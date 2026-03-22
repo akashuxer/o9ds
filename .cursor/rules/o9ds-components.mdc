@@ -1,0 +1,32 @@
+---
+description: o9ds component development — no third-party UI libraries, use tokens only
+globs: src/components/**/*, src/pages/**/*
+alwaysApply: false
+---
+
+# o9ds Component Development
+
+## Constraint
+
+**Do not import or use any third-party UI/component libraries.**
+
+- No MUI, Ant Design, Chakra, Radix UI, Headless UI, etc.
+- Build all components from scratch.
+
+## Allowed
+
+- Native HTML elements
+- Internal design tokens (from `index.css`, `tailwind.config.js`)
+- Internal utility functions / hooks
+- Utility libraries (classnames, date-fns, etc.) if approved — but **no UI component libraries**
+
+## Goal
+
+- Ensure consistency with o9 Design System
+- Maintain full control over styling, behavior, and accessibility
+- Avoid dependency on external UI frameworks
+
+## Development Order
+
+1. **Foundations first**: Set design tokens, spacing scale, typography, colors.
+2. **Components second**: Build components using only those tokens — no libraries.

@@ -138,6 +138,30 @@ import CodeBlock from '../components/CodeBlock'
 
 ---
 
+## Components — Development Guidelines
+
+All design system components must be **implemented from scratch**. No third-party UI libraries.
+
+### Constraint
+- Do not import or use any third-party UI/component libraries (MUI, Ant Design, Chakra, Radix, etc.).
+- Build all components from scratch using only internal design tokens, styles, and architecture.
+
+### Allowed
+- Native HTML elements
+- Internal design tokens (`index.css`, `tailwind.config.js`)
+- Internal utility functions / hooks
+- Utility libraries (e.g. classnames, date handling) if approved — **no UI component libraries**
+
+### Goal
+- Full control over behavior, accessibility, theming, scalability
+- Consistency with o9 Design System
+
+### Development Order
+1. **Foundations first** — tokens, spacing, typography, colors
+2. **Components second** — using only those tokens, no libraries
+
+---
+
 ## Colors Page
 
 - Palette cards: `#F2F2F2` bg, `#E5E5E5` border.
