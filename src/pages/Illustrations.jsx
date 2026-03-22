@@ -5,22 +5,22 @@ import CodeBlock from '../components/CodeBlock'
 const tabs = ['Overview', 'o9Illus Gallery', 'Accessibility', 'Code']
 
 const ILLUSTRATIONS = [
-  { name: 'dashboard', label: 'Dashboard', src: '/o9illus-dark-dashboard.svg' },
-  { name: 'document', label: 'Document', src: '/o9illus-dark-document.svg' },
-  { name: 'favorites', label: 'Favorites', src: '/o9illus-dark-favorites.svg' },
-  { name: 'help', label: 'Help', src: '/o9illus-dark-help.svg' },
-  { name: 'no-filter-results', label: 'No Filter Results', src: '/o9illus-dark-no-filter-results.svg' },
-  { name: 'no-filter-results-found', label: 'No Filter Results Found', src: '/o9illus-no-filter-results-found.svg' },
-  { name: 'no-form-configured', label: 'No Form Configured', src: '/o9illus-no-form-configured.svg' },
-  { name: 'no-notifications', label: 'No Notifications', src: '/o9illus-dark-no-notifications.svg' },
-  { name: 'no-post', label: 'No Post', src: '/o9illus-dark-no-post.svg' },
-  { name: 'no-report', label: 'No Report', src: '/o9illus-dark-no-report.svg' },
-  { name: 'no-results-found', label: 'No Results Found', src: '/o9illus-dark-no-results-found.svg' },
-  { name: 'no-slides', label: 'No Slides', src: '/o9illus-dark-no-slides.svg' },
-  { name: 'no-tasks', label: 'No Tasks', src: '/o9illus-dark-no-tasks.svg' },
-  { name: 'no-restricted-access', label: 'No Restricted Access', src: '/o9illus-dark-no-restricted-access.svg' },
-  { name: 'server-error', label: 'Server Error', src: '/o9illus-dark-server-error.svg' },
-  { name: 'settings', label: 'Settings', src: '/o9illus-dark-settings.svg' },
+  { name: 'dashboard', label: 'Dashboard', srcDark: '/o9illus/dark/o9illus-dark-dashboard.svg', srcLight: '/o9illus/light/o9illus-light-dashboard.svg' },
+  { name: 'document', label: 'Document', srcDark: '/o9illus/dark/o9illus-dark-document.svg', srcLight: '/o9illus/light/o9illus-light-document.svg' },
+  { name: 'favorites', label: 'Favorites', srcDark: '/o9illus/dark/o9illus-dark-favorites.svg', srcLight: '/o9illus/light/o9illus-light-favorites.svg' },
+  { name: 'help', label: 'Help', srcDark: '/o9illus/dark/o9illus-dark-help.svg', srcLight: '/o9illus/light/o9illus-light-help.svg' },
+  { name: 'no-filter-results', label: 'No Filter Results', srcDark: '/o9illus/dark/o9illus-dark-no-filter-results.svg', srcLight: '/o9illus/light/o9illus-light-no-filter-results.svg' },
+  { name: 'no-filters-found', label: 'No Filters Found', srcDark: '/o9illus/dark/o9illus-dark-no-filter-results-found.svg', srcLight: '/o9illus/light/o9illus-light-no-filters-found.svg' },
+  { name: 'no-form-configured', label: 'No Form Configured', srcDark: '/o9illus/dark/o9illus-dark-no-form-configured.svg', srcLight: '/o9illus/light/o9illus-light-no-form-configured.svg' },
+  { name: 'no-notifications', label: 'No Notifications', srcDark: '/o9illus/dark/o9illus-dark-no-notifications.svg', srcLight: '/o9illus/light/o9illus-light-no-notifications.svg' },
+  { name: 'no-post', label: 'No Post', srcDark: '/o9illus/dark/o9illus-dark-no-post.svg', srcLight: '/o9illus/light/o9illus-light-no-post.svg' },
+  { name: 'no-report', label: 'No Report', srcDark: '/o9illus/dark/o9illus-dark-no-report.svg', srcLight: '/o9illus/light/o9illus-light-no-report.svg' },
+  { name: 'no-results-found', label: 'No Results Found', srcDark: '/o9illus/dark/o9illus-dark-no-results-found.svg', srcLight: '/o9illus/light/o9illus-light-no-results-found.svg' },
+  { name: 'no-slides', label: 'No Slides', srcDark: '/o9illus/dark/o9illus-dark-no-slides.svg', srcLight: '/o9illus/light/o9illus-light-no-slides.svg' },
+  { name: 'no-tasks', label: 'No Tasks', srcDark: '/o9illus/dark/o9illus-dark-no-tasks.svg', srcLight: '/o9illus/light/o9illus-light-no-tasks.svg' },
+  { name: 'restricted-access', label: 'Restricted Access', srcDark: '/o9illus/dark/o9illus-dark-no-restricted-access.svg', srcLight: '/o9illus/light/o9illus-light-restricted-access.svg' },
+  { name: 'server-error', label: 'Server Error', srcDark: '/o9illus/dark/o9illus-dark-server-error.svg', srcLight: '/o9illus/light/o9illus-light-server-error.svg' },
+  { name: 'settings', label: 'Settings', srcDark: '/o9illus/dark/o9illus-dark-settings.svg', srcLight: '/o9illus/light/o9illus-light-settings.svg' },
 ]
 
 const SIZES = [96, 124, 224]
@@ -65,6 +65,7 @@ function IllustrationCard({ item, size }) {
   const [copied, setCopied] = useState(false)
   const { theme } = useTheme()
   const isLight = theme === 'light'
+  const src = isLight ? item.srcLight : item.srcDark
   const snippet = `<div class="o9ds-illus o9ds-illus--${item.name} o9ds-illus-${size}"></div>`
 
   const handleCopy = (e) => {
@@ -78,20 +79,26 @@ function IllustrationCard({ item, size }) {
   return (
     <div
       className="group border dark:border-neutral-700 overflow-hidden shadow-sm hover:shadow-md dark:hover:border-neutral-600 transition-all"
-      style={{ borderColor: isLight ? '#E5E5E5' : undefined }}
+      style={{
+        backgroundColor: isLight ? '#FFFFFF' : '#171717',
+        borderColor: isLight ? '#E5E5E5' : undefined,
+      }}
       data-o9ds-card={isLight ? 'light-white' : 'dark'}
     >
       <div className="flex flex-col items-center p-6">
         <div className="flex items-center justify-center shrink-0 overflow-hidden" style={{ width: size, height: size }}>
           <img
-            src={item.src}
+            src={src}
             alt={item.label}
             className="w-full h-full object-contain"
             style={{ width: size, height: size }}
           />
         </div>
         <div className="mt-4 flex flex-col items-center gap-1 w-full">
-          <span className="text-sm font-medium dark:text-white" style={isLight ? { color: '#010101' } : undefined}>
+          <span
+            className="text-sm font-medium dark:text-white"
+            style={isLight ? { color: '#010101' } : { color: '#fff' }}
+          >
             {item.label}
           </span>
           <button
@@ -250,8 +257,8 @@ export default function Illustrations() {
               <div className="flex flex-wrap items-end justify-center gap-12">
                 {SIZES.map((s) => (
                   <div key={s} className="flex flex-col items-center">
-                    <div className="flex items-center justify-center overflow-hidden dark:bg-black" style={{ width: s, height: s, backgroundColor: isLight ? '#FFFFFF' : undefined }}>
-                      <img src="/o9illus-dark-dashboard.svg" alt="Dashboard" style={{ width: s, height: s }} className="object-contain" />
+                    <div className="flex items-center justify-center overflow-hidden" style={{ width: s, height: s, backgroundColor: isLight ? '#FFFFFF' : '#171717' }}>
+                      <img src={isLight ? '/o9illus/light/o9illus-light-dashboard.svg' : '/o9illus/dark/o9illus-dark-dashboard.svg'} alt="Dashboard" style={{ width: s, height: s }} className="object-contain" />
                     </div>
                     <p className="mt-3 text-sm font-medium text-o9ds-light-primary dark:text-white">{s}px</p>
                     <p className="text-xs font-mono text-o9ds-light-secondary dark:text-neutral-400">o9ds-illus-{s}</p>
@@ -342,7 +349,7 @@ export default function Illustrations() {
             />
           </div>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Replace <code className="px-1 py-0.5" data-o9ds-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, settings) and <code className="px-1 py-0.5" data-o9ds-inline-code>124</code> with the desired size (96, 124, 224).
+            Replace <code className="px-1 py-0.5" data-o9ds-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, no-filters-found, no-form-configured, no-notifications, no-post, no-report, no-results-found, no-slides, no-tasks, restricted-access, server-error, settings) and <code className="px-1 py-0.5" data-o9ds-inline-code>124</code> with the desired size (96, 124, 224).
           </p>
         </section>
       )}
