@@ -253,6 +253,13 @@ body {
   font-feature-settings: "ss01" 1, "ss02" 1;
 }
 
+/* o9con icon sizes - use with .o9con base */
+.o9ds-icon-14 { font-size: 14px; }
+.o9ds-icon-16 { font-size: 16px; }
+.o9ds-icon-20 { font-size: 20px; }
+.o9ds-icon-24 { font-size: 24px; }
+.o9ds-icon-32 { font-size: 32px; }
+
 /* o9ds: 0 radius policy — no border radius */
 *,
 *::before,

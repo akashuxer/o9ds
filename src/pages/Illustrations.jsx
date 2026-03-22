@@ -52,13 +52,23 @@ function CopyIcon({ className }) {
   )
 }
 
+function CheckDoubleIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l4 4 9-9" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 16l3 3 7-7" />
+    </svg>
+  )
+}
+
 function IllustrationCard({ item, size }) {
   const [copied, setCopied] = useState(false)
   const { theme } = useTheme()
   const isLight = theme === 'light'
   const snippet = `<div class="o9ds-illus o9ds-illus--${item.name} o9ds-illus-${size}"></div>`
 
-  const handleCopy = () => {
+  const handleCopy = (e) => {
+    e.stopPropagation()
     navigator.clipboard.writeText(snippet).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
@@ -67,17 +77,12 @@ function IllustrationCard({ item, size }) {
 
   return (
     <div
-    className="group border dark:border-neutral-700 overflow-hidden shadow-sm hover:shadow-md dark:hover:border-neutral-600 transition-all"
-    style={{
-      borderColor: isLight ? '#E5E5E5' : undefined,
-    }}
-    data-o9ds-card={isLight ? 'light-white' : 'dark'}
-  >
+      className="group border dark:border-neutral-700 overflow-hidden shadow-sm hover:shadow-md dark:hover:border-neutral-600 transition-all"
+      style={{ borderColor: isLight ? '#E5E5E5' : undefined }}
+      data-o9ds-card={isLight ? 'light-white' : 'dark'}
+    >
       <div className="flex flex-col items-center p-6">
-        <div
-          className="flex items-center justify-center shrink-0 overflow-hidden dark:bg-black"
-          style={{ width: size, height: size, ...(isLight ? { backgroundColor: '#FFFFFF' } : {}) }}
-        >
+        <div className="flex items-center justify-center shrink-0 overflow-hidden" style={{ width: size, height: size }}>
           <img
             src={item.src}
             alt={item.label}
@@ -85,21 +90,22 @@ function IllustrationCard({ item, size }) {
             style={{ width: size, height: size }}
           />
         </div>
-        <div className="mt-4 flex items-center justify-center gap-2 w-full">
-          <span
-              className="text-sm font-medium dark:text-white"
-              style={isLight ? { color: '#010101' } : undefined}
-            >
-              {item.label}
-            </span>
+        <div className="mt-4 flex flex-col items-center gap-1 w-full">
+          <span className="text-sm font-medium dark:text-white" style={isLight ? { color: '#010101' } : undefined}>
+            {item.label}
+          </span>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 border dark:border-neutral-600 px-2 py-1.5 text-xs dark:text-neutral-400 hover:text-o9ds-light-primary dark:hover:text-white hover:border-o9ds-light-primary dark:hover:border-neutral-500 transition-colors"
-            style={isLight ? { borderColor: '#E5E5E5', color: '#303030' } : undefined}
+            className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
+            style={
+              copied
+                ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
+                : isLight ? { borderColor: '#E5E5E5', color: '#303030' } : { borderColor: '#404040', color: '#a3a3a3' }
+            }
             title="Copy code"
+            aria-label="Copy code"
           >
-            <CopyIcon className="h-3.5 w-3.5" />
-            {copied ? 'Copied!' : 'Copy'}
+            {copied ? <CheckDoubleIcon className="h-3.5 w-3.5" style={{ color: '#fff' }} /> : <CopyIcon className="h-3.5 w-3.5" />}
           </button>
         </div>
       </div>
@@ -144,7 +150,7 @@ export default function Illustrations() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </span>
-          Illustrations
+          Illustrations &quot;o9Illus&quot;
         </h1>
         <p className="mt-4 text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
           As part of the new o9 Design System, we are introducing o9Illus, a collection of flat illustrations that are an integral part of the o9 brand.
