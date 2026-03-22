@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Vertical lines across main body - very light, even spacing */
+.o9ds-main {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(80px - 1px),
+    rgba(0, 0, 0, 0.04) calc(80px - 1px),
+    rgba(0, 0, 0, 0.04) 80px
+  );
+}
+html.dark .o9ds-main,
+html[data-theme="dark"] .o9ds-main {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(80px - 1px),
+    rgba(255, 255, 255, 0.08) calc(80px - 1px),
+    rgba(255, 255, 255, 0.08) 80px
+  );
+}
+
+/* Theme: explicit fallbacks so toggle works reliably */
+/* Light mode - #FFFFFF bg, #010101 primary text, #303030 secondary, #F2F2F2 / #E5E5E5 surfaces */
+html[data-theme="light"],
+html:not(.dark) {
+  color-scheme: light;
+  background-color: #FFFFFF !important;
+  color: #010101;
+}
+html[data-theme="light"] body,
+html:not(.dark) body {
+  background-color: #FFFFFF !important;
+  color: #010101;
+}
+html[data-theme="light"] #root,
+html:not(.dark) #root {
+  background-color: #FFFFFF !important;
+}
+/* Dark mode */
+html[data-theme="dark"],
+html.dark {
+  color-scheme: dark;
+  background-color: #000 !important;
+}
+html[data-theme="dark"] body,
+html.dark body {
+  background-color: #000 !important;
+}
+
+:root {
+  /* o9ds Design Tokens */
+  --o9-black: #000000;
+  --o9-white: #ffffff;
+  --o9-shock: #0037ff;
+  --o9-indigo: #7433cc;
+  --o9-grass: #00c278;
+  --o9-sun: #ffe500;
+  --o9-juice: #ff7311;
+  --o9-scarlet: #ff1e39;
+}
+
+/* Light mode semantic colors */
+html[data-theme="light"],
+html:not(.dark) {
+  --o9ds-bg: #FFFFFF;
+  --o9ds-bg-surface: #F2F2F2;
+  --o9ds-text-primary: #010101;
+  --o9ds-text-secondary: #303030;
+  --o9ds-border: #E5E5E5;
+}
+
+/* Light mode: card/section borders - default #E5E5E5, no black in default state */
+html[data-theme="light"] main a.border,
+html[data-theme="light"] main div.border,
+html[data-theme="light"] main section.border,
+html:not(.dark) main a.border,
+html:not(.dark) main div.border,
+html:not(.dark) main section.border {
+  border-color: #E5E5E5 !important;
+}
+/* Card hover: white default -> F2F2F2 bg + 010101 border; F2F2F2 default -> 010101 border only */
+html[data-theme="light"] main a.border:hover,
+html[data-theme="light"] main a.group:hover,
+html[data-theme="light"] main [data-o9ds-card="light"]:hover,
+html[data-theme="light"] main [data-o9ds-card="light-white"]:hover,
+html:not(.dark) main a.border:hover,
+html:not(.dark) main a.group:hover,
+html:not(.dark) main [data-o9ds-card="light"]:hover,
+html:not(.dark) main [data-o9ds-card="light-white"]:hover {
+  border-color: #010101 !important;
+}
+html[data-theme="light"] main [data-o9ds-card="light-white"]:hover,
+html:not(.dark) main [data-o9ds-card="light-white"]:hover {
+  background-color: #F2F2F2 !important;
+}
+/* Dark mode: card base bg #000 so vertical lines stay behind */
+html[data-theme="dark"] main [data-o9ds-card],
+html.dark main [data-o9ds-card],
+html[data-theme="dark"] main div.border.p-4,
+html[data-theme="dark"] main div.border.p-6,
+html.dark main div.border.p-4,
+html.dark main div.border.p-6 {
+  background-color: #000 !important;
+}
+/* Dark mode: card hover - FFF border */
+html[data-theme="dark"] main a.border:hover,
+html[data-theme="dark"] main a.group:hover,
+html[data-theme="dark"] main [data-o9ds-card]:hover,
+html.dark main a.border:hover,
+html.dark main a.group:hover,
+html.dark main [data-o9ds-card]:hover {
+  border-color: #FFFFFF !important;
+}
+/* Tab bars: subtle border in light mode */
+html[data-theme="light"] main [data-o9ds-tabs],
+html:not(.dark) main [data-o9ds-tabs] {
+  border-bottom-color: #E5E5E5 !important;
+}
+/* Code blocks: F2F2F2 bg, E5E5E5 border - light mode */
+html[data-theme="light"] main [data-o9ds-code],
+html:not(.dark) main [data-o9ds-code] {
+  background-color: #F2F2F2 !important;
+  border-color: #E5E5E5 !important;
+}
+/* Inline code: light mode F2F2F2 bg, dark mode neutral-700 */
+html[data-theme="light"] main code,
+html[data-theme="light"] main [data-o9ds-inline-code],
+html:not(.dark) main code,
+html:not(.dark) main [data-o9ds-inline-code] {
+  background-color: #F2F2F2 !important;
+  color: #010101 !important;
+}
+html[data-theme="dark"] main [data-o9ds-inline-code],
+html.dark main [data-o9ds-inline-code] {
+  background-color: #404040 !important;
+  color: #e5e5e5 !important;
+}
+
+/* Illustration: selected size button - white text on black */
+html[data-theme="light"] main button[data-o9ds-size-selected],
+html:not(.dark) main button[data-o9ds-size-selected] {
+  color: #FFFFFF !important;
+}
+
+/* Tab buttons: ensure active/hover text visible + active tab bottom border 010101 */
+html[data-theme="light"] main [data-o9ds-tabs] button[data-o9ds-tab-active],
+html:not(.dark) main [data-o9ds-tabs] button[data-o9ds-tab-active] {
+  color: #010101 !important;
+  border-bottom-color: #010101 !important;
+}
+html[data-theme="light"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]),
+html:not(.dark) main [data-o9ds-tabs] button:not([data-o9ds-tab-active]) {
+  color: #303030 !important;
+}
+html[data-theme="light"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover,
+html:not(.dark) main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover {
+  color: #010101 !important;
+}
+/* Dark mode tabs */
+html[data-theme="dark"] main [data-o9ds-tabs] button[data-o9ds-tab-active],
+html.dark main [data-o9ds-tabs] button[data-o9ds-tab-active] {
+  color: #FFFFFF !important;
+}
+html[data-theme="dark"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]),
+html.dark main [data-o9ds-tabs] button:not([data-o9ds-tab-active]) {
+  color: #a3a3a3 !important;
+}
+html[data-theme="dark"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover,
+html.dark main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover {
+  color: #FFFFFF !important;
+}
+/* Light mode: avatar/icon boxes - default */
+html[data-theme="light"] main [data-o9ds-avatar],
+html:not(.dark) main [data-o9ds-avatar] {
+  background-color: #F2F2F2 !important;
+  color: #010101 !important;
+}
+/* Avatar hover: invert colors - light mode (exclude page header) */
+html[data-theme="light"] main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
+html[data-theme="light"] main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]),
+html:not(.dark) main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
+html:not(.dark) main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]) {
+  background-color: #010101 !important;
+  color: #FFFFFF !important;
+}
+/* Avatar hover: dark mode - bg #FFF, text #010101 (exclude page header) */
+html[data-theme="dark"] main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
+html[data-theme="dark"] main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]),
+html.dark main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
+html.dark main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]) {
+  background-color: #FFFFFF !important;
+  color: #010101 !important;
+}
+/* Sidebar nav: active item left border 2px */
+aside nav a[aria-current="page"] {
+  border-left-width: 2px !important;
+}
+
+/* View principles button - light mode */
+html[data-theme="light"] main a[data-o9ds-principles-btn],
+html:not(.dark) main a[data-o9ds-principles-btn] {
+  color: #F2F2F2 !important;
+}
+/* Force light mode text visibility - overrides conflicting Tailwind utilities */
+html[data-theme="light"] main,
+html:not(.dark) main {
+  color: #010101 !important;
+}
+html[data-theme="light"] main h1,
+html[data-theme="light"] main h2,
+html[data-theme="light"] main h3,
+html[data-theme="light"] main h4,
+html[data-theme="light"] main h5,
+html[data-theme="light"] main h6,
+html[data-theme="light"] main [class*="font-bold"],
+html[data-theme="light"] main [class*="font-semibold"],
+html:not(.dark) main h1,
+html:not(.dark) main h2,
+html:not(.dark) main h3,
+html:not(.dark) main h4,
+html:not(.dark) main h5,
+html:not(.dark) main h6,
+html:not(.dark) main [class*="font-bold"],
+html:not(.dark) main [class*="font-semibold"] {
+  color: #010101 !important;
+}
+html[data-theme="light"] main p,
+html[data-theme="light"] main li,
+html[data-theme="light"] main td,
+html[data-theme="light"] main th,
+html[data-theme="light"] main label,
+html[data-theme="light"] main pre,
+html[data-theme="light"] main code,
+html:not(.dark) main p,
+html:not(.dark) main li,
+html:not(.dark) main td,
+html:not(.dark) main th,
+html:not(.dark) main label,
+html:not(.dark) main pre,
+html:not(.dark) main code {
+  color: #303030 !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-feature-settings: "ss01" 1, "ss02" 1;
+}
+
+/* o9ds: 0 radius policy — no border radius */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+/* Focus-visible: #010101 in light, #fff in dark - all interactive elements */
+html[data-theme="light"] button:focus-visible,
+html[data-theme="light"] a:focus-visible,
+html[data-theme="light"] input:focus-visible,
+html[data-theme="light"] select:focus-visible,
+html[data-theme="light"] textarea:focus-visible,
+html[data-theme="light"] [tabindex]:not([tabindex="-1"]):focus-visible,
+html:not(.dark) button:focus-visible,
+html:not(.dark) a:focus-visible,
+html:not(.dark) input:focus-visible,
+html:not(.dark) select:focus-visible,
+html:not(.dark) textarea:focus-visible,
+html:not(.dark) [tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid #010101 !important;
+  outline-offset: 2px;
+}
+html[data-theme="dark"] button:focus-visible,
+html[data-theme="dark"] a:focus-visible,
+html[data-theme="dark"] input:focus-visible,
+html[data-theme="dark"] select:focus-visible,
+html[data-theme="dark"] textarea:focus-visible,
+html[data-theme="dark"] [tabindex]:not([tabindex="-1"]):focus-visible,
+html.dark button:focus-visible,
+html.dark a:focus-visible,
+html.dark input:focus-visible,
+html.dark select:focus-visible,
+html.dark textarea:focus-visible,
+html.dark [tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid #ffffff !important;
+  outline-offset: 2px;
+}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 124 124">
+  <defs>
+    <linearGradient id="linear-gradient" x1="37.574" y1="106.632" x2="69.931" y2="105.802" gradientTransform="translate(163.089 48.766) rotate(89.857)" gradientUnits="userSpaceOnUse">
+      <stop offset=".386" stop-color="#3a3a3a"/>
+      <stop offset=".824" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="39.619" y1="110.12" x2="61.309" y2="110.12" gradientTransform="translate(162.744 57.091) rotate(89.857)" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="123.334" y1="34.035" x2="-57.535" y2="35.89" gradientTransform="translate(96.564 -27.513) rotate(89.837)" gradientUnits="userSpaceOnUse">
+      <stop offset=".062" stop-color="#fff"/>
+      <stop offset=".142" stop-color="#f5f5f5"/>
+      <stop offset=".276" stop-color="#dbdbdb"/>
+      <stop offset=".447" stop-color="#b1b1b1"/>
+      <stop offset=".583" stop-color="#8b8b8b"/>
+      <stop offset=".914" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="77.267" y1="91.72" x2="102.193" y2="55.438" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".017" stop-color="#dadada"/>
+      <stop offset=".037" stop-color="#b4b4b4"/>
+      <stop offset=".06" stop-color="#939393"/>
+      <stop offset=".085" stop-color="#777"/>
+      <stop offset=".113" stop-color="#606060"/>
+      <stop offset=".145" stop-color="#4f4f4f"/>
+      <stop offset=".184" stop-color="#434343"/>
+      <stop offset=".238" stop-color="#3b3b3b"/>
+      <stop offset=".371" stop-color="#3a3a3a"/>
+      <stop offset=".757" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-5" x1="101.47" y1="60.058" x2="77.686" y2="81.219" gradientUnits="userSpaceOnUse">
+      <stop offset=".113" stop-color="#fff"/>
+      <stop offset=".163" stop-color="#f9f9f9"/>
+      <stop offset=".394" stop-color="#e3e3e3"/>
+      <stop offset=".616" stop-color="#d6d6d6"/>
+      <stop offset=".82" stop-color="#d2d2d2"/>
+    </linearGradient>
+  </defs>
+  <g isolation="isolate">
+    <g id="Layer_1" data-name="Layer 1">
+      <g>
+        <path d="M124,62c0,4.685-.52,9.249-1.505,13.635-.512,2.284-1.15,4.52-1.906,6.7-1.067,3.073-2.369,6.036-3.884,8.868-.057.109-.115.217-.174.326-5.726,10.553-14.427,19.257-24.978,24.988-.026.015-.053.028-.079.043-8.766,4.745-18.805,7.44-29.474,7.44s-20.707-2.695-29.473-7.44c-.026-.015-.053-.028-.079-.043-10.549-5.729-19.248-14.432-24.975-24.983-.059-.108-.118-.217-.175-.327-1.515-2.832-2.818-5.796-3.885-8.87-.756-2.181-1.394-4.417-1.906-6.701-.985-4.387-1.505-8.95-1.505-13.635C0,34.789,17.529,11.672,41.912,3.327c6.3-2.156,13.057-3.327,20.088-3.327,6.236,0,12.255.92,17.933,2.633,25.499,7.691,44.068,31.36,44.068,59.367Z"/>
+        <g>
+          <rect x="46.292" y="72.345" width="31.98" height="56.391" transform="translate(-38.435 162.536) rotate(-89.837)" fill="#1a1a1a"/>
+          <rect x="56.293" y="92.847" width="1.616" height="26.568" transform="translate(-49.172 162.967) rotate(-89.857)" fill="url(#linear-gradient)"/>
+          <rect x="51.947" y="101.172" width="1.616" height="17.897" transform="translate(-57.496 162.601) rotate(-89.857)" fill="url(#linear-gradient-2)"/>
+          <rect x="60.492" y="55.528" width="3.69" height="56.404" transform="translate(-21.571 145.829) rotate(-89.837)" fill="#3a3a3a"/>
+          <circle cx="36.105" cy="83.714" r=".57"/>
+          <circle cx="38.481" cy="83.721" r=".57"/>
+          <circle cx="40.856" cy="83.728" r=".57"/>
+        </g>
+        <g>
+          <rect x="41.305" y="44.835" width="41.948" height="73.985" transform="translate(-19.726 143.873) rotate(-89.837)" fill="#3a3a3a"/>
+          <rect x="59.931" y="22.777" width="4.84" height="74.003" transform="translate(2.395 121.958) rotate(-89.837)" fill="#717171"/>
+          <circle cx="27.934" cy="59.756" r=".748"/>
+          <circle cx="31.051" cy="59.765" r=".748"/>
+          <circle cx="34.168" cy="59.774" r=".748"/>
+        </g>
+        <g>
+          <rect x="33.807" y="14.514" width="56.484" height="99.679" transform="translate(-2.481 126.219) rotate(-89.837)" fill="#fff"/>
+          <rect x="-11.295" y="61.125" width="54.727" height="7.991" transform="translate(-49.097 81.003) rotate(-89.837)" fill="#8b8b8b"/>
+          <rect x="83.717" y="66.569" width="19.826" height="23.622" transform="translate(14.906 171.722) rotate(-89.789)" fill="#e8e8e8" mix-blend-mode="multiply" opacity=".49"/>
+          <rect x="45.277" y="43.152" width="19.826" height="23.622" transform="translate(.025 109.951) rotate(-89.789)" fill="#e8e8e8" mix-blend-mode="multiply" opacity=".49"/>
+          <path d="M111.698,36.327S30.358,17.788,57.538,60.829c18.366,29.084-45.409,31.67-45.409,31.67l99.679.238-.11-56.41Z" fill="#f4f4f4" mix-blend-mode="multiply"/>
+          <rect x="58.819" y="-15.255" width="6.517" height="99.837" transform="translate(27.238 96.642) rotate(-89.837)" fill="url(#linear-gradient-3)"/>
+          <circle cx="15.777" cy="34.634" r="1.008"/>
+          <circle cx="19.976" cy="34.646" r="1.008"/>
+          <circle cx="24.175" cy="34.658" r="1.008"/>
+        </g>
+        <rect x="75.518" y="56.386" width="30.851" height="30.851" rx="15.425" ry="15.425" fill="url(#linear-gradient-4)" stroke="#1a1a1a" stroke-miterlimit="10" stroke-width="1.13"/>
+        <polygon points="101.498 72.535 84.455 62.695 84.455 82.375 101.498 72.535" fill="url(#linear-gradient-5)"/>
+      </g>
+    </g>
+  </g>
+</svg>
