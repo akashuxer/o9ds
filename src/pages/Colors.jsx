@@ -154,13 +154,19 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
 
   const rowBorderColor = isLight ? '#E5E5E5' : '#404040'
   const isBorderTab = semanticSubTab === 'Border'
+  const isTextTab = semanticSubTab === 'Text'
+  const isIconTab = semanticSubTab === 'Icon'
 
   const lightTileStyle = isBorderTab
     ? { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${lightHex}` }
-    : { backgroundColor: lightHex, border: `1px solid ${rowBorderColor}` }
+    : isTextTab || isIconTab
+      ? null
+      : { backgroundColor: lightHex, border: `1px solid ${rowBorderColor}` }
   const darkTileStyle = isBorderTab
     ? { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${darkHex}` }
-    : { backgroundColor: darkHex, border: `1px solid ${rowBorderColor}` }
+    : isTextTab || isIconTab
+      ? null
+      : { backgroundColor: darkHex, border: `1px solid ${rowBorderColor}` }
 
   const lightModeCellBg = useSurfaceThemeBg ? resolveSurfaceThemeHex(lightTheme, false) : '#FFFFFF'
   const darkModeCellBg = useSurfaceThemeBg ? resolveSurfaceThemeHex(lightTheme, true) : '#010101'
@@ -168,18 +174,65 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
   const lightModeCellFg = isLightBg(lightModeCellBg) ? '#303030' : '#FFFFFF'
   const darkModeCellFg = isLightBg(darkModeCellBg) ? '#010101' : '#FFFFFF'
 
+  const isWhiteOrVeryLight = (hex) => {
+    if (!hex) return false
+    const h = hex.toLowerCase()
+    if (h === '#fff' || h === '#ffffff') return true
+    const m = hex.match(/^#?([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i)
+    if (!m) return false
+    const r = parseInt(m[1], 16) / 255
+    const g = parseInt(m[2], 16) / 255
+    const b = parseInt(m[3], 16) / 255
+    const lum = 0.299 * r + 0.587 * g + 0.114 * b
+    return lum > 0.9
+  }
+  const isBlackOrVeryDark = (hex) => {
+    if (!hex) return false
+    const h = hex.toLowerCase()
+    if (h === '#000' || h === '#000000' || h === '#010101') return true
+    const m = hex.match(/^#?([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i)
+    if (!m) return false
+    const r = parseInt(m[1], 16) / 255
+    const g = parseInt(m[2], 16) / 255
+    const b = parseInt(m[3], 16) / 255
+    const lum = 0.299 * r + 0.587 * g + 0.114 * b
+    return lum < 0.08
+  }
+  const lightSwatchBg = (isTextTab || isIconTab) && isWhiteOrVeryLight(lightHex) ? '#404040' : 'transparent'
+  const darkSwatchBg = (isTextTab || isIconTab) && isBlackOrVeryDark(darkHex) ? '#525252' : 'transparent'
+
   return (
     <tr style={{ borderBottom: `1px solid ${rowBorderColor}` }} className="last:border-b-0 group">
       <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{row.token}</td>
       <td className="py-2 px-3" style={{ backgroundColor: lightModeCellBg }}>
         <div className="flex items-center gap-2">
-          <div className="h-6 w-6 shrink-0" style={lightTileStyle} title={lightHex} />
+          {isTextTab ? (
+            <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: lightSwatchBg }}>
+              <span className="text-lg font-semibold leading-none" style={{ color: lightHex }} title={lightHex}>A</span>
+            </div>
+          ) : isIconTab ? (
+            <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: lightSwatchBg }}>
+              <span className="o9con o9con-info-circle o9ds-icon-20" style={{ color: lightHex, fontSize: '20px' }} title={lightHex} aria-hidden />
+            </div>
+          ) : (
+            <div className="h-6 w-6 shrink-0" style={lightTileStyle} title={lightHex} />
+          )}
           <span className="font-mono" style={{ color: lightModeCellFg }}>{lightModeGlobalName}</span>
         </div>
       </td>
       <td className="py-2 px-3" style={{ backgroundColor: darkModeCellBg }}>
         <div className="flex items-center gap-2">
-          <div className="h-6 w-6 shrink-0" style={darkTileStyle} title={darkHex} />
+          {isTextTab ? (
+            <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: darkSwatchBg }}>
+              <span className="text-lg font-semibold leading-none" style={{ color: darkHex }} title={darkHex}>A</span>
+            </div>
+          ) : isIconTab ? (
+            <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: darkSwatchBg }}>
+              <span className="o9con o9con-info-circle o9ds-icon-20" style={{ color: darkHex, fontSize: '20px' }} title={darkHex} aria-hidden />
+            </div>
+          ) : (
+            <div className="h-6 w-6 shrink-0" style={darkTileStyle} title={darkHex} />
+          )}
           <span className="font-mono" style={{ color: darkModeCellFg }}>{row.darkGlobal}</span>
         </div>
       </td>
