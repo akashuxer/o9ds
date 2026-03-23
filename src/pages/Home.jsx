@@ -62,10 +62,10 @@ export default function Home() {
       {/* Hero Section */}
       <section>
         <h1 className="text-4xl md:text-5xl font-bold text-o9ds-light-primary dark:text-white mb-4 tracking-tight">
-          Built with o9 Design System
+          Design with Consistency. Build with Confidence. Scale with o9 Design System.
         </h1>
         <p className="text-xl md:text-2xl text-o9ds-light-secondary dark:text-neutral-400 mb-8 max-w-2xl leading-relaxed">
-          "o9ds" for the o9 platform — a centralized system of foundations, components, and patterns that power sophisticated enterprise applications.
+          o9 Design System (o9DS) is a centralized system of foundations, components, and patterns that standardize how products are designed and built across the platform. It enables teams to create consistent, accessible, and scalable enterprise experiences while reducing design and development effort. By aligning design, engineering, and business, o9DS accelerates product delivery and ensures a unified experience across all workflows.
         </p>
         <div
           className="group/hero border overflow-hidden animate-fade-in shadow-sm"
