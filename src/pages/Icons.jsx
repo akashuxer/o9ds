@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import { o9conIcons } from '../data/o9conIcons'
-import { ICON_SIZE_TOKENS_SCSS } from '../data/iconTokens'
-import CodeBlock from '../components/CodeBlock'
+import { o9conIcons } from '../tokens/o9conIcons'
+import { ICON_SIZE_TOKENS_SCSS } from '../tokens/iconTokens'
+import CodeBlock from '../LayoutComponents/CodeBlock'
 
 const tabs = ['Overview', 'o9con Gallery', 'Accessibility', 'Code']
 const SIZES = [14, 16, 20, 24, 32]

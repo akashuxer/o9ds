@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import CodeBlock from '../components/CodeBlock'
-import { SPACING_TOKENS, SPACING_TOKENS_SCSS } from '../data/spacingTokens'
+import CodeBlock from '../LayoutComponents/CodeBlock'
+import { SPACING_TOKENS, SPACING_TOKENS_SCSS } from '../tokens/spacingTokens'
 
 function CopyIcon({ className }) {
   return (

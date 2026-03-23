@@ -55,7 +55,7 @@ o9ds Website/
 │   ├── App.jsx             # Routes and layout wrapper
 │   ├── index.css           # Global styles, tokens, light/dark rules
 │   │
-│   ├── components/         # Reusable UI
+│   ├── LayoutComponents/   # Layout & shared UI
 │   │   ├── Layout.jsx      # Header, sidebar, nav, theme toggle
 │   │   ├── CodeBlock.jsx   # Code snippet with copy
 │   │   ├── ColorSwatch.jsx # Color preview tile
@@ -64,7 +64,7 @@ o9ds Website/
 │   ├── context/
 │   │   └── ThemeContext.jsx # Light/dark theme state
 │   │
-│   ├── data/               # Design token definitions
+│   ├── tokens/             # Design token definitions
 │   │   ├── brandColors.js
 │   │   ├── globalColorTokens.js
 │   │   ├── semanticColorTokens.js
@@ -82,11 +82,12 @@ o9ds Website/
 │   │   ├── Borders.jsx
 │   │   ├── Icons.jsx
 │   │   ├── Illustrations.jsx
-│   │   ├── Button.jsx
 │   │   ├── Components.jsx
 │   │   ├── Principles.jsx
 │   │   ├── Overview.jsx
-│   │   └── Placeholder.jsx  # Generic placeholder for WIP routes
+│   │   ├── Placeholder.jsx
+│   │   └── components/     # Component documentation
+│   │       └── Button.jsx
 │   │
 │   └── utils/
 │       └── colorUtils.js
@@ -102,17 +103,17 @@ o9ds Website/
 
 | Location | Contents |
 |----------|----------|
-| `src/data/brandColors.js` | Brand palettes, neutrals |
-| `src/data/globalColorTokens.js` | Global colors (neutral, theme, dark, feedback, utility) |
-| `src/data/semanticColorTokens.js` | Semantic mappings (surface, border, text, icon) |
-| `src/data/spacingTokens.js` | Spacing scale (`o9ds-space-*`) |
-| `src/data/borderTokens.js` | Border radius and width |
-| `src/data/iconTokens.js` | Icon size tokens (o9con) |
-| `src/data/illustrationTokens.js` | Illustration size tokens (o9Illus) |
-| `src/data/o9conIcons.js` | o9con icon class names and metadata |
+| `src/tokens/brandColors.js` | Brand palettes, neutrals |
+| `src/tokens/globalColorTokens.js` | Global colors (neutral, theme, dark, feedback, utility) |
+| `src/tokens/semanticColorTokens.js` | Semantic mappings (surface, border, text, icon) |
+| `src/tokens/spacingTokens.js` | Spacing scale (`o9ds-space-*`) |
+| `src/tokens/borderTokens.js` | Border radius and width |
+| `src/tokens/iconTokens.js` | Icon size tokens (o9con) |
+| `src/tokens/illustrationTokens.js` | Illustration size tokens (o9Illus) |
+| `src/tokens/o9conIcons.js` | o9con icon class names and metadata |
 | `src/index.css` | Global styles, 0-radius policy, `data-o9ds-*` rules |
 | `src/App.jsx` | Route definitions |
-| `src/components/Layout.jsx` | Sidebar nav, page titles |
+| `src/LayoutComponents/Layout.jsx` | Sidebar nav, page titles |
 
 ---
 
@@ -148,7 +149,7 @@ o9ds Website/
 ## Adding or Changing Tokens
 
 1. **Colors** — Edit `globalColorTokens.js` or `semanticColorTokens.js`
-2. **Spacing / borders / icons / illustrations** — Edit the matching file in `src/data/`
+2. **Spacing / borders / icons / illustrations** — Edit the matching file in `src/tokens/`
 3. Save; dev server reloads automatically
 
 ---

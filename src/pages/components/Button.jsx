@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import CodeBlock from '../components/CodeBlock'
+import CodeBlock from '../../LayoutComponents/CodeBlock'
 
 const variants = [
   { name: 'Primary', variant: 'default', className: 'bg-o9ds-light-surface dark:bg-white text-o9ds-light-primary dark:text-black hover:bg-o9ds-light-border dark:hover:bg-neutral-200' },

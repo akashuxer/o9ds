@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import CodeBlock from '../components/CodeBlock'
-import { BORDER_TOKENS_SCSS } from '../data/borderTokens'
+import CodeBlock from '../LayoutComponents/CodeBlock'
+import { BORDER_TOKENS_SCSS } from '../tokens/borderTokens'
 
 function CopyIcon({ className }) {
   return (

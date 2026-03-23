@@ -1,6 +1,6 @@
 ---
 description: o9ds component development — no third-party libraries, no Tailwind, build from scratch
-globs: src/components/**/*, src/pages/**/*
+globs: src/LayoutComponents/**/*, src/pages/**/*
 alwaysApply: false
 ---
 

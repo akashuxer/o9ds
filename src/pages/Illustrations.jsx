@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import { ILLUSTRATION_SIZE_TOKENS_SCSS } from '../data/illustrationTokens'
-import CodeBlock from '../components/CodeBlock'
+import { ILLUSTRATION_SIZE_TOKENS_SCSS } from '../tokens/illustrationTokens'
+import CodeBlock from '../LayoutComponents/CodeBlock'
 
 const tabs = ['Overview', 'o9Illus Gallery', 'Accessibility', 'Code']
 

@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import ColorSwatch from '../components/ColorSwatch'
-import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../data/brandColors'
+import ColorSwatch from '../LayoutComponents/ColorSwatch'
+import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../tokens/brandColors'
 import {
   NEUTRAL_TOKENS,
   o9THEME_TOKENS,
@@ -15,7 +15,7 @@ import {
   FEEDBACK_REDISH,
   FEEDBACK_ORANGISH,
   UTILITY_TOKENS,
-} from '../data/globalColorTokens'
+} from '../tokens/globalColorTokens'
 import {
   SEMANTIC_SURFACE,
   SEMANTIC_BORDER,
@@ -28,7 +28,7 @@ import {
   resolveSurfaceThemeHex,
   resolveSurfaceNegativeActiveHex,
   resolveSurfaceWhiteStaticHex,
-} from '../data/semanticColorTokens'
+} from '../tokens/semanticColorTokens'
 
 const tabs = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Tokens']
 
