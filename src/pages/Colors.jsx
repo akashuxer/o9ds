@@ -248,7 +248,7 @@ export default function Colors() {
                     <code className="shrink-0 font-mono text-sm font-semibold text-o9ds-light-primary dark:text-white">({code})</code>
                     <div>
                       <span className="font-medium text-o9ds-light-primary dark:text-white">{name}</span>
-                      <span className="text-o9ds-light-secondary dark:text-neutral-400"> — {usage}</span>
+                      <span style={isLight ? { color: '#303030' } : undefined} className="dark:text-neutral-400"> — {usage}</span>
                     </div>
                   </div>
                 ))}
