@@ -92,33 +92,6 @@ const sidebarSections = [
     ],
   },
   {
-    title: 'CONTENT GUIDELINES',
-    items: [
-      { path: '/content', label: 'Overview' },
-      { path: '/content/writing-principles', label: 'Writing Principles' },
-      { path: '/content/grammar', label: 'Grammar' },
-      { path: '/content/voice-and-tone', label: 'Voice and Tone' },
-    ],
-  },
-  {
-    title: 'PATTERNS',
-    items: [
-      { path: '/patterns', label: 'Overview' },
-      { path: '/patterns/forms', label: 'Forms' },
-      { path: '/patterns/search', label: 'Search' },
-      { path: '/patterns/filters', label: 'Filters' },
-      { path: '/patterns/tables', label: 'Tables' },
-      { path: '/patterns/side-panels', label: 'Side Panels' },
-      { path: '/patterns/modals', label: 'Modals' },
-      { path: '/patterns/notifications', label: 'Notifications' },
-      { path: '/patterns/empty-states', label: 'Empty States' },
-      { path: '/patterns/bulk-actions', label: 'Bulk Actions' },
-      { path: '/patterns/nested-interactions', label: 'Nested Interactions' },
-      { path: '/patterns/drag', label: 'Drag' },
-      { path: '/patterns/disabled', label: 'Disabled' },
-    ],
-  },
-  {
     title: 'ACCESSIBILITY',
     items: [
       { path: '/accessibility', label: 'Overview' },
@@ -147,6 +120,33 @@ const sidebarSections = [
       { path: '/components/textarea', label: 'Textarea' },
       { path: '/components/search', label: 'Search' },
       { path: '/components/select', label: 'Select' },
+    ],
+  },
+  {
+    title: 'CONTENT GUIDELINES',
+    items: [
+      { path: '/content', label: 'Overview' },
+      { path: '/content/writing-principles', label: 'Writing Principles' },
+      { path: '/content/grammar', label: 'Grammar' },
+      { path: '/content/voice-and-tone', label: 'Voice and Tone' },
+    ],
+  },
+  {
+    title: 'PATTERNS',
+    items: [
+      { path: '/patterns', label: 'Overview' },
+      { path: '/patterns/forms', label: 'Forms' },
+      { path: '/patterns/search', label: 'Search' },
+      { path: '/patterns/filters', label: 'Filters' },
+      { path: '/patterns/tables', label: 'Tables' },
+      { path: '/patterns/side-panels', label: 'Side Panels' },
+      { path: '/patterns/modals', label: 'Modals' },
+      { path: '/patterns/notifications', label: 'Notifications' },
+      { path: '/patterns/empty-states', label: 'Empty States' },
+      { path: '/patterns/bulk-actions', label: 'Bulk Actions' },
+      { path: '/patterns/nested-interactions', label: 'Nested Interactions' },
+      { path: '/patterns/drag', label: 'Drag' },
+      { path: '/patterns/disabled', label: 'Disabled' },
     ],
   },
 ]

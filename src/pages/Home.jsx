@@ -47,10 +47,10 @@ const cards = [
   { title: 'Get Started', desc: 'Overview, principles, and how to use the design system', path: '/overview', icon: 'getStarted' },
   { title: 'Foundations', desc: 'Tokens, colors, typography, spacing', path: '/colors', icon: 'foundations' },
   { title: 'Assets', desc: 'Icons and illustrations', path: '/icons', icon: 'assets' },
-  { title: 'Components', desc: 'Buttons, inputs, navigation, and more', path: '/components/button', icon: 'components' },
   { title: 'Accessibility', desc: 'WCAG standards and inclusive design', path: '/accessibility', icon: 'accessibility' },
-  { title: 'Patterns', desc: 'Workflow solutions and layouts', path: '/patterns', icon: 'patterns' },
+  { title: 'Components', desc: 'Buttons, inputs, navigation, and more', path: '/components/button', icon: 'components' },
   { title: 'Content Guidelines', desc: 'UX writing and microcopy', path: '/content', icon: 'content' },
+  { title: 'Patterns', desc: 'Workflow solutions and layouts', path: '/patterns', icon: 'patterns' },
 ]
 
 export default function Home() {
