@@ -262,10 +262,13 @@ export default function Colors() {
               ].map(({ level, title, desc, example }) => (
                 <div
                   key={level}
-                  className="flex gap-4 items-start border dark:border-neutral-700 p-4 shadow-sm"
+                  className="group flex gap-4 items-start border dark:border-neutral-700 p-4 shadow-sm"
                   style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : { backgroundColor: 'transparent' }}
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center text-sm font-bold dark:bg-neutral-700" style={isLight ? { backgroundColor: '#010101', color: '#FFFFFF' } : { color: '#fff' }}>
+                  <span
+                    className="flex h-12 w-12 shrink-0 items-center justify-center text-sm font-bold transition-colors dark:bg-neutral-700 dark:text-neutral-400 group-hover:text-white"
+                    data-o9ds-avatar={isLight ? '' : undefined}
+                  >
                     {level}
                   </span>
                   <div className="min-w-0 flex-1">
