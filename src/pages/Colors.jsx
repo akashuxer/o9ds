@@ -26,6 +26,8 @@ import {
   resolveSemanticToHex,
   resolveSemanticToGlobalName,
   resolveSurfaceThemeHex,
+  resolveSurfaceNegativeActiveHex,
+  resolveSurfaceWhiteStaticHex,
 } from '../data/semanticColorTokens'
 
 const tabs = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Tokens']
@@ -131,7 +133,14 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
   const lightHex = resolveHex(row, lightTheme, false)
   const darkHex = resolveHex(row, lightTheme, true)
   const lightModeGlobalName = resolveName(row, lightTheme, false)
-  const useSurfaceThemeBg = row.token === 'o9ds-color-b-focus-inverse'
+  const useSurfaceThemeBg =
+    row.token === 'o9ds-color-b-focus-inverse' ||
+    row.token === 'o9ds-color-t-inverse' ||
+    row.token === 'o9ds-color-i-inverse' ||
+    row.token === 'o9ds-color-t-active-inverse' ||
+    row.token === 'o9ds-color-i-active-inverse'
+  const useSurfaceNegativeActiveBg =
+    row.token === 'o9ds-color-t-white-static' || row.token === 'o9ds-color-i-white-static'
 
   const getCopyText = () => {
     if (semanticSubTab === 'Surface') return `background: var(--${row.token});`
@@ -168,8 +177,20 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
       ? null
       : { backgroundColor: darkHex, border: `1px solid ${rowBorderColor}` }
 
-  const lightModeCellBg = useSurfaceThemeBg ? resolveSurfaceThemeHex(lightTheme, false) : '#FFFFFF'
-  const darkModeCellBg = useSurfaceThemeBg ? resolveSurfaceThemeHex(lightTheme, true) : '#010101'
+  const lightModeCellBg = useSurfaceNegativeActiveBg
+    ? resolveSurfaceNegativeActiveHex(lightTheme, false)
+    : useSurfaceWhiteStaticBg
+      ? resolveSurfaceWhiteStaticHex(lightTheme, false)
+      : useSurfaceThemeBg
+        ? resolveSurfaceThemeHex(lightTheme, false)
+        : '#FFFFFF'
+  const darkModeCellBg = useSurfaceNegativeActiveBg
+    ? resolveSurfaceNegativeActiveHex(lightTheme, true)
+    : useSurfaceWhiteStaticBg
+      ? resolveSurfaceWhiteStaticHex(lightTheme, true)
+      : useSurfaceThemeBg
+        ? resolveSurfaceThemeHex(lightTheme, true)
+        : '#010101'
   const isLightBg = (hex) => !hex || hex === '#FFFFFF' || hex === '#fff' || hex.toLowerCase() === '#ffffff'
   const lightModeCellFg = isLightBg(lightModeCellBg) ? '#303030' : '#FFFFFF'
   const darkModeCellFg = isLightBg(darkModeCellBg) ? '#010101' : '#FFFFFF'
@@ -198,8 +219,9 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
     const lum = 0.299 * r + 0.587 * g + 0.114 * b
     return lum < 0.08
   }
-  const lightSwatchBg = (isTextTab || isIconTab) && isWhiteOrVeryLight(lightHex) ? '#404040' : 'transparent'
-  const darkSwatchBg = (isTextTab || isIconTab) && isBlackOrVeryDark(darkHex) ? '#525252' : 'transparent'
+  const needsContrastBackdrop = !useSurfaceThemeBg && !useSurfaceNegativeActiveBg && !useSurfaceWhiteStaticBg
+  const lightSwatchBg = (isTextTab || isIconTab) && needsContrastBackdrop && isWhiteOrVeryLight(lightHex) ? '#404040' : 'transparent'
+  const darkSwatchBg = (isTextTab || isIconTab) && needsContrastBackdrop && isBlackOrVeryDark(darkHex) ? '#525252' : 'transparent'
 
   return (
     <tr style={{ borderBottom: `1px solid ${rowBorderColor}` }} className="last:border-b-0 group">
@@ -207,12 +229,12 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
       <td className="py-2 px-3" style={{ backgroundColor: lightModeCellBg }}>
         <div className="flex items-center gap-2">
           {isTextTab ? (
-            <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: lightSwatchBg }}>
-              <span className="text-lg font-semibold leading-none" style={{ color: lightHex }} title={lightHex}>A</span>
+            <div className="shrink-0 min-w-8 h-6 px-1 rounded flex items-center justify-center" style={{ backgroundColor: lightSwatchBg }}>
+              <span className="text-base font-medium leading-none o9ds-swatch" style={{ ['--o9ds-swatch-color']: lightHex, color: 'var(--o9ds-swatch-color)' }} title={lightHex} data-o9ds-swatch>Ab1@</span>
             </div>
           ) : isIconTab ? (
             <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: lightSwatchBg }}>
-              <span className="o9con o9con-info-circle o9ds-icon-20" style={{ color: lightHex, fontSize: '20px' }} title={lightHex} aria-hidden />
+              <span className="o9con o9con-info-circle o9ds-icon-20 o9ds-swatch" style={{ ['--o9ds-swatch-color']: lightHex, color: 'var(--o9ds-swatch-color)', fontSize: '20px' }} title={lightHex} aria-hidden />
             </div>
           ) : (
             <div className="h-6 w-6 shrink-0" style={lightTileStyle} title={lightHex} />
@@ -223,12 +245,12 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
       <td className="py-2 px-3" style={{ backgroundColor: darkModeCellBg }}>
         <div className="flex items-center gap-2">
           {isTextTab ? (
-            <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: darkSwatchBg }}>
-              <span className="text-lg font-semibold leading-none" style={{ color: darkHex }} title={darkHex}>A</span>
+            <div className="shrink-0 min-w-8 h-6 px-1 rounded flex items-center justify-center" style={{ backgroundColor: darkSwatchBg }}>
+              <span className="text-base font-medium leading-none o9ds-swatch" style={{ ['--o9ds-swatch-color']: darkHex, color: 'var(--o9ds-swatch-color)' }} title={darkHex} data-o9ds-swatch>Ab1@</span>
             </div>
           ) : isIconTab ? (
             <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: darkSwatchBg }}>
-              <span className="o9con o9con-info-circle o9ds-icon-20" style={{ color: darkHex, fontSize: '20px' }} title={darkHex} aria-hidden />
+              <span className="o9con o9con-info-circle o9ds-icon-20 o9ds-swatch" style={{ ['--o9ds-swatch-color']: darkHex, color: 'var(--o9ds-swatch-color)', fontSize: '20px' }} title={darkHex} aria-hidden />
             </div>
           ) : (
             <div className="h-6 w-6 shrink-0" style={darkTileStyle} title={darkHex} />

@@ -19,9 +19,23 @@ export const THEME_LABELS = {
 /** Surface-theme token (o9ds-color-s-theme) for cell bg when displaying focus-inverse, disabled. */
 const SURFACE_THEME_ROW = { lightGlobal: { o9theme: 'o9ds-global-o9theme-10', skyblue: 'o9ds-global-skyblue-09', onyxblack: 'o9ds-global-onyxblack-10', forestgreen: 'o9ds-global-forestgreen-09', midnightindigo: 'o9ds-global-midnightindigo-10' }, darkGlobal: 'o9ds-global-dark-07' }
 
-/** Resolve surface-theme hex for focus-inverse / disabled cell backgrounds. */
+/** Resolve surface-theme hex for focus-inverse / inverse / active-inverse cell backgrounds. */
 export function resolveSurfaceThemeHex(lightTheme, isDark) {
   const globalToken = isDark ? SURFACE_THEME_ROW.darkGlobal : SURFACE_THEME_ROW.lightGlobal[lightTheme]
+  return GLOBAL_TOKEN_HEX[globalToken] ?? '#808080'
+}
+
+/** Resolve surface-negative-active hex for white-static cell backgrounds. */
+const SURFACE_NEGATIVE_ACTIVE = { lightGlobal: 'o9ds-global-redish-11', darkGlobal: 'o9ds-global-redish-10' }
+export function resolveSurfaceNegativeActiveHex(lightTheme, isDark) {
+  const globalToken = isDark ? SURFACE_NEGATIVE_ACTIVE.darkGlobal : SURFACE_NEGATIVE_ACTIVE.lightGlobal
+  return GLOBAL_TOKEN_HEX[globalToken] ?? '#808080'
+}
+
+/** Resolve surface-white-static hex for black-static cell backgrounds. */
+const SURFACE_WHITE_STATIC = { lightGlobal: 'o9ds-global-white', darkGlobal: 'o9ds-global-white' }
+export function resolveSurfaceWhiteStaticHex(lightTheme, isDark) {
+  const globalToken = isDark ? SURFACE_WHITE_STATIC.darkGlobal : SURFACE_WHITE_STATIC.lightGlobal
   return GLOBAL_TOKEN_HEX[globalToken] ?? '#808080'
 }
 
