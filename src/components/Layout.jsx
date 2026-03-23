@@ -463,7 +463,7 @@ export default function Layout({ children }) {
           style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
           data-theme={theme}
         >
-          <div className="mx-auto max-w-4xl relative z-10">
+          <div className={`mx-auto relative z-10 ${pathname === '/' ? 'max-w-6xl' : 'max-w-4xl'}`}>
             {children}
           </div>
         </main>

@@ -57,18 +57,38 @@ export default function Home() {
   const { theme } = useTheme()
   const isLight = theme === 'light'
 
+  const highlightStyle = isLight
+    ? { backgroundColor: 'rgba(255, 229, 0, 0.35)', padding: '0 0.2em', borderRadius: '2px' }
+    : { backgroundColor: 'rgba(255, 229, 0, 0.2)', padding: '0 0.2em', borderRadius: '2px', color: '#fff' }
+
   return (
     <div className="space-y-16">
       {/* Hero Section */}
       <section>
-        <h1 className="text-4xl md:text-5xl font-bold text-o9ds-light-primary dark:text-white mb-4 tracking-tight">
-          Design with Consistency. Build with Confidence. Scale with o9 Design System.
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-o9ds-light-primary dark:text-white mb-6 tracking-tight leading-[1.15]">
+          Design with Consistency. Build with Confidence.{' '}
+          <span className="block mt-1">Scale with o9 Design System.</span>
         </h1>
-        <p className="text-xl md:text-2xl text-o9ds-light-secondary dark:text-neutral-400 mb-8 max-w-2xl leading-relaxed">
-          o9 Design System (o9DS) is a centralized system of foundations, components, and patterns that standardize how products are designed and built across the platform. It enables teams to create consistent, accessible, and scalable enterprise experiences while reducing design and development effort. By aligning design, engineering, and business, o9DS accelerates product delivery and ensures a unified experience across all workflows.
-        </p>
+        <div className="flex flex-wrap gap-2 mb-6">
+          <span className="px-3 py-1 text-sm font-medium border" style={isLight ? { borderColor: '#E5E5E5', color: '#303030', backgroundColor: '#F9F9F9' } : { borderColor: '#404040', color: '#a3a3a3', backgroundColor: '#171717' }}>
+            Foundations
+          </span>
+          <span className="px-3 py-1 text-sm font-medium border" style={isLight ? { borderColor: '#E5E5E5', color: '#303030', backgroundColor: '#F9F9F9' } : { borderColor: '#404040', color: '#a3a3a3', backgroundColor: '#171717' }}>
+            Components
+          </span>
+          <span className="px-3 py-1 text-sm font-medium border" style={isLight ? { borderColor: '#E5E5E5', color: '#303030', backgroundColor: '#F9F9F9' } : { borderColor: '#404040', color: '#a3a3a3', backgroundColor: '#171717' }}>
+            Patterns
+          </span>
+        </div>
+        <div className="border rounded-lg p-6 md:p-8 mb-8" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FAFAFA' } : { borderColor: '#262626', backgroundColor: '#0a0a0a' }}>
+          <p className="text-lg md:text-xl text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed md:leading-loose max-w-4xl">
+            <strong className="text-o9ds-light-primary dark:text-white">o9 Design System (o9DS)</strong> is a centralized system of{' '}
+            <span style={highlightStyle}>foundations, components, and patterns</span> that standardize how products are designed and built across the platform. It enables teams to create{' '}
+            <span style={highlightStyle}>consistent, accessible, and scalable</span> enterprise experiences while reducing design and development effort. By aligning design, engineering, and business, o9DS accelerates product delivery and ensures a unified experience across all workflows.
+          </p>
+        </div>
         <div
-          className="group/hero border overflow-hidden animate-fade-in shadow-sm"
+          className="group/hero border overflow-hidden animate-fade-in shadow-sm rounded-lg"
           style={{ borderColor: isLight ? '#E5E5E5' : '#404040', backgroundColor: isLight ? '#F2F2F2' : '#171717' }}
         >
           <div className="relative overflow-hidden">
@@ -92,7 +112,7 @@ export default function Home() {
 
       {/* Navigation Cards */}
       <section>
-        <h2 className="text-2xl md:text-3xl font-semibold text-o9ds-light-primary dark:text-white mb-8">Explore the design system</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold text-o9ds-light-primary dark:text-white mb-8 mt-12">Explore the design system</h2>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map(({ title, desc, path, icon }, i) => (
             <Link
