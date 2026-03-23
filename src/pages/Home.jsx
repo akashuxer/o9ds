@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import PageWithToc from '../LayoutComponents/PageWithToc'
+import MouseGlow from '../LayoutComponents/MouseGlow'
 
 const HOME_SECTIONS = [{ id: 'explore', label: 'Explore the design system' }]
 
@@ -47,13 +48,13 @@ const CardIcon = ({ name }) => {
 }
 
 const cards = [
-  { title: 'Get Started', desc: 'Overview, principles, and how to use the design system', path: '/overview', icon: 'getStarted' },
-  { title: 'Foundations', desc: 'Tokens, colors, typography, spacing', path: '/colors', icon: 'foundations' },
+  { title: 'Get Started', desc: 'Overview, principles, and usage', path: '/overview', icon: 'getStarted' },
+  { title: 'Foundations', desc: 'Colors, typography, spacing', path: '/colors', icon: 'foundations' },
   { title: 'Assets', desc: 'Icons and illustrations', path: '/icons', icon: 'assets' },
-  { title: 'Components', desc: 'Buttons, inputs, navigation, and more', path: '/components/button', icon: 'components' },
-  { title: 'Accessibility', desc: 'WCAG standards and inclusive design', path: '/accessibility', icon: 'accessibility' },
-  { title: 'Content Guidelines', desc: 'UX writing and microcopy', path: '/content', icon: 'content' },
-  { title: 'Patterns', desc: 'Workflow solutions and layouts', path: '/patterns', icon: 'patterns' },
+  { title: 'Components', desc: 'Buttons, inputs, navigation', path: '/components/button', icon: 'components' },
+  { title: 'Accessibility', desc: 'WCAG and inclusive design', path: '/accessibility', icon: 'accessibility' },
+  { title: 'Content', desc: 'UX writing and microcopy', path: '/content', icon: 'content' },
+  { title: 'Patterns', desc: 'Workflows and layouts', path: '/patterns', icon: 'patterns' },
 ]
 
 export default function Home() {
@@ -61,72 +62,75 @@ export default function Home() {
   const isLight = theme === 'light'
 
   const highlightStyle = isLight
-    ? { backgroundColor: 'rgba(255, 229, 0, 0.35)', padding: '0 0.2em', borderRadius: '2px' }
-    : { backgroundColor: 'rgba(255, 229, 0, 0.2)', padding: '0 0.2em', borderRadius: '2px', color: '#fff' }
+    ? { backgroundColor: 'rgba(255, 229, 0, 0.3)', padding: '0 0.15em' }
+    : { backgroundColor: 'rgba(255, 229, 0, 0.18)', padding: '0 0.15em', color: '#fff' }
 
   return (
     <PageWithToc sections={HOME_SECTIONS}>
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <section>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-o9ds-light-primary dark:text-white mb-6 tracking-tight leading-[1.15]">
-          Design with Consistency. Build with Confidence. Scale with o9ds
+    <MouseGlow />
+    <div className="relative z-10 space-y-20">
+      {/* Hero */}
+      <section className="relative">
+        <h1 className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-o9ds-light-primary dark:text-white mb-8 tracking-tight leading-[1.1] animate-fade-in">
+          Design with consistency.
+          <br />
+          Build with confidence.
+          <br />
+          <span className="animate-highlight-pulse" style={highlightStyle}>Scale with o9ds</span>
         </h1>
-        <div className="border p-6 md:p-8 mb-8" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FAFAFA' } : { borderColor: '#262626', backgroundColor: '#0a0a0a' }}>
-          <p className="text-lg md:text-xl text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed md:leading-loose max-w-4xl">
-            <strong style={{ color: isLight ? '#010101' : '#fff' }}>o9 Design System (o9DS)</strong> is a centralized system of{' '}
-            <span className="animate-highlight-pulse" style={highlightStyle}>foundations, components, and patterns</span> that standardize how products are designed and built across the platform. It enables teams to create{' '}
-            <span className="animate-highlight-pulse" style={highlightStyle}>consistent, accessible, and scalable</span> enterprise experiences while reducing design and development effort. By aligning design, engineering, and business,{' '}
-            <span className="animate-highlight-pulse" style={highlightStyle}>o9DS accelerates product delivery and ensures a unified experience across all workflows</span>.
-          </p>
-        </div>
+
+        <p className="relative text-lg md:text-xl text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed animate-fade-in" style={{ animationDelay: '100ms' }}>
+          One system. Consistent experiences across the platform. Foundations, components, and patterns that accelerate delivery.
+        </p>
+
         <div
-          className="group/hero border overflow-hidden animate-fade-in shadow-sm rounded-lg"
-          style={{ borderColor: isLight ? '#E5E5E5' : '#404040', backgroundColor: isLight ? '#F2F2F2' : '#171717' }}
+          className="group/hero relative mt-12 border overflow-hidden animate-fade-in shadow-sm"
+          style={{
+            borderColor: isLight ? '#E5E5E5' : '#404040',
+            backgroundColor: isLight ? '#F2F2F2' : '#171717',
+            animationDelay: '150ms',
+          }}
         >
-          <div className="relative overflow-hidden">
-            <img
-              src="/dashboard-app.svg"
-              alt="o9 Design System — Enterprise dashboard with workspaces, filters, and data visualization"
-              className="w-full h-auto transition-transform duration-500 ease-out group-hover/hero:scale-105"
-            />
-            {/* Fade-darken gradient from bottom */}
-            <div
-              className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
-              style={{
-                background: isLight
-                  ? 'linear-gradient(to top, rgba(0,0,0,0.12), transparent)'
-                  : 'linear-gradient(to top, rgba(0,0,0,0.4), transparent)',
-              }}
-            />
-          </div>
+          <img
+            src="/dashboard-app.svg"
+            alt="o9 Design System — Enterprise dashboard"
+            className="w-full h-auto transition-transform duration-700 ease-out group-hover/hero:scale-[1.02]"
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+            style={{
+              background: isLight
+                ? 'linear-gradient(to top, rgba(0,0,0,0.08), transparent)'
+                : 'linear-gradient(to top, rgba(0,0,0,0.35), transparent)',
+            }}
+          />
         </div>
       </section>
 
-      {/* Navigation Cards */}
-      <section id="explore">
-        <h2 className="text-2xl md:text-3xl font-semibold text-o9ds-light-primary dark:text-white mb-8 mt-12">Explore the design system</h2>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Cards */}
+      <section id="explore" className="relative">
+        <h2 className="text-xl md:text-2xl font-semibold text-o9ds-light-primary dark:text-white mb-8">Explore</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map(({ title, desc, path, icon }, i) => (
             <Link
               key={path}
               to={path}
-              className="group block border p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 animate-fade-in-up"
+              className="group block border p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in-up"
               style={{
-                animationDelay: `${i * 60}ms`,
+                animationDelay: `${80 + i * 50}ms`,
                 borderColor: isLight ? '#E5E5E5' : '#404040',
                 backgroundColor: isLight ? '#FFFFFF' : 'transparent',
               }}
-            data-o9ds-card={isLight ? 'light-white' : 'dark'}
+              data-o9ds-card={isLight ? 'light-white' : 'dark'}
             >
               <span
-                className="flex h-12 w-12 items-center justify-center mb-4 transition-colors dark:bg-neutral-700 dark:text-neutral-400 group-hover:text-white"
+                className="flex h-11 w-11 items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110"
                 data-o9ds-avatar={isLight ? '' : undefined}
               >
                 <CardIcon name={icon} />
               </span>
-              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h3>
-              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">{desc}</p>
+              <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white mb-1">{title}</h3>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">{desc}</p>
             </Link>
           ))}
         </div>
