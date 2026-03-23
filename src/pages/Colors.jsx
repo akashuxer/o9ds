@@ -2,8 +2,116 @@ import { useState, useRef } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import ColorSwatch from '../components/ColorSwatch'
 import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../data/brandColors'
+import {
+  NEUTRAL_TOKENS,
+  o9THEME_TOKENS,
+  DARK_THEME_TOKENS,
+  ONYXBLACK_TOKENS,
+  SKYBLUE_TOKENS,
+  FORESTGREEN_TOKENS,
+  MIDNIGHTINDIGO_TOKENS,
+  FEEDBACK_BLUISH,
+  FEEDBACK_GREENISH,
+  FEEDBACK_REDISH,
+  FEEDBACK_ORANGISH,
+  UTILITY_TOKENS,
+} from '../data/globalColorTokens'
 
 const tabs = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Tokens']
+
+function CopyIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+    </svg>
+  )
+}
+
+function CheckDoubleIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l4 4 9-9" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 16l3 3 7-7" />
+    </svg>
+  )
+}
+
+function TokenRow({ token, hex, primary, isLight }) {
+  const [copied, setCopied] = useState(false)
+  const snippet = `var(--${token});`
+
+  const handleCopy = (e) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(snippet).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    })
+  }
+
+  const rowBorderColor = isLight ? '#E5E5E5' : '#404040'
+  return (
+    <tr style={{ borderBottom: `1px solid ${rowBorderColor}` }} className="last:border-b-0 group">
+      <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">
+        {token}
+        {primary && <span className="ml-1 px-1 py-0.5 text-[10px] font-medium" style={{ backgroundColor: isLight ? '#E5E5E5' : '#404040', color: isLight ? '#010101' : '#fff' }}>P</span>}
+      </td>
+      <td className="py-2 px-3">
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-6 border shrink-0" style={{ backgroundColor: hex, borderColor: rowBorderColor }} />
+          <span className="font-mono text-o9ds-light-secondary dark:text-neutral-400" style={isLight ? { color: '#303030' } : undefined}>{hex}</span>
+        </div>
+      </td>
+      <td className="py-2 px-3 w-10">
+        <button
+          onClick={handleCopy}
+          className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
+          style={
+            copied
+              ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
+              : isLight ? { borderColor: '#E5E5E5', color: '#303030' } : { borderColor: '#404040', color: '#a3a3a3' }
+          }
+          title="Copy var()"
+          aria-label="Copy code"
+        >
+          {copied ? <CheckDoubleIcon className="h-3.5 w-3.5" style={{ color: '#fff' }} /> : <CopyIcon className="h-3.5 w-3.5" />}
+        </button>
+      </td>
+    </tr>
+  )
+}
+
+function TokenTable({ tokens, isLight }) {
+  const rowBorderColor = isLight ? '#E5E5E5' : '#404040'
+  const tableBg = isLight ? '#FFFFFF' : '#0a0a0a'
+
+  return (
+    <div
+      className="border overflow-hidden"
+      style={{
+        borderColor: rowBorderColor,
+        backgroundColor: tableBg,
+      }}
+    >
+      <table className="w-full text-sm">
+        <thead>
+          <tr
+            style={isLight ? { backgroundColor: '#F2F2F2', borderBottom: `1px solid ${rowBorderColor}` } : { borderBottom: `1px solid ${rowBorderColor}` }}
+            className="dark:bg-neutral-800/50"
+          >
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Token Name</th>
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Hex</th>
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white w-10" aria-label="Copy" />
+          </tr>
+        </thead>
+        <tbody>
+          {tokens.map(({ token, hex, primary }) => (
+            <TokenRow key={token} token={token} hex={hex} primary={primary} isLight={isLight} />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 export default function Colors() {
   const [activeTab, setActiveTab] = useState('Overview')
@@ -374,26 +482,93 @@ export default function Colors() {
       )}
 
       {activeTab === 'Global Tokens' && (
-        <section className="space-y-4">
-          <p className="text-o9ds-light-secondary dark:text-neutral-400">Neutral grays and theme-specific palettes.</p>
-          <div className="grid gap-2 sm:grid-cols-5">
-            {[
-              { n: '50', hex: '#fafafa' },
-              { n: '100', hex: '#f5f5f5' },
-              { n: '200', hex: '#e5e5e5' },
-              { n: '300', hex: '#d4d4d4' },
-              { n: '400', hex: '#a3a3a3' },
-              { n: '500', hex: '#737373' },
-              { n: '600', hex: '#525252' },
-              { n: '700', hex: '#404040' },
-              { n: '800', hex: '#262626' },
-              { n: '900', hex: '#171717' },
-            ].map(({ n, hex }) => (
-              <div key={n} className=" overflow-hidden">
-                <div className="h-12" style={{ backgroundColor: hex }} />
-                <p className="py-1 text-center text-xs text-o9ds-light-secondary dark:text-neutral-500">{n}</p>
+        <section className="space-y-10">
+          {/* Neutral Colors */}
+          <div>
+            <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Neutral Colors</h2>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+              Base grayscale colors ranging from pure black to pure white, providing the foundation for backgrounds, text, and borders.
+            </p>
+            <TokenTable tokens={NEUTRAL_TOKENS} isLight={isLight} />
+          </div>
+
+          {/* o9 Theme (default light) */}
+          <div>
+            <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">o9 Theme</h2>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
+              Default theme in light mode.
+            </p>
+            <TokenTable tokens={o9THEME_TOKENS} isLight={isLight} />
+          </div>
+
+          {/* Dark Mode Theme */}
+          <div>
+            <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Dark Mode Theme</h2>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
+              o9 theme in dark mode.
+            </p>
+            <TokenTable tokens={DARK_THEME_TOKENS} isLight={isLight} />
+          </div>
+
+          {/* Secondary Themes */}
+          <div>
+            <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Secondary Themes</h2>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
+              Forest Green, Onyx Black, Midnight Indigo, and Sky Blue.
+            </p>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Forest Green</h3>
+                <TokenTable tokens={FORESTGREEN_TOKENS} isLight={isLight} />
               </div>
-            ))}
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Onyx Black</h3>
+                <TokenTable tokens={ONYXBLACK_TOKENS} isLight={isLight} />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Midnight Indigo</h3>
+                <TokenTable tokens={MIDNIGHTINDIGO_TOKENS} isLight={isLight} />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Sky Blue</h3>
+                <TokenTable tokens={SKYBLUE_TOKENS} isLight={isLight} />
+              </div>
+            </div>
+          </div>
+
+          {/* Feedback Colors */}
+          <div>
+            <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Feedback Colors</h2>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+              Semantic status colors for communicating system states including error, success, warning, and informational feedback across all interface elements.
+            </p>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Bluish</h3>
+                <TokenTable tokens={FEEDBACK_BLUISH} isLight={isLight} />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Greenish</h3>
+                <TokenTable tokens={FEEDBACK_GREENISH} isLight={isLight} />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Redish</h3>
+                <TokenTable tokens={FEEDBACK_REDISH} isLight={isLight} />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-o9ds-light-primary dark:text-white mb-3">Orangish</h3>
+                <TokenTable tokens={FEEDBACK_ORANGISH} isLight={isLight} />
+              </div>
+            </div>
+          </div>
+
+          {/* Utility Colors */}
+          <div>
+            <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Utility Colors</h2>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
+              Purples, opacity tokens, and green scale — used less frequently.
+            </p>
+            <TokenTable tokens={UTILITY_TOKENS} isLight={isLight} />
           </div>
         </section>
       )}
