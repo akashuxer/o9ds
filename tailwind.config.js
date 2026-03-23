@@ -61,10 +61,15 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'highlight-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.85' },
+        },
       },
       animation: {
         'fade-in-up': 'fade-in-up 0.5s ease-out both',
         'fade-in': 'fade-in 0.4s ease-out both',
+        'highlight-pulse': 'highlight-pulse 2s ease-in-out infinite',
       },
       transitionDuration: {
         '400': '400ms',

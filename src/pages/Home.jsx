@@ -66,25 +66,14 @@ export default function Home() {
       {/* Hero Section */}
       <section>
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-o9ds-light-primary dark:text-white mb-6 tracking-tight leading-[1.15]">
-          Design with Consistency. Build with Confidence.{' '}
-          <span className="block mt-1">Scale with o9 Design System.</span>
+          Design with Consistency. Build with Confidence. Scale with o9ds
         </h1>
-        <div className="flex flex-wrap gap-2 mb-6">
-          <span className="px-3 py-1 text-sm font-medium border" style={isLight ? { borderColor: '#E5E5E5', color: '#303030', backgroundColor: '#F9F9F9' } : { borderColor: '#404040', color: '#a3a3a3', backgroundColor: '#171717' }}>
-            Foundations
-          </span>
-          <span className="px-3 py-1 text-sm font-medium border" style={isLight ? { borderColor: '#E5E5E5', color: '#303030', backgroundColor: '#F9F9F9' } : { borderColor: '#404040', color: '#a3a3a3', backgroundColor: '#171717' }}>
-            Components
-          </span>
-          <span className="px-3 py-1 text-sm font-medium border" style={isLight ? { borderColor: '#E5E5E5', color: '#303030', backgroundColor: '#F9F9F9' } : { borderColor: '#404040', color: '#a3a3a3', backgroundColor: '#171717' }}>
-            Patterns
-          </span>
-        </div>
-        <div className="border rounded-lg p-6 md:p-8 mb-8" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FAFAFA' } : { borderColor: '#262626', backgroundColor: '#0a0a0a' }}>
+        <div className="border p-6 md:p-8 mb-8" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FAFAFA' } : { borderColor: '#262626', backgroundColor: '#0a0a0a' }}>
           <p className="text-lg md:text-xl text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed md:leading-loose max-w-4xl">
-            <strong className="text-o9ds-light-primary dark:text-white">o9 Design System (o9DS)</strong> is a centralized system of{' '}
-            <span style={highlightStyle}>foundations, components, and patterns</span> that standardize how products are designed and built across the platform. It enables teams to create{' '}
-            <span style={highlightStyle}>consistent, accessible, and scalable</span> enterprise experiences while reducing design and development effort. By aligning design, engineering, and business, o9DS accelerates product delivery and ensures a unified experience across all workflows.
+            <strong style={{ color: isLight ? '#010101' : '#fff' }}>o9 Design System (o9DS)</strong> is a centralized system of{' '}
+            <span className="animate-highlight-pulse" style={highlightStyle}>foundations, components, and patterns</span> that standardize how products are designed and built across the platform. It enables teams to create{' '}
+            <span className="animate-highlight-pulse" style={highlightStyle}>consistent, accessible, and scalable</span> enterprise experiences while reducing design and development effort. By aligning design, engineering, and business,{' '}
+            <span className="animate-highlight-pulse" style={highlightStyle}>o9DS accelerates product delivery and ensures a unified experience across all workflows</span>.
           </p>
         </div>
         <div
