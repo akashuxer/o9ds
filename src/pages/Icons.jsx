@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import { o9conIcons } from '../data/o9conIcons'
+import { ICON_SIZE_TOKENS_SCSS } from '../data/iconTokens'
 import CodeBlock from '../components/CodeBlock'
 
 const tabs = ['Overview', 'o9con Gallery', 'Accessibility', 'Code']
@@ -259,7 +260,7 @@ export default function Icons() {
       )}
 
       {activeTab === 'Code' && (
-        <section className="space-y-6">
+        <section className="space-y-8">
           <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Implementation</h2>
           <p className="text-o9ds-light-secondary dark:text-neutral-400">Use the following HTML structure to render o9con icons:</p>
 
@@ -280,6 +281,12 @@ export default function Icons() {
 <span class="o9con o9con-arrow-left o9ds-icon-32"></span> <!-- 32px -->`}
             label="o9con usage examples"
           />
+
+          <div>
+            <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-3">Icon Size Tokens</h3>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">Copy the SCSS variables for icon sizes:</p>
+            <CodeBlock code={ICON_SIZE_TOKENS_SCSS} label="o9con icon size tokens" />
+          </div>
         </section>
       )}
     </div>

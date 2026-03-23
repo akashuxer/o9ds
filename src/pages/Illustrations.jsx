@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useTheme } from '../context/ThemeContext'
+import { ILLUSTRATION_SIZE_TOKENS_SCSS } from '../data/illustrationTokens'
 import CodeBlock from '../components/CodeBlock'
 
 const tabs = ['Overview', 'o9Illus Gallery', 'Accessibility', 'Code']
@@ -339,7 +340,7 @@ export default function Illustrations() {
       )}
 
       {activeTab === 'Code' && (
-        <section className="space-y-6">
+        <section className="space-y-8">
           <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Implementation</h2>
           <p className="text-o9ds-light-secondary dark:text-neutral-400">Use the following HTML structure to render an illustration:</p>
           <div className="relative">
@@ -351,6 +352,12 @@ export default function Illustrations() {
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
             Replace <code className="px-1 py-0.5" data-o9ds-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, no-filters-found, no-form-configured, no-notifications, no-post, no-report, no-results-found, no-slides, no-tasks, restricted-access, server-error, settings) and <code className="px-1 py-0.5" data-o9ds-inline-code>124</code> with the desired size (96, 124, 224).
           </p>
+
+          <div>
+            <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-3">Illustration Size Tokens</h3>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">Copy the SCSS variables for illustration sizes:</p>
+            <CodeBlock code={ILLUSTRATION_SIZE_TOKENS_SCSS} label="o9Illus size tokens" />
+          </div>
         </section>
       )}
     </div>
