@@ -282,7 +282,7 @@ export default function Layout({ children }) {
           backgroundColor: isDark ? '#000' : '#FFFFFF',
         }}
       >
-        <div className="flex h-14 items-center justify-between px-4 sm:px-6">
+        <div className="flex h-14 items-center justify-between px-4 sm:px-6 min-[2560px]:max-w-[1800px] min-[2560px]:mx-auto min-[2560px]:px-6">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen((o) => !o)}
@@ -350,13 +350,14 @@ export default function Layout({ children }) {
           />
         )}
 
-        <div className="flex">
-        {/* Sidebar - drawer on mobile, fixed on lg */}
+        <div className="flex min-[2560px]:max-w-[1800px] min-[2560px]:mx-auto min-[2560px]:w-full">
+        {/* Sidebar - drawer on mobile, fixed on lg, sticky in-flow on 2560px+ */}
         <aside
           className={`
             fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-64 shrink-0 overflow-y-auto border-r
             transform transition-transform duration-200 ease-out
             lg:translate-x-0
+            min-[2560px]:sticky min-[2560px]:top-14 min-[2560px]:self-start
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}
           style={{
@@ -364,7 +365,10 @@ export default function Layout({ children }) {
             backgroundColor: isDark ? '#0a0a0a' : '#F2F2F2',
           }}
         >
-          <div className="p-4">
+          <div
+            className="sticky top-0 z-10 p-4 border-b"
+            style={{ backgroundColor: isDark ? '#0a0a0a' : '#F2F2F2', borderColor: isDark ? '#262626' : '#E5E5E5' }}
+          >
             <input
               ref={searchRef}
               type="search"
@@ -461,7 +465,7 @@ export default function Layout({ children }) {
 
         {/* Main content */}
         <main
-          className="o9ds-main ml-0 lg:ml-64 min-h-[calc(100vh-3.5rem)] flex-1 px-4 sm:px-6 md:px-8 py-8 sm:py-10"
+          className="o9ds-main ml-0 lg:ml-64 min-[2560px]:ml-0 min-h-[calc(100vh-3.5rem)] flex-1 min-w-0 px-4 sm:px-6 md:px-8 py-8 sm:py-10"
           style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
           data-theme={theme}
         >
