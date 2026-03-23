@@ -81,7 +81,6 @@ const sidebarSections = [
     title: 'FOUNDATIONS',
     items: [
       { path: '/colors', label: 'Colors' },
-      { path: '/colors/data-viz', label: 'Data Visualization Colors' },
       { path: '/typography', label: 'Typography' },
       { path: '/spacing', label: 'Spacing' },
       { path: '/borders', label: 'Borders & Radius' },
@@ -89,12 +88,7 @@ const sidebarSections = [
       { path: '/illustrations', label: 'Illustrations' },
       { path: '/motion', label: 'Motion & Animation' },
       { path: '/elevation', label: 'Elevation & Shadows' },
-    ],
-  },
-  {
-    title: 'ACCESSIBILITY',
-    items: [
-      { path: '/accessibility', label: 'Overview' },
+      { path: '/colors/data-viz', label: 'Data Visualization Colors' },
     ],
   },
   {
@@ -120,6 +114,12 @@ const sidebarSections = [
       { path: '/components/textarea', label: 'Textarea' },
       { path: '/components/search', label: 'Search' },
       { path: '/components/select', label: 'Select' },
+    ],
+  },
+  {
+    title: 'ACCESSIBILITY',
+    items: [
+      { path: '/accessibility', label: 'Overview' },
     ],
   },
   {
