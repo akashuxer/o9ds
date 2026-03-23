@@ -141,6 +141,8 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
     row.token === 'o9ds-color-i-active-inverse'
   const useSurfaceNegativeActiveBg =
     row.token === 'o9ds-color-t-white-static' || row.token === 'o9ds-color-i-white-static'
+  const useSurfaceWhiteStaticBg =
+    row.token === 'o9ds-color-t-black-static' || row.token === 'o9ds-color-i-black-static'
 
   const getCopyText = () => {
     if (semanticSubTab === 'Surface') return `background: var(--${row.token});`
