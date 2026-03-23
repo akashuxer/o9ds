@@ -33,6 +33,9 @@ export const o9THEME_TOKENS = [
 // Dark Mode Theme — o9 theme in dark mode
 export const DARK_THEME_TOKENS = [
   { token: 'o9ds-global-dark-13', hex: '#666666' },
+  { token: 'o9ds-global-dark-05', hex: '#737373' },
+  { token: 'o9ds-global-dark-04', hex: '#525252' },
+  { token: 'o9ds-global-dark-03', hex: '#B2B2B2' },
   { token: 'o9ds-global-dark-12', hex: '#303030' },
   { token: 'o9ds-global-dark-11', hex: '#010101' },
   { token: 'o9ds-global-dark-10', hex: '#121212' },
@@ -121,4 +124,23 @@ export const UTILITY_TOKENS = [
   { token: 'o9ds-global-green-07', hex: '#26A644' },
   { token: 'o9ds-global-green-06', hex: '#6EDE8A' },
   { token: 'o9ds-global-green-05', hex: '#E1F3E4' },
+  { token: 'o9ds-global-dark-gray-10', hex: '#1A1A1A' },
 ]
+
+/** Build a flat lookup map: global token name -> hex */
+const ALL_GLOBAL = [
+  ...NEUTRAL_TOKENS,
+  ...o9THEME_TOKENS,
+  ...DARK_THEME_TOKENS,
+  ...ONYXBLACK_TOKENS,
+  ...SKYBLUE_TOKENS,
+  ...FORESTGREEN_TOKENS,
+  ...MIDNIGHTINDIGO_TOKENS,
+  ...FEEDBACK_BLUISH,
+  ...FEEDBACK_GREENISH,
+  ...FEEDBACK_REDISH,
+  ...FEEDBACK_ORANGISH,
+  ...UTILITY_TOKENS,
+]
+
+export const GLOBAL_TOKEN_HEX = Object.fromEntries(ALL_GLOBAL.map((t) => [t.token, t.hex]))

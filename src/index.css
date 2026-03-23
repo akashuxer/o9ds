@@ -245,6 +245,16 @@ html:not(.dark) main code {
   color: #303030 !important;
 }
 
+/* Interactive elements: cursor pointer */
+button,
+a,
+[role="button"],
+[role="tab"],
+select,
+label[for] {
+  cursor: pointer;
+}
+
 html {
   scroll-behavior: smooth;
 }

@@ -16,6 +16,17 @@ import {
   FEEDBACK_ORANGISH,
   UTILITY_TOKENS,
 } from '../data/globalColorTokens'
+import {
+  SEMANTIC_SURFACE,
+  SEMANTIC_BORDER,
+  SEMANTIC_TEXT,
+  SEMANTIC_ICON,
+  LIGHT_THEMES,
+  THEME_LABELS,
+  resolveSemanticToHex,
+  resolveSemanticToGlobalName,
+  resolveSurfaceThemeHex,
+} from '../data/semanticColorTokens'
 
 const tabs = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Tokens']
 
@@ -113,8 +124,142 @@ function TokenTable({ tokens, isLight }) {
   )
 }
 
+const SEMANTIC_SUBTABS = ['Surface', 'Border', 'Text', 'Icon']
+
+function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex, resolveName }) {
+  const [copied, setCopied] = useState(false)
+  const lightHex = resolveHex(row, lightTheme, false)
+  const darkHex = resolveHex(row, lightTheme, true)
+  const lightModeGlobalName = resolveName(row, lightTheme, false)
+  const useSurfaceThemeBg = row.token === 'o9ds-color-b-focus-inverse'
+
+  const getCopyText = () => {
+    if (semanticSubTab === 'Surface') return `background: var(--${row.token});`
+    if (semanticSubTab === 'Border') {
+      const style = row.borderStyle === 'dashed' ? 'dashed' : 'solid'
+      return `border: 2px ${style} var(--${row.token});`
+    }
+    if (semanticSubTab === 'Text') return `color: var(--${row.token});`
+    if (semanticSubTab === 'Icon') return `color: var(--${row.token});`
+    return row.token
+  }
+
+  const handleCopy = (e) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(getCopyText()).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    })
+  }
+
+  const rowBorderColor = isLight ? '#E5E5E5' : '#404040'
+  const isBorderTab = semanticSubTab === 'Border'
+
+  const lightTileStyle = isBorderTab
+    ? { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${lightHex}` }
+    : { backgroundColor: lightHex, border: `1px solid ${rowBorderColor}` }
+  const darkTileStyle = isBorderTab
+    ? { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${darkHex}` }
+    : { backgroundColor: darkHex, border: `1px solid ${rowBorderColor}` }
+
+  const lightModeCellBg = useSurfaceThemeBg ? resolveSurfaceThemeHex(lightTheme, false) : '#FFFFFF'
+  const darkModeCellBg = useSurfaceThemeBg ? resolveSurfaceThemeHex(lightTheme, true) : '#010101'
+  const isLightBg = (hex) => !hex || hex === '#FFFFFF' || hex === '#fff' || hex.toLowerCase() === '#ffffff'
+  const lightModeCellFg = isLightBg(lightModeCellBg) ? '#303030' : '#FFFFFF'
+  const darkModeCellFg = isLightBg(darkModeCellBg) ? '#010101' : '#FFFFFF'
+
+  return (
+    <tr style={{ borderBottom: `1px solid ${rowBorderColor}` }} className="last:border-b-0 group">
+      <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{row.token}</td>
+      <td className="py-2 px-3" style={{ backgroundColor: lightModeCellBg }}>
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-6 shrink-0" style={lightTileStyle} title={lightHex} />
+          <span className="font-mono" style={{ color: lightModeCellFg }}>{lightModeGlobalName}</span>
+        </div>
+      </td>
+      <td className="py-2 px-3" style={{ backgroundColor: darkModeCellBg }}>
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-6 shrink-0" style={darkTileStyle} title={darkHex} />
+          <span className="font-mono" style={{ color: darkModeCellFg }}>{row.darkGlobal}</span>
+        </div>
+      </td>
+      <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400 text-sm" style={isLight ? { color: '#303030' } : undefined}>
+        {row.useCase}
+      </td>
+      <td className="py-2 px-3 w-10">
+        <button
+          onClick={handleCopy}
+          className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
+          style={
+            copied
+              ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
+              : isLight ? { borderColor: '#E5E5E5', color: '#303030' } : { borderColor: '#404040', color: '#a3a3a3' }
+          }
+          title="Copy usage snippet"
+          aria-label="Copy usage snippet"
+        >
+          {copied ? <CheckDoubleIcon className="h-3.5 w-3.5" style={{ color: '#fff' }} /> : <CopyIcon className="h-3.5 w-3.5" />}
+        </button>
+      </td>
+    </tr>
+  )
+}
+
+function SemanticTokenTable({ tokens, lightTheme, isLight, semanticSubTab }) {
+  const rowBorderColor = isLight ? '#E5E5E5' : '#404040'
+  const tableBg = isLight ? '#FFFFFF' : '#0a0a0a'
+
+  return (
+    <div
+      className="border overflow-hidden"
+      style={{
+        borderColor: rowBorderColor,
+        backgroundColor: tableBg,
+      }}
+    >
+      <table className="w-full text-sm">
+        <thead>
+          <tr
+            style={isLight ? { backgroundColor: '#F2F2F2', borderBottom: `1px solid ${rowBorderColor}` } : { borderBottom: `1px solid ${rowBorderColor}` }}
+            className="dark:bg-neutral-800/50"
+          >
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Token Name</th>
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Light Mode ({THEME_LABELS[lightTheme]})</th>
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Dark Mode</th>
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Use Case</th>
+            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white w-10" aria-label="Copy" />
+          </tr>
+        </thead>
+        <tbody>
+          {tokens.map((row) => (
+            <SemanticTokenRow
+              key={row.token}
+              row={row}
+              lightTheme={lightTheme}
+              isLight={isLight}
+              semanticSubTab={semanticSubTab}
+              resolveHex={resolveSemanticToHex}
+              resolveName={resolveSemanticToGlobalName}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+const SEMANTIC_DATA = { Surface: SEMANTIC_SURFACE, Border: SEMANTIC_BORDER, Text: SEMANTIC_TEXT, Icon: SEMANTIC_ICON }
+const SEMANTIC_COUNTS = {
+  Surface: SEMANTIC_SURFACE.length,
+  Border: SEMANTIC_BORDER.length,
+  Text: SEMANTIC_TEXT.length,
+  Icon: SEMANTIC_ICON.length,
+}
+
 export default function Colors() {
   const [activeTab, setActiveTab] = useState('Overview')
+  const [semanticSubTab, setSemanticSubTab] = useState('Surface')
+  const [lightTheme, setLightTheme] = useState('o9theme')
   const tabListRef = useRef(null)
   const { theme } = useTheme()
   const isLight = theme === 'light'
@@ -577,34 +722,76 @@ export default function Colors() {
       )}
 
       {activeTab === 'Semantic Tokens' && (
-        <section>
-          <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">Purpose-driven mappings for surfaces, text, and feedback.</p>
-          <div className="border border-o9ds-light-border dark:border-neutral-700 overflow-hidden shadow-sm">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-o9ds-light-border dark:border-neutral-700">
-                  <th className="py-3 px-4 text-left font-medium text-o9ds-light-secondary dark:text-neutral-400">Token</th>
-                  <th className="py-3 px-4 text-left font-medium text-o9ds-light-secondary dark:text-neutral-400">Usage</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['color-surface', 'Page background'],
-                  ['color-surface-raised', 'Cards, modals'],
-                  ['color-text-primary', 'Headings, body'],
-                  ['color-text-secondary', 'Captions, hints'],
-                  ['color-border', 'Borders, dividers'],
-                  ['color-feedback-success', 'Success states'],
-                  ['color-feedback-error', 'Error states'],
-                ].map(([token, usage]) => (
-                  <tr key={token} className="border-b border-o9ds-light-border dark:border-neutral-700/50">
-                    <td className="py-3 px-4 font-mono text-o9ds-light-primary dark:text-white">{token}</td>
-                    <td className="py-3 px-4 text-o9ds-light-secondary dark:text-neutral-400">{usage}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <section className="space-y-6">
+          <p className="text-o9ds-light-secondary dark:text-neutral-400">Purpose-driven mappings for surfaces, borders, text, and icons. All semantic tokens map to global tokens—no hardcoded values.</p>
+
+          {/* Theme switcher - reuse Display Options button group styling (data-o9ds-size-selected) */}
+          <div className="flex flex-wrap items-center gap-4 mb-2">
+            <span className="text-sm dark:text-neutral-400" style={isLight ? { color: '#303030' } : undefined}>Light theme:</span>
+            <div className="flex gap-2">
+              {LIGHT_THEMES.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setLightTheme(t)}
+                  data-o9ds-size-selected={lightTheme === t ? '' : undefined}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    lightTheme === t ? 'dark:text-black dark:bg-white' : 'border dark:border-neutral-600 dark:text-neutral-400 hover:text-o9ds-light-primary dark:hover:text-white'
+                  }`}
+                  style={
+                    lightTheme === t
+                      ? { backgroundColor: isLight ? '#010101' : undefined, color: isLight ? '#FFFFFF' : undefined }
+                      : { borderColor: isLight ? '#E5E5E5' : undefined, color: isLight ? '#303030' : undefined }
+                  }
+                >
+                  {THEME_LABELS[t]}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {/* Semantic sub-tabs - reuse existing tabs (data-o9ds-tabs) */}
+          <div
+            role="tablist"
+            className="flex gap-6 border-b border-o9ds-light-border dark:border-neutral-700"
+            data-o9ds-tabs
+            aria-label="Semantic categories"
+          >
+            {SEMANTIC_SUBTABS.map((tab) => (
+              <button
+                key={tab}
+                role="tab"
+                aria-selected={semanticSubTab === tab}
+                onClick={() => setSemanticSubTab(tab)}
+                data-o9ds-tab-active={semanticSubTab === tab ? '' : undefined}
+                className={`pb-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
+                  semanticSubTab === tab
+                    ? 'border-o9ds-light-primary dark:border-white text-o9ds-light-primary dark:text-white'
+                    : 'border-transparent text-o9ds-light-secondary hover:text-o9ds-light-primary dark:text-neutral-400 dark:hover:text-neutral-300'
+                }`}
+              >
+                {tab}
+                <span
+                  className="px-1.5 py-0.5 text-[10px] font-medium min-w-[1.25rem] text-center"
+                  style={{
+                    backgroundColor: semanticSubTab === tab
+                      ? (isLight ? '#E5E5E5' : '#404040')
+                      : (isLight ? '#F2F2F2' : '#262626'),
+                    color: semanticSubTab === tab ? (isLight ? '#010101' : '#fff') : (isLight ? '#303030' : '#a3a3a3'),
+                  }}
+                >
+                  {SEMANTIC_COUNTS[tab]}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Token table */}
+          <SemanticTokenTable
+            tokens={SEMANTIC_DATA[semanticSubTab]}
+            lightTheme={lightTheme}
+            isLight={isLight}
+            semanticSubTab={semanticSubTab}
+          />
         </section>
       )}
     </div>
