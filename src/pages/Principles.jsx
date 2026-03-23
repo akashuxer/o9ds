@@ -1,4 +1,7 @@
 import { useTheme } from '../context/ThemeContext'
+import PageWithToc from '../LayoutComponents/PageWithToc'
+
+const PRINCIPLES_SECTIONS = [{ id: 'core-principles', label: 'Our Core Principles' }]
 
 export default function Principles() {
   const { theme } = useTheme()
@@ -62,6 +65,7 @@ export default function Principles() {
   ]
 
   return (
+    <PageWithToc sections={PRINCIPLES_SECTIONS}>
     <div className="max-w-3xl space-y-10">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold text-o9ds-light-primary dark:text-white">
@@ -77,7 +81,7 @@ export default function Principles() {
         </p>
       </section>
 
-      <section>
+      <section id="core-principles">
         <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-6">Our Core Principles</h2>
         <div className="grid gap-6 sm:grid-cols-2">
           {principles.map(({ num, title, desc, bullets, rule }) => (
@@ -109,5 +113,6 @@ export default function Principles() {
         </div>
       </section>
     </div>
+    </PageWithToc>
   )
 }

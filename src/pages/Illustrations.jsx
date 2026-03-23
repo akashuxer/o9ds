@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useTheme } from '../context/ThemeContext'
+import PageWithToc from '../LayoutComponents/PageWithToc'
 import { ILLUSTRATION_SIZE_TOKENS_SCSS } from '../tokens/illustrationTokens'
 import CodeBlock from '../LayoutComponents/CodeBlock'
 
@@ -128,6 +129,25 @@ export default function Illustrations() {
   const { theme } = useTheme()
   const isLight = theme === 'light'
 
+  const onThisPageSections = useMemo(() => {
+    if (activeTab === 'Overview') {
+      return [
+        { id: 'o9illus-philosophy', label: 'o9Illus Design Philosophy' },
+        { id: 'usage-guidelines', label: 'Usage Guidelines' },
+        { id: 'sizes', label: 'Sizes' },
+      ]
+    }
+    if (activeTab === 'o9Illus Gallery') {
+      return [
+        { id: 'illus-display-options', label: 'Display Options' },
+        { id: 'o9illus-library', label: 'o9Illus Library' },
+      ]
+    }
+    if (activeTab === 'Accessibility') return [{ id: 'illus-accessibility', label: 'Illustration Accessibility' }]
+    if (activeTab === 'Code') return [{ id: 'illus-implementation', label: 'Implementation' }, { id: 'illus-size-tokens', label: 'Illustration Size Tokens' }]
+    return []
+  }, [activeTab])
+
   const handleTabKeyDown = (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
     const idx = tabs.indexOf(activeTab)
@@ -141,6 +161,7 @@ export default function Illustrations() {
   }
 
   return (
+    <PageWithToc sections={onThisPageSections}>
     <div className="max-w-4xl space-y-8">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold text-o9ds-light-primary dark:text-white pb-2">
@@ -193,7 +214,7 @@ export default function Illustrations() {
 
       {activeTab === 'Overview' && (
         <>
-          <section className="border dark:border-neutral-700 p-6 md:p-8 shadow-sm bg-o9ds-light-surface dark:bg-transparent">
+          <section id="o9illus-philosophy" className="border dark:border-neutral-700 p-6 md:p-8 shadow-sm bg-o9ds-light-surface dark:bg-transparent">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">o9Illus Design Philosophy</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">
               Meaningful visuals that enhance user experience and guide interactions
@@ -215,7 +236,7 @@ export default function Illustrations() {
             </div>
           </section>
 
-          <section>
+          <section id="usage-guidelines">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-4">Usage Guidelines</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">Best practices for implementing o9Illus in your interfaces</p>
             <div className="border dark:border-neutral-700 p-6 space-y-6 shadow-sm dark:bg-transparent" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : undefined}>
@@ -239,7 +260,7 @@ export default function Illustrations() {
             </div>
           </section>
 
-          <section>
+          <section id="sizes">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-4">Sizes</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">
               Illustration usage has been made simple like our icons. Selectors are all that's needed for rendering an illustration in an element.
@@ -273,7 +294,7 @@ export default function Illustrations() {
 
       {activeTab === 'o9Illus Gallery' && (
         <>
-          <section>
+          <section id="illus-display-options">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Display Options</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">Customize how illustrations are displayed in the gallery</p>
             <div className="flex flex-wrap items-center gap-4 mb-2">
@@ -303,7 +324,7 @@ export default function Illustrations() {
             </div>
           </section>
 
-          <section>
+          <section id="o9illus-library">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">
               o9Illus Library
               <span
@@ -326,7 +347,7 @@ export default function Illustrations() {
       )}
 
       {activeTab === 'Accessibility' && (
-        <section className="border dark:border-neutral-700 p-6 md:p-8 shadow-sm dark:bg-transparent" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : undefined}>
+        <section id="illus-accessibility" className="border dark:border-neutral-700 p-6 md:p-8 shadow-sm dark:bg-transparent" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : undefined}>
           <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-4">Illustration Accessibility</h2>
           <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed mb-6">
             All o9Illus illustrations are designed with accessibility in mind. Each illustration includes proper semantic markup and can be paired with descriptive text or aria-labels for screen reader users.
@@ -340,7 +361,7 @@ export default function Illustrations() {
       )}
 
       {activeTab === 'Code' && (
-        <section className="space-y-8">
+        <section id="illus-implementation" className="space-y-8">
           <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Implementation</h2>
           <p className="text-o9ds-light-secondary dark:text-neutral-400">Use the following HTML structure to render an illustration:</p>
           <div className="relative">
@@ -353,7 +374,7 @@ export default function Illustrations() {
             Replace <code className="px-1 py-0.5" data-o9ds-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, no-filters-found, no-form-configured, no-notifications, no-post, no-report, no-results-found, no-slides, no-tasks, restricted-access, server-error, settings) and <code className="px-1 py-0.5" data-o9ds-inline-code>124</code> with the desired size (96, 124, 224).
           </p>
 
-          <div>
+          <div id="illus-size-tokens">
             <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-3">Illustration Size Tokens</h3>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">Copy the SCSS variables for illustration sizes:</p>
             <CodeBlock code={ILLUSTRATION_SIZE_TOKENS_SCSS} label="o9Illus size tokens" />
@@ -361,5 +382,6 @@ export default function Illustrations() {
         </section>
       )}
     </div>
+    </PageWithToc>
   )
 }

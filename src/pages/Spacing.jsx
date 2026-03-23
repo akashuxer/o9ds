@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import CodeBlock from '../LayoutComponents/CodeBlock'
+import PageWithToc from '../LayoutComponents/PageWithToc'
+
+const SPACING_SECTIONS = [
+  { id: 'scale', label: 'Scale' },
+  { id: 'spacing-tokens', label: 'Spacing Tokens' },
+]
 import { SPACING_TOKENS, SPACING_TOKENS_SCSS } from '../tokens/spacingTokens'
 
 function CopyIcon({ className }) {
@@ -62,6 +68,7 @@ export default function Spacing() {
   const isLight = theme === 'light'
 
   return (
+    <PageWithToc sections={SPACING_SECTIONS}>
     <div className="space-y-12">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold mb-4 text-o9ds-light-primary dark:text-white">
@@ -77,7 +84,7 @@ export default function Spacing() {
         </p>
       </section>
 
-      <section>
+      <section id="scale">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Scale</h2>
         <div className="border overflow-hidden" style={{ borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#FFFFFF' : undefined }}>
           <table className="w-full text-sm">
@@ -107,7 +114,7 @@ export default function Spacing() {
         </div>
       </section>
 
-      <section>
+      <section id="spacing-tokens">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Spacing Tokens</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
           Copy the SCSS variables below to use spacing tokens in your project.
@@ -118,5 +125,6 @@ export default function Spacing() {
         />
       </section>
     </div>
+    </PageWithToc>
   )
 }

@@ -469,7 +469,7 @@ export default function Layout({ children }) {
           style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
           data-theme={theme}
         >
-          <div className={`mx-auto relative z-10 ${pathname === '/' ? 'max-w-6xl' : 'max-w-4xl'}`}>
+          <div className={`mx-auto relative z-10 ${['/', '/overview', '/principles', '/colors', '/typography', '/spacing', '/borders', '/icons', '/illustrations', '/components', '/components/button'].includes(pathname) ? 'max-w-6xl' : 'max-w-4xl'}`}>
             {children}
           </div>
         </main>

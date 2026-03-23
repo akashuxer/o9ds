@@ -1,3 +1,10 @@
+import PageWithToc from '../LayoutComponents/PageWithToc'
+
+const TYPOGRAPHY_SECTIONS = [
+  { id: 'type-scale', label: 'Type Scale' },
+  { id: 'font-stack', label: 'Font Stack' },
+]
+
 const typeScale = [
   { name: 'Display', class: 'text-5xl font-bold', sample: 'The quick brown fox' },
   { name: 'H1', class: 'text-4xl font-bold', sample: 'The quick brown fox' },
@@ -12,6 +19,7 @@ const typeScale = [
 
 export default function Typography() {
   return (
+    <PageWithToc sections={TYPOGRAPHY_SECTIONS}>
     <div className="space-y-12">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold mb-4 text-o9ds-light-primary dark:text-white">
@@ -28,7 +36,7 @@ export default function Typography() {
         </p>
       </section>
 
-      <section>
+      <section id="type-scale">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Type Scale</h2>
         <div className="space-y-8">
           {typeScale.map(({ name, class: cls, sample }) => (
@@ -40,7 +48,7 @@ export default function Typography() {
         </div>
       </section>
 
-      <section>
+      <section id="font-stack">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Font Stack</h2>
         <div className=" border border-o9ds-light-border dark:border-neutral-700 bg-o9ds-light-surface dark:bg-neutral-800/50 p-6 space-y-4">
           <div>
@@ -54,5 +62,6 @@ export default function Typography() {
         </div>
       </section>
     </div>
+    </PageWithToc>
   )
 }

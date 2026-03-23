@@ -1,6 +1,14 @@
 import { useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import CodeBlock from '../LayoutComponents/CodeBlock'
+import PageWithToc from '../LayoutComponents/PageWithToc'
+
+const BORDERS_SECTIONS = [
+  { id: 'policy', label: 'Policy' },
+  { id: 'border-radius-tokens', label: 'Border Radius Tokens' },
+  { id: 'border-width-tokens', label: 'Border Width Tokens' },
+  { id: 'border-tokens', label: 'Border Tokens' },
+]
 import { BORDER_TOKENS_SCSS } from '../tokens/borderTokens'
 
 function CopyIcon({ className }) {
@@ -78,6 +86,7 @@ export default function Borders() {
   const isLight = theme === 'light'
 
   return (
+    <PageWithToc sections={BORDERS_SECTIONS}>
     <div className="space-y-8">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold mb-4 text-o9ds-light-primary dark:text-white">
@@ -93,7 +102,7 @@ export default function Borders() {
         </p>
       </section>
 
-      <section>
+      <section id="policy">
         <h2 className="text-2xl font-bold mb-4 text-o9ds-light-primary dark:text-white">Policy</h2>
         <div>
           <p className="text-o9ds-light-secondary dark:text-neutral-300 mb-4" style={isLight ? { color: '#303030' } : undefined}>
@@ -108,7 +117,7 @@ border-radius: 0;
         </div>
       </section>
 
-      <section>
+      <section id="border-radius-tokens">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Border Radius Tokens</h2>
         <div className="border overflow-hidden group" style={{ borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#FFFFFF' : undefined }}>
           <table className="w-full text-sm">
@@ -129,7 +138,7 @@ border-radius: 0;
         </div>
       </section>
 
-      <section>
+      <section id="border-width-tokens">
         <h2 className="text-2xl font-bold mb-4 text-o9ds-light-primary dark:text-white">Border Width Tokens</h2>
         <div className="border overflow-hidden group" style={{ borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#FFFFFF' : undefined }}>
           <table className="w-full text-sm">
@@ -152,7 +161,7 @@ border-radius: 0;
         </div>
       </section>
 
-      <section>
+      <section id="border-tokens">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Border Tokens</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
           Copy the SCSS variables below to use border radius and width tokens in your project.
@@ -160,5 +169,6 @@ border-radius: 0;
         <CodeBlock code={BORDER_TOKENS_SCSS} label="SCSS variables" />
       </section>
     </div>
+    </PageWithToc>
   )
 }

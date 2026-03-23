@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import PageWithToc from '../LayoutComponents/PageWithToc'
+
+const HOME_SECTIONS = [{ id: 'explore', label: 'Explore the design system' }]
 
 const CardIcon = ({ name }) => {
   const icons = {
@@ -62,6 +65,7 @@ export default function Home() {
     : { backgroundColor: 'rgba(255, 229, 0, 0.2)', padding: '0 0.2em', borderRadius: '2px', color: '#fff' }
 
   return (
+    <PageWithToc sections={HOME_SECTIONS}>
     <div className="space-y-16">
       {/* Hero Section */}
       <section>
@@ -100,7 +104,7 @@ export default function Home() {
       </section>
 
       {/* Navigation Cards */}
-      <section>
+      <section id="explore">
         <h2 className="text-2xl md:text-3xl font-semibold text-o9ds-light-primary dark:text-white mb-8 mt-12">Explore the design system</h2>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map(({ title, desc, path, icon }, i) => (
@@ -128,5 +132,6 @@ export default function Home() {
         </div>
       </section>
     </div>
+    </PageWithToc>
   )
 }

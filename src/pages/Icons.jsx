@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import { o9conIcons } from '../tokens/o9conIcons'
 import { ICON_SIZE_TOKENS_SCSS } from '../tokens/iconTokens'
 import CodeBlock from '../LayoutComponents/CodeBlock'
+import PageWithToc from '../LayoutComponents/PageWithToc'
 
 const tabs = ['Overview', 'o9con Gallery', 'Accessibility', 'Code']
 const SIZES = [14, 16, 20, 24, 32]
@@ -101,8 +102,47 @@ export default function Icons() {
       icon.class.toLowerCase().includes(o9conSearch.toLowerCase())
   )
 
+  const onThisPageSections = useMemo(() => {
+    if (activeTab === 'Overview') {
+      return [
+        { id: 'design-philosophy', label: 'o9Con Design Philosophy' },
+        { id: 'evolution', label: 'Evolution: Old vs New Icons' },
+        { id: 'icon-types', label: 'Icon Types: Categorisation' },
+        { id: 'base-grid', label: 'Base Grid' },
+        { id: 'padding', label: 'Padding' },
+        { id: 'key-shapes', label: 'Key Shapes' },
+        { id: 'shape-size', label: 'Shape Size' },
+        { id: 'strokes', label: 'Strokes' },
+        { id: 'angles', label: 'Angles' },
+        { id: 'action', label: 'Action' },
+        { id: 'available-sizes', label: 'Available Sizes' },
+      ]
+    }
+    if (activeTab === 'o9con Gallery') {
+      return [
+        { id: 'display-options', label: 'Display Options' },
+        { id: 'o9con-library', label: 'o9con Library' },
+      ]
+    }
+    if (activeTab === 'Accessibility') {
+      return [
+        { id: 'aria-attributes', label: 'ARIA Attributes' },
+        { id: 'visual-accessibility', label: 'Visual Accessibility' },
+        { id: 'interactive-icons', label: 'Interactive Icons' },
+      ]
+    }
+    if (activeTab === 'Code') {
+      return [
+        { id: 'implementation', label: 'Implementation' },
+        { id: 'icon-size-tokens', label: 'Icon Size Tokens' },
+      ]
+    }
+    return []
+  }, [activeTab])
+
   return (
-    <div className="max-w-4xl space-y-8">
+    <PageWithToc sections={onThisPageSections}>
+    <div className="space-y-8">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold text-o9ds-light-primary dark:text-white pb-2">
           <span
@@ -148,14 +188,233 @@ export default function Icons() {
       </section>
 
       {activeTab === 'Overview' && (
-        <section>
-          <p className="text-o9ds-light-secondary dark:text-neutral-400">Content coming soon.</p>
+        <section className="space-y-12">
+          {/* Design Philosophy */}
+          <div id="design-philosophy">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">o9Con Design Philosophy</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">Core principles that guide o9&apos;s icon design system and creation process</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              Our icon design philosophy is built on five fundamental principles that ensure consistency, clarity, and usability across all interface elements. These principles guide every aspect of our icon creation and selection process.
+            </p>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { title: 'Simplicity', desc: 'Avoid over-complicated designs. Each icon should communicate its purpose clearly without unnecessary visual elements.' },
+                { title: 'Clarity', desc: 'Ensure icons are easily recognizable and their meaning is immediately understood by users.' },
+                { title: 'Scalability', desc: 'Icons must work at various sizes while maintaining their clarity and visual impact.' },
+                { title: 'Consistency', desc: 'Align with the visual language of the platform. Standardized stroke width, size, and corner radii across icons.' },
+                { title: 'Accessibility', desc: 'High contrast and distinguishable shapes that work for all users, including those with visual impairments.' },
+              ].map(({ title, desc }) => (
+                <div
+                  key={title}
+                  className="border dark:border-neutral-700 p-6 dark:bg-neutral-800/50 shadow-sm"
+                  style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : undefined}
+                >
+                  <h3 className="font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h3>
+                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Evolution */}
+          <div id="evolution">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Evolution: Old vs New Icons</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Continuous improvement in design quality and user experience</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              Our icon evolution reflects continuous improvement in design quality and user experience. The new icon set demonstrates enhanced visual balance, improved proportions, simplified design, better spacing, and adherence to our sharp corner philosophy with unified design approach and enhanced readability.
+            </p>
+            <div className="border overflow-hidden" style={isLight ? { borderColor: '#E5E5E5' } : undefined}>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
+                    <th className="py-3 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Old</th>
+                    <th className="py-3 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">New Icons</th>
+                    <th className="py-3 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Key Improvements</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t dark:border-neutral-700" style={{ borderColor: isLight ? '#E5E5E5' : undefined }}>
+                    <td className="py-3 px-4 text-o9ds-light-secondary dark:text-neutral-400">Thicker stroke, rounded exterior and interior corners</td>
+                    <td className="py-3 px-4 text-o9ds-light-secondary dark:text-neutral-400">Thinner strokes, sharp right-angled corners, more geometric and refined</td>
+                    <td className="py-3 px-4 text-o9ds-light-secondary dark:text-neutral-400">
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Visually balanced</li>
+                        <li>Improved proportions</li>
+                        <li>Simplified design</li>
+                        <li>Better spacing</li>
+                        <li>Sharp corners</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr className="border-t dark:border-neutral-700" style={{ borderColor: isLight ? '#E5E5E5' : undefined }}>
+                    <td className="py-3 px-4 text-o9ds-light-secondary dark:text-neutral-400">Thicker shapes, more compact composition</td>
+                    <td className="py-3 px-4 text-o9ds-light-secondary dark:text-neutral-400">Thinner, cleaner lines, more whitespace for clarity</td>
+                    <td className="py-3 px-4 text-o9ds-light-secondary dark:text-neutral-400">Unified Design Approach · Enhanced Readability</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Icon Types */}
+          <div id="icon-types">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Icon Types: Categorisation</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">Organized icon categories that enhance user experience through logical grouping</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              Our icon library is systematically organized into four primary categories, each designed to serve specific interface functions while maintaining visual consistency across the entire system.
+            </p>
+            <div className="grid gap-6 sm:grid-cols-2">
+              {[
+                { title: '1. Functional Icons', desc: 'Essential interface actions and system operations that users interact with frequently. These icons represent core functionality like save, edit, delete, and search.' },
+                { title: '2. Navigation Icons', desc: 'Directional and movement-based icons that guide users through the interface. Includes arrows, chevrons, and directional indicators for navigation flows.' },
+                { title: '3. Status Icons', desc: 'Communication and feedback icons that convey system states, user notifications, and important information. Includes success, warning, error, and informational indicators.' },
+                { title: '4. Custom Features Icons', desc: 'Specialized icons designed for specific product features and unique functionality. These icons are tailored to represent domain-specific actions and concepts within the o9 platform.' },
+              ].map(({ title, desc }) => (
+                <div
+                  key={title}
+                  className="border dark:border-neutral-700 p-6 dark:bg-neutral-800/50 shadow-sm"
+                  style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : undefined}
+                >
+                  <h3 className="font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h3>
+                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Base Grid */}
+          <div id="base-grid">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Base Grid</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">The underlying foundation for all o9 icon design and construction</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+              The square grid is the underlying fabric of all o9 icons. It is used as the foundation to determine line thickness, proportion, shape, and positioning across the entire set of icons. Icons are drawn on a pixel-based grid of 24×24px and scaled down linearly to different sizes.
+            </p>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">Avoid random decimal points in the x- and y-coordinates. All icons are drawn on a pixel-based grid.</p>
+            <div className="border overflow-hidden" style={isLight ? { borderColor: '#E5E5E5' } : undefined}>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
+                    <th className="py-2 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Icon size</th>
+                    <th className="py-2 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Stroke width</th>
+                    <th className="py-2 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Padding</th>
+                    <th className="py-2 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Live area</th>
+                    <th className="py-2 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Corner radius</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t dark:border-neutral-700" style={{ borderColor: isLight ? '#E5E5E5' : undefined }}>
+                    <td className="py-2 px-4 text-o9ds-light-secondary dark:text-neutral-400">24px</td>
+                    <td className="py-2 px-4 text-o9ds-light-secondary dark:text-neutral-400">1.4px</td>
+                    <td className="py-2 px-4 text-o9ds-light-secondary dark:text-neutral-400">2px</td>
+                    <td className="py-2 px-4 text-o9ds-light-secondary dark:text-neutral-400">20px</td>
+                    <td className="py-2 px-4 text-o9ds-light-secondary dark:text-neutral-400">0px</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul className="mt-4 list-disc list-inside text-sm text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
+              <li>24×24px frame</li>
+              <li>20×20px grid</li>
+              <li>2px padding</li>
+            </ul>
+          </div>
+
+          {/* Padding */}
+          <div id="padding">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Padding</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Essential spacing that ensures proper icon scaling and white space</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl">
+              The grid contains 2px padding. This ensures icons will retain their desired scale and surrounding white space when exported into their UI bounding box. Icons should remain inside the grid.
+            </p>
+          </div>
+
+          {/* Key Shapes */}
+          <div id="key-shapes">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Key Shapes</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Consistent proportions and shapes that provide structural foundation for all icons</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+              Key lines give you consistent sizes for basic shapes or proportions across the icon set. Make sure when creating new icons the focal point is in the middle. Do use the key shape that best demonstrates the proportion of the metaphor.
+            </p>
+            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 font-medium mb-2">4 types of basic key shapes:</p>
+            <ul className="list-disc list-inside text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
+              <li>Circle</li>
+              <li>Rectangle</li>
+              <li>Square</li>
+              <li>Triangle</li>
+            </ul>
+          </div>
+
+          {/* Shape Size */}
+          <div id="shape-size">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Shape Size</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Minimum size requirements and outline behavior for consistent icon rendering</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+              No shape within an icon should be smaller than 4.27×4.27px. Once a shape reaches the minimum size (defined as a &quot;small square&quot;), it must be a solid fill and can no longer be an outline. This ensures clarity and visibility at small scales.
+            </p>
+          </div>
+
+          {/* Strokes */}
+          <div id="strokes">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Strokes</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Visual weight consistency and stroke specifications for all icons</p>
+            <ul className="list-disc list-inside text-o9ds-light-secondary dark:text-neutral-400 space-y-2 max-w-2xl">
+              <li>One icon should not look heavier or lighter than other icons of the same size.</li>
+              <li>Maintain the same visual weight by using a 1.4pt base stroke for all icons on the 20×20px grid.</li>
+              <li>There are a few exceptions when the icon is complex or has a certain line density.</li>
+              <li>For full shapes, make sure the stroke is an &quot;inner&quot; stroke.</li>
+              <li>We use sharp-edged icons as default. You may use curves only in circular elements.</li>
+            </ul>
+          </div>
+
+          {/* Angles */}
+          <div id="angles">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Angles</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Consistent angle increments that create harmony across the icon set</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+              Create harmony across the icon set by consistently making 90° angles sit on the same increments. Use increments of 9° for other angles when needed.
+            </p>
+          </div>
+
+          {/* Action */}
+          <div id="action">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Action</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Step-by-step icon creation process following o9 design guidelines</p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              Follow these systematic steps to create icons that align with o9 design principles. Each step builds upon the previous to ensure consistency and quality.
+            </p>
+            <ol className="list-decimal list-inside space-y-4 text-o9ds-light-secondary dark:text-neutral-400">
+              <li><strong className="text-o9ds-light-primary dark:text-white">Move the angle grid</strong> — Place the angle grid on the side of the 20×20px grid.</li>
+              <li><strong className="text-o9ds-light-primary dark:text-white">Design within 9° increments</strong> — Start the icon design; it doesn&apos;t have to be centered as long as the degrees are carefully designed first.</li>
+              <li><strong className="text-o9ds-light-primary dark:text-white">Center the shape</strong> — When angles are defined, center the shape on the grid for perfect symmetry.</li>
+            </ol>
+            <ul className="mt-4 list-disc list-inside text-sm text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
+              <li>Always start with the established grid system and angle guidelines</li>
+              <li>Maintain consistency with existing icon angles and proportions</li>
+              <li>Ensure symmetrical design where appropriate for visual balance</li>
+              <li>Test the icon at different sizes to verify scalability</li>
+            </ul>
+          </div>
+
+          {/* Available Sizes */}
+          <div id="available-sizes">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Available Sizes</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">Icons are available in multiple predefined sizes for consistency</p>
+            <div className="border p-4 flex flex-wrap items-center gap-6 dark:border-neutral-700 dark:bg-neutral-800/50" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#F2F2F2' } : undefined}>
+              {SIZES.map((s) => (
+                <div key={s} className="flex flex-col items-center gap-2">
+                  <span className={`o9con o9con-chevron-right o9ds-icon-${s} dark:text-white`} style={isLight ? { color: '#010101' } : undefined} aria-hidden />
+                  <span className="text-sm font-medium text-o9ds-light-primary dark:text-white">{s}px</span>
+                  <code className="text-xs font-mono text-o9ds-light-secondary dark:text-neutral-400">o9ds-icon-{s}</code>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
       )}
 
       {activeTab === 'o9con Gallery' && (
         <>
-          <section>
+          <section id="display-options">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Display Options</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">Customize how icons are displayed in the gallery</p>
             <div className="flex flex-wrap items-center gap-4 mb-2">
@@ -183,7 +442,7 @@ export default function Icons() {
             </div>
           </section>
 
-          <section>
+          <section id="o9con-library">
             <div className="mb-4">
               <input
                 type="search"
@@ -231,7 +490,7 @@ export default function Icons() {
           <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">Best practices for accessible icon implementation</p>
 
           <div className="space-y-6">
-            <div>
+            <div id="aria-attributes">
               <h3 className="font-semibold text-o9ds-light-primary dark:text-white mb-3">ARIA Attributes</h3>
               <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
                 <li>Use <code className="px-1 py-0.5" data-o9ds-inline-code>aria-hidden=&quot;true&quot;</code> for decorative icons that don&apos;t convey meaning</li>
@@ -239,7 +498,7 @@ export default function Icons() {
                 <li>Provide alternative text for icons used without accompanying text</li>
               </ul>
             </div>
-            <div>
+            <div id="visual-accessibility">
               <h3 className="font-semibold text-o9ds-light-primary dark:text-white mb-3">Visual Accessibility</h3>
               <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
                 <li>Ensure sufficient color contrast (4.5:1 for normal text, 3:1 for large text)</li>
@@ -247,7 +506,7 @@ export default function Icons() {
                 <li>Don&apos;t rely solely on icons to convey important information</li>
               </ul>
             </div>
-            <div>
+            <div id="interactive-icons">
               <h3 className="font-semibold text-o9ds-light-primary dark:text-white mb-3">Interactive Icons</h3>
               <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
                 <li>Ensure interactive icons have adequate click/touch targets (minimum 44×44px)</li>
@@ -260,7 +519,7 @@ export default function Icons() {
       )}
 
       {activeTab === 'Code' && (
-        <section className="space-y-8">
+        <section className="space-y-8" id="implementation">
           <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Implementation</h2>
           <p className="text-o9ds-light-secondary dark:text-neutral-400">Use the following HTML structure to render o9con icons:</p>
 
@@ -282,7 +541,7 @@ export default function Icons() {
             label="o9con usage examples"
           />
 
-          <div>
+          <div id="icon-size-tokens">
             <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-3">Icon Size Tokens</h3>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">Copy the SCSS variables for icon sizes:</p>
             <CodeBlock code={ICON_SIZE_TOKENS_SCSS} label="o9con icon size tokens" />
@@ -290,5 +549,6 @@ export default function Icons() {
         </section>
       )}
     </div>
+    </PageWithToc>
   )
 }

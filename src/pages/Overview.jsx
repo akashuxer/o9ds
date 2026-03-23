@@ -1,5 +1,15 @@
 import { Link } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import PageWithToc from '../LayoutComponents/PageWithToc'
+
+const OVERVIEW_SECTIONS = [
+  { id: 'what-is-o9ds', label: 'What is o9ds?' },
+  { id: 'why-we-built-it', label: 'Why we built it' },
+  { id: 'principles', label: 'Principles' },
+  { id: 'scope', label: 'Scope' },
+  { id: 'audience', label: 'Audience' },
+  { id: 'business-impact', label: 'Business Impact' },
+]
 
 const whyWeBuiltIt = [
   'Eliminate inconsistency',
@@ -27,6 +37,7 @@ export default function Overview() {
   const isLight = theme === 'light'
 
   return (
+    <PageWithToc sections={OVERVIEW_SECTIONS}>
     <div className="max-w-3xl space-y-12">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold text-o9ds-light-primary dark:text-white mb-4">
@@ -60,7 +71,7 @@ export default function Overview() {
       </section>
 
       {/* What is o9ds */}
-      <section className="animate-fade-in-up" style={{ animationDelay: '80ms' }}>
+      <section id="what-is-o9ds" className="animate-fade-in-up" style={{ animationDelay: '80ms' }}>
         <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-3">What is o9ds?</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
           The o9 Design System (o9DS) is a centralized system of foundations, components, patterns, and guidelines that standardize how interfaces are designed and built across the o9 platform. It aligns design, engineering, accessibility, and brand into one scalable system.
@@ -68,7 +79,7 @@ export default function Overview() {
       </section>
 
       {/* Why we built it - Cards */}
-      <section>
+      <section id="why-we-built-it">
         <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-3">Why we built it</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">Address platform-wide inconsistencies and enable scalable product development.</p>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -86,7 +97,7 @@ export default function Overview() {
       </section>
 
       {/* Principles Link */}
-      <section className="animate-fade-in-up" style={{ animationDelay: '550ms' }}>
+      <section id="principles" className="animate-fade-in-up" style={{ animationDelay: '550ms' }}>
         <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-3">Principles</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">Five core principles define how interfaces are designed and built.</p>
         <Link
@@ -103,7 +114,7 @@ export default function Overview() {
       </section>
 
       {/* Scope */}
-      <section className="animate-fade-in-up" style={{ animationDelay: '600ms' }}>
+      <section id="scope" className="animate-fade-in-up" style={{ animationDelay: '600ms' }}>
         <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-4">Scope</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div
@@ -126,13 +137,13 @@ export default function Overview() {
       </section>
 
       {/* Audience */}
-      <section className="animate-fade-in-up" style={{ animationDelay: '650ms' }}>
+      <section id="audience" className="animate-fade-in-up" style={{ animationDelay: '650ms' }}>
         <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-4">Audience</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">Designers, developers, product managers, QA, content writers, stakeholders, and customers.</p>
       </section>
 
       {/* Business Impact - Cards */}
-      <section>
+      <section id="business-impact">
         <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-4">Business Impact</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">The o9 Design System unifies design, development, accessibility, and brand into one scalable system.</p>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -150,5 +161,6 @@ export default function Overview() {
         </div>
       </section>
     </div>
+    </PageWithToc>
   )
 }

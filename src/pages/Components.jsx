@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom'
+import PageWithToc from '../LayoutComponents/PageWithToc'
+
+const COMPONENTS_SECTIONS = [
+  { id: 'buttons-actions', label: 'Buttons & Actions' },
+  { id: 'inputs', label: 'Inputs' },
+  { id: 'cards', label: 'Cards' },
+  { id: 'badges', label: 'Badges' },
+  { id: 'alerts', label: 'Alerts' },
+]
 
 export default function Components() {
   return (
+    <PageWithToc sections={COMPONENTS_SECTIONS}>
     <div className="space-y-12">
       <section>
         <h1 className="text-[30px] font-bold mb-4 text-o9ds-light-primary dark:text-white">Components</h1>
@@ -10,7 +20,7 @@ export default function Components() {
         </p>
       </section>
 
-      <section>
+      <section id="buttons-actions">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Buttons & Actions</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">See the <Link to="/components/button" className="text-o9ds-light-primary dark:text-white underline hover:no-underline">Button</Link> component for variants and usage.</p>
         <div className="flex flex-wrap gap-4">
@@ -32,7 +42,7 @@ export default function Components() {
         </div>
       </section>
 
-      <section>
+      <section id="inputs">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Inputs</h2>
         <div className="max-w-md space-y-4">
           <input
@@ -49,7 +59,7 @@ export default function Components() {
         </div>
       </section>
 
-      <section>
+      <section id="cards">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Cards</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
@@ -72,7 +82,7 @@ export default function Components() {
         </div>
       </section>
 
-      <section>
+      <section id="badges">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Badges</h2>
         <div className="flex flex-wrap gap-2">
           <span className=" bg-neutral-700 px-3 py-1 text-xs font-medium text-o9ds-light-primary dark:text-white">Default</span>
@@ -80,7 +90,7 @@ export default function Components() {
         </div>
       </section>
 
-      <section>
+      <section id="alerts">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Alerts</h2>
         <div className="space-y-4 max-w-md">
           <div className=" border border-emerald-600/50 bg-emerald-600/10 p-4 text-emerald-400">
@@ -98,5 +108,6 @@ export default function Components() {
         </div>
       </section>
     </div>
+    </PageWithToc>
   )
 }

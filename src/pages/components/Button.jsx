@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
 
 const variants = [
   { name: 'Primary', variant: 'default', className: 'bg-o9ds-light-surface dark:bg-white text-o9ds-light-primary dark:text-black hover:bg-o9ds-light-border dark:hover:bg-neutral-200' },
@@ -15,6 +16,18 @@ export default function Button() {
   const [activeTab, setActiveTab] = useState('Overview')
   const tabListRef = useRef(null)
 
+  const onThisPageSections = useMemo(() => {
+    if (activeTab === 'Overview') {
+      return [
+        { id: 'usage-guidelines', label: 'Usage Guidelines' },
+        { id: 'variants', label: 'Variants' },
+      ]
+    }
+    if (activeTab === 'Accessibility') return [{ id: 'button-accessibility', label: 'Accessibility' }]
+    if (activeTab === 'Code') return [{ id: 'button-code', label: 'Implementation' }]
+    return []
+  }, [activeTab])
+
   const handleTabKeyDown = (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
     const idx = buttonTabs.indexOf(activeTab)
@@ -28,6 +41,7 @@ export default function Button() {
   }
 
   return (
+    <PageWithToc sections={onThisPageSections}>
     <div className="max-w-4xl space-y-8">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold text-o9ds-light-primary dark:text-white mb-4">
@@ -72,7 +86,7 @@ export default function Button() {
 
       {activeTab === 'Overview' && (
         <>
-          <section>
+          <section id="usage-guidelines">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-4">Usage Guidelines</h2>
             <div className="grid gap-8 md:grid-cols-2">
               <div>
@@ -96,7 +110,7 @@ export default function Button() {
             </div>
           </section>
 
-          <section>
+          <section id="variants">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-6">Variants</h2>
             <div className="flex flex-wrap gap-4 mb-8">
               {variants.map(({ name, className }) => (
@@ -123,7 +137,7 @@ export default function Button() {
       )}
 
       {activeTab === 'Accessibility' && (
-        <section>
+        <section id="button-accessibility">
           <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">
             Buttons are focusable, keyboard navigable, and support proper ARIA attributes for screen readers.
           </p>
@@ -136,7 +150,7 @@ export default function Button() {
       )}
 
       {activeTab === 'Code' && (
-        <section>
+        <section id="button-code">
           <CodeBlock
             code={`import { Button } from '@o9ds/react'
 
@@ -147,5 +161,6 @@ export default function Button() {
         </section>
       )}
     </div>
+    </PageWithToc>
   )
 }

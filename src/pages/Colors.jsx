@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useTheme } from '../context/ThemeContext'
+import PageWithToc from '../LayoutComponents/PageWithToc'
 import ColorSwatch from '../LayoutComponents/ColorSwatch'
 import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../tokens/brandColors'
 import {
@@ -341,6 +342,34 @@ export default function Colors() {
   const { theme } = useTheme()
   const isLight = theme === 'light'
 
+  const onThisPageSections = useMemo(() => {
+    if (activeTab === 'Overview') {
+      return [
+        { id: 'color-system-overview', label: 'Color System Overview' },
+        { id: 'color-token-levels', label: 'Color Token Levels' },
+        { id: 'referencing-flow', label: 'Referencing Flow' },
+        { id: 'naming-convention', label: 'Naming Convention' },
+        { id: 'types-of-variables', label: 'Types of Variables & Their Behavior' },
+        { id: 'usage-guidelines', label: 'Usage Guidelines' },
+      ]
+    }
+    if (activeTab === 'Brand Colors') {
+      return [{ id: 'brand-palettes', label: 'Brand Palettes' }]
+    }
+    if (activeTab === 'Global Tokens') {
+      return [
+        { id: 'global-neutral-colors', label: 'Neutral Colors' },
+        { id: 'global-o9-theme', label: 'o9 Theme' },
+        { id: 'global-dark-mode', label: 'Dark Mode Theme' },
+        { id: 'global-secondary-themes', label: 'Secondary Themes' },
+        { id: 'global-feedback-colors', label: 'Feedback Colors' },
+        { id: 'global-utility-colors', label: 'Utility Colors' },
+      ]
+    }
+    if (activeTab === 'Semantic Tokens') return [{ id: 'semantic-tokens', label: 'Semantic Tokens' }]
+    return []
+  }, [activeTab])
+
   const handleTabKeyDown = (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
     const idx = tabs.indexOf(activeTab)
@@ -354,6 +383,7 @@ export default function Colors() {
   }
 
   return (
+    <PageWithToc sections={onThisPageSections}>
     <div className="max-w-4xl space-y-8">
       <section>
         <h1 className="group flex items-center gap-2 text-[30px] font-bold text-o9ds-light-primary dark:text-white">
@@ -400,7 +430,7 @@ export default function Colors() {
       {activeTab === 'Overview' && (
         <>
           {/* Color System Overview */}
-          <section>
+          <section id="color-system-overview">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-2">Color System Overview</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
               Understanding the structure and purpose of our color token system
@@ -450,7 +480,7 @@ export default function Colors() {
           </section>
 
           {/* Color Token Hierarchy */}
-          <section>
+          <section id="color-token-levels">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-4">Color Token Levels</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
               A four-tier hierarchy defines how colors flow from raw values to component usage.
@@ -506,7 +536,7 @@ export default function Colors() {
           </section>
 
           {/* Token Flow Anatomy */}
-          <section>
+          <section id="referencing-flow">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-4">Referencing Flow</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
               How a raw hex value flows through global and semantic tokens to reach a component.
@@ -535,7 +565,7 @@ export default function Colors() {
           </section>
 
           {/* Naming Convention */}
-          <section>
+          <section id="naming-convention">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-4">Naming Convention</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
               Semantic color tokens follow a four-part structure: <code className="px-1.5 py-0.5 text-sm font-mono dark:bg-neutral-800" style={isLight ? { backgroundColor: '#E5E5E5' } : undefined}>system-category-variant-property</code>
@@ -590,7 +620,7 @@ export default function Colors() {
           </section>
 
           {/* Variable Types & Behavior */}
-          <section>
+          <section id="types-of-variables">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-4">Types of Variables & Their Behavior</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
               How different token types respond to theme and light/dark mode.
@@ -636,7 +666,7 @@ export default function Colors() {
           </section>
 
           {/* Usage Guidelines */}
-          <section>
+          <section id="usage-guidelines">
             <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-4">Usage Guidelines</h2>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="border dark:border-neutral-700 p-5" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#F9FDF9', borderLeftWidth: '4px', borderLeftColor: '#00c278' } : { borderLeftWidth: '4px', borderLeftColor: '#00c278' }}>
@@ -674,7 +704,7 @@ export default function Colors() {
               platform token colors, which are eventually mapped into semantic tokens across the system.
             </p>
           </section>
-          <section className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <section id="brand-palettes" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {BRAND_PALETTES.map(({ name, palette }) => (
               <div key={name} className="border dark:border-neutral-700 overflow-hidden" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#F2F2F2' } : undefined}>
                 <div className="border-b dark:border-neutral-700 px-4 py-3 dark:bg-neutral-800/50" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: 'transparent' } : undefined}>
@@ -709,7 +739,7 @@ export default function Colors() {
       {activeTab === 'Global Tokens' && (
         <section className="space-y-10">
           {/* Neutral Colors */}
-          <div>
+          <div id="global-neutral-colors">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Neutral Colors</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
               Base grayscale colors ranging from pure black to pure white, providing the foundation for backgrounds, text, and borders.
@@ -718,7 +748,7 @@ export default function Colors() {
           </div>
 
           {/* o9 Theme (default light) */}
-          <div>
+          <div id="global-o9-theme">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">o9 Theme</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
               Default theme in light mode.
@@ -727,7 +757,7 @@ export default function Colors() {
           </div>
 
           {/* Dark Mode Theme */}
-          <div>
+          <div id="global-dark-mode">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Dark Mode Theme</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
               o9 theme in dark mode.
@@ -736,7 +766,7 @@ export default function Colors() {
           </div>
 
           {/* Secondary Themes */}
-          <div>
+          <div id="global-secondary-themes">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Secondary Themes</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
               Forest Green, Onyx Black, Midnight Indigo, and Sky Blue.
@@ -762,7 +792,7 @@ export default function Colors() {
           </div>
 
           {/* Feedback Colors */}
-          <div>
+          <div id="global-feedback-colors">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Feedback Colors</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
               Semantic status colors for communicating system states including error, success, warning, and informational feedback across all interface elements.
@@ -788,7 +818,7 @@ export default function Colors() {
           </div>
 
           {/* Utility Colors */}
-          <div>
+          <div id="global-utility-colors">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Utility Colors</h2>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
               Purples, opacity tokens, and green scale — used less frequently.
@@ -799,7 +829,7 @@ export default function Colors() {
       )}
 
       {activeTab === 'Semantic Tokens' && (
-        <section className="space-y-6">
+        <section id="semantic-tokens" className="space-y-6">
           <p className="text-o9ds-light-secondary dark:text-neutral-400">Purpose-driven mappings for surfaces, borders, text, and icons. All semantic tokens map to global tokens—no hardcoded values.</p>
 
           {/* Theme switcher - reuse Display Options button group styling (data-o9ds-size-selected) */}
@@ -872,5 +902,6 @@ export default function Colors() {
         </section>
       )}
     </div>
+    </PageWithToc>
   )
 }
