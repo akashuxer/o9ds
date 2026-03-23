@@ -1,6 +1,60 @@
 import { useState, useRef, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+
+const PAGE_TITLES = {
+  '/': 'Platform UI',
+  '/overview': 'Overview',
+  '/principles': 'Principles and Guidelines',
+  '/colors': 'Colors',
+  '/colors/data-viz': 'Data Visualization Colors',
+  '/typography': 'Typography',
+  '/spacing': 'Spacing',
+  '/borders': 'Borders & Radius',
+  '/icons': 'Iconography',
+  '/illustrations': 'Illustrations',
+  '/motion': 'Motion & Animation',
+  '/elevation': 'Elevation & Shadows',
+  '/components': 'Components',
+  '/components/button': 'Button',
+  '/components/icon-button': 'Icon Button',
+  '/components/split-button': 'Split Button',
+  '/components/button-group': 'Button Group',
+  '/components/link': 'Link',
+  '/components/breadcrumb': 'Breadcrumb',
+  '/components/tabstrip': 'Tabstrip',
+  '/components/pagination': 'Pagination',
+  '/components/workspace-sidebar': 'Workspace Sidebar',
+  '/components/label': 'Label',
+  '/components/textbox': 'Textbox',
+  '/components/textarea': 'Textarea',
+  '/components/search': 'Search',
+  '/components/select': 'Select',
+  '/designers': 'For Designers',
+  '/developers': 'For Developers',
+  '/vibe-coders': 'For Vibe Coders',
+  '/accessibility': 'Accessibility',
+  '/content': 'Content Guidelines',
+  '/content/writing-principles': 'Writing Principles',
+  '/content/grammar': 'Grammar',
+  '/content/voice-and-tone': 'Voice and Tone',
+  '/patterns': 'Patterns',
+  '/patterns/forms': 'Forms',
+  '/patterns/search': 'Search',
+  '/patterns/filters': 'Filters',
+  '/patterns/tables': 'Tables',
+  '/patterns/side-panels': 'Side Panels',
+  '/patterns/modals': 'Modals',
+  '/patterns/notifications': 'Notifications',
+  '/patterns/empty-states': 'Empty States',
+  '/patterns/bulk-actions': 'Bulk Actions',
+  '/patterns/nested-interactions': 'Nested Interactions',
+  '/patterns/drag': 'Drag',
+  '/patterns/disabled': 'Disabled',
+  '/contribute': 'How to Contribute',
+  '/faqs': 'FAQs',
+  '/changelog': 'Changelog',
+}
 
 const sidebarSections = [
   {
@@ -117,12 +171,29 @@ const pathsWithContent = new Set([
   '/components/button',
 ])
 
+function getPageTitle(pathname) {
+  const exact = PAGE_TITLES[pathname]
+  if (exact) return exact
+  // Fallback for /components/:slug – titleize slug
+  const componentsMatch = pathname.match(/^\/components\/(.+)$/)
+  if (componentsMatch) {
+    return componentsMatch[1].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
+  }
+  return 'Design System'
+}
+
 export default function Layout({ children }) {
   const { theme, toggleTheme } = useTheme()
+  const { pathname } = useLocation()
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const searchRef = useRef(null)
   const navRef = useRef(null)
+
+  useEffect(() => {
+    const pageName = getPageTitle(pathname)
+    document.title = `o9ds Design System - ${pageName}`
+  }, [pathname])
 
   const filteredSections = sidebarSections
     .map((section) => {
