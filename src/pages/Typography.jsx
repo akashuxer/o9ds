@@ -1,9 +1,16 @@
+import PageHeader from '../LayoutComponents/PageHeader'
 import PageWithToc from '../LayoutComponents/PageWithToc'
 
 const TYPOGRAPHY_SECTIONS = [
   { id: 'type-scale', label: 'Type Scale' },
   { id: 'font-stack', label: 'Font Stack' },
 ]
+
+const typographyIcon = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7-6v12m7-6v12" />
+  </svg>
+)
 
 const typeScale = [
   { name: 'Display', class: 'text-5xl font-bold', sample: 'The quick brown fox' },
@@ -21,20 +28,12 @@ export default function Typography() {
   return (
     <PageWithToc sections={TYPOGRAPHY_SECTIONS}>
     <div className="space-y-12">
-      <section>
-        <h1 className="group flex items-center gap-2 text-[30px] font-bold mb-4 text-o9ds-light-primary dark:text-white">
-          <span className="flex h-8 w-8 items-center justify-center bg-o9ds-light-surface dark:bg-neutral-700" data-o9ds-avatar data-o9ds-avatar-header>
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7-6v12m7-6v12" />
-            </svg>
-          </span>
-          Typography
-        </h1>
-        <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl">
-          Built on :o9 Sans — a Swiss-inspired grotesque designed for high contrast hierarchies 
-          and clear visual communication. Using DM Sans as a web fallback.
-        </p>
-      </section>
+      <PageHeader
+        title="Typography"
+        description="Built on :o9 Sans — a Swiss-inspired grotesque designed for high contrast hierarchies and clear visual communication. Using DM Sans as a web fallback."
+        icon={typographyIcon}
+        descClassName="text-lg"
+      />
 
       <section id="type-scale">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Type Scale</h2>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import GrayBgCard from '../LayoutComponents/GrayBgCard'
 import PageWithToc from '../LayoutComponents/PageWithToc'
 
 const OVERVIEW_SECTIONS = [
@@ -148,15 +149,13 @@ export default function Overview() {
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">The o9 Design System unifies design, development, accessibility, and brand into one scalable system.</p>
         <div className="grid gap-4 sm:grid-cols-2">
           {businessImpact.map(({ title, desc }, i) => (
-            <div
+            <GrayBgCard
               key={title}
-              className="border dark:border-neutral-700 p-4 transition-all duration-300 hover:border-o9ds-light-primary dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50 hover:shadow-md hover:-translate-y-0.5 animate-fade-in-up"
-              style={{ animationDelay: `${700 + i * 60}ms`, borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#F2F2F2' : undefined }}
-              data-o9ds-card="light"
-            >
-              <h4 className="font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h4>
-              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">{desc}</p>
-            </div>
+              title={title}
+              desc={desc}
+              className="animate-fade-in-up p-4"
+              style={{ animationDelay: `${700 + i * 60}ms` }}
+            />
           ))}
         </div>
       </section>

@@ -1,7 +1,9 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import PageWithToc from '../LayoutComponents/PageWithToc'
 import ColorSwatch from '../LayoutComponents/ColorSwatch'
+import DocTabs from '../LayoutComponents/DocTabs'
+import WhiteBgCard from '../LayoutComponents/WhiteBgCard'
 import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../tokens/brandColors'
 import {
   NEUTRAL_TOKENS,
@@ -338,7 +340,6 @@ export default function Colors() {
   const [activeTab, setActiveTab] = useState('Overview')
   const [semanticSubTab, setSemanticSubTab] = useState('Surface')
   const [lightTheme, setLightTheme] = useState('o9theme')
-  const tabListRef = useRef(null)
   const { theme } = useTheme()
   const isLight = theme === 'light'
 
@@ -370,18 +371,6 @@ export default function Colors() {
     return []
   }, [activeTab])
 
-  const handleTabKeyDown = (e) => {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
-    const idx = tabs.indexOf(activeTab)
-    if (idx < 0) return
-    let next
-    if (e.key === 'ArrowRight') next = (idx + 1) % tabs.length
-    else next = (idx - 1 + tabs.length) % tabs.length
-    e.preventDefault()
-    setActiveTab(tabs[next])
-    setTimeout(() => tabListRef.current?.children?.[next]?.focus(), 0)
-  }
-
   return (
     <PageWithToc sections={onThisPageSections}>
     <div className="max-w-4xl space-y-8">
@@ -399,32 +388,7 @@ export default function Colors() {
           visual design attributes like colors, typography, spacing, and more.
         </p>
 
-        {/* Tabs */}
-        <div
-          ref={tabListRef}
-          role="tablist"
-          className="mt-6 flex gap-6 border-b border-o9ds-light-border dark:border-neutral-700"
-          data-o9ds-tabs
-          onKeyDown={handleTabKeyDown}
-        >
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              role="tab"
-              aria-selected={activeTab === tab}
-              tabIndex={activeTab === tab ? 0 : -1}
-              onClick={() => setActiveTab(tab)}
-              data-o9ds-tab-active={activeTab === tab ? '' : undefined}
-              className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
-                activeTab === tab
-                  ? 'border-o9ds-light-primary dark:border-white text-o9ds-light-primary dark:text-white'
-                  : 'border-transparent text-o9ds-light-secondary hover:text-o9ds-light-primary dark:text-neutral-400 dark:hover:text-neutral-300'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+        <DocTabs tabs={tabs} activeTab={activeTab} onSelect={setActiveTab} />
       </section>
 
       {activeTab === 'Overview' && (
@@ -439,43 +403,29 @@ export default function Colors() {
               Our color system is built on two foundational layers: <strong className="text-o9ds-light-primary dark:text-white">Global Tokens</strong> and <strong className="text-o9ds-light-primary dark:text-white">Semantic Tokens</strong>. This approach ensures consistency, maintainability, and flexibility across all design implementations.
             </p>
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="border dark:border-neutral-700 dark:bg-transparent p-6 shadow-sm" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#F2F2F2' } : undefined}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="flex h-8 w-8 items-center justify-center dark:bg-neutral-700" aria-hidden>
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </span>
-                  <h3 className="font-semibold text-o9ds-light-primary dark:text-white">Global Tokens</h3>
-                </div>
-                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">
-                  Raw color values organized by theme and purpose. These are the foundation colors that define our visual identity and provide the building blocks for semantic tokens.
-                </p>
-                <ul className="space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400 list-disc list-inside">
-                  <li>Neutral grays and brand colors</li>
-                  <li>Theme variations (o9, Onyx Black, Sky Blue, etc.)</li>
-                  <li>Feedback and utility colors</li>
-                </ul>
-              </div>
-              <div className="border dark:border-neutral-700 dark:bg-transparent p-6 shadow-sm" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#F2F2F2' } : undefined}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="flex h-8 w-8 items-center justify-center dark:bg-neutral-700" aria-hidden>
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </span>
-                  <h3 className="font-semibold text-o9ds-light-primary dark:text-white">Semantic Tokens</h3>
-                </div>
-                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">
-                  Purpose-driven color assignments that map global tokens to specific UI functions. These tokens provide meaning and context to color usage across components.
-                </p>
-                <ul className="space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400 list-disc list-inside">
-                  <li>Brand colors for identity elements</li>
-                  <li>Surface colors for backgrounds</li>
-                  <li>Feedback colors for status communication</li>
-                </ul>
-              </div>
+              <WhiteBgCard
+                icon={
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                }
+                title="Global Tokens"
+                desc="Raw color values organized by theme and purpose. These are the foundation colors that define our visual identity and provide the building blocks for semantic tokens."
+                bullets={['Neutral grays and brand colors', 'Theme variations (o9, Onyx Black, Sky Blue, etc.)', 'Feedback and utility colors']}
+                unified
+              />
+              <WhiteBgCard
+                icon={
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                }
+                title="Semantic Tokens"
+                desc="Purpose-driven color assignments that map global tokens to specific UI functions. These tokens provide meaning and context to color usage across components."
+                bullets={['Brand colors for identity elements', 'Surface colors for backgrounds', 'Feedback colors for status communication']}
+                unified
+              />
             </div>
           </section>
 
@@ -655,7 +605,7 @@ export default function Colors() {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold text-o9ds-light-primary dark:text-white">{type}</h3>
-                    <code className="text-xs font-mono px-2 py-1 dark:bg-neutral-800 truncate max-w-[180px]" style={isLight ? { backgroundColor: '#F2F2F2', color: '#010101' } : { color: '#a3a3a3' }} title={token}>
+                    <code className="text-xs font-mono px-2 py-1 dark:bg-neutral-800 break-all" style={isLight ? { backgroundColor: '#F2F2F2', color: '#010101' } : { color: '#a3a3a3' }} title={token}>
                       {token}
                     </code>
                   </div>

@@ -1,11 +1,9 @@
-import { useTheme } from '../context/ThemeContext'
 import PageWithToc from '../LayoutComponents/PageWithToc'
+import WhiteBgCard from '../LayoutComponents/WhiteBgCard'
 
 const PRINCIPLES_SECTIONS = [{ id: 'core-principles', label: 'Our Core Principles' }]
 
 export default function Principles() {
-  const { theme } = useTheme()
-  const isLight = theme === 'light'
   const principles = [
     {
       num: 1,
@@ -85,30 +83,17 @@ export default function Principles() {
         <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white mb-6">Our Core Principles</h2>
         <div className="grid gap-6 sm:grid-cols-2">
           {principles.map(({ num, title, desc, bullets, rule }) => (
-            <div
-              key={num}
-              className="group border dark:border-neutral-700 p-6 transition-all duration-300 hover:border-o9ds-light-primary dark:hover:border-neutral-600 hover:shadow-md hover:-translate-y-0.5 animate-fade-in-up"
-              style={{ animationDelay: `${num * 80}ms`, borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#FFFFFF' : undefined }}
-              data-o9ds-card={isLight ? 'light-white' : 'dark'}
-            >
-              <div className="mb-4 flex h-8 w-8 items-center justify-center text-sm font-bold dark:bg-white dark:text-black" data-o9ds-avatar>
-                {num}
-              </div>
-              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h3>
-              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 leading-relaxed">{desc}</p>
-              <ul className="space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">
-                {bullets.map((b, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="text-o9ds-light-secondary dark:text-neutral-500 shrink-0">•</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
-              <div className="border-l-2 border-o9ds-light-border dark:border-neutral-600 pl-4 py-2">
-                <p className="text-xs font-semibold text-o9ds-light-secondary dark:text-neutral-500 uppercase tracking-wider mb-1">Decision rule</p>
-                <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">{rule}</p>
-              </div>
-            </div>
+              <WhiteBgCard
+                key={num}
+                number={num}
+                title={title}
+                desc={desc}
+                bullets={bullets}
+                decisionRule={rule}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${num * 80}ms` }}
+                unified
+              />
           ))}
         </div>
       </section>

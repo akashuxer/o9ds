@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import PageWithToc from '../LayoutComponents/PageWithToc'
+import DocTable from '../LayoutComponents/DocTable'
+import { SPACING_TOKENS } from '../tokens/spacingTokens'
 
 const COMPONENTS_SECTIONS = [
   { id: 'buttons-actions', label: 'Buttons & Actions' },
@@ -7,6 +9,7 @@ const COMPONENTS_SECTIONS = [
   { id: 'cards', label: 'Cards' },
   { id: 'badges', label: 'Badges' },
   { id: 'alerts', label: 'Alerts' },
+  { id: 'spacing-tokens', label: 'Spacing Tokens' },
 ]
 
 export default function Components() {
@@ -106,6 +109,14 @@ export default function Components() {
             Info — Additional information available.
           </div>
         </div>
+      </section>
+
+      <section id="spacing-tokens">
+        <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Spacing Tokens</h2>
+        <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+          Use these tokens for padding, margins, and gaps across components. See <Link to="/spacing" className="text-o9ds-light-primary dark:text-white underline hover:no-underline">Spacing</Link> for full reference.
+        </p>
+        <DocTable tokens={SPACING_TOKENS} showCopy />
       </section>
     </div>
     </PageWithToc>

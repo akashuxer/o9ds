@@ -50,7 +50,7 @@ function BorderTokenRow({ token, value, px, usage, copyFormat, isLight, isWidth 
   }
 
   return (
-    <tr className="border-b dark:border-neutral-700 last:border-b-0" style={{ borderColor: isLight ? '#E5E5E5' : undefined }}>
+    <tr className="group border-b last:border-b-0" style={{ borderColor: isLight ? '#E5E5E5' : '#404040' }}>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#fff' }}>{token}</td>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#e5e5e5' }}>{value}</td>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#303030' : '#a3a3a3' }}>{px}</td>
@@ -65,7 +65,7 @@ function BorderTokenRow({ token, value, px, usage, copyFormat, isLight, isWidth 
       <td className="py-2 px-3 w-12">
         <button
           onClick={handleCopy}
-          className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
+          className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
           style={
             copied
               ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
@@ -119,7 +119,7 @@ border-radius: 0;
 
       <section id="border-radius-tokens">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Border Radius Tokens</h2>
-        <div className="border overflow-hidden group" style={{ borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#FFFFFF' : undefined }}>
+        <div className="border overflow-hidden" style={{ borderColor: isLight ? '#E5E5E5' : '#404040', backgroundColor: isLight ? '#FFFFFF' : undefined }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
@@ -140,7 +140,7 @@ border-radius: 0;
 
       <section id="border-width-tokens">
         <h2 className="text-2xl font-bold mb-4 text-o9ds-light-primary dark:text-white">Border Width Tokens</h2>
-        <div className="border overflow-hidden group" style={{ borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#FFFFFF' : undefined }}>
+        <div className="border overflow-hidden" style={{ borderColor: isLight ? '#E5E5E5' : '#404040', backgroundColor: isLight ? '#FFFFFF' : undefined }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">

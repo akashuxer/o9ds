@@ -14,6 +14,7 @@ import Button from './pages/components/Button'
 import Placeholder from './pages/Placeholder'
 import Borders from './pages/Borders'
 import Illustrations from './pages/Illustrations'
+import Logos from './pages/Logos'
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/borders" element={<Borders />} />
           <Route path="/icons" element={<Icons />} />
           <Route path="/illustrations" element={<Illustrations />} />
+          <Route path="/logos" element={<Logos />} />
           <Route path="/motion" element={<Placeholder title="Motion & Animation" />} />
           <Route path="/elevation" element={<Placeholder title="Elevation & Shadows" />} />
           <Route path="/components" element={<Components />} />

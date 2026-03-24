@@ -13,6 +13,7 @@ const PAGE_TITLES = {
   '/borders': 'Borders & Radius',
   '/icons': 'Iconography',
   '/illustrations': 'Illustrations',
+  '/logos': 'Logos',
   '/motion': 'Motion & Animation',
   '/elevation': 'Elevation & Shadows',
   '/components': 'Components',
@@ -84,8 +85,15 @@ const sidebarSections = [
       { path: '/typography', label: 'Typography' },
       { path: '/spacing', label: 'Spacing' },
       { path: '/borders', label: 'Borders & Radius' },
-      { path: '/icons', label: 'Iconography' },
-      { path: '/illustrations', label: 'Illustrations' },
+      {
+        path: '/icons',
+        label: 'Assets',
+        children: [
+          { path: '/icons', label: 'Iconography' },
+          { path: '/illustrations', label: 'Illustrations' },
+          { path: '/logos', label: 'Logos' },
+        ],
+      },
       { path: '/motion', label: 'Motion & Animation' },
       { path: '/elevation', label: 'Elevation & Shadows' },
       { path: '/colors/data-viz', label: 'Data Visualization Colors' },
@@ -167,6 +175,7 @@ const pathsWithContent = new Set([
   '/borders',
   '/icons',
   '/illustrations',
+  '/logos',
   '/components',
   '/components/button',
 ])
@@ -407,7 +416,7 @@ export default function Layout({ children }) {
                         <div className="px-2 py-1.5 text-sm font-medium" style={{ color: isDark ? '#a3a3a3' : '#303030' }}>
                           {item.label}
                         </div>
-                        <ul className="ml-2 space-y-0.5 border-l pl-3" style={{ borderColor: isDark ? '#262626' : '#E5E5E5' }}>
+                        <ul className="ml-2 space-y-0.5 pl-3">
                           {item.children.map((child) => (
                             <li key={child.path}>
                               <NavLink
@@ -415,10 +424,10 @@ export default function Layout({ children }) {
                                 end
                                 onClick={() => setSidebarOpen(false)}
                                 className={({ isActive }) =>
-                                  `flex items-center justify-between gap-2 px-2 py-1.5 text-sm transition-colors border-l ${
+                                  `flex items-center justify-between gap-2 px-2 py-1.5 text-sm transition-colors ${
                                     isActive
-                                      ? (isDark ? 'bg-neutral-800 text-white border-l-white' : 'bg-[#E5E5E5] text-[#010101] border-l-[#010101]')
-                                      : 'border-l-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#F2F2F2] hover:text-[#010101]')
+                                      ? (isDark ? 'bg-neutral-800 text-white' : 'bg-[#E5E5E5] text-[#010101]')
+                                      : 'hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#F2F2F2] hover:text-[#010101]')
                                   }`
                                 }
                               >
@@ -440,10 +449,10 @@ export default function Layout({ children }) {
                           end
                           onClick={() => setSidebarOpen(false)}
                           className={({ isActive }) =>
-                            `flex items-center gap-2 px-2 py-1.5 text-sm transition-colors border-l ${
+                            `flex items-center gap-2 px-2 py-1.5 text-sm transition-colors ${
                               isActive
-                                ? (isDark ? 'bg-neutral-800 text-white border-l-white' : 'bg-[#E5E5E5] text-[#010101] border-l-[#010101]')
-                                : 'border-l-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#F2F2F2] hover:text-[#010101]')
+                                ? (isDark ? 'bg-neutral-800 text-white' : 'bg-[#E5E5E5] text-[#010101]')
+                                : 'hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#F2F2F2] hover:text-[#010101]')
                             }`
                           }
                         >
@@ -469,7 +478,7 @@ export default function Layout({ children }) {
           style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
           data-theme={theme}
         >
-          <div className={`mx-auto relative z-10 ${['/', '/overview', '/principles', '/colors', '/typography', '/spacing', '/borders', '/icons', '/illustrations', '/components', '/components/button'].includes(pathname) ? 'max-w-6xl' : 'max-w-4xl'}`}>
+          <div className={`mx-auto relative z-10 ${['/', '/overview', '/principles', '/colors', '/typography', '/spacing', '/borders', '/icons', '/illustrations', '/logos', '/components', '/components/button'].includes(pathname) ? 'max-w-6xl' : 'max-w-4xl'}`}>
             {children}
           </div>
         </main>

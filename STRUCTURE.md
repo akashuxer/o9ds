@@ -15,8 +15,7 @@ This document defines the structure to follow for all pages in the design system
 
 ## Main Body
 
-- Vertical lines: 80px spacing, 1px wide, `rgba(0,0,0,0.04)` (light) / `rgba(255,255,255,0.03)` (dark).
-- Applied via `.o9ds-main` class on main element.
+- No background vertical lines (removed to reduce noise).
 
 ---
 
@@ -30,22 +29,18 @@ This document defines the structure to follow for all pages in the design system
 
 ## Page Header Pattern
 
-All content pages use a consistent header:
+Use the **PageHeader** layout component:
 
 ```jsx
-<h1 className="group flex items-center gap-2 text-[30px] font-bold text-o9ds-light-primary dark:text-white [pb-2 if tabs]">
-  <span
-    className="flex h-8 w-8 items-center justify-center bg-o9ds-light-surface dark:bg-neutral-700"
-    data-o9ds-avatar
-    data-o9ds-avatar-header
-  >
-    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">...</svg>
-  </span>
-  Page Title
-</h1>
-<p className="mt-4 text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
-  Description...
-</p>
+import PageHeader from '../LayoutComponents/PageHeader'
+
+<PageHeader
+  title="Page Title"
+  description="Optional description text."
+  icon={<svg className="h-4 w-4" ...>...</svg>}
+>
+  <DocTabs ... />  {/* optional: tabs below header */}
+</PageHeader>
 ```
 
 - **Avatar**: 32×32px, `#F2F2F2` bg (light) / `neutral-700` (dark). No hover on headers.
@@ -131,10 +126,24 @@ import CodeBlock from '../components/CodeBlock'
 
 ---
 
+## Layout Components (`src/LayoutComponents/`)
+
+| Component | Use for |
+|-----------|---------|
+| `DocTable` | Any structured table (props, tokens, keyboard, ARIA) |
+| `WhiteBgCard` | Principle cards, callouts — white bg, light border |
+| `GrayBgCard` | Principle cards, callouts — gray bg, dark border |
+| `DocTabs` | Overview / Usage / API / Accessibility tabs |
+| `CodeBlock` | Code snippets with copy |
+| `PageWithToc` | Pages with "On This Page" TOC |
+
+**Do not recreate components if they exist in LayoutComponents.**
+
+---
+
 ## Principles Cards
 
-- Grid: `sm:grid-cols-2` (2 per row).
-- White bg, `#E5E5E5` border (light).
+- Use `WhiteBgCard` (odd) and `GrayBgCard` (even). Grid: `sm:grid-cols-2`.
 
 ---
 

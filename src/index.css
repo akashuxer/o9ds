@@ -2,26 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Vertical lines across main body - very light, even spacing */
-.o9ds-main {
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent calc(80px - 1px),
-    rgba(0, 0, 0, 0.04) calc(80px - 1px),
-    rgba(0, 0, 0, 0.04) 80px
-  );
-}
-html.dark .o9ds-main,
-html[data-theme="dark"] .o9ds-main {
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent calc(80px - 1px),
-    rgba(255, 255, 255, 0.08) calc(80px - 1px),
-    rgba(255, 255, 255, 0.08) 80px
-  );
-}
 
 /* Theme: explicit fallbacks so toggle works reliably */
 /* Light mode - #FFFFFF bg, #010101 primary text, #303030 secondary, #F2F2F2 / #E5E5E5 surfaces */
@@ -97,7 +77,31 @@ html[data-theme="light"] main [data-o9ds-card="light-white"]:hover,
 html:not(.dark) main [data-o9ds-card="light-white"]:hover {
   background-color: #F2F2F2 !important;
 }
-/* Dark mode: card base bg #000 so vertical lines stay behind */
+/* Dark mode: table borders/dividers #404040 */
+html[data-theme="dark"] main div.border.overflow-hidden:has(table),
+html.dark main div.border.overflow-hidden:has(table) {
+  border-color: #404040 !important;
+}
+html[data-theme="dark"] main div.border.overflow-hidden:has(table) tr,
+html.dark main div.border.overflow-hidden:has(table) tr {
+  border-color: #404040 !important;
+}
+
+/* Principles cards: white bg both modes; subtle border; avatar gray */
+html[data-theme="dark"] main [data-o9ds-card="principles"],
+html.dark main [data-o9ds-card="principles"] {
+  background-color: #FFFFFF !important;
+}
+/* Principles cards: border hover light #010101, dark #FFFFFF */
+html[data-theme="light"] main [data-o9ds-card="principles"]:hover,
+html:not(.dark) main [data-o9ds-card="principles"]:hover {
+  border-color: #010101 !important;
+}
+html[data-theme="dark"] main [data-o9ds-card="principles"]:hover,
+html.dark main [data-o9ds-card="principles"]:hover {
+  border-color: #FFFFFF !important;
+}
+/* Dark mode: card base bg #000 */
 html[data-theme="dark"] main [data-o9ds-card],
 html.dark main [data-o9ds-card],
 html[data-theme="dark"] main div.border.p-4,

@@ -1,0 +1,27 @@
+---
+description: Use existing layout components — do not recreate
+globs: src/**/*
+alwaysApply: true
+---
+
+# Layout Components
+
+**Do not recreate components if they already exist in `src/LayoutComponents/`.**
+
+Before building a new card, table, or layout element, check and reuse:
+
+| Component | Use for |
+|-----------|---------|
+| `PageHeader` | Page title + avatar icon + optional description (use on all doc pages) |
+| `DocTable` | Any structured table (props, tokens, keyboard, ARIA, etc.) |
+| `WhiteBgCard` | Principle cards, callouts — white bg, light border |
+| `GrayBgCard` | Principle cards, callouts — gray bg, dark border |
+| `DocTabs` | Overview / Usage / API / Accessibility tabs (with slide animation) |
+| `CodeBlock` | Code snippets with copy |
+| `PageWithToc` | Pages with "On This Page" TOC |
+| `OnThisPage` | Right-side section nav |
+| `ColorSwatch` | Color preview tile |
+
+Import from `../LayoutComponents/ComponentName` (adjust path as needed).
+
+**When adding new layout components:** Add them here and to README.md LayoutComponents list.

@@ -47,6 +47,9 @@ o9ds Website/
 │   ├── o9illus/
 │   │   ├── light/          # Light-mode illustration SVGs
 │   │   └── dark/           # Dark-mode illustration SVGs
+│   ├── o9ClientLogos/
+│   │   ├── light/          # Client logos — light (SVG, /logos page)
+│   │   └── dark/           # Client logos — dark (SVG)
 │   ├── fonts/              # o9con icon font (woff2, woff, o9con.css)
 │   └── favicon.svg
 │
@@ -55,8 +58,15 @@ o9ds Website/
 │   ├── App.jsx             # Routes and layout wrapper
 │   ├── index.css           # Global styles, tokens, light/dark rules
 │   │
-│   ├── LayoutComponents/   # Layout & shared UI
+│   ├── LayoutComponents/   # Layout & shared UI (reuse — do not recreate)
 │   │   ├── Layout.jsx      # Header, sidebar, nav, theme toggle
+│   │   ├── PageHeader.jsx  # Page title + avatar icon + description
+│   │   ├── PageWithToc.jsx # Main wrapper with "On This Page" TOC
+│   │   ├── OnThisPage.jsx  # Right-side section nav
+│   │   ├── DocTabs.jsx     # Tabs with slide animation (Overview/Usage/API)
+│   │   ├── DocTable.jsx    # Structured tables (props, tokens, ARIA)
+│   │   ├── WhiteBgCard.jsx # Cards — white bg, subtle border
+│   │   ├── GrayBgCard.jsx  # Cards — gray bg, dark border
 │   │   ├── CodeBlock.jsx   # Code snippet with copy
 │   │   ├── ColorSwatch.jsx # Color preview tile
 │   │   └── ScrollToTop.jsx
@@ -111,9 +121,14 @@ o9ds Website/
 | `src/tokens/iconTokens.js` | Icon size tokens (o9con) |
 | `src/tokens/illustrationTokens.js` | Illustration size tokens (o9Illus) |
 | `src/tokens/o9conIcons.js` | o9con icon class names and metadata |
+| `src/tokens/clientLogos.js` | Client logo filenames (`o9ClientLogos/light/` and `dark/`) |
 | `src/index.css` | Global styles, 0-radius policy, `data-o9ds-*` rules |
 | `src/App.jsx` | Route definitions |
 | `src/LayoutComponents/Layout.jsx` | Sidebar nav, page titles |
+
+### Sidebar structure
+
+- **FOUNDATIONS** → Colors, Typography, Spacing, Borders, **Assets** (Iconography, Illustrations, Logos), Motion, Elevation
 
 ---
 
@@ -126,8 +141,9 @@ o9ds Website/
 | `/typography` | Typography |
 | `/spacing` | Spacing scale and tokens |
 | `/borders` | Border radius and width tokens |
-| `/icons` | o9con gallery, accessibility, code |
-| `/illustrations` | o9Illus gallery, code |
+| `/icons` | Assets → Iconography (o9con gallery) |
+| `/illustrations` | Assets → Illustrations (o9Illus gallery) |
+| `/logos` | Assets → Logos (client logos, download as SVG) |
 | `/components` | Components overview |
 | `/components/button` | Button docs |
 | `/principles` | Principles and guidelines |
