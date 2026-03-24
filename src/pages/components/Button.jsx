@@ -38,14 +38,17 @@ const SIZES = [
   { size: 'lg', height: '40px', font: '16px', icon: '24px', padding: '10px 12px' },
 ]
 
-const ARIA_ATTRS = [
-  { attr: 'aria-label', when: 'Icon-only buttons; optional when visible label is sufficient' },
+/** When to apply ARIA — do not duplicate native &lt;button&gt; semantics. */
+const ARIA_WHEN_TO_USE = [
+  { attr: 'aria-label', when: 'Icon-only buttons; optional when a visible label is sufficient' },
   { attr: 'aria-disabled', when: 'Only when the button must stay focusable while logically disabled' },
   { attr: 'aria-pressed', when: 'Toggle buttons (selected prop)' },
   { attr: 'aria-expanded', when: 'Button opens/closes content (menus, disclosures)' },
   { attr: 'aria-haspopup', when: 'Opens menu, listbox, or dialog' },
   { attr: 'aria-busy', when: 'Loading state (set automatically when loading)' },
   { attr: 'aria-describedby', when: 'Links to helper text, shortcut hint, or disabled reason' },
+  { attr: 'aria-labelledby', when: 'The visible name is provided by other element(s)' },
+  { attr: 'aria-controls', when: 'The button toggles or operates a specific region by id' },
 ]
 
 const BUTTON_SPACING_TOKENS = SPACING_TOKENS.filter((t) => ['o9ds-space-4', 'o9ds-space-6', 'o9ds-space-8', 'o9ds-space-10', 'o9ds-space-12'].includes(t.token))
@@ -89,13 +92,18 @@ export default function Button() {
     if (activeTab === 'Accessibility') {
       return [
         { id: 'a11y-intro', label: 'Overview' },
-        { id: 'a11y-keyboard', label: 'Keyboard' },
-        { id: 'a11y-screen-readers', label: 'Screen readers' },
-        { id: 'a11y-aria', label: 'ARIA' },
-        { id: 'a11y-states', label: 'States & announcements' },
-        { id: 'a11y-focus', label: 'Focus' },
-        { id: 'a11y-rules', label: 'Rules & WCAG' },
-        { id: 'a11y-checklist', label: 'Checklist' },
+        { id: 'a11y-keyboard', label: 'Keyboard interaction' },
+        { id: 'a11y-focus', label: 'Focus behavior' },
+        { id: 'a11y-disabled', label: 'Disabled state' },
+        { id: 'a11y-pressed', label: 'Pressed state' },
+        { id: 'a11y-expand-collapse', label: 'Expand / popups' },
+        { id: 'a11y-dynamic-labels', label: 'Dynamic labels' },
+        { id: 'a11y-supplementary', label: 'Extra description & shortcuts' },
+        { id: 'a11y-tooltip-focus', label: 'Tooltip & accessibility' },
+        { id: 'a11y-loading', label: 'Loading state' },
+        { id: 'a11y-focus-management', label: 'Focus after activation' },
+        { id: 'a11y-notes', label: 'Accessibility notes' },
+        { id: 'a11y-supported-aria', label: 'Supported ARIA attributes' },
       ]
     }
     return []
@@ -516,45 +524,283 @@ const handleSave = async () => {
             <div id="a11y-intro" className="scroll-mt-24 space-y-4">
               <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Button accessibility</h2>
               <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-                A text button must be operable with keyboard and assistive technologies. Prefer native <code className="px-1 py-0.5" data-o9ds-inline-code>&lt;button&gt;</code> via <strong className="text-o9ds-light-primary dark:text-white font-medium">O9Button</strong> or documented markup so semantics and activation behavior are inherited.
+                Use this as the accessibility spec for a standard text button in the design system: dynamic labels, counters, disabled states, shortcut hints, and runtime state changes. Prefer native{' '}
+                <code className="px-1 py-0.5" data-o9ds-inline-code>&lt;button&gt;</code> via <strong className="text-o9ds-light-primary dark:text-white font-medium">O9Button</strong> or equivalent documented markup so activation and semantics stay correct.
+              </p>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                Screen readers typically announce: <code className="px-1 py-0.5" data-o9ds-inline-code>[Accessible name], button</code>
               </p>
             </div>
 
             <div id="a11y-keyboard" className="scroll-mt-24 space-y-4">
               <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Keyboard interaction</h3>
+              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Required behavior</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li>The button must be reachable by keyboard.</li>
+                <li>Activation must work with both <strong className="text-o9ds-light-primary dark:text-white font-medium">Enter</strong> and <strong className="text-o9ds-light-primary dark:text-white font-medium">Space</strong>.</li>
+                <li>Focus must remain predictable after the action.</li>
+              </ul>
+              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white pt-2">Do not</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li>Trigger the action on focus alone.</li>
+                <li>Require mouse hover to understand the action.</li>
+                <li>Break native button behavior with custom key handling unless absolutely needed.</li>
+              </ul>
               <DocTable
                 columns={[
-                  { key: 'key', label: 'Key', mono: true },
-                  { key: 'behavior', label: 'Behavior' },
+                  { key: 'key', label: 'Keys', mono: true },
+                  { key: 'behavior', label: 'Purpose' },
                 ]}
                 rows={[
-                  { key: 'Tab', behavior: 'Moves focus to the button' },
-                  { key: 'Shift + Tab', behavior: 'Moves focus backward' },
-                  { key: 'Enter', behavior: 'Activates the button' },
-                  { key: 'Space', behavior: 'Activates the button' },
+                  { key: 'Enter', behavior: 'Activates the button and triggers the associated action.' },
+                  { key: 'Space', behavior: 'Activates the button and triggers the associated action.' },
                 ]}
               />
-              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
-                <li>Reachable via keyboard; one activation per key press; no focus trap.</li>
-              </ul>
             </div>
 
-            <div id="a11y-screen-readers" className="scroll-mt-24 space-y-4">
-              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Screen reader behavior</h3>
+            <div id="a11y-focus" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Focus behavior</h3>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                <strong className="text-o9ds-light-primary dark:text-white font-medium">Focus visible:</strong> A visible focus indicator must appear when the button receives keyboard focus.
+              </p>
+              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">It should</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li>Be clearly visible against all supported backgrounds.</li>
+                <li>Not rely on color alone.</li>
+                <li>Not be removed via <code className="px-1 py-0.5" data-o9ds-inline-code>outline: none</code> unless replaced with an equally strong alternative.</li>
+              </ul>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed pt-2">
+                <strong className="text-o9ds-light-primary dark:text-white font-medium">Recommendation:</strong> Use <code className="px-1 py-0.5" data-o9ds-inline-code>:focus-visible</code> instead of <code className="px-1 py-0.5" data-o9ds-inline-code>:focus</code> for keyboard focus styling so mouse clicks do not always show a focus ring.
+              </p>
               <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-                Typical pattern: <code className="px-1 py-0.5" data-o9ds-inline-code>[Accessible Name], button</code>
+                <strong className="text-o9ds-light-primary dark:text-white font-normal">WCAG:</strong> 2.4.7 Focus Visible · 2.4.13 Focus Appearance (WCAG 2.2)
+              </p>
+            </div>
+
+            <div id="a11y-disabled" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Disabled state</h3>
+              <CodeBlock code={`<button type="button" disabled>Checkout</button>`} label="Native disabled" />
+              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Disabled behavior</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li>Cannot be activated.</li>
+                <li>Removed from tab order in native HTML.</li>
+                <li>Screen readers usually announce it as dimmed or unavailable.</li>
+                <li>Pointer interaction is blocked.</li>
+                <li>Use <code className="px-1 py-0.5" data-o9ds-inline-code>cursor: not-allowed</code> where appropriate.</li>
+              </ul>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <strong className="text-o9ds-light-primary dark:text-white font-medium">Screen reader example:</strong> “Checkout, dimmed, button”
+              </p>
+            </div>
+
+            <div id="a11y-pressed" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Pressed state</h3>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                Use only if the button is a <strong className="text-o9ds-light-primary dark:text-white font-medium">toggle</strong> (e.g. pin/unpin, favorite/bookmark).
+              </p>
+              <CodeBlock code={`<button type="button" aria-pressed="true">Cumulative</button>`} label="Toggle (pressed)" />
+            </div>
+
+            <div id="a11y-expand-collapse" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Collapsed / Expanded state</h3>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                Use when the button opens or collapses content, or when it opens a popup-type UI.
+              </p>
+              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Use for</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li>Popover trigger</li>
+                <li>Dropdown / menu button</li>
+                <li>Expandable panel trigger</li>
+                <li>Menu, dialog, listbox, tree</li>
+              </ul>
+              <CodeBlock
+                code={`<button type="button" aria-haspopup="menu" aria-expanded="false">
+  More actions
+</button>`}
+                label="Menu trigger"
+              />
+            </div>
+
+            <div id="a11y-dynamic-labels" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Dynamic button label / counter updates</h3>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                Sometimes the label changes based on selection or quantity. This is acceptable if the label stays clear.
               </p>
               <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
-                <li>Disabled: e.g. “button, dimmed” or “unavailable” (varies by AT).</li>
-                <li>Toggle: expose <code className="px-1 py-0.5" data-o9ds-inline-code>aria-pressed</code>.</li>
-                <li>Loading: expose busy (e.g. <code className="px-1 py-0.5" data-o9ds-inline-code>aria-busy=&quot;true&quot;</code>).</li>
+                <li>Add to cart (2)</li>
+                <li>Apply (3 filters)</li>
+                <li>Delete 5 items</li>
+                <li>Continue (Step 2 of 4)</li>
+                <li>View cart (3)</li>
+              </ul>
+              <CodeBlock
+                language="html"
+                code={`<button type="button" id="cartBtn">
+  Add to Cart
+</button>
+
+<!-- Live region (initially empty) -->
+<div aria-live="polite" id="cartStatus" class="sr-only"></div>
+<!-- Inject status messages into #cartStatus when counts or confirmations change -->`}
+                label="Button + polite live region for dynamic updates"
+              />
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                Wire scripts to set the live region’s text when the label or cart state updates so screen readers hear the change without relying on the visible button text alone.
+              </p>
+            </div>
+
+            <div id="a11y-supplementary" className="scroll-mt-24 space-y-10">
+              <section className="space-y-4">
+                <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Buttons with Extra Descriptive Information</h3>
+                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                  Some buttons require additional context beyond the visible label to help users understand:
+                </p>
+                <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                  <li>why the action is disabled</li>
+                  <li>what will happen after click</li>
+                  <li>keyboard shortcuts</li>
+                  <li>item counts</li>
+                  <li>warnings or irreversible impact</li>
+                </ul>
+                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                  This information should not replace the button label, but be provided as supplementary description using{' '}
+                  <code className="px-1 py-0.5" data-o9ds-inline-code>aria-describedby</code>.
+                </p>
+                <h4 className="text-base font-semibold text-o9ds-light-primary dark:text-white pt-2">Use cases</h4>
+                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">Use this pattern for:</p>
+                <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                  <li>Destructive actions (Delete, Remove)</li>
+                  <li>Validation-dependent actions (Apply, Save)</li>
+                  <li>Keyboard shortcut hints</li>
+                  <li>Dynamic contextual info (counts, selections)</li>
+                  <li>Warnings or irreversible outcomes</li>
+                </ul>
+                <CodeBlock
+                  code={`<button type="button" aria-describedby="delete-help">
+  Delete
+</button>
+
+<p id="delete-help">
+  Deletes 3 selected files permanently.
+</p>`}
+                  label="Destructive action with description"
+                />
+                <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Screen reader announcement</p>
+                <ul className="list-none space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400 pl-0">
+                  <li>“Delete, button”</li>
+                  <li>“Deletes 3 selected files permanently.”</li>
+                </ul>
+              </section>
+
+              <section className="space-y-4 border-t border-neutral-200 dark:border-neutral-700 pt-8">
+                <h4 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Shortcut Information (as Description)</h4>
+                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                  Keyboard shortcuts are supplementary, not part of the main label.
+                </p>
+                <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Example: Shortcut with Description</p>
+                <CodeBlock
+                  code={`<button type="button" aria-describedby="save-shortcut">
+  Save
+</button>
+
+<div id="save-shortcut">
+  Shortcut: Control + S
+</div>`}
+                  label="Shortcut with description"
+                />
+                <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Screen reader announcement</p>
+                <ul className="list-none space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400 pl-0">
+                  <li>“Save, button”</li>
+                  <li>“Shortcut: Control plus S”</li>
+                </ul>
+              </section>
+
+              <section id="a11y-tooltip-focus" className="space-y-4 border-t border-neutral-200 dark:border-neutral-700 pt-8 scroll-mt-24">
+                <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Tooltip + Accessibility Requirement</h3>
+                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                  If shortcut or help info is shown visually (tooltip):
+                </p>
+                <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Must also be available on</p>
+                <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                  <li>Hover</li>
+                  <li>Keyboard focus</li>
+                </ul>
+                <p className="text-sm font-medium text-o9ds-light-primary dark:text-white pt-2">Must not be</p>
+                <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                  <li>Hover-only (information must not be available on hover alone)</li>
+                </ul>
+                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                  <strong className="text-o9ds-light-primary dark:text-white font-normal">WCAG:</strong> 1.4.13 Content on Hover or Focus
+                </p>
+              </section>
+            </div>
+
+            <div id="a11y-loading" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Loading state</h3>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                If clicking starts a process: keep the label stable or change it clearly, prevent double submission, and expose busy/progress appropriately.
+              </p>
+              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">Good label transitions</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li>Save → Saving…</li>
+                <li>Add to cart → Adding…</li>
+                <li>Checkout → Processing…</li>
+              </ul>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400 pt-2">
+                <li>The button may become temporarily disabled.</li>
+                <li>The loading indicator should not be the only cue.</li>
+                <li>Announce a status message if needed (e.g. “Saving.”, “Added to cart.”, “Processing payment.”).</li>
+                <li>For longer actions, expose result status in a live region.</li>
+                <li>Use <code className="px-1 py-0.5" data-o9ds-inline-code>aria-busy</code> when the button itself represents a busy/loading state.</li>
+              </ul>
+              <CodeBlock code={`<button type="button" aria-busy="true" disabled>Saving...</button>`} label="Busy + disabled" />
+            </div>
+
+            <div id="a11y-focus-management" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Focus management after activation</h3>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                After activation, focus should depend on what changes:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li><strong className="text-o9ds-light-primary dark:text-white font-medium">Same page updates:</strong> keep focus stable unless there is a major context shift.</li>
+                <li><strong className="text-o9ds-light-primary dark:text-white font-medium">Popover / modal / dialog opens:</strong> move focus into the dialog.</li>
+                <li><strong className="text-o9ds-light-primary dark:text-white font-medium">Page navigates:</strong> focus should land meaningfully on the next page.</li>
+                <li><strong className="text-o9ds-light-primary dark:text-white font-medium">Button becomes unavailable:</strong> move focus only if necessary and predictably.</li>
+              </ul>
+              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white pt-2">Dynamic button updates</p>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">After “Add to cart”:</p>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+                <li>Keep focus on the button if inline confirmation appears nearby and is announced, or</li>
+                <li>Move focus to the cart drawer only if that drawer opens intentionally.</li>
               </ul>
             </div>
 
-            <div id="a11y-aria" className="scroll-mt-24 space-y-4">
-              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">ARIA (when needed)</h3>
+            <div id="a11y-notes" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Accessibility notes</h3>
+              <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
+                <WhiteBgCard title="Keyboard navigation">
+                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">
+                    When using <code className="px-1 py-0.5" data-o9ds-inline-code>role=&quot;button&quot;</code> on non-button elements, implement keyboard support manually: handle both{' '}
+                    <code className="px-1 py-0.5" data-o9ds-inline-code>Enter</code> and <code className="px-1 py-0.5" data-o9ds-inline-code>Space</code>, and prevent default Space behavior to avoid page scrolling.
+                  </p>
+                </WhiteBgCard>
+                <WhiteBgCard title="Focus indicators">
+                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">
+                    Always provide visible focus indicators. The default browser outline is acceptable; custom styles should meet WCAG contrast (about 3:1 minimum for the focus indicator).
+                  </p>
+                </WhiteBgCard>
+                <WhiteBgCard title="Screen reader announcements">
+                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">
+                    Screen readers announce the element as a “button” with its accessible name. For toggle buttons, use <code className="px-1 py-0.5" data-o9ds-inline-code>aria-pressed</code> so AT can announce pressed or not pressed with the name.
+                  </p>
+                </WhiteBgCard>
+              </div>
+            </div>
+
+            <div id="a11y-supported-aria" className="scroll-mt-24 space-y-4">
+              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Supported ARIA attributes</h3>
               <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">
-                Do not add ARIA that duplicates native semantics. Use attributes below only when the scenario requires it.
+                Do not add ARIA that duplicates native semantics.
               </p>
               <div className="border overflow-hidden" style={isLight ? { borderColor: '#E5E5E5' } : undefined}>
                 <table className="w-full text-sm">
@@ -565,7 +811,7 @@ const handleSave = async () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {ARIA_ATTRS.map(({ attr, when }) => (
+                    {ARIA_WHEN_TO_USE.map(({ attr, when }) => (
                       <tr key={attr} className="border-t dark:border-neutral-700" style={{ borderColor: isLight ? '#E5E5E5' : undefined }}>
                         <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{attr}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{when}</td>
@@ -574,65 +820,6 @@ const handleSave = async () => {
                   </tbody>
                 </table>
               </div>
-            </div>
-
-            <div id="a11y-states" className="scroll-mt-24 space-y-4">
-              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">States & announcements</h3>
-              <DocTable
-                columns={[
-                  { key: 'scenario', label: 'Scenario' },
-                  { key: 'announcement', label: 'Typical announcement' },
-                ]}
-                rows={[
-                  { scenario: 'Default', announcement: 'Apply, button' },
-                  { scenario: 'Disabled', announcement: 'Checkout, button, dimmed' },
-                  { scenario: 'With count', announcement: 'View cart 3 items, button' },
-                  { scenario: 'Shortcut', announcement: 'Save, button; description: Shortcut Control S' },
-                ]}
-              />
-              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-                For dynamic labels, update the accessible name when counts or eligibility change. When disabled, explain why if it is not obvious (helper text or <code className="px-1 py-0.5" data-o9ds-inline-code>aria-describedby</code>). Use live regions sparingly for meaningful status changes only.
-              </p>
-            </div>
-
-            <div id="a11y-focus" className="scroll-mt-24 space-y-3">
-              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Focus behavior</h3>
-              <ul className="list-disc pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-                <li>Visible focus indicator; prefer <code className="px-1 py-0.5" data-o9ds-inline-code>:focus-visible</code> for keyboard users.</li>
-                <li>Logical tab order; return focus to the trigger after closing overlays when appropriate.</li>
-                <li>After inline updates, often keep focus; after navigation, move focus to a meaningful start.</li>
-              </ul>
-            </div>
-
-            <div id="a11y-rules" className="scroll-mt-24 space-y-4">
-              <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Rules & WCAG</h3>
-              <ul className="list-disc pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
-                <li>Do not replace the visible label with only a shortcut string.</li>
-                <li>Expose shortcut hints on hover <strong className="text-o9ds-light-primary dark:text-white font-medium">and</strong> keyboard focus.</li>
-                <li>WCAG: <strong className="text-o9ds-light-primary dark:text-white font-normal">2.4.7 Focus Visible</strong>, <strong className="text-o9ds-light-primary dark:text-white font-normal">2.4.13 Focus Appearance</strong>.</li>
-              </ul>
-            </div>
-
-            <div id="a11y-checklist" className="scroll-mt-24">
-              <GrayBgCard
-                title="Accessible text button"
-                desc="Users can:"
-                bullets={[
-                  'Find the control and understand its purpose',
-                  'Know if it is available and why it is disabled',
-                  'Use it with keyboard and see focus',
-                  'Understand dynamic updates and meaningful feedback',
-                ]}
-              />
-            </div>
-
-            <div className="p-4 border dark:border-neutral-700" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#F2F2F2' } : undefined}>
-              <h3 className="text-sm font-semibold text-o9ds-light-primary dark:text-white mb-2">Related components</h3>
-              <ul className="text-sm text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
-                <li><strong className="text-o9ds-light-primary dark:text-white">Icon Button</strong> — icon-only; requires accessible name</li>
-                <li><strong className="text-o9ds-light-primary dark:text-white">Dropdown Button</strong> — <code className="px-1 py-0.5" data-o9ds-inline-code>aria-haspopup</code> / <code className="px-1 py-0.5" data-o9ds-inline-code>aria-expanded</code></li>
-                <li><strong className="text-o9ds-light-primary dark:text-white">Button Group</strong> — may use <code className="px-1 py-0.5" data-o9ds-inline-code>.focus-border</code></li>
-              </ul>
             </div>
           </section>
         )}

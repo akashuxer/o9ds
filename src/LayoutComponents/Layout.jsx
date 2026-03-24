@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import ComponentTreeNav from './ComponentTreeNav'
+import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
 
 const PAGE_TITLES = {
   '/': 'Platform UI',
@@ -102,29 +104,8 @@ const sidebarSections = [
   },
   {
     title: 'COMPONENTS',
-    items: [
-      {
-        path: '/components/button',
-        label: 'Buttons & Actions',
-        children: [
-          { path: '/components/button', label: 'Button' },
-          { path: '/components/icon-button', label: 'Icon Button' },
-          { path: '/components/split-button', label: 'Split Button' },
-          { path: '/components/button-group', label: 'Button Group' },
-        ],
-      },
-      { path: '/components/cards', label: 'Cards' },
-      { path: '/components/link', label: 'Link' },
-      { path: '/components/breadcrumb', label: 'Breadcrumb' },
-      { path: '/components/tabstrip', label: 'Tabstrip' },
-      { path: '/components/pagination', label: 'Pagination' },
-      { path: '/components/workspace-sidebar', label: 'Workspace Sidebar' },
-      { path: '/components/label', label: 'Label' },
-      { path: '/components/textbox', label: 'Textbox' },
-      { path: '/components/textarea', label: 'Textarea' },
-      { path: '/components/search', label: 'Search' },
-      { path: '/components/select', label: 'Select' },
-    ],
+    componentTree: true,
+    items: [],
   },
   {
     title: 'ACCESSIBILITY',
@@ -210,6 +191,13 @@ export default function Layout({ children }) {
 
   const filteredSections = sidebarSections
     .map((section) => {
+      if (section.componentTree) {
+        const q = searchQuery.trim()
+        if (!q) return section
+        const tree = filterComponentNavTree(COMPONENTS_NAV_TREE, searchQuery)
+        if (tree.length === 0 && !matchesSearch('Overview', searchQuery)) return null
+        return section
+      }
       const filteredItems = section.items.filter((item) => {
         if (item.children) {
           const matchingChildren = item.children.filter((c) => matchesSearch(c.label, searchQuery))
@@ -225,7 +213,7 @@ export default function Layout({ children }) {
       }).filter((item) => !item.children || item.children.length > 0)
       return { ...section, items: filteredItems }
     })
-    .filter((section) => section.items.length > 0)
+    .filter((section) => section != null && (section.componentTree || section.items.length > 0))
 
   // / shortcut to focus search
   useEffect(() => {
@@ -413,6 +401,13 @@ export default function Layout({ children }) {
                     {section.title}
                   </h3>
                 )}
+                {section.componentTree ? (
+                  <ComponentTreeNav
+                    searchQuery={searchQuery}
+                    isDark={isDark}
+                    onNavigate={() => setSidebarOpen(false)}
+                  />
+                ) : (
                 <ul className="space-y-0.5">
                   {section.items.map((item) =>
                     item.children ? (
@@ -471,6 +466,7 @@ export default function Layout({ children }) {
                     )
                   )}
                 </ul>
+                )}
               </div>
             ))}
           </nav>
@@ -482,7 +478,24 @@ export default function Layout({ children }) {
           style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
           data-theme={theme}
         >
-          <div className={`mx-auto relative z-10 ${['/', '/overview', '/principles', '/colors', '/typography', '/spacing', '/borders', '/icons', '/illustrations', '/logos', '/components', '/components/button', '/components/cards', '/developers'].includes(pathname) ? 'max-w-6xl' : 'max-w-4xl'}`}>
+          <div
+            className={`mx-auto relative z-10 ${
+              pathname === '/' ||
+              pathname.startsWith('/overview') ||
+              pathname.startsWith('/principles') ||
+              pathname.startsWith('/colors') ||
+              pathname.startsWith('/typography') ||
+              pathname.startsWith('/spacing') ||
+              pathname.startsWith('/borders') ||
+              pathname.startsWith('/icons') ||
+              pathname.startsWith('/illustrations') ||
+              pathname.startsWith('/logos') ||
+              pathname.startsWith('/components') ||
+              pathname.startsWith('/developers')
+                ? 'max-w-6xl'
+                : 'max-w-4xl'
+            }`}
+          >
             {children}
           </div>
         </main>

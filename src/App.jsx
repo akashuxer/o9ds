@@ -10,8 +10,7 @@ import Typography from './pages/Typography'
 import Components from './pages/Components'
 import Spacing from './pages/Spacing'
 import Icons from './pages/Icons'
-import Button from './pages/components/Button'
-import Cards from './pages/components/Cards'
+import ComponentDocPage from './pages/components/ComponentDocPage'
 import Placeholder from './pages/Placeholder'
 import Borders from './pages/Borders'
 import Illustrations from './pages/Illustrations'
@@ -39,8 +38,7 @@ export default function App() {
           <Route path="/motion" element={<Placeholder title="Motion & Animation" />} />
           <Route path="/elevation" element={<Placeholder title="Elevation & Shadows" />} />
           <Route path="/components" element={<Components />} />
-          <Route path="/components/button" element={<Button />} />
-          <Route path="/components/cards" element={<Cards />} />
+          <Route path="/components/:slug" element={<ComponentDocPage />} />
           <Route path="/designers" element={<Placeholder title="For Designers" />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/vibe-coders" element={<Placeholder title="For Vibe Coders" />} />
@@ -65,17 +63,6 @@ export default function App() {
           <Route path="/contribute" element={<Placeholder title="How to Contribute" />} />
           <Route path="/faqs" element={<Placeholder title="FAQs" />} />
           <Route path="/changelog" element={<Placeholder title="Changelog" />} />
-          {[
-            'icon-button', 'split-button', 'button-group', 'link', 'breadcrumb',
-            'tabstrip', 'pagination', 'workspace-sidebar', 'label', 'textbox',
-            'textarea', 'search', 'select',
-          ].map((slug) => (
-            <Route
-              key={slug}
-              path={`/components/${slug}`}
-              element={<Placeholder title={slug.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')} />}
-            />
-          ))}
         </Routes>
         </Layout>
       </BrowserRouter>
