@@ -97,7 +97,8 @@ o9ds Website/
 │   │   ├── Overview.jsx
 │   │   ├── Placeholder.jsx
 │   │   └── components/     # Component documentation
-│   │       └── Button.jsx
+│   │       ├── Button.jsx
+│   │       └── Cards.jsx   # Includes Chromatic Storybook embed examples
 │   │
 │   └── utils/
 │       └── colorUtils.js
@@ -146,6 +147,7 @@ o9ds Website/
 | `/logos` | Assets → Logos (client logos, download as SVG) |
 | `/components` | Components overview |
 | `/components/button` | Button docs |
+| `/components/cards` | Cards (o9ds-card) — includes Storybook embeds |
 | `/principles` | Principles and guidelines |
 | `/overview` | Overview |
 | `/changelog` | Changelog |
@@ -170,53 +172,69 @@ o9ds Website/
 
 ---
 
-## Embedding Storybook Stories in Components
+## Integrating Storybook / Chromatic embeds
 
-To show Storybook stories inside component pages:
+This site documents components under `src/pages/components/`. When stories are published to **Chromatic** (or any hosted Storybook), you can embed them in a doc page with an `<iframe>`.
 
-### Option 1: Iframe embed
+**Reference implementation:** `src/pages/components/Cards.jsx` — exports URL constants and shows three embed patterns for the same Chromatic project.
 
-1. Build Storybook as a static site:
-   ```bash
-   npx storybook build
-   ```
-   Output goes to `storybook-static/`.
+### 1. Embed documentation (`viewMode=docs`)
 
-2. Host that build (e.g. on GitHub Pages, Netlify, or alongside this app).
+Use the auto-generated **documentation** entry for a story (not `viewMode=story`). In the iframe URL, set `viewMode=docs` and point `id` at the docs story (e.g. `mycomponent--docs`).
 
-3. Embed in a component page:
-   ```jsx
-   <iframe
-     src="/storybook/iframe.html?id=button--primary"
-     title="Button Primary story"
-     className="w-full border h-[400px]"
-     style={{ borderColor: isLight ? '#E5E5E5' : undefined }}
-   />
-   ```
+- **Rule of thumb:** replace `viewMode=story` with the documentation entry Chromatic generates for that component’s docs page.
 
-4. Adjust `src` to the URL where Storybook is served (e.g. `/storybook/` if you copy `storybook-static` into `public/storybook`).
+Example (Shadowbox CTA):
 
-### Option 2: Storybook in the same project
+```
+https://<your-chromatic>.chromatic.com/iframe.html?id=shadowboxcta--docs&viewMode=docs&shortcuts=false&singleStory=true
+```
 
-1. Add Storybook to this repo (if not already present):
-   ```bash
-   npx storybook init
-   ```
+Typical iframe size: `width="800"` `height="400"` (adjust as needed).
 
-2. Add a route in `App.jsx` for a page that embeds stories.
+### 2. Embed a story **with** the Storybook toolbar
 
-3. Use `@storybook/react` to render the story inside your doc page, or keep using an iframe to your Storybook build.
+Paste the **published story URL** from Chromatic (sidebar + toolbar). Add query params as needed, e.g. `full=1`, `shortcuts=false`, `singleStory=true`.
 
-### Option 3: `storybook-addon-embed`
+Example:
 
-1. Add the addon and configure it in `.storybook/main.js`.
+```
+https://<your-chromatic>.chromatic.com/?path=/story/shadowboxcta--default
+```
 
-2. Use the embed block in your MDX or component docs to reference stories by ID.
+Iframe `src` example:
 
-**What you need:**
-- Storybook in this repo or in a separate package
-- A built Storybook output (static HTML) or Storybook dev server URL
-- An `<iframe>` or embed component in `src/pages/` (e.g. in `Button.jsx`) pointing to the story URL
+```
+https://<your-chromatic>.chromatic.com/?path=/story/shadowboxcta--default&full=1&shortcuts=false&singleStory=true
+```
+
+Suggested iframe: `width="800"` `height="260"`.
+
+### 3. Embed a story **without** the toolbar (canvas only)
+
+In Storybook, use **“Open canvas in new tab”** (top-right) to get the **iframe** canvas URL, or build it as:
+
+```
+https://<your-chromatic>.chromatic.com/iframe.html?id=<story-id>&viewMode=story&shortcuts=false&singleStory=true
+```
+
+Example oEmbed-style link (path-style id):
+
+```
+https://<your-chromatic>.chromatic.com/iframe.html?id=/story/shadowboxcta--default&viewMode=story
+```
+
+Suggested iframe: `width="800"` `height="200"`.
+
+### Implementation notes
+
+- Use a **descriptive** `title` on every `<iframe>` for accessibility.
+- Third-party embeds may need `sandbox` (see `Cards.jsx`) and a **fallback link** to open the same URL in a new tab if the iframe is blocked.
+- Replace `shadowboxcta` / story ids with your component’s ids when copying patterns.
+
+### Self-hosted Storybook (optional)
+
+If you build Storybook locally and host static output (e.g. `npx storybook build` → `storybook-static/`), serve it and point iframe `src` at `/storybook/iframe.html?id=...` the same way—only the origin changes.
 
 ---
 

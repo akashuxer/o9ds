@@ -11,10 +11,12 @@ import Components from './pages/Components'
 import Spacing from './pages/Spacing'
 import Icons from './pages/Icons'
 import Button from './pages/components/Button'
+import Cards from './pages/components/Cards'
 import Placeholder from './pages/Placeholder'
 import Borders from './pages/Borders'
 import Illustrations from './pages/Illustrations'
 import Logos from './pages/Logos'
+import Developers from './pages/Developers'
 
 export default function App() {
   return (
@@ -38,8 +40,9 @@ export default function App() {
           <Route path="/elevation" element={<Placeholder title="Elevation & Shadows" />} />
           <Route path="/components" element={<Components />} />
           <Route path="/components/button" element={<Button />} />
+          <Route path="/components/cards" element={<Cards />} />
           <Route path="/designers" element={<Placeholder title="For Designers" />} />
-          <Route path="/developers" element={<Placeholder title="For Developers" />} />
+          <Route path="/developers" element={<Developers />} />
           <Route path="/vibe-coders" element={<Placeholder title="For Vibe Coders" />} />
           <Route path="/accessibility" element={<Placeholder title="Accessibility" />} />
           <Route path="/content" element={<Placeholder title="Content Guidelines" />} />

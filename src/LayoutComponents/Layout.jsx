@@ -18,6 +18,7 @@ const PAGE_TITLES = {
   '/elevation': 'Elevation & Shadows',
   '/components': 'Components',
   '/components/button': 'Button',
+  '/components/cards': 'Cards',
   '/components/icon-button': 'Icon Button',
   '/components/split-button': 'Split Button',
   '/components/button-group': 'Button Group',
@@ -112,6 +113,7 @@ const sidebarSections = [
           { path: '/components/button-group', label: 'Button Group' },
         ],
       },
+      { path: '/components/cards', label: 'Cards' },
       { path: '/components/link', label: 'Link' },
       { path: '/components/breadcrumb', label: 'Breadcrumb' },
       { path: '/components/tabstrip', label: 'Tabstrip' },
@@ -178,6 +180,8 @@ const pathsWithContent = new Set([
   '/logos',
   '/components',
   '/components/button',
+  '/components/cards',
+  '/developers',
 ])
 
 function getPageTitle(pathname) {
@@ -424,10 +428,10 @@ export default function Layout({ children }) {
                                 end
                                 onClick={() => setSidebarOpen(false)}
                                 className={({ isActive }) =>
-                                  `flex items-center justify-between gap-2 px-2 py-1.5 text-sm transition-colors ${
+                                  `flex items-center justify-between gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
                                     isActive
-                                      ? (isDark ? 'bg-neutral-800 text-white' : 'bg-[#E5E5E5] text-[#010101]')
-                                      : 'hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#F2F2F2] hover:text-[#010101]')
+                                      ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
+                                      : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
                                   }`
                                 }
                               >
@@ -449,10 +453,10 @@ export default function Layout({ children }) {
                           end
                           onClick={() => setSidebarOpen(false)}
                           className={({ isActive }) =>
-                            `flex items-center gap-2 px-2 py-1.5 text-sm transition-colors ${
+                            `flex items-center gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
                               isActive
-                                ? (isDark ? 'bg-neutral-800 text-white' : 'bg-[#E5E5E5] text-[#010101]')
-                                : 'hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#F2F2F2] hover:text-[#010101]')
+                                ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
+                                : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
                             }`
                           }
                         >
@@ -478,7 +482,7 @@ export default function Layout({ children }) {
           style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
           data-theme={theme}
         >
-          <div className={`mx-auto relative z-10 ${['/', '/overview', '/principles', '/colors', '/typography', '/spacing', '/borders', '/icons', '/illustrations', '/logos', '/components', '/components/button'].includes(pathname) ? 'max-w-6xl' : 'max-w-4xl'}`}>
+          <div className={`mx-auto relative z-10 ${['/', '/overview', '/principles', '/colors', '/typography', '/spacing', '/borders', '/icons', '/illustrations', '/logos', '/components', '/components/button', '/components/cards', '/developers'].includes(pathname) ? 'max-w-6xl' : 'max-w-4xl'}`}>
             {children}
           </div>
         </main>

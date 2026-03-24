@@ -60,7 +60,7 @@ export default function DocTabs({ tabs, activeTab, onSelect }) {
         </button>
       ))}
       <span
-        className="absolute bottom-0 z-10 h-0.5 bg-o9ds-light-primary dark:bg-white transition-[left,width] duration-300 ease-out"
+        className="absolute -bottom-px z-20 h-0.5 bg-o9ds-light-primary dark:bg-white transition-[left,width] duration-300 ease-out"
         style={{
           left: indicator.left,
           width: indicator.width,

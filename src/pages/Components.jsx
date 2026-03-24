@@ -64,6 +64,9 @@ export default function Components() {
 
       <section id="cards">
         <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Cards</h2>
+        <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4">
+          See the <Link to="/components/cards" className="text-o9ds-light-primary dark:text-white underline hover:no-underline">Cards (o9ds-card)</Link> documentation for usage, APIs, accessibility, and a Storybook embed.
+        </p>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { title: 'Default Card', desc: 'Standard card with border' },

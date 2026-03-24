@@ -77,6 +77,11 @@ html[data-theme="light"] main [data-o9ds-card="light-white"]:hover,
 html:not(.dark) main [data-o9ds-card="light-white"]:hover {
   background-color: #F2F2F2 !important;
 }
+/* Default: no pure #FFF on light-mode cards (use off-white surface) */
+html[data-theme="light"] main [data-o9ds-card="light-white"],
+html:not(.dark) main [data-o9ds-card="light-white"] {
+  background-color: #fafafa !important;
+}
 /* Dark mode: table borders/dividers #404040 */
 html[data-theme="dark"] main div.border.overflow-hidden:has(table),
 html.dark main div.border.overflow-hidden:has(table) {
@@ -123,6 +128,19 @@ html.dark main [data-o9ds-card]:hover {
 html[data-theme="light"] main [data-o9ds-tabs],
 html:not(.dark) main [data-o9ds-tabs] {
   border-bottom-color: #E5E5E5 !important;
+}
+/* Sliding active tab indicator (span) — sit above baseline border so it is visible in light mode */
+html[data-theme="light"] main [data-o9ds-tabs] > span[aria-hidden="true"],
+html:not(.dark) main [data-o9ds-tabs] > span[aria-hidden="true"] {
+  background-color: #010101 !important;
+  bottom: -1px !important;
+  z-index: 20 !important;
+}
+html[data-theme="dark"] main [data-o9ds-tabs] > span[aria-hidden="true"],
+html.dark main [data-o9ds-tabs] > span[aria-hidden="true"] {
+  background-color: #ffffff !important;
+  bottom: -1px !important;
+  z-index: 20 !important;
 }
 /* Code blocks: F2F2F2 bg, E5E5E5 border - light mode */
 html[data-theme="light"] main [data-o9ds-code],
@@ -199,9 +217,18 @@ html.dark main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]) {
   background-color: #FFFFFF !important;
   color: #010101 !important;
 }
-/* Sidebar nav: active item left border 2px */
+/* Sidebar nav: active item left border (must set style + color or border is invisible) */
 aside nav a[aria-current="page"] {
+  border-left-style: solid !important;
   border-left-width: 2px !important;
+}
+html[data-theme="light"] aside nav a[aria-current="page"],
+html:not(.dark) aside nav a[aria-current="page"] {
+  border-left-color: #010101 !important;
+}
+html[data-theme="dark"] aside nav a[aria-current="page"],
+html.dark aside nav a[aria-current="page"] {
+  border-left-color: #ffffff !important;
 }
 
 /* View principles button - light mode */
@@ -238,15 +265,27 @@ html[data-theme="light"] main td,
 html[data-theme="light"] main th,
 html[data-theme="light"] main label,
 html[data-theme="light"] main pre,
-html[data-theme="light"] main code,
 html:not(.dark) main p,
 html:not(.dark) main li,
 html:not(.dark) main td,
 html:not(.dark) main th,
 html:not(.dark) main label,
-html:not(.dark) main pre,
-html:not(.dark) main code {
+html:not(.dark) main pre {
   color: #303030 !important;
+}
+/* code: keep monospace readable (do not inherit gray p color) */
+html[data-theme="light"] main code,
+html:not(.dark) main code {
+  color: #010101 !important;
+}
+/* Emphasis: always visible on light / dark surfaces */
+html[data-theme="light"] main strong,
+html:not(.dark) main strong {
+  color: #010101 !important;
+}
+html[data-theme="dark"] main strong,
+html.dark main strong {
+  color: #ffffff !important;
 }
 
 /* Interactive elements: cursor pointer */
