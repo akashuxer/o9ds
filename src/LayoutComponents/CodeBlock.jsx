@@ -11,7 +11,7 @@ function CopyIcon({ className }) {
 }
 
 /**
- * @param {{ code: string, label?: string, language?: 'html' | 'markup' | 'ts' | 'js' | 'text' | 'auto' }} props
+ * @param {{ code: string, label?: string, language?: 'html' | 'markup' | 'ts' | 'js' | 'text' | 'mermaid' | 'scss' | 'auto' }} props
  */
 export default function CodeBlock({ code, label, language = 'auto' }) {
   const [copied, setCopied] = useState(false)

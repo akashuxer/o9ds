@@ -273,6 +273,15 @@ html:not(.dark) main label,
 html:not(.dark) main pre {
   color: #303030 !important;
 }
+/* DocTable identifier columns: violet (same family as code keyword / $var) — beats global td !important */
+html[data-theme="light"] main td.o9ds-doc-table-cell--tone,
+html:not(.dark) main td.o9ds-doc-table-cell--tone {
+  color: #7c3aed !important; /* violet-600 */
+}
+html[data-theme="dark"] main td.o9ds-doc-table-cell--tone,
+html.dark main td.o9ds-doc-table-cell--tone {
+  color: #a78bfa !important; /* violet-400 */
+}
 /* code: keep monospace readable (do not inherit gray p color) */
 html[data-theme="light"] main code,
 html:not(.dark) main code {

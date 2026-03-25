@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
+import { TABLE_IDENTIFIER_TONE_CLASS } from './codeHighlight'
 
 function CopyIcon({ className }) {
   return (
@@ -57,13 +58,20 @@ function TokenRow({ token, value, px, varFormat, isLight, showCopy }) {
   )
 }
 
+function columnToneClass(tone) {
+  if (tone === 'package' || tone === 'module' || tone === 'prop' || tone === 'agent' || tone === 'layer' || tone === 'gate' || tone === 'code') {
+    return TABLE_IDENTIFIER_TONE_CLASS
+  }
+  return ''
+}
+
 /**
  * Reusable table for documentation: props, tokens, keyboard, ARIA, etc.
  * No vertical lines between columns. Use across any page needing structured tables.
  *
  * @param {Object} props
  * @param {Array} props.tokens - For token table: [{ token, value, px }]. Renders Token Name, Value (rem), Value (px), Preview bar.
- * @param {Array} props.columns - For generic table: [{ key, label }]
+ * @param {Array} props.columns - For generic table: [{ key, label, mono?, primary?, tone?: 'package' | 'module' | 'prop' | 'agent' | 'layer' | 'gate' | 'code' }]
  * @param {Array} props.rows - For generic table: array of row objects
  * @param {boolean} props.showCopy - Only for tokens: show copy var() button per row
  */
@@ -110,7 +118,9 @@ export default function DocTable({ tokens, columns = [], rows = [], showCopy = t
         <thead>
           <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
             {columns.map((col) => (
-              <th key={col.key} className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">{col.label}</th>
+              <th key={col.key} className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">
+                {col.label}
+              </th>
             ))}
           </tr>
         </thead>
@@ -120,7 +130,11 @@ export default function DocTable({ tokens, columns = [], rows = [], showCopy = t
               {columns.map((col) => (
                 <td
                   key={col.key}
-                  className={`py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400 ${col.mono ? 'font-mono' : ''}`}
+                  className={`py-2 px-3 ${col.mono ? 'font-mono text-sm' : ''} ${
+                    col.tone
+                      ? `${columnToneClass(col.tone)} font-medium o9ds-doc-table-cell--tone`
+                      : 'text-o9ds-light-secondary dark:text-neutral-400'
+                  }`}
                   style={col.primary ? { color: isLight ? '#010101' : '#fff' } : undefined}
                 >
                   {row[col.key]}

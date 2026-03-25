@@ -1,5 +1,11 @@
 import { Fragment } from 'react'
 
+/** String literals in code blocks */
+export const CODE_SYNTAX_STRING_CLASS = 'text-emerald-700 dark:text-emerald-400'
+
+/** DocTable identifier columns — matches `keyword` / SCSS `$var` coloring (violet) */
+export const TABLE_IDENTIFIER_TONE_CLASS = 'text-violet-600 dark:text-violet-400'
+
 /**
  * Lightweight syntax coloring for doc code blocks (no extra dependencies).
  */
@@ -7,10 +13,13 @@ const cls = {
   punct: 'text-neutral-500 dark:text-neutral-500',
   tag: 'text-sky-600 dark:text-sky-400',
   attr: 'text-amber-700 dark:text-amber-300',
-  string: 'text-emerald-700 dark:text-emerald-400',
+  string: CODE_SYNTAX_STRING_CLASS,
   text: 'text-o9ds-light-primary dark:text-neutral-200',
   keyword: 'text-violet-600 dark:text-violet-400',
   comment: 'text-neutral-500 dark:text-neutral-500 italic',
+  mArrow: 'text-sky-600 dark:text-sky-300 font-semibold',
+  mLabel: 'text-amber-700 dark:text-amber-300',
+  mBracket: 'text-cyan-700 dark:text-cyan-400',
   plain: '',
 }
 
@@ -116,9 +125,143 @@ function highlightPlainCode(code) {
   return nodes.length ? nodes.filter(Boolean) : [span(0, code, 'text')]
 }
 
+const MERMAID_KEYWORD =
+  /\b(?:graph|flowchart|subgraph|end|direction|LR|TB|style|fill|stroke|classDef)\b/g
+
+/**
+ * @param {string} line
+ * @param {{ n: number }} keyRef
+ */
+function highlightMermaidLine(line, keyRef) {
+  const nodes = []
+  if (/^\s*%%/.test(line)) {
+    return [span(keyRef.n++, line, 'comment')]
+  }
+
+  const segments = line.split(/(\s*-->\s*)/)
+  for (const seg of segments) {
+    if (seg === '') continue
+    if (/^\s*-->\s*$/.test(seg)) {
+      nodes.push(span(keyRef.n++, seg, 'mArrow'))
+      continue
+    }
+
+    const re = new RegExp(MERMAID_KEYWORD.source, 'g')
+    let last = 0
+    let km
+    while ((km = re.exec(seg)) !== null) {
+      if (km.index > last) {
+        nodes.push(...highlightMermaidPlain(seg.slice(last, km.index), keyRef))
+      }
+      nodes.push(span(keyRef.n++, km[0], 'keyword'))
+      last = km.index + km[0].length
+    }
+    if (last < seg.length) {
+      nodes.push(...highlightMermaidPlain(seg.slice(last), keyRef))
+    }
+  }
+
+  return nodes.filter(Boolean)
+}
+
+/**
+ * Brackets, quoted strings, @-scoped ids in a mermaid segment.
+ * @param {string} chunk
+ * @param {{ n: number }} keyRef
+ */
+function highlightMermaidPlain(chunk, keyRef) {
+  const nodes = []
+  const re = /(\[[^\]]*\]|\([^)]*\)|["'][^"']*["']|@[\w/-]+)/g
+  let last = 0
+  let m
+  while ((m = re.exec(chunk)) !== null) {
+    if (m.index > last) {
+      nodes.push(span(keyRef.n++, chunk.slice(last, m.index), 'text'))
+    }
+    const t = m[1]
+    if (t.startsWith('[') || t.startsWith('(')) {
+      nodes.push(span(keyRef.n++, t, 'mBracket'))
+    } else if (t.startsWith('"') || t.startsWith("'")) {
+      nodes.push(span(keyRef.n++, t, 'string'))
+    } else if (t.startsWith('@')) {
+      nodes.push(span(keyRef.n++, t, 'tag'))
+    }
+    last = m.index + t.length
+  }
+  if (last < chunk.length) {
+    nodes.push(span(keyRef.n++, chunk.slice(last), 'text'))
+  }
+  return nodes.length ? nodes : [span(keyRef.n++, chunk, 'text')]
+}
+
 /**
  * @param {string} code
- * @param {'html' | 'markup' | 'ts' | 'js' | 'text' | 'auto'} language
+ */
+function highlightMermaid(code) {
+  const keyRef = { n: 0 }
+  const lines = code.split('\n')
+  const out = []
+  for (let i = 0; i < lines.length; i++) {
+    out.push(...highlightMermaidLine(lines[i], keyRef))
+    if (i < lines.length - 1) {
+      out.push(span(keyRef.n++, '\n', 'punct'))
+    }
+  }
+  return out.length ? out : [<Fragment key="m0">{code}</Fragment>]
+}
+
+/**
+ * @param {string} line
+ * @param {{ n: number }} keyRef
+ */
+function highlightScssLine(line, keyRef) {
+  const nodes = []
+  const re = /(\$[\w-]+|var\(--[^)]+\)|\/\/[^\n]*|\.[\w-]+|#[\da-fA-F]{3,8}|::?[\w-]+)/g
+  let last = 0
+  let m
+  while ((m = re.exec(line)) !== null) {
+    if (m.index > last) {
+      nodes.push(span(keyRef.n++, line.slice(last, m.index), 'text'))
+    }
+    const t = m[1]
+    if (t.startsWith('$')) nodes.push(span(keyRef.n++, t, 'keyword'))
+    else if (t.startsWith('var(')) nodes.push(span(keyRef.n++, t, 'tag'))
+    else if (t.startsWith('//')) nodes.push(span(keyRef.n++, t, 'comment'))
+    else if (t.startsWith('.')) nodes.push(span(keyRef.n++, t, 'tag'))
+    else if (t.startsWith('#')) nodes.push(span(keyRef.n++, t, 'string'))
+    else if (t.startsWith(':')) nodes.push(span(keyRef.n++, t, 'attr'))
+    last = m.index + t.length
+  }
+  if (last < line.length) {
+    nodes.push(span(keyRef.n++, line.slice(last), 'text'))
+  }
+  return nodes.length ? nodes : [span(keyRef.n++, line, 'text')]
+}
+
+/**
+ * @param {string} code
+ */
+function highlightScss(code) {
+  const keyRef = { n: 0 }
+  const lines = code.split('\n')
+  const out = []
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    if (/^\s*\/\//.test(line)) {
+      out.push(span(keyRef.n++, line, 'comment'))
+    } else {
+      out.push(...highlightScssLine(line, keyRef))
+    }
+    if (i < lines.length - 1) {
+      out.push(span(keyRef.n++, '\n', 'punct'))
+    }
+  }
+  return out.length ? out : [<Fragment key="s0">{code}</Fragment>]
+}
+
+/**
+ * @param {string} code
+ * @param {'html' | 'markup' | 'ts' | 'js' | 'text' | 'mermaid' | 'scss' | 'auto'} language
  */
 export function highlightCode(code, language = 'auto') {
   let lang = language
@@ -135,6 +278,12 @@ export function highlightCode(code, language = 'auto') {
   }
   if (lang === 'ts' || lang === 'js') {
     return highlightPlainCode(code)
+  }
+  if (lang === 'mermaid') {
+    return highlightMermaid(code)
+  }
+  if (lang === 'scss') {
+    return highlightScss(code)
   }
   return [<Fragment key="plain">{code}</Fragment>]
 }
