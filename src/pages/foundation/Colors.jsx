@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react'
-import { useTheme } from '../context/ThemeContext'
-import PageWithToc from '../LayoutComponents/PageWithToc'
-import ColorSwatch from '../LayoutComponents/ColorSwatch'
-import DocTabs from '../LayoutComponents/DocTabs'
-import WhiteBgCard from '../LayoutComponents/WhiteBgCard'
-import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../tokens/brandColors'
+import { useTheme } from '../../context/ThemeContext'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
+import ColorSwatch from '../../LayoutComponents/ColorSwatch'
+import DocTabs from '../../LayoutComponents/DocTabs'
+import WhiteBgCard from '../../LayoutComponents/WhiteBgCard'
+import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../../tokens/brandColors'
 import {
   NEUTRAL_TOKENS,
   o9THEME_TOKENS,
@@ -18,7 +18,7 @@ import {
   FEEDBACK_REDISH,
   FEEDBACK_ORANGISH,
   UTILITY_TOKENS,
-} from '../tokens/globalColorTokens'
+} from '../../tokens/globalColorTokens'
 import {
   SEMANTIC_SURFACE,
   SEMANTIC_BORDER,
@@ -31,7 +31,7 @@ import {
   resolveSurfaceThemeHex,
   resolveSurfaceNegativeActiveHex,
   resolveSurfaceWhiteStaticHex,
-} from '../tokens/semanticColorTokens'
+} from '../../tokens/semanticColorTokens'
 
 const tabs = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Tokens']
 

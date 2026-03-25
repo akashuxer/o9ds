@@ -1,7 +1,7 @@
-import { useTheme } from '../context/ThemeContext'
-import PageHeader from '../LayoutComponents/PageHeader'
-import PageWithToc from '../LayoutComponents/PageWithToc'
-import { CLIENT_LOGOS, LOGOS_BASE_PATH_LIGHT, LOGOS_BASE_PATH_DARK } from '../tokens/clientLogos'
+import { useTheme } from '../../context/ThemeContext'
+import PageHeader from '../../LayoutComponents/PageHeader'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
+import { CLIENT_LOGOS, LOGOS_BASE_PATH_LIGHT, LOGOS_BASE_PATH_DARK } from '../../tokens/clientLogos'
 
 const LOGOS_SECTIONS = [{ id: 'client-logos', label: 'Client Logos' }]
 

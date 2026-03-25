@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
-import CodeBlock from '../../LayoutComponents/CodeBlock'
-import DocTabs from '../../LayoutComponents/DocTabs'
-import PageWithToc from '../../LayoutComponents/PageWithToc'
-import DocTable from '../../LayoutComponents/DocTable'
-import GrayBgCard from '../../LayoutComponents/GrayBgCard'
-import WhiteBgCard from '../../LayoutComponents/WhiteBgCard'
+import CodeBlock from '../../../LayoutComponents/CodeBlock'
+import DocTabs from '../../../LayoutComponents/DocTabs'
+import PageWithToc from '../../../LayoutComponents/PageWithToc'
+import DocTable from '../../../LayoutComponents/DocTable'
+import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
+import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
+import { getComponentPageDescription } from '../../../data/componentPageMeta'
 
 const cardTabs = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
@@ -211,6 +212,9 @@ export default function Cards() {
             </span>
             Cards
           </h1>
+          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed mb-2">
+            {getComponentPageDescription('cards')}
+          </p>
           <p className="text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
             Containers for grouped content and actions. The <strong className="text-o9ds-light-primary dark:text-white font-medium">o9ds-card</strong> surface is used for tiles, callouts, and structured regions across the platform.
           </p>

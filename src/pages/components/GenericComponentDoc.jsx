@@ -3,6 +3,7 @@ import DocTabs from '../../LayoutComponents/DocTabs'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import GrayBgCard from '../../LayoutComponents/GrayBgCard'
+import { getComponentPageDescription } from '../../data/componentPageMeta'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
@@ -22,9 +23,11 @@ const docIcon = (
 
 /**
  * Standard four-tab shell for components that do not have a dedicated doc file yet.
+ * @param {{ slug?: string, description?: string }} props
  */
-export default function GenericComponentDoc({ slug }) {
+export default function GenericComponentDoc({ slug, description: descriptionProp }) {
   const title = slugToComponentTitle(slug)
+  const headerDescription = descriptionProp ?? getComponentPageDescription(slug)
   const [activeTab, setActiveTab] = useState('Overview')
 
   const onThisPageSections = useMemo(() => {
@@ -49,11 +52,7 @@ export default function GenericComponentDoc({ slug }) {
   return (
     <PageWithToc sections={onThisPageSections}>
       <div className="max-w-4xl space-y-8 pb-16">
-        <PageHeader
-          title={title}
-          description={`o9DS documentation for this component will be expanded here. Until then, use the design system principles, tokens, and related components as a guide.`}
-          icon={docIcon}
-        />
+        <PageHeader title={title} description={headerDescription} icon={docIcon} />
         <DocTabs tabs={TABS} activeTab={activeTab} onSelect={setActiveTab} />
 
         {activeTab === 'Overview' && (

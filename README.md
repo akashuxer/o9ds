@@ -31,6 +31,10 @@ Design system documentation for **o9 Design Lab** — built from the o9 brand id
    ```
    Output goes to `dist/`.
 
+**Deploy (Vercel):** `vercel.json` rewrites all paths to `index.html` so client-side routes (e.g. `/components/button`) work on refresh and direct URL entry.
+
+**Regenerate component stubs:** After editing `src/data/componentsNav.js`, run `npm run generate:component-stubs` to refresh `allStubComponents.js` and the per-slug files under `src/pages/components/<category>/`.
+
 ---
 
 ## Folder Structure
@@ -42,6 +46,10 @@ o9ds Website/
 ├── vite.config.js          # Build config
 ├── tailwind.config.js      # Design tokens, colors
 ├── postcss.config.js
+├── vercel.json             # SPA rewrites: all routes → index.html (deep links / refresh)
+│
+├── scripts/
+│   └── generate-component-stubs.mjs  # Regenerate stub pages + allStubComponents.js
 │
 ├── public/                 # Static assets (served as-is)
 │   ├── o9illus/
@@ -84,21 +92,24 @@ o9ds Website/
 │   │   ├── illustrationTokens.js
 │   │   └── o9conIcons.js
 │   │
-│   ├── pages/              # Documentation pages (one per route)
-│   │   ├── Home.jsx
-│   │   ├── Colors.jsx
-│   │   ├── Typography.jsx
-│   │   ├── Spacing.jsx
-│   │   ├── Borders.jsx
-│   │   ├── Icons.jsx
-│   │   ├── Illustrations.jsx
-│   │   ├── Components.jsx
-│   │   ├── Principles.jsx
-│   │   ├── Overview.jsx
-│   │   ├── Placeholder.jsx
-│   │   └── components/     # Component documentation
-│   │       ├── Button.jsx
-│   │       └── Cards.jsx   # Includes Chromatic Storybook embed examples
+│   ├── pages/
+│   │   ├── Home.jsx, Overview.jsx, Components.jsx, Developers.jsx, Placeholder.jsx
+│   │   ├── foundation/                 # Foundations (tokens, type, spacing, assets)
+│   │   │   ├── Colors.jsx, Typography.jsx, Spacing.jsx, Borders.jsx
+│   │   │   ├── Icons.jsx, Illustrations.jsx, Logos.jsx, Principles.jsx
+│   │   └── components/                 # Component docs — `/components/:slug`
+│   │       ├── ComponentDocPage.jsx    # Routes slug → page module
+│   │       ├── GenericComponentDoc.jsx # Four-tab stub for catalog items
+│   │       ├── stubComponentPage.jsx, allStubComponents.js (generated)
+│   │       ├── buttons-actions/        # e.g. Button.jsx
+│   │       ├── data-display/           # e.g. Cards.jsx (Storybook embeds)
+│   │       ├── inputs/, navigation/, file-handling/, overlays/, feedback/
+│   │       ├── loading-empty/, layout-structure/, identity/
+│   │       └── …                       # one folder per top-level nav group id
+│   │
+│   ├── data/
+│   │   ├── componentsNav.js            # Sidebar tree, slugs, COMPONENT_DOC_ROUTES
+│   │   └── componentPageMeta.js        # Stub page titles / descriptions
 │   │
 │   └── utils/
 │       └── colorUtils.js
@@ -125,6 +136,9 @@ o9ds Website/
 | `src/tokens/clientLogos.js` | Client logo filenames (`o9ClientLogos/light/` and `dark/`) |
 | `src/index.css` | Global styles, 0-radius policy, `data-o9ds-*` rules |
 | `src/App.jsx` | Route definitions |
+| `src/data/componentsNav.js` | Component catalog tree and `/components/:slug` slugs |
+| `src/data/componentPageMeta.js` | Intro copy for generated component stub pages |
+| `vercel.json` | SPA fallback for production hosting |
 | `src/LayoutComponents/Layout.jsx` | Sidebar nav, page titles |
 
 ### Sidebar structure
@@ -146,10 +160,12 @@ o9ds Website/
 | `/illustrations` | Assets → Illustrations (o9Illus gallery) |
 | `/logos` | Assets → Logos (client logos, download as SVG) |
 | `/components` | Components overview |
-| `/components/button` | Button docs |
-| `/components/cards` | Cards (o9ds-card) — includes Storybook embeds |
+| `/components/:slug` | Component doc (full pages for e.g. `button`, `cards`; stubs for others) |
+| `/components/button` | Button docs (`src/pages/components/buttons-actions/Button.jsx`) |
+| `/components/cards` | Cards — Storybook embeds (`src/pages/components/data-display/Cards.jsx`) |
 | `/principles` | Principles and guidelines |
 | `/overview` | Overview |
+| `/developers` | Developers |
 | `/changelog` | Changelog |
 
 ---
@@ -174,9 +190,9 @@ o9ds Website/
 
 ## Integrating Storybook / Chromatic embeds
 
-This site documents components under `src/pages/components/`. When stories are published to **Chromatic** (or any hosted Storybook), you can embed them in a doc page with an `<iframe>`.
+This site documents components under `src/pages/components/` (organized by category folder, e.g. `data-display/`). When stories are published to **Chromatic** (or any hosted Storybook), you can embed them in a doc page with an `<iframe>`.
 
-**Reference implementation:** `src/pages/components/Cards.jsx` — exports URL constants and shows three embed patterns for the same Chromatic project.
+**Reference implementation:** `src/pages/components/data-display/Cards.jsx` — exports URL constants and shows three embed patterns for the same Chromatic project.
 
 ### 1. Embed documentation (`viewMode=docs`)
 
@@ -229,7 +245,7 @@ Suggested iframe: `width="800"` `height="200"`.
 ### Implementation notes
 
 - Use a **descriptive** `title` on every `<iframe>` for accessibility.
-- Third-party embeds may need `sandbox` (see `Cards.jsx`) and a **fallback link** to open the same URL in a new tab if the iframe is blocked.
+- Third-party embeds may need `sandbox` (see `data-display/Cards.jsx`) and a **fallback link** to open the same URL in a new tab if the iframe is blocked.
 - Replace `shadowboxcta` / story ids with your component’s ids when copying patterns.
 
 ### Self-hosted Storybook (optional)
@@ -237,8 +253,3 @@ Suggested iframe: `width="800"` `height="200"`.
 If you build Storybook locally and host static output (e.g. `npx storybook build` → `storybook-static/`), serve it and point iframe `src` at `/storybook/iframe.html?id=...` the same way—only the origin changes.
 
 ---
-
-## Brand References
-
-- [o9 Design Lab Brand Library](https://www.figma.com/community/file/987382411861395545/o9-design-lab-brand-library)
-- [o9 Design Lab](https://o9designlab.com/)

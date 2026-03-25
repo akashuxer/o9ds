@@ -40,4 +40,4 @@ Do not add a fifth tab or rename these. All content must fit within these four.
 - Avoid overlap: no code in Overview; no long design essays in Code/APIs; keep Accessibility behavior-focused, not generic theory.
 - Use scenario-based examples throughout Usage and Code/APIs.
 
-Reference implementation: `src/pages/components/Button.jsx`.
+Reference implementation: `src/pages/components/buttons-actions/Button.jsx`.

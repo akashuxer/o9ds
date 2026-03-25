@@ -1,5 +1,5 @@
-import PageHeader from '../LayoutComponents/PageHeader'
-import PageWithToc from '../LayoutComponents/PageWithToc'
+import PageHeader from '../../LayoutComponents/PageHeader'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
 
 const TYPOGRAPHY_SECTIONS = [
   { id: 'type-scale', label: 'Type Scale' },

@@ -1,8 +1,8 @@
 import { useState, useRef, useMemo } from 'react'
-import { useTheme } from '../context/ThemeContext'
-import PageWithToc from '../LayoutComponents/PageWithToc'
-import { ILLUSTRATION_SIZE_TOKENS_SCSS } from '../tokens/illustrationTokens'
-import CodeBlock from '../LayoutComponents/CodeBlock'
+import { useTheme } from '../../context/ThemeContext'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
+import { ILLUSTRATION_SIZE_TOKENS_SCSS } from '../../tokens/illustrationTokens'
+import CodeBlock from '../../LayoutComponents/CodeBlock'
 
 const tabs = ['Overview', 'o9Illus Gallery', 'Accessibility', 'Code']
 

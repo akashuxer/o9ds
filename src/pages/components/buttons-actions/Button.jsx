@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react'
-import { useTheme } from '../../context/ThemeContext'
-import CodeBlock from '../../LayoutComponents/CodeBlock'
-import DocTabs from '../../LayoutComponents/DocTabs'
-import PageWithToc from '../../LayoutComponents/PageWithToc'
-import DocTable from '../../LayoutComponents/DocTable'
-import GrayBgCard from '../../LayoutComponents/GrayBgCard'
-import WhiteBgCard from '../../LayoutComponents/WhiteBgCard'
-import { SPACING_TOKENS } from '../../tokens/spacingTokens'
+import { useTheme } from '../../../context/ThemeContext'
+import CodeBlock from '../../../LayoutComponents/CodeBlock'
+import DocTabs from '../../../LayoutComponents/DocTabs'
+import PageWithToc from '../../../LayoutComponents/PageWithToc'
+import DocTable from '../../../LayoutComponents/DocTable'
+import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
+import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
+import { SPACING_TOKENS } from '../../../tokens/spacingTokens'
+import { getComponentPageDescription } from '../../../data/componentPageMeta'
 
 const buttonTabs = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
@@ -129,6 +130,9 @@ export default function Button() {
             </span>
             Button
           </h1>
+          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed mb-2">
+            {getComponentPageDescription('button')}
+          </p>
           <p className="text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
             The primary control for triggering actions in the o9 platform. Use this page to understand the component conceptually, when to use it, how to implement it, and how to keep it accessible.
           </p>

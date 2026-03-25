@@ -1,8 +1,8 @@
-import CodeBlock from '../LayoutComponents/CodeBlock'
-import DocTable from '../LayoutComponents/DocTable'
-import PageHeader from '../LayoutComponents/PageHeader'
-import PageWithToc from '../LayoutComponents/PageWithToc'
-import { SPACING_TOKENS, SPACING_TOKENS_SCSS } from '../tokens/spacingTokens'
+import CodeBlock from '../../LayoutComponents/CodeBlock'
+import DocTable from '../../LayoutComponents/DocTable'
+import PageHeader from '../../LayoutComponents/PageHeader'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
+import { SPACING_TOKENS, SPACING_TOKENS_SCSS } from '../../tokens/spacingTokens'
 
 const SPACING_SECTIONS = [
   { id: 'scale', label: 'Scale' },

@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useTheme } from '../context/ThemeContext'
-import CodeBlock from '../LayoutComponents/CodeBlock'
-import PageWithToc from '../LayoutComponents/PageWithToc'
+import { useTheme } from '../../context/ThemeContext'
+import CodeBlock from '../../LayoutComponents/CodeBlock'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
+import { BORDER_TOKENS_SCSS } from '../../tokens/borderTokens'
 
 const BORDERS_SECTIONS = [
   { id: 'policy', label: 'Policy' },
@@ -9,7 +10,6 @@ const BORDERS_SECTIONS = [
   { id: 'border-width-tokens', label: 'Border Width Tokens' },
   { id: 'border-tokens', label: 'Border Tokens' },
 ]
-import { BORDER_TOKENS_SCSS } from '../tokens/borderTokens'
 
 function CopyIcon({ className }) {
   return (

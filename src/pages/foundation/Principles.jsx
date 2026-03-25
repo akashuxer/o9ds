@@ -1,5 +1,5 @@
-import PageWithToc from '../LayoutComponents/PageWithToc'
-import WhiteBgCard from '../LayoutComponents/WhiteBgCard'
+import PageWithToc from '../../LayoutComponents/PageWithToc'
+import WhiteBgCard from '../../LayoutComponents/WhiteBgCard'
 
 const PRINCIPLES_SECTIONS = [{ id: 'core-principles', label: 'Our Core Principles' }]
 
