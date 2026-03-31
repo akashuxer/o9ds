@@ -56,9 +56,6 @@ o9ds Website/
 │   ├── o9illus/
 │   │   ├── light/          # Light-mode illustration SVGs
 │   │   └── dark/           # Dark-mode illustration SVGs
-│   ├── o9ClientLogos/
-│   │   ├── light/          # Client logos — light (SVG, /logos page)
-│   │   └── dark/           # Client logos — dark (SVG)
 │   ├── fonts/              # o9con icon font (woff2, woff, o9con.css)
 │   └── favicon.svg
 │
@@ -97,7 +94,7 @@ o9ds Website/
 │   │   ├── Home.jsx, Overview.jsx, Components.jsx, Developers.jsx, Placeholder.jsx
 │   │   ├── foundation/                 # Foundations (tokens, type, spacing, assets)
 │   │   │   ├── Colors.jsx, Typography.jsx, Spacing.jsx, Borders.jsx
-│   │   │   ├── Icons.jsx, Illustrations.jsx, Logos.jsx, Principles.jsx
+│   │   │   ├── Icons.jsx, Illustrations.jsx, Principles.jsx
 │   │   └── components/                 # Component docs — `/components/:slug`
 │   │       ├── ComponentDocPage.jsx    # Routes slug → page module
 │   │       ├── GenericComponentDoc.jsx # Four-tab stub for catalog items
@@ -134,7 +131,6 @@ o9ds Website/
 | `src/tokens/iconTokens.js` | Icon size tokens (o9con) |
 | `src/tokens/illustrationTokens.js` | Illustration size tokens (o9Illus) |
 | `src/tokens/o9conIcons.js` | o9con icon class names and metadata |
-| `src/tokens/clientLogos.js` | Client logo filenames (`o9ClientLogos/light/` and `dark/`) |
 | `src/index.css` | Global styles, 0-radius policy, `data-o9ds-*` rules |
 | `src/App.jsx` | Route definitions |
 | `src/data/componentsNav.js` | Component catalog tree and `/components/:slug` slugs |
@@ -144,7 +140,7 @@ o9ds Website/
 
 ### Sidebar structure
 
-- **FOUNDATIONS** → Colors, Typography, Spacing, Borders, **Assets** (Iconography, Illustrations, Logos), Motion, Elevation
+- **FOUNDATIONS** → Colors, Typography, Spacing, Borders, **Assets** (Iconography, Illustrations), Motion, Elevation
 
 ---
 
@@ -159,7 +155,6 @@ o9ds Website/
 | `/borders` | Border radius and width tokens |
 | `/icons` | Assets → Iconography (o9con gallery) |
 | `/illustrations` | Assets → Illustrations (o9Illus gallery) |
-| `/logos` | Assets → Logos (client logos, download as SVG) |
 | `/components` | Components overview |
 | `/components/:slug` | Component doc (full pages for e.g. `button`, `cards`; stubs for others) |
 | `/components/button` | Button docs (`src/pages/components/buttons-actions/Button.jsx`) |

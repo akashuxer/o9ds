@@ -14,7 +14,6 @@ import ComponentDocPage from './pages/components/ComponentDocPage'
 import Placeholder from './pages/Placeholder'
 import Borders from './pages/foundation/Borders'
 import Illustrations from './pages/foundation/Illustrations'
-import Logos from './pages/foundation/Logos'
 import Developers from './pages/Developers'
 
 export default function App() {
@@ -34,7 +33,6 @@ export default function App() {
           <Route path="/borders" element={<Borders />} />
           <Route path="/icons" element={<Icons />} />
           <Route path="/illustrations" element={<Illustrations />} />
-          <Route path="/logos" element={<Logos />} />
           <Route path="/motion" element={<Placeholder title="Motion & Animation" />} />
           <Route path="/elevation" element={<Placeholder title="Elevation & Shadows" />} />
           <Route path="/components" element={<Components />} />

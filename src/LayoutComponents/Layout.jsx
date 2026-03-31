@@ -15,7 +15,6 @@ const PAGE_TITLES = {
   '/borders': 'Borders & Radius',
   '/icons': 'Iconography',
   '/illustrations': 'Illustrations',
-  '/logos': 'Logos',
   '/motion': 'Motion & Animation',
   '/elevation': 'Elevation & Shadows',
   '/components': 'Components',
@@ -94,7 +93,6 @@ const sidebarSections = [
         children: [
           { path: '/icons', label: 'Iconography' },
           { path: '/illustrations', label: 'Illustrations' },
-          { path: '/logos', label: 'Logos' },
         ],
       },
       { path: '/motion', label: 'Motion & Animation' },
@@ -158,7 +156,6 @@ const pathsWithContent = new Set([
   '/borders',
   '/icons',
   '/illustrations',
-  '/logos',
   '/components',
   '/components/button',
   '/components/cards',
@@ -489,7 +486,6 @@ export default function Layout({ children }) {
               pathname.startsWith('/borders') ||
               pathname.startsWith('/icons') ||
               pathname.startsWith('/illustrations') ||
-              pathname.startsWith('/logos') ||
               pathname.startsWith('/components') ||
               pathname.startsWith('/developers')
                 ? 'max-w-6xl'
