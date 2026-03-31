@@ -52,6 +52,7 @@ o9ds Website/
 │   └── generate-component-stubs.mjs  # Regenerate stub pages + allStubComponents.js
 │
 ├── public/                 # Static assets (served as-is)
+│   ├── o9DocGraphics/      # Documentation graphics (architecture PNG, home hero SVG, component anatomy SVGs)
 │   ├── o9illus/
 │   │   ├── light/          # Light-mode illustration SVGs
 │   │   └── dark/           # Dark-mode illustration SVGs

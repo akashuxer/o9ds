@@ -602,7 +602,7 @@ export default function Developers() {
               <figure className="space-y-2 m-0">
                 <div className="border overflow-hidden rounded-sm bg-white dark:bg-neutral-900" style={{ borderColor: '#E5E5E5' }}>
                   <img
-                    src="/o9ds-developers-system-architecture.png"
+                    src="/o9DocGraphics/o9ds-developers-system-architecture.png"
                     alt="Diagram: Foundation layer packages feed component layer; React and jQuery connect to test-utils, Storybook, and metadata; metadata flows to Docusaurus."
                     className="w-full h-auto block"
                     loading="lazy"

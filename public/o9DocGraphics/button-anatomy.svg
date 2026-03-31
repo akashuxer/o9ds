@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" width="640" height="220" role="img" aria-labelledby="btn-anatomy-title">
+  <title id="btn-anatomy-title">Button anatomy: surface, leading icon, and label</title>
+  <defs>
+    <style>
+      .callout-box { fill: #7c3aed; }
+      .callout-line { stroke: #7c3aed; stroke-width: 1.5; fill: none; }
+      .callout-num { fill: #ffffff; font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; }
+      .btn-label { fill: #ffffff; font-family: system-ui, sans-serif; font-size: 15px; font-weight: 500; }
+      .icon-stroke { stroke: #ffffff; stroke-width: 2; stroke-linecap: round; }
+    </style>
+  </defs>
+  <!-- Primary button surface -->
+  <rect x="220" y="78" width="200" height="44" fill="#010101" />
+  <!-- Leading icon (X) -->
+  <path class="icon-stroke" d="M236 92 L248 104 M248 92 L236 104" />
+  <!-- Label -->
+  <text class="btn-label" x="264" y="106">Button</text>
+  <!-- Callout 1: surface / container -->
+  <line class="callout-line" x1="112" y1="100" x2="220" y2="100" />
+  <rect class="callout-box" x="88" y="88" width="24" height="24" />
+  <text class="callout-num" x="96" y="104">1</text>
+  <!-- Callout 2: icon -->
+  <line class="callout-line" x1="242" y1="150" x2="242" y2="98" />
+  <rect class="callout-box" x="230" y="150" width="24" height="24" />
+  <text class="callout-num" x="238" y="166">2</text>
+  <!-- Callout 3: label text -->
+  <line class="callout-line" x1="520" y1="100" x2="300" y2="100" />
+  <rect class="callout-box" x="520" y="88" width="24" height="24" />
+  <text class="callout-num" x="528" y="104">3</text>
+</svg>

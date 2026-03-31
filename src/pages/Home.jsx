@@ -86,7 +86,7 @@ export default function Home() {
         >
           <div className="relative overflow-hidden">
             <img
-              src="/dashboard-app.svg"
+              src="/o9DocGraphics/home-hero-dashboard.svg"
               alt="o9 Design System — Enterprise dashboard with workspaces, filters, and data visualization"
               className="w-full h-auto transition-transform duration-500 ease-out group-hover/hero:scale-105"
             />

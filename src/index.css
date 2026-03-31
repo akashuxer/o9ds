@@ -115,6 +115,14 @@ html.dark main div.border.p-4,
 html.dark main div.border.p-6 {
   background-color: #000 !important;
 }
+/* Doc illustration panels: light surface + dots (override dark card rule for div.border.p-*) */
+html[data-theme="dark"] main div.border[data-o9ds-doc-figure],
+html.dark main div.border[data-o9ds-doc-figure] {
+  background-color: #fafafa !important;
+  border-color: #e5e5e5 !important;
+  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.35) 1px, transparent 1px) !important;
+  background-size: 14px 14px !important;
+}
 /* Dark mode: card hover - FFF border */
 html[data-theme="dark"] main a.border:hover,
 html[data-theme="dark"] main a.group:hover,

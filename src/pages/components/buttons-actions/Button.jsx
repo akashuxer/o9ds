@@ -160,12 +160,44 @@ export default function Button() {
               </p>
             </section>
 
-            <section id="overview-anatomy" className="scroll-mt-24 space-y-3">
-              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Visual anatomy</h2>
+            <section id="overview-anatomy" className="scroll-mt-24 space-y-4">
+              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Anatomy</h2>
+              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                A text button combines a <strong className="text-o9ds-light-primary dark:text-white font-medium">surface</strong> (the clickable
+                container), an optional <strong className="text-o9ds-light-primary dark:text-white font-medium">leading icon</strong>, and a{' '}
+                <strong className="text-o9ds-light-primary dark:text-white font-medium">label</strong>. The diagram numbers match the list below.
+              </p>
+              <div
+                data-o9ds-doc-figure
+                className="border overflow-hidden p-6 md:p-10"
+                style={{
+                  borderColor: '#E5E5E5',
+                  backgroundColor: '#fafafa',
+                  backgroundImage: 'radial-gradient(circle, rgba(148, 163, 184, 0.35) 1px, transparent 1px)',
+                  backgroundSize: '14px 14px',
+                }}
+              >
+                <img
+                  src="/o9DocGraphics/button-anatomy.svg"
+                  alt="Button anatomy: 1 surface container, 2 leading icon, 3 text label"
+                  className="w-full max-w-2xl mx-auto block"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
               <ul className="list-disc pl-5 space-y-2 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-                <li><strong className="text-o9ds-light-primary dark:text-white font-medium">Label</strong> — short verb or verb + object (e.g. Save changes, Apply filters).</li>
-                <li><strong className="text-o9ds-light-primary dark:text-white font-medium">Optional leading icon</strong> — reinforces meaning without replacing the label.</li>
-                <li><strong className="text-o9ds-light-primary dark:text-white font-medium">Surface</strong> — container sized by variant and size token; loading state uses a shimmer overlay across the surface.</li>
+                <li>
+                  <strong className="text-o9ds-light-primary dark:text-white font-medium">1 — Surface</strong> — container sized by variant and size
+                  token; loading state uses a shimmer overlay across the surface.
+                </li>
+                <li>
+                  <strong className="text-o9ds-light-primary dark:text-white font-medium">2 — Optional leading icon</strong> — reinforces meaning
+                  without replacing the label.
+                </li>
+                <li>
+                  <strong className="text-o9ds-light-primary dark:text-white font-medium">3 — Label</strong> — short verb or verb + object (e.g. Save
+                  changes, Apply filters).
+                </li>
               </ul>
             </section>
 
