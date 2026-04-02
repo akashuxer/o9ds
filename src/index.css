@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base UI font: o9 Sans from /o9SansFont/o9Sans.css (matches Tailwind font-sans). */
+html {
+  font-family: "o9Sans", system-ui, sans-serif;
+}
 
 /* Theme: explicit fallbacks so toggle works reliably */
 /* Light mode - #FFFFFF bg, #010101 primary text, #303030 secondary, #F2F2F2 / #E5E5E5 surfaces */

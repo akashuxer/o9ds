@@ -700,7 +700,7 @@ export default function Developers() {
                   Each component is implemented across shared styles plus two adapters. Both stacks target the same HTML structure and CSS
                   classes; only the framework integration differs.
                 </ProseP>
-                <ul className="list-disc pl-5 space-y-1 text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed font-mono text-xs">
+                <ul className="list-disc pl-5 space-y-1 text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
                   <li>packages/styles/src/components/_button.scss</li>
                   <li>packages/react/src/components/Button/Button.tsx</li>
                   <li>packages/jquery/src/components/button/button.ts</li>

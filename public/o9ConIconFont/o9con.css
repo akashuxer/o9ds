@@ -6,8 +6,7 @@ Date: 17-August-2021
 -------------------------------- */
 @font-face {
   font-family: "o9con";
-  src: url("/fonts/fonts/o9con.eot");
-  src: url("/fonts/fonts/o9con.eot") format("embedded-opentype"), url("/fonts/fonts/o9con.woff2") format("woff2"), url("/fonts/fonts/o9con.woff") format("woff"), url("/fonts/fonts/o9con.ttf") format("truetype"), url("/fonts/fonts/o9con.svg") format("svg");
+  src: url("/o9ConIconFont/o9con.woff2") format("woff2"), url("/o9ConIconFont/o9con.woff") format("woff"), url("/o9ConIconFont/o9con.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

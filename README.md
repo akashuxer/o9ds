@@ -56,7 +56,8 @@ o9ds Website/
 │   ├── o9illus/
 │   │   ├── light/          # Light-mode illustration SVGs
 │   │   └── dark/           # Dark-mode illustration SVGs
-│   ├── fonts/              # o9con icon font (woff2, woff, o9con.css)
+│   ├── o9SansFont/         # o9 Sans: o9Sans.css + font files (.woff2 / .woff / .ttf) for UI body text
+│   ├── o9ConIconFont/      # o9con icon font (woff2, woff, ttf, o9con.css)
 │   └── favicon.svg
 │
 ├── src/

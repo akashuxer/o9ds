@@ -283,7 +283,7 @@ export default function Illustrations() {
                       <img src={isLight ? '/o9illus/light/o9illus-light-dashboard.svg' : '/o9illus/dark/o9illus-dark-dashboard.svg'} alt="Dashboard" style={{ width: s, height: s }} className="object-contain" />
                     </div>
                     <p className="mt-3 text-sm font-medium text-o9ds-light-primary dark:text-white">{s}px</p>
-                    <p className="text-xs font-mono text-o9ds-light-secondary dark:text-neutral-400">o9ds-illus-{s}</p>
+                    <p className="text-xs text-o9ds-light-secondary dark:text-neutral-400">o9ds-illus-{s}</p>
                   </div>
                 ))}
               </div>

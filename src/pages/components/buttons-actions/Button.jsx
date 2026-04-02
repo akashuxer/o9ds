@@ -500,7 +500,7 @@ const handleSave = async () => {
                 ].map(({ cat, vars }) => (
                   <div key={cat} className="border p-4 dark:border-neutral-700" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FAFAFA' } : undefined}>
                     <h3 className="text-sm font-semibold text-o9ds-light-primary dark:text-white mb-2">{cat}</h3>
-                    <ul className="space-y-1 text-sm font-mono text-o9ds-light-secondary dark:text-neutral-400">
+                    <ul className="space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
                       {vars.map((v) => (
                         <li key={v}>{v}</li>
                       ))}

@@ -1,3 +1,5 @@
+import defaultTheme from 'tailwindcss/defaultTheme.js'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
@@ -48,10 +50,6 @@ export default {
           border: '#E5E5E5',
         },
       },
-      fontFamily: {
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
-      },
       keyframes: {
         'fade-in-up': {
           '0%': { opacity: '0', transform: 'translateY(12px)' },
@@ -74,6 +72,12 @@ export default {
       transitionDuration: {
         '400': '400ms',
       },
+    },
+    // Replace default sans/mono entirely (no merge with old stacks). See public/o9SansFont/o9Sans.css
+    fontFamily: {
+      ...defaultTheme.fontFamily,
+      sans: ['"o9Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
     },
   },
   plugins: [],

@@ -30,7 +30,7 @@ export default function Typography() {
     <div className="space-y-12">
       <PageHeader
         title="Typography"
-        description="Built on :o9 Sans — a Swiss-inspired grotesque designed for high contrast hierarchies and clear visual communication. Using DM Sans as a web fallback."
+        description="Built on o9 Sans — a Swiss-inspired grotesque designed for high contrast hierarchies and clear visual communication. The site loads o9 Sans from local files (Light through Bold, with italics)."
         icon={typographyIcon}
         descClassName="text-lg"
       />
@@ -40,7 +40,7 @@ export default function Typography() {
         <div className="space-y-8">
           {typeScale.map(({ name, class: cls, sample }) => (
             <div key={name} className="border-b border-o9ds-light-border dark:border-neutral-700 pb-6 last:border-0">
-              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-500 mb-2 font-mono">{name}</p>
+              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-500 mb-2">{name}</p>
               <p className={`${cls} text-o9ds-light-primary dark:text-white`}>{sample}</p>
             </div>
           ))}
@@ -52,7 +52,7 @@ export default function Typography() {
         <div className=" border border-o9ds-light-border dark:border-neutral-700 bg-o9ds-light-surface dark:bg-neutral-800/50 p-6 space-y-4">
           <div>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-500 font-mono">font-sans</p>
-            <p className="text-lg font-sans text-o9ds-light-primary dark:text-white">DM Sans, system-ui, sans-serif</p>
+            <p className="text-lg font-sans text-o9ds-light-primary dark:text-white">o9Sans, system-ui, sans-serif</p>
           </div>
           <div>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-500 font-mono">font-mono</p>

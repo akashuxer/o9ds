@@ -1,0 +1,74 @@
+// o9 Sans — original SCSS from product codebase; paths updated for o9ds (`/o9SansFont/`).
+// Served to the browser as `public/o9SansFont/o9Sans.css` (keep in sync when editing).
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-Light.woff2") format("woff2"), url("/o9SansFont/o9Sans-Light.woff") format("woff"),
+    url("/o9SansFont/o9Sans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-LightItalic.woff2") format("woff2"), url("/o9SansFont/o9Sans-LightItalic.woff") format("woff"),
+    url("/o9SansFont/o9Sans-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-Regular.woff2") format("woff2"), url("/o9SansFont/o9Sans-Regular.woff") format("woff"),
+    url("/o9SansFont/o9Sans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-RegularItalic.woff2") format("woff2"), url("/o9SansFont/o9Sans-RegularItalic.woff") format("woff"),
+    url("/o9SansFont/o9Sans-RegularItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-Medium.woff2") format("woff2"), url("/o9SansFont/o9Sans-Medium.woff") format("woff"),
+    url("/o9SansFont/o9Sans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-MediumItalic.woff2") format("woff2"), url("/o9SansFont/o9Sans-MediumItalic.woff") format("woff"),
+    url("/o9SansFont/o9Sans-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-Bold.woff2") format("woff2"), url("/o9SansFont/o9Sans-Bold.woff") format("woff"),
+    url("/o9SansFont/o9Sans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "o9Sans";
+  src: url("/o9SansFont/o9Sans-BoldItalic.woff2") format("woff2"), url("/o9SansFont/o9Sans-BoldItalic.woff") format("woff"),
+    url("/o9SansFont/o9Sans-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
