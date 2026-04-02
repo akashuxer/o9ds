@@ -1,0 +1,19 @@
+---
+description: Section overview grids (Foundations, Patterns, Accessibility, Content) — keep catalog in sync
+globs: src/data/overviewCatalog.js, src/data/pathsWithContent.js, src/pages/**/*Overview*.jsx, src/LayoutComponents/SectionOverviewPage.jsx
+alwaysApply: false
+---
+
+# Overview catalog pages
+
+Foundations (`/foundations`), Patterns (`/patterns`), Accessibility (`/accessibility`), and Content (`/content`) use **cards** built from `src/data/overviewCatalog.js` and `LayoutComponents/SectionOverviewPage.jsx`.
+
+## When you add a new doc route in one of these sections
+
+1. **`src/data/overviewCatalog.js`** — Add a `{ path, label, section }` entry to the matching `*_CATALOG` array so a card appears on the overview grid. **Do not** add the section overview URL itself (e.g. `/accessibility`, `/content`, `/patterns`, `/foundations`) as a card — only concrete topic pages.
+2. **`src/data/pathsWithContent.js`** — When the page has real documentation (not `Placeholder`), add its `path` to `PATHS_WITH_CONTENT` so the **green dot** shows in the sidebar and on overview cards.
+3. **Optional:** `src/data/sectionOverviewIllustrations.js` — Map `path` to an SVG under `public/o9DocGraphics/SectionOverview/` if you have a custom tile graphic; otherwise the default placeholder is used.
+
+Components use `COMPONENT_DOC_ROUTES` in `componentsNav.js` for the same “ready” behavior; new component slugs belong there when full docs ship.
+
+Do **not** forget the catalog row — the sidebar alone does not create overview cards.

@@ -145,6 +145,7 @@ export const COMPONENTS_NAV_TREE = [
           { path: '/components/badge', label: 'Badge' },
           { path: '/components/indicators', label: 'Indicators' },
           { path: '/components/counter', label: 'Counter' },
+          { path: '/components/backdrop', label: 'Backdrop' },
         ],
       },
     ],

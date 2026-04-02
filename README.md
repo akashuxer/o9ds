@@ -75,6 +75,8 @@ o9ds Website/
 │   │   ├── GrayBgCard.jsx  # Cards — gray bg, dark border
 │   │   ├── CodeBlock.jsx   # Code snippet with copy
 │   │   ├── ColorSwatch.jsx # Color preview tile
+│   │   ├── ComponentOverviewCard.jsx # Components catalog tiles (fixed light surfaces)
+│   │   ├── SectionOverviewPage.jsx   # Foundations / Patterns / Accessibility / Content grids
 │   │   └── ScrollToTop.jsx
 │   │
 │   ├── context/
@@ -92,6 +94,7 @@ o9ds Website/
 │   │
 │   ├── pages/
 │   │   ├── Home.jsx, Overview.jsx, Components.jsx, Developers.jsx, Placeholder.jsx
+│   │   ├── FoundationsOverview.jsx, PatternsOverview.jsx, AccessibilityOverview.jsx, ContentOverview.jsx
 │   │   ├── foundation/                 # Foundations (tokens, type, spacing, assets)
 │   │   │   ├── Colors.jsx, Typography.jsx, Spacing.jsx, Borders.jsx
 │   │   │   ├── Icons.jsx, Illustrations.jsx, Principles.jsx
@@ -107,7 +110,11 @@ o9ds Website/
 │   │
 │   ├── data/
 │   │   ├── componentsNav.js            # Sidebar tree, slugs, COMPONENT_DOC_ROUTES
-│   │   └── componentPageMeta.js        # Stub page titles / descriptions
+│   │   ├── componentPageMeta.js        # Stub page titles / descriptions
+│   │   ├── pathsWithContent.js         # Sidebar + section overview green dots (ready docs)
+│   │   ├── overviewCatalog.js          # Card lists for Foundations / Patterns / Accessibility / Content
+│   │   ├── sectionOverviewIllustrations.js
+│   │   └── componentOverviewIllustrations.js
 │   │
 │   └── utils/
 │       └── colorUtils.js
@@ -135,12 +142,14 @@ o9ds Website/
 | `src/App.jsx` | Route definitions |
 | `src/data/componentsNav.js` | Component catalog tree and `/components/:slug` slugs |
 | `src/data/componentPageMeta.js` | Intro copy for generated component stub pages |
+| `src/data/pathsWithContent.js` | Routes with ready docs (green dot in nav + section overviews) |
+| `src/data/overviewCatalog.js` | Overview card lists for Foundations, Patterns, Accessibility, Content |
 | `vercel.json` | SPA fallback for production hosting |
 | `src/LayoutComponents/Layout.jsx` | Sidebar nav, page titles |
 
 ### Sidebar structure
 
-- **FOUNDATIONS** → Colors, Typography, Spacing, Borders, **Assets** (Iconography, Illustrations), Motion, Elevation
+- **FOUNDATIONS** → **Overview** (`/foundations`), Colors, Typography, Spacing, Borders, **Assets** (Iconography, Illustrations), Motion, Elevation
 
 ---
 
@@ -149,13 +158,17 @@ o9ds Website/
 | Path | Page |
 |------|------|
 | `/` | Home |
+| `/foundations` | Foundations overview (grid of foundation topics) |
 | `/colors` | Colors (brand, global, semantic tokens) |
 | `/typography` | Typography |
 | `/spacing` | Spacing scale and tokens |
 | `/borders` | Border radius and width tokens |
 | `/icons` | Assets → Iconography (o9con gallery) |
 | `/illustrations` | Assets → Illustrations (o9Illus gallery) |
-| `/components` | Components overview |
+| `/components` | Components overview (search, Ready status, category) |
+| `/patterns` | Patterns overview (grid) |
+| `/accessibility` | Accessibility overview (grid) |
+| `/content` | Content guidelines overview (grid) |
 | `/components/:slug` | Component doc (full pages for e.g. `button`, `cards`; stubs for others) |
 | `/components/button` | Button docs (`src/pages/components/buttons-actions/Button.jsx`) |
 | `/components/cards` | Cards — Storybook embeds (`src/pages/components/data-display/Cards.jsx`) |

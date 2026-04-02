@@ -15,6 +15,10 @@ import Placeholder from './pages/Placeholder'
 import Borders from './pages/foundation/Borders'
 import Illustrations from './pages/foundation/Illustrations'
 import Developers from './pages/Developers'
+import FoundationsOverview from './pages/FoundationsOverview'
+import PatternsOverview from './pages/PatternsOverview'
+import AccessibilityOverview from './pages/AccessibilityOverview'
+import ContentOverview from './pages/ContentOverview'
 
 export default function App() {
   return (
@@ -26,6 +30,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/overview" element={<Overview />} />
           <Route path="/principles" element={<Principles />} />
+          <Route path="/foundations" element={<FoundationsOverview />} />
           <Route path="/colors" element={<Colors />} />
           <Route path="/colors/data-viz" element={<Placeholder title="Data Visualization Colors" />} />
           <Route path="/typography" element={<Typography />} />
@@ -40,12 +45,12 @@ export default function App() {
           <Route path="/designers" element={<Placeholder title="For Designers" />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/vibe-coders" element={<Placeholder title="For Vibe Coders" />} />
-          <Route path="/accessibility" element={<Placeholder title="Accessibility" />} />
-          <Route path="/content" element={<Placeholder title="Content Guidelines" />} />
+          <Route path="/accessibility" element={<AccessibilityOverview />} />
+          <Route path="/content" element={<ContentOverview />} />
           <Route path="/content/writing-principles" element={<Placeholder title="Writing Principles" />} />
           <Route path="/content/grammar" element={<Placeholder title="Grammar" />} />
           <Route path="/content/voice-and-tone" element={<Placeholder title="Voice and Tone" />} />
-          <Route path="/patterns" element={<Placeholder title="Patterns" />} />
+          <Route path="/patterns" element={<PatternsOverview />} />
           <Route path="/patterns/forms" element={<Placeholder title="Forms" />} />
           <Route path="/patterns/search" element={<Placeholder title="Search" />} />
           <Route path="/patterns/filters" element={<Placeholder title="Filters" />} />

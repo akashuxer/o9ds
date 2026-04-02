@@ -6,6 +6,21 @@ import {
   findOpenGroupIds,
   filterComponentNavTree,
 } from '../data/componentsNav'
+import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
+
+/** Keep only component leaves that have full docs (green dot in nav). */
+function filterNavTreeByReady(nodes) {
+  const out = []
+  for (const node of nodes) {
+    if (node.path) {
+      if (COMPONENT_DOC_ROUTES.has(node.path)) out.push(node)
+    } else if (node.children) {
+      const filtered = filterNavTreeByReady(node.children)
+      if (filtered.length > 0) out.push({ ...node, children: filtered })
+    }
+  }
+  return out
+}
 
 function Chevron({ open }) {
   return (
@@ -36,11 +51,17 @@ function collectGroupIds(nodes) {
 /**
  * Recursive collapsible nav for /components/* — used in Layout sidebar.
  */
-export default function ComponentTreeNav({ searchQuery, isDark, onNavigate }) {
+export default function ComponentTreeNav({ searchQuery, readyOnly = false, isDark, onNavigate }) {
   const { pathname } = useLocation()
   const [openIds, setOpenIds] = useState(() => new Set())
 
-  const tree = useMemo(() => filterComponentNavTree(COMPONENTS_NAV_TREE, searchQuery), [searchQuery])
+  const tree = useMemo(() => {
+    let base = filterComponentNavTree(COMPONENTS_NAV_TREE, searchQuery)
+    if (readyOnly) {
+      base = filterNavTreeByReady(base)
+    }
+    return base
+  }, [searchQuery, readyOnly])
 
   const applyPathDefaults = useCallback(() => {
     const ids = findOpenGroupIds(pathname, COMPONENTS_NAV_TREE)
@@ -92,7 +113,7 @@ export default function ComponentTreeNav({ searchQuery, isDark, onNavigate }) {
               <NavLink to={node.path} end className={linkClass} onClick={onNavigate}>
                 <span className="flex items-center gap-2 min-w-0">
                   {hasDoc && (
-                    <span className="shrink-0 w-2 h-2 rounded-full bg-[#00c278]" aria-hidden title="Documentation available" />
+                    <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Documentation available" />
                   )}
                   {node.label}
                 </span>
@@ -120,25 +141,31 @@ export default function ComponentTreeNav({ searchQuery, isDark, onNavigate }) {
     </ul>
   )
 
+  const showOverviewLink = !readyOnly || PATHS_WITH_CONTENT.has('/components')
+
   if (tree.length === 0) {
     return (
       <ul className="space-y-0.5">
-        <li>
-          <NavLink to="/components" end className={linkClass} onClick={onNavigate}>
-            <span className="flex items-center gap-2 min-w-0">Overview</span>
-          </NavLink>
-        </li>
+        {showOverviewLink && (
+          <li>
+            <NavLink to="/components" end className={linkClass} onClick={onNavigate}>
+              <span className="flex items-center gap-2 min-w-0">Overview</span>
+            </NavLink>
+          </li>
+        )}
       </ul>
     )
   }
 
   return (
     <ul className="space-y-0.5">
-      <li>
-        <NavLink to="/components" end className={linkClass} onClick={onNavigate}>
-          <span className="flex items-center gap-2 min-w-0">Overview</span>
-        </NavLink>
-      </li>
+      {showOverviewLink && (
+        <li>
+          <NavLink to="/components" end className={linkClass} onClick={onNavigate}>
+            <span className="flex items-center gap-2 min-w-0">Overview</span>
+          </NavLink>
+        </li>
+      )}
       <li className="pt-1">{renderNodes(tree, 0)}</li>
     </ul>
   )

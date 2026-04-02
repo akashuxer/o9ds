@@ -1,13 +1,15 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
+import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
 
 const PAGE_TITLES = {
   '/': 'Platform UI',
   '/overview': 'Overview',
   '/principles': 'Principles and Guidelines',
+  '/foundations': 'Foundations',
   '/colors': 'Colors',
   '/colors/data-viz': 'Data Visualization Colors',
   '/typography': 'Typography',
@@ -83,6 +85,7 @@ const sidebarSections = [
   {
     title: 'FOUNDATIONS',
     items: [
+      { path: '/foundations', label: 'Overview' },
       { path: '/colors', label: 'Colors' },
       { path: '/typography', label: 'Typography' },
       { path: '/spacing', label: 'Spacing' },
@@ -145,22 +148,19 @@ function matchesSearch(label, query) {
   return label.toLowerCase().includes(query.toLowerCase().trim())
 }
 
-/* Paths that have real content (not placeholder) */
-const pathsWithContent = new Set([
-  '/',
-  '/overview',
-  '/principles',
-  '/colors',
-  '/typography',
-  '/spacing',
-  '/borders',
-  '/icons',
-  '/illustrations',
-  '/components',
-  '/components/button',
-  '/components/cards',
-  '/developers',
-])
+/** Sidebar nav: keep only links whose path is in PATHS_WITH_CONTENT (green dot = ready). */
+function filterNavItemsByReady(items) {
+  return items
+    .map((item) => {
+      if (item.children) {
+        const children = item.children.filter((c) => PATHS_WITH_CONTENT.has(c.path))
+        if (children.length === 0) return null
+        return { ...item, children }
+      }
+      return PATHS_WITH_CONTENT.has(item.path) ? item : null
+    })
+    .filter(Boolean)
+}
 
 function getPageTitle(pathname) {
   const exact = PAGE_TITLES[pathname]
@@ -177,6 +177,7 @@ export default function Layout({ children }) {
   const { theme, toggleTheme } = useTheme()
   const { pathname } = useLocation()
   const [searchQuery, setSearchQuery] = useState('')
+  const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const searchRef = useRef(null)
   const navRef = useRef(null)
@@ -186,31 +187,47 @@ export default function Layout({ children }) {
     document.title = `o9ds Design System - ${pageName}`
   }, [pathname])
 
-  const filteredSections = sidebarSections
-    .map((section) => {
-      if (section.componentTree) {
-        const q = searchQuery.trim()
-        if (!q) return section
-        const tree = filterComponentNavTree(COMPONENTS_NAV_TREE, searchQuery)
-        if (tree.length === 0 && !matchesSearch('Overview', searchQuery)) return null
-        return section
-      }
-      const filteredItems = section.items.filter((item) => {
-        if (item.children) {
-          const matchingChildren = item.children.filter((c) => matchesSearch(c.label, searchQuery))
-          return matchesSearch(item.label, searchQuery) || matchingChildren.length > 0
+  const filteredSections = useMemo(() => {
+    const afterSearch = sidebarSections
+      .map((section) => {
+        if (section.componentTree) {
+          const q = searchQuery.trim()
+          if (!q) return section
+          const tree = filterComponentNavTree(COMPONENTS_NAV_TREE, searchQuery)
+          if (tree.length === 0 && !matchesSearch('Overview', searchQuery)) return null
+          return section
         }
-        return matchesSearch(item.label, searchQuery)
-      }).map((item) => {
-        if (item.children) {
-          const matchingChildren = item.children.filter((c) => matchesSearch(c.label, searchQuery))
-          return { ...item, children: matchingChildren }
-        }
-        return item
-      }).filter((item) => !item.children || item.children.length > 0)
-      return { ...section, items: filteredItems }
-    })
-    .filter((section) => section != null && (section.componentTree || section.items.length > 0))
+        const filteredItems = section.items
+          .filter((item) => {
+            if (item.children) {
+              const matchingChildren = item.children.filter((c) => matchesSearch(c.label, searchQuery))
+              return matchesSearch(item.label, searchQuery) || matchingChildren.length > 0
+            }
+            return matchesSearch(item.label, searchQuery)
+          })
+          .map((item) => {
+            if (item.children) {
+              const matchingChildren = item.children.filter((c) => matchesSearch(c.label, searchQuery))
+              return { ...item, children: matchingChildren }
+            }
+            return item
+          })
+          .filter((item) => !item.children || item.children.length > 0)
+        return { ...section, items: filteredItems }
+      })
+      .filter((section) => section != null && (section.componentTree || section.items.length > 0))
+
+    if (!sidebarReadyOnly) return afterSearch
+
+    return afterSearch
+      .map((section) => {
+        if (section.componentTree) return section
+        const items = filterNavItemsByReady(section.items)
+        if (items.length === 0) return null
+        return { ...section, items }
+      })
+      .filter(Boolean)
+  }, [searchQuery, sidebarReadyOnly])
 
   // / shortcut to focus search
   useEffect(() => {
@@ -373,7 +390,7 @@ export default function Layout({ children }) {
               placeholder="Search documentation..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border px-3 py-2 text-sm focus:outline-none"
+              className="w-full rounded-none border px-3 py-2 text-sm focus:outline-none"
               style={{
                 borderColor: isDark ? '#404040' : '#E5E5E5',
                 backgroundColor: isDark ? '#171717' : '#FFFFFF',
@@ -381,8 +398,21 @@ export default function Layout({ children }) {
               }}
             />
             <p className="mt-1 text-[10px]" style={{ color: isDark ? '#a3a3a3' : '#303030' }}>
-              Press <kbd className="px-1 py-0.5 font-mono text-[10px]" style={{ backgroundColor: isDark ? '#262626' : '#E5E5E5' }}>/</kbd> to search
+              Press <kbd className="rounded-none px-1 py-0.5 font-mono text-[10px]" style={{ backgroundColor: isDark ? '#262626' : '#E5E5E5' }}>/</kbd> to search
             </p>
+            <label
+              className="mt-3 flex cursor-pointer select-none items-center gap-2 text-xs font-medium"
+              style={{ color: isDark ? '#fff' : '#010101' }}
+            >
+              <input
+                type="checkbox"
+                checked={sidebarReadyOnly}
+                onChange={(e) => setSidebarReadyOnly(e.target.checked)}
+                className="h-4 w-4 shrink-0 rounded-none border-2 border-[#010101] bg-white accent-[#010101] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#010101] focus-visible:ring-offset-0 dark:border-white dark:bg-black dark:accent-white dark:focus-visible:ring-white"
+                aria-label="Show only pages with ready documentation"
+              />
+              Ready status
+            </label>
           </div>
           <nav
             ref={navRef}
@@ -401,6 +431,7 @@ export default function Layout({ children }) {
                 {section.componentTree ? (
                   <ComponentTreeNav
                     searchQuery={searchQuery}
+                    readyOnly={sidebarReadyOnly}
                     isDark={isDark}
                     onNavigate={() => setSidebarOpen(false)}
                   />
@@ -428,8 +459,8 @@ export default function Layout({ children }) {
                                 }
                               >
                                 <span className="flex items-center gap-2 min-w-0">
-                                  {pathsWithContent.has(child.path) && (
-                                    <span className="shrink-0 w-2 h-2 rounded-full bg-[#00c278]" aria-hidden title="Content available" />
+                                  {PATHS_WITH_CONTENT.has(child.path) && (
+                                    <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
                                   )}
                                   {child.label}
                                 </span>
@@ -453,8 +484,8 @@ export default function Layout({ children }) {
                           }
                         >
                           <span className="flex items-center gap-2 min-w-0">
-                            {pathsWithContent.has(item.path) && (
-                              <span className="shrink-0 w-2 h-2 rounded-full bg-[#00c278]" aria-hidden title="Content available" />
+                            {PATHS_WITH_CONTENT.has(item.path) && (
+                              <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
                             )}
                             {item.label}
                           </span>
@@ -486,6 +517,10 @@ export default function Layout({ children }) {
               pathname.startsWith('/borders') ||
               pathname.startsWith('/icons') ||
               pathname.startsWith('/illustrations') ||
+              pathname.startsWith('/foundations') ||
+              pathname.startsWith('/patterns') ||
+              pathname.startsWith('/accessibility') ||
+              pathname.startsWith('/content') ||
               pathname.startsWith('/components') ||
               pathname.startsWith('/developers')
                 ? 'max-w-6xl'

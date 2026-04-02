@@ -21,6 +21,8 @@ Before building a new card, table, or layout element, check and reuse:
 | `PageWithToc` | Pages with "On This Page" TOC |
 | `OnThisPage` | Right-side section nav |
 | `ColorSwatch` | Color preview tile |
+| `ComponentOverviewCard` | Components catalog — fixed-height white + dot-grid illustration band, theme-aware footer, 2-line description + tooltip when truncated |
+| `SectionOverviewPage` | Foundations / Patterns / Accessibility / Content overview grids (search, Ready status, shared cards) |
 
 Import from `../LayoutComponents/ComponentName` (adjust path as needed).
 
