@@ -58,6 +58,37 @@ function TokenRow({ token, value, px, varFormat, isLight, showCopy }) {
   )
 }
 
+function RowCopyButton({ text, isLight }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = (e) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    })
+  }
+
+  return (
+    <td className="py-2 px-3 w-12 align-middle">
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
+        style={
+          copied
+            ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
+            : isLight ? { borderColor: '#E5E5E5', color: '#303030' } : { borderColor: '#404040', color: '#a3a3a3' }
+        }
+        title="Copy"
+        aria-label="Copy"
+      >
+        {copied ? <CheckIcon className="h-3.5 w-3.5" style={{ color: '#fff' }} /> : <CopyIcon className="h-3.5 w-3.5" />}
+      </button>
+    </td>
+  )
+}
+
 function columnToneClass(tone) {
   if (tone === 'package' || tone === 'module' || tone === 'prop' || tone === 'agent' || tone === 'layer' || tone === 'gate' || tone === 'code') {
     return TABLE_IDENTIFIER_TONE_CLASS
@@ -74,8 +105,9 @@ function columnToneClass(tone) {
  * @param {Array} props.columns - For generic table: [{ key, label, mono?, primary?, tone?: 'package' | 'module' | 'prop' | 'agent' | 'layer' | 'gate' | 'code' }]
  * @param {Array} props.rows - For generic table: array of row objects
  * @param {boolean} props.showCopy - Only for tokens: show copy var() button per row
+ * @param {(row: object) => string} [props.rowCopy] - Generic table: if set, adds a copy column; function returns clipboard text per row
  */
-export default function DocTable({ tokens, columns = [], rows = [], showCopy = true }) {
+export default function DocTable({ tokens, columns = [], rows = [], showCopy = true, rowCopy }) {
   const { theme } = useTheme()
   const isLight = theme === 'light'
 
@@ -112,6 +144,8 @@ export default function DocTable({ tokens, columns = [], rows = [], showCopy = t
   }
 
   // Generic table mode
+  const rowCopyFn = typeof rowCopy === 'function' ? rowCopy : null
+
   return (
     <div className="border overflow-hidden" style={{ borderColor: isLight ? '#E5E5E5' : '#404040', backgroundColor: isLight ? '#FFFFFF' : undefined }}>
       <table className="w-full text-sm">
@@ -122,11 +156,12 @@ export default function DocTable({ tokens, columns = [], rows = [], showCopy = t
                 {col.label}
               </th>
             ))}
+            {rowCopyFn && <th className="py-2 px-3 w-12" aria-label="Copy" />}
           </tr>
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={i} className="border-t" style={{ borderColor: isLight ? '#E5E5E5' : '#404040' }}>
+            <tr key={i} className="group border-t" style={{ borderColor: isLight ? '#E5E5E5' : '#404040' }}>
               {columns.map((col) => (
                 <td
                   key={col.key}
@@ -140,6 +175,7 @@ export default function DocTable({ tokens, columns = [], rows = [], showCopy = t
                   {row[col.key]}
                 </td>
               ))}
+              {rowCopyFn && <RowCopyButton text={rowCopyFn(row)} isLight={isLight} />}
             </tr>
           ))}
         </tbody>

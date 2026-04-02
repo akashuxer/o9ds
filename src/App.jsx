@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
+import { DocsShellProvider } from './context/DocsShellContext'
 import Layout from './LayoutComponents/Layout'
 import ScrollToTop from './LayoutComponents/ScrollToTop'
 import Home from './pages/Home'
@@ -23,6 +24,7 @@ import ContentOverview from './pages/ContentOverview'
 export default function App() {
   return (
     <ThemeProvider>
+      <DocsShellProvider>
       <BrowserRouter>
         <ScrollToTop />
         <Layout>
@@ -69,6 +71,7 @@ export default function App() {
         </Routes>
         </Layout>
       </BrowserRouter>
+      </DocsShellProvider>
     </ThemeProvider>
   )
 }

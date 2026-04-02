@@ -1,0 +1,248 @@
+/* USAGE
+    - *DO NOT* use shorthand 'font' property when styling elements. It is bad practice and leads to
+      unintended consequences. Always use individual font properties (font-size, font-weight, etc).
+    - Mixins are available for use and are aligned with Design System guidelines. 
+    - Mixin usage is optional, but encouraged to ensure consistency.
+
+    Font-Family
+    - Inner DOM inherits font-family appropriately from body.
+    - *DO NOT* set font-family manually as future enhancements for dynamic fonts will rely on consistent token usage for runtime update.
+*/
+
+// FONT FAMILY TOKENS
+$default-font: $o9-reg;
+$mono-font: $o9-mono; // to be set with proper font
+
+// FONT WEIGHT TOKENS
+$o9ds-light: 300;
+$o9ds-regular: 400;
+$o9ds-medium: 500;
+$o9ds-bold: 700;
+
+// FONT SIZE TOKENS
+$o9ds-font-size-10: 0.625rem; // 10px
+$o9ds-font-size-12: 0.75rem; // 12px
+$o9ds-font-size-14: 0.875rem; // 14px
+$o9ds-font-size-16: 1rem; // 16px
+$o9ds-font-size-18: 1.125rem; // 18px
+$o9ds-font-size-20: 1.25rem; // 20px
+$o9ds-font-size-32: 2rem; // 32px
+
+/* o9con icon base font */
+$o9con-reg-em-1: normal normal normal 1em/1 $o9con;
+
+// TYPOGRAPHY TOKENS  (o9ds-font-variantsize-property)
+/*
+    Variants
+    h - heading
+    p - paragraph
+    l - label
+
+    Properties
+    r - regular
+    ri - regular italic
+    rc - regular caps
+    m - medium
+    mi - medium italic
+    mc - medium caps
+    b - bold
+    bi - bold italic
+    bc - bold caps
+*/
+
+// HEADING
+@mixin o9ds-font-h32-r {
+    font-size: $o9ds-font-size-32;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h20-r {
+    font-size: $o9ds-font-size-20;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h18-r {
+    font-size: $o9ds-font-size-18;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h16-m {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-h14-r {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h14-rc {
+    font-size: $o9ds-font-size-14;
+    text-transform: uppercase;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h14-m {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-h12-rc {
+    font-size: $o9ds-font-size-12;
+    text-transform: uppercase;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h12-m {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-h12-r {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h12-mc {
+    font-size: $o9ds-font-size-12;
+    text-transform: uppercase;
+    font-weight: $o9ds-medium;
+}
+
+
+// PARAGRAPH
+
+@mixin o9ds-font-p16-r {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-p16-m {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p14-r {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-p14-m {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p14-b {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-bold;
+}
+
+@mixin o9ds-font-p12-r {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-p12-m {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p12-ru {
+    font-size: $o9ds-font-size-12;
+    text-decoration: underline;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p10-r {
+    font-size: $o9ds-font-size-10;
+    font-weight: $o9ds-regular;
+}
+
+
+// LABELS
+
+@mixin o9ds-font-l16-r {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l14-r {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l14-m {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-l14-ru {
+    font-size: $o9ds-font-size-14;
+    text-decoration: underline;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l12-r {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l12-m {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-l12-ru {
+    font-size: $o9ds-font-size-12;
+    text-decoration: underline;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l10-r {
+    font-size: $o9ds-font-size-10;
+    font-weight: $o9ds-regular;
+}
+
+
+/*  ---------------------------------------------- IMPORTANT ----------------------------------------------
+    - DO NOT use any of the below tokens or mixins. This is strictly to support migration to new ds.
+    - These are to be removed over time and updated to use only above tokens to follow UX guidelines.
+*/ 
+
+@mixin o9-font-reg-12 {
+    font-size: 12px;
+    font-weight: $o9ds-regular;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-12-important {
+    font-size: 12px !important;
+    font-weight: $o9ds-regular !important;
+    line-height: normal !important;
+}
+
+@mixin o9-font-reg-13 {
+    font-size: 13px;
+    font-weight: $o9ds-regular;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-13-important {
+    font-size: 13px !important;
+    font-weight: $o9ds-regular !important;
+    line-height: normal !important;
+}
+
+@mixin o9-font-reg-14 {
+    font-size: 14px;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-15 {
+    font-size: 15px;
+    line-height: normal;
+}
+
+$o9-font-reg-16: normal 16px $default-font;
+$o9-font-reg-17: normal 17px $default-font;
+$o9-font-reg-18: normal 18px $default-font;

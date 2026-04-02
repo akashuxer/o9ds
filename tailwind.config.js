@@ -63,11 +63,41 @@ export default {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.85' },
         },
+        'hero-float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        aurora: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'ai-shimmer': {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+        'pulse-ring': {
+          '0%, 100%': { opacity: '0.35', transform: 'scale(1)' },
+          '50%': { opacity: '0.6', transform: 'scale(1.02)' },
+        },
+        'word-enter': {
+          '0%': { opacity: '0', transform: 'translateY(0.35em)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'hero-bob': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-4px)' },
+        },
       },
       animation: {
         'fade-in-up': 'fade-in-up 0.5s ease-out both',
         'fade-in': 'fade-in 0.4s ease-out both',
         'highlight-pulse': 'highlight-pulse 2s ease-in-out infinite',
+        'hero-float': 'hero-float 5s ease-in-out infinite',
+        aurora: 'aurora 14s ease-in-out infinite',
+        'ai-shimmer': 'ai-shimmer 3.5s linear infinite',
+        'pulse-ring': 'pulse-ring 4s ease-in-out infinite',
+        'word-enter': 'word-enter 0.5s ease-out both',
+        'hero-bob': 'hero-bob 5s ease-in-out infinite',
       },
       transitionDuration: {
         '400': '400ms',

@@ -176,6 +176,8 @@ function getPageTitle(pathname) {
 export default function Layout({ children }) {
   const { theme, toggleTheme } = useTheme()
   const { pathname } = useLocation()
+  /** Full-width landing: sidebar only appears on routes other than `/`. */
+  const isLandingHome = pathname === '/'
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -281,6 +283,17 @@ export default function Layout({ children }) {
   }
 
   const isDark = theme === 'dark'
+  const [headerScrolled, setHeaderScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => {
+      setHeaderScrolled((window.scrollY || document.documentElement.scrollTop) > 10)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <div
       className="min-h-screen font-sans antialiased"
@@ -289,17 +302,27 @@ export default function Layout({ children }) {
         color: isDark ? '#fff' : '#010101',
       }}
     >
-      {/* Header */}
+      {/* Header: solid at top → glassmorphism after scroll */}
       <header
-        className="sticky top-0 z-50 border-b"
-        style={{
-          borderColor: isDark ? '#262626' : '#E5E5E5',
-          backgroundColor: isDark ? '#000' : '#FFFFFF',
-        }}
+        className={`sticky top-0 z-50 border-b transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-out ${
+          headerScrolled
+            ? 'border-white/20 bg-white/72 shadow-[0_8px_40px_rgba(0,0,0,0.06)] backdrop-blur-xl backdrop-saturate-150 dark:border-white/10 dark:bg-black/45 dark:shadow-[0_8px_40px_rgba(0,0,0,0.35)] dark:backdrop-blur-xl'
+            : ''
+        }`}
+        style={
+          headerScrolled
+            ? undefined
+            : {
+                borderColor: isDark ? '#262626' : '#E5E5E5',
+                backgroundColor: isDark ? '#000' : '#FFFFFF',
+              }
+        }
       >
         <div className="flex h-14 items-center justify-between px-4 sm:px-6 min-[2560px]:max-w-[1800px] min-[2560px]:mx-auto min-[2560px]:px-6">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            {!isLandingHome && (
             <button
+              type="button"
               onClick={() => setSidebarOpen((o) => !o)}
               className="lg:hidden flex items-center justify-center p-2 -ml-2 shrink-0"
               style={{ color: isDark ? '#a3a3a3' : '#303030' }}
@@ -314,6 +337,7 @@ export default function Layout({ children }) {
                 )}
               </svg>
             </button>
+            )}
             <Link to="/" className="flex items-center gap-2 sm:gap-3 min-w-0 hover:opacity-90 transition-opacity" aria-label="Go to home">
               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" focusable="false" className="h-8 w-8 shrink-0" aria-hidden>
                 <rect width="48" height="48" fill={isDark ? '#FFFFFF' : '#010101'} />
@@ -355,8 +379,8 @@ export default function Layout({ children }) {
         </div>
       </header>
 
-      {/* Mobile overlay */}
-        {sidebarOpen && (
+        {/* Mobile overlay */}
+        {!isLandingHome && sidebarOpen && (
           <div
             className="fixed inset-0 z-30 lg:hidden"
             style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
@@ -366,9 +390,10 @@ export default function Layout({ children }) {
         )}
 
         <div className="flex min-[2560px]:max-w-[1800px] min-[2560px]:mx-auto min-[2560px]:w-full">
-        {/* Sidebar - drawer on mobile, fixed on lg, sticky in-flow on 2560px+ */}
+        {/* Sidebar - drawer on mobile, fixed on lg, sticky in-flow on 2560px+ — hidden until Get Started on home */}
         <aside
           className={`
+            ${isLandingHome ? 'hidden' : ''}
             fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-64 shrink-0 overflow-y-auto border-r
             transform transition-transform duration-200 ease-out
             lg:translate-x-0
@@ -502,29 +527,34 @@ export default function Layout({ children }) {
 
         {/* Main content */}
         <main
-          className="o9ds-main ml-0 lg:ml-64 min-[2560px]:ml-0 min-h-[calc(100vh-3.5rem)] flex-1 min-w-0 px-4 sm:px-6 md:px-8 py-8 sm:py-10"
+          className={`o9ds-main min-h-[calc(100vh-3.5rem)] flex-1 min-w-0 py-8 sm:py-10 ${
+            isLandingHome ? 'px-4 sm:px-6' : 'px-4 sm:px-6 md:px-8'
+          } ${
+            isLandingHome ? 'ml-0' : 'ml-0 lg:ml-64 min-[2560px]:ml-0'
+          }`}
           style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
           data-theme={theme}
         >
           <div
             className={`mx-auto relative z-10 ${
-              pathname === '/' ||
-              pathname.startsWith('/overview') ||
-              pathname.startsWith('/principles') ||
-              pathname.startsWith('/colors') ||
-              pathname.startsWith('/typography') ||
-              pathname.startsWith('/spacing') ||
-              pathname.startsWith('/borders') ||
-              pathname.startsWith('/icons') ||
-              pathname.startsWith('/illustrations') ||
-              pathname.startsWith('/foundations') ||
-              pathname.startsWith('/patterns') ||
-              pathname.startsWith('/accessibility') ||
-              pathname.startsWith('/content') ||
-              pathname.startsWith('/components') ||
-              pathname.startsWith('/developers')
-                ? 'max-w-6xl'
-                : 'max-w-4xl'
+              pathname === '/'
+                ? 'w-full max-w-none'
+                : pathname.startsWith('/overview') ||
+                    pathname.startsWith('/principles') ||
+                    pathname.startsWith('/colors') ||
+                    pathname.startsWith('/typography') ||
+                    pathname.startsWith('/spacing') ||
+                    pathname.startsWith('/borders') ||
+                    pathname.startsWith('/icons') ||
+                    pathname.startsWith('/illustrations') ||
+                    pathname.startsWith('/foundations') ||
+                    pathname.startsWith('/patterns') ||
+                    pathname.startsWith('/accessibility') ||
+                    pathname.startsWith('/content') ||
+                    pathname.startsWith('/components') ||
+                    pathname.startsWith('/developers')
+                  ? 'max-w-6xl'
+                  : 'max-w-4xl'
             }`}
           >
             {children}
