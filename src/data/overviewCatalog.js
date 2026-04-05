@@ -13,7 +13,7 @@ export const FOUNDATIONS_CATALOG = [
   { path: '/icons', label: 'Iconography', section: 'Assets' },
   { path: '/illustrations', label: 'Illustrations', section: 'Assets' },
   { path: '/motion', label: 'Motion & Animation', section: 'Foundations' },
-  { path: '/elevation', label: 'Elevation & Shadows', section: 'Foundations' },
+  { path: '/effects', label: 'Effects', section: 'Foundations' },
   { path: '/colors/data-viz', label: 'Data Visualization Colors', section: 'Foundations' },
 ]
 

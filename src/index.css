@@ -119,6 +119,8 @@ html[data-theme="dark"],
 html.dark {
   color-scheme: dark;
   background-color: #000 !important;
+  /* Same global opacity-1 as light — $o9ds-color-s-overlay-static */
+  --o9ds-color-s-overlay-static: #01010199;
 }
 html[data-theme="dark"] body,
 html.dark body {
@@ -127,6 +129,7 @@ html.dark body {
 
 :root {
   /* o9ds Design Tokens */
+  --o9ds-shadow-blur: 4px; /* matches $o9ds-shadow-blur — backdrop-filter blur() on overlay scrims */
   --o9-black: #000000;
   --o9-white: #ffffff;
   --o9-shock: #0037ff;
@@ -145,6 +148,8 @@ html:not(.dark) {
   --o9ds-text-primary: #010101;
   --o9ds-text-secondary: #303030;
   --o9ds-border: #E5E5E5;
+  /* Semantic: maps to $o9ds-global-opacity-1 — modal/overlay scrim */
+  --o9ds-color-s-overlay-static: #01010199;
 }
 
 /* Light mode: card/section borders - default #E5E5E5, no black in default state */

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { DocsShellProvider } from './context/DocsShellContext'
 import Layout from './LayoutComponents/Layout'
@@ -14,6 +14,7 @@ import Icons from './pages/foundation/Icons'
 import ComponentDocPage from './pages/components/ComponentDocPage'
 import Placeholder from './pages/Placeholder'
 import Borders from './pages/foundation/Borders'
+import Effects from './pages/foundation/Effects'
 import Illustrations from './pages/foundation/Illustrations'
 import Developers from './pages/Developers'
 import FoundationsOverview from './pages/FoundationsOverview'
@@ -41,7 +42,8 @@ export default function App() {
           <Route path="/icons" element={<Icons />} />
           <Route path="/illustrations" element={<Illustrations />} />
           <Route path="/motion" element={<Placeholder title="Motion & Animation" />} />
-          <Route path="/elevation" element={<Placeholder title="Elevation & Shadows" />} />
+          <Route path="/effects" element={<Effects />} />
+          <Route path="/elevation" element={<Navigate to="/effects" replace />} />
           <Route path="/components" element={<Components />} />
           <Route path="/components/:slug" element={<ComponentDocPage />} />
           <Route path="/designers" element={<Placeholder title="For Designers" />} />

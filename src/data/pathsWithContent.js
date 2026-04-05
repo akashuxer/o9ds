@@ -11,6 +11,7 @@ export const PATHS_WITH_CONTENT = new Set([
   '/typography',
   '/spacing',
   '/borders',
+  '/effects',
   '/icons',
   '/illustrations',
   '/components',
