@@ -2,11 +2,13 @@ import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
-import { SPACING_TOKENS, SPACING_TOKENS_SCSS } from '../../tokens/spacingTokens'
+import { SPACING_TOKENS } from '../../tokens/spacingTokens'
 
 const SPACING_SECTIONS = [
-  { id: 'scale', label: 'Scale' },
-  { id: 'spacing-tokens', label: 'Spacing Tokens' },
+  { id: 'spacing-scale-tokens', label: 'Spacing Scale / Tokens' },
+  { id: 'applying-padding', label: 'Applying padding' },
+  { id: 'applying-margin', label: 'Applying margin' },
+  { id: 'applying-gap', label: 'Applying gap' },
 ]
 
 const spacingIcon = (
@@ -15,33 +17,91 @@ const spacingIcon = (
   </svg>
 )
 
+const SPACING_COLUMNS = [
+  { key: 'name', label: 'Name', mono: true, tone: 'code' },
+  { key: 'valueRem', label: 'Value (rem)', mono: true },
+  { key: 'valuePx', label: 'Value (px)', mono: true },
+  { key: 'preview', label: 'Preview' },
+]
+
+function SpacingPreviewBar({ px }) {
+  return <div className="h-8 max-w-full bg-neutral-600 dark:bg-neutral-500" style={{ width: px }} />
+}
+
+const SPACING_TABLE_ROWS = SPACING_TOKENS.map((t) => ({
+  name: `$${t.token}`,
+  valueRem: t.value,
+  valuePx: t.px,
+  preview: <SpacingPreviewBar px={t.px} />,
+}))
+
+const copySpacingRowName = (row) => row.name
+
 export default function Spacing() {
   return (
     <PageWithToc sections={SPACING_SECTIONS}>
-    <div className="space-y-12">
-      <PageHeader
-        title="Spacing"
-        description="A consistent 4px base unit for padding, margins, and gaps across layouts."
-        icon={spacingIcon}
-        descClassName="text-lg mt-4"
-      />
-
-      <section id="scale">
-        <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Scale</h2>
-        <DocTable tokens={SPACING_TOKENS} showCopy />
-      </section>
-
-      <section id="spacing-tokens">
-        <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Spacing Tokens</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
-          Copy the SCSS variables below to use spacing tokens in your project.
-        </p>
-        <CodeBlock
-          code={SPACING_TOKENS_SCSS}
-          label="SCSS variables"
+      <div className="space-y-12">
+        <PageHeader
+          title="Spacing"
+          description="A consistent 4px base unit for padding, margins, and gaps across layouts."
+          icon={spacingIcon}
+          descClassName="mt-4"
         />
-      </section>
-    </div>
+
+        <section id="spacing-scale-tokens" className="scroll-mt-24 space-y-8">
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
+            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+              ✦
+            </span>
+            Spacing Scale / Tokens
+          </h2>
+
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            Use the SCSS variables below for padding, margin, and gap. Values scale from 1px to 80px on the same system as the rest of o9ds.
+          </p>
+
+          <DocTable
+            columns={SPACING_COLUMNS}
+            rows={SPACING_TABLE_ROWS}
+            rowCopy={copySpacingRowName}
+            rowCopyAlwaysVisible
+          />
+        </section>
+
+        <section id="applying-padding" className="scroll-mt-24 space-y-4 max-w-3xl">
+          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying padding</h2>
+          <CodeBlock
+            label="SCSS"
+            language="scss"
+            code={`.card {
+  padding: $o9ds-space-16;
+}`}
+          />
+        </section>
+
+        <section id="applying-margin" className="scroll-mt-24 space-y-4 max-w-3xl">
+          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying margin</h2>
+          <CodeBlock
+            label="SCSS"
+            language="scss"
+            code={`.section {
+  margin-bottom: $o9ds-space-24;
+}`}
+          />
+        </section>
+
+        <section id="applying-gap" className="scroll-mt-24 space-y-4 max-w-3xl">
+          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying gap</h2>
+          <CodeBlock
+            label="SCSS"
+            language="scss"
+            code={`.toolbar {
+  display: flex;
+  gap: $o9ds-space-16;
+}`}
+          />
+        </section>
+      </div>
     </PageWithToc>
   )
 }

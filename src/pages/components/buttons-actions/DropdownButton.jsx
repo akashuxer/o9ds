@@ -137,7 +137,7 @@ export default function DropdownButton() {
             </span>
             Dropdown Button
           </h1>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed mb-2">
+          <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed mb-2">
             {getComponentPageDescription('dropdown-button')}
           </p>
           <p className="text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">

@@ -150,7 +150,7 @@ o9ds Website/
 
 ### Sidebar structure
 
-- **FOUNDATIONS** → **Overview** (`/foundations`), Colors, Typography, Spacing, Borders, **Assets** (Iconography, Illustrations), Motion, Elevation
+- **FOUNDATIONS** → **Overview** (`/foundations`), Colors, Typography, Spacing, Borders, **Assets** (Iconography, Illustrations), Motion, Effects
 
 ---
 
@@ -164,6 +164,7 @@ o9ds Website/
 | `/typography` | Typography |
 | `/spacing` | Spacing scale and tokens |
 | `/borders` | Border radius and width tokens |
+| `/effects` | Effects (shadow, blur, and opacity tokens) |
 | `/icons` | Assets → Iconography (o9con gallery) |
 | `/illustrations` | Assets → Illustrations (o9Illus gallery) |
 | `/components` | Components overview (search, Ready status, category) |
@@ -193,7 +194,7 @@ o9ds Website/
 ## Adding or Changing Tokens
 
 1. **Colors** — Edit `globalColorTokens.js` or `semanticColorTokens.js`
-2. **Spacing / borders / icons / illustrations** — Edit the matching file in `src/tokens/`
+2. **Spacing / borders / effects / icons / illustrations** — Edit the matching file in `src/tokens/`
 3. Save; dev server reloads automatically
 
 ---

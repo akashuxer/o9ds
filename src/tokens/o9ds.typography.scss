@@ -14,19 +14,21 @@ $default-font: $o9-reg;
 $mono-font: $o9-mono; // to be set with proper font
 
 // FONT WEIGHT TOKENS
-$o9ds-light: 300;
 $o9ds-regular: 400;
 $o9ds-medium: 500;
 $o9ds-bold: 700;
 
 // FONT SIZE TOKENS
-$o9ds-font-size-10: 0.625rem; // 10px
-$o9ds-font-size-12: 0.75rem; // 12px
-$o9ds-font-size-14: 0.875rem; // 14px
-$o9ds-font-size-16: 1rem; // 16px
-$o9ds-font-size-18: 1.125rem; // 18px
-$o9ds-font-size-20: 1.25rem; // 20px
+$o9ds-font-size-64: 4rem; // 64px
+$o9ds-font-size-40: 2.5rem; // 40px
 $o9ds-font-size-32: 2rem; // 32px
+$o9ds-font-size-24: 1.5rem; // 24px
+$o9ds-font-size-20: 1.25rem; // 20px
+$o9ds-font-size-18: 1.125rem; // 18px
+$o9ds-font-size-16: 1rem; // 16px
+$o9ds-font-size-14: 0.875rem; // 14px
+$o9ds-font-size-12: 0.75rem; // 12px
+$o9ds-font-size-10: 0.625rem; // 10px
 
 /* o9con icon base font */
 $o9con-reg-em-1: normal normal normal 1em/1 $o9con;
@@ -51,6 +53,16 @@ $o9con-reg-em-1: normal normal normal 1em/1 $o9con;
 */
 
 // HEADING
+@mixin o9ds-font-h64-r {
+    font-size: $o9ds-font-size-64;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h40-r {
+    font-size: $o9ds-font-size-40;
+    font-weight: $o9ds-regular;
+}
+
 @mixin o9ds-font-h32-r {
     font-size: $o9ds-font-size-32;
     font-weight: $o9ds-regular;
@@ -160,6 +172,21 @@ $o9con-reg-em-1: normal normal normal 1em/1 $o9con;
 
 
 // LABELS
+
+@mixin o9ds-font-l40-r {
+    font-size: $o9ds-font-size-40;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l32-r {
+    font-size: $o9ds-font-size-32;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l24-r {
+    font-size: $o9ds-font-size-24;
+    font-weight: $o9ds-regular;
+}
 
 @mixin o9ds-font-l16-r {
     font-size: $o9ds-font-size-16;

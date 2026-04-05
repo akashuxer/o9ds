@@ -9,9 +9,12 @@ import { BLUR_TOKEN_ROWS, OPACITY_TOKEN_ROWS, SHADOW_BOX_TOKEN_ROWS } from '../.
 /** Sample image for opacity previews (shared base; opacity applied per card). */
 const OPACITY_SAMPLE_IMG = '/hero-1.svg'
 
+/** Placeholder asset for blur preview (mask overlay over image). */
+const BLUR_PREVIEW_PLACEHOLDER_IMG = '/placeholder.svg'
+
 const EFFECTS_SECTIONS = [
   { id: 'shadow-tokens', label: 'Shadow tokens' },
-  { id: 'blur', label: 'Blur' },
+  { id: 'blur', label: 'Blur Tokens' },
   { id: 'opacity-tokens', label: 'Opacity tokens' },
 ]
 
@@ -163,14 +166,22 @@ function ShadowPreviewGallery() {
 function BlurPreviewGallery() {
   return (
     <DottedLightDocPanel title="Blur preview">
-      <div className="mx-auto flex max-w-xs flex-col items-center gap-3">
-        <div className="relative h-28 w-full overflow-hidden rounded-lg border border-neutral-200 bg-gradient-to-br from-sky-200 via-violet-200 to-amber-100">
+      <div className="mx-auto flex w-full flex-col items-center gap-3">
+        <div className="relative inline-block max-w-full overflow-hidden rounded-lg border border-neutral-200">
+          <img
+            src={BLUR_PREVIEW_PLACEHOLDER_IMG}
+            alt=""
+            className="block h-auto w-auto max-w-full"
+          />
           <div
-            className="absolute inset-0 flex items-center justify-center text-sm font-medium text-neutral-700"
-            style={{ filter: 'blur(4px)' }}
-          >
-            Sample content
-          </div>
+            className="absolute inset-0"
+            style={{
+              backgroundColor: 'var(--o9ds-color-s-overlay-static)',
+              backdropFilter: 'blur(var(--o9ds-shadow-blur))',
+              WebkitBackdropFilter: 'blur(var(--o9ds-shadow-blur))',
+            }}
+            aria-hidden
+          />
         </div>
         <TokenPill forceLight noCopy>
           $o9ds-shadow-blur
@@ -331,7 +342,7 @@ export default function Effects() {
             <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
-            Blur
+            Blur Tokens
           </h2>
 
           <div className="max-w-3xl space-y-4">

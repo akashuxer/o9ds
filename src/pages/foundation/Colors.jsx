@@ -691,7 +691,7 @@ export default function Colors() {
           {/* Neutral Colors */}
           <div id="global-neutral-colors">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Neutral Colors</h2>
-            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+            <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
               Base grayscale colors ranging from pure black to pure white, providing the foundation for backgrounds, text, and borders.
             </p>
             <TokenTable tokens={NEUTRAL_TOKENS} isLight={isLight} />
@@ -744,7 +744,7 @@ export default function Colors() {
           {/* Feedback Colors */}
           <div id="global-feedback-colors">
             <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">Feedback Colors</h2>
-            <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+            <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
               Semantic status colors for communicating system states including error, success, warning, and informational feedback across all interface elements.
             </p>
             <div className="grid gap-6 sm:grid-cols-2">

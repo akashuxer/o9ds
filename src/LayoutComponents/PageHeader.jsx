@@ -1,6 +1,7 @@
 /**
  * Consistent page header with avatar icon, title, and optional description.
  * Use across all documentation pages for unified layout.
+ * Description uses text-lg (18px); avoid overriding size in descClassName unless intentional.
  */
 export default function PageHeader({ title, description, icon, children, className = '', descClassName = '' }) {
   return (
@@ -16,7 +17,9 @@ export default function PageHeader({ title, description, icon, children, classNa
         {title}
       </h1>
       {description && (
-        <p className={`text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed ${descClassName}`}>
+        <p
+          className={`text-lg text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed ${descClassName}`}
+        >
           {description}
         </p>
       )}

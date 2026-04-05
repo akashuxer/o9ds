@@ -211,31 +211,58 @@ function highlightMermaid(code) {
 }
 
 /**
+ * CSS/SCSS line: strings, vars, block comments, keywords, punctuation (richer coloring for doc snippets).
  * @param {string} line
  * @param {{ n: number }} keyRef
  */
 function highlightScssLine(line, keyRef) {
   const nodes = []
-  const re = /(\$[\w-]+|var\(--[^)]+\)|\/\/[^\n]*|\.[\w-]+|#[\da-fA-F]{3,8}|::?[\w-]+)/g
+  const re =
+    /(\$[\w-]+|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\/\*[\s\S]*?\*\/|\/\/[^\n]*|var\(--[^)]+\)|\b(?:font-family|font-size|font-weight|html|sans-serif|Arial|serif|monospace|inherit|initial|unset)\b|\.[\w-]+|#[\da-fA-F]{3,8}|::?[\w-]+|[{};,]|:)/g
   let last = 0
   let m
   while ((m = re.exec(line)) !== null) {
     if (m.index > last) {
-      nodes.push(span(keyRef.n++, line.slice(last, m.index), 'text'))
+      const gap = line.slice(last, m.index)
+      nodes.push(...highlightScssGapNumbers(gap, keyRef))
     }
     const t = m[1]
     if (t.startsWith('$')) nodes.push(span(keyRef.n++, t, 'keyword'))
-    else if (t.startsWith('var(')) nodes.push(span(keyRef.n++, t, 'tag'))
+    else if (t.startsWith('"') || t.startsWith("'")) nodes.push(span(keyRef.n++, t, 'string'))
+    else if (t.startsWith('/*')) nodes.push(span(keyRef.n++, t, 'comment'))
     else if (t.startsWith('//')) nodes.push(span(keyRef.n++, t, 'comment'))
-    else if (t.startsWith('.')) nodes.push(span(keyRef.n++, t, 'tag'))
+    else if (t.startsWith('var(')) nodes.push(span(keyRef.n++, t, 'tag'))
+    else if (/^(?:font-family|font-size|font-weight|html|sans-serif|Arial|serif|monospace|inherit|initial|unset)$/.test(t)) {
+      nodes.push(span(keyRef.n++, t, 'keyword'))
+    } else if (t.startsWith('.')) nodes.push(span(keyRef.n++, t, 'tag'))
     else if (t.startsWith('#')) nodes.push(span(keyRef.n++, t, 'string'))
-    else if (t.startsWith(':')) nodes.push(span(keyRef.n++, t, 'attr'))
+    else if (/^[{};,]$/.test(t) || t === ':') nodes.push(span(keyRef.n++, t, 'punct'))
+    else nodes.push(span(keyRef.n++, t, 'text'))
     last = m.index + t.length
   }
   if (last < line.length) {
-    nodes.push(span(keyRef.n++, line.slice(last), 'text'))
+    nodes.push(...highlightScssGapNumbers(line.slice(last), keyRef))
   }
   return nodes.length ? nodes : [span(keyRef.n++, line, 'text')]
+}
+
+/** rem, px, bare numbers in gaps between regex matches */
+function highlightScssGapNumbers(gap, keyRef) {
+  const nodes = []
+  const re = /(\d+(?:\.\d+)?(?:px|rem|em|%)?)/g
+  let last = 0
+  let m
+  while ((m = re.exec(gap)) !== null) {
+    if (m.index > last) {
+      nodes.push(span(keyRef.n++, gap.slice(last, m.index), 'text'))
+    }
+    nodes.push(span(keyRef.n++, m[1], 'string'))
+    last = m.index + m[1].length
+  }
+  if (last < gap.length) {
+    nodes.push(span(keyRef.n++, gap.slice(last), 'text'))
+  }
+  return nodes.length ? nodes : gap ? [span(keyRef.n++, gap, 'text')] : []
 }
 
 /**

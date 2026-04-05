@@ -111,7 +111,7 @@ export default function Radio() {
             </span>
             Radio
           </h1>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed mb-2">
+          <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed mb-2">
             {getComponentPageDescription('radio')}
           </p>
           <p className="text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
