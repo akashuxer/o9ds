@@ -18,7 +18,7 @@ function CheckIcon({ className }) {
   )
 }
 
-function TokenRow({ token, value, px, varFormat, isLight, showCopy }) {
+function TokenRow({ token, value, px, varFormat, isLight, showCopy, tokenPreviewMode = 'bar', copyAlwaysVisible = false }) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = (e) => {
@@ -29,19 +29,32 @@ function TokenRow({ token, value, px, varFormat, isLight, showCopy }) {
     })
   }
 
+  const copyBtnClass = copyAlwaysVisible
+    ? 'p-1.5 border opacity-100 transition-opacity'
+    : 'p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity'
+
   return (
     <tr className="group border-b last:border-b-0" style={{ borderColor: isLight ? '#E5E5E5' : '#404040' }}>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#fff' }}>{token}</td>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#e5e5e5' }}>{value}</td>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#303030' : '#a3a3a3' }}>{px}</td>
-      <td className="py-2 px-3">
-        <div className="h-8" style={{ width: px, backgroundColor: isLight ? '#444444' : '#737373' }} />
+      <td className="py-2 px-3 align-middle">
+        {tokenPreviewMode === 'fontSize' ? (
+          <span
+            className="font-sans leading-none text-o9ds-light-primary dark:text-white"
+            style={{ fontSize: value, fontWeight: 400 }}
+          >
+            Aa
+          </span>
+        ) : (
+          <div className="h-8" style={{ width: px, backgroundColor: isLight ? '#444444' : '#737373' }} />
+        )}
       </td>
       {showCopy && (
         <td className="py-2 px-3 w-12">
           <button
             onClick={handleCopy}
-            className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
+            className={copyBtnClass}
             style={
               copied
                 ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
@@ -58,7 +71,7 @@ function TokenRow({ token, value, px, varFormat, isLight, showCopy }) {
   )
 }
 
-function RowCopyButton({ text, isLight }) {
+function RowCopyButton({ text, isLight, alwaysVisible = false }) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = (e) => {
@@ -69,12 +82,16 @@ function RowCopyButton({ text, isLight }) {
     })
   }
 
+  const btnClass = alwaysVisible
+    ? 'p-1.5 border opacity-100 transition-opacity'
+    : 'p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity'
+
   return (
     <td className="py-2 px-3 w-12 align-middle">
       <button
         type="button"
         onClick={handleCopy}
-        className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
+        className={btnClass}
         style={
           copied
             ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
@@ -105,9 +122,21 @@ function columnToneClass(tone) {
  * @param {Array} props.columns - For generic table: [{ key, label, mono?, primary?, tone?: 'package' | 'module' | 'prop' | 'agent' | 'layer' | 'gate' | 'code' }]
  * @param {Array} props.rows - For generic table: array of row objects
  * @param {boolean} props.showCopy - Only for tokens: show copy var() button per row
+ * @param {'bar'|'fontSize'} [props.tokenPreviewMode] - Token table Preview column: bar (default) or o9 Sans size sample at weight 400
+ * @param {boolean} [props.copyAlwaysVisible] - Token table: copy button always visible (not only on row hover)
  * @param {(row: object) => string} [props.rowCopy] - Generic table: if set, adds a copy column; function returns clipboard text per row
+ * @param {boolean} [props.rowCopyAlwaysVisible] - Generic table: copy column always visible
  */
-export default function DocTable({ tokens, columns = [], rows = [], showCopy = true, rowCopy }) {
+export default function DocTable({
+  tokens,
+  columns = [],
+  rows = [],
+  showCopy = true,
+  rowCopy,
+  tokenPreviewMode = 'bar',
+  copyAlwaysVisible = false,
+  rowCopyAlwaysVisible = false,
+}) {
   const { theme } = useTheme()
   const isLight = theme === 'light'
 
@@ -135,6 +164,8 @@ export default function DocTable({ tokens, columns = [], rows = [], showCopy = t
                 varFormat={`var(--${token})`}
                 isLight={isLight}
                 showCopy={showCopy}
+                tokenPreviewMode={tokenPreviewMode}
+                copyAlwaysVisible={copyAlwaysVisible}
               />
             ))}
           </tbody>
@@ -175,7 +206,7 @@ export default function DocTable({ tokens, columns = [], rows = [], showCopy = t
                   {row[col.key]}
                 </td>
               ))}
-              {rowCopyFn && <RowCopyButton text={rowCopyFn(row)} isLight={isLight} />}
+              {rowCopyFn && <RowCopyButton text={rowCopyFn(row)} isLight={isLight} alwaysVisible={rowCopyAlwaysVisible} />}
             </tr>
           ))}
         </tbody>

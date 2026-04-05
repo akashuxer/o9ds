@@ -107,7 +107,22 @@ const FAMILY_COLUMNS = [
 const WEIGHT_COLUMNS = [
   { key: 'token', label: 'Variable', mono: true, tone: 'code' },
   { key: 'value', label: 'Value', mono: true },
+  { key: 'preview', label: 'Preview' },
 ]
+
+const FONT_WEIGHT_PREVIEW_SAMPLE = 'o9 Sans'
+
+const FONT_WEIGHT_ROWS_WITH_PREVIEW = FONT_WEIGHT_ROWS.map((r) => ({
+  ...r,
+  preview: (
+    <span
+      className="font-sans text-o9ds-light-primary dark:text-white"
+      style={{ fontWeight: Number(r.value) }}
+    >
+      {FONT_WEIGHT_PREVIEW_SAMPLE}
+    </span>
+  ),
+}))
 
 export default function Typography() {
   return (
@@ -153,12 +168,12 @@ export default function Typography() {
 
         <section id="font-weight-tokens" className="space-y-4">
           <h2 className="text-2xl font-bold text-o9ds-light-primary dark:text-white">Font weight tokens</h2>
-          <DocTable columns={WEIGHT_COLUMNS} rows={FONT_WEIGHT_ROWS} />
+          <DocTable columns={WEIGHT_COLUMNS} rows={FONT_WEIGHT_ROWS_WITH_PREVIEW} />
         </section>
 
         <section id="font-size-tokens" className="space-y-4">
           <h2 className="text-2xl font-bold text-o9ds-light-primary dark:text-white">Font size tokens</h2>
-          <DocTable tokens={FONT_SIZE_TOKENS} showCopy={false} />
+          <DocTable tokens={FONT_SIZE_TOKENS} showCopy={false} tokenPreviewMode="fontSize" />
         </section>
 
         <section id="naming-convention" className="space-y-6">
@@ -182,17 +197,17 @@ export default function Typography() {
 
         <section id="heading-mixins" className="space-y-4">
           <h2 className="text-2xl font-bold text-o9ds-light-primary dark:text-white">Heading tokens</h2>
-          <DocTable columns={MIXIN_COLUMNS} rows={HEADING_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} />
+          <DocTable columns={MIXIN_COLUMNS} rows={HEADING_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} rowCopyAlwaysVisible />
         </section>
 
         <section id="paragraph-mixins" className="space-y-4">
           <h2 className="text-2xl font-bold text-o9ds-light-primary dark:text-white">Paragraph tokens</h2>
-          <DocTable columns={MIXIN_COLUMNS} rows={PARAGRAPH_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} />
+          <DocTable columns={MIXIN_COLUMNS} rows={PARAGRAPH_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} rowCopyAlwaysVisible />
         </section>
 
         <section id="label-mixins" className="space-y-4">
           <h2 className="text-2xl font-bold text-o9ds-light-primary dark:text-white">Label tokens</h2>
-          <DocTable columns={MIXIN_COLUMNS} rows={LABEL_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} />
+          <DocTable columns={MIXIN_COLUMNS} rows={LABEL_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} rowCopyAlwaysVisible />
         </section>
       </div>
     </PageWithToc>
