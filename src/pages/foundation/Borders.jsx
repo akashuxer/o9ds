@@ -1,174 +1,220 @@
-import { useState } from 'react'
-import { useTheme } from '../../context/ThemeContext'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
+import DocTable from '../../LayoutComponents/DocTable'
+import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
-import { BORDER_TOKENS_SCSS } from '../../tokens/borderTokens'
+import WhiteBgCard from '../../LayoutComponents/WhiteBgCard'
+import {
+  BORDER_RADIUS_TOKEN_ROWS,
+  BORDER_WIDTH_TOKEN_ROWS,
+} from '../../tokens/borderTokens'
+
+const OLD_BORDER_IMG = '/o9DocGraphics/FoundationGraphic/old-border.svg'
+const NEW_BORDER_IMG = '/o9DocGraphics/FoundationGraphic/new-border.svg'
 
 const BORDERS_SECTIONS = [
+  { id: 'sharp-corners', label: 'Sharp corners' },
   { id: 'policy', label: 'Policy' },
-  { id: 'border-radius-tokens', label: 'Border Radius Tokens' },
-  { id: 'border-width-tokens', label: 'Border Width Tokens' },
-  { id: 'border-tokens', label: 'Border Tokens' },
+  { id: 'border-radius-tokens', label: 'Border radius tokens' },
+  { id: 'applying-border-radius', label: 'Applying border-radius' },
+  { id: 'border-width-tokens', label: 'Border width tokens' },
+  { id: 'applying-border-width', label: 'Applying border-width' },
 ]
 
-function CopyIcon({ className }) {
+const bordersIcon = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+)
+
+const RADIUS_COLUMNS = [
+  { key: 'name', label: 'Name', mono: true, tone: 'code' },
+  { key: 'valueRem', label: 'Value (rem)', mono: true },
+  { key: 'valuePx', label: 'Value (px)', mono: true },
+  { key: 'preview', label: 'Preview' },
+  { key: 'usage', label: 'Usage' },
+]
+
+const WIDTH_COLUMNS = [
+  { key: 'name', label: 'Name', mono: true, tone: 'code' },
+  { key: 'valueRem', label: 'Value (rem)', mono: true },
+  { key: 'valuePx', label: 'Value (px)', mono: true },
+  { key: 'preview', label: 'Preview' },
+  { key: 'usage', label: 'Usage' },
+]
+
+function BorderRadiusPreview({ circle }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-    </svg>
+    <div
+      className={`h-12 w-12 border-2 border-neutral-400 bg-neutral-100 dark:border-neutral-500 dark:bg-neutral-800 ${
+        circle ? 'rounded-full' : 'rounded-2xl'
+      }`}
+      aria-hidden
+    />
   )
 }
 
-function CheckIcon({ className }) {
+function BorderWidthPreview({ px }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-    </svg>
+    <div
+      className="box-border h-10 w-10 border-solid border-neutral-900 dark:border-white"
+      style={{ borderWidth: px }}
+      aria-hidden
+    />
   )
 }
 
-const BORDER_RADIUS_TOKENS = [
-  { token: 'o9ds-radius-16', value: '1rem', px: '16px', copyFormat: 'border-radius: var(--o9ds-radius-16);' },
-  { token: 'o9ds-radius-circle', value: '62.438rem', px: '999px (circle)', copyFormat: 'border-radius: var(--o9ds-radius-circle);' },
-]
+const BORDER_RADIUS_TABLE_ROWS = BORDER_RADIUS_TOKEN_ROWS.map((row) => ({
+  ...row,
+  preview: <BorderRadiusPreview circle={row.name.includes('circle')} />,
+}))
 
-const BORDER_WIDTH_TOKENS = [
-  { token: 'o9ds-border-1', value: '0.063rem', px: '1px', usage: 'Default borders', copyFormat: 'border-width: var(--o9ds-border-1);' },
-  { token: 'o9ds-border-2', value: '0.125rem', px: '2px', usage: 'Emphasis', copyFormat: 'border-width: var(--o9ds-border-2);' },
-  { token: 'o9ds-border-3', value: '0.094rem', px: '1.5px', usage: 'Subtle', copyFormat: 'border-width: var(--o9ds-border-3);' },
-]
+const BORDER_WIDTH_TABLE_ROWS = BORDER_WIDTH_TOKEN_ROWS.map((row) => ({
+  ...row,
+  preview: <BorderWidthPreview px={row.valuePx} />,
+}))
 
-function BorderTokenRow({ token, value, px, usage, copyFormat, isLight, isWidth }) {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = (e) => {
-    e.stopPropagation()
-    navigator.clipboard.writeText(copyFormat).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    })
-  }
-
-  return (
-    <tr className="group border-b last:border-b-0" style={{ borderColor: isLight ? '#E5E5E5' : '#404040' }}>
-      <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#fff' }}>{token}</td>
-      <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#e5e5e5' }}>{value}</td>
-      <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#303030' : '#a3a3a3' }}>{px}</td>
-      {isWidth && (
-        <td className="py-2 px-3">
-          <div className="h-8 border" style={{ borderWidth: px, borderColor: isLight ? '#010101' : '#fff' }} />
-        </td>
-      )}
-      {usage != null && (
-        <td className="py-2 px-3 text-sm" style={{ color: isLight ? '#303030' : '#a3a3a3' }}>{usage}</td>
-      )}
-      <td className="py-2 px-3 w-12">
-        <button
-          onClick={handleCopy}
-          className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-          style={
-            copied
-              ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
-              : isLight ? { borderColor: '#E5E5E5', color: '#303030' } : { borderColor: '#404040', color: '#a3a3a3' }
-          }
-          title="Copy var()"
-          aria-label="Copy"
-        >
-          {copied ? <CheckIcon className="h-3.5 w-3.5" style={{ color: '#fff' }} /> : <CopyIcon className="h-3.5 w-3.5" />}
-        </button>
-      </td>
-    </tr>
-  )
-}
+const copyBorderRow = (row) => row.clipboard
 
 export default function Borders() {
-  const { theme } = useTheme()
-  const isLight = theme === 'light'
-
   return (
     <PageWithToc sections={BORDERS_SECTIONS}>
-    <div className="space-y-8">
-      <section>
-        <h1 className="group flex items-center gap-2 text-[30px] font-bold mb-4 text-o9ds-light-primary dark:text-white">
-          <span className="flex h-8 w-8 items-center justify-center bg-o9ds-light-surface dark:bg-neutral-700" data-o9ds-avatar data-o9ds-avatar-header>
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </span>
-          Borders & Radius
-        </h1>
-        <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl">
-          o9ds follows a <strong style={{ color: isLight ? '#010101' : '#fff' }}>0 radius policy</strong> — all UI elements use sharp corners with no border radius. Border radius and width tokens are available for exceptions.
-        </p>
-      </section>
+      <div className="space-y-12">
+        <PageHeader
+          title="Borders & radius"
+          description="Border width and radius tokens for o9ds. Product UI defaults to sharp (0) corners; tokens cover exceptions and legacy surfaces."
+          icon={bordersIcon}
+          descClassName="mt-4"
+        />
 
-      <section id="policy">
-        <h2 className="text-2xl font-bold mb-4 text-o9ds-light-primary dark:text-white">Policy</h2>
-        <div>
-          <p className="text-o9ds-light-secondary dark:text-neutral-300 mb-4" style={isLight ? { color: '#303030' } : undefined}>
-            Border radius is set to 0 across the design system. Buttons, inputs, cards, badges, and all components use sharp (90°) corners only.
+        <section id="sharp-corners" className="scroll-mt-24 space-y-6">
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
+            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+              ✦
+            </span>
+            Sharp corners
+          </h2>
+
+          <WhiteBgCard className="max-w-3xl" unified>
+            <p className="m-0 text-lg font-semibold text-o9ds-light-primary dark:text-white">
+              o9 Branding is Moving to Sharp Borders Instead of Rounded Corners
+            </p>
+            <p className="mt-4 mb-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+              o9 is modernizing its design language to align with a more sleek, professional, and data-driven aesthetic.
+            </p>
+            <p className="mt-4 mb-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+              Sharp corners convey a structured and precise look, reinforcing the professional and analytical nature of o9&apos;s UI platform.
+            </p>
+            <p className="mt-4 mb-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+              From o9con icons to UI components, we are shifting to a 0-radius approach, ensuring a modern, cohesive, and forward-thinking design
+              system.
+            </p>
+          </WhiteBgCard>
+
+          <div
+            data-o9ds-doc-figure
+            className="rounded-xl border border-[#e5e5e5] bg-[#fafafa] px-6 py-6 [background-image:radial-gradient(circle,rgba(148,163,184,0.35)_1px,transparent_1px)] [background-size:14px_14px] dark:!border-[#e5e5e5] dark:!bg-[#fafafa]"
+          >
+            <p className="mb-4 text-sm font-medium text-[#303030]">Border radius: before and after</p>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+              <figure className="m-0 flex flex-col gap-2">
+                <img
+                  src={OLD_BORDER_IMG}
+                  alt="Previous treatment with rounded corners"
+                  className="w-full object-contain"
+                />
+                <figcaption className="text-center text-sm font-medium text-[#303030]">Before (rounded)</figcaption>
+              </figure>
+              <figure className="m-0 flex flex-col gap-2">
+                <img
+                  src={NEW_BORDER_IMG}
+                  alt="Current treatment with sharp corners"
+                  className="w-full object-contain"
+                />
+                <figcaption className="text-center text-sm font-medium text-[#303030]">After (sharp)</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="policy" className="scroll-mt-24 space-y-4">
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
+            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+              ✦
+            </span>
+            Policy
+          </h2>
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            Border radius defaults to <strong className="font-semibold text-o9ds-light-primary dark:text-neutral-200">0</strong> across the design
+            system. Buttons, inputs, cards, badges, and components use sharp (90°) corners unless a tokenized exception applies.
           </p>
           <CodeBlock
-            code={`/* All elements */
-border-radius: 0;
-
-/* Tailwind: borderRadius plugin disabled */`}
+            label="SCSS"
+            language="scss"
+            code={`.surface {
+  border-radius: 0;
+}`}
           />
-        </div>
-      </section>
+        </section>
 
-      <section id="border-radius-tokens">
-        <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Border Radius Tokens</h2>
-        <div className="border overflow-hidden" style={{ borderColor: isLight ? '#E5E5E5' : '#404040', backgroundColor: isLight ? '#FFFFFF' : undefined }}>
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Token Name</th>
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Value (rem)</th>
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Value (px)</th>
-                <th className="py-2 px-3 w-12" aria-label="Copy" />
-              </tr>
-            </thead>
-            <tbody>
-              {BORDER_RADIUS_TOKENS.map((row) => (
-                <BorderTokenRow key={row.token} {...row} isLight={isLight} isWidth={false} usage={null} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+        <section id="border-radius-tokens" className="scroll-mt-24 space-y-6">
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
+            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+              ✦
+            </span>
+            Border radius tokens
+          </h2>
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            Prefer <code className="font-mono text-sm px-1" data-o9ds-inline-code>0</code> for new UI. The token below makes a full circle—use it for small indicators (for example an unsaved orange dot), not for large rounded cards.
+          </p>
+          <DocTable
+            columns={RADIUS_COLUMNS}
+            rows={BORDER_RADIUS_TABLE_ROWS}
+            rowCopy={copyBorderRow}
+            rowCopyAlwaysVisible
+          />
 
-      <section id="border-width-tokens">
-        <h2 className="text-2xl font-bold mb-4 text-o9ds-light-primary dark:text-white">Border Width Tokens</h2>
-        <div className="border overflow-hidden" style={{ borderColor: isLight ? '#E5E5E5' : '#404040', backgroundColor: isLight ? '#FFFFFF' : undefined }}>
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Token Name</th>
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Value (rem)</th>
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Value (px)</th>
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Preview</th>
-                <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Usage</th>
-                <th className="py-2 px-3 w-12" aria-label="Copy" />
-              </tr>
-            </thead>
-            <tbody>
-              {BORDER_WIDTH_TOKENS.map((row) => (
-                <BorderTokenRow key={row.token} {...row} isLight={isLight} isWidth />
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+          <div id="applying-border-radius" className="scroll-mt-8 space-y-4 max-w-3xl">
+            <h3 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying border-radius</h3>
+            <CodeBlock
+              label="SCSS"
+              language="scss"
+              code={`.unsaved-indicator {
+  border-radius: $o9ds-radius-circle;
+}`}
+            />
+          </div>
+        </section>
 
-      <section id="border-tokens">
-        <h2 className="text-2xl font-bold mb-6 text-o9ds-light-primary dark:text-white">Border Tokens</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
-          Copy the SCSS variables below to use border radius and width tokens in your project.
-        </p>
-        <CodeBlock code={BORDER_TOKENS_SCSS} label="SCSS variables" />
-      </section>
-    </div>
+        <section id="border-width-tokens" className="scroll-mt-24 space-y-6">
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
+            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+              ✦
+            </span>
+            Border width tokens
+          </h2>
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            Standard hairline and emphasis widths for outlines, dividers, and focus rings.
+          </p>
+          <DocTable
+            columns={WIDTH_COLUMNS}
+            rows={BORDER_WIDTH_TABLE_ROWS}
+            rowCopy={copyBorderRow}
+            rowCopyAlwaysVisible
+          />
+        </section>
+
+        <section id="applying-border-width" className="scroll-mt-24 space-y-4 max-w-3xl">
+          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying border-width</h2>
+          <CodeBlock
+            label="SCSS"
+            language="scss"
+            code={`.input-outline {
+  border-width: $o9ds-border-1;
+  border-style: solid;
+}`}
+          />
+        </section>
+      </div>
     </PageWithToc>
   )
 }
