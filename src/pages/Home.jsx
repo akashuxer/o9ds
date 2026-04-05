@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BackgroundRippleEffect } from '@/components/ui/BackgroundRippleEffect'
 import { useTheme } from '../context/ThemeContext'
@@ -240,9 +240,66 @@ function RotatingFlipWord() {
   )
 }
 
-function TabletHeroFrame({ src, alt, className = '' }) {
+/** Hero illustration paths — auto-advancing carousel (see TabletHeroFrame). */
+const HERO_SLIDES = [
+  { src: '/hero-1.svg', alt: 'o9 Design System — hero illustration 1 of 3' },
+  { src: '/hero-2.svg', alt: 'o9 Design System — hero illustration 2 of 3' },
+  { src: '/hero-3.svg', alt: 'o9 Design System — hero illustration 3 of 3' },
+]
+
+const HERO_CAROUSEL_INTERVAL_MS = 5200
+
+function TabletHeroFrame({ slides, className = '' }) {
   const frameRef = useRef(null)
+  const indexRef = useRef(0)
   const [ty, setTy] = useState(0)
+  const [index, setIndex] = useState(0)
+  const [reduceMotion, setReduceMotion] = useState(false)
+  /** When false, X position jumps without CSS transition (used after clone slide to snap back to real slide 1). */
+  const [slideTransitionOn, setSlideTransitionOn] = useState(true)
+
+  const loopSlides = useMemo(() => {
+    if (slides.length < 2) return slides
+    return [...slides, slides[0]]
+  }, [slides])
+
+  const slideCount = loopSlides.length
+  const lastIndex = slideCount - 1
+
+  useEffect(() => {
+    indexRef.current = index
+  }, [index])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReduceMotion(mq.matches)
+    const fn = () => setReduceMotion(mq.matches)
+    mq.addEventListener('change', fn)
+    return () => mq.removeEventListener('change', fn)
+  }, [])
+
+  useEffect(() => {
+    if (reduceMotion || slides.length < 2) return
+    const id = window.setInterval(() => {
+      setIndex((i) => {
+        if (i === slides.length - 1) return lastIndex
+        return i + 1
+      })
+    }, HERO_CAROUSEL_INTERVAL_MS)
+    return () => window.clearInterval(id)
+  }, [reduceMotion, slides.length, lastIndex])
+
+  const handleSlideTransitionEnd = (e) => {
+    if (e.propertyName !== 'transform') return
+    if (indexRef.current !== lastIndex) return
+    setSlideTransitionOn(false)
+    setIndex(0)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setSlideTransitionOn(true)
+      })
+    })
+  }
 
   useEffect(() => {
     const onScroll = () => {
@@ -259,22 +316,86 @@ function TabletHeroFrame({ src, alt, className = '' }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const pct = slideCount ? (100 / slideCount) * index : 0
+
+  const transitionClass =
+    reduceMotion || !slideTransitionOn
+      ? ''
+      : 'motion-safe:transition-transform motion-safe:duration-[680ms] motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'
+
+  if (reduceMotion || slides.length < 2) {
+    return (
+      <div className={`relative z-[5] w-full overflow-visible ${className}`}>
+        <div ref={frameRef} className="relative mx-auto w-full max-w-none overflow-visible">
+          <div className="relative block w-full max-w-full">
+            <div className="relative w-full overflow-visible bg-transparent p-1 leading-[0] sm:p-1.5">
+              <div
+                className="relative motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-reduce:transform-none"
+                style={{ transform: `translate3d(0, ${ty}px, 0)` }}
+              >
+                <div
+                  role="region"
+                  aria-roledescription="carousel"
+                  aria-label="Hero illustrations"
+                  className="relative w-full overflow-hidden"
+                >
+                  <img
+                    src={slides[0].src}
+                    alt={slides[0].alt}
+                    className="block h-auto max-h-[min(85vh,880px)] w-full max-w-full align-top"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={`relative z-[5] w-full overflow-visible ${className}`}>
       <div ref={frameRef} className="relative mx-auto w-full max-w-none overflow-visible">
         <div className="relative block w-full max-w-full">
           <div className="relative w-full overflow-visible bg-transparent p-1 leading-[0] sm:p-1.5">
-            <div className="origin-center motion-safe:-rotate-[2.25deg] motion-safe:skew-x-[-4deg] motion-reduce:transform-none">
+            <div
+              className="relative motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-reduce:transform-none"
+              style={{ transform: `translate3d(0, ${ty}px, 0)` }}
+            >
               <div
-                className="relative motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-reduce:transform-none"
-                style={{ transform: `translate3d(0, ${ty}px, 0)` }}
+                role="region"
+                aria-roledescription="carousel"
+                aria-label="Hero illustrations"
+                aria-live="polite"
+                className="relative w-full overflow-hidden"
               >
-                <img
-                  src={src}
-                  alt={alt}
-                  className="block h-auto max-h-[min(85vh,880px)] w-full max-w-full align-top"
-                  loading="lazy"
-                />
+                <div
+                  className={`flex ${transitionClass}`}
+                  style={{
+                    width: `${slideCount * 100}%`,
+                    transform: `translateX(-${pct}%)`,
+                  }}
+                  onTransitionEnd={handleSlideTransitionEnd}
+                >
+                  {loopSlides.map((slide, i) => (
+                    <div
+                      key={i === lastIndex ? `${slide.src}-loop-clone` : slide.src}
+                      className="box-border shrink-0"
+                      style={{ width: `${100 / slideCount}%` }}
+                      aria-hidden={i !== index}
+                    >
+                      <img
+                        src={slide.src}
+                        alt={slide.alt}
+                        className="block h-auto max-h-[min(85vh,880px)] w-full max-w-full align-top"
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -356,11 +477,7 @@ export default function Home() {
             </div>
 
             <div className="relative flex min-h-0 min-w-0 justify-end lg:justify-end lg:pl-0">
-              <TabletHeroFrame
-                className="mt-2 w-full max-w-full lg:mt-0"
-                src="/o9DocGraphics/home-hero-dashboard.svg"
-                alt="o9 Design System — Enterprise dashboard with workspaces, filters, and data visualization"
-              />
+              <TabletHeroFrame className="mt-2 w-full max-w-full lg:mt-0" slides={HERO_SLIDES} />
             </div>
           </div>
         </section>
