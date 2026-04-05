@@ -189,8 +189,55 @@ export const COMPONENTS_NAV_TREE = [
   },
 ]
 
-/** Routes implemented as real doc pages (not Placeholder) */
-export const COMPONENT_DOC_ROUTES = new Set(['/components/button', '/components/cards'])
+/**
+ * Routes implemented as real doc pages (not placeholder stubs).
+ * This drives the green dot in ComponentTreeNav. Keep in sync with
+ * PATHS_WITH_CONTENT in pathsWithContent.js.
+ */
+export const COMPONENT_DOC_ROUTES = new Set([
+  // Buttons & Actions
+  '/components/button',
+  '/components/icon-button',
+  '/components/button-group',
+  '/components/dropdown-button',
+  '/components/dropdown-icon-button',
+  '/components/fab-button',
+
+  // Navigation
+  '/components/link',
+  '/components/button-link',
+  '/components/icon-button-link',
+  '/components/tabstrip',
+  '/components/breadcrumb',
+
+  // Inputs — Text
+  '/components/textbox',
+  '/components/textarea',
+  '/components/number-input',
+
+  // Inputs — Selection Controls
+  '/components/checkbox',
+  '/components/checkbox-group',
+  '/components/radio',
+  '/components/radio-group',
+  '/components/switch',
+
+  // Inputs — Selection Inputs
+  '/components/select-dropdown',
+  '/components/combobox',
+
+  // Feedback
+  '/components/toast',
+  '/components/badge',
+
+  // Overlays
+  '/components/action-menu',
+  '/components/popover',
+  '/components/tooltip',
+
+  // Data Display
+  '/components/cards',
+])
 
 /**
  * @param {NavNode[]} nodes
