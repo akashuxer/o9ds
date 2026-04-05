@@ -10,7 +10,7 @@ Design system documentation for **o9 Design Lab** — built from the o9 brand id
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/akashuxer/o9ds.git
+   git clone https://github.com/akashUxer-12/o9ds.git
    cd o9ds
    ```
 
@@ -52,6 +52,7 @@ o9ds Website/
 │   └── generate-component-stubs.mjs  # Regenerate stub pages + allStubComponents.js
 │
 ├── public/                 # Static assets (served as-is)
+│   ├── placeholder.svg       # Effects blur preview (mask overlay demo)
 │   ├── o9DocGraphics/      # Documentation graphics (architecture PNG, home hero SVG, component anatomy SVGs)
 │   ├── o9illus/
 │   │   ├── light/          # Light-mode illustration SVGs
@@ -88,6 +89,9 @@ o9ds Website/
 │   │   ├── globalColorTokens.js
 │   │   ├── semanticColorTokens.js
 │   │   ├── spacingTokens.js
+│   │   ├── effectsTokens.js        # Shadow, blur, opacity (Effects page tables)
+│   │   ├── typographyTokens.js
+│   │   ├── o9ds.typography.scss    # Typography reference SCSS
 │   │   ├── borderTokens.js
 │   │   ├── iconTokens.js
 │   │   ├── illustrationTokens.js
@@ -96,8 +100,8 @@ o9ds Website/
 │   ├── pages/
 │   │   ├── Home.jsx, Overview.jsx, Components.jsx, Developers.jsx, Placeholder.jsx
 │   │   ├── FoundationsOverview.jsx, PatternsOverview.jsx, AccessibilityOverview.jsx, ContentOverview.jsx
-│   │   ├── foundation/                 # Foundations (tokens, type, spacing, assets)
-│   │   │   ├── Colors.jsx, Typography.jsx, Spacing.jsx, Borders.jsx
+│   │   ├── foundation/                 # Foundations (tokens, type, spacing, effects, assets)
+│   │   │   ├── Colors.jsx, Typography.jsx, Spacing.jsx, Effects.jsx, Borders.jsx
 │   │   │   ├── Icons.jsx, Illustrations.jsx, Principles.jsx
 │   │   └── components/                 # Component docs — `/components/:slug`
 │   │       ├── ComponentDocPage.jsx    # Routes slug → page module
@@ -134,7 +138,8 @@ o9ds Website/
 | `src/tokens/brandColors.js` | Brand palettes, neutrals |
 | `src/tokens/globalColorTokens.js` | Global colors (neutral, theme, dark, feedback, utility) |
 | `src/tokens/semanticColorTokens.js` | Semantic mappings (surface, border, text, icon) |
-| `src/tokens/spacingTokens.js` | Spacing scale (`o9ds-space-*`) |
+| `src/tokens/spacingTokens.js` | Spacing scale (`$o9ds-space-*`) |
+| `src/tokens/effectsTokens.js` | Shadow, blur, opacity tokens (Effects page) |
 | `src/tokens/borderTokens.js` | Border radius and width |
 | `src/tokens/iconTokens.js` | Icon size tokens (o9con) |
 | `src/tokens/illustrationTokens.js` | Illustration size tokens (o9Illus) |
@@ -162,9 +167,10 @@ o9ds Website/
 | `/foundations` | Foundations overview (grid of foundation topics) |
 | `/colors` | Colors (brand, global, semantic tokens) |
 | `/typography` | Typography |
-| `/spacing` | Spacing scale and tokens |
+| `/spacing` | Spacing scale / tokens (table + SCSS examples for padding, margin, gap) |
 | `/borders` | Border radius and width tokens |
-| `/effects` | Effects (shadow, blur, and opacity tokens) |
+| `/effects` | Effects — shadow, blur, and opacity tokens (previews + SCSS) |
+| `/elevation` | Redirects to `/effects` (legacy path) |
 | `/icons` | Assets → Iconography (o9con gallery) |
 | `/illustrations` | Assets → Illustrations (o9Illus gallery) |
 | `/components` | Components overview (search, Ready status, category) |
@@ -183,7 +189,8 @@ o9ds Website/
 
 ## Clipboard / Copy Behavior
 
-- **Spacing:** Copy button per row → `var(--o9ds-space-1)` etc.
+- **Spacing:** Copy button per row → SCSS token name (e.g. `$o9ds-space-16`).
+- **Effects:** Copy button per row → full SCSS snippet where defined (e.g. `box-shadow: $o9ds-shadow-down;`, mask overlay `background` + `backdrop-filter` for blur, `opacity: $o9ds-opacity-80;`).
 - **Borders:** Copy button per row →
   - Radius: `border-radius: var(--o9ds-radius-16);`
   - Width: `border-width: var(--o9ds-border-1);`

@@ -265,7 +265,7 @@ function OpacityPreviewGallery() {
                 style={{ opacity: row.decimal }}
               />
             </div>
-            <TokenPill noCopy>{row.name}</TokenPill>
+            <TokenPill noCopy>{row.pct}</TokenPill>
           </div>
         ))}
       </div>
