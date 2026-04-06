@@ -121,6 +121,20 @@ html.dark {
   background-color: #000 !important;
   /* Same global opacity-1 as light — $o9ds-color-s-overlay-static */
   --o9ds-color-s-overlay-static: #01010199;
+  /* Semantic text tokens (o9 theme) — matches semanticColorTokens.js + globalColorTokens.js */
+  --o9ds-color-t-primary: #e5e5e5;
+  --o9ds-color-t-secondary: #cccccc;
+  --o9ds-color-t-tertiary: #b2b2b2;
+  --o9ds-color-t-placeholder: #b2b2b2;
+  --o9ds-color-t-negative: #f07a62;
+  --o9ds-color-t-positive: #2fe09d;
+  --o9ds-color-t-warning: #ffef5c;
+  --o9ds-color-t-disabled: #666666;
+  --o9ds-color-t-readonly: #cccccc;
+  --o9ds-color-t-info-light: #b8c7ff;
+  --o9ds-color-t-info-dark: #8aa3ff;
+  --o9ds-color-t-inverse: #010101;
+  --o9ds-doc-inverse-text-surface: #f2f2f2;
 }
 html[data-theme="dark"] body,
 html.dark body {
@@ -150,6 +164,21 @@ html:not(.dark) {
   --o9ds-border: #E5E5E5;
   /* Semantic: maps to $o9ds-global-opacity-1 — modal/overlay scrim */
   --o9ds-color-s-overlay-static: #01010199;
+  /* Semantic text tokens (o9 theme) — matches semanticColorTokens.js + globalColorTokens.js */
+  --o9ds-color-t-primary: #010101;
+  --o9ds-color-t-secondary: #303030;
+  --o9ds-color-t-tertiary: #4c4c4c;
+  --o9ds-color-t-placeholder: #666666;
+  --o9ds-color-t-negative: #bc1227;
+  --o9ds-color-t-positive: #0c7951;
+  --o9ds-color-t-warning: #926200;
+  --o9ds-color-t-disabled: #b2b2b2;
+  --o9ds-color-t-readonly: #303030;
+  --o9ds-color-t-info-light: #0037ff;
+  --o9ds-color-t-info-dark: #002ed2;
+  --o9ds-color-t-inverse: #ffffff;
+  /* Typography doc: inverse token swatch surface */
+  --o9ds-doc-inverse-text-surface: #010101;
 }
 
 /* Light mode: card/section borders - default #E5E5E5, no black in default state */
@@ -426,6 +455,14 @@ body {
 main .o9ds-swatch,
 main [data-o9ds-swatch] {
   color: var(--o9ds-swatch-color) !important;
+}
+
+/* Typography type-style variant previews: --o9ds-type-variant-color references --o9ds-color-t-* on html */
+html[data-theme="light"] main td [data-o9ds-type-variant-preview],
+html:not(.dark) main td [data-o9ds-type-variant-preview],
+html[data-theme="dark"] main td [data-o9ds-type-variant-preview],
+html.dark main td [data-o9ds-type-variant-preview] {
+  color: var(--o9ds-type-variant-color) !important;
 }
 
 /* o9con icon sizes - use with .o9con base */

@@ -5,7 +5,10 @@ import DocTable from '../../LayoutComponents/DocTable'
 import DocTabs from '../../LayoutComponents/DocTabs'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
-import { FONT_SIZE_TOKENS, FONT_WEIGHT_ROWS } from '../../tokens/typographyTokens'
+import { useTheme } from '../../context/ThemeContext'
+import { GLOBAL_TOKEN_HEX } from '../../tokens/globalColorTokens'
+import { resolveSemanticToHex, SEMANTIC_TEXT } from '../../tokens/semanticColorTokens'
+import { FONT_SIZE_TOKENS, FONT_WEIGHT_ROWS, TYPE_STYLE_VARIANT_DOC } from '../../tokens/typographyTokens'
 
 const TYPEFACE_GRAPHIC_SRC = '/o9DocGraphics/FoundationGraphic/typeface.svg'
 const TYPO1_SRC = '/o9DocGraphics/FoundationGraphic/typo1.svg'
@@ -28,6 +31,58 @@ const VARIANT_CATEGORIZATION_COLUMNS = [
   { key: 'name', label: 'Name' },
   { key: 'meaning', label: 'Meaning' },
 ]
+
+const TYPE_STYLE_VARIANT_COLUMNS = [
+  { key: 'preview', label: 'Preview' },
+  { key: 'token', label: 'Token', mono: true, tone: 'code' },
+  { key: 'useFor', label: 'Use for' },
+]
+
+/**
+ * Resolved preview color via `resolveSemanticToHex` (same as Colors → Semantic → Text) so
+ * light/dark match `GLOBAL_TOKEN_HEX` mappings; `--o9ds-type-variant-color` is set to that hex
+ * so global `main td` !important rules still lose to index.css `[data-o9ds-type-variant-preview]`.
+ */
+function TypeStyleVariantPreview({ token, variantLabel, underline, inverse }) {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+  const row = SEMANTIC_TEXT.find((r) => r.token === token)
+  if (!row) return null
+  const hex = resolveSemanticToHex(row, 'o9theme', isDark)
+  const baseStyle = {
+    '--o9ds-type-variant-color': hex,
+    fontWeight: 600,
+    fontFamily: 'inherit',
+  }
+  if (inverse) {
+    const bg = isDark ? GLOBAL_TOKEN_HEX['o9ds-global-gray-01'] : GLOBAL_TOKEN_HEX['o9ds-global-black']
+    return (
+      <span
+        data-o9ds-type-variant-preview
+        className="inline-block px-2 py-1 font-sans text-sm"
+        style={{
+          ...baseStyle,
+          backgroundColor: bg,
+        }}
+      >
+        {variantLabel}
+      </span>
+    )
+  }
+  return (
+    <span
+      data-o9ds-type-variant-preview
+      className="font-sans text-sm"
+      style={{
+        ...baseStyle,
+        textDecoration: underline ? 'underline' : undefined,
+        textUnderlineOffset: underline ? '2px' : undefined,
+      }}
+    >
+      {variantLabel}
+    </span>
+  )
+}
 
 /** Structural template ↔ example token with segment colors (matches design reference). */
 function TokenNamingPatternCard() {
@@ -185,6 +240,19 @@ const FONT_WEIGHT_ROWS_WITH_PREVIEW = FONT_WEIGHT_ROWS.map((r) => ({
   ),
 }))
 
+const TYPE_STYLE_VARIANT_ROWS = TYPE_STYLE_VARIANT_DOC.map((doc) => ({
+  preview: (
+    <TypeStyleVariantPreview
+      token={doc.token}
+      variantLabel={doc.variantLabel}
+      underline={doc.underline}
+      inverse={doc.inverse}
+    />
+  ),
+  token: `$${doc.token}`,
+  useFor: doc.useFor,
+}))
+
 export default function Typography() {
   const [activeTab, setActiveTab] = useState('Overview')
 
@@ -199,7 +267,7 @@ export default function Typography() {
         { id: 'naming-anatomy', label: 'Anatomy' },
         { id: 'variant-categorization', label: 'Variant categorization' },
         { id: 'property-suffixes', label: 'Property suffixes' },
-        { id: 'typeface-reference', label: 'Typeface reference' },
+        { id: 'type-style-variants', label: 'Type style variants' },
       ]
     }
     return [
@@ -352,16 +420,36 @@ export default function Typography() {
                 <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Property suffixes</h3>
                 <DocTable columns={NAMING_COLUMNS} rows={NAMING_PROPERTY_ROWS} />
               </div>
-            </section>
 
-            <section id="typeface-reference" className="space-y-4 max-w-3xl">
-              <div className="max-w-3xl">
+              <div className="max-w-3xl pt-4">
                 <ComponentOverviewCard
                   illustrationSrc={TYPEFACE_GRAPHIC_SRC}
                   hideFooter
                   imageAlt="o9 Sans typeface and scale reference"
                 />
               </div>
+            </section>
+
+            <section id="type-style-variants" className="space-y-6 max-w-4xl scroll-mt-24">
+              <h2 className="text-2xl font-bold text-o9ds-light-primary dark:text-white">
+                <span className="text-o9ds-light-secondary dark:text-neutral-500 mr-1.5" aria-hidden>
+                  ✦
+                </span>
+                Type style variants
+              </h2>
+              <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed max-w-3xl">
+                Type styles let you tune o9ds typography beyond the default scale. Variants build on top of your hierarchies so readers can
+                scan meaning—state, emphasis, and affordance—without relying on size alone.
+              </p>
+              <p className="text-lg text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed max-w-3xl">
+                Pair each text style with the semantic text tokens below so color stays aligned with the rest of the system.
+              </p>
+              <p className="rounded-md border border-neutral-200/90 bg-neutral-50/90 px-4 py-3 text-sm leading-relaxed text-o9ds-light-secondary dark:border-neutral-700 dark:bg-neutral-900/40 dark:text-neutral-300 max-w-3xl">
+                <span className="font-semibold text-o9ds-light-primary dark:text-white">Note:</span> Color is not the only way to convey
+                information. For critical messages, combine color with shape, pattern, or icons so the meaning is not lost for users who do
+                not perceive color alone.
+              </p>
+              <DocTable columns={TYPE_STYLE_VARIANT_COLUMNS} rows={TYPE_STYLE_VARIANT_ROWS} />
             </section>
           </div>
         )}

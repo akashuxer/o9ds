@@ -3,17 +3,17 @@
  * Token naming: o9ds-global-{name}-{variant}
  */
 
-// Neutral Colors — Base grayscale from black to white
+// Neutral Colors — Base grayscale from black to white (o9ds global neutral scale)
 export const NEUTRAL_TOKENS = [
   { token: 'o9ds-global-black', hex: '#010101', branding: 'Off Black Accent' },
-  { token: 'o9ds-global-gray-11', hex: '#121212', branding: 'Off Black L1' },
-  { token: 'o9ds-global-gray-10', hex: '#202020', branding: 'Off Black L3' },
-  { token: 'o9ds-global-gray-09', hex: '#303030', branding: 'Off Black L4' },
-  { token: 'o9ds-global-gray-08', hex: '#4C4C4C', branding: 'Off Black L5' },
-  { token: 'o9ds-global-gray-07', hex: '#666666', branding: 'Off Black L6' },
-  { token: 'o9ds-global-gray-06', hex: '#808080', branding: 'Off White L5' },
-  { token: 'o9ds-global-gray-05', hex: '#B2B2B2', branding: 'Off White L4' },
-  { token: 'o9ds-global-gray-04', hex: '#CCCCCC', branding: 'Off White L3' },
+  { token: 'o9ds-global-gray-11', hex: '#949494', branding: 'Off Black L1' },
+  { token: 'o9ds-global-gray-10', hex: '#121212', branding: 'Off Black L3' },
+  { token: 'o9ds-global-gray-09', hex: '#202020', branding: 'Off Black L4' },
+  { token: 'o9ds-global-gray-08', hex: '#303030', branding: 'Off Black L5' },
+  { token: 'o9ds-global-gray-07', hex: '#4C4C4C', branding: 'Off Black L6' },
+  { token: 'o9ds-global-gray-06', hex: '#666666', branding: 'Off White L5' },
+  { token: 'o9ds-global-gray-05', hex: '#808080', branding: 'Off White L4' },
+  { token: 'o9ds-global-gray-04', hex: '#B2B2B2', branding: 'Off White L3' },
   { token: 'o9ds-global-gray-03', hex: '#CCCCCC', branding: 'Off White L3' },
   { token: 'o9ds-global-gray-02', hex: '#E5E5E5', branding: 'Off White L2' },
   { token: 'o9ds-global-gray-01', hex: '#F2F2F2', branding: 'Off White L1' },
