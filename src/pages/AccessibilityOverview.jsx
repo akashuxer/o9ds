@@ -19,6 +19,7 @@ export default function AccessibilityOverview() {
       items={ACCESSIBILITY_CATALOG}
       getIllustrationSrc={getSectionOverviewIllustrationSrc}
       isReady={hasReadyDocumentation}
+      documentationCatalogId="accessibility"
     />
   )
 }

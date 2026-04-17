@@ -18,6 +18,7 @@ export default function PatternsOverview() {
       items={PATTERNS_CATALOG}
       getIllustrationSrc={getSectionOverviewIllustrationSrc}
       isReady={hasReadyDocumentation}
+      documentationCatalogId="patterns"
     />
   )
 }

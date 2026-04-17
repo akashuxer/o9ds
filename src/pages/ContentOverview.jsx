@@ -18,6 +18,7 @@ export default function ContentOverview() {
       items={CONTENT_CATALOG}
       getIllustrationSrc={getSectionOverviewIllustrationSrc}
       isReady={hasReadyDocumentation}
+      documentationCatalogId="contentWriting"
     />
   )
 }

@@ -4,8 +4,14 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import GrayBgCard from '../../LayoutComponents/GrayBgCard'
 import { getComponentPageDescription } from '../../data/componentPageMeta'
+import {
+  DOCUMENTATION_STATUS_TITLE,
+  getDocumentationStatusDescription,
+} from '../../data/documentationStatus'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
+
+const COMPONENT_STATUS_DESC = getDocumentationStatusDescription('component')
 
 export function slugToComponentTitle(slug) {
   if (!slug) return 'Component'
@@ -21,6 +27,14 @@ const docIcon = (
   </svg>
 )
 
+function DocumentationStatusCard({ id }) {
+  return (
+    <section id={id} className="scroll-mt-24">
+      <GrayBgCard title={DOCUMENTATION_STATUS_TITLE} desc={COMPONENT_STATUS_DESC} />
+    </section>
+  )
+}
+
 /**
  * Standard four-tab shell for components that do not have a dedicated doc file yet.
  * @param {{ slug?: string, description?: string }} props
@@ -34,17 +48,26 @@ export default function GenericComponentDoc({ slug, description: descriptionProp
     if (activeTab === 'Overview') {
       return [
         { id: 'stub-purpose', label: 'Purpose' },
-        { id: 'stub-status', label: 'Status' },
+        { id: 'stub-status-overview', label: 'Documentation status' },
       ]
     }
     if (activeTab === 'Usage') {
-      return [{ id: 'stub-usage', label: 'Guidance' }]
+      return [
+        { id: 'stub-usage', label: 'Guidance' },
+        { id: 'stub-status-usage', label: 'Documentation status' },
+      ]
     }
     if (activeTab === 'Code/APIs') {
-      return [{ id: 'stub-code', label: 'Implementation' }]
+      return [
+        { id: 'stub-code', label: 'Implementation' },
+        { id: 'stub-status-code', label: 'Documentation status' },
+      ]
     }
     if (activeTab === 'Accessibility') {
-      return [{ id: 'stub-a11y', label: 'Basics' }]
+      return [
+        { id: 'stub-a11y', label: 'Basics' },
+        { id: 'stub-status-a11y', label: 'Documentation status' },
+      ]
     }
     return []
   }, [activeTab])
@@ -65,41 +88,45 @@ export default function GenericComponentDoc({ slug, description: descriptionProp
                 iteration.
               </p>
             </section>
-            <section id="stub-status" className="scroll-mt-24">
-              <GrayBgCard
-                title="Documentation status"
-                desc="This route is wired and listed in the component catalog. Replace this stub with a dedicated page when the API and examples are ready."
-              />
-            </section>
+            <DocumentationStatusCard id="stub-status-overview" />
           </div>
         )}
 
         {activeTab === 'Usage' && (
-          <section id="stub-usage" className="scroll-mt-24 space-y-3 pt-2">
-            <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Usage</h2>
-            <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-              Usage guidance—when to choose this component, layout, and pairing with other o9DS patterns—will be documented here.
-            </p>
-          </section>
+          <div className="space-y-10 pt-2">
+            <section id="stub-usage" className="scroll-mt-24 space-y-3">
+              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Usage</h2>
+              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                Usage guidance—when to choose this component, layout, and pairing with other o9DS patterns—will be documented here.
+              </p>
+            </section>
+            <DocumentationStatusCard id="stub-status-usage" />
+          </div>
         )}
 
         {activeTab === 'Code/APIs' && (
-          <section id="stub-code" className="scroll-mt-24 space-y-3 pt-2">
-            <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Code / APIs</h2>
-            <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-              Props, package imports, tokens, and implementation examples will be added here. Refer to sibling components with full docs (e.g.
-              Button, Cards) for the expected structure.
-            </p>
-          </section>
+          <div className="space-y-10 pt-2">
+            <section id="stub-code" className="scroll-mt-24 space-y-3">
+              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Code / APIs</h2>
+              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                Props, package imports, tokens, and implementation examples will be added here. Refer to sibling components with full docs (e.g.
+                Button, Cards) for the expected structure.
+              </p>
+            </section>
+            <DocumentationStatusCard id="stub-status-code" />
+          </div>
         )}
 
         {activeTab === 'Accessibility' && (
-          <section id="stub-a11y" className="scroll-mt-24 space-y-3 pt-2">
-            <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Accessibility</h2>
-            <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-              Keyboard, screen reader, and ARIA guidance will be documented here. Prefer native HTML semantics where possible.
-            </p>
-          </section>
+          <div className="space-y-10 pt-2">
+            <section id="stub-a11y" className="scroll-mt-24 space-y-3">
+              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Accessibility</h2>
+              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+                Keyboard, screen reader, and ARIA guidance will be documented here. Prefer native HTML semantics where possible.
+              </p>
+            </section>
+            <DocumentationStatusCard id="stub-status-a11y" />
+          </div>
         )}
       </div>
     </PageWithToc>

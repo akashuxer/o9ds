@@ -18,6 +18,7 @@ export default function FoundationsOverview() {
       items={FOUNDATIONS_CATALOG}
       getIllustrationSrc={getSectionOverviewIllustrationSrc}
       isReady={hasReadyDocumentation}
+      documentationCatalogId="foundations"
     />
   )
 }

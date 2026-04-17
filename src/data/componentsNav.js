@@ -1,246 +1,183 @@
 /**
  * Component catalog: sidebar + Components overview page.
  * Leaf nodes use /components/:slug (kebab-case).
+ * Top-level groups only (no nested subcategories). Categories A–Z; items A–Z within each.
  */
 
 /** @typedef {{ path: string, label: string }} NavLeaf */
-/** @typedef {{ id: string, label: string, children: NavNode[] }} NavGroup */
-/** @typedef {NavLeaf | NavGroup} NavNode */
+/** @typedef {{ id: string, label: string, children: NavLeaf[] }} NavGroup */
 
-/** @type {NavGroup[]} */
+/** @param {NavLeaf[]} leaves */
+function sortLeaves(leaves) {
+  return [...leaves].sort((a, b) =>
+    a.label.localeCompare(b.label, 'en', { sensitivity: 'base', numeric: true })
+  )
+}
+
+/** @type {NavGroup[]} — category order A–Z by label */
 export const COMPONENTS_NAV_TREE = [
   {
     id: 'buttons-actions',
-    label: 'Buttons & Actions',
-    children: [
+    label: 'Actions',
+    children: sortLeaves([
       { path: '/components/button', label: 'Button' },
-      { path: '/components/icon-button', label: 'Icon Button' },
       { path: '/components/button-group', label: 'Button Group' },
       { path: '/components/dropdown-button', label: 'Dropdown Button' },
-      { path: '/components/dropdown-icon-button', label: 'Dropdown Icon Button' },
+      { path: '/components/fab-button', label: 'FAB' },
+      { path: '/components/icon-button', label: 'Icon Button' },
       { path: '/components/split-button', label: 'Split Button' },
       { path: '/components/split-icon-button', label: 'Split Icon Button' },
-      { path: '/components/fab-button', label: 'FAB Button' },
-    ],
-  },
-  {
-    id: 'navigation',
-    label: 'Navigation',
-    children: [
-      { path: '/components/link', label: 'Link' },
-      { path: '/components/button-link', label: 'Button Link' },
-      { path: '/components/icon-button-link', label: 'Icon Button Link' },
-      { path: '/components/tabstrip', label: 'Tabstrip' },
-      { path: '/components/breadcrumb', label: 'Breadcrumb' },
-    ],
-  },
-  {
-    id: 'inputs',
-    label: 'Inputs',
-    children: [
-      { path: '/components/label', label: 'Label' },
-      {
-        id: 'inputs-text',
-        label: 'Text Inputs',
-        children: [
-          { path: '/components/textbox', label: 'Textbox' },
-          { path: '/components/textarea', label: 'Textarea' },
-          { path: '/components/search', label: 'Search' },
-          { path: '/components/input-url', label: 'Input URL' },
-          { path: '/components/number-input', label: 'Number Input' },
-        ],
-      },
-      {
-        id: 'inputs-selection-controls',
-        label: 'Selection Controls',
-        children: [
-          { path: '/components/checkbox', label: 'Checkbox' },
-          { path: '/components/checkbox-group', label: 'Checkbox Group' },
-          { path: '/components/radio', label: 'Radio' },
-          { path: '/components/radio-group', label: 'Radio Group' },
-          { path: '/components/switch', label: 'Switch' },
-          { path: '/components/slider', label: 'Slider' },
-          { path: '/components/chip', label: 'Chip' },
-          { path: '/components/chip-list', label: 'Chip List' },
-        ],
-      },
-      {
-        id: 'inputs-selection-inputs',
-        label: 'Selection Inputs',
-        children: [
-          { path: '/components/select-dropdown', label: 'Select Dropdown' },
-          { path: '/components/multi-select', label: 'Multi Select' },
-          { path: '/components/combobox', label: 'Combobox' },
-        ],
-      },
-      {
-        id: 'inputs-datetime',
-        label: 'DateTime Pickers',
-        children: [
-          { path: '/components/date-picker', label: 'Date Picker' },
-          { path: '/components/time-picker', label: 'Time Picker' },
-          { path: '/components/date-time-picker', label: 'Date Time Picker' },
-          { path: '/components/date-range-picker', label: 'Date Range Picker' },
-        ],
-      },
-      {
-        id: 'inputs-visual',
-        label: 'Visual Inputs',
-        children: [
-          { path: '/components/color-picker', label: 'Color Picker' },
-          { path: '/components/color-input', label: 'Color Input' },
-        ],
-      },
-      {
-        id: 'inputs-editor',
-        label: 'Editor',
-        children: [
-          { path: '/components/text-editor', label: 'Text Editor' },
-          { path: '/components/image-editor', label: 'Image Editor' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'file-handling',
-    label: 'File Handling',
-    children: [
-      { path: '/components/file-input', label: 'File Input' },
-      { path: '/components/upload', label: 'Upload' },
-      { path: '/components/dropzone', label: 'Dropzone' },
-    ],
-  },
-  {
-    id: 'overlays',
-    label: 'Overlays & popups',
-    children: [
-      { path: '/components/tooltip', label: 'Tooltip' },
-      { path: '/components/popover', label: 'Popover' },
-      { path: '/components/action-menu', label: 'Action Menu' },
-      { path: '/components/hybrid-popover', label: 'Hybrid Popover' },
-      { path: '/components/drawer', label: 'Drawer' },
-      { path: '/components/side-panel', label: 'Side Panel' },
-      { path: '/components/overlay-window', label: 'Overlay / Window' },
-    ],
-  },
-  {
-    id: 'feedback',
-    label: 'Feedback',
-    children: [
-      {
-        id: 'feedback-messaging',
-        label: 'Messaging',
-        children: [
-          { path: '/components/inline-alert', label: 'Inline Alert' },
-          { path: '/components/banner-alerts', label: 'Banner Alerts' },
-          { path: '/components/toast', label: 'Toast' },
-          { path: '/components/alert-dialog', label: 'Alert Dialog' },
-          { path: '/components/notifications', label: 'Notifications' },
-        ],
-      },
-      {
-        id: 'feedback-status',
-        label: 'Status Indicators',
-        children: [
-          { path: '/components/badge', label: 'Badge' },
-          { path: '/components/indicators', label: 'Indicators' },
-          { path: '/components/counter', label: 'Counter' },
-          { path: '/components/backdrop', label: 'Backdrop' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'loading-empty',
-    label: 'Loading & Empty States',
-    children: [
-      { path: '/components/spinner', label: 'Spinner' },
-      { path: '/components/skeleton-loader', label: 'Skeleton Loader' },
-      { path: '/components/empty-state', label: 'Empty State' },
-    ],
+      { path: '/components/toolbar', label: 'Toolbar' },
+    ]),
   },
   {
     id: 'data-display',
     label: 'Data Display',
-    children: [
-      { path: '/components/cards', label: 'Card' },
-      { path: '/components/list', label: 'List' },
-      { path: '/components/grid', label: 'Grid' },
+    children: sortLeaves([
       { path: '/components/accordion', label: 'Accordion' },
+      { path: '/components/cards', label: 'Card' },
+      { path: '/components/carousel-view', label: 'Carousel View' },
+      { path: '/components/code-block', label: 'Code (Block / Editor)' },
+      { path: '/components/comments', label: 'Comments' },
+      { path: '/components/grid', label: 'Grid' },
+      { path: '/components/media-player', label: 'Media Player' },
+      { path: '/components/pdf-viewer', label: 'PDF Viewer' },
       { path: '/components/tree-widget', label: 'Tree Widget' },
-    ],
+    ]),
   },
   {
-    id: 'layout-structure',
-    label: 'Layout & Structure',
-    children: [
-      { path: '/components/layout-tiles', label: 'Layout Tiles' },
-      { path: '/components/splitter', label: 'Splitter' },
-      { path: '/components/scroll-bar', label: 'Scroll Bar' },
-    ],
+    id: 'feedback',
+    label: 'Feedback',
+    children: sortLeaves([
+      { path: '/components/badge', label: 'Badge Alert' },
+      { path: '/components/banner-alerts', label: 'Banner Alert' },
+      { path: '/components/counter', label: 'Counter' },
+      { path: '/components/email-notification', label: 'Email Notification' },
+      { path: '/components/empty-state', label: 'Empty State' },
+      { path: '/components/inline-alert', label: 'MessageAlert' },
+      { path: '/components/notifications', label: 'Notifications' },
+      { path: '/components/skeleton-loader', label: 'Skeleton Loader' },
+      { path: '/components/spinner', label: 'Spinner' },
+      { path: '/components/toast', label: 'Toast' },
+    ]),
   },
   {
-    id: 'identity',
-    label: 'Identity',
-    children: [
+    id: 'inputs',
+    label: 'Inputs',
+    children: sortLeaves([
+      { path: '/components/checkbox', label: 'Checkbox' },
+      { path: '/components/checkbox-group', label: 'Checkbox Group' },
+      { path: '/components/chip', label: 'Chips' },
+      { path: '/components/color-input', label: 'Color Input' },
+      { path: '/components/color-picker', label: 'Color Picker' },
+      { path: '/components/combobox', label: 'Combobox' },
+      { path: '/components/date-picker', label: 'Date Picker' },
+      { path: '/components/date-range-picker', label: 'Date Range Picker' },
+      { path: '/components/date-time-picker', label: 'Date Time Picker' },
+      { path: '/components/dropzone', label: 'Dropzone' },
+      { path: '/components/dropdown-tree', label: 'Dropdown Tree' },
+      { path: '/components/text-editor', label: 'Editor' },
+      { path: '/components/file-input', label: 'File Input' },
+      { path: '/components/multi-select', label: 'Multi-Select' },
+      { path: '/components/number-input', label: 'Number Input' },
+      { path: '/components/otp-input', label: 'OTP Input' },
+      { path: '/components/property-filter', label: 'Property Filter' },
+      { path: '/components/radio-group', label: 'RadioGroup' },
+      { path: '/components/search', label: 'Search' },
+      { path: '/components/select-dropdown', label: 'Select Dropdown' },
+      { path: '/components/slider', label: 'Slider' },
+      { path: '/components/switch', label: 'Switch' },
+      { path: '/components/textarea', label: 'Textarea' },
+      { path: '/components/textbox', label: 'Textbox' },
+      { path: '/components/time-picker', label: 'Time Picker' },
+      { path: '/components/upload', label: 'Upload' },
+    ]),
+  },
+  {
+    id: 'navigation',
+    label: 'Navigation',
+    children: sortLeaves([
+      { path: '/components/breadcrumb', label: 'Breadcrumb' },
+      { path: '/components/button-link', label: 'Button Link' },
+      { path: '/components/icon-button-link', label: 'Icon Link' },
+      { path: '/components/link', label: 'Link' },
+      { path: '/components/pagination', label: 'Pagination' },
+      { path: '/components/stepper', label: 'Stepper' },
+      { path: '/components/tabstrip', label: 'Tabs' },
+      { path: '/components/tree', label: 'Tree' },
+      { path: '/components/wizard', label: 'Wizard' },
+    ]),
+  },
+  {
+    id: 'overlays',
+    label: 'Overlays',
+    children: sortLeaves([
+      { path: '/components/action-menu', label: 'Action Menu' },
+      { path: '/components/alert-dialog', label: 'Alert Dialog' },
+      { path: '/components/calendar', label: 'Calendar' },
+      { path: '/components/calendar-range', label: 'Calendar Range' },
+      { path: '/components/drawer', label: 'Drawer' },
+      { path: '/components/help-panel', label: 'Help Panel' },
+      { path: '/components/hybrid-popover', label: 'Hybrid Popover' },
+      { path: '/components/list', label: 'List View' },
+      { path: '/components/backdrop', label: 'Mask Overlay' },
+      { path: '/components/my-profile', label: 'My Profile' },
+      { path: '/components/notifications-panel', label: 'Notifications Panel' },
+      { path: '/components/popover', label: 'Popover' },
+      { path: '/components/side-panel', label: 'Side Panel' },
+      { path: '/components/time', label: 'Time' },
+      { path: '/components/tooltip', label: 'Tooltip' },
+      { path: '/components/overlay-window', label: 'Window' },
+    ]),
+  },
+  {
+    id: 'utilities',
+    label: 'Utilities',
+    children: sortLeaves([
       { path: '/components/avatar', label: 'Avatar' },
       { path: '/components/avatar-group', label: 'Avatar Group' },
-    ],
+      { path: '/components/label', label: 'Form Label' },
+      { path: '/components/indicators', label: 'Indicator' },
+      { path: '/components/scroll-bar', label: 'Scrollbar' },
+      { path: '/components/splitter', label: 'Splitter' },
+    ]),
   },
 ]
 
 /**
  * Routes implemented as real doc pages (not placeholder stubs).
- * This drives the green dot in ComponentTreeNav. Keep in sync with
- * PATHS_WITH_CONTENT in pathsWithContent.js.
+ * Drives the green dot in ComponentTreeNav. Keep in sync with PATHS_WITH_CONTENT in pathsWithContent.js.
  */
 export const COMPONENT_DOC_ROUTES = new Set([
-  // Buttons & Actions
   '/components/button',
   '/components/icon-button',
   '/components/button-group',
   '/components/dropdown-button',
-  '/components/dropdown-icon-button',
   '/components/fab-button',
-
-  // Navigation
   '/components/link',
   '/components/button-link',
   '/components/icon-button-link',
   '/components/tabstrip',
   '/components/breadcrumb',
-
-  // Inputs — Text
   '/components/textbox',
   '/components/textarea',
   '/components/number-input',
-
-  // Inputs — Selection Controls
   '/components/checkbox',
   '/components/checkbox-group',
-  '/components/radio',
   '/components/radio-group',
   '/components/switch',
-
-  // Inputs — Selection Inputs
   '/components/select-dropdown',
   '/components/combobox',
-
-  // Feedback
   '/components/toast',
   '/components/badge',
-
-  // Overlays
   '/components/action-menu',
   '/components/popover',
   '/components/tooltip',
-
-  // Data Display
   '/components/cards',
 ])
 
 /**
- * @param {NavNode[]} nodes
+ * @param {NavLeaf[]} nodes
  * @param {(leaf: NavLeaf) => void} visit
  */
 function walkLeaves(nodes, visit) {
@@ -265,7 +202,7 @@ export function getAllComponentSlugs() {
 
 /**
  * @param {string} pathname
- * @param {NavNode[]} nodes
+ * @param {NavGroup[]} nodes
  * @param {string[]} acc
  * @returns {string[] | null}
  */
@@ -284,9 +221,9 @@ export function findOpenGroupIds(pathname, nodes, acc = []) {
 }
 
 /**
- * @param {NavNode[]} nodes
+ * @param {NavGroup[]} nodes
  * @param {string} query
- * @returns {NavNode[]}
+ * @returns {NavGroup[]}
  */
 export function filterComponentNavTree(nodes, query) {
   const q = query.trim().toLowerCase()

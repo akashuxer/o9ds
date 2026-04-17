@@ -35,13 +35,13 @@ export default function App() {
           <Route path="/principles" element={<Principles />} />
           <Route path="/foundations" element={<FoundationsOverview />} />
           <Route path="/colors" element={<Colors />} />
-          <Route path="/colors/data-viz" element={<Placeholder title="Data Visualization Colors" />} />
+          <Route path="/colors/data-viz" element={<Placeholder title="Data Visualization Colors" documentationCatalog="foundations" />} />
           <Route path="/typography" element={<Typography />} />
           <Route path="/spacing" element={<Spacing />} />
           <Route path="/borders" element={<Borders />} />
           <Route path="/icons" element={<Icons />} />
           <Route path="/illustrations" element={<Illustrations />} />
-          <Route path="/motion" element={<Placeholder title="Motion & Animation" />} />
+          <Route path="/motion" element={<Placeholder title="Motion & Animation" documentationCatalog="foundations" />} />
           <Route path="/effects" element={<Effects />} />
           <Route path="/elevation" element={<Navigate to="/effects" replace />} />
           <Route path="/components" element={<Components />} />
@@ -51,22 +51,22 @@ export default function App() {
           <Route path="/vibe-coders" element={<Placeholder title="For Vibe Coders" />} />
           <Route path="/accessibility" element={<AccessibilityOverview />} />
           <Route path="/content" element={<ContentOverview />} />
-          <Route path="/content/writing-principles" element={<Placeholder title="Writing Principles" />} />
-          <Route path="/content/grammar" element={<Placeholder title="Grammar" />} />
-          <Route path="/content/voice-and-tone" element={<Placeholder title="Voice and Tone" />} />
+          <Route path="/content/writing-principles" element={<Placeholder title="Writing Principles" documentationCatalog="contentWriting" />} />
+          <Route path="/content/grammar" element={<Placeholder title="Grammar" documentationCatalog="contentWriting" />} />
+          <Route path="/content/voice-and-tone" element={<Placeholder title="Voice and Tone" documentationCatalog="contentWriting" />} />
           <Route path="/patterns" element={<PatternsOverview />} />
-          <Route path="/patterns/forms" element={<Placeholder title="Forms" />} />
-          <Route path="/patterns/search" element={<Placeholder title="Search" />} />
-          <Route path="/patterns/filters" element={<Placeholder title="Filters" />} />
-          <Route path="/patterns/tables" element={<Placeholder title="Tables" />} />
-          <Route path="/patterns/side-panels" element={<Placeholder title="Side Panels" />} />
-          <Route path="/patterns/modals" element={<Placeholder title="Modals" />} />
-          <Route path="/patterns/notifications" element={<Placeholder title="Notifications" />} />
-          <Route path="/patterns/empty-states" element={<Placeholder title="Empty States" />} />
-          <Route path="/patterns/bulk-actions" element={<Placeholder title="Bulk Actions" />} />
-          <Route path="/patterns/nested-interactions" element={<Placeholder title="Nested Interactions" />} />
-          <Route path="/patterns/drag" element={<Placeholder title="Drag" />} />
-          <Route path="/patterns/disabled" element={<Placeholder title="Disabled" />} />
+          <Route path="/patterns/forms" element={<Placeholder title="Forms" documentationCatalog="patterns" />} />
+          <Route path="/patterns/search" element={<Placeholder title="Search" documentationCatalog="patterns" />} />
+          <Route path="/patterns/filters" element={<Placeholder title="Filters" documentationCatalog="patterns" />} />
+          <Route path="/patterns/tables" element={<Placeholder title="Tables" documentationCatalog="patterns" />} />
+          <Route path="/patterns/side-panels" element={<Placeholder title="Side Panels" documentationCatalog="patterns" />} />
+          <Route path="/patterns/modals" element={<Placeholder title="Modals" documentationCatalog="patterns" />} />
+          <Route path="/patterns/notifications" element={<Placeholder title="Notifications" documentationCatalog="patterns" />} />
+          <Route path="/patterns/empty-states" element={<Placeholder title="Empty States" documentationCatalog="patterns" />} />
+          <Route path="/patterns/bulk-actions" element={<Placeholder title="Bulk Actions" documentationCatalog="patterns" />} />
+          <Route path="/patterns/nested-interactions" element={<Placeholder title="Nested Interactions" documentationCatalog="patterns" />} />
+          <Route path="/patterns/drag" element={<Placeholder title="Drag" documentationCatalog="patterns" />} />
+          <Route path="/patterns/disabled" element={<Placeholder title="Disabled" documentationCatalog="patterns" />} />
           <Route path="/contribute" element={<Placeholder title="How to Contribute" />} />
           <Route path="/faqs" element={<Placeholder title="FAQs" />} />
           <Route path="/changelog" element={<Placeholder title="Changelog" />} />

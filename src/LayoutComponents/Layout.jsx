@@ -171,7 +171,7 @@ function getPageTitle(pathname) {
   if (componentsMatch) {
     return componentsMatch[1].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
   }
-  return 'Design System'
+  return 'Avora Design System'
 }
 
 export default function Layout({ children }) {
@@ -187,7 +187,7 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     const pageName = getPageTitle(pathname)
-    document.title = `o9ds Design System - ${pageName}`
+    document.title = `Avora Design System - ${pageName}`
   }, [pathname])
 
   const filteredSections = useMemo(() => {
@@ -346,7 +346,12 @@ export default function Layout({ children }) {
               </svg>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold truncate" style={{ color: isDark ? '#fff' : '#010101' }}>Design System</span>
+                  <span className="flex min-w-0 items-center font-semibold">
+                    <span className="shrink-0 bg-gradient-to-r from-[#ff453a] via-[#ff2d55] to-[#ff33cc] bg-clip-text text-transparent">
+                      Avora
+                    </span>
+                    <span className="ml-1 truncate text-[#010101] dark:text-white">Design System</span>
+                  </span>
                   <span className="bg-blue-600 px-1.5 py-0.5 text-[10px] font-medium uppercase text-white">
                     ALPHA
                   </span>

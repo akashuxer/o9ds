@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import PageHeader from './PageHeader'
 import ComponentOverviewCard from './ComponentOverviewCard'
+import GrayBgCard from './GrayBgCard'
+import {
+  DOCUMENTATION_STATUS_TITLE,
+  getDocumentationStatusDescription,
+} from '../data/documentationStatus'
 
 function SearchIcon({ className }) {
   return (
@@ -20,7 +25,18 @@ function ResetIcon({ className }) {
   )
 }
 
-export default function SectionOverviewPage({ title, description, icon, items, getIllustrationSrc, isReady }) {
+/**
+ * @param {{ title: string, description: string, icon: import('react').ReactNode, items: Array<{ path: string, label: string, section: string }>, getIllustrationSrc: (path: string) => string | undefined, isReady: (path: string) => boolean, documentationCatalogId?: 'component' | 'contentWriting' | 'accessibility' | 'foundations' | 'patterns' | 'documentation' }} props
+ */
+export default function SectionOverviewPage({
+  title,
+  description,
+  icon,
+  items,
+  getIllustrationSrc,
+  isReady,
+  documentationCatalogId = 'documentation',
+}) {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const [query, setQuery] = useState('')
@@ -117,12 +133,18 @@ export default function SectionOverviewPage({ title, description, icon, items, g
         )}
 
         {items.length === 0 ? (
-          <div
-            className="rounded-none border px-6 py-12 text-center text-sm text-o9ds-light-secondary dark:text-neutral-400"
-            style={{ borderColor: isDark ? '#404040' : '#E5E5E5', backgroundColor: isDark ? '#0a0a0a' : '#FAFAFA' }}
-          >
-            No topics are listed for this overview yet. Add rows to <code className="font-mono text-xs">src/data/overviewCatalog.js</code> when
-            documentation pages are published.
+          <div className="space-y-6">
+            <GrayBgCard
+              title={DOCUMENTATION_STATUS_TITLE}
+              desc={getDocumentationStatusDescription(documentationCatalogId)}
+            />
+            <div
+              className="rounded-none border px-6 py-12 text-center text-sm text-o9ds-light-secondary dark:text-neutral-400"
+              style={{ borderColor: isDark ? '#404040' : '#E5E5E5', backgroundColor: isDark ? '#0a0a0a' : '#FAFAFA' }}
+            >
+              No topics are listed for this overview yet. Add rows to <code className="font-mono text-xs">src/data/overviewCatalog.js</code> when
+              documentation pages are published.
+            </div>
           </div>
         ) : filtered.length === 0 ? (
           <div
