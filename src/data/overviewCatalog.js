@@ -122,7 +122,8 @@ export const ACCESSIBILITY_CATALOG = [
     path: '/accessibility/shortcuts',
     label: 'Shortcuts',
     section: 'Accessibility',
-    description: 'Product and browser shortcuts versus assistive-tech commands, and how to document them clearly.',
+    description:
+      'Reserved for product and browser shortcut guidance versus assistive-technology commands—documentation will expand in a future release.',
   },
   {
     path: '/accessibility/visual-accessibility',
