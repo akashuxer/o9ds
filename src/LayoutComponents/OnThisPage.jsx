@@ -76,16 +76,16 @@ export default function OnThisPage({ sections = [], className = '' }) {
               <a
                 href={`#${id}`}
                 onClick={(e) => handleClick(e, id)}
-                className="relative block py-1.5 -ml-3 pl-6 text-sm transition-colors hover:opacity-90 border-l-[3px] border-transparent"
+                aria-current={isActive ? 'location' : undefined}
+                className={`relative block py-1.5 -ml-3 pl-6 text-sm leading-snug transition-[color,opacity,font-weight] hover:opacity-90 border-l-[3px] border-transparent ${
+                  isActive ? 'font-semibold' : 'font-normal'
+                }`}
                 style={{
                   color: isActive ? (isLight ? '#010101' : '#fff') : (isLight ? '#303030' : '#a3a3a3'),
                   borderLeftColor: isActive ? (isLight ? '#010101' : '#fff') : 'transparent',
                 }}
               >
-                <span aria-hidden className="block font-bold invisible select-none">{label}</span>
-                <span className="absolute inset-0 flex items-start pt-1.5 pb-1.5 pl-6 pr-0">
-                  <span style={{ fontWeight: isActive ? 'bold' : 'normal' }}>{label}</span>
-                </span>
+                {label}
               </a>
             </li>
           )

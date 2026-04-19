@@ -6,7 +6,7 @@ const SECTION_BASE = '/o9DocGraphics/SectionOverview'
 
 /** @type {Record<string, string>} */
 const SECTION_OVERVIEW_BY_PATH = {
-  // Add entries when assets exist, e.g. '/colors': `${SECTION_BASE}/colors.svg`,
+  '/effects': '/o9DocGraphics/FoundationGraphic/effects.png',
 }
 
 const FALLBACK = '/o9DocGraphics/ComponentsOverview/default.svg'

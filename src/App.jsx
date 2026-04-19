@@ -28,7 +28,7 @@ import AccessibilityScreenReaderAndAria from './pages/accessibility/ScreenReader
 import AccessibilityKeyboardAndFocus from './pages/accessibility/KeyboardAndFocus'
 import AccessibilityVisualAccessibility from './pages/accessibility/VisualAccessibility'
 import AccessibilityTestingAndQA from './pages/accessibility/TestingAndQA'
-import AccessibilityGlossary from './pages/accessibility/Glossary'
+import AccessibilityShortcuts from './pages/accessibility/Shortcuts'
 import ContentOverview from './pages/ContentOverview'
 
 export default function App() {
@@ -73,13 +73,14 @@ export default function App() {
             element={<Navigate to="/accessibility/screen-reader-and-aria" replace />}
           />
           <Route path="/accessibility/keyboard-and-focus" element={<AccessibilityKeyboardAndFocus />} />
+          <Route path="/accessibility/shortcuts" element={<AccessibilityShortcuts />} />
           <Route path="/accessibility/visual-accessibility" element={<AccessibilityVisualAccessibility />} />
           <Route
             path="/accessibility/component-accessibility-template"
             element={<Navigate to="/accessibility/overview" replace />}
           />
           <Route path="/accessibility/testing-and-qa" element={<AccessibilityTestingAndQA />} />
-          <Route path="/accessibility/glossary" element={<AccessibilityGlossary />} />
+          <Route path="/accessibility/glossary" element={<Navigate to="/accessibility/overview" replace />} />
           <Route path="/content" element={<ContentOverview />} />
           <Route path="/content/writing-principles" element={<Placeholder title="Writing Principles" documentationCatalog="contentWriting" />} />
           <Route path="/content/grammar" element={<Placeholder title="Grammar" documentationCatalog="contentWriting" />} />

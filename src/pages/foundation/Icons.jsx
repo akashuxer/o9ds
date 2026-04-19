@@ -218,6 +218,7 @@ export default function Icons() {
         { id: 'design-philosophy', label: 'o9Con Design Philosophy' },
         { id: 'evolution', label: 'Evolution: Old vs New Icons' },
         { id: 'icon-types', label: 'Icon Types: Categorisation' },
+        { id: 'pixel-grid', label: 'Pixel Grid' },
         { id: 'base-grid', label: 'Base Grid' },
         { id: 'padding', label: 'Padding' },
         { id: 'key-shapes', label: 'Key Shapes' },
@@ -225,6 +226,8 @@ export default function Icons() {
         { id: 'strokes', label: 'Strokes' },
         { id: 'angles', label: 'Angles' },
         { id: 'action', label: 'Action' },
+        { id: 'combining-multiple-actions', label: 'Combining Multiple Actions' },
+        { id: 'dos-and-donts', label: "Dos and Don'ts" },
         { id: 'icons-in-figma', label: 'Icons in Figma' },
         { id: 'illustrator-tips', label: 'Illustrator tips' },
         { id: 'available-sizes', label: 'Available Sizes' },
@@ -269,7 +272,7 @@ export default function Icons() {
           Iconography &quot;o9con&quot;
         </h1>
         <p className="mt-4 text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
-          The o9Con icon library provides a comprehensive set of carefully crafted icons designed for user interfaces. Built as an icon font, ensuring crisp rendering at any size while maintaining small file sizes. Each icon must retain clarity and visual impact across different resolutions and usage contexts.
+          Our redesigned o9con icon library includes over 800 meticulously crafted icons. These modern visuals guide your journey with clarity and ease, combining functionality with a fresh, sophisticated aesthetic. The precision of these icons ensures intuitive interactions, enhancing the overall experience while reinforcing a visually cohesive and professional platform environment.
         </p>
 
         <div
@@ -388,6 +391,41 @@ export default function Icons() {
             </div>
           </div>
 
+          {/* Pixel Grid */}
+          <div id="pixel-grid">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Pixel Grid</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+              All icons are designed on a pixel-based grid with the following specifications:
+            </p>
+            <div className="border overflow-hidden mb-4 max-w-xl" style={isLight ? { borderColor: '#E5E5E5' } : undefined}>
+              <table className="w-full text-sm">
+                <tbody>
+                  <tr className="border-b dark:border-neutral-700" style={{ borderColor: isLight ? '#E5E5E5' : undefined }}>
+                    <th className="py-2 px-4 text-left font-medium text-o9ds-light-primary dark:text-white w-40">Grid size</th>
+                    <td className="py-2 px-4 text-o9ds-light-secondary dark:text-neutral-400">20px × 20px</td>
+                  </tr>
+                  <tr>
+                    <th className="py-2 px-4 text-left font-medium text-o9ds-light-primary dark:text-white">Padding</th>
+                    <td className="py-2 px-4 text-o9ds-light-secondary dark:text-neutral-400">2px</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              This ensures consistent scaling, alignment, and visual balance.
+            </p>
+            <div className="space-y-6">
+              <IconSpecExpandableFigure
+                illustrationSrc={iconGraphicSrc('pixel-grid-01.svg')}
+                imageAlt="Pixel grid specification diagram 1: 20 by 20 pixel grid with padding for o9con icons."
+              />
+              <IconSpecExpandableFigure
+                illustrationSrc={iconGraphicSrc('pixel-grid-02.svg')}
+                imageAlt="Pixel grid specification diagram 2: alignment and visual balance on the icon pixel grid."
+              />
+            </div>
+          </div>
+
           {/* Base Grid */}
           <div id="base-grid">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Base Grid</h2>
@@ -454,7 +492,7 @@ export default function Icons() {
               <li>Triangle</li>
             </ul>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('Key shapes.svg')}
+              illustrationSrc={iconGraphicSrc('Keyshapes.svg')}
               imageAlt="Key shape templates: circle, square, rectangle, and triangle guides for consistent proportions on the icon grid."
             />
           </div>
@@ -467,7 +505,7 @@ export default function Icons() {
               No shape within an icon should be smaller than 4.27×4.27px. Once a shape reaches the minimum size (defined as a &quot;small square&quot;), it must be a solid fill and can no longer be an outline. This ensures clarity and visibility at small scales.
             </p>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('Shape size.svg')}
+              illustrationSrc={iconGraphicSrc('Shape Size.svg')}
               imageAlt="Minimum shape size rules: small square threshold and when outlines become solid fills on the grid."
             />
           </div>
@@ -486,7 +524,7 @@ export default function Icons() {
               <li className="pl-1">We use sharp-edged icons as default. You may use curves only in circular elements.</li>
             </ul>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('Strokes.svg')}
+              illustrationSrc={iconGraphicSrc('strokes.svg')}
               imageAlt="Stroke weight and inner versus outer stroke behavior for o9 icons on the grid."
             />
           </div>
@@ -499,7 +537,7 @@ export default function Icons() {
               Create harmony across the icon set by consistently making 90° angles sit on the same increments. Use increments of 9° for other angles when needed.
             </p>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('Angles.svg')}
+              illustrationSrc={iconGraphicSrc('angles.svg')}
               imageAlt="Angle construction: 90 degree alignment and 9 degree increments on the icon grid."
             />
           </div>
@@ -523,9 +561,61 @@ export default function Icons() {
               <li>Test the icon at different sizes to verify scalability</li>
             </ul>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('Action.svg')}
+              illustrationSrc={iconGraphicSrc('Action-process.svg')}
               imageAlt="Step-by-step action diagram for placing the angle grid, designing on increments, and centering shapes on the o9 icon grid."
             />
+          </div>
+
+          {/* Combining Multiple Actions */}
+          <div id="combining-multiple-actions">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Combining Multiple Actions</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+              When combining icons with multiple actions, divide the initial icon into one quarter and add the action with the padding of two grid boxes. Please see the examples below.
+            </p>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              When crossing over an icon, make sure the initial whitespace uses two grid boxes of padding with a 45° cut-off.
+            </p>
+            <div className="space-y-6">
+              <IconSpecExpandableFigure
+                illustrationSrc={iconGraphicSrc('Combining  Multiple Actions-spacing.png')}
+                imageAlt="Spacing when combining multiple actions: secondary action aligned with two grid boxes of padding from a quarter segment of the base icon."
+              />
+              <IconSpecExpandableFigure
+                illustrationSrc={iconGraphicSrc('Combining  Multiple Actions -crossovers.png')}
+                imageAlt="Crossing actions over an icon: two grid boxes of padding and a 45 degree cut-off at the overlap."
+              />
+            </div>
+          </div>
+
+          {/* Dos and Don'ts */}
+          <div id="dos-and-donts">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Dos and Don&apos;ts</h2>
+            <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white mb-2">Dos:</h3>
+            <ul className="mb-6 max-w-2xl list-disc space-y-2 pl-5 text-o9ds-light-secondary dark:text-neutral-400 marker:text-o9ds-light-secondary dark:marker:text-neutral-400">
+              <li className="pl-1">Use the pixel-based grid (20px × 20px) and maintain 2px padding.</li>
+              <li className="pl-1">Center the focal point and ensure alignment within the grid.</li>
+              <li className="pl-1">Keep line thickness and proportions consistent across the icon set.</li>
+              <li className="pl-1">Simplify designs to maintain clarity at smaller sizes.</li>
+              <li className="pl-1">Use whole numbers for x- and y-coordinates to avoid misalignment.</li>
+            </ul>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('do.svg')}
+              imageAlt="Icon design dos: grid, padding, focal point, consistent strokes, simplicity, and whole-number coordinates."
+            />
+            <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white mt-8 mb-2">Don&apos;ts:</h3>
+            <ul className="mb-6 max-w-2xl list-disc space-y-2 pl-5 text-o9ds-light-secondary dark:text-neutral-400 marker:text-o9ds-light-secondary dark:marker:text-neutral-400">
+              <li className="pl-1">Do not exceed or fall short of the grid boundaries.</li>
+              <li className="pl-1">Avoid using random decimal points in coordinates or line thickness.</li>
+              <li className="pl-1">Do not overcrowd the icon with unnecessary details.</li>
+              <li className="pl-1">Avoid inconsistent styles or deviations from the brand&apos;s visual language.</li>
+            </ul>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('dont.svg')}
+              imageAlt="Icon design don'ts: staying inside the grid, avoiding arbitrary decimals, clutter, and off-brand styles."
+            />
+            <p className="mt-6 text-sm text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl">
+              <strong className="text-o9ds-light-primary dark:text-white">Tip:</strong> Always double-check these guidelines for a polished and cohesive icon set.
+            </p>
           </div>
 
           {/* Icons in Figma */}

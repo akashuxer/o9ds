@@ -24,9 +24,9 @@ export const PATHS_WITH_CONTENT = new Set([
   '/accessibility/assistive-technology',
   '/accessibility/screen-reader-and-aria',
   '/accessibility/keyboard-and-focus',
+  '/accessibility/shortcuts',
   '/accessibility/visual-accessibility',
   '/accessibility/testing-and-qa',
-  '/accessibility/glossary',
   '/content',
 
   // Buttons & Actions

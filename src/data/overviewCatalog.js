@@ -42,9 +42,9 @@ export const ACCESSIBILITY_CATALOG = [
   { path: '/accessibility/assistive-technology', label: 'Assistive technology', section: 'Accessibility' },
   { path: '/accessibility/screen-reader-and-aria', label: 'Screen reader and ARIA', section: 'Accessibility' },
   { path: '/accessibility/keyboard-and-focus', label: 'Keyboard and focus', section: 'Accessibility' },
+  { path: '/accessibility/shortcuts', label: 'Shortcuts', section: 'Accessibility' },
   { path: '/accessibility/visual-accessibility', label: 'Visual accessibility', section: 'Accessibility' },
   { path: '/accessibility/testing-and-qa', label: 'Testing and QA', section: 'Accessibility' },
-  { path: '/accessibility/glossary', label: 'Glossary', section: 'Accessibility' },
 ]
 
 /** @type {OverviewCatalogItem[]} */

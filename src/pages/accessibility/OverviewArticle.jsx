@@ -176,6 +176,11 @@ export default function OverviewArticle() {
             </Link>
           </li>
           <li>
+            <Link to="/accessibility/shortcuts" className="underline font-medium text-o9ds-light-primary dark:text-white hover:opacity-90">
+              Shortcuts
+            </Link>
+          </li>
+          <li>
             <Link to="/accessibility/visual-accessibility" className="underline font-medium text-o9ds-light-primary dark:text-white hover:opacity-90">
               Visual accessibility
             </Link>
@@ -183,11 +188,6 @@ export default function OverviewArticle() {
           <li>
             <Link to="/accessibility/testing-and-qa" className="underline font-medium text-o9ds-light-primary dark:text-white hover:opacity-90">
               Testing and QA
-            </Link>
-          </li>
-          <li>
-            <Link to="/accessibility/glossary" className="underline font-medium text-o9ds-light-primary dark:text-white hover:opacity-90">
-              Glossary
             </Link>
           </li>
         </ul>
