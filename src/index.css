@@ -135,6 +135,10 @@ html.dark {
   --o9ds-color-t-info-dark: #8aa3ff;
   --o9ds-color-t-inverse: #010101;
   --o9ds-doc-inverse-text-surface: #f2f2f2;
+  /* Border: form field — semanticColorTokens o9ds-color-b-form (gray-05 dark) */
+  --o9ds-color-b-form: #808080;
+  /* Border: input error — semanticColorTokens o9ds-color-b-negative (redish-06 dark) */
+  --o9ds-color-b-negative: #f07a62;
 }
 html[data-theme="dark"] body,
 html.dark body {
@@ -162,6 +166,10 @@ html:not(.dark) {
   --o9ds-text-primary: #010101;
   --o9ds-text-secondary: #303030;
   --o9ds-border: #E5E5E5;
+  /* Border: form field — semanticColorTokens o9ds-color-b-form (gray-11 light) */
+  --o9ds-color-b-form: #949494;
+  /* Border: input error — semanticColorTokens o9ds-color-b-negative (redish-09 light) */
+  --o9ds-color-b-negative: #bc1227;
   /* Semantic: maps to $o9ds-global-opacity-1 — modal/overlay scrim */
   --o9ds-color-s-overlay-static: #01010199;
   /* Semantic text tokens (o9 theme) — matches semanticColorTokens.js + globalColorTokens.js */
@@ -522,4 +530,41 @@ html.dark textarea:focus-visible,
 html.dark [tabindex]:not([tabindex="-1"]):focus-visible {
   outline: 2px solid #ffffff !important;
   outline-offset: 2px;
+}
+
+/* Keyboard & focus doc — left: :focus only (ring on click); right: :focus-visible only */
+[data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-only:focus {
+  outline: 2px solid #010101 !important;
+  outline-offset: 2px;
+}
+html[data-theme="dark"] [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-only:focus,
+html.dark [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-only:focus {
+  outline-color: #ffffff !important;
+}
+[data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus {
+  outline: none !important;
+}
+[data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus-visible {
+  outline: 2px solid #010101 !important;
+  outline-offset: 2px;
+}
+html[data-theme="dark"] [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus-visible,
+html.dark [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus-visible {
+  outline-color: #ffffff !important;
+}
+
+/* Keyboard doc form demos: underline fields — focus only on bottom border, not global input outline */
+html[data-theme="light"] main [data-o9ds-kb-form-demo] input:focus,
+html[data-theme="light"] main [data-o9ds-kb-form-demo] input:focus-visible,
+html:not(.dark) main [data-o9ds-kb-form-demo] input:focus,
+html:not(.dark) main [data-o9ds-kb-form-demo] input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+html[data-theme="dark"] main [data-o9ds-kb-form-demo] input:focus,
+html[data-theme="dark"] main [data-o9ds-kb-form-demo] input:focus-visible,
+html.dark main [data-o9ds-kb-form-demo] input:focus,
+html.dark main [data-o9ds-kb-form-demo] input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }

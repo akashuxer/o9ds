@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 import AccessibilityDocPage from './AccessibilityDocPage'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
@@ -19,7 +20,6 @@ const toc = [
   { id: 'a11y-kb-roving', label: 'Roving tabindex' },
   { id: 'a11y-kb-active', label: 'aria-activedescendant' },
   { id: 'a11y-kb-delete', label: 'Focus after deletion (lists)' },
-  { id: 'a11y-kb-shortcuts', label: 'Shortcuts' },
 ]
 
 const focusCss = `button:focus-visible,
@@ -31,10 +31,123 @@ textarea:focus-visible {
   outline-offset: 2px;
 }`
 
+/** o9ds-font-l12-r — label token (12px / 400) for interactive form labels. */
+const tokenLabelL12RClassName =
+  'mb-1 block text-xs font-normal text-[var(--o9ds-text-primary)] dark:text-white'
+
+/** Bottom border only (default: --o9ds-color-b-form); focus emphasizes bottom edge. 8px horizontal padding. */
+const tokenFieldClassName =
+  'w-full rounded-none border-0 border-b border-[color:var(--o9ds-color-b-form)] px-2 py-2 text-sm bg-white text-[var(--o9ds-text-primary)] placeholder:text-[var(--o9ds-color-t-placeholder)] focus:outline-none focus-visible:outline-none focus-visible:border-b-2 focus-visible:border-b-[#010101] dark:bg-[#010101] dark:text-white dark:placeholder:text-neutral-500 dark:focus-visible:border-b-white'
+
+/** Same as default field, but error border/focus use --o9ds-color-b-negative. */
+const tokenFieldErrorClassName =
+  'w-full rounded-none border-0 border-b-2 border-[color:var(--o9ds-color-b-negative)] px-2 py-2 text-sm bg-white text-[var(--o9ds-text-primary)] placeholder:text-[var(--o9ds-color-t-placeholder)] focus:outline-none focus-visible:outline-none focus-visible:border-b-2 focus-visible:border-b-[color:var(--o9ds-color-b-negative)] dark:bg-[#010101] dark:text-white dark:placeholder:text-neutral-500'
+
+/** Card surface: #F2F2F2 in light; dark panel unchanged for contrast with #010101 inputs. */
+const tokenFormDemoSurfaceClassName =
+  'space-y-4 overflow-hidden border border-o9ds-light-border bg-[#F2F2F2] p-4 dark:border-neutral-700 dark:bg-[rgba(38,38,38,0.5)]'
+
+const tokenButtonSecondaryClassName =
+  'rounded-none border border-o9ds-light-border dark:border-neutral-600 bg-transparent px-4 py-2 text-sm font-medium text-o9ds-light-primary dark:text-white'
+
+const tokenButtonPrimaryClassName =
+  'rounded-none border border-o9ds-light-primary dark:border-white bg-o9ds-light-primary dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-o9ds-light-primary'
+
 const escColumns = [
   { key: 'scenario', label: 'Scenario', primary: true },
   { key: 'behavior', label: 'Esc key and focus behavior' },
 ]
+
+/** Interactive: submit validates required fields in DOM order and focuses the first missing value. */
+function SubmitInvalidDemo() {
+  const [field1, setField1] = useState('')
+  const [field2, setField2] = useState('')
+  const [attempted, setAttempted] = useState(false)
+  const firstRef = useRef(null)
+  const secondRef = useRef(null)
+
+  const showErr1 = attempted && !field1.trim()
+  const showErr2 = attempted && !field2.trim()
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setAttempted(true)
+    if (!field1.trim()) {
+      window.setTimeout(() => firstRef.current?.focus(), 0)
+      return
+    }
+    if (!field2.trim()) {
+      window.setTimeout(() => secondRef.current?.focus(), 0)
+      return
+    }
+    setAttempted(false)
+  }
+
+  return (
+    <form
+      data-o9ds-kb-form-demo
+      className={`${tokenFormDemoSurfaceClassName} max-w-xl`}
+      onSubmit={handleSubmit}
+      aria-label="Example: focus first invalid field on submit"
+      noValidate
+    >
+      <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+        Press <strong className="text-o9ds-light-primary dark:text-white">Submit</strong> with empty values: focus moves to the first required field in DOM order; if the first is filled and the second is empty, focus moves to the second.
+      </p>
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="kb-submit-inv-1" className={tokenLabelL12RClassName}>
+            Required field 1
+          </label>
+          <input
+            ref={firstRef}
+            id="kb-submit-inv-1"
+            name="req1"
+            type="text"
+            autoComplete="off"
+            value={field1}
+            onChange={(e) => setField1(e.target.value)}
+            aria-invalid={showErr1 || undefined}
+            aria-describedby={showErr1 ? 'kb-submit-inv-err-1' : undefined}
+            className={showErr1 ? tokenFieldErrorClassName : tokenFieldClassName}
+          />
+          {showErr1 ? (
+            <p id="kb-submit-inv-err-1" className="mt-1 text-xs text-[color:var(--o9ds-color-t-negative)]" role="alert">
+              This field is required.
+            </p>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="kb-submit-inv-2" className={tokenLabelL12RClassName}>
+            Required field 2
+          </label>
+          <input
+            ref={secondRef}
+            id="kb-submit-inv-2"
+            name="req2"
+            type="text"
+            autoComplete="off"
+            value={field2}
+            onChange={(e) => setField2(e.target.value)}
+            aria-invalid={showErr2 || undefined}
+            aria-describedby={showErr2 ? 'kb-submit-inv-err-2' : undefined}
+            className={showErr2 ? tokenFieldErrorClassName : tokenFieldClassName}
+          />
+          {showErr2 ? (
+            <p id="kb-submit-inv-err-2" className="mt-1 text-xs text-[color:var(--o9ds-color-t-negative)]" role="alert">
+              This field is required.
+            </p>
+          ) : null}
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-3 border-t border-o9ds-light-border pt-4 dark:border-neutral-600">
+        <button type="submit" className={tokenButtonPrimaryClassName}>
+          Submit
+        </button>
+      </div>
+    </form>
+  )
+}
 
 const escRows = [
   {
@@ -81,15 +194,54 @@ export default function KeyboardAndFocus() {
           Keyboard users move through the page in <strong className="text-o9ds-light-primary dark:text-white">DOM order</strong>, not necessarily in the order the layout “looks” when scanned visually. That relationship is straightforward in a single-column, linear layout: reading order and tab order usually match if the DOM follows the same top-to-bottom sequence.
         </p>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Single-column (linear) layouts</h3>
           <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
             <li>Tab typically follows one vertical flow; fewer opportunities for visual order to disagree with DOM order.</li>
             <li>Still validate reading order for responsive breakpoints—content that reorders at different widths must keep a sensible tab sequence.</li>
           </ul>
+          <p className="pt-2 text-sm font-medium text-o9ds-light-primary dark:text-white">Example</p>
+          <p className="text-xs text-o9ds-light-secondary dark:text-neutral-500">
+            DOM order for single column (top → bottom), then the footer actions—Tab follows that sequence.
+          </p>
+          <form
+            className={tokenFormDemoSurfaceClassName}
+            data-o9ds-kb-form-demo
+            onSubmit={(e) => e.preventDefault()}
+            aria-label="Demo single-column form"
+          >
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="kb-demo-linear-1" className={tokenLabelL12RClassName}>
+                  Project name
+                </label>
+                <input id="kb-demo-linear-1" name="linear1" type="text" autoComplete="off" className={tokenFieldClassName} placeholder="e.g. North America rollout" />
+              </div>
+              <div>
+                <label htmlFor="kb-demo-linear-2" className={tokenLabelL12RClassName}>
+                  Owner
+                </label>
+                <input id="kb-demo-linear-2" name="linear2" type="text" autoComplete="off" className={tokenFieldClassName} placeholder="Team or person" />
+              </div>
+              <div>
+                <label htmlFor="kb-demo-linear-3" className={tokenLabelL12RClassName}>
+                  Description
+                </label>
+                <input id="kb-demo-linear-3" name="linear3" type="text" autoComplete="off" className={tokenFieldClassName} placeholder="Short summary" />
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-3 border-t border-o9ds-light-border pt-4 dark:border-neutral-600">
+              <button type="button" className={tokenButtonSecondaryClassName}>
+                Cancel
+              </button>
+              <button type="submit" className={tokenButtonPrimaryClassName}>
+                Save
+              </button>
+            </div>
+          </form>
         </div>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Multi-column layouts (e.g. two columns)</h3>
           <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
             <li>
@@ -105,6 +257,68 @@ export default function KeyboardAndFocus() {
               At narrow widths, multi-column layouts often stack into a single column; test keyboard order in both stacked and side-by-side states.
             </li>
           </ul>
+          <p className="pt-2 text-sm font-medium text-o9ds-light-primary dark:text-white">Example</p>
+          <p className="text-xs text-o9ds-light-secondary dark:text-neutral-500">
+            DOM order is <strong className="text-o9ds-light-primary dark:text-white">left column (top → bottom)</strong>, then{' '}
+            <strong className="text-o9ds-light-primary dark:text-white">right column (top → bottom)</strong>, then the footer actions—Tab follows that sequence.
+          </p>
+          <form
+            className={tokenFormDemoSurfaceClassName}
+            data-o9ds-kb-form-demo
+            onSubmit={(e) => e.preventDefault()}
+            aria-label="Demo two-column form"
+          >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+              <div className="space-y-3">
+                <div>
+                  <label htmlFor="kb-demo-mc-l1" className={tokenLabelL12RClassName}>
+                    Account
+                  </label>
+                  <input id="kb-demo-mc-l1" name="mcL1" type="text" autoComplete="off" className={tokenFieldClassName} />
+                </div>
+                <div>
+                  <label htmlFor="kb-demo-mc-l2" className={tokenLabelL12RClassName}>
+                    Region
+                  </label>
+                  <input id="kb-demo-mc-l2" name="mcL2" type="text" autoComplete="off" className={tokenFieldClassName} />
+                </div>
+                <div>
+                  <label htmlFor="kb-demo-mc-l3" className={tokenLabelL12RClassName}>
+                    Segment
+                  </label>
+                  <input id="kb-demo-mc-l3" name="mcL3" type="text" autoComplete="off" className={tokenFieldClassName} />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <label htmlFor="kb-demo-mc-r1" className={tokenLabelL12RClassName}>
+                    Start date
+                  </label>
+                  <input id="kb-demo-mc-r1" name="mcR1" type="text" autoComplete="off" className={tokenFieldClassName} placeholder="YYYY-MM-DD" />
+                </div>
+                <div>
+                  <label htmlFor="kb-demo-mc-r2" className={tokenLabelL12RClassName}>
+                    End date
+                  </label>
+                  <input id="kb-demo-mc-r2" name="mcR2" type="text" autoComplete="off" className={tokenFieldClassName} placeholder="YYYY-MM-DD" />
+                </div>
+                <div>
+                  <label htmlFor="kb-demo-mc-r3" className={tokenLabelL12RClassName}>
+                    Notes
+                  </label>
+                  <input id="kb-demo-mc-r3" name="mcR3" type="text" autoComplete="off" className={tokenFieldClassName} />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-3 border-t border-o9ds-light-border pt-4 dark:border-neutral-600">
+              <button type="button" className={tokenButtonSecondaryClassName}>
+                Cancel
+              </button>
+              <button type="submit" className={tokenButtonPrimaryClassName}>
+                Save
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -139,13 +353,29 @@ export default function KeyboardAndFocus() {
         <div className="border border-o9ds-light-border dark:border-neutral-700 p-5 space-y-2">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Best practice for this design system</h3>
           <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            <li>Use <code className="px-1" data-o9ds-inline-code>:focus-visible</code> (often combined with <code className="px-1" data-o9ds-inline-code>:focus</code> fallbacks where needed) for focus ring styling.</li>
             <li>Avoid showing a prominent focus ring on every mouse click when the platform supports <code className="px-1" data-o9ds-inline-code>:focus-visible</code>.</li>
             <li>Ensure keyboard users still get a <strong className="text-o9ds-light-primary dark:text-white">strong, high-contrast</strong> visible indicator—meet contrast requirements against adjacent colors.</li>
           </ul>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 pt-2">
             This balances accessibility with visual cleanliness: keyboard users get an unambiguous focus location; pointer users are not overwhelmed by rings on every click.
           </p>
+        </div>
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5" data-o9ds-kb-focus-demo>
+          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Live comparison</h3>
+          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+            <strong className="text-o9ds-light-primary dark:text-white">:focus btn</strong> — the demo outline uses{' '}
+            <code className="px-1" data-o9ds-inline-code>:focus</code> only (#010101 in light, white in dark): you should see the ring after a <em>mouse click</em> and when the control is focused.{' '}
+            <strong className="text-o9ds-light-primary dark:text-white">:focus-visible btn</strong> — outline only on{' '}
+            <code className="px-1" data-o9ds-inline-code>:focus-visible</code> with the same colors: many browsers hide the ring on a simple click but show it when focus moves with the keyboard.
+          </p>
+          <div className="flex flex-wrap items-start gap-4">
+            <button type="button" className={`o9ds-a11y-focus-only ${tokenButtonSecondaryClassName}`}>
+              :focus btn
+            </button>
+            <button type="button" className={`o9ds-a11y-focus-visible-only ${tokenButtonSecondaryClassName}`}>
+              :focus-visible btn
+            </button>
+          </div>
         </div>
         <CodeBlock code={focusCss} label="Example: focus-visible outline on interactive elements" />
       </section>
@@ -165,6 +395,8 @@ export default function KeyboardAndFocus() {
         <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
           For very long forms, an alternative is moving focus to an <strong className="text-o9ds-light-primary dark:text-white">error summary</strong> at the top with links to each field; pick one pattern and use it consistently.
         </p>
+        <p className="text-sm font-semibold text-o9ds-light-primary dark:text-white">Example</p>
+        <SubmitInvalidDemo />
         <CodeBlock
           code={`form.addEventListener('submit', (event) => {
   const firstInvalid = form.querySelector(':invalid');
@@ -340,13 +572,6 @@ export default function KeyboardAndFocus() {
           </li>
           <li>If the list becomes empty, move focus to the control used to add items or to the parent region.</li>
         </ul>
-      </section>
-
-      <section id="a11y-kb-shortcuts" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Shortcuts</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">
-          Keyboard shortcuts can improve efficiency but must be documented, consistent, discoverable, compatible with assistive technology, and safe relative to browser and OS defaults. If shortcuts appear in the UI, expose equivalent information to screen reader users where needed.
-        </p>
       </section>
     </AccessibilityDocPage>
   )

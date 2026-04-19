@@ -120,7 +120,7 @@ export const SEMANTIC_BORDER = [
   { token: 'o9ds-color-b-theme-active', lightGlobal: { o9theme: 'o9ds-global-o9theme-10', skyblue: 'o9ds-global-skyblue-09', onyxblack: 'o9ds-global-onyxblack-10', forestgreen: 'o9ds-global-forestgreen-09', midnightindigo: 'o9ds-global-midnightindigo-10' }, darkGlobal: 'o9ds-global-dark-07', useCase: 'Tab active state hover color.' },
   { token: 'o9ds-color-b-active-static', lightGlobal: 'o9ds-global-gray-05', darkGlobal: 'o9ds-global-gray-05', useCase: 'Active state for interactive elements (e.g. title view in filters).' },
   { token: 'o9ds-color-b-theme-hover-2', lightGlobal: { o9theme: 'o9ds-global-o9theme-09', skyblue: 'o9ds-global-skyblue-10', onyxblack: 'o9ds-global-onyxblack-10', forestgreen: 'o9ds-global-forestgreen-10', midnightindigo: 'o9ds-global-midnightindigo-09' }, darkGlobal: 'o9ds-global-dark-08', useCase: 'Active/selected state of chips, cards, or active tabs.' },
-  { token: 'o9ds-color-b-negative', lightGlobal: 'o9ds-global-redish-09', darkGlobal: 'o9ds-global-redish-08', useCase: 'Input field error border on hover/focus.' },
+  { token: 'o9ds-color-b-negative', lightGlobal: 'o9ds-global-redish-09', darkGlobal: 'o9ds-global-redish-06', useCase: 'Input field error border on hover/focus.' },
   { token: 'o9ds-color-b-warning', lightGlobal: 'o9ds-global-orangish-10', darkGlobal: 'o9ds-global-orangish-09', useCase: 'Warning border.' },
   { token: 'o9ds-color-b-positive', lightGlobal: 'o9ds-global-greenish-10', darkGlobal: 'o9ds-global-greenish-09', useCase: 'Positive/success border.' },
   { token: 'o9ds-color-b-info-light', lightGlobal: 'o9ds-global-bluish-09', darkGlobal: 'o9ds-global-bluish-08', useCase: 'Info border.' },
