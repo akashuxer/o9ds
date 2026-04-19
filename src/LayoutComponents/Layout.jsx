@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import ComponentTreeNav from './ComponentTreeNav'
@@ -303,6 +303,9 @@ export default function Layout({ children }) {
 
   const isDark = theme === 'dark'
   const [headerScrolled, setHeaderScrolled] = useState(false)
+  const [showEvolutionBanner, setShowEvolutionBanner] = useState(true)
+  const headerStackRef = useRef(null)
+  const [headerStackHeight, setHeaderStackHeight] = useState(56)
 
   useEffect(() => {
     const onScroll = () => {
@@ -313,6 +316,16 @@ export default function Layout({ children }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useLayoutEffect(() => {
+    const el = headerStackRef.current
+    if (!el) return
+    const update = () => setHeaderStackHeight(el.offsetHeight)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [showEvolutionBanner])
+
   return (
     <div
       className="min-h-screen font-sans antialiased"
@@ -321,22 +334,55 @@ export default function Layout({ children }) {
         color: isDark ? '#fff' : '#010101',
       }}
     >
-      {/* Header: solid at top → glassmorphism after scroll */}
-      <header
-        className={`sticky top-0 z-50 border-b transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-out ${
-          headerScrolled
-            ? 'border-white/20 bg-white/72 shadow-[0_8px_40px_rgba(0,0,0,0.06)] backdrop-blur-xl backdrop-saturate-150 dark:border-white/10 dark:bg-black/45 dark:shadow-[0_8px_40px_rgba(0,0,0,0.35)] dark:backdrop-blur-xl'
-            : ''
-        }`}
-        style={
-          headerScrolled
-            ? undefined
-            : {
-                borderColor: isDark ? '#262626' : '#E5E5E5',
-                backgroundColor: isDark ? '#000' : '#FFFFFF',
-              }
-        }
-      >
+      {/* Sticky stack: optional evolution banner + main header row */}
+      <div ref={headerStackRef} className="sticky top-0 z-50">
+        {showEvolutionBanner && (
+          <div
+            role="status"
+            className="flex items-start gap-2 border-b px-3 py-2.5 sm:px-6 sm:py-3"
+            style={{
+              borderColor: isDark ? '#3f3a2e' : '#e8dcc8',
+              backgroundColor: isDark ? '#1c1914' : '#fff8ed',
+              color: isDark ? '#e7e5e4' : '#292524',
+            }}
+          >
+            <p className="min-w-0 flex-1 text-xs leading-relaxed sm:text-sm">
+              This design system is actively evolving and not yet fully complete. We are continuously improving components,
+              documentation, and experiences as we work toward the official Q3 2026 release. You may notice occasional
+              inconsistencies or gaps as updates are rolled out, which will be addressed over time.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowEvolutionBanner(false)}
+              className="shrink-0 rounded-none border p-1.5 transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#010101] focus-visible:ring-offset-2 dark:focus-visible:ring-white dark:focus-visible:ring-offset-[#1c1914]"
+              style={{
+                borderColor: isDark ? '#525252' : '#d6d3d1',
+                color: isDark ? '#fafaf9' : '#010101',
+              }}
+              aria-label="Dismiss announcement"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        {/* Header: solid at top → glassmorphism after scroll */}
+        <header
+          className={`border-b transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-out ${
+            headerScrolled
+              ? 'border-white/20 bg-white/72 shadow-[0_8px_40px_rgba(0,0,0,0.06)] backdrop-blur-xl backdrop-saturate-150 dark:border-white/10 dark:bg-black/45 dark:shadow-[0_8px_40px_rgba(0,0,0,0.35)] dark:backdrop-blur-xl'
+              : ''
+          }`}
+          style={
+            headerScrolled
+              ? undefined
+              : {
+                  borderColor: isDark ? '#262626' : '#E5E5E5',
+                  backgroundColor: isDark ? '#000' : '#FFFFFF',
+                }
+          }
+        >
         <div className="flex h-14 items-center justify-between px-4 sm:px-6 min-[2560px]:max-w-[1800px] min-[2560px]:mx-auto min-[2560px]:px-6">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             {!isLandingHome && (
@@ -402,6 +448,7 @@ export default function Layout({ children }) {
           </div>
         </div>
       </header>
+      </div>
 
         {/* Mobile overlay */}
         {!isLandingHome && sidebarOpen && (
@@ -418,15 +465,17 @@ export default function Layout({ children }) {
         <aside
           className={`
             ${isLandingHome ? 'hidden' : ''}
-            fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-64 shrink-0 overflow-y-auto border-r
+            fixed left-0 z-40 w-64 shrink-0 overflow-y-auto border-r
             transform transition-transform duration-200 ease-out
             lg:translate-x-0
-            min-[2560px]:sticky min-[2560px]:top-14 min-[2560px]:self-start
+            min-[2560px]:sticky min-[2560px]:self-start
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}
           style={{
             borderColor: isDark ? '#262626' : '#E5E5E5',
             backgroundColor: isDark ? '#0a0a0a' : '#F2F2F2',
+            top: headerStackHeight,
+            height: `calc(100vh - ${headerStackHeight}px)`,
           }}
         >
           <div
@@ -553,12 +602,16 @@ export default function Layout({ children }) {
 
         {/* Main content */}
         <main
-          className={`o9ds-main min-h-[calc(100vh-3.5rem)] flex-1 min-w-0 py-8 sm:py-10 ${
+          className={`o9ds-main flex-1 min-w-0 py-8 sm:py-10 ${
             isLandingHome ? 'px-4 sm:px-6' : 'px-4 sm:px-6 md:px-8'
           } ${
             isLandingHome ? 'ml-0' : 'ml-0 lg:ml-64 min-[2560px]:ml-0'
           }`}
-          style={{ backgroundColor: isDark ? '#000' : '#FFFFFF', color: isDark ? '#fff' : '#010101' }}
+          style={{
+            backgroundColor: isDark ? '#000' : '#FFFFFF',
+            color: isDark ? '#fff' : '#010101',
+            minHeight: `calc(100vh - ${headerStackHeight}px)`,
+          }}
           data-theme={theme}
         >
           <div
