@@ -3,7 +3,117 @@ import { useTheme } from '../../context/ThemeContext'
 import { o9conIcons } from '../../tokens/o9conIcons'
 import { ICON_SIZE_TOKENS_SCSS } from '../../tokens/iconTokens'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
+import ExpandableDocImage from '../../LayoutComponents/ExpandableDocImage'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
+
+/** Icon spec SVGs live in `public/IconGraphic/` (dot-grid surface matches ComponentOverviewCard). */
+function iconGraphicSrc(filename) {
+  return `/IconGraphic/${encodeURIComponent(filename)}`
+}
+
+/** Dot-band spec figure + click to enlarge (same neutral dot grid in light/dark as catalog cards). */
+function IconSpecExpandableFigure({ illustrationSrc, imageAlt }) {
+  return (
+    <div
+      className="overflow-hidden rounded-none border border-[#E5E5E5] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-shadow duration-200 hover:shadow-md dark:border-neutral-700"
+      data-o9ds-icon-spec-figure
+    >
+      <div className="relative w-full shrink-0 overflow-hidden">
+        <div className="absolute inset-0 bg-white dark:bg-white" aria-hidden />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(148, 163, 184, 0.35) 1px, transparent 1px)',
+            backgroundSize: '14px 14px',
+          }}
+          aria-hidden
+        />
+        <div className="relative z-10 flex w-full items-center justify-center px-4 py-8 sm:py-10">
+          <ExpandableDocImage
+            src={illustrationSrc}
+            alt={imageAlt}
+            triggerClassName="!max-w-none flex w-full min-h-[120px] items-center justify-center"
+            className="max-h-[min(70vh,560px)] w-auto max-w-full object-contain object-center"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Category preview SVGs use white fills (for dark UI). Light mode: invert to dark glyphs on light dot grid.
+ * Dark mode: dark panel + no invert so strokes stay visible.
+ */
+function IconCategoryDotCard({ title, description, illustrationSrc, imageAlt }) {
+  return (
+    <div className="flex h-full flex-col overflow-hidden rounded-none border border-[#E5E5E5] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-shadow duration-200 hover:shadow-md dark:border-neutral-700">
+      <div className="relative h-[168px] w-full shrink-0 overflow-hidden border-b border-[#E5E5E5] dark:border-neutral-700">
+        <div className="absolute inset-0 bg-white dark:bg-[#0a0a0a]" aria-hidden />
+        <div
+          className="absolute inset-0 pointer-events-none dark:hidden"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(148, 163, 184, 0.35) 1px, transparent 1px)',
+            backgroundSize: '14px 14px',
+          }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 hidden dark:block"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+            backgroundSize: '14px 14px',
+          }}
+          aria-hidden
+        />
+        <div className="relative z-10 flex h-full w-full items-center justify-center px-4 py-5">
+          <ExpandableDocImage
+            src={illustrationSrc}
+            alt={imageAlt}
+            triggerClassName="!max-w-none flex h-full min-h-[168px] w-full items-center justify-center"
+            className="max-h-[120px] w-auto max-w-full object-contain invert dark:invert-0"
+          />
+        </div>
+      </div>
+      <div className="bg-[#FAFAFA] px-4 py-4 dark:bg-neutral-900">
+        <h3 className="mb-1.5 text-base font-semibold text-[#010101] dark:text-white">{title}</h3>
+        <p className="text-sm leading-relaxed text-[#525252] dark:text-neutral-400">{description}</p>
+      </div>
+    </div>
+  )
+}
+
+const ICON_TYPE_CATEGORIES = [
+  {
+    file: 'functional.svg',
+    title: '1. Functional Icons',
+    description:
+      'Essential interface actions and system operations that users interact with frequently. These icons represent core functionality like save, edit, delete, and search.',
+    imageAlt:
+      'Functional icon category: settings, home, save or edit, search, filter, and calendar style glyphs in a grid.',
+  },
+  {
+    file: 'navigational.svg',
+    title: '2. Navigation Icons',
+    description:
+      'Directional and movement-based icons that guide users through the interface. Includes arrows, chevrons, and directional indicators for navigation flows.',
+    imageAlt: 'Navigation icon category: chevrons, arrows, and directional indicators.',
+  },
+  {
+    file: 'status.svg',
+    title: '3. Status Icons',
+    description:
+      'Communication and feedback icons that convey system states, user notifications, and important information. Includes success, warning, error, and informational indicators.',
+    imageAlt: 'Status icon category: checkmarks, clock, pause, and alert style glyphs.',
+  },
+  {
+    file: 'custom-features.svg',
+    title: '4. Custom Features Icons',
+    description:
+      'Specialized icons designed for specific product features and unique functionality. These icons are tailored to represent domain-specific actions and concepts within the o9 platform.',
+    imageAlt: 'Custom feature icon category: domain-specific product and platform glyphs.',
+  },
+]
 
 const tabs = ['Overview', 'o9con Gallery', 'Accessibility', 'Code']
 const SIZES = [14, 16, 20, 24, 32]
@@ -115,6 +225,8 @@ export default function Icons() {
         { id: 'strokes', label: 'Strokes' },
         { id: 'angles', label: 'Angles' },
         { id: 'action', label: 'Action' },
+        { id: 'icons-in-figma', label: 'Icons in Figma' },
+        { id: 'illustrator-tips', label: 'Illustrator tips' },
         { id: 'available-sizes', label: 'Available Sizes' },
       ]
     }
@@ -264,20 +376,14 @@ export default function Icons() {
               Our icon library is systematically organized into four primary categories, each designed to serve specific interface functions while maintaining visual consistency across the entire system.
             </p>
             <div className="grid gap-6 sm:grid-cols-2">
-              {[
-                { title: '1. Functional Icons', desc: 'Essential interface actions and system operations that users interact with frequently. These icons represent core functionality like save, edit, delete, and search.' },
-                { title: '2. Navigation Icons', desc: 'Directional and movement-based icons that guide users through the interface. Includes arrows, chevrons, and directional indicators for navigation flows.' },
-                { title: '3. Status Icons', desc: 'Communication and feedback icons that convey system states, user notifications, and important information. Includes success, warning, error, and informational indicators.' },
-                { title: '4. Custom Features Icons', desc: 'Specialized icons designed for specific product features and unique functionality. These icons are tailored to represent domain-specific actions and concepts within the o9 platform.' },
-              ].map(({ title, desc }) => (
-                <div
-                  key={title}
-                  className="border dark:border-neutral-700 p-6 dark:bg-neutral-800/50 shadow-sm"
-                  style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : undefined}
-                >
-                  <h3 className="font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h3>
-                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">{desc}</p>
-                </div>
+              {ICON_TYPE_CATEGORIES.map(({ file, title, description, imageAlt }) => (
+                <IconCategoryDotCard
+                  key={file}
+                  title={title}
+                  description={description}
+                  illustrationSrc={iconGraphicSrc(file)}
+                  imageAlt={imageAlt}
+                />
               ))}
             </div>
           </div>
@@ -312,20 +418,25 @@ export default function Icons() {
                 </tbody>
               </table>
             </div>
-            <ul className="mt-4 list-disc list-inside text-sm text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
-              <li>24×24px frame</li>
-              <li>20×20px grid</li>
-              <li>2px padding</li>
-            </ul>
+            <div className="mt-6">
+              <IconSpecExpandableFigure
+                illustrationSrc={iconGraphicSrc('Base Grid.svg')}
+                imageAlt="o9 icon base grid: 24 by 24 artboard with 20 by 20 live area, stroke width, and padding guides."
+              />
+            </div>
           </div>
 
           {/* Padding */}
           <div id="padding">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Padding</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Essential spacing that ensures proper icon scaling and white space</p>
-            <p className="text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl">
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
               The grid contains 2px padding. This ensures icons will retain their desired scale and surrounding white space when exported into their UI bounding box. Icons should remain inside the grid.
             </p>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Padding.svg')}
+              imageAlt="Diagram showing 2px padding between the outer frame and the 20 by 20 live drawing area for o9 icons."
+            />
           </div>
 
           {/* Key Shapes */}
@@ -336,43 +447,61 @@ export default function Icons() {
               Key lines give you consistent sizes for basic shapes or proportions across the icon set. Make sure when creating new icons the focal point is in the middle. Do use the key shape that best demonstrates the proportion of the metaphor.
             </p>
             <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 font-medium mb-2">4 types of basic key shapes:</p>
-            <ul className="list-disc list-inside text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
+            <ul className="list-disc list-inside text-o9ds-light-secondary dark:text-neutral-400 space-y-1 mb-6">
               <li>Circle</li>
               <li>Rectangle</li>
               <li>Square</li>
               <li>Triangle</li>
             </ul>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Key shapes.svg')}
+              imageAlt="Key shape templates: circle, square, rectangle, and triangle guides for consistent proportions on the icon grid."
+            />
           </div>
 
           {/* Shape Size */}
           <div id="shape-size">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Shape Size</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Minimum size requirements and outline behavior for consistent icon rendering</p>
-            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
               No shape within an icon should be smaller than 4.27×4.27px. Once a shape reaches the minimum size (defined as a &quot;small square&quot;), it must be a solid fill and can no longer be an outline. This ensures clarity and visibility at small scales.
             </p>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Shape size.svg')}
+              imageAlt="Minimum shape size rules: small square threshold and when outlines become solid fills on the grid."
+            />
           </div>
 
           {/* Strokes */}
           <div id="strokes">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Strokes</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Visual weight consistency and stroke specifications for all icons</p>
-            <ul className="list-disc list-inside text-o9ds-light-secondary dark:text-neutral-400 space-y-2 max-w-2xl">
-              <li>One icon should not look heavier or lighter than other icons of the same size.</li>
-              <li>Maintain the same visual weight by using a 1.4pt base stroke for all icons on the 20×20px grid.</li>
-              <li>There are a few exceptions when the icon is complex or has a certain line density.</li>
-              <li>For full shapes, make sure the stroke is an &quot;inner&quot; stroke.</li>
-              <li>We use sharp-edged icons as default. You may use curves only in circular elements.</li>
+            <ul className="mb-6 max-w-2xl list-disc space-y-2 pl-5 text-o9ds-light-secondary dark:text-neutral-400 marker:text-o9ds-light-secondary dark:marker:text-neutral-400">
+              <li className="pl-1">One icon should not look heavier or lighter than other icons of the same size.</li>
+              <li className="pl-1">
+                Maintain the same visual weight by using a 1.4pt base stroke for all icons on the 20×20px grid.
+              </li>
+              <li className="pl-1">There are a few exceptions when the icon is complex or has a certain line density.</li>
+              <li className="pl-1">For full shapes, make sure the stroke is an &quot;inner&quot; stroke.</li>
+              <li className="pl-1">We use sharp-edged icons as default. You may use curves only in circular elements.</li>
             </ul>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Strokes.svg')}
+              imageAlt="Stroke weight and inner versus outer stroke behavior for o9 icons on the grid."
+            />
           </div>
 
           {/* Angles */}
           <div id="angles">
             <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Angles</h2>
             <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-2">Consistent angle increments that create harmony across the icon set</p>
-            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
               Create harmony across the icon set by consistently making 90° angles sit on the same increments. Use increments of 9° for other angles when needed.
             </p>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Angles.svg')}
+              imageAlt="Angle construction: 90 degree alignment and 9 degree increments on the icon grid."
+            />
           </div>
 
           {/* Action */}
@@ -387,12 +516,40 @@ export default function Icons() {
               <li><strong className="text-o9ds-light-primary dark:text-white">Design within 9° increments</strong> — Start the icon design; it doesn&apos;t have to be centered as long as the degrees are carefully designed first.</li>
               <li><strong className="text-o9ds-light-primary dark:text-white">Center the shape</strong> — When angles are defined, center the shape on the grid for perfect symmetry.</li>
             </ol>
-            <ul className="mt-4 list-disc list-inside text-sm text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
+            <ul className="mt-4 mb-6 list-disc list-inside text-sm text-o9ds-light-secondary dark:text-neutral-400 space-y-1">
               <li>Always start with the established grid system and angle guidelines</li>
               <li>Maintain consistency with existing icon angles and proportions</li>
               <li>Ensure symmetrical design where appropriate for visual balance</li>
               <li>Test the icon at different sizes to verify scalability</li>
             </ul>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Action.svg')}
+              imageAlt="Step-by-step action diagram for placing the angle grid, designing on increments, and centering shapes on the o9 icon grid."
+            />
+          </div>
+
+          {/* Icons in Figma */}
+          <div id="icons-in-figma">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Icons in Figma</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              Use the shared Figma structure and components so icons stay aligned with grid, padding, and export settings across files.
+            </p>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Icons in Figma.svg')}
+              imageAlt="Figma setup for o9 icons: frames, components, and grid alignment in the design tool."
+            />
+          </div>
+
+          {/* Illustrator */}
+          <div id="illustrator-tips">
+            <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-2">Illustrator tips</h2>
+            <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 max-w-2xl">
+              Checklist for drawing and exporting icons in Adobe Illustrator without losing pixel alignment or stroke behavior.
+            </p>
+            <IconSpecExpandableFigure
+              illustrationSrc={iconGraphicSrc('Illustrator  Things to remember.svg')}
+              imageAlt="Illustrator checklist: pixel preview, strokes, alignment, and export settings for o9 icons."
+            />
           </div>
 
           {/* Available Sizes */}

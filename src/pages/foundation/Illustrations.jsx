@@ -25,7 +25,7 @@ const ILLUSTRATIONS = [
   { name: 'settings', label: 'Settings', srcDark: '/o9illus/dark/o9illus-dark-settings.svg', srcLight: '/o9illus/light/o9illus-light-settings.svg' },
 ]
 
-const SIZES = [96, 124, 224]
+const SIZES = [80, 120, 200, 280]
 
 const DESIGN_PRINCIPLES = [
   {
@@ -124,7 +124,7 @@ function IllustrationCard({ item, size }) {
 
 export default function Illustrations() {
   const [activeTab, setActiveTab] = useState('Overview')
-  const [selectedSize, setSelectedSize] = useState(124)
+  const [selectedSize, setSelectedSize] = useState(120)
   const tabListRef = useRef(null)
   const { theme } = useTheme()
   const isLight = theme === 'light'
@@ -252,9 +252,10 @@ export default function Illustrations() {
               <div>
                 <h3 className="font-semibold text-o9ds-light-primary dark:text-white mb-3">Size Selection</h3>
                 <ul className="space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
-                  <li><strong className="text-o9ds-light-primary dark:text-white">96px</strong> — Small illustrations for inline states and compact spaces</li>
-                  <li><strong className="text-o9ds-light-primary dark:text-white">124px</strong> — Default size for most empty states and modal dialogs</li>
-                  <li><strong className="text-o9ds-light-primary dark:text-white">224px</strong> — Large illustrations for prominent empty states and landing pages</li>
+                  <li><strong className="text-o9ds-light-primary dark:text-white">80px</strong> — Compact illustrations for tight layouts and inline states</li>
+                  <li><strong className="text-o9ds-light-primary dark:text-white">120px</strong> — Default size for most empty states and modal dialogs</li>
+                  <li><strong className="text-o9ds-light-primary dark:text-white">200px</strong> — Medium-large illustrations for section empty states</li>
+                  <li><strong className="text-o9ds-light-primary dark:text-white">280px</strong> — Largest size for prominent empty states and landing pages</li>
                 </ul>
               </div>
             </div>
@@ -271,7 +272,7 @@ export default function Illustrations() {
                 <div className="space-y-2">
                   <CodeBlock code="o9ds-illus" label="Base" />
                   <CodeBlock code={'.o9ds-illus--{illus-name}'} label="Illustration" />
-                  <CodeBlock code=".o9ds-illus-96   .o9ds-illus-124   .o9ds-illus-224" label="Size" />
+                  <CodeBlock code={SIZES.map((s) => `.o9ds-illus-${s}`).join('   ')} label="Size" />
                 </div>
               </div>
             </div>
@@ -366,12 +367,12 @@ export default function Illustrations() {
           <p className="text-o9ds-light-secondary dark:text-neutral-400">Use the following HTML structure to render an illustration:</p>
           <div className="relative">
             <CodeBlock
-              code={`<div class="o9ds-illus o9ds-illus--dashboard o9ds-illus-124"></div>`}
-              label="Example: Dashboard at 124px"
+              code={`<div class="o9ds-illus o9ds-illus--dashboard o9ds-illus-120"></div>`}
+              label="Example: Dashboard at 120px"
             />
           </div>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Replace <code className="px-1 py-0.5" data-o9ds-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, no-filters-found, no-form-configured, no-notifications, no-post, no-report, no-results-found, no-slides, no-tasks, restricted-access, server-error, settings) and <code className="px-1 py-0.5" data-o9ds-inline-code>124</code> with the desired size (96, 124, 224).
+            Replace <code className="px-1 py-0.5" data-o9ds-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, no-filters-found, no-form-configured, no-notifications, no-post, no-report, no-results-found, no-slides, no-tasks, restricted-access, server-error, settings) and <code className="px-1 py-0.5" data-o9ds-inline-code>120</code> with the desired size (80, 120, 200, 280).
           </p>
 
           <div id="illus-size-tokens">

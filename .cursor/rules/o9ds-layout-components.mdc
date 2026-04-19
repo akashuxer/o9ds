@@ -18,6 +18,7 @@ Before building a new card, table, or layout element, check and reuse:
 | `GrayBgCard` | Principle cards, callouts — gray bg, dark border |
 | `DocTabs` | Overview / Usage / API / Accessibility tabs (with slide animation) |
 | `CodeBlock` | Code snippets with copy |
+| `ExpandableDocImage` | Doc infographics / large figures — click opens full-size overlay (Escape, Close, backdrop) |
 | `PageWithToc` | Pages with "On This Page" TOC |
 | `OnThisPage` | Right-side section nav |
 | `ColorSwatch` | Color preview tile |

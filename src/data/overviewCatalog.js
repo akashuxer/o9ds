@@ -12,6 +12,7 @@ export const FOUNDATIONS_CATALOG = [
   { path: '/borders', label: 'Borders & Radius', section: 'Foundations' },
   { path: '/icons', label: 'Iconography', section: 'Assets' },
   { path: '/illustrations', label: 'Illustrations', section: 'Assets' },
+  { path: '/symbol', label: 'Symbol', section: 'Assets' },
   { path: '/motion', label: 'Motion & Animation', section: 'Foundations' },
   { path: '/effects', label: 'Effects', section: 'Foundations' },
   { path: '/colors/data-viz', label: 'Data Visualization Colors', section: 'Foundations' },
@@ -35,7 +36,16 @@ export const PATTERNS_CATALOG = [
 
 /** Do not list the section overview route itself (e.g. /accessibility) as a card — only child topics. */
 /** @type {OverviewCatalogItem[]} */
-export const ACCESSIBILITY_CATALOG = []
+export const ACCESSIBILITY_CATALOG = [
+  { path: '/accessibility/overview', label: 'Introduction', section: 'Accessibility' },
+  { path: '/accessibility/standards-and-principles', label: 'Standards and principles', section: 'Accessibility' },
+  { path: '/accessibility/assistive-technology', label: 'Assistive technology', section: 'Accessibility' },
+  { path: '/accessibility/screen-reader-and-aria', label: 'Screen reader and ARIA', section: 'Accessibility' },
+  { path: '/accessibility/keyboard-and-focus', label: 'Keyboard and focus', section: 'Accessibility' },
+  { path: '/accessibility/visual-accessibility', label: 'Visual accessibility', section: 'Accessibility' },
+  { path: '/accessibility/testing-and-qa', label: 'Testing and QA', section: 'Accessibility' },
+  { path: '/accessibility/glossary', label: 'Glossary', section: 'Accessibility' },
+]
 
 /** @type {OverviewCatalogItem[]} */
 export const CONTENT_CATALOG = [

@@ -83,6 +83,7 @@ const cards = [
     links: [
       { label: 'Icons', to: '/icons' },
       { label: 'Illustrations', to: '/illustrations' },
+      { label: 'Symbol', to: '/symbol' },
     ],
   },
   {
@@ -102,7 +103,11 @@ const cards = [
     desc: 'Inclusive patterns and WCAG-aligned guidance.',
     path: '/accessibility',
     icon: 'accessibility',
-    links: [{ label: 'Accessibility overview', to: '/accessibility' }],
+    links: [
+      { label: 'Accessibility topics', to: '/accessibility' },
+      { label: 'Introduction', to: '/accessibility/overview' },
+      { label: 'Testing and QA', to: '/accessibility/testing-and-qa' },
+    ],
   },
   {
     title: 'Content Guidelines',

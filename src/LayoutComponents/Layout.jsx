@@ -17,6 +17,7 @@ const PAGE_TITLES = {
   '/borders': 'Borders & Radius',
   '/icons': 'Iconography',
   '/illustrations': 'Illustrations',
+  '/symbol': 'Symbol',
   '/motion': 'Motion & Animation',
   '/effects': 'Effects',
   '/elevation': 'Effects',
@@ -39,7 +40,15 @@ const PAGE_TITLES = {
   '/designers': 'For Designers',
   '/developers': 'For Developers',
   '/vibe-coders': 'For Vibe Coders',
-  '/accessibility': 'Accessibility',
+  '/accessibility': 'Accessibility — Overview',
+  '/accessibility/overview': 'Accessibility — Introduction',
+  '/accessibility/standards-and-principles': 'Standards and principles',
+  '/accessibility/assistive-technology': 'Assistive technology',
+  '/accessibility/screen-reader-and-aria': 'Screen reader and ARIA',
+  '/accessibility/keyboard-and-focus': 'Keyboard and focus',
+  '/accessibility/visual-accessibility': 'Visual accessibility',
+  '/accessibility/testing-and-qa': 'Testing and QA',
+  '/accessibility/glossary': 'Accessibility glossary',
   '/content': 'Content Guidelines',
   '/content/writing-principles': 'Writing Principles',
   '/content/grammar': 'Grammar',
@@ -97,6 +106,7 @@ const sidebarSections = [
         children: [
           { path: '/icons', label: 'Iconography' },
           { path: '/illustrations', label: 'Illustrations' },
+          { path: '/symbol', label: 'Symbol' },
         ],
       },
       { path: '/motion', label: 'Motion & Animation' },
@@ -113,6 +123,14 @@ const sidebarSections = [
     title: 'ACCESSIBILITY',
     items: [
       { path: '/accessibility', label: 'Overview' },
+      { path: '/accessibility/overview', label: 'Introduction' },
+      { path: '/accessibility/standards-and-principles', label: 'Standards and principles' },
+      { path: '/accessibility/assistive-technology', label: 'Assistive technology' },
+      { path: '/accessibility/screen-reader-and-aria', label: 'Screen reader and ARIA' },
+      { path: '/accessibility/keyboard-and-focus', label: 'Keyboard and focus' },
+      { path: '/accessibility/visual-accessibility', label: 'Visual accessibility' },
+      { path: '/accessibility/testing-and-qa', label: 'Testing and QA' },
+      { path: '/accessibility/glossary', label: 'Glossary' },
     ],
   },
   {
@@ -471,9 +489,11 @@ export default function Layout({ children }) {
                   {section.items.map((item) =>
                     item.children ? (
                       <li key={item.path}>
-                        <div className="px-2 py-1.5 text-sm font-medium" style={{ color: isDark ? '#a3a3a3' : '#303030' }}>
-                          {item.label}
-                        </div>
+                        {!item.hideGroupLabel && (
+                          <div className="px-2 py-1.5 text-sm font-medium" style={{ color: isDark ? '#a3a3a3' : '#303030' }}>
+                            {item.label}
+                          </div>
+                        )}
                         <ul className="ml-2 space-y-0.5 pl-3">
                           {item.children.map((child) => (
                             <li key={child.path}>
@@ -553,6 +573,7 @@ export default function Layout({ children }) {
                     pathname.startsWith('/borders') ||
                     pathname.startsWith('/icons') ||
                     pathname.startsWith('/illustrations') ||
+                    pathname.startsWith('/symbol') ||
                     pathname.startsWith('/foundations') ||
                     pathname.startsWith('/patterns') ||
                     pathname.startsWith('/accessibility') ||

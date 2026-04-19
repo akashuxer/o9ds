@@ -26,7 +26,7 @@ function ResetIcon({ className }) {
 }
 
 /**
- * @param {{ title: string, description: string, icon: import('react').ReactNode, items: Array<{ path: string, label: string, section: string }>, getIllustrationSrc: (path: string) => string | undefined, isReady: (path: string) => boolean, documentationCatalogId?: 'component' | 'contentWriting' | 'accessibility' | 'foundations' | 'patterns' | 'documentation' }} props
+ * @param {{ title: string, description: string, icon: import('react').ReactNode, items: Array<{ path: string, label: string, section: string }>, getIllustrationSrc: (path: string) => string | undefined, isReady: (path: string) => boolean, documentationCatalogId?: 'component' | 'contentWriting' | 'accessibility' | 'foundations' | 'patterns' | 'documentation', preserveCatalogOrder?: boolean }} props
  */
 export default function SectionOverviewPage({
   title,
@@ -36,6 +36,8 @@ export default function SectionOverviewPage({
   getIllustrationSrc,
   isReady,
   documentationCatalogId = 'documentation',
+  /** When true, grid order follows \`items\` array order (no A–Z sort). Use for Accessibility to match sidebar. */
+  preserveCatalogOrder = false,
 }) {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
@@ -54,8 +56,15 @@ export default function SectionOverviewPage({
         return hay.includes(q)
       })
     }
+    if (preserveCatalogOrder) {
+      const rank = (path) => {
+        const i = items.findIndex((it) => it.path === path)
+        return i === -1 ? 9999 : i
+      }
+      return [...rows].sort((a, b) => rank(a.path) - rank(b.path))
+    }
     return [...rows].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
-  }, [items, query, readyOnly, isReady])
+  }, [items, query, readyOnly, isReady, preserveCatalogOrder])
 
   const canReset = query.trim() !== '' || readyOnly
 

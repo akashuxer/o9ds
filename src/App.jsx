@@ -16,10 +16,19 @@ import Placeholder from './pages/Placeholder'
 import Borders from './pages/foundation/Borders'
 import Effects from './pages/foundation/Effects'
 import Illustrations from './pages/foundation/Illustrations'
+import Symbol from './pages/foundation/Symbol'
 import Developers from './pages/Developers'
 import FoundationsOverview from './pages/FoundationsOverview'
 import PatternsOverview from './pages/PatternsOverview'
 import AccessibilityOverview from './pages/AccessibilityOverview'
+import AccessibilityOverviewArticle from './pages/accessibility/OverviewArticle'
+import AccessibilityStandardsAndPrinciples from './pages/accessibility/StandardsAndPrinciples'
+import AccessibilityAssistiveTechnology from './pages/accessibility/AssistiveTechnology'
+import AccessibilityScreenReaderAndAria from './pages/accessibility/ScreenReaderAndAria'
+import AccessibilityKeyboardAndFocus from './pages/accessibility/KeyboardAndFocus'
+import AccessibilityVisualAccessibility from './pages/accessibility/VisualAccessibility'
+import AccessibilityTestingAndQA from './pages/accessibility/TestingAndQA'
+import AccessibilityGlossary from './pages/accessibility/Glossary'
 import ContentOverview from './pages/ContentOverview'
 
 export default function App() {
@@ -41,6 +50,7 @@ export default function App() {
           <Route path="/borders" element={<Borders />} />
           <Route path="/icons" element={<Icons />} />
           <Route path="/illustrations" element={<Illustrations />} />
+          <Route path="/symbol" element={<Symbol />} />
           <Route path="/motion" element={<Placeholder title="Motion & Animation" documentationCatalog="foundations" />} />
           <Route path="/effects" element={<Effects />} />
           <Route path="/elevation" element={<Navigate to="/effects" replace />} />
@@ -50,6 +60,26 @@ export default function App() {
           <Route path="/developers" element={<Developers />} />
           <Route path="/vibe-coders" element={<Placeholder title="For Vibe Coders" />} />
           <Route path="/accessibility" element={<AccessibilityOverview />} />
+          <Route path="/accessibility/overview" element={<AccessibilityOverviewArticle />} />
+          <Route path="/accessibility/standards-and-principles" element={<AccessibilityStandardsAndPrinciples />} />
+          <Route path="/accessibility/assistive-technology" element={<AccessibilityAssistiveTechnology />} />
+          <Route path="/accessibility/screen-reader-and-aria" element={<AccessibilityScreenReaderAndAria />} />
+          <Route
+            path="/accessibility/semantics-and-aria"
+            element={<Navigate to="/accessibility/screen-reader-and-aria" replace />}
+          />
+          <Route
+            path="/accessibility/labels-errors-and-content"
+            element={<Navigate to="/accessibility/screen-reader-and-aria" replace />}
+          />
+          <Route path="/accessibility/keyboard-and-focus" element={<AccessibilityKeyboardAndFocus />} />
+          <Route path="/accessibility/visual-accessibility" element={<AccessibilityVisualAccessibility />} />
+          <Route
+            path="/accessibility/component-accessibility-template"
+            element={<Navigate to="/accessibility/overview" replace />}
+          />
+          <Route path="/accessibility/testing-and-qa" element={<AccessibilityTestingAndQA />} />
+          <Route path="/accessibility/glossary" element={<AccessibilityGlossary />} />
           <Route path="/content" element={<ContentOverview />} />
           <Route path="/content/writing-principles" element={<Placeholder title="Writing Principles" documentationCatalog="contentWriting" />} />
           <Route path="/content/grammar" element={<Placeholder title="Grammar" documentationCatalog="contentWriting" />} />

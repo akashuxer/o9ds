@@ -76,6 +76,7 @@ o9ds Website/
 │   │   ├── WhiteBgCard.jsx # Cards — white bg, subtle border
 │   │   ├── GrayBgCard.jsx  # Cards — gray bg, dark border
 │   │   ├── CodeBlock.jsx   # Code snippet with copy
+│   │   ├── ExpandableDocImage.jsx # Doc infographic: click opens full-size lightbox
 │   │   ├── ColorSwatch.jsx # Color preview tile
 │   │   ├── ComponentOverviewCard.jsx # Components catalog tiles (fixed light surfaces)
 │   │   ├── SectionOverviewPage.jsx   # Foundations / Patterns / Accessibility / Content grids
