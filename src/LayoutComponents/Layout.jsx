@@ -100,6 +100,7 @@ const sidebarSections = [
       { path: '/typography', label: 'Typography' },
       { path: '/spacing', label: 'Spacing' },
       { path: '/borders', label: 'Borders & Radius' },
+      { path: '/effects', label: 'Effects' },
       {
         path: '/icons',
         label: 'Assets',
@@ -110,7 +111,6 @@ const sidebarSections = [
         ],
       },
       { path: '/motion', label: 'Motion & Animation' },
-      { path: '/effects', label: 'Effects' },
       { path: '/colors/data-viz', label: 'Data Visualization Colors' },
     ],
   },

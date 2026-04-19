@@ -26,7 +26,7 @@ function ResetIcon({ className }) {
 }
 
 /**
- * @param {{ title: string, description: string, icon: import('react').ReactNode, items: Array<{ path: string, label: string, section: string }>, getIllustrationSrc: (path: string) => string | undefined, isReady: (path: string) => boolean, documentationCatalogId?: 'component' | 'contentWriting' | 'accessibility' | 'foundations' | 'patterns' | 'documentation', preserveCatalogOrder?: boolean }} props
+ * @param {{ title: string, description: string, icon: import('react').ReactNode, items: Array<{ path: string, label: string, section: string, description?: string }>, getIllustrationSrc: (path: string) => string | undefined, isReady: (path: string) => boolean, documentationCatalogId?: 'component' | 'contentWriting' | 'accessibility' | 'foundations' | 'patterns' | 'documentation', preserveCatalogOrder?: boolean }} props
  */
 export default function SectionOverviewPage({
   title,
@@ -52,7 +52,7 @@ export default function SectionOverviewPage({
     }
     if (q) {
       rows = rows.filter((m) => {
-        const hay = `${m.label} ${m.section} ${m.path}`.toLowerCase()
+        const hay = `${m.label} ${m.section} ${m.path} ${m.description ?? ''}`.toLowerCase()
         return hay.includes(q)
       })
     }
@@ -176,7 +176,10 @@ export default function SectionOverviewPage({
                   >
                     <ComponentOverviewCard
                       title={m.label}
-                      description={`${m.section}. Open for guidance and examples as they are published.`}
+                      description={
+                        m.description ??
+                        `${m.section}. Open for guidance and examples as they are published.`
+                      }
                       illustrationSrc={getIllustrationSrc(m.path)}
                       ready={ready}
                     />
