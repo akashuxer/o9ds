@@ -346,10 +346,11 @@ export default function Layout({ children }) {
               color: isDark ? '#e7e5e4' : '#292524',
             }}
           >
-            <p className="min-w-0 flex-1 text-xs leading-relaxed sm:text-sm">
-              This design system is actively evolving and not yet fully complete. We are continuously improving components,
-              documentation, and experiences as we work toward the official Q3 2026 release. You may notice occasional
-              inconsistencies or gaps as updates are rolled out, which will be addressed over time.
+            <p className="min-w-0 flex-1 text-xs font-normal leading-relaxed sm:text-sm">
+              <strong className="font-bold">This design system is actively evolving and not yet fully complete.</strong>{' '}
+              We are continuously improving components, documentation, and experiences{' '}
+              <span className="font-semibold">as we work toward the official Q3 2026 release</span>. You may notice
+              occasional inconsistencies or gaps as updates are rolled out, which will be addressed over time.
             </p>
             <button
               type="button"
