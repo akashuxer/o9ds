@@ -141,6 +141,10 @@ export default function Resources() {
               </div>
             ))}
           </div>
+          <p className="m-0 mt-8 max-w-3xl text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            Thank you to everyone who has supported o9ds—in every role, every review, and every small win along the way.
+            Your help is what keeps this system moving forward. ❤️
+          </p>
         </section>
 
         <section id="on-this-site" className="scroll-mt-24 border-t border-neutral-200 pt-12 dark:border-neutral-800">
