@@ -1,8 +1,9 @@
 /**
- * Per-path illustrations for Foundations overview cards (`public/o9DocGraphics/FoundationGraphic/`).
+ * Per-path illustrations for section overview cards (Foundations, Accessibility, etc.).
  * Unmapped paths use the shared default from ComponentsOverview.
  */
 const FOUNDATION_GRAPHIC = '/o9DocGraphics/FoundationGraphic'
+const ACCESSIBILITY_GRAPHIC = '/AccessibilityGraphics'
 
 /** @type {Record<string, string>} */
 const SECTION_OVERVIEW_BY_PATH = {
@@ -17,6 +18,15 @@ const SECTION_OVERVIEW_BY_PATH = {
   '/motion': `${FOUNDATION_GRAPHIC}/motion.png`,
 }
 
+/** @type {Record<string, string>} */
+const ACCESSIBILITY_OVERVIEW_BY_PATH = {
+  '/accessibility/overview': `${ACCESSIBILITY_GRAPHIC}/introductionOverview.png`,
+  '/accessibility/standards-and-principles': `${ACCESSIBILITY_GRAPHIC}/standard and principles Overview.png`,
+  '/accessibility/assistive-technology': `${ACCESSIBILITY_GRAPHIC}/AssistiveTechnologyOverview.png`,
+  '/accessibility/screen-reader-and-aria': `${ACCESSIBILITY_GRAPHIC}/ScreenReaderAriaOverview.png`,
+  '/accessibility/keyboard-and-focus': `${ACCESSIBILITY_GRAPHIC}/keyboard-focusOverview.png`,
+}
+
 const FALLBACK = '/o9DocGraphics/ComponentsOverview/default.svg'
 
 /**
@@ -24,5 +34,5 @@ const FALLBACK = '/o9DocGraphics/ComponentsOverview/default.svg'
  * @returns {string}
  */
 export function getSectionOverviewIllustrationSrc(path) {
-  return SECTION_OVERVIEW_BY_PATH[path] ?? FALLBACK
+  return SECTION_OVERVIEW_BY_PATH[path] ?? ACCESSIBILITY_OVERVIEW_BY_PATH[path] ?? FALLBACK
 }
