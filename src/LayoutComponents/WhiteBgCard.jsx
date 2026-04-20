@@ -5,7 +5,7 @@ import { useTheme } from '../context/ThemeContext'
  * Use for principle cards, feature callouts, and structured content.
  * No vertical line in decision rule section (reduces noise).
  */
-export default function WhiteBgCard({ number, icon, title, desc, bullets = [], decisionRule, children, className = '', style, unified }) {
+export default function WhiteBgCard({ number, icon, title, desc, media, bullets = [], decisionRule, children, className = '', style, unified }) {
   const { theme } = useTheme()
   const isLight = theme === 'light'
 
@@ -25,7 +25,13 @@ export default function WhiteBgCard({ number, icon, title, desc, bullets = [], d
       {number != null && (
         <div
           className="mb-4 flex h-8 w-8 items-center justify-center text-sm font-bold shrink-0 transition-colors"
-          style={isLight ? { backgroundColor: '#E5E5E5', color: '#010101' } : (isUnified ? { backgroundColor: '#404040', color: '#fff' } : { backgroundColor: '#fff', color: '#000' })}
+          style={
+            isUnified
+              ? { backgroundColor: '#000000', color: '#ffffff' }
+              : isLight
+                ? { backgroundColor: '#E5E5E5', color: '#010101' }
+                : { backgroundColor: '#fff', color: '#000' }
+          }
           data-o9ds-avatar
         >
           {number}
@@ -43,6 +49,7 @@ export default function WhiteBgCard({ number, icon, title, desc, bullets = [], d
         <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h3>
       )}
       {desc && <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 leading-relaxed">{desc}</p>}
+      {media != null && <div className="mb-4">{media}</div>}
       {bullets.length > 0 && (
         <ul className="space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">
           {bullets.map((b, i) => (

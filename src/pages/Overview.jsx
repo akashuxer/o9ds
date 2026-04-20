@@ -1,13 +1,19 @@
 import { useTheme } from '../context/ThemeContext'
+import ExpandableDocImage from '../LayoutComponents/ExpandableDocImage'
 import GrayBgCard from '../LayoutComponents/GrayBgCard'
 import WhiteBgCard from '../LayoutComponents/WhiteBgCard'
 import PageWithToc from '../LayoutComponents/PageWithToc'
-import { DESIGN_PRINCIPLES, PRINCIPLES_INTRO } from '../data/principlesContent'
+import {
+  DESIGN_PRINCIPLES,
+  GET_STARTED_INTRO,
+  GET_STARTED_SYSTEM_DIAGRAM,
+  PRINCIPLES_INTRO,
+} from '../data/principlesContent'
 
 const OVERVIEW_SECTIONS = [
   { id: 'what-is-o9ds', label: 'What is o9ds?' },
   { id: 'why-we-built-it', label: 'Why we built it' },
-  { id: 'principles', label: 'Principles' },
+  { id: 'get-started', label: 'Get started' },
   { id: 'business-impact', label: 'Business Impact' },
 ]
 
@@ -49,26 +55,6 @@ export default function Overview() {
           Overview
         </h1>
       </section>
-      {/* Slogan */}
-      <section
-        className="border dark:border-neutral-700 dark:bg-neutral-900/50 p-6 md:p-8 animate-fade-in shadow-sm"
-        style={
-          isLight
-            ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' }
-            : undefined
-        }
-      >
-        <p className="text-center text-base md:text-lg font-semibold text-o9ds-light-primary dark:text-white leading-relaxed">
-          ONE COMPANY · ONE SYSTEM · MULTIPLE MODULES · DIFFERENT PRODUCTS · MULTIPLE TEAMS
-          <br />
-          <span
-            className="dark:text-neutral-400"
-            style={isLight ? { color: '#303030' } : undefined}
-          >
-            BUT ONE CONSISTENT EXPERIENCE
-          </span>
-        </p>
-      </section>
 
       {/* What is o9ds */}
       <section id="what-is-o9ds" className="animate-fade-in-up" style={{ animationDelay: '80ms' }}>
@@ -96,22 +82,48 @@ export default function Overview() {
         </div>
       </section>
 
-      {/* Principles — full guidelines (formerly standalone /principles) */}
-      <section id="principles" className="animate-fade-in-up scroll-mt-24" style={{ animationDelay: '550ms' }}>
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-3">Principles</h2>
+      {/* Get started — system diagram + five principles (infographics in public/GetStarted/) */}
+      <section id="get-started" className="animate-fade-in-up scroll-mt-24" style={{ animationDelay: '500ms' }}>
+        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-3">Get started</h2>
+        <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 leading-relaxed max-w-2xl">
+          {GET_STARTED_INTRO}
+        </p>
+        <div className="mb-10">
+          <ExpandableDocImage
+            src={GET_STARTED_SYSTEM_DIAGRAM.src}
+            alt={GET_STARTED_SYSTEM_DIAGRAM.alt}
+            className="w-full"
+            triggerClassName="max-w-full"
+          />
+        </div>
+        <h3
+          id="principles"
+          className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-3 scroll-mt-24"
+        >
+          Core principles
+        </h3>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6 leading-relaxed">{PRINCIPLES_INTRO}</p>
-        <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-6">Our Core Principles</h3>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {DESIGN_PRINCIPLES.map(({ num, title, desc, bullets, rule }) => (
+        <div className="grid gap-8 sm:grid-cols-2 sm:gap-6">
+          {DESIGN_PRINCIPLES.map(({ num, title, desc, bullets, rule, infographic, infographicAlt }) => (
             <WhiteBgCard
               key={num}
               number={num}
               title={title}
               desc={desc}
+              media={
+                infographic ? (
+                  <ExpandableDocImage
+                    src={infographic}
+                    alt={infographicAlt || `Principle ${num} infographic`}
+                    className="w-full"
+                    triggerClassName="max-w-full w-full"
+                  />
+                ) : null
+              }
               bullets={bullets}
               decisionRule={rule}
               className="animate-fade-in-up p-6"
-              style={{ animationDelay: `${550 + num * 80}ms` }}
+              style={{ animationDelay: `${560 + num * 80}ms` }}
               unified
             />
           ))}
