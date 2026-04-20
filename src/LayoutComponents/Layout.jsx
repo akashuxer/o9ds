@@ -107,6 +107,36 @@ const sidebarSections = [
       { path: '/overview', label: 'Overview' },
       { path: '/designers', label: 'For Designers' },
       { path: '/developers', label: 'For Developers' },
+      {
+        path: '_nav-group-usage',
+        label: 'Usage',
+        subsectionGroup: true,
+        children: [
+          { path: '/usage', label: 'Overview' },
+          { path: '/usage/public-api', label: 'Public API' },
+          { path: '/usage/components', label: 'Components Contract' },
+          { path: '/usage/styling', label: 'Styling' },
+          { path: '/usage/composition', label: 'Composition' },
+          { path: '/usage/accessibility', label: 'Accessibility' },
+          { path: '/usage/testing', label: 'Testing' },
+          { path: '/usage/versioning', label: 'Versioning' },
+          { path: '/usage/anti-patterns', label: 'Anti-Patterns' },
+          { path: '/usage/checklist', label: 'PR Checklist' },
+        ],
+      },
+      {
+        path: '_nav-group-developer-reference',
+        label: 'Developer Reference',
+        subsectionGroup: true,
+        children: [
+          { path: '/developer-reference/agentic-pipeline', label: 'Agentic Pipeline' },
+          { path: '/developer-reference/component-pipeline', label: 'Component Pipeline' },
+          { path: '/developer-reference/token-pipeline', label: 'Token Pipeline' },
+          { path: '/developer-reference/shared-patterns', label: 'Shared Patterns' },
+          { path: '/developer-reference/testing-and-drift', label: 'Testing & Drift' },
+          { path: '/developer-reference/workflows', label: 'Contributor Workflows' },
+        ],
+      },
       { path: '/arvo-mcp-other-mcps', label: 'Arvo MCP/Other MCPs' },
       { path: '/vibe-coders', label: 'For Vibe Coders' },
       { path: '/contribute', label: 'How to Contribute' },
@@ -139,32 +169,6 @@ const sidebarSections = [
     title: 'COMPONENTS',
     componentTree: true,
     items: [],
-  },
-  {
-    title: 'USAGE',
-    items: [
-      { path: '/usage', label: 'Overview' },
-      { path: '/usage/public-api', label: 'Public API' },
-      { path: '/usage/components', label: 'Components Contract' },
-      { path: '/usage/styling', label: 'Styling' },
-      { path: '/usage/composition', label: 'Composition' },
-      { path: '/usage/accessibility', label: 'Accessibility' },
-      { path: '/usage/testing', label: 'Testing' },
-      { path: '/usage/versioning', label: 'Versioning' },
-      { path: '/usage/anti-patterns', label: 'Anti-Patterns' },
-      { path: '/usage/checklist', label: 'PR Checklist' },
-    ],
-  },
-  {
-    title: 'DEVELOPER REFERENCE',
-    items: [
-      { path: '/developer-reference/agentic-pipeline', label: 'Agentic Pipeline' },
-      { path: '/developer-reference/component-pipeline', label: 'Component Pipeline' },
-      { path: '/developer-reference/token-pipeline', label: 'Token Pipeline' },
-      { path: '/developer-reference/shared-patterns', label: 'Shared Patterns' },
-      { path: '/developer-reference/testing-and-drift', label: 'Testing & Drift' },
-      { path: '/developer-reference/workflows', label: 'Contributor Workflows' },
-    ],
   },
   {
     title: 'ACCESSIBILITY',
@@ -248,12 +252,26 @@ export default function Layout({ children }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  /** Accordion: Usage + Developer Reference under GETTING STARTED (default expanded). */
+  const [subsectionOpen, setSubsectionOpen] = useState({
+    '_nav-group-usage': true,
+    '_nav-group-developer-reference': true,
+  })
   const searchRef = useRef(null)
   const navRef = useRef(null)
 
   useEffect(() => {
     const pageName = getPageTitle(pathname)
     document.title = `o9ds Design System - ${pageName}`
+  }, [pathname])
+
+  useEffect(() => {
+    if (pathname.startsWith('/usage')) {
+      setSubsectionOpen((o) => ({ ...o, '_nav-group-usage': true }))
+    }
+    if (pathname.startsWith('/developer-reference')) {
+      setSubsectionOpen((o) => ({ ...o, '_nav-group-developer-reference': true }))
+    }
   }, [pathname])
 
   const filteredSections = useMemo(() => {
@@ -604,41 +622,116 @@ export default function Layout({ children }) {
                   />
                 ) : (
                 <ul className="space-y-0.5">
-                  {section.items.map((item) =>
-                    item.children ? (
-                      <li key={item.path}>
-                        {!item.hideGroupLabel && (
-                          <div className="px-2 py-1.5 text-sm font-medium" style={{ color: isDark ? '#a3a3a3' : '#303030' }}>
-                            {item.label}
-                          </div>
-                        )}
-                        <ul className="ml-2 space-y-0.5 pl-3">
-                          {item.children.map((child) => (
-                            <li key={child.path}>
-                              <NavLink
-                                to={child.path}
-                                end
-                                onClick={() => setSidebarOpen(false)}
-                                className={({ isActive }) =>
-                                  `flex items-center justify-between gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
-                                    isActive
-                                      ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
-                                      : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
-                                  }`
-                                }
+                  {section.items.map((item, itemIndex) => {
+                    if (item.children) {
+                      if (item.subsectionGroup && !item.hideGroupLabel) {
+                        const expanded =
+                          Boolean(searchQuery.trim()) || subsectionOpen[item.path] !== false
+                        return (
+                          <li key={item.path}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSubsectionOpen((o) => {
+                                  const isOpen = o[item.path] !== false
+                                  return { ...o, [item.path]: !isOpen }
+                                })
+                              }}
+                              aria-expanded={expanded}
+                              className={`mb-1 flex w-full items-center gap-2 py-2 pl-2 pr-2 text-left text-sm font-normal transition-colors hover:bg-black/[0.04] dark:hover:bg-white/[0.06] ${
+                                itemIndex > 0 ? 'mt-2' : 'mt-0.5'
+                              }`}
+                              style={{
+                                color: isDark ? '#a3a3a3' : '#333333',
+                              }}
+                            >
+                              <svg
+                                className={`h-4 w-4 shrink-0 transition-transform duration-200 ease-out ${
+                                  expanded ? 'rotate-90' : ''
+                                }`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                aria-hidden
                               >
-                                <span className="flex items-center gap-2 min-w-0">
-                                  {PATHS_WITH_CONTENT.has(child.path) && (
-                                    <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
-                                  )}
-                                  {child.label}
-                                </span>
-                              </NavLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
-                    ) : (
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                              <span>{item.label}</span>
+                            </button>
+                            {expanded && (
+                              <ul className="ml-2 space-y-0.5 border-l border-neutral-200 pl-3 dark:border-neutral-700">
+                                {item.children.map((child) => (
+                                  <li key={child.path}>
+                                    <NavLink
+                                      to={child.path}
+                                      end
+                                      onClick={() => setSidebarOpen(false)}
+                                      className={({ isActive }) =>
+                                        `flex items-center justify-between gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
+                                          isActive
+                                            ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
+                                            : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
+                                        }`
+                                      }
+                                    >
+                                      <span className="flex items-center gap-2 min-w-0">
+                                        {PATHS_WITH_CONTENT.has(child.path) && (
+                                          <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
+                                        )}
+                                        {child.label}
+                                      </span>
+                                    </NavLink>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                        )
+                      }
+                      return (
+                        <li key={item.path}>
+                          {!item.hideGroupLabel && (
+                            <div
+                              className="px-2 py-1.5 text-sm font-medium"
+                              style={{ color: isDark ? '#a3a3a3' : '#303030' }}
+                            >
+                              {item.label}
+                            </div>
+                          )}
+                          <ul className="ml-2 space-y-0.5 pl-3">
+                            {item.children.map((child) => (
+                              <li key={child.path}>
+                                <NavLink
+                                  to={child.path}
+                                  end
+                                  onClick={() => setSidebarOpen(false)}
+                                  className={({ isActive }) =>
+                                    `flex items-center justify-between gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
+                                      isActive
+                                        ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
+                                        : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
+                                    }`
+                                  }
+                                >
+                                  <span className="flex items-center gap-2 min-w-0">
+                                    {PATHS_WITH_CONTENT.has(child.path) && (
+                                      <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
+                                    )}
+                                    {child.label}
+                                  </span>
+                                </NavLink>
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      )
+                    }
+                    return (
                       <li key={item.path}>
                         <NavLink
                           to={item.path}
@@ -661,7 +754,7 @@ export default function Layout({ children }) {
                         </NavLink>
                       </li>
                     )
-                  )}
+                  })}
                 </ul>
                 )}
               </div>
