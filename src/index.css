@@ -139,6 +139,10 @@ html.dark {
   --o9ds-color-b-form: #808080;
   /* Border: input error — semanticColorTokens o9ds-color-b-negative (redish-06 dark) */
   --o9ds-color-b-negative: #f07a62;
+  /* Surfaces — dialogs / form regions; theme focus border (dark) */
+  --o9ds-color-s-layer-03: #4c4c4c;
+  --o9ds-color-s-layer-04: #303030;
+  --o9ds-color-b-theme-focus: #ffffff;
 }
 html[data-theme="dark"] body,
 html.dark body {
@@ -187,6 +191,10 @@ html:not(.dark) {
   --o9ds-color-t-inverse: #ffffff;
   /* Typography doc: inverse token swatch surface */
   --o9ds-doc-inverse-text-surface: #010101;
+  /* Surfaces — semanticColorTokens o9ds-color-s-layer-03 / 04; focus border — o9ds-color-b-theme-focus */
+  --o9ds-color-s-layer-03: #ffffff;
+  --o9ds-color-s-layer-04: #f2f2f2;
+  --o9ds-color-b-theme-focus: #010101;
 }
 
 /* Light mode: card/section borders - default #E5E5E5, no black in default state */
@@ -530,6 +538,34 @@ html.dark textarea:focus-visible,
 html.dark [tabindex]:not([tabindex="-1"]):focus-visible {
   outline: 2px solid #ffffff !important;
   outline-offset: 2px;
+}
+
+/* Modal / overlay scrim — SCSS: background: $o9ds-color-s-overlay-static; backdrop-filter: $o9ds-shadow-blur; */
+.o9ds-mask-overlay {
+  background: var(--o9ds-color-s-overlay-static);
+  backdrop-filter: blur(var(--o9ds-shadow-blur));
+  -webkit-backdrop-filter: blur(var(--o9ds-shadow-blur));
+}
+
+/* Keyboard a11y demo dialogs — underline fields; focus = thicker bottom border (b-theme-focus), no ring */
+[data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--o9ds-color-b-form);
+  background-color: var(--o9ds-color-s-layer-04);
+}
+html[data-theme="light"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html[data-theme="light"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
+html:not(.dark) [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html:not(.dark) [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
+html[data-theme="dark"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html[data-theme="dark"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
+html.dark [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html.dark [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-bottom-width: 2px;
+  border-bottom-color: var(--o9ds-color-b-theme-focus);
 }
 
 /* Keyboard & focus doc — left: :focus only (ring on click); right: :focus-visible only */

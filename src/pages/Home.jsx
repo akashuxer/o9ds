@@ -7,47 +7,15 @@ import { useDocsShell } from '../context/DocsShellContext'
 /** Flip order: Consistent → Flexible → Accessible → Effortless → Delightful */
 const FLIP_WORDS = ['Consistent', 'Flexible', 'Accessible', 'Effortless', 'Delightful']
 
-
-const CardIcon = ({ name }) => {
-  const icons = {
-    getStarted: (
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    ),
-    foundations: (
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343L12.657 5.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-      </svg>
-    ),
-    assets: (
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    ),
-    components: (
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-      </svg>
-    ),
-    accessibility: (
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-      </svg>
-    ),
-    patterns: (
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-      </svg>
-    ),
-    content: (
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-      </svg>
-    ),
-  }
-  return icons[name] || null
+/** Infographic paths under `public/home/`. */
+const HOME_CARD_ILLUSTRATIONS = {
+  getStarted: '/home/getStarted.png',
+  foundations: '/home/foundations.png',
+  assets: '/home/assets.png',
+  components: '/home/components.png',
+  accessibility: '/home/accessibility.png',
+  content: '/home/contentguide.png',
+  patterns: '/home/patterns.png',
 }
 
 const cards = [
@@ -56,83 +24,75 @@ const cards = [
     desc: 'Orientation, principles, and how teams adopt o9DS.',
     path: '/overview',
     icon: 'getStarted',
-    links: [
-      { label: 'Overview', to: '/overview' },
-      { label: 'Principles', to: '/principles' },
-      { label: 'For Designers', to: '/designers' },
-      { label: 'For Developers', to: '/developers' },
-    ],
   },
   {
     title: 'Foundations',
     desc: 'Tokens, color, type, spacing, and motion baselines.',
     path: '/foundations',
     icon: 'foundations',
-    links: [
-      { label: 'Foundations overview', to: '/foundations' },
-      { label: 'Colors', to: '/colors' },
-      { label: 'Typography', to: '/typography' },
-      { label: 'Spacing', to: '/spacing' },
-    ],
   },
   {
     title: 'Assets',
     desc: 'Iconography and illustration language.',
     path: '/icons',
     icon: 'assets',
-    links: [
-      { label: 'Icons', to: '/icons' },
-      { label: 'Illustrations', to: '/illustrations' },
-      { label: 'Symbol', to: '/symbol' },
-    ],
   },
   {
     title: 'Components',
     desc: 'Inputs, actions, navigation, and data display.',
     path: '/components',
     icon: 'components',
-    links: [
-      { label: 'All components', to: '/components' },
-      { label: 'Button', to: '/components/button' },
-      { label: 'Cards', to: '/components/cards' },
-      { label: 'Workspace sidebar', to: '/components/workspace-sidebar' },
-    ],
   },
   {
     title: 'Accessibility',
     desc: 'Inclusive patterns and WCAG-aligned guidance.',
     path: '/accessibility',
     icon: 'accessibility',
-    links: [
-      { label: 'Accessibility topics', to: '/accessibility' },
-      { label: 'Introduction', to: '/accessibility/overview' },
-      { label: 'Testing and QA', to: '/accessibility/testing-and-qa' },
-    ],
   },
   {
     title: 'Content Guidelines',
     desc: 'Voice, tone, and product copy conventions.',
     path: '/content',
     icon: 'content',
-    links: [
-      { label: 'Content overview', to: '/content' },
-      { label: 'Writing principles', to: '/content/writing-principles' },
-      { label: 'Voice & tone', to: '/content/voice-and-tone' },
-    ],
   },
   {
     title: 'Patterns',
     desc: 'Common workflows: forms, tables, modals, and more.',
     path: '/patterns',
     icon: 'patterns',
-    links: [
-      { label: 'Patterns overview', to: '/patterns' },
-      { label: 'Forms', to: '/patterns/forms' },
-      { label: 'Tables', to: '/patterns/tables' },
-      { label: 'Modals', to: '/patterns/modals' },
-    ],
   },
 ]
+
+function HomeBlockCardIllustration({ illustrationSrc, isLight }) {
+  return (
+    <div
+      className="relative h-[clamp(200px,42vw,300px)] min-h-[200px] w-full shrink-0 overflow-hidden border-b sm:h-[clamp(220px,26vw,300px)] sm:min-h-[220px] lg:h-[clamp(240px,22vw,300px)]"
+      style={{
+        borderColor: isLight ? '#E5E5E5' : '#404040',
+      }}
+      aria-hidden
+    >
+      {/* White band in both themes so the slate dot grid matches light mode visibility (see ComponentOverviewCard). */}
+      <div className="absolute inset-0 bg-white" />
+      <div
+        className="absolute inset-0 opacity-[0.85]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(148, 163, 184, 0.4) 1px, transparent 1px)',
+          backgroundSize: '14px 14px',
+        }}
+      />
+      <div className="relative z-10 h-full min-h-0 w-full">
+        <img
+          src={illustrationSrc}
+          alt=""
+          className="absolute inset-3 z-[1] h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] max-h-none object-contain object-center sm:inset-4 sm:h-[calc(100%-2rem)] sm:w-[calc(100%-2rem)] motion-safe:transition-[transform,filter] motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:scale-[1.04] motion-safe:group-hover:brightness-[1.02] dark:brightness-[0.98] dark:group-hover:brightness-100"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  )
+}
 
 /** Full-viewport orbit mesh + corners (fixed behind content). */
 function HeroPatternFullPage({ isLight }) {
@@ -421,9 +381,6 @@ export default function Home() {
     navigate('/overview')
   }
 
-  const linkClass =
-    'inline-block border-b border-transparent text-xs font-medium text-o9-shock transition-colors hover:border-o9-shock dark:text-[#7ca8ff] dark:hover:border-[#7ca8ff]'
-
   return (
     <div className="relative">
       {/* Full-page ripple + orbit (viewport-fixed; only on Home route) */}
@@ -491,41 +448,45 @@ export default function Home() {
           <h2 className="mb-10 max-w-4xl text-left text-[clamp(1.65rem,5.5vw,2.85rem)] font-medium leading-[1.12] tracking-[-0.03em] text-o9ds-light-primary motion-safe:animate-fade-in-up dark:text-white md:mb-14">
             Building Blocks of o9DS
           </h2>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {cards.map(({ title, desc, path, icon, links }, i) => (
-              <div
-                key={path}
-                className="flex flex-col border p-6 transition-all duration-300 hover:shadow-md motion-safe:hover:-translate-y-0.5 motion-safe:animate-fade-in-up"
-                style={{
-                  animationDelay: `${i * 45}ms`,
-                  borderColor: isLight ? '#E5E5E5' : '#404040',
-                  backgroundColor: isLight ? '#FFFFFF' : 'transparent',
-                }}
-                data-o9ds-card={isLight ? 'light-white' : 'dark'}
-              >
-                <Link to={path} onClick={() => enterDocs()} className="group block min-w-0 flex-1 text-left">
-                  <span
-                    className="mb-4 flex h-12 w-12 items-center justify-center transition-colors dark:bg-neutral-700 dark:text-neutral-400 group-hover:text-white"
-                    data-o9ds-avatar={isLight ? '' : undefined}
-                  >
-                    <CardIcon name={icon} />
-                  </span>
-                  <h3 className="mb-2 text-lg font-semibold text-o9ds-light-primary group-hover:underline dark:text-white">{title}</h3>
-                  <p className="text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">{desc}</p>
-                </Link>
-                {links.length > 0 && (
-                  <ul className="mt-5 flex flex-wrap gap-x-3 gap-y-2 border-t border-o9ds-light-border pt-4 dark:border-neutral-700">
-                    {links.map(({ label, to }) => (
-                      <li key={`${path}-${to}`}>
-                        <Link to={to} onClick={() => enterDocs()} className={linkClass}>
-                          {label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+          <div className="grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-9">
+            {cards.map(({ title, desc, path, icon }, i) => {
+              const illustrationSrc = HOME_CARD_ILLUSTRATIONS[icon] ?? null
+              return (
+                <div
+                  key={path}
+                  className="flex flex-col overflow-hidden border shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-[box-shadow,transform,border-color] duration-300 hover:border-o9ds-light-primary/25 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] motion-safe:hover:-translate-y-1 motion-safe:animate-fade-in-up dark:border-neutral-700 dark:shadow-[0_2px_12px_rgba(0,0,0,0.35)] dark:hover:border-neutral-500 dark:hover:shadow-[0_16px_48px_rgba(0,0,0,0.45)]"
+                  style={{
+                    animationDelay: `${i * 45}ms`,
+                    borderColor: isLight ? '#E5E5E5' : '#404040',
+                    backgroundColor: isLight ? '#FFFFFF' : 'transparent',
+                  }}
+                  data-o9ds-card={isLight ? 'light-white' : 'dark'}
+                >
+                  <Link to={path} onClick={() => enterDocs()} className="group block min-w-0 flex-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-o9-shock dark:focus-visible:ring-[#7ca8ff]">
+                    <HomeBlockCardIllustration illustrationSrc={illustrationSrc} isLight={isLight} />
+                    <div className="bg-[#FAFAFA] px-5 pb-6 pt-5 dark:bg-neutral-900/80 sm:px-6">
+                      <h3 className="mb-2 text-lg font-semibold tracking-tight text-o9ds-light-primary dark:text-white sm:text-xl">
+                        {title}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400 sm:text-[0.9375rem] sm:leading-relaxed">
+                        {desc}
+                      </p>
+                      <span className="mt-5 inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.12em] text-o9ds-light-primary dark:text-white sm:text-xs sm:tracking-[0.14em]">
+                        <span>Learn more</span>
+                        <svg
+                          className="h-3 w-3 shrink-0 stroke-current motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-x-1 motion-reduce:transition-none"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          aria-hidden
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              )
+            })}
           </div>
         </section>
       </div>

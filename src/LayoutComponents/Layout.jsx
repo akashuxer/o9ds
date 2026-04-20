@@ -413,7 +413,7 @@ export default function Layout({ children }) {
                 <div className="flex items-center gap-2">
                   <span className="flex min-w-0 items-center font-semibold">
                     <span className="shrink-0 bg-gradient-to-r from-[#ff453a] via-[#ff2d55] to-[#ff33cc] bg-clip-text text-transparent">
-                      o9ds
+                      Avora
                     </span>
                     <span className="ml-1 truncate text-[#010101] dark:text-white">Design System</span>
                   </span>

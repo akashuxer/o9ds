@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import AccessibilityDocPage from './AccessibilityDocPage'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
@@ -53,10 +54,491 @@ const tokenButtonSecondaryClassName =
 const tokenButtonPrimaryClassName =
   'rounded-none border border-o9ds-light-primary dark:border-white bg-o9ds-light-primary dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-o9ds-light-primary'
 
+/** o9ds-font-h16-m + color-t-primary — dialog titles on Keyboard & focus demos */
+const kbDialogTitleClassName = 'text-base font-medium text-[color:var(--o9ds-color-t-primary)]'
+
+/** Labels inside a11y demo dialogs */
+const kbDialogLabelClassName =
+  'mb-1 block text-xs font-normal text-[color:var(--o9ds-color-t-primary)]'
+
+/** Underline inputs: field fill s-layer-04 (index.css); focus = b-theme-focus bottom border only */
+const kbDialogFieldClassName =
+  'kb-a11y-dialog-field w-full rounded-none border-0 px-2 py-2 text-sm text-[color:var(--o9ds-color-t-primary)] placeholder:text-[var(--o9ds-color-t-placeholder)]'
+
+const kbDialogHowToClassName =
+  'mt-2 max-w-xl text-xs leading-relaxed text-o9ds-light-secondary dark:text-neutral-500'
+
+function KbDialogHowTo({ children }) {
+  return (
+    <p className={kbDialogHowToClassName}>
+      <strong className="font-semibold text-o9ds-light-primary dark:text-white">How to try it: </strong>
+      {children}
+    </p>
+  )
+}
+
 const escColumns = [
   { key: 'scenario', label: 'Scenario', primary: true },
   { key: 'behavior', label: 'Esc key and focus behavior' },
 ]
+
+const TAB_INITIAL_FOCUS_TABS = ['Overview', 'Settings', 'Activity']
+
+function getFocusableInDialog(container) {
+  if (!container) return []
+  const sel = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])'
+  return Array.from(container.querySelectorAll(sel)).filter((el) => {
+    if (el.getAttribute('tabindex') === '-1') return false
+    return el.tabIndex >= 0
+  })
+}
+
+function handleDialogFocusTrapKeyDown(dialogRef, close) {
+  return (e) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation()
+      close()
+      return
+    }
+    if (e.key !== 'Tab') return
+    const root = dialogRef.current
+    if (!root) return
+    const focusables = getFocusableInDialog(root)
+    if (focusables.length === 0) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    const active = document.activeElement
+    if (!root.contains(active)) {
+      e.preventDefault()
+      first.focus()
+      return
+    }
+    if (active !== root && !focusables.includes(active)) {
+      e.preventDefault()
+      e.shiftKey ? last.focus() : first.focus()
+      return
+    }
+    if (active === root) {
+      e.preventDefault()
+      e.shiftKey ? last.focus() : first.focus()
+      return
+    }
+    if (first === last) {
+      e.preventDefault()
+      first.focus()
+      return
+    }
+    if (e.shiftKey) {
+      if (active === first) {
+        e.preventDefault()
+        last.focus()
+      }
+    } else if (active === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
+}
+
+/**
+ * Shared modal shell: header, body, and footer all on s-layer-03; form controls use s-layer-04 on the field only.
+ * Optional: footer off (f), initial focus on dialog container (tabIndex -1), or on primary footer control (e).
+ */
+function KeyboardA11yDemoDialog({
+  open,
+  close,
+  triggerRef,
+  dialogRef,
+  titleId,
+  children,
+  showFooter = true,
+  primaryFooterRef = null,
+  containerInitialFocus = false,
+}) {
+  const wasOpenRef = useRef(false)
+
+  useEffect(() => {
+    if (wasOpenRef.current && !open) {
+      triggerRef.current?.focus()
+    }
+    wasOpenRef.current = open
+  }, [open, triggerRef])
+
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [open])
+
+  useLayoutEffect(() => {
+    if (!open) return
+    if (containerInitialFocus) {
+      dialogRef.current?.focus()
+      return
+    }
+    if (primaryFooterRef?.current) {
+      primaryFooterRef.current.focus()
+    }
+  }, [open, containerInitialFocus, primaryFooterRef, dialogRef])
+
+  if (!open) return null
+
+  return createPortal(
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6">
+      <div
+        className="o9ds-mask-overlay absolute inset-0 cursor-default"
+        onClick={close}
+        aria-hidden="true"
+      />
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={containerInitialFocus ? -1 : undefined}
+        data-o9ds-kb-a11y-dialog
+        className="relative z-10 flex w-full max-w-lg flex-col border border-o9ds-light-border bg-[color:var(--o9ds-color-s-layer-03)] shadow-lg dark:border-neutral-600"
+        onKeyDown={handleDialogFocusTrapKeyDown(dialogRef, close)}
+      >
+        <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
+          <h2 id={titleId} className={kbDialogTitleClassName}>
+            Demo Example
+          </h2>
+          <button
+            type="button"
+            onClick={close}
+            className="flex h-9 w-9 shrink-0 items-center justify-center border border-[color:var(--o9ds-color-b-form)] text-[color:var(--o9ds-color-t-primary)] transition-opacity hover:opacity-80"
+            aria-label="Close"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="px-4 pb-4 sm:px-5">{children}</div>
+        {showFooter ? (
+          <div className="flex flex-wrap justify-end gap-2 px-4 py-3 sm:px-5">
+            <button type="button" onClick={close} className={tokenButtonSecondaryClassName}>
+              Cancel
+            </button>
+            <button
+              ref={primaryFooterRef ?? undefined}
+              type="button"
+              onClick={close}
+              className={tokenButtonPrimaryClassName}
+            >
+              OK
+            </button>
+          </div>
+        ) : null}
+      </div>
+    </div>,
+    document.body
+  )
+}
+
+/** Dialog with tab strip: opening moves initial focus to the active tab. */
+function TabStripInitialFocusDemo() {
+  const [open, setOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState(TAB_INITIAL_FOCUS_TABS[0])
+  const [tabIndicator, setTabIndicator] = useState({ left: 0, width: 0 })
+  const openBtnRef = useRef(null)
+  const dialogRef = useRef(null)
+  const tabListRef = useRef(null)
+  const titleId = 'a11y-kb-tab-initial-demo-title'
+
+  const close = () => setOpen(false)
+
+  useEffect(() => {
+    if (!open) return
+    const id = window.requestAnimationFrame(() => {
+      tabListRef.current?.querySelector('[role="tab"][aria-selected="true"]')?.focus()
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const list = tabListRef.current
+    if (!list) return
+    const idx = TAB_INITIAL_FOCUS_TABS.indexOf(activeTab)
+    if (idx < 0) return
+    const tabs = list.querySelectorAll('[role="tab"]')
+    const btn = tabs[idx]
+    if (!btn) return
+    const listRect = list.getBoundingClientRect()
+    const btnRect = btn.getBoundingClientRect()
+    setTabIndicator({
+      left: btnRect.left - listRect.left,
+      width: btnRect.width,
+    })
+  }, [open, activeTab])
+
+  const handleTabListKeyDown = (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+    const idx = TAB_INITIAL_FOCUS_TABS.indexOf(activeTab)
+    if (idx < 0) return
+    e.preventDefault()
+    const next =
+      e.key === 'ArrowRight' ? (idx + 1) % TAB_INITIAL_FOCUS_TABS.length : (idx - 1 + TAB_INITIAL_FOCUS_TABS.length) % TAB_INITIAL_FOCUS_TABS.length
+    setActiveTab(TAB_INITIAL_FOCUS_TABS[next])
+    window.setTimeout(() => tabListRef.current?.querySelectorAll('[role="tab"]')[next]?.focus(), 0)
+  }
+
+  return (
+    <>
+      <button
+        ref={openBtnRef}
+        type="button"
+        className={tokenButtonSecondaryClassName}
+        onClick={() => {
+          setActiveTab(TAB_INITIAL_FOCUS_TABS[0])
+          setOpen(true)
+        }}
+      >
+        View Example
+      </button>
+      <KbDialogHowTo>
+        Activate <strong className="text-o9ds-light-primary dark:text-white">View Example</strong> (click or when the button is focused, press{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Enter</strong> or <strong className="text-o9ds-light-primary dark:text-white">Space</strong>
+        ). On open, focus should land on the <strong className="text-o9ds-light-primary dark:text-white">Overview</strong> tab. Use{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-o9ds-light-primary dark:text-white">Right Arrow</strong> to
+        change tabs; use <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> / <strong className="text-o9ds-light-primary dark:text-white">Shift+Tab</strong> to
+        move through the dialog. Press <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> or use the close control / footer buttons to dismiss.
+      </KbDialogHowTo>
+      <KeyboardA11yDemoDialog
+        open={open}
+        close={close}
+        triggerRef={openBtnRef}
+        dialogRef={dialogRef}
+        titleId={titleId}
+      >
+        <div
+          ref={tabListRef}
+          role="tablist"
+          aria-label="Example tabs"
+          className="relative mt-1 flex gap-6"
+          data-o9ds-tabs
+          onKeyDown={handleTabListKeyDown}
+        >
+          {TAB_INITIAL_FOCUS_TABS.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === tab}
+              aria-controls={`a11y-kb-tab-panel-${tab}`}
+              id={`a11y-kb-tab-${tab}`}
+              tabIndex={activeTab === tab ? 0 : -1}
+              data-o9ds-tab-active={activeTab === tab ? '' : undefined}
+              onClick={() => {
+                setActiveTab(tab)
+                window.setTimeout(() => document.getElementById(`a11y-kb-tab-${tab}`)?.focus(), 0)
+              }}
+              className={`relative z-10 pb-3 text-sm font-medium transition-colors ${
+                activeTab === tab
+                  ? 'text-[color:var(--o9ds-color-t-primary)]'
+                  : 'text-[color:var(--o9ds-color-t-secondary)] hover:text-[color:var(--o9ds-color-t-primary)]'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+          <span
+            className="pointer-events-none absolute -bottom-px z-20 h-0.5 bg-[color:var(--o9ds-color-b-theme-focus)] transition-[left,width] duration-300 ease-out"
+            style={{
+              left: tabIndicator.left,
+              width: tabIndicator.width,
+            }}
+            aria-hidden
+          />
+        </div>
+        {TAB_INITIAL_FOCUS_TABS.map((tab) => (
+          <div
+            key={tab}
+            role="tabpanel"
+            id={`a11y-kb-tab-panel-${tab}`}
+            aria-labelledby={`a11y-kb-tab-${tab}`}
+            hidden={activeTab !== tab}
+            className="pt-3 text-sm text-[color:var(--o9ds-color-t-secondary)]"
+          >
+            <p>
+              Panel for <strong className="text-[color:var(--o9ds-color-t-primary)]">{tab}</strong>. On open, initial focus moves to the{' '}
+              <strong className="text-[color:var(--o9ds-color-t-primary)]">active tab</strong> in the tab list (not the header close control).
+            </p>
+          </div>
+        ))}
+      </KeyboardA11yDemoDialog>
+    </>
+  )
+}
+
+/** Same dialog shell; opening moves initial focus to the first field in the body. */
+function FormBodyInitialFocusDemo({ howToPurpose = 'initial' }) {
+  const [open, setOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const openBtnRef = useRef(null)
+  const dialogRef = useRef(null)
+  const firstFieldRef = useRef(null)
+  const titleId = 'a11y-kb-form-body-initial-demo-title'
+
+  const close = () => setOpen(false)
+
+  useEffect(() => {
+    if (!open) return
+    const id = window.requestAnimationFrame(() => {
+      firstFieldRef.current?.focus()
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [open])
+
+  const howTo =
+    howToPurpose === 'trap' ? (
+      <>
+        Open the dialog, then press <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> and{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Shift+Tab</strong> many times—focus should stay inside the dialog (close control, fields, footer) and
+        never jump to the page behind the overlay. Press <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> to close.
+      </>
+    ) : howToPurpose === 'return' ? (
+      <>
+        Open the dialog, then close with <strong className="text-o9ds-light-primary dark:text-white">Esc</strong>,{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">OK</strong>, <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>, or the header
+        close control—keyboard focus should move back to this <strong className="text-o9ds-light-primary dark:text-white">View Example</strong> button.
+      </>
+    ) : (
+      <>
+        Open with a click or, when <strong className="text-o9ds-light-primary dark:text-white">View Example</strong> is focused,{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Enter</strong> / <strong className="text-o9ds-light-primary dark:text-white">Space</strong>. Initial focus
+        should land in the <strong className="text-o9ds-light-primary dark:text-white">Name</strong> field; <strong className="text-o9ds-light-primary dark:text-white">Tab</strong>{' '}
+        through <strong className="text-o9ds-light-primary dark:text-white">Email</strong> and the footer. <strong className="text-o9ds-light-primary dark:text-white">Esc</strong>{' '}
+        closes the dialog.
+      </>
+    )
+
+  return (
+    <>
+      <button ref={openBtnRef} type="button" className={tokenButtonSecondaryClassName} onClick={() => setOpen(true)}>
+        View Example
+      </button>
+      <KbDialogHowTo>{howTo}</KbDialogHowTo>
+      <KeyboardA11yDemoDialog
+        open={open}
+        close={close}
+        triggerRef={openBtnRef}
+        dialogRef={dialogRef}
+        titleId={titleId}
+      >
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="a11y-kb-form-body-name" className={kbDialogLabelClassName}>
+              Name
+            </label>
+            <input
+              ref={firstFieldRef}
+              id="a11y-kb-form-body-name"
+              name="demoName"
+              type="text"
+              autoComplete="off"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={kbDialogFieldClassName}
+            />
+          </div>
+          <div>
+            <label htmlFor="a11y-kb-form-body-email" className={kbDialogLabelClassName}>
+              Email
+            </label>
+            <input
+              id="a11y-kb-form-body-email"
+              name="demoEmail"
+              type="email"
+              autoComplete="off"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={kbDialogFieldClassName}
+            />
+          </div>
+        </div>
+      </KeyboardA11yDemoDialog>
+    </>
+  )
+}
+
+/** Body is static copy only; initial focus on primary (OK) in the footer. */
+function FooterOnlyInitialFocusDemo() {
+  const [open, setOpen] = useState(false)
+  const openBtnRef = useRef(null)
+  const dialogRef = useRef(null)
+  const okRef = useRef(null)
+  const titleId = 'a11y-kb-footer-only-initial-demo-title'
+  const close = () => setOpen(false)
+
+  return (
+    <>
+      <button ref={openBtnRef} type="button" className={tokenButtonSecondaryClassName} onClick={() => setOpen(true)}>
+        View Example
+      </button>
+      <KbDialogHowTo>
+        Open the dialog; initial focus should be on <strong className="text-o9ds-light-primary dark:text-white">OK</strong>. Use{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> / <strong className="text-o9ds-light-primary dark:text-white">Shift+Tab</strong> to move between{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">OK</strong>, <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>, and the header
+        close control. <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes.
+      </KbDialogHowTo>
+      <KeyboardA11yDemoDialog
+        open={open}
+        close={close}
+        triggerRef={openBtnRef}
+        dialogRef={dialogRef}
+        titleId={titleId}
+        primaryFooterRef={okRef}
+      >
+        <p className="text-sm leading-relaxed text-[color:var(--o9ds-color-t-secondary)]">
+          No tab strip or inputs here—only this message and the footer actions. Initial focus is on <strong className="text-[color:var(--o9ds-color-t-primary)]">OK</strong>.
+        </p>
+      </KeyboardA11yDemoDialog>
+    </>
+  )
+}
+
+/** No footer actions; initial focus on the dialog surface (tabIndex -1); Tab moves to the header close control. */
+function ContainerInitialFocusDemo() {
+  const [open, setOpen] = useState(false)
+  const openBtnRef = useRef(null)
+  const dialogRef = useRef(null)
+  const titleId = 'a11y-kb-container-initial-demo-title'
+  const close = () => setOpen(false)
+
+  return (
+    <>
+      <button ref={openBtnRef} type="button" className={tokenButtonSecondaryClassName} onClick={() => setOpen(true)}>
+        View Example
+      </button>
+      <KbDialogHowTo>
+        Open the dialog; initial focus is on the dialog surface (not the close button). Press{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> once to move focus to the header close control; there are no footer buttons in this variant.{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes.
+      </KbDialogHowTo>
+      <KeyboardA11yDemoDialog
+        open={open}
+        close={close}
+        triggerRef={openBtnRef}
+        dialogRef={dialogRef}
+        titleId={titleId}
+        showFooter={false}
+        containerInitialFocus
+      >
+        <p className="text-sm leading-relaxed text-[color:var(--o9ds-color-t-secondary)]">
+          Message-only content. The dialog container receives initial focus; use <strong className="text-[color:var(--o9ds-color-t-primary)]">Tab</strong> to reach
+          the close control.
+        </p>
+      </KeyboardA11yDemoDialog>
+    </>
+  )
+}
 
 /** Interactive: submit validates required fields in DOM order and focuses the first missing value. */
 function SubmitInvalidDemo() {
@@ -424,18 +906,20 @@ export default function KeyboardAndFocus() {
           Establishing clear <strong className="text-o9ds-light-primary dark:text-white">initial focus</strong> when opening interactive containers (popups, modals, side panels, popovers, drawers, dropdown lists) is essential for accessibility and for a predictable experience. The first focused element should match the user’s task and reduce unnecessary Tab presses.
         </p>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">a. Tab component present</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
             When a modal, side panel, popover, or similar container includes a tab strip, move <strong className="text-o9ds-light-primary dark:text-white">initial focus to the active tab</strong> (the selected tab panel’s corresponding tab). That aligns with user expectation that the tab interface controls the view.
           </p>
+          <TabStripInitialFocusDemo />
         </div>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">b. Form elements or buttons in the body</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
             If the body contains form fields or actionable buttons, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">first meaningful form element or button</strong> so keyboard and screen reader users can start interacting immediately. Order fields logically (labels, required indicators, and errors must remain programmatically associated).
           </p>
+          <FormBodyInitialFocusDemo />
         </div>
 
         <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
@@ -452,18 +936,20 @@ export default function KeyboardAndFocus() {
           </p>
         </div>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">e. No tabs and no form controls in the body—footer actions only</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
             If the body has no tab strip and no form fields, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">primary button in the footer</strong> (when that is the main affordance), so users can complete or dismiss without hunting for focus.
           </p>
+          <FooterOnlyInitialFocusDemo />
         </div>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">f. No interactive elements in the body or footer</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
             If there are no focusable controls in the body or footer (rare), set initial focus to the <strong className="text-o9ds-light-primary dark:text-white">container element</strong> using <code className="px-1" data-o9ds-inline-code>tabindex=&quot;-1&quot;</code> and appropriate dialog labeling. The first <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> press should move focus to the <strong className="text-o9ds-light-primary dark:text-white">close control</strong> (for example the “X” in the header), so users are never stranded without a path to dismiss.
           </p>
+          <ContainerInitialFocusDemo />
         </div>
 
         <CodeBlock
@@ -496,6 +982,7 @@ export default function KeyboardAndFocus() {
         <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">
           Non-modal panels that do not block the page may not use a full trap; still document focus behavior so keyboard users are not dropped into an inconsistent state.
         </p>
+        <FormBodyInitialFocusDemo howToPurpose="trap" />
       </section>
 
       <section id="a11y-kb-return" className="space-y-4 scroll-mt-24">
@@ -508,6 +995,7 @@ export default function KeyboardAndFocus() {
           <li>If opening a control spawns another overlay, move focus into the new layer and return it to the appropriate trigger when that layer closes.</li>
           <li>Chains of overlays should unwind focus in reverse order of opening when possible.</li>
         </ul>
+        <FormBodyInitialFocusDemo howToPurpose="return" />
       </section>
 
       <section id="a11y-kb-esc" className="space-y-4 scroll-mt-24">
