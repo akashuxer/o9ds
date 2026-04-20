@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BackgroundRippleEffect } from '@/components/ui/BackgroundRippleEffect'
 import { useTheme } from '../context/ThemeContext'
@@ -63,7 +63,7 @@ const cards = [
   },
 ]
 
-function HomeBlockCardIllustration({ illustrationSrc, isLight }) {
+function HomeBlockCardIllustration({ illustrationSrc, isLight, loading = 'lazy', fetchPriority = 'auto' }) {
   return (
     <div
       className="relative h-[clamp(200px,42vw,300px)] min-h-[200px] w-full shrink-0 overflow-hidden border-b sm:h-[clamp(220px,26vw,300px)] sm:min-h-[220px] lg:h-[clamp(240px,22vw,300px)]"
@@ -86,8 +86,9 @@ function HomeBlockCardIllustration({ illustrationSrc, isLight }) {
           src={illustrationSrc}
           alt=""
           className="absolute inset-3 z-[1] h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] max-h-none object-contain object-center sm:inset-4 sm:h-[calc(100%-2rem)] sm:w-[calc(100%-2rem)] motion-safe:transition-[transform,filter] motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:scale-[1.04] motion-safe:group-hover:brightness-[1.02] dark:brightness-[0.98] dark:group-hover:brightness-100"
-          loading="lazy"
+          loading={loading}
           decoding="async"
+          fetchPriority={fetchPriority}
         />
       </div>
     </div>
@@ -308,8 +309,11 @@ function TabletHeroFrame({ slides, className = '' }) {
                     src={slides[0].src}
                     alt={slides[0].alt}
                     className="block h-auto max-h-[min(85vh,880px)] w-full max-w-full align-top"
+                    width={1920}
+                    height={1080}
                     loading="eager"
                     decoding="async"
+                    fetchPriority="high"
                   />
                 </div>
               </div>
@@ -355,8 +359,11 @@ function TabletHeroFrame({ slides, className = '' }) {
                         src={slide.src}
                         alt={slide.alt}
                         className="block h-auto max-h-[min(85vh,880px)] w-full max-w-full align-top"
-                        loading={i === 0 ? 'eager' : 'lazy'}
+                        width={1920}
+                        height={1080}
+                        loading="eager"
                         decoding="async"
+                        fetchPriority={i === 0 ? 'high' : 'low'}
                       />
                     </div>
                   ))}
@@ -375,6 +382,19 @@ export default function Home() {
   const { enterDocs } = useDocsShell()
   const navigate = useNavigate()
   const isLight = theme === 'light'
+
+  /** Card PNGs: inject preloads as soon as Home mounts (no cost on other routes). */
+  useLayoutEffect(() => {
+    if (document.querySelector('link[data-o9ds-preload="home-cards"]')) return
+    Object.values(HOME_CARD_ILLUSTRATIONS).forEach((href) => {
+      const l = document.createElement('link')
+      l.rel = 'preload'
+      l.as = 'image'
+      l.href = href
+      l.setAttribute('data-o9ds-preload', 'home-cards')
+      document.head.appendChild(l)
+    })
+  }, [])
 
   const onGetStarted = () => {
     enterDocs()
@@ -451,6 +471,7 @@ export default function Home() {
           <div className="grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-9">
             {cards.map(({ title, desc, path, icon }, i) => {
               const illustrationSrc = HOME_CARD_ILLUSTRATIONS[icon] ?? null
+              const isAboveFoldCard = i < 4
               return (
                 <div
                   key={path}
@@ -463,7 +484,12 @@ export default function Home() {
                   data-o9ds-card={isLight ? 'light-white' : 'dark'}
                 >
                   <Link to={path} onClick={() => enterDocs()} className="group block min-w-0 flex-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-o9-shock dark:focus-visible:ring-[#7ca8ff]">
-                    <HomeBlockCardIllustration illustrationSrc={illustrationSrc} isLight={isLight} />
+                    <HomeBlockCardIllustration
+                      illustrationSrc={illustrationSrc}
+                      isLight={isLight}
+                      loading={isAboveFoldCard ? 'eager' : 'lazy'}
+                      fetchPriority={isAboveFoldCard ? 'low' : 'auto'}
+                    />
                     <div className="bg-[#FAFAFA] px-5 pb-6 pt-5 dark:bg-neutral-900/80 sm:px-6">
                       <h3 className="mb-2 text-lg font-semibold tracking-tight text-o9ds-light-primary dark:text-white sm:text-xl">
                         {title}
