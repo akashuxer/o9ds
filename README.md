@@ -35,6 +35,8 @@ Design system documentation for **o9 Design Lab** — built from the o9 brand id
 
 **Regenerate component stubs:** After editing `src/data/componentsNav.js`, run `npm run generate:component-stubs` to refresh `allStubComponents.js` and the per-slug files under `src/pages/components/<category>/`.
 
+**Regenerate o9con icon catalog:** After replacing `public/o9ConIconFont/o9con.css` and font files (`.woff2`, `.woff`, `.ttf`) from a new export, run `npm run generate:o9con-icons` to rebuild `src/tokens/o9conIcons.js` from the CSS so **Assets → Iconography** lists every icon class. Ensure `@font-face` in `o9con.css` uses URLs **relative to that file** (e.g. `url('./o9con.woff2')`) so fonts load from `/o9ConIconFont/`; some generators emit `../fonts/...`, which will 404 unless you add matching files under `public/fonts/`.
+
 ---
 
 ## Folder Structure
@@ -49,7 +51,8 @@ o9ds Website/
 ├── vercel.json             # SPA rewrites: all routes → index.html (deep links / refresh)
 │
 ├── scripts/
-│   └── generate-component-stubs.mjs  # Regenerate stub pages + allStubComponents.js
+│   ├── generate-component-stubs.mjs  # Regenerate stub pages + allStubComponents.js
+│   └── generate-o9con-icons.mjs      # Regenerate src/tokens/o9conIcons.js from public/o9ConIconFont/o9con.css
 │
 ├── public/                 # Static assets (served as-is)
 │   ├── placeholder.svg       # Effects blur preview (mask overlay demo)
@@ -58,7 +61,7 @@ o9ds Website/
 │   │   ├── light/          # Light-mode illustration SVGs
 │   │   └── dark/           # Dark-mode illustration SVGs
 │   ├── o9SansFont/         # o9 Sans: o9Sans.css + font files (.woff2 / .woff / .ttf) for UI body text
-│   ├── o9ConIconFont/      # o9con icon font (woff2, woff, ttf, o9con.css)
+│   ├── o9ConIconFont/      # o9con icon font: o9con.css + o9con.woff2 / .woff / .ttf (same folder; @font-face paths must resolve here)
 │   └── favicon.svg
 │
 ├── src/
@@ -144,7 +147,7 @@ o9ds Website/
 | `src/tokens/borderTokens.js` | Border radius and width |
 | `src/tokens/iconTokens.js` | Icon size tokens (o9con) |
 | `src/tokens/illustrationTokens.js` | Illustration size tokens (o9Illus) |
-| `src/tokens/o9conIcons.js` | o9con icon class names and metadata |
+| `src/tokens/o9conIcons.js` | o9con icon class names and metadata (**generated** — run `npm run generate:o9con-icons` after updating `public/o9ConIconFont/o9con.css`) |
 | `src/index.css` | Global styles, 0-radius policy, `data-o9ds-*` rules |
 | `src/App.jsx` | Route definitions |
 | `src/data/componentsNav.js` | Component catalog tree and `/components/:slug` slugs |
@@ -204,6 +207,12 @@ o9ds Website/
 1. **Colors** — Edit `globalColorTokens.js` or `semanticColorTokens.js`
 2. **Spacing / borders / effects / icons / illustrations** — Edit the matching file in `src/tokens/`
 3. Save; dev server reloads automatically
+
+### o9con icon font (Iconography gallery)
+
+1. Drop updated `o9con.css` and font files into `public/o9ConIconFont/` (keep `@font-face` `url()` paths pointing at files in that folder).
+2. Run `npm run generate:o9con-icons` to refresh `src/tokens/o9conIcons.js`.
+3. Commit both the font assets and the regenerated `o9conIcons.js`.
 
 ---
 
