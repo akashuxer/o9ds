@@ -482,6 +482,8 @@ html.dark main div.border.overflow-hidden:has(table) tr {
 }
 
 /* Principles cards: white bg both modes; subtle border; avatar gray */
+html[data-theme="light"] main [data-o9ds-card="principles"],
+html:not(.dark) main [data-o9ds-card="principles"],
 html[data-theme="dark"] main [data-o9ds-card="principles"],
 html.dark main [data-o9ds-card="principles"] {
   background-color: #FFFFFF !important;
@@ -505,6 +507,8 @@ html.dark main div.border.p-6 {
   background-color: #000 !important;
 }
 /* Doc illustration panels: light surface + dots (override dark card rule for div.border.p-*) */
+html[data-theme="light"] main div.border[data-o9ds-doc-figure],
+html:not(.dark) main div.border[data-o9ds-doc-figure],
 html[data-theme="dark"] main div.border[data-o9ds-doc-figure],
 html.dark main div.border[data-o9ds-doc-figure] {
   background-color: #fafafa !important;

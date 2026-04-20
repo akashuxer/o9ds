@@ -16,8 +16,8 @@ export default function WhiteBgCard({ number, icon, title, desc, media, bullets 
       className={`group border p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 ${className}`}
       style={{
         borderColor: isLight ? '#E5E5E5' : (isUnified ? '#404040' : undefined),
-        /* Light: off-white surface (#FAFAFA), not pure #FFF — dark: let global [data-o9ds-card] rules apply */
-        backgroundColor: isLight ? '#FAFAFA' : (isUnified ? '#FFFFFF' : undefined),
+        /* Unified principles: #FFF in both themes so infographics match dark-mode doc treatment */
+        backgroundColor: isUnified ? '#FFFFFF' : isLight ? '#FAFAFA' : undefined,
         ...style,
       }}
       data-o9ds-card={isUnified ? 'principles' : (isLight ? 'light-white' : 'dark')}

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { useCallback, useEffect } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import ExpandableDocImage from '../LayoutComponents/ExpandableDocImage'
 import GrayBgCard from '../LayoutComponents/GrayBgCard'
@@ -38,7 +38,7 @@ function ErgonomicsBullet({ line }) {
 const OVERVIEW_SECTIONS = [
   { id: 'what-arvo-represents', label: 'What Arvo represents' },
   { id: 'why-we-built-it', label: 'Why we built it' },
-  { id: 'get-started', label: 'Get started' },
+  { id: 'principles', label: 'Core principles' },
   { id: 'business-impact', label: 'Business Impact' },
 ]
 
@@ -63,18 +63,88 @@ const businessImpact = [
   { title: 'Strengthens brand', desc: 'Brings o9 brand principles and visual language into the platform' },
 ]
 
+/**
+ * Prefer neural / enhanced en-US voices — clearer than the default on many setups.
+ * Browsers often populate the list asynchronously (voiceschanged).
+ */
+function pickClearEnglishVoice(synth) {
+  const voices = synth.getVoices()
+  if (!voices.length) return null
+  const score = (v) => {
+    const n = `${v.name} ${v.lang}`.toLowerCase()
+    let s = 0
+    if (v.lang === 'en-US' || v.lang === 'en_US') s += 8
+    else if (v.lang.startsWith('en')) s += 4
+    if (/google|natural|neural|network|enhanced|premium|aria/i.test(n)) s += 10
+    if (/microsoft.*(aria|jenny|guy|davis|zira|mark)/i.test(n)) s += 8
+    if (/samantha|allison|alex|karen|daniel|moira|tessa/i.test(n)) s += 5
+    return s
+  }
+  return [...voices].sort((a, b) => score(b) - score(a))[0]
+}
+
+/** Spoken as one phrase (“o nine Arvo”) — reads more naturally than literal “o9”. */
+const O9_ARVO_SPEAK_TEXT = 'o nine Arvo'
+
+/**
+ * Speak the full product name in one utterance so it flows like a single phrase.
+ */
+function pronounceO9Arvo() {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return
+  const synth = window.speechSynthesis
+  synth.cancel()
+
+  const voice = pickClearEnglishVoice(synth)
+  const ut = new SpeechSynthesisUtterance(O9_ARVO_SPEAK_TEXT)
+  ut.lang = voice?.lang?.startsWith('en') ? voice.lang : 'en-US'
+  if (voice) ut.voice = voice
+  ut.rate = 0.9
+  ut.pitch = 1
+  ut.volume = 1
+  synth.speak(ut)
+}
+
 export default function Overview() {
   const { theme } = useTheme()
   const isLight = theme === 'light'
+
+  useEffect(() => {
+    const synth = typeof window !== 'undefined' ? window.speechSynthesis : null
+    if (!synth) return undefined
+
+    /** Prime voice list so first click can pick a clear voice (Chrome/Safari). */
+    const primeVoices = () => {
+      synth.getVoices()
+    }
+    primeVoices()
+    synth.addEventListener('voiceschanged', primeVoices)
+    return () => {
+      synth.removeEventListener('voiceschanged', primeVoices)
+      synth.cancel()
+    }
+  }, [])
+
+  const onPronounceO9Arvo = useCallback(() => pronounceO9Arvo(), [])
 
   return (
     <PageWithToc sections={OVERVIEW_SECTIONS}>
     <div className="max-w-3xl space-y-12 lg:space-y-14">
       <section>
         <div className="pb-8 lg:pb-10">
-          <p className="text-[2rem] font-bold leading-[1.1] tracking-tight text-o9ds-light-primary dark:text-white sm:text-[2.5rem] md:text-[2.75rem]">
-            o9 Arvo
-          </p>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
+            <p className="text-[2rem] font-bold leading-[1.1] tracking-tight text-o9ds-light-primary dark:text-white sm:text-[2.5rem] md:text-[2.75rem]">
+              o9 Arvo
+            </p>
+            <button
+              type="button"
+              onClick={onPronounceO9Arvo}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-neutral-300 bg-white text-o9ds-light-primary transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800"
+              aria-label="Play pronunciation: o9 Arvo"
+              title="Hear pronunciation: o9 Arvo"
+            >
+              <span className="o9con o9con-speaker o9ds-icon-24" aria-hidden />
+            </button>
+          </div>
           <p className="mt-4 max-w-2xl text-base font-medium leading-relaxed text-o9ds-light-secondary dark:text-neutral-300 sm:text-lg md:text-xl">
             A Value System for Adaptive, Intelligent Enterprise Experiences
           </p>
@@ -205,22 +275,16 @@ export default function Overview() {
         </div>
       </section>
 
-      {/* Get started — five principles (infographics in public/GetStarted/) */}
-      <section id="get-started" className="animate-fade-in-up scroll-mt-24" style={{ animationDelay: '500ms' }}>
+      {/* Core principles — infographics in public/GetStarted/ */}
+      <section id="principles" className="animate-fade-in-up scroll-mt-24" style={{ animationDelay: '500ms' }}>
         <div
           className="mb-8 border-t pt-10 dark:border-neutral-700"
           style={{ borderColor: isLight ? '#E5E5E5' : undefined }}
         >
           <h2 className="text-2xl font-bold tracking-tight text-o9ds-light-primary dark:text-white sm:text-[28px]">
-            Get started
+            Core principles
           </h2>
         </div>
-        <h3
-          id="principles"
-          className="mb-4 scroll-mt-24 text-xl font-semibold text-o9ds-light-primary dark:text-white"
-        >
-          Core principles
-        </h3>
         <p className="mb-8 max-w-2xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
           {PRINCIPLES_INTRO}
         </p>
@@ -233,12 +297,14 @@ export default function Overview() {
               desc={desc}
               media={
                 infographic ? (
-                  <ExpandableDocImage
-                    src={infographic}
-                    alt={infographicAlt || `Principle ${num} infographic`}
-                    className="w-full"
-                    triggerClassName="max-w-full w-full"
-                  />
+                  <div className="overflow-hidden rounded-sm border" data-o9ds-doc-figure>
+                    <ExpandableDocImage
+                      src={infographic}
+                      alt={infographicAlt || `Principle ${num} infographic`}
+                      className="w-full"
+                      triggerClassName="max-w-full w-full"
+                    />
+                  </div>
                 ) : null
               }
               bullets={bullets}
@@ -248,17 +314,6 @@ export default function Overview() {
               unified
             />
           ))}
-        </div>
-        <div className="mt-10 rounded-xl border border-neutral-200/90 bg-gradient-to-br from-neutral-50 to-white p-6 dark:border-neutral-700 dark:from-neutral-900/50 dark:to-neutral-950">
-          <p className="m-0 text-sm font-semibold text-o9ds-light-primary dark:text-white">Resources hub</p>
-          <p className="mt-2 m-0 max-w-2xl text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-            Design files, engineering entry points, adoption checklists, and the living Google Doc index—everything in one place on
-            the{' '}
-            <Link to="/resources" className="font-semibold text-violet-600 underline underline-offset-2 dark:text-violet-400">
-              Resources
-            </Link>{' '}
-            page.
-          </p>
         </div>
       </section>
 
