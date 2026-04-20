@@ -25,6 +25,9 @@ const ACCESSIBILITY_OVERVIEW_BY_PATH = {
   '/accessibility/assistive-technology': `${ACCESSIBILITY_GRAPHIC}/AssistiveTechnologyOverview.png`,
   '/accessibility/screen-reader-and-aria': `${ACCESSIBILITY_GRAPHIC}/ScreenReaderAriaOverview.png`,
   '/accessibility/keyboard-and-focus': `${ACCESSIBILITY_GRAPHIC}/keyboard-focusOverview.png`,
+  '/accessibility/shortcuts': `${ACCESSIBILITY_GRAPHIC}/shortcutOverview.png`,
+  '/accessibility/visual-accessibility': `${ACCESSIBILITY_GRAPHIC}/VisualAccessibilityOverview.png`,
+  '/accessibility/testing-and-qa': `${ACCESSIBILITY_GRAPHIC}/TestingQAOverview.png`,
 }
 
 const FALLBACK = '/o9DocGraphics/ComponentsOverview/default.svg'
