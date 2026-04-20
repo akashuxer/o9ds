@@ -129,6 +129,8 @@ html.dark {
   --o9ds-color-t-negative: #f07a62;
   --o9ds-color-t-positive: #2fe09d;
   --o9ds-color-t-warning: #ffef5c;
+  /* Icon: semanticColorTokens o9ds-color-i-warning (orangish-09 dark) */
+  --o9ds-color-i-warning: #ffef5c;
   --o9ds-color-t-disabled: #666666;
   --o9ds-color-t-readonly: #cccccc;
   --o9ds-color-t-info-light: #b8c7ff;
@@ -184,6 +186,8 @@ html:not(.dark) {
   --o9ds-color-t-negative: #bc1227;
   --o9ds-color-t-positive: #0c7951;
   --o9ds-color-t-warning: #926200;
+  /* Icon: semanticColorTokens o9ds-color-i-warning (orangish-10 light) */
+  --o9ds-color-i-warning: #926200;
   --o9ds-color-t-disabled: #b2b2b2;
   --o9ds-color-t-readonly: #303030;
   --o9ds-color-t-info-light: #0037ff;

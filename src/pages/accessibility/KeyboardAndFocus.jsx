@@ -54,6 +54,10 @@ const tokenButtonSecondaryClassName =
 const tokenButtonPrimaryClassName =
   'rounded-none border border-o9ds-light-primary dark:border-white bg-o9ds-light-primary dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-o9ds-light-primary'
 
+/** Destructive confirm (e.g. Delete) in alert demos */
+const tokenButtonDestructiveClassName =
+  'rounded-none border border-[color:var(--o9ds-color-b-negative)] bg-[color:var(--o9ds-color-b-negative)] px-4 py-2 text-sm font-medium text-white dark:border-red-500 dark:bg-red-600'
+
 /** o9ds-font-h16-m + color-t-primary — dialog titles on Keyboard & focus demos */
 const kbDialogTitleClassName = 'text-base font-medium text-[color:var(--o9ds-color-t-primary)]'
 
@@ -93,9 +97,10 @@ function getFocusableInDialog(container) {
   })
 }
 
-function handleDialogFocusTrapKeyDown(dialogRef, close) {
+function handleDialogFocusTrapKeyDown(dialogRef, close, onEscapeKey) {
   return (e) => {
     if (e.key === 'Escape') {
+      if (onEscapeKey?.(e)) return
       e.stopPropagation()
       close()
       return
@@ -142,7 +147,7 @@ function handleDialogFocusTrapKeyDown(dialogRef, close) {
 
 /**
  * Shared modal shell: header, body, and footer all on s-layer-03; form controls use s-layer-04 on the field only.
- * Optional: footer off (f), initial focus on dialog container (tabIndex -1), or on primary footer control (e).
+ * Optional: alert header icon, secondary-first focus, custom Esc (nested overlays).
  */
 function KeyboardA11yDemoDialog({
   open,
@@ -153,9 +158,19 @@ function KeyboardA11yDemoDialog({
   children,
   showFooter = true,
   primaryFooterRef = null,
+  secondaryFooterRef = null,
+  initialFooterFocus = 'primary',
   containerInitialFocus = false,
+  dialogTitle = 'Demo Example',
+  variant = 'default',
+  primaryLabel = 'OK',
+  secondaryLabel = 'Cancel',
+  primaryActionClassName,
+  onEscapeKey,
 }) {
   const wasOpenRef = useRef(false)
+  const role = variant === 'alert' ? 'alertdialog' : 'dialog'
+  const primaryClass = primaryActionClassName ?? tokenButtonPrimaryClassName
 
   useEffect(() => {
     if (wasOpenRef.current && !open) {
@@ -179,10 +194,14 @@ function KeyboardA11yDemoDialog({
       dialogRef.current?.focus()
       return
     }
+    if (initialFooterFocus === 'secondary' && secondaryFooterRef?.current) {
+      secondaryFooterRef.current.focus()
+      return
+    }
     if (primaryFooterRef?.current) {
       primaryFooterRef.current.focus()
     }
-  }, [open, containerInitialFocus, primaryFooterRef, dialogRef])
+  }, [open, containerInitialFocus, primaryFooterRef, secondaryFooterRef, initialFooterFocus, dialogRef])
 
   if (!open) return null
 
@@ -195,18 +214,27 @@ function KeyboardA11yDemoDialog({
       />
       <div
         ref={dialogRef}
-        role="dialog"
+        role={role}
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={containerInitialFocus ? -1 : undefined}
         data-o9ds-kb-a11y-dialog
         className="relative z-10 flex w-full max-w-lg flex-col border border-o9ds-light-border bg-[color:var(--o9ds-color-s-layer-03)] shadow-lg dark:border-neutral-600"
-        onKeyDown={handleDialogFocusTrapKeyDown(dialogRef, close)}
+        onKeyDown={handleDialogFocusTrapKeyDown(dialogRef, close, onEscapeKey)}
       >
         <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
-          <h2 id={titleId} className={kbDialogTitleClassName}>
-            Demo Example
-          </h2>
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            {variant === 'alert' ? (
+              <span
+                className="o9con o9con-exclamation-triangle o9ds-icon-20 shrink-0"
+                style={{ color: 'var(--o9ds-color-i-warning)' }}
+                aria-hidden
+              />
+            ) : null}
+            <h2 id={titleId} className={`min-w-0 ${kbDialogTitleClassName}`}>
+              {dialogTitle}
+            </h2>
+          </div>
           <button
             type="button"
             onClick={close}
@@ -221,16 +249,11 @@ function KeyboardA11yDemoDialog({
         <div className="px-4 pb-4 sm:px-5">{children}</div>
         {showFooter ? (
           <div className="flex flex-wrap justify-end gap-2 px-4 py-3 sm:px-5">
-            <button type="button" onClick={close} className={tokenButtonSecondaryClassName}>
-              Cancel
+            <button ref={secondaryFooterRef ?? undefined} type="button" onClick={close} className={tokenButtonSecondaryClassName}>
+              {secondaryLabel}
             </button>
-            <button
-              ref={primaryFooterRef ?? undefined}
-              type="button"
-              onClick={close}
-              className={tokenButtonPrimaryClassName}
-            >
-              OK
+            <button ref={primaryFooterRef ?? undefined} type="button" onClick={close} className={primaryClass}>
+              {primaryLabel}
             </button>
           </div>
         ) : null}
@@ -537,6 +560,385 @@ function ContainerInitialFocusDemo() {
         </p>
       </KeyboardA11yDemoDialog>
     </>
+  )
+}
+
+/** High-stakes confirmation: o9con exclamation-triangle at 20px, initial focus on Cancel. */
+function AlertHighStakesDialogDemo() {
+  const [open, setOpen] = useState(false)
+  const openBtnRef = useRef(null)
+  const dialogRef = useRef(null)
+  const cancelRef = useRef(null)
+  const deleteRef = useRef(null)
+  const titleId = 'a11y-kb-alert-high-stakes-title'
+
+  return (
+    <>
+      <button ref={openBtnRef} type="button" className={tokenButtonSecondaryClassName} onClick={() => setOpen(true)}>
+        View Example
+      </button>
+      <KbDialogHowTo>
+        Open the dialog. Initial focus is on <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong> (safer action). Use{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> to reach <strong className="text-o9ds-light-primary dark:text-white">Delete</strong>.{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes the dialog.
+      </KbDialogHowTo>
+      <KeyboardA11yDemoDialog
+        open={open}
+        close={() => setOpen(false)}
+        triggerRef={openBtnRef}
+        dialogRef={dialogRef}
+        titleId={titleId}
+        variant="alert"
+        dialogTitle="Destructive Demo Example"
+        initialFooterFocus="secondary"
+        secondaryFooterRef={cancelRef}
+        primaryFooterRef={deleteRef}
+        secondaryLabel="Cancel"
+        primaryLabel="Delete"
+        primaryActionClassName={tokenButtonDestructiveClassName}
+      >
+        <p className="text-sm leading-relaxed text-[color:var(--o9ds-color-t-secondary)]">
+          This action cannot be undone. The selected items will be permanently removed.
+        </p>
+      </KeyboardA11yDemoDialog>
+    </>
+  )
+}
+
+const DROPDOWN_OVERLAY_OPTIONS = ['Option A', 'Option B', 'Option C', 'Option D', 'Option E']
+
+/** Standalone listbox as overlay: opening moves focus to the first option; chevron reflects state. */
+function DropdownInitialFocusDemo() {
+  const [open, setOpen] = useState(false)
+  const triggerRef = useRef(null)
+  const rootRef = useRef(null)
+  const optionRefs = useRef([])
+
+  const focusOption = (index) => {
+    const el = optionRefs.current[index]
+    if (el) el.focus()
+  }
+
+  useLayoutEffect(() => {
+    if (!open) return
+    const id = window.requestAnimationFrame(() => {
+      focusOption(0)
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setOpen(false)
+        window.setTimeout(() => triggerRef.current?.focus(), 0)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (e) => {
+      if (!rootRef.current?.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onPointerDown)
+    return () => document.removeEventListener('mousedown', onPointerDown)
+  }, [open])
+
+  const closeAndReturnFocus = () => {
+    setOpen(false)
+    window.setTimeout(() => triggerRef.current?.focus(), 0)
+  }
+
+  const onOptionKeyDown = (e, index) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (index < DROPDOWN_OVERLAY_OPTIONS.length - 1) focusOption(index + 1)
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      if (index === 0) {
+        closeAndReturnFocus()
+      } else {
+        focusOption(index - 1)
+      }
+    }
+    if (e.key === 'Home') {
+      e.preventDefault()
+      focusOption(0)
+    }
+    if (e.key === 'End') {
+      e.preventDefault()
+      focusOption(DROPDOWN_OVERLAY_OPTIONS.length - 1)
+    }
+  }
+
+  const triggerClassName = [
+    'inline-flex min-w-[10rem] items-center justify-between gap-2 rounded-none px-3 py-2 text-sm font-medium text-[color:var(--o9ds-color-t-primary)] transition-colors',
+    open
+      ? 'border border-transparent bg-[color:var(--o9ds-color-s-layer-04)] dark:bg-neutral-700'
+      : 'border border-[color:var(--o9ds-color-b-form)] bg-[color:var(--o9ds-color-s-layer-03)] dark:border-neutral-600',
+  ].join(' ')
+
+  const chevronClass = open ? 'o9con-chevron-up' : 'o9con-chevron-down'
+
+  return (
+    <div
+      ref={rootRef}
+      className="max-w-2xl space-y-3 border border-o9ds-light-border bg-[#FAFAFA] p-4 dark:border-neutral-700 dark:bg-neutral-900/40"
+      data-o9ds-kb-dropdown-demo
+    >
+      <KbDialogHowTo>
+        Activate <strong className="text-o9ds-light-primary dark:text-white">Example</strong> to open the overlay. Focus should move to the{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">first option</strong>. Use arrow keys to move;{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> or click outside closes the list and returns focus to the trigger.
+      </KbDialogHowTo>
+      <div className="relative inline-block">
+        <button
+          ref={triggerRef}
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls="a11y-kb-dropdown-demo-list"
+          className={triggerClassName}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <span>Example</span>
+          <span className={`o9con ${chevronClass} o9ds-icon-20 shrink-0 text-[color:var(--o9ds-color-t-primary)]`} aria-hidden />
+        </button>
+        {open ? (
+          <ul
+            id="a11y-kb-dropdown-demo-list"
+            role="listbox"
+            aria-label="Example options"
+            className="absolute left-0 top-full z-20 mt-0 min-w-full border border-[color:var(--o9ds-color-b-form)] bg-[color:var(--o9ds-color-s-layer-03)] py-1 shadow-[0_4px_16px_rgba(1,1,1,0.12)] dark:border-neutral-600 dark:shadow-[0_4px_16px_rgba(0,0,0,0.45)]"
+          >
+            {DROPDOWN_OVERLAY_OPTIONS.map((label, i) => (
+              <li key={label} role="presentation">
+                <button
+                  ref={(el) => {
+                    optionRefs.current[i] = el
+                  }}
+                  type="button"
+                  role="option"
+                  tabIndex={-1}
+                  className="w-full px-3 py-2.5 text-left text-sm text-[color:var(--o9ds-color-t-primary)] hover:bg-[color:var(--o9ds-color-s-layer-04)] focus:bg-[color:var(--o9ds-color-s-layer-04)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#010101] dark:focus-visible:ring-white"
+                  onKeyDown={(e) => onOptionKeyDown(e, i)}
+                  onClick={closeAndReturnFocus}
+                >
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+/** Modal containing an expandable menu: first Esc closes menu, second Esc closes modal. */
+function NestedEscStackDemo() {
+  const [open, setOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const triggerRef = useRef(null)
+  const firstOptionRef = useRef(null)
+  const okRef = useRef(null)
+  const openBtnRef = useRef(null)
+  const dialogRef = useRef(null)
+  const titleId = 'a11y-kb-nested-esc-demo-title'
+
+  const close = () => {
+    setMenuOpen(false)
+    setOpen(false)
+  }
+
+  useLayoutEffect(() => {
+    if (!open || !menuOpen) return
+    const id = window.requestAnimationFrame(() => {
+      firstOptionRef.current?.focus()
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [open, menuOpen])
+
+  const onEscapeKey = () => {
+    if (menuOpen) {
+      setMenuOpen(false)
+      window.setTimeout(() => triggerRef.current?.focus(), 0)
+      return true
+    }
+    return false
+  }
+
+  return (
+    <>
+      <button ref={openBtnRef} type="button" className={tokenButtonSecondaryClassName} onClick={() => setOpen(true)}>
+        View Example
+      </button>
+      <KbDialogHowTo>
+        Open the dialog, then <strong className="text-o9ds-light-primary dark:text-white">Open sample menu</strong>. With the list open,{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">first Esc</strong> closes only the menu (focus returns to the trigger).{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Second Esc</strong> closes the dialog.
+      </KbDialogHowTo>
+      <KeyboardA11yDemoDialog
+        open={open}
+        close={close}
+        triggerRef={openBtnRef}
+        dialogRef={dialogRef}
+        titleId={titleId}
+        dialogTitle="Modal with nested menu"
+        onEscapeKey={onEscapeKey}
+        primaryFooterRef={okRef}
+      >
+        <div className="space-y-3 text-sm text-[color:var(--o9ds-color-t-secondary)]">
+          <p>Demonstrates stacked dismissible layers: inner list first, then the dialog.</p>
+          <div>
+            <button
+              ref={triggerRef}
+              type="button"
+              id="a11y-kb-nested-menu-trigger"
+              aria-haspopup="listbox"
+              aria-expanded={menuOpen}
+              aria-controls="a11y-kb-nested-menu-list"
+              className={tokenButtonSecondaryClassName}
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              Open sample menu
+            </button>
+            {menuOpen ? (
+              <ul
+                id="a11y-kb-nested-menu-list"
+                role="listbox"
+                className="mt-2 max-w-xs border border-o9ds-light-border bg-[color:var(--o9ds-color-s-layer-04)] dark:border-neutral-600"
+                aria-label="Sample options"
+              >
+                {['Option A', 'Option B', 'Option C'].map((label, i) => (
+                  <li key={label} role="presentation" className="border-b border-o9ds-light-border last:border-b-0 dark:border-neutral-700">
+                    <button
+                      ref={i === 0 ? firstOptionRef : undefined}
+                      type="button"
+                      role="option"
+                      className="w-full px-3 py-2 text-left text-sm text-[color:var(--o9ds-color-t-primary)] hover:bg-[color:var(--o9ds-color-s-layer-03)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#010101] dark:focus-visible:ring-white"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </div>
+      </KeyboardA11yDemoDialog>
+    </>
+  )
+}
+
+const ROVING_TOOLBAR_LABELS = ['Cut', 'Copy', 'Paste']
+
+function RovingTabindexToolbarDemo() {
+  const [active, setActive] = useState(0)
+  const refs = useRef([])
+
+  const move = (from, delta) => {
+    const len = ROVING_TOOLBAR_LABELS.length
+    const next = (from + delta + len) % len
+    setActive(next)
+    window.requestAnimationFrame(() => refs.current[next]?.focus())
+  }
+
+  return (
+    <div
+      role="toolbar"
+      aria-label="Example clipboard actions"
+      className="inline-flex flex-wrap gap-1 border border-o9ds-light-border bg-[#FAFAFA] p-2 dark:border-neutral-700 dark:bg-neutral-900/40"
+      data-o9ds-kb-roving-demo
+    >
+      {ROVING_TOOLBAR_LABELS.map((label, i) => (
+        <button
+          key={label}
+          ref={(el) => {
+            refs.current[i] = el
+          }}
+          type="button"
+          tabIndex={active === i ? 0 : -1}
+          className={tokenButtonSecondaryClassName}
+          onFocus={() => setActive(i)}
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowRight') {
+              e.preventDefault()
+              move(i, 1)
+            }
+            if (e.key === 'ArrowLeft') {
+              e.preventDefault()
+              move(i, -1)
+            }
+          }}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+const DELETE_LIST_SEED = [
+  { id: 'kb-del-1', label: 'North' },
+  { id: 'kb-del-2', label: 'South' },
+  { id: 'kb-del-3', label: 'East' },
+  { id: 'kb-del-4', label: 'West' },
+]
+
+function FocusAfterDeleteListDemo() {
+  const [items, setItems] = useState(DELETE_LIST_SEED)
+  const btnRefs = useRef([])
+
+  const removeAt = (index) => {
+    const nextFocusIdx = Math.max(0, index - 1)
+    setItems((prev) => prev.filter((_, i) => i !== index))
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        btnRefs.current[nextFocusIdx]?.focus()
+      })
+    })
+  }
+
+  return (
+    <div
+      className="max-w-xl space-y-3 border border-o9ds-light-border bg-[#FAFAFA] p-4 dark:border-neutral-700 dark:bg-neutral-900/40"
+      data-o9ds-kb-delete-focus-demo
+      aria-label="Example removable list"
+    >
+      <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+        {items.map((item, index) => (
+          <li key={item.id} className="inline-flex items-center gap-2 border border-o9ds-light-border bg-white px-2 py-1 text-sm dark:border-neutral-600 dark:bg-[#010101]">
+            <span className="text-[color:var(--o9ds-color-t-primary)]">{item.label}</span>
+            <button
+              ref={(el) => {
+                btnRefs.current[index] = el
+              }}
+              type="button"
+              className="border border-o9ds-light-border px-1.5 py-0.5 text-xs font-medium text-o9ds-light-secondary hover:text-o9ds-light-primary dark:border-neutral-600 dark:text-neutral-400 dark:hover:text-white"
+              aria-label={`Remove ${item.label}`}
+              onClick={() => removeAt(index)}
+            >
+              Remove
+            </button>
+          </li>
+        ))}
+      </ul>
+      {items.length === 0 ? (
+        <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">List empty—focus could move to an “Add” control in a real flow.</p>
+      ) : null}
+      <KbDialogHowTo>
+        Activate <strong className="text-o9ds-light-primary dark:text-white">Remove</strong> on an item: focus moves to the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip’s
+        Remove control (not the next), so screen reader users stay oriented after the list changes.
+      </KbDialogHowTo>
+    </div>
   )
 }
 
@@ -922,18 +1324,23 @@ export default function KeyboardAndFocus() {
           <FormBodyInitialFocusDemo />
         </div>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">c. Dropdown or select menu opens</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
             When a dropdown or select list opens, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">first option</strong> (or the currently selected option, depending on pattern) inside the menu. That supports quick selection and predictable arrow-key navigation within the list.
           </p>
+          <DropdownInitialFocusDemo />
         </div>
 
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">d. Alert or high-stakes confirmation dialog</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
             For warning or destructive confirmations, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">secondary (safer) action first</strong>—for example Cancel or Dismiss—so users do not accidentally activate Delete or OK on the first keypress. This is a common pattern to reduce accidental destructive actions.
           </p>
+          <p className="text-xs text-o9ds-light-secondary dark:text-neutral-500">
+            The demo uses the same dialog shell as the other examples on this page, with an <strong className="text-o9ds-light-primary dark:text-white">alert</strong> header using the o9con <strong className="text-o9ds-light-primary dark:text-white">exclamation triangle</strong> icon at <strong className="text-o9ds-light-primary dark:text-white">20px</strong> and initial focus on <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>.
+          </p>
+          <AlertHighStakesDialogDemo />
         </div>
 
         <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
@@ -1004,6 +1411,13 @@ export default function KeyboardAndFocus() {
           When multiple dismissible layers are stacked (for example a dropdown inside a modal), <strong className="text-o9ds-light-primary dark:text-white">Esc should dismiss the topmost layer first</strong>. A second Esc dismisses the next layer down. After closing, restore focus as described in focus return—typically to the trigger of the layer that just closed.
         </p>
         <DocTable columns={escColumns} rows={escRows} />
+        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Interactive: nested menu inside a dialog</h3>
+          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+            Open the sample modal, then open the in-dialog menu. The first <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes only the menu; the second closes the dialog.
+          </p>
+          <NestedEscStackDemo />
+        </div>
       </section>
 
       <section id="a11y-kb-nested" className="space-y-4 scroll-mt-24">
@@ -1026,6 +1440,13 @@ export default function KeyboardAndFocus() {
 </div>`}
           label="Tablist pattern"
         />
+        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: toolbar with roving focus</h3>
+          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+            <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> into the toolbar, then use <strong className="text-o9ds-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-o9ds-light-primary dark:text-white">Right Arrow</strong> to move between buttons. Only one control keeps <code className="px-1" data-o9ds-inline-code>tabindex=0</code> at a time.
+          </p>
+          <RovingTabindexToolbarDemo />
+        </div>
       </section>
 
       <section id="a11y-kb-active" className="space-y-4 scroll-mt-24">
@@ -1060,6 +1481,13 @@ export default function KeyboardAndFocus() {
           </li>
           <li>If the list becomes empty, move focus to the control used to add items or to the parent region.</li>
         </ul>
+        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: focus moves to the previous item</h3>
+          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+            Remove items with the keyboard: after each removal, focus lands on the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip’s control (not the next).
+          </p>
+          <FocusAfterDeleteListDemo />
+        </div>
       </section>
     </AccessibilityDocPage>
   )
