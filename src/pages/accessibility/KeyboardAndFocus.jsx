@@ -16,7 +16,7 @@ const toc = [
   { id: 'a11y-kb-initial', label: 'Initial focus and tab order' },
   { id: 'a11y-kb-trap', label: 'Focus trapping' },
   { id: 'a11y-kb-return', label: 'Focus return' },
-  { id: 'a11y-kb-esc', label: 'Single vs multi Esc' },
+  { id: 'a11y-kb-esc', label: 'Single vs Multi esc key' },
   { id: 'a11y-kb-nested', label: 'Nested overlays' },
   { id: 'a11y-kb-roving', label: 'Roving tabindex' },
   { id: 'a11y-kb-active', label: 'aria-activedescendant' },
@@ -95,6 +95,26 @@ function getFocusableInDialog(container) {
     if (el.getAttribute('tabindex') === '-1') return false
     return el.tabIndex >= 0
   })
+}
+
+/** Tab order scope for closing an open list and moving focus (dialog vs page main). */
+function getDropdownTabOrderContainer(focusOrderContainerRef, triggerEl) {
+  if (focusOrderContainerRef?.current) return focusOrderContainerRef.current
+  return triggerEl?.closest('[data-o9ds-kb-a11y-dialog]') ?? triggerEl?.closest('main') ?? document.body
+}
+
+function moveFocusRelativeToTrigger(trigger, container, shiftKey) {
+  if (!trigger || !container) return
+  const list = getFocusableInDialog(container)
+  const i = list.indexOf(trigger)
+  if (i < 0) return
+  if (shiftKey) {
+    const next = i > 0 ? i - 1 : list.length - 1
+    list[next]?.focus()
+  } else {
+    const next = i < list.length - 1 ? i + 1 : 0
+    list[next]?.focus()
+  }
 }
 
 function handleDialogFocusTrapKeyDown(dialogRef, close, onEscapeKey) {
@@ -607,10 +627,23 @@ function AlertHighStakesDialogDemo() {
 
 const DROPDOWN_OVERLAY_OPTIONS = ['Option A', 'Option B', 'Option C', 'Option D', 'Option E']
 
-/** Standalone listbox as overlay: opening moves focus to the first option; chevron reflects state. */
-function DropdownInitialFocusDemo() {
-  const [open, setOpen] = useState(false)
-  const triggerRef = useRef(null)
+/**
+ * Shared “Example” dropdown + overlay listbox (same as “Dropdown or select menu opens”).
+ * When nested in a dialog, set registerDocumentEscape={false} so the parent handles Esc first.
+ */
+function DropdownOverlaySelect({
+  listId,
+  triggerId,
+  open,
+  onOpenChange,
+  ariaLabel = 'Example options',
+  registerDocumentEscape = true,
+  triggerRef: triggerRefProp,
+  /** When set (e.g. dialog root), Tab from an option closes the list and focuses the next control after the trigger. */
+  focusOrderContainerRef = null,
+}) {
+  const triggerFallbackRef = useRef(null)
+  const triggerRef = triggerRefProp ?? triggerFallbackRef
   const rootRef = useRef(null)
   const optionRefs = useRef([])
 
@@ -628,33 +661,54 @@ function DropdownInitialFocusDemo() {
   }, [open])
 
   useEffect(() => {
-    if (!open) return
+    if (!registerDocumentEscape || !open) return
     const onKey = (e) => {
       if (e.key === 'Escape') {
         e.preventDefault()
-        setOpen(false)
+        onOpenChange(false)
         window.setTimeout(() => triggerRef.current?.focus(), 0)
       }
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [open])
+  }, [open, onOpenChange, registerDocumentEscape])
 
   useEffect(() => {
     if (!open) return
     const onPointerDown = (e) => {
-      if (!rootRef.current?.contains(e.target)) setOpen(false)
+      if (!rootRef.current?.contains(e.target)) onOpenChange(false)
     }
     document.addEventListener('mousedown', onPointerDown)
     return () => document.removeEventListener('mousedown', onPointerDown)
-  }, [open])
+  }, [open, onOpenChange])
 
   const closeAndReturnFocus = () => {
-    setOpen(false)
+    onOpenChange(false)
     window.setTimeout(() => triggerRef.current?.focus(), 0)
   }
 
+  const closeListAndTabAway = (shiftKey) => {
+    onOpenChange(false)
+    const container = getDropdownTabOrderContainer(focusOrderContainerRef, triggerRef.current)
+    window.requestAnimationFrame(() => {
+      moveFocusRelativeToTrigger(triggerRef.current, container, shiftKey)
+    })
+  }
+
+  const onTriggerKeyDown = (e) => {
+    if (!open || e.key !== 'Tab') return
+    e.preventDefault()
+    e.stopPropagation()
+    closeListAndTabAway(e.shiftKey)
+  }
+
   const onOptionKeyDown = (e, index) => {
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      e.stopPropagation()
+      closeListAndTabAway(e.shiftKey)
+      return
+    }
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       if (index < DROPDOWN_OVERLAY_OPTIONS.length - 1) focusOption(index + 1)
@@ -678,65 +732,76 @@ function DropdownInitialFocusDemo() {
   }
 
   const triggerClassName = [
-    'inline-flex min-w-[10rem] items-center justify-between gap-2 rounded-none px-3 py-2 text-sm font-medium text-[color:var(--o9ds-color-t-primary)] transition-colors',
+    'inline-flex min-w-[10rem] items-center justify-between gap-2 rounded-none border-[1.5px] px-3 py-2 text-sm font-medium text-[color:var(--o9ds-color-t-primary)] transition-[border-color,background-color] outline-none ring-0 focus:border-[color:var(--o9ds-color-b-theme-focus)] focus:outline-none',
     open
-      ? 'border border-transparent bg-[color:var(--o9ds-color-s-layer-04)] dark:bg-neutral-700'
-      : 'border border-[color:var(--o9ds-color-b-form)] bg-[color:var(--o9ds-color-s-layer-03)] dark:border-neutral-600',
+      ? 'border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-04)] dark:bg-neutral-700'
+      : 'border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-03)]',
   ].join(' ')
 
   const chevronClass = open ? 'o9con-chevron-up' : 'o9con-chevron-down'
 
   return (
+    <div ref={rootRef} data-o9ds-kb-dropdown className="relative inline-block">
+      <button
+        ref={triggerRef}
+        type="button"
+        id={triggerId}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={listId}
+        className={triggerClassName}
+        onClick={() => onOpenChange((prev) => !prev)}
+        onKeyDown={onTriggerKeyDown}
+      >
+        <span>Example</span>
+        <span className={`o9con ${chevronClass} o9ds-icon-20 shrink-0 text-[color:var(--o9ds-color-t-primary)]`} aria-hidden />
+      </button>
+      {open ? (
+        <ul
+          id={listId}
+          role="listbox"
+          aria-label={ariaLabel}
+          className="absolute left-0 top-full z-20 mt-0 min-w-full border border-[color:var(--o9ds-color-b-form)] bg-[color:var(--o9ds-color-s-layer-03)] py-1 shadow-[0_4px_16px_rgba(1,1,1,0.12)] dark:border-neutral-600 dark:shadow-[0_4px_16px_rgba(0,0,0,0.45)]"
+        >
+          {DROPDOWN_OVERLAY_OPTIONS.map((label, i) => (
+            <li key={label} role="presentation">
+              <button
+                ref={(el) => {
+                  optionRefs.current[i] = el
+                }}
+                type="button"
+                role="option"
+                tabIndex={-1}
+                className="w-full border-[1.5px] border-transparent px-3 py-2.5 text-left text-sm text-[color:var(--o9ds-color-t-primary)] hover:bg-[color:var(--o9ds-color-s-layer-04)] focus:border-[color:var(--o9ds-color-b-theme-focus)] focus:bg-[color:var(--o9ds-color-s-layer-04)] focus:outline-none"
+                onKeyDown={(e) => onOptionKeyDown(e, i)}
+                onClick={closeAndReturnFocus}
+              >
+                {label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  )
+}
+
+/** Standalone listbox as overlay: opening moves focus to the first option; chevron reflects state. */
+function DropdownInitialFocusDemo() {
+  const [open, setOpen] = useState(false)
+
+  return (
     <div
-      ref={rootRef}
       className="max-w-2xl space-y-3 border border-o9ds-light-border bg-[#FAFAFA] p-4 dark:border-neutral-700 dark:bg-neutral-900/40"
       data-o9ds-kb-dropdown-demo
     >
       <KbDialogHowTo>
         Activate <strong className="text-o9ds-light-primary dark:text-white">Example</strong> to open the overlay. Focus should move to the{' '}
         <strong className="text-o9ds-light-primary dark:text-white">first option</strong>. Use arrow keys to move;{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> closes the list and moves to the next focusable control on the page;{' '}
         <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> or click outside closes the list and returns focus to the trigger.
       </KbDialogHowTo>
-      <div className="relative inline-block">
-        <button
-          ref={triggerRef}
-          type="button"
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          aria-controls="a11y-kb-dropdown-demo-list"
-          className={triggerClassName}
-          onClick={() => setOpen((o) => !o)}
-        >
-          <span>Example</span>
-          <span className={`o9con ${chevronClass} o9ds-icon-20 shrink-0 text-[color:var(--o9ds-color-t-primary)]`} aria-hidden />
-        </button>
-        {open ? (
-          <ul
-            id="a11y-kb-dropdown-demo-list"
-            role="listbox"
-            aria-label="Example options"
-            className="absolute left-0 top-full z-20 mt-0 min-w-full border border-[color:var(--o9ds-color-b-form)] bg-[color:var(--o9ds-color-s-layer-03)] py-1 shadow-[0_4px_16px_rgba(1,1,1,0.12)] dark:border-neutral-600 dark:shadow-[0_4px_16px_rgba(0,0,0,0.45)]"
-          >
-            {DROPDOWN_OVERLAY_OPTIONS.map((label, i) => (
-              <li key={label} role="presentation">
-                <button
-                  ref={(el) => {
-                    optionRefs.current[i] = el
-                  }}
-                  type="button"
-                  role="option"
-                  tabIndex={-1}
-                  className="w-full px-3 py-2.5 text-left text-sm text-[color:var(--o9ds-color-t-primary)] hover:bg-[color:var(--o9ds-color-s-layer-04)] focus:bg-[color:var(--o9ds-color-s-layer-04)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#010101] dark:focus-visible:ring-white"
-                  onKeyDown={(e) => onOptionKeyDown(e, i)}
-                  onClick={closeAndReturnFocus}
-                >
-                  {label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
+      <DropdownOverlaySelect listId="a11y-kb-dropdown-demo-list" open={open} onOpenChange={setOpen} />
     </div>
   )
 }
@@ -746,7 +811,6 @@ function NestedEscStackDemo() {
   const [open, setOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const triggerRef = useRef(null)
-  const firstOptionRef = useRef(null)
   const okRef = useRef(null)
   const openBtnRef = useRef(null)
   const dialogRef = useRef(null)
@@ -756,14 +820,6 @@ function NestedEscStackDemo() {
     setMenuOpen(false)
     setOpen(false)
   }
-
-  useLayoutEffect(() => {
-    if (!open || !menuOpen) return
-    const id = window.requestAnimationFrame(() => {
-      firstOptionRef.current?.focus()
-    })
-    return () => window.cancelAnimationFrame(id)
-  }, [open, menuOpen])
 
   const onEscapeKey = () => {
     if (menuOpen) {
@@ -780,7 +836,10 @@ function NestedEscStackDemo() {
         View Example
       </button>
       <KbDialogHowTo>
-        Open the dialog, then <strong className="text-o9ds-light-primary dark:text-white">Open sample menu</strong>. With the list open,{' '}
+        Open the dialog, then use the same <strong className="text-o9ds-light-primary dark:text-white">Example</strong> dropdown as in{' '}
+        <em className="text-o9ds-light-primary dark:text-white">Dropdown or select menu opens</em>. With the list open,{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> closes the menu and moves focus to the next control in the dialog (for example{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>);{' '}
         <strong className="text-o9ds-light-primary dark:text-white">first Esc</strong> closes only the menu (focus returns to the trigger).{' '}
         <strong className="text-o9ds-light-primary dark:text-white">Second Esc</strong> closes the dialog.
       </KbDialogHowTo>
@@ -796,43 +855,50 @@ function NestedEscStackDemo() {
       >
         <div className="space-y-3 text-sm text-[color:var(--o9ds-color-t-secondary)]">
           <p>Demonstrates stacked dismissible layers: inner list first, then the dialog.</p>
-          <div>
-            <button
-              ref={triggerRef}
-              type="button"
-              id="a11y-kb-nested-menu-trigger"
-              aria-haspopup="listbox"
-              aria-expanded={menuOpen}
-              aria-controls="a11y-kb-nested-menu-list"
-              className={tokenButtonSecondaryClassName}
-              onClick={() => setMenuOpen((o) => !o)}
-            >
-              Open sample menu
-            </button>
-            {menuOpen ? (
-              <ul
-                id="a11y-kb-nested-menu-list"
-                role="listbox"
-                className="mt-2 max-w-xs border border-o9ds-light-border bg-[color:var(--o9ds-color-s-layer-04)] dark:border-neutral-600"
-                aria-label="Sample options"
-              >
-                {['Option A', 'Option B', 'Option C'].map((label, i) => (
-                  <li key={label} role="presentation" className="border-b border-o9ds-light-border last:border-b-0 dark:border-neutral-700">
-                    <button
-                      ref={i === 0 ? firstOptionRef : undefined}
-                      type="button"
-                      role="option"
-                      className="w-full px-3 py-2 text-left text-sm text-[color:var(--o9ds-color-t-primary)] hover:bg-[color:var(--o9ds-color-s-layer-03)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#010101] dark:focus-visible:ring-white"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
+          <DropdownOverlaySelect
+            listId="a11y-kb-nested-menu-list"
+            triggerId="a11y-kb-nested-menu-trigger"
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+            registerDocumentEscape={false}
+            triggerRef={triggerRef}
+            focusOrderContainerRef={dialogRef}
+          />
         </div>
+      </KeyboardA11yDemoDialog>
+    </>
+  )
+}
+
+/** One dismissible layer only: a single Esc closes the dialog (no nested dropdown). */
+function SingleEscSimpleModalDemo() {
+  const [open, setOpen] = useState(false)
+  const openBtnRef = useRef(null)
+  const dialogRef = useRef(null)
+  const okRef = useRef(null)
+  const titleId = 'a11y-kb-single-esc-layer-title'
+
+  return (
+    <>
+      <button ref={openBtnRef} type="button" className={tokenButtonSecondaryClassName} onClick={() => setOpen(true)}>
+        View Example
+      </button>
+      <KbDialogHowTo>
+        Only this dialog is open—<strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes it in one step and focus returns to the button. The same idea applies to a{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">dropdown at layout level</strong> (not inside another overlay): one Esc dismisses that list.
+      </KbDialogHowTo>
+      <KeyboardA11yDemoDialog
+        open={open}
+        close={() => setOpen(false)}
+        triggerRef={openBtnRef}
+        dialogRef={dialogRef}
+        titleId={titleId}
+        dialogTitle="Single-layer dialog"
+        primaryFooterRef={okRef}
+      >
+        <p className="text-sm text-[color:var(--o9ds-color-t-secondary)]">
+          There is no nested menu here—Esc closes this overlay immediately.
+        </p>
       </KeyboardA11yDemoDialog>
     </>
   )
@@ -886,57 +952,113 @@ function RovingTabindexToolbarDemo() {
   )
 }
 
-const DELETE_LIST_SEED = [
-  { id: 'kb-del-1', label: 'North' },
-  { id: 'kb-del-2', label: 'South' },
-  { id: 'kb-del-3', label: 'East' },
-  { id: 'kb-del-4', label: 'West' },
+const FILTER_CHIP_SEED = [
+  { id: 'kb-filter-model', label: 'Model' },
+  { id: 'kb-filter-size', label: 'Size' },
+  { id: 'kb-filter-colors', label: 'Colors' },
+  { id: 'kb-filter-item', label: 'Item' },
 ]
 
+/** Filter chips: roving tabindex + arrows; on focus, “Clear” tooltip + × overlay; Delete / Enter / Space clears; focus → previous item. */
 function FocusAfterDeleteListDemo() {
-  const [items, setItems] = useState(DELETE_LIST_SEED)
-  const btnRefs = useRef([])
+  const [items, setItems] = useState(FILTER_CHIP_SEED)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const chipRefs = useRef([])
 
   const removeAt = (index) => {
-    const nextFocusIdx = Math.max(0, index - 1)
-    setItems((prev) => prev.filter((_, i) => i !== index))
-    window.requestAnimationFrame(() => {
+    setItems((prev) => {
+      if (prev.length === 0) return prev
+      const next = prev.filter((_, i) => i !== index)
+      const focusIdx = index === 0 ? 0 : index - 1
+      const safe = next.length === 0 ? 0 : Math.min(focusIdx, next.length - 1)
       window.requestAnimationFrame(() => {
-        btnRefs.current[nextFocusIdx]?.focus()
+        setActiveIndex(safe)
+        window.requestAnimationFrame(() => {
+          if (next.length > 0) chipRefs.current[safe]?.focus()
+        })
       })
+      return next
     })
   }
 
+  const moveFocus = (fromIndex, delta) => {
+    const len = items.length
+    if (len === 0) return
+    const next = Math.min(Math.max(0, fromIndex + delta), len - 1)
+    if (next === fromIndex) return
+    setActiveIndex(next)
+    window.requestAnimationFrame(() => chipRefs.current[next]?.focus())
+  }
+
+  const filterLabelId = 'a11y-kb-filter-by-label'
+
   return (
     <div
-      className="max-w-xl space-y-3 border border-o9ds-light-border bg-[#FAFAFA] p-4 dark:border-neutral-700 dark:bg-neutral-900/40"
+      className="max-w-3xl space-y-3 border border-o9ds-light-border bg-[color:var(--o9ds-color-s-layer-03)] p-4 dark:border-neutral-600"
       data-o9ds-kb-delete-focus-demo
-      aria-label="Example removable list"
     >
-      <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
-        {items.map((item, index) => (
-          <li key={item.id} className="inline-flex items-center gap-2 border border-o9ds-light-border bg-white px-2 py-1 text-sm dark:border-neutral-600 dark:bg-[#010101]">
-            <span className="text-[color:var(--o9ds-color-t-primary)]">{item.label}</span>
-            <button
-              ref={(el) => {
-                btnRefs.current[index] = el
-              }}
-              type="button"
-              className="border border-o9ds-light-border px-1.5 py-0.5 text-xs font-medium text-o9ds-light-secondary hover:text-o9ds-light-primary dark:border-neutral-600 dark:text-neutral-400 dark:hover:text-white"
-              aria-label={`Remove ${item.label}`}
-              onClick={() => removeAt(index)}
-            >
-              Remove
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-wrap items-center gap-2">
+        <span id={filterLabelId} className="text-sm font-medium text-[color:var(--o9ds-color-t-secondary)]">
+          Filter By
+        </span>
+        <ul
+          className="flex flex-wrap items-center gap-2 p-0 m-0 list-none"
+          role="group"
+          aria-labelledby={filterLabelId}
+        >
+          {items.map((item, index) => {
+            const tipId = `${item.id}-clear-tip`
+            return (
+              <li key={item.id} className="relative">
+                <button
+                  ref={(el) => {
+                    chipRefs.current[index] = el
+                  }}
+                  type="button"
+                  tabIndex={activeIndex === index ? 0 : -1}
+                  aria-describedby={tipId}
+                  aria-label={`${item.label} filter. Clear with Delete, Backspace, Enter, or Space.`}
+                  className="group relative inline-flex min-h-[2.25rem] items-center overflow-visible border-[1.5px] border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-03)] px-3 py-1.5 text-sm font-medium text-[color:var(--o9ds-color-t-primary)] outline-none ring-0 transition-[border-color,background-color] hover:bg-[color:var(--o9ds-color-s-theme-hover-2)] focus:border-[color:var(--o9ds-color-b-theme-focus)] focus:outline-none"
+                  onFocus={() => setActiveIndex(index)}
+                  onClick={() => removeAt(index)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'ArrowRight') {
+                      e.preventDefault()
+                      moveFocus(index, 1)
+                    } else if (e.key === 'ArrowLeft') {
+                      e.preventDefault()
+                      moveFocus(index, -1)
+                    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+                      e.preventDefault()
+                      removeAt(index)
+                    }
+                  }}
+                >
+                  <span id={tipId} role="tooltip" className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1 -translate-x-1/2 whitespace-nowrap bg-[#010101] px-2 py-1 text-xs font-medium text-white opacity-0 shadow-md transition-opacity group-hover:opacity-100 group-focus:opacity-100 dark:bg-white dark:text-[#010101]">
+                    Clear
+                  </span>
+                  <span className="relative z-0 whitespace-nowrap">{item.label}</span>
+                  <span
+                    className="pointer-events-none absolute right-0.5 top-1/2 z-10 flex h-6 w-6 -translate-y-1/2 items-center justify-center border-[1.5px] border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-04)] text-sm leading-none text-[color:var(--o9ds-color-t-primary)] opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus:opacity-100"
+                    aria-hidden
+                  >
+                    ×
+                  </span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
       {items.length === 0 ? (
-        <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">List empty—focus could move to an “Add” control in a real flow.</p>
+        <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400" role="status">
+          All filters cleared—focus could move to an “Add filter” control in a real flow.
+        </p>
       ) : null}
       <KbDialogHowTo>
-        Activate <strong className="text-o9ds-light-primary dark:text-white">Remove</strong> on an item: focus moves to the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip’s
-        Remove control (not the next), so screen reader users stay oriented after the list changes.
+        Use <strong className="text-o9ds-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-o9ds-light-primary dark:text-white">Right Arrow</strong> to move between chips (roving tabindex). Hover applies the theme hover-2 surface; hover or focus shows the <strong className="text-o9ds-light-primary dark:text-white">Clear</strong> tooltip and × layered on the chip (no extra padding for the ×). Default stroke is divider color; focused stroke is <strong className="text-o9ds-light-primary dark:text-white">1.5px</strong> theme-focus—no separate outline. Press{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Delete</strong>, <strong className="text-o9ds-light-primary dark:text-white">Backspace</strong>,{' '}
+        <strong className="text-o9ds-light-primary dark:text-white">Enter</strong>, or <strong className="text-o9ds-light-primary dark:text-white">Space</strong> to clear that chip—focus moves to the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip (or the new first chip if you cleared the first).
       </KbDialogHowTo>
     </div>
   )
@@ -1040,14 +1162,10 @@ const escRows = [
       'First Esc closes the inner overlay (dropdown). Second Esc closes the parent container. After each close, move focus appropriately—when the dropdown closes, focus typically returns to its trigger; when the container closes, focus returns to the element that opened the container.',
   },
   {
-    scenario: 'Only a modal, popover, window, or dialog is open (no nested dropdown active)',
+    scenario:
+      'Only a modal, popover, window, or dialog is open (no nested dropdown active), or dropdown is open at layout level.',
     behavior:
       'A single Esc closes that container. Focus returns to the element that triggered the overlay.',
-  },
-  {
-    scenario: 'Outer overlay is open but the inner dropdown is not active',
-    behavior:
-      'First Esc closes the visible overlay and returns focus to the triggering element. Users should not need multiple Esc presses when there is only one dismissible layer.',
   },
 ]
 
@@ -1080,7 +1198,7 @@ export default function KeyboardAndFocus() {
 
         <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Single-column (linear) layouts</h3>
-          <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
             <li>Tab typically follows one vertical flow; fewer opportunities for visual order to disagree with DOM order.</li>
             <li>Still validate reading order for responsive breakpoints—content that reorders at different widths must keep a sensible tab sequence.</li>
           </ul>
@@ -1127,7 +1245,7 @@ export default function KeyboardAndFocus() {
 
         <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Multi-column layouts (e.g. two columns)</h3>
-          <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
             <li>
               Visual reading order may be left column then right column, or main column then rail—keyboard focus follows the <strong className="text-o9ds-light-primary dark:text-white">order of elements in the DOM</strong>.
             </li>
@@ -1208,7 +1326,7 @@ export default function KeyboardAndFocus() {
 
       <section id="a11y-kb-standard" className="space-y-4 scroll-mt-24">
         <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Standard expectations</h2>
-        <ul className="list-disc list-inside space-y-2 text-o9ds-light-secondary dark:text-neutral-400 text-sm">
+        <ul className="list-disc list-outside pl-5 space-y-2 text-o9ds-light-secondary dark:text-neutral-400 text-sm">
           <li>
             <strong className="text-o9ds-light-primary dark:text-white">Tab / Shift+Tab</strong> — Move forward and backward between tab stops.
           </li>
@@ -1219,7 +1337,7 @@ export default function KeyboardAndFocus() {
             <strong className="text-o9ds-light-primary dark:text-white">Arrow keys</strong> — Move within composite widgets (menus, tablists, radio groups, listboxes, toolbars).
           </li>
           <li>
-            <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> — Close the topmost dismissible layer (see the section <em>Single vs multi Esc</em> below).
+            <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> — Close the topmost dismissible layer (see the section <em>Single vs Multi esc key</em> below).
           </li>
         </ul>
       </section>
@@ -1236,7 +1354,7 @@ export default function KeyboardAndFocus() {
         </div>
         <div className="border border-o9ds-light-border dark:border-neutral-700 p-5 space-y-2">
           <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Best practice for this design system</h3>
-          <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
             <li>Avoid showing a prominent focus ring on every mouse click when the platform supports <code className="px-1" data-o9ds-inline-code>:focus-visible</code>.</li>
             <li>Ensure keyboard users still get a <strong className="text-o9ds-light-primary dark:text-white">strong, high-contrast</strong> visible indicator—meet contrast requirements against adjacent colors.</li>
           </ul>
@@ -1377,7 +1495,7 @@ export default function KeyboardAndFocus() {
           Focus trapping keeps keyboard focus <strong className="text-o9ds-light-primary dark:text-white">inside an active overlay</strong> until the user dismisses it. While the overlay is open, Tab and Shift+Tab should cycle within that container—not move to links and buttons in the background. That prevents accidental interaction outside the intended context and reduces confusion.
         </p>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">Applies to:</p>
-        <ul className="list-disc list-inside space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <ul className="list-disc list-outside pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
           <li>Modal dialogs and alert dialogs</li>
           <li>Modal popovers and blocking panels</li>
           <li>Side panels and drawers that capture focus</li>
@@ -1397,7 +1515,7 @@ export default function KeyboardAndFocus() {
         <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
           After closing dialogs, windows, side panels, or dropdowns, <strong className="text-o9ds-light-primary dark:text-white">focus should return to the element that triggered the action</strong> (the opener), unless the workflow intentionally moves the user elsewhere (for example after successful submit). This preserves a clear navigation path and reduces disorientation.
         </p>
-        <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
           <li>When selecting an option from a dropdown, return focus to the trigger (or follow platform pattern) so the next Tab continues predictably.</li>
           <li>If opening a control spawns another overlay, move focus into the new layer and return it to the appropriate trigger when that layer closes.</li>
           <li>Chains of overlays should unwind focus in reverse order of opening when possible.</li>
@@ -1406,17 +1524,24 @@ export default function KeyboardAndFocus() {
       </section>
 
       <section id="a11y-kb-esc" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Single vs multi Esc behavior</h2>
+        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Single vs Multi esc key</h2>
         <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed mb-4">
           When multiple dismissible layers are stacked (for example a dropdown inside a modal), <strong className="text-o9ds-light-primary dark:text-white">Esc should dismiss the topmost layer first</strong>. A second Esc dismisses the next layer down. After closing, restore focus as described in focus return—typically to the trigger of the layer that just closed.
         </p>
         <DocTable columns={escColumns} rows={escRows} />
         <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Interactive: nested menu inside a dialog</h3>
+          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: nested dropdown inside a dialog</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Open the sample modal, then open the in-dialog menu. The first <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes only the menu; the second closes the dialog.
+            Matches the first row: open the modal, then open the in-dialog menu. The first <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes only the menu; the second closes the dialog.
           </p>
           <NestedEscStackDemo />
+        </div>
+        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: single overlay (dialog only)</h3>
+          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
+            Matches the second row: only one layer is active, so <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes it once. A standalone dropdown on the page (layout level, not nested in another overlay) behaves the same—one Esc dismisses that list.
+          </p>
+          <SingleEscSimpleModalDemo />
         </div>
       </section>
 
@@ -1469,7 +1594,7 @@ export default function KeyboardAndFocus() {
         <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
           In interactive lists—filter chips, selected members, tag lists—when the user deletes item <strong className="text-o9ds-light-primary dark:text-white">N</strong>, move focus to the <strong className="text-o9ds-light-primary dark:text-white">preceding item (N−1)</strong>, not to the following item (N+1).
         </p>
-        <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
           <li>
             Focusing <strong className="text-o9ds-light-primary dark:text-white">N−1</strong> keeps users near where the removal happened; screen readers can announce the updated list context without skipping the fact that an item was removed.
           </li>
@@ -1482,9 +1607,9 @@ export default function KeyboardAndFocus() {
           <li>If the list becomes empty, move focus to the control used to add items or to the parent region.</li>
         </ul>
         <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: focus moves to the previous item</h3>
+          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: filter chips</h3>
           <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Remove items with the keyboard: after each removal, focus lands on the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip’s control (not the next).
+            Roving tabindex and arrow keys move between chips. Clearing a chip moves focus to the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip (or the new first chip when the first was cleared).
           </p>
           <FocusAfterDeleteListDemo />
         </div>

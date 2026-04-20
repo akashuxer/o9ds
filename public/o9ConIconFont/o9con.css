@@ -1,334 +1,82 @@
-/* --------------------------------
-o9con Web Font
-Version: 1.8.0
-Author: Atul Meshram
-Date: 17-August-2021
+/*--------------------------------
+
+o9con icon font
+Generated using nucleoapp.com
+
 -------------------------------- */
+
 @font-face {
-  font-family: "o9con";
-  src: url("/o9ConIconFont/o9con.woff2") format("woff2"), url("/o9ConIconFont/o9con.woff") format("woff"), url("/o9ConIconFont/o9con.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+  font-family: 'o9con';
+  /* Paths relative to this file: /o9ConIconFont/o9con.css */
+  src: url('./o9con.woff2') format('woff2'),
+       url('./o9con.woff') format('woff'),
+       url('./o9con.ttf') format('truetype');
 }
-/*------------------------
-	base class definition
--------------------------*/
+
+/* base class */
 .o9con {
   display: inline-block;
-  font: normal normal normal 1em/1 "o9con";
-  speak: none;
-  text-transform: none;
-  /* Better Font Rendering */
+  font: normal normal normal 1em/1 'o9con';
+  color: inherit;
+  flex-shrink: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/*------------------------
-  change icon size
--------------------------*/
-/* relative units */
-.o9con-sz-xs {
-  font-size: 0.75em;
+/* size examples - relative units */
+.o9con-sm {
+  font-size: 0.8em;
 }
 
-.o9con-sz-sm {
-  font-size: 0.875em;
+.o9con-lg {
+  font-size: 1.2em;
 }
 
-.o9con-sz-lg {
-  font-size: 1.33em;
-}
-
-.o9con-sz-2x {
-  font-size: 2em;
-}
-
-.o9con-sz-3x {
-  font-size: 3em;
-}
-
-.o9con-sz-4x {
-  font-size: 4em;
-}
-
-.o9con-sz-5x {
-  font-size: 5em;
-}
-
-.o9con-sz-6x {
-  font-size: 6em;
-}
-
-.o9con-sz-7x {
-  font-size: 7em;
-}
-
-.o9con-sz-8x {
-  font-size: 8em;
-}
-
-.o9con-sz-9x {
-  font-size: 9em;
-}
-
-.o9con-sz-10x {
-  font-size: 10em;
-}
-
-/* absolute units */
+/* size examples - absolute units */
 .o9con-16 {
   font-size: 16px;
-}
-
-.o9con-20 {
-  font-size: 20px;
-}
-
-.o9con-24 {
-  font-size: 24px;
 }
 
 .o9con-32 {
   font-size: 32px;
 }
 
-.o9con-40 {
-  font-size: 40px;
+/* rotate the icon infinitely */
+.o9con-is-spinning {
+  animation: o9con-spin 1s infinite linear;
 }
 
-.o9con-48 {
-  font-size: 48px;
-}
-
-/*----------------------------------
-  add a square/circle background
------------------------------------*/
-.o9con-bg-color {
-  background-color: inherit;
-}
-
-.o9con-text-color {
-  color: inherit;
-}
-
-.o9con-bg-sqr,
-.o9con-bg-sqr-smooth,
-.o9con-bg-cir {
-  padding: 0.33em;
-}
-
-.o9con-bg-sqr {
-  border-radius: 0;
-}
-
-.o9con-bg-sqr-smooth {
-  border-radius: 0.25em;
-}
-
-.o9con-bg-cir {
-  border-radius: 50%;
-}
-
-.o9con-bg-border {
-  border: solid 1.5px inherit;
-}
-
-/*------------------------------------
-  use icons as list item markers
--------------------------------------*/
-.o9con-ul {
-  padding-left: 0;
-  list-style-type: none;
-}
-.o9con-ul > li {
-  display: flex;
-  align-items: flex-start;
-  line-height: 1.4;
-}
-.o9con-ul > li > .o9con {
-  margin-right: 0.4em;
-  line-height: inherit;
-}
-
-/*------------------------
-  animated icons
--------------------------*/
-.o9con-anim-spin {
-  -webkit-animation: o9con-spin 2s infinite linear;
-  -moz-animation: o9con-spin 2s infinite linear;
-  animation: o9con-spin 2s infinite linear;
-}
-
-@-webkit-keyframes o9con-spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-@-moz-keyframes o9con-spin {
-  0% {
-    -moz-transform: rotate(0deg);
-  }
-  100% {
-    -moz-transform: rotate(360deg);
-  }
-}
 @keyframes o9con-spin {
   0% {
-    -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -ms-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
-.o9con-anim-pulse {
-  -webkit-animation: o9con-pulse 1s ease infinite;
-  -moz-animation: o9con-pulse 1s ease infinite;
-  animation: o9con-pulse 1s ease infinite;
-}
 
-@-webkit-keyframes o9con-pulse {
-  0% {
-    -webkit-transform: scale(1);
-  }
-  50% {
-    -webkit-transform: scale(1.3);
-  }
-  100% {
-    -webkit-transform: scale(1);
-  }
-}
-@-moz-keyframes o9con-pulse {
-  0% {
-    -moz-transform: scale(1);
-  }
-  50% {
-    -moz-transform: scale(1.3);
-  }
-  100% {
-    -moz-transform: scale(1);
-  }
-}
-@keyframes o9con-pulse {
-  0% {
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transform: scale(1);
-  }
-  50% {
-    -webkit-transform: scale(1.3);
-    -moz-transform: scale(1.3);
-    -ms-transform: scale(1.3);
-    -o-transform: scale(1.3);
-    transform: scale(1.3);
-  }
-  100% {
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transform: scale(1);
-  }
-}
-/*------------------------
-  rotated/flipped icons
--------------------------*/
-.o9con-rotate-45 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-
+/* transform */
 .o9con-rotate-90 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 
-.o9con-rotate-135 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
-  -webkit-transform: rotate(135deg);
-  -moz-transform: rotate(135deg);
-  -ms-transform: rotate(135deg);
-  -o-transform: rotate(135deg);
-  transform: rotate(135deg);
-}
-
 .o9con-rotate-180 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 
-.o9con-rotate-225 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
-  -webkit-transform: rotate(225deg);
-  -moz-transform: rotate(225deg);
-  -ms-transform: rotate(225deg);
-  -o-transform: rotate(225deg);
-  transform: rotate(225deg);
-}
-
 .o9con-rotate-270 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-  -webkit-transform: rotate(270deg);
-  -moz-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  -o-transform: rotate(270deg);
   transform: rotate(270deg);
 }
 
-.o9con-rotate-315 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
-  -webkit-transform: rotate(315deg);
-  -moz-transform: rotate(315deg);
-  -ms-transform: rotate(315deg);
-  -o-transform: rotate(315deg);
-  transform: rotate(315deg);
+.o9con-flip-y {
+  transform: scaleY(-1);
 }
 
 .o9con-flip-x {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
-  -webkit-transform: scale(-1, 1);
-  -moz-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  transform: scale(-1, 1);
+  transform: scaleX(-1);
 }
 
-.o9con-flip-y {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
-  -webkit-transform: scale(1, -1);
-  -moz-transform: scale(1, -1);
-  -ms-transform: scale(1, -1);
-  -o-transform: scale(1, -1);
-  transform: scale(1, -1);
-}
-
-/*------------------------
-	icons
--------------------------*/
+/* icons */
 .o9con-arrow-circle-left::before {
   content: "\ea02";
 }
@@ -1397,7 +1145,7 @@ Date: 17-August-2021
   content: "\eb0c";
 }
 
-.o9con-heatmap::before {
+.o9con-bubble-chart::before {
   content: "\eb0d";
 }
 
@@ -3629,376 +3377,890 @@ Date: 17-August-2021
   content: "\ed42";
 }
 
-.o9con-edit::before {
-  content: "\eb38";
+.o9con-add-attachment::before {
+  content: "\ed43";
 }
 
-.o9con-euro::before {
-  content: "\ebbe";
+.o9con-unfreeze::before {
+  content: "\ed44";
 }
 
-.o9con-show::before {
-  content: "\eaa5";
+.o9con-add-favorite::before {
+  content: "\ed47";
 }
 
-.o9con-hide::before {
-  content: "\ea9d";
+.o9con-gauge-chart::before {
+  content: "\ed48";
 }
 
-.o9con-file-picture-o::before {
-  content: "\eae9";
+.o9con-push-pinned::before {
+  content: "\ed49";
 }
 
-.o9con-file-photo-o::before {
-  content: "\eae9";
+.o9con-lock-open-two::before {
+  content: "\ed4a";
 }
 
-.o9con-file-audio-o::before {
-  content: "\eaf4";
+.o9con-sftp::before {
+  content: "\ed4b";
 }
 
-.o9con-file-sound-o::before {
-  content: "\eaf4";
+.o9con-push-data::before {
+  content: "\ed4c";
 }
 
-.o9con-file-text::before {
-  content: "\eaea";
+.o9con-pull-data::before {
+  content: "\ed4d";
 }
 
-.o9con-file-movie-o::before {
-  content: "\eaed";
+.o9con-kafka::before {
+  content: "\ed4e";
 }
 
-.o9con-folder-open-o::before {
-  content: "\ebb7";
+.o9con-json::before {
+  content: "\ed4f";
 }
 
-.o9con-ge::before {
-  content: "\ebc2";
+.o9con-gcp-gcs::before {
+  content: "\ed50";
 }
 
-.o9con-gear::before {
-  content: "\ea7a";
+.o9con-event-hub::before {
+  content: "\ed51";
 }
 
-.o9con-gears::before {
-  content: "\ea79";
+.o9con-csv::before {
+  content: "\ed52";
 }
 
-.o9con-image::before {
-  content: "\ec01";
+.o9con-big-query::before {
+  content: "\ed53";
 }
 
-.o9con-jpy::before {
-  content: "\ebcb";
+.o9con-azure-blobstore::before {
+  content: "\ed54";
 }
 
-.o9con-mail-forward::before {
-  content: "\eae1";
+.o9con-avro::before {
+  content: "\ed55";
 }
 
-.o9con-mobile-phone::before {
-  content: "\ecb7";
+.o9con-staging-api::before {
+  content: "\ed56";
 }
 
-.o9con-outdent::before {
-  content: "\eac1";
+.o9con-advance-filter::before {
+  content: "\ed57";
 }
 
-.o9con-paste::before {
-  content: "\eab4";
+.o9con-add-pipeline::before {
+  content: "\ed5b";
 }
 
-.o9con-phone::before {
-  content: "\ebd7";
+.o9con-parquet::before {
+  content: "\ed5e";
 }
 
-.o9con-photo::before {
-  content: "\ec01";
+.o9con-sql::before {
+  content: "\ed5f";
 }
 
-.o9con-photo-o::before {
-  content: "\ec01";
+.o9con-pipeline-alt::before {
+  content: "\ed60";
 }
 
-.o9con-picture-o::before {
-  content: "\ec01";
+.o9con-pipeline-group::before {
+  content: "\ed61";
 }
 
-.o9con-play-circle-o::before {
-  content: "\ec00";
+.o9con-join::before {
+  content: "\ed62";
 }
 
-.o9con-print::before {
-  content: "\eb97";
+.o9con-redshift::before {
+  content: "\ed63";
 }
 
-.o9con-random::before {
-  content: "\ebed";
+.o9con-share-alt-filled::before {
+  content: "\ed65";
 }
 
-.o9con-remove::before {
-  content: "\ea7e";
+.o9con-desktop-cog-add::before {
+  content: "\ed66";
 }
 
-.o9con-reply::before {
-  content: "\eadc";
+.o9con-advance-filter-filled::before {
+  content: "\ed67";
 }
 
-.o9con-reply-all::before {
-  content: "\eadd";
+.o9con-grid-filter::before {
+  content: "\ed6a";
 }
 
-.o9con-save::before {
-  content: "\eabc";
+.o9con-pyspark::before {
+  content: "\ed6b";
 }
 
-.o9con-scissors::before {
-  content: "\eab6";
+.o9con-hive::before {
+  content: "\ed6c";
 }
 
-.o9con-send::before {
-  content: "\eb9a";
+.o9con-find-replace::before {
+  content: "\ed6d";
 }
 
-.o9con-send-o::before {
-  content: "\ecb4";
+.o9con-column-header::before {
+  content: "\ed6e";
 }
 
-.o9con-sitemap::before {
-  content: "\eafe";
+.o9con-contextual-help::before {
+  content: "\ed6f";
+}
+
+.o9con-filled-filter::before {
+  content: "\ed70";
+}
+
+.o9con-info-circle-filled::before {
+  content: "\ed71";
+}
+
+.o9con-exclamation-triangle-filled::before {
+  content: "\ed72";
+}
+
+.o9con-inline-form::before {
+  content: "\ed73";
+}
+
+.o9con-blocker-action::before {
+  content: "\ed74";
+}
+
+.o9con-blocker-action-filled::before {
+  content: "\ed75";
+}
+
+.o9con-radio-checked::before {
+  content: "\ed76";
+}
+
+.o9con-heatmap::before {
+  content: "\ed77";
+}
+
+.o9con-external-tenant::before {
+  content: "\ed78";
+}
+
+.o9con-client-side::before {
+  content: "\ed79";
+}
+
+.o9con-change-orientation-vertical::before {
+  content: "\ed7a";
+}
+
+.o9con-change-orientation-horizontal::before {
+  content: "\ed7b";
+}
+
+.o9con-solution::before {
+  content: "\ed7c";
+}
+
+.o9con-shipment-tracker::before {
+  content: "\ed7d";
+}
+
+.o9con-input-alt::before {
+  content: "\ed7e";
+}
+
+.o9con-output-alt::before {
+  content: "\ed7f";
+}
+
+.o9con-config-block::before {
+  content: "\ed80";
+}
+
+.o9con-measure-alias::before {
+  content: "\ed81";
+}
+
+.o9con-tenant-operation::before {
+  content: "\ed82";
+}
+
+.o9con-tenant-inactive::before {
+  content: "\ed83";
+}
+
+.o9con-tenant-active::before {
+  content: "\ed84";
+}
+
+.o9con-spark-sql::before {
+  content: "\ed85";
+}
+
+.o9con-share-all-filled::before {
+  content: "\ed86";
+}
+
+.o9con-hive-sql::before {
+  content: "\ed87";
+}
+
+.o9con-cube-node::before {
+  content: "\ed88";
+}
+
+.o9con-unlocked-filled::before {
+  content: "\ed89";
+}
+
+.o9con-lock-filled::before {
+  content: "\ed8a";
+}
+
+.o9con-tenant-restore::before {
+  content: "\ed8b";
+}
+
+.o9con-tenant-backup::before {
+  content: "\ed8c";
+}
+
+.o9con-re-run::before {
+  content: "\ed8d";
+}
+
+.o9con-execute-api::before {
+  content: "\ed8e";
+}
+
+.o9con-where-used::before {
+  content: "\ed8f";
+}
+
+.o9con-terminate-execution::before {
+  content: "\ed90";
+}
+
+.o9con-conditonal-transformer::before {
+  content: "\ed91";
+}
+
+.o9con-add-data-node::before {
+  content: "\ed92";
+}
+
+.o9con-triageroom::before {
+  content: "\ed93";
+}
+
+.o9con-interval-partitioned-dimension::before {
+  content: "\ed94";
+}
+
+.o9con-python::before {
+  content: "\ed95";
+}
+
+.o9con-play-circle-fill::before {
+  content: "\ed96";
+}
+
+.o9con-event-flow::before {
+  content: "\ed97";
+}
+
+.o9con-measure-filter::before {
+  content: "\ed98";
+}
+
+.o9con-move-to-right::before {
+  content: "\ed99";
+}
+
+.o9con-upper-limit::before {
+  content: "\ed9a";
+}
+
+.o9con-select-all::before {
+  content: "\ed9b";
+}
+
+.o9con-lower-limit::before {
+  content: "\ed9c";
+}
+
+.o9con-deltalake-write::before {
+  content: "\ed9d";
+}
+
+.o9con-deltalake-node::before {
+  content: "\ed9e";
+}
+
+.o9con-switch::before {
+  content: "\ed9f";
+}
+
+.o9con-clear-bag::before {
+  content: "\eda0";
+}
+
+.o9con-filter-template-filled-1::before {
+  content: "\eda1";
+}
+
+.o9con-add-to-bag-outline::before {
+  content: "\eda2";
+}
+
+.o9con-add-to-bag-filled::before {
+  content: "\eda3";
+}
+
+.o9con-filter-template-filled::before {
+  content: "\eda4";
+}
+
+.o9con-filter-template-outline-1::before {
+  content: "\eda5";
+}
+
+.o9con-save-as::before {
+  content: "\eda6";
+}
+
+.o9con-filter-template-outline::before {
+  content: "\eda7";
+}
+
+.o9con-comment-add-alt::before {
+  content: "\eda8";
+}
+
+.o9con-encrypted::before {
+  content: "\eda9";
+}
+
+.o9con-marker-splitline::before {
+  content: "\edaa";
+}
+
+.o9con-marker-solidline::before {
+  content: "\edab";
+}
+
+.o9con-marker-dottedline::before {
+  content: "\edac";
+}
+
+.o9con-marker-dashedline::before {
+  content: "\edad";
+}
+
+.o9con-basicshape-triangle::before {
+  content: "\edae";
+}
+
+.o9con-square-outline::before {
+  content: "\edaf";
+}
+
+.o9con-square-filled::before {
+  content: "\edb0";
+}
+
+.o9con-basicshape-square::before {
+  content: "\edb1";
+}
+
+.o9con-basicshape-rhombus::before {
+  content: "\edb2";
+}
+
+.o9con-plus-filled::before {
+  content: "\edb3";
+}
+
+.o9con-basicshape-pentagon::before {
+  content: "\edb4";
+}
+
+.o9con-basicshape-hexagon::before {
+  content: "\edb5";
+}
+
+.o9con-diamond-outline::before {
+  content: "\edb6";
+}
+
+.o9con-diamond-filled::before {
+  content: "\edb7";
+}
+
+.o9con-dash::before {
+  content: "\edb8";
+}
+
+.o9con-cross-filled::before {
+  content: "\edb9";
+}
+
+.o9con-circle-outline::before {
+  content: "\edba";
+}
+
+.o9con-circle-filled::before {
+  content: "\edbb";
+}
+
+.o9con-basicshape-circle::before {
+  content: "\edbc";
+}
+
+.o9con-nullify::before {
+  content: "\edbd";
+}
+
+.o9con-non-cyclic::before {
+  content: "\edbe";
+}
+
+.o9con-left-pane-o::before {
+  content: "\edbf";
+}
+
+.o9con-right-pane-o::before {
+  content: "\edc0";
+}
+
+.o9con-member-specific-attribute::before {
+  content: "\edc1";
+}
+
+.o9con-pagegroup::before {
+  content: "\edc2";
+}
+
+.o9con-page::before {
+  content: "\edc3";
+}
+
+.o9con-generate::before {
+  content: "\edc4";
+}
+
+.o9con-delist::before {
+  content: "\edc5";
+}
+
+.o9con-populate::before {
+  content: "\edc6";
+}
+
+.o9con-publish::before {
+  content: "\edc7";
+}
+
+.o9con-regenerate::before {
+  content: "\edc8";
+}
+
+.o9con-filter-remove::before {
+  content: "\edc9";
+}
+
+.o9con-untagged::before {
+  content: "\edca";
+}
+
+.o9con-open-same::before {
+  content: "\edcb";
+}
+
+.o9con-create-tag::before {
+  content: "\edcc";
+}
+
+.o9con-arrow-left-down::before {
+  content: "\edcf";
+}
+
+.o9con-arrow-left-up::before {
+  content: "\edd0";
+}
+
+.o9con-arrow-right-down::before {
+  content: "\edd1";
+}
+
+.o9con-arrow-right-up::before {
+  content: "\edd2";
+}
+
+.o9con-drag-handle::before {
+  content: "\edd4";
+}
+
+.o9con-paper-plane-filled::before {
+  content: "\edd6";
+}
+
+.o9con-blocker-action-alt::before {
+  content: "\edd8";
+}
+
+.o9con-blocker-action-filled-alt::before {
+  content: "\edd9";
+}
+
+.o9con-calendar-end-alt::before {
+  content: "\edda";
+}
+
+.o9con-calendar-warning-alt::before {
+  content: "\eddb";
+}
+
+.o9con-datetime::before {
+  content: "\eddc";
+}
+
+.o9con-crown::before {
+  content: "\eddd";
+}
+
+.o9con-monitor-view::before {
+  content: "\edde";
+}
+
+.o9con-error::before {
+  content: "\eddf";
+}
+
+.o9con-filter-bold::before {
+  content: "\ede0";
+}
+
+.o9con-filter-filled-o::before {
+  content: "\ede1";
+}
+
+.o9con-genai-filled::before {
+  content: "\ede2";
+}
+
+.o9con-genai::before {
+  content: "\ede4";
+}
+
+.o9con-kafka-alt::before {
+  content: "\ede5";
+}
+
+.o9con-rotate-user::before {
+  content: "\ede6";
+}
+
+.o9con-tty-1::before {
+  content: "\ede7";
+}
+
+.o9con-tty-2::before {
+  content: "\ede8";
+}
+
+.o9con-left-angled-triangle::before {
+  content: "\edee";
+}
+
+.o9con-right-angled-triangle::before {
+  content: "\edef";
+}
+
+.o9con-not-started::before {
+  content: "\edf0";
+}
+
+.o9con-on-hold::before {
+  content: "\edf1";
+}
+
+.o9con-partial-completed::before {
+  content: "\edf2";
+}
+
+.o9con-pending::before {
+  content: "\edf3";
+}
+
+.o9con-progress::before {
+  content: "\edf4";
+}
+
+.o9con-resolved::before {
+  content: "\edf5";
+}
+
+.o9con-semi-circle::before {
+  content: "\edf6";
+}
+
+.o9con-survey::before {
+  content: "\edf7";
+}
+
+.o9con-big-query-ds::before {
+  content: "\edf8";
+}
+
+.o9con-jhub::before {
+  content: "\edf9";
+}
+
+.o9con-page-break::before {
+  content: "\edfa";
+}
+
+.o9con-page-number::before {
+  content: "\edfb";
+}
+
+.o9con-print-configuration::before {
+  content: "\edfc";
+}
+
+.o9con-snowflake-ds::before {
+  content: "\edfd";
+}
+
+.o9con-pane::before {
+  content: "\edfe";
+}
+
+.o9con-multibar-chart::before {
+  content: "\edff";
+}
+
+.o9con-exclude::before {
+  content: "\ee04";
+}
+
+.o9con-caret-down-outline::before {
+  content: "\ee05";
+}
+
+.o9con-caret-left-outline::before {
+  content: "\ee06";
+}
+
+.o9con-caret-right-outline::before {
+  content: "\ee07";
+}
+
+.o9con-caret-up-outline::before {
+  content: "\ee08";
+}
+
+.o9con-thumbs-down-filled::before {
+  content: "\ee09";
+}
+
+.o9con-thumbs-up-filled::before {
+  content: "\ee0a";
+}
+
+.o9con-voicemode::before {
+  content: "\ee0b";
+}
+
+.o9con-sparkle::before {
+  content: "\ee0c";
+}
+
+.o9con-publish-in::before {
+  content: "\ee0d";
+}
+
+.o9con-shopping-goods::before {
+  content: "\ee0e";
+}
+
+.o9con-shopping-location::before {
+  content: "\ee0f";
+}
+
+.o9con-tree-view-reverse::before {
+  content: "\ee10";
+}
+
+.o9con-view-favorites::before {
+  content: "\ee11";
+}
+
+.o9con-deltalake-share::before {
+  content: "\ee12";
+}
+
+.o9con-dashboard-alt::before {
+  content: "\ee13";
+}
+
+.o9con-exclamation-circle-filled::before {
+  content: "\ee14";
+}
+
+.o9con-pivot::before {
+  content: "\ee15";
+}
+
+.o9con-python-filled::before {
+  content: "\ee16";
+}
+
+.o9con-reset-to-factory-settings::before {
+  content: "\ee17";
+}
+
+.o9con-fetch::before {
+  content: "\ee18";
+}
+
+.o9con-master-planner::before {
+  content: "\ee19";
+}
+
+.o9con-material-planner::before {
+  content: "\ee1a";
+}
+
+.o9con-multi-column::before {
+  content: "\ee1b";
+}
+
+.o9con-single-column::before {
+  content: "\ee1c";
+}
+
+.o9con-restore-default::before {
+  content: "\ee1d";
+}
+
+.o9con-calendar-date-selected::before {
+  content: "\ee1e";
+}
+
+.o9con-carousel-alt::before {
+  content: "\ee1f";
+}
+
+.o9con-carousel::before {
+  content: "\ee20";
+}
+
+.o9con-hide-trace::before {
+  content: "\ee21";
+}
+
+.o9con-view-trace::before {
+  content: "\ee22";
+}
+
+.o9con-calendar-range::before {
+  content: "\ee23";
+}
+
+.o9con-caret-collapse-all::before {
+  content: "\ee24";
+}
+
+.o9con-caret-expand-all::before {
+  content: "\ee25";
+}
+
+.o9con-search-airflow::before {
+  content: "\ee26";
+}
+
+.o9con-search-logs::before {
+  content: "\ee27";
+}
+
+.o9con-search-task::before {
+  content: "\ee28";
+}
+
+.o9con-spark-cluster::before {
+  content: "\ee29";
+}
+
+.o9con-ELK::before {
+  content: "\ee2a";
+}
+
+.o9con-report-link::before {
+  content: "\ee2b";
+}
+
+.o9con-stacking-filled::before {
+  content: "\ee2c";
+}
+
+.o9con-stacking::before {
+  content: "\ee2d";
+}
+
+.o9con-alphabet-p-filled::before {
+  content: "\ee2e";
+}
+
+.o9con-alphabet-p::before {
+  content: "\ee2f";
+}
+
+.o9con-alphabet-s-filled::before {
+  content: "\ee30";
+}
+
+.o9con-alphabet-s::before {
+  content: "\ee31";
+}
+
+.o9con-polling-transformer::before {
+  content: "\ee32";
+}
+
+.o9con-sort-filled::before {
+  content: "\ee33";
 }
 
 .o9con-sort::before {
-  content: "\ea1e";
+  content: "\ee34";
 }
 
-.o9con-sort-down::before {
-  content: "\ea22";
+.o9con-cluster-boost::before {
+  content: "\ee35";
 }
 
-.o9con-star-half::before {
-  content: "\eb31";
+.o9con-ascending-sort::before {
+  content: "\ee36";
 }
 
-.o9con-star-half-empty::before {
-  content: "\eb31";
+.o9con-descending-sort::before {
+  content: "\ee37";
 }
 
-.o9con-star-half-full::before {
-  content: "\eb31";
+.o9con-numeric-download::before {
+  content: "\ee38";
 }
 
-.o9con-step-backward::before {
-  content: "\ebfb";
+.o9con-text-download::before {
+  content: "\ee39";
 }
-
-.o9con-step-forward::before {
-  content: "\ebfd";
-}
-
-.o9con-th::before {
-  content: "\ea86";
-}
-
-.o9con-thumbs-o-down::before {
-  content: "\eb30";
-}
-
-.o9con-thumbs-o-up::before {
-  content: "\eb2f";
-}
-
-.o9con-trash::before {
-  content: "\ea8b";
-}
-
-.o9con-trash-o::before {
-  content: "\ea8b";
-}
-
-.o9con-close-circle::before {
-  content: "\ebc1";
-}
-
-.o9con-close-circle-o::before {
-  content: "\ea7f";
-}
-
-.o9con-undo::before {
-  content: "\ead0";
-}
-
-.o9con-redo::before {
-  content: "\eacb";
-}
-
-.o9con-users::before {
-  content: "\eb99";
-}
-
-.o9con-asl-interpreting::before {
-  content: "\ec98";
-}
-
-.o9con-hand-grab-o::before {
-  content: "\eccc";
-}
-
-.o9con-hand-stop-o::before {
-  content: "\eccf";
-}
-
-.o9con-registered::before {
-  content: "\ecf1";
-}
-
-.o9con-warning::before {
-  content: "\ea67";
-}
-
-.o9con-toggle-down::before {
-  content: "\ea1d";
-}
-
-.o9con-toggle-up::before {
-  content: "\ea1a";
-}
-
-.o9con-toggle-right::before {
-  content: "\ea1b";
-}
-
-.o9con-toggle-left::before {
-  content: "\ea1c";
-}
-
-.o9con-support::before {
-  content: "\eba8";
-}
-
-.o9con-search-plus::before {
-  content: "\eaaf";
-}
-
-.o9con-search-minus::before {
-  content: "\eaad";
-}
-
-.o9con-bitcoin::before {
-  content: "\ecc7";
-}
-
-.o9con-feed::before {
-  content: "\eb84";
-}
-
-.o9con-genderless::before {
-  content: "\ec1e";
-}
-
-.o9con-intersex::before {
-  content: "\ed0f";
-}
-
-.o9con-mars::before {
-  content: "\eba3";
-}
-
-.o9con-mortar-board::before {
-  content: "\ebb1";
-}
-
-.o9con-navicon::before {
-  content: "\ea85";
-}
-
-.o9con-reorder::before {
-  content: "\ea85";
-}
-
-.o9con-rmb::before {
-  content: "\ebcb";
-}
-
-.o9con-rouble::before {
-  content: "\ecf0";
-}
-
-.o9con-ruble::before {
-  content: "\ecf0";
-}
-
-.o9con-rupee::before {
-  content: "\ebac";
-}
-
-.o9con-server::before {
-  content: "\eb7d";
-}
-
-.o9con-shekel::before {
-  content: "\ecf9";
-}
-
-.o9con-sheqel::before {
-  content: "\ecf9";
-}
-
-.o9con-soccer-ball-o::before {
-  content: "\ec84";
-}
-
-.o9con-sort-asc::before {
-  content: "\ea17";
-}
-
-.o9con-sort-desc::before {
-  content: "\ea22";
-}
-
-.o9con-sort-up::before {
-  content: "\ea17";
-}
-
-.o9con-tachometer::before {
-  content: "\ebca";
-}
-
-.o9con-university::before {
-  content: "\ec73";
-}
-
-.o9con-unlock::before {
-  content: "\eb3e";
-}
-
-.o9con-unlock-alt::before {
-  content: "\eb3f";
-}
-
-.o9con-unsorted::before {
-  content: "\ea1e";
-}
-
-.o9con-usd::before {
-  content: "\ebc3";
-}
-
-.o9con-user-md::before {
-  content: "\ecd1";
-}
-
-.o9con-venus::before {
-  content: "\ebbd";
-}
-
-.o9con-volume-off::before {
-  content: "\ebec";
-}
-
-.o9con-yen::before {
-  content: "\ebcb";
-}
-
-/*# sourceMappingURL=o9con.css.map */

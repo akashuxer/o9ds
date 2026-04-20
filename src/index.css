@@ -145,6 +145,9 @@ html.dark {
   --o9ds-color-s-layer-03: #4c4c4c;
   --o9ds-color-s-layer-04: #303030;
   --o9ds-color-b-theme-focus: #ffffff;
+  /* semanticColorTokens: o9ds-color-b-divider, o9ds-color-s-theme-hover-2 */
+  --o9ds-color-b-divider: #303030;
+  --o9ds-color-s-theme-hover-2: #666666;
 }
 html[data-theme="dark"] body,
 html.dark body {
@@ -199,6 +202,9 @@ html:not(.dark) {
   --o9ds-color-s-layer-03: #ffffff;
   --o9ds-color-s-layer-04: #f2f2f2;
   --o9ds-color-b-theme-focus: #010101;
+  /* semanticColorTokens: o9ds-color-b-divider, o9ds-color-s-theme-hover-2 */
+  --o9ds-color-b-divider: #e5e5e5;
+  --o9ds-color-s-theme-hover-2: #cccccc;
 }
 
 /* Light mode: card/section borders - default #E5E5E5, no black in default state */
@@ -570,6 +576,19 @@ html.dark [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible {
   box-shadow: none !important;
   border-bottom-width: 2px;
   border-bottom-color: var(--o9ds-color-b-theme-focus);
+}
+
+/* Keyboard & focus doc — overlay listbox: border-only focus (no global outline ring) */
+html[data-theme="light"] [data-o9ds-kb-dropdown] button:focus,
+html[data-theme="light"] [data-o9ds-kb-dropdown] button:focus-visible,
+html:not(.dark) [data-o9ds-kb-dropdown] button:focus,
+html:not(.dark) [data-o9ds-kb-dropdown] button:focus-visible,
+html[data-theme="dark"] [data-o9ds-kb-dropdown] button:focus,
+html[data-theme="dark"] [data-o9ds-kb-dropdown] button:focus-visible,
+html.dark [data-o9ds-kb-dropdown] button:focus,
+html.dark [data-o9ds-kb-dropdown] button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Keyboard & focus doc — left: :focus only (ring on click); right: :focus-visible only */

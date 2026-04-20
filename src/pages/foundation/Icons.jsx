@@ -272,7 +272,7 @@ export default function Icons() {
           Iconography &quot;o9con&quot;
         </h1>
         <p className="mt-4 text-o9ds-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
-          Our redesigned o9con icon library includes over 800 meticulously crafted icons. These modern visuals guide your journey with clarity and ease, combining functionality with a fresh, sophisticated aesthetic. The precision of these icons ensures intuitive interactions, enhancing the overall experience while reinforcing a visually cohesive and professional platform environment.
+          Our redesigned o9con icon library includes {o9conIcons.length.toLocaleString()} meticulously crafted icons. These modern visuals guide your journey with clarity and ease, combining functionality with a fresh, sophisticated aesthetic. The precision of these icons ensures intuitive interactions, enhancing the overall experience while reinforcing a visually cohesive and professional platform environment.
         </p>
 
         <div

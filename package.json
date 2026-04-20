@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "generate:component-stubs": "node scripts/generate-component-stubs.mjs"
+    "generate:component-stubs": "node scripts/generate-component-stubs.mjs",
+    "generate:o9con-icons": "node scripts/generate-o9con-icons.mjs"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.1",
