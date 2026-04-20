@@ -696,9 +696,8 @@ export default function Icons() {
                 placeholder="Search documentation..."
                 value={o9conSearch}
                 onChange={(e) => setO9conSearch(e.target.value)}
-                className="w-full max-w-md border px-3 py-2 text-sm focus:outline-none"
+                className="o9ds-doc-search-input w-full max-w-md px-3 py-2 text-sm"
                 style={{
-                  borderColor: isLight ? '#E5E5E5' : '#404040',
                   backgroundColor: isLight ? '#FFFFFF' : '#171717',
                   color: isLight ? '#010101' : '#fff',
                 }}

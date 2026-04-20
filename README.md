@@ -106,7 +106,7 @@ o9ds Website/
 │   │   ├── FoundationsOverview.jsx, PatternsOverview.jsx, AccessibilityOverview.jsx, ContentOverview.jsx
 │   │   ├── foundation/                 # Foundations (tokens, type, spacing, effects, assets)
 │   │   │   ├── Colors.jsx, Typography.jsx, Spacing.jsx, Effects.jsx, Borders.jsx
-│   │   │   ├── Icons.jsx, Illustrations.jsx, Principles.jsx
+│   │   │   ├── Icons.jsx, Illustrations.jsx
 │   │   └── components/                 # Component docs — `/components/:slug`
 │   │       ├── ComponentDocPage.jsx    # Routes slug → page module
 │   │       ├── GenericComponentDoc.jsx # Four-tab stub for catalog items
@@ -122,6 +122,7 @@ o9ds Website/
 │   │   ├── componentPageMeta.js        # Stub page titles / descriptions
 │   │   ├── pathsWithContent.js         # Sidebar + section overview green dots (ready docs)
 │   │   ├── overviewCatalog.js          # Card lists for Foundations / Patterns / Accessibility / Content
+│   │   ├── principlesContent.js        # Five o9DS design principles (Overview)
 │   │   ├── sectionOverviewIllustrations.js
 │   │   └── componentOverviewIllustrations.js
 │   │
@@ -184,8 +185,8 @@ o9ds Website/
 | `/components/:slug` | Component doc (full pages for e.g. `button`, `cards`; stubs for others) |
 | `/components/button` | Button docs (`src/pages/components/buttons-actions/Button.jsx`) |
 | `/components/cards` | Cards — Storybook embeds (`src/pages/components/data-display/Cards.jsx`) |
-| `/principles` | Principles and guidelines |
-| `/overview` | Overview |
+| `/principles` | Redirects to `/overview#principles` (principles live on Overview) |
+| `/overview` | Getting Started overview (includes principles and guidelines) |
 | `/developers` | Developers |
 | `/changelog` | Changelog |
 

@@ -5,7 +5,6 @@ import Layout from './LayoutComponents/Layout'
 import ScrollToTop from './LayoutComponents/ScrollToTop'
 import Home from './pages/Home'
 import Overview from './pages/Overview'
-import Principles from './pages/foundation/Principles'
 import Colors from './pages/foundation/Colors'
 import Typography from './pages/foundation/Typography'
 import Components from './pages/Components'
@@ -41,7 +40,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/overview" element={<Overview />} />
-          <Route path="/principles" element={<Principles />} />
+          <Route path="/principles" element={<Navigate to="/overview#principles" replace />} />
           <Route path="/foundations" element={<FoundationsOverview />} />
           <Route path="/colors" element={<Colors />} />
           <Route path="/colors/data-viz" element={<Placeholder title="Data Visualization Colors" documentationCatalog="foundations" />} />
@@ -58,6 +57,7 @@ export default function App() {
           <Route path="/components/:slug" element={<ComponentDocPage />} />
           <Route path="/designers" element={<Placeholder title="For Designers" />} />
           <Route path="/developers" element={<Developers />} />
+          <Route path="/arvo-mcp-other-mcps" element={<Placeholder title="Arvo MCP/Other MCPs" />} />
           <Route path="/vibe-coders" element={<Placeholder title="For Vibe Coders" />} />
           <Route path="/accessibility" element={<AccessibilityOverview />} />
           <Route path="/accessibility/overview" element={<AccessibilityOverviewArticle />} />
@@ -88,16 +88,16 @@ export default function App() {
           <Route path="/patterns" element={<PatternsOverview />} />
           <Route path="/patterns/forms" element={<Placeholder title="Forms" documentationCatalog="patterns" />} />
           <Route path="/patterns/search" element={<Placeholder title="Search" documentationCatalog="patterns" />} />
+          <Route path="/patterns/application-layouts" element={<Placeholder title="Application Layouts" documentationCatalog="patterns" />} />
+          <Route path="/patterns/notifications-alerts" element={<Placeholder title="Notifications / Alerts" documentationCatalog="patterns" />} />
+          <Route path="/patterns/truncation" element={<Placeholder title="Truncation" documentationCatalog="patterns" />} />
+          <Route path="/patterns/loading" element={<Placeholder title="Loading" documentationCatalog="patterns" />} />
+          <Route path="/patterns/export" element={<Placeholder title="Export" documentationCatalog="patterns" />} />
+          <Route path="/patterns/destructive-action" element={<Placeholder title="Destructive Action" documentationCatalog="patterns" />} />
+          <Route path="/patterns/navigation" element={<Placeholder title="Navigation" documentationCatalog="patterns" />} />
+          <Route path="/patterns/on-hover-always-visible" element={<Placeholder title="On Hover / Always Visible" documentationCatalog="patterns" />} />
           <Route path="/patterns/filters" element={<Placeholder title="Filters" documentationCatalog="patterns" />} />
-          <Route path="/patterns/tables" element={<Placeholder title="Tables" documentationCatalog="patterns" />} />
-          <Route path="/patterns/side-panels" element={<Placeholder title="Side Panels" documentationCatalog="patterns" />} />
-          <Route path="/patterns/modals" element={<Placeholder title="Modals" documentationCatalog="patterns" />} />
-          <Route path="/patterns/notifications" element={<Placeholder title="Notifications" documentationCatalog="patterns" />} />
-          <Route path="/patterns/empty-states" element={<Placeholder title="Empty States" documentationCatalog="patterns" />} />
           <Route path="/patterns/bulk-actions" element={<Placeholder title="Bulk Actions" documentationCatalog="patterns" />} />
-          <Route path="/patterns/nested-interactions" element={<Placeholder title="Nested Interactions" documentationCatalog="patterns" />} />
-          <Route path="/patterns/drag" element={<Placeholder title="Drag" documentationCatalog="patterns" />} />
-          <Route path="/patterns/disabled" element={<Placeholder title="Disabled" documentationCatalog="patterns" />} />
           <Route path="/contribute" element={<Placeholder title="How to Contribute" />} />
           <Route path="/faqs" element={<Placeholder title="FAQs" />} />
           <Route path="/changelog" element={<Placeholder title="Changelog" />} />

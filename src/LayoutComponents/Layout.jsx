@@ -11,7 +11,6 @@ const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns
 const PAGE_TITLES = {
   '/': 'Platform UI',
   '/overview': 'Overview',
-  '/principles': 'Principles and Guidelines',
   '/foundations': 'Foundations',
   '/colors': 'Colors',
   '/colors/data-viz': 'Data Visualization Colors',
@@ -42,6 +41,7 @@ const PAGE_TITLES = {
   '/components/select': 'Select',
   '/designers': 'For Designers',
   '/developers': 'For Developers',
+  '/arvo-mcp-other-mcps': 'Arvo MCP/Other MCPs',
   '/vibe-coders': 'For Vibe Coders',
   '/accessibility': 'Accessibility',
   '/accessibility/overview': 'Accessibility — Introduction',
@@ -59,16 +59,16 @@ const PAGE_TITLES = {
   '/patterns': 'Patterns',
   '/patterns/forms': 'Forms',
   '/patterns/search': 'Search',
+  '/patterns/application-layouts': 'Application Layouts',
+  '/patterns/notifications-alerts': 'Notifications / Alerts',
+  '/patterns/truncation': 'Truncation',
+  '/patterns/loading': 'Loading',
+  '/patterns/export': 'Export',
+  '/patterns/destructive-action': 'Destructive Action',
+  '/patterns/navigation': 'Navigation',
+  '/patterns/on-hover-always-visible': 'On Hover / Always Visible',
   '/patterns/filters': 'Filters',
-  '/patterns/tables': 'Tables',
-  '/patterns/side-panels': 'Side Panels',
-  '/patterns/modals': 'Modals',
-  '/patterns/notifications': 'Notifications',
-  '/patterns/empty-states': 'Empty States',
   '/patterns/bulk-actions': 'Bulk Actions',
-  '/patterns/nested-interactions': 'Nested Interactions',
-  '/patterns/drag': 'Drag',
-  '/patterns/disabled': 'Disabled',
   '/contribute': 'How to Contribute',
   '/faqs': 'FAQs',
   '/changelog': 'Changelog',
@@ -87,11 +87,11 @@ const sidebarSections = [
     title: 'GETTING STARTED',
     items: [
       { path: '/overview', label: 'Overview' },
-      { path: '/principles', label: 'Principles and Guidelines' },
       { path: '/designers', label: 'For Designers' },
       { path: '/developers', label: 'For Developers' },
+      { path: '/arvo-mcp-other-mcps', label: 'Arvo MCP/Other MCPs' },
       { path: '/vibe-coders', label: 'For Vibe Coders' },
-      { path: '/contribute', label: 'How to Contribute / Governance Model' },
+      { path: '/contribute', label: 'How to Contribute' },
       { path: '/faqs', label: 'FAQs' },
     ],
   },
@@ -151,16 +151,16 @@ const sidebarSections = [
       { path: '/patterns', label: 'Overview' },
       { path: '/patterns/forms', label: 'Forms' },
       { path: '/patterns/search', label: 'Search' },
+      { path: '/patterns/application-layouts', label: 'Application Layouts' },
+      { path: '/patterns/notifications-alerts', label: 'Notifications / Alerts' },
+      { path: '/patterns/truncation', label: 'Truncation' },
+      { path: '/patterns/loading', label: 'Loading' },
+      { path: '/patterns/export', label: 'Export' },
+      { path: '/patterns/destructive-action', label: 'Destructive Action' },
+      { path: '/patterns/navigation', label: 'Navigation' },
+      { path: '/patterns/on-hover-always-visible', label: 'On Hover / Always Visible' },
       { path: '/patterns/filters', label: 'Filters' },
-      { path: '/patterns/tables', label: 'Tables' },
-      { path: '/patterns/side-panels', label: 'Side Panels' },
-      { path: '/patterns/modals', label: 'Modals' },
-      { path: '/patterns/notifications', label: 'Notifications' },
-      { path: '/patterns/empty-states', label: 'Empty States' },
       { path: '/patterns/bulk-actions', label: 'Bulk Actions' },
-      { path: '/patterns/nested-interactions', label: 'Nested Interactions' },
-      { path: '/patterns/drag', label: 'Drag' },
-      { path: '/patterns/disabled', label: 'Disabled' },
     ],
   },
 ]
@@ -417,18 +417,31 @@ export default function Layout({ children }) {
             </button>
             )}
             <Link to="/" className="flex items-center gap-2 sm:gap-3 min-w-0 hover:opacity-90 transition-opacity" aria-label="Go to home">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" focusable="false" className="h-8 w-8 shrink-0" aria-hidden>
-                <rect width="48" height="48" fill={isDark ? '#FFFFFF' : '#010101'} />
-                <path d="M35.8031 21.1231C35.8031 23.3631 34.6311 25.3311 33.5391 26.6751L28.4351 32.8991H25.7231L31.0991 26.5991C30.4271 26.9991 29.6551 27.1991 28.8071 27.1991C27.1631 27.1991 25.8191 26.7271 24.7751 25.9311C24.7991 26.0791 24.7991 26.2551 24.7991 26.4271C24.7991 30.3591 22.3351 33.1991 18.5231 33.1991C14.6151 33.1991 12.2231 30.3591 12.2231 26.4271C12.2231 22.4671 14.6151 19.6551 18.5231 19.6551C20.2151 19.6551 21.6111 20.1791 22.6551 21.0991C22.7031 17.4871 25.3671 14.7991 29.3031 14.7991C33.3911 14.7991 35.8031 17.5391 35.8031 21.1231ZM22.4591 26.4271C22.4591 23.5391 21.1911 21.4471 18.5271 21.4471C15.8391 21.4471 14.5671 23.5391 14.5671 26.4271C14.5671 29.3391 15.8351 31.4071 18.5271 31.4071C21.1911 31.4071 22.4591 29.3391 22.4591 26.4271ZM33.5391 21.1231C33.5391 18.6831 32.0471 16.5911 29.3071 16.5911C26.5951 16.5911 24.9991 18.6831 24.9991 21.1991C24.9991 23.6631 26.5191 25.6791 29.2551 25.6791C31.9431 25.6791 33.5391 23.5151 33.5391 21.1231Z" fill={isDark ? '#010101' : '#FFFFFF'} />
-              </svg>
+              <div className="flex min-w-0 shrink-0 items-center gap-1">
+                <span
+                  className="o9con o9con-o9-logo flex h-[50px] shrink-0 items-center justify-center leading-none text-o9ds-light-primary dark:text-white text-[46px]"
+                  aria-hidden
+                />
+                <div
+                  className="flex h-[38px] min-w-0 max-w-[min(300px,58vw)] shrink items-center border px-3 sm:px-4"
+                  style={{
+                    backgroundColor: isDark ? '#ffffff' : '#000000',
+                    borderColor: isDark ? '#e5e5e5' : '#262626',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.12)',
+                  }}
+                >
+                  <span
+                    className="truncate whitespace-nowrap text-[15px] leading-none tracking-tight sm:text-[17px]"
+                    style={{ color: isDark ? '#010101' : '#ffffff' }}
+                  >
+                    <span className="font-extrabold">arvo</span>
+                    <span className="font-extrabold">.</span>
+                    <span className="font-extralight"> design system</span>
+                  </span>
+                </div>
+              </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="flex min-w-0 items-center font-semibold">
-                    <span className="shrink-0 bg-gradient-to-r from-[#ff453a] via-[#ff2d55] to-[#ff33cc] bg-clip-text text-transparent">
-                      Arvo
-                    </span>
-                    <span className="ml-1 truncate text-[#010101] dark:text-white">Design System</span>
-                  </span>
                   <span className="bg-blue-600 px-1.5 py-0.5 text-[10px] font-medium uppercase text-white">
                     ALPHA
                   </span>
@@ -501,9 +514,8 @@ export default function Layout({ children }) {
               placeholder="Search documentation..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-none border px-3 py-2 text-sm focus:outline-none"
+              className="o9ds-doc-search-input w-full px-3 py-2 text-sm"
               style={{
-                borderColor: isDark ? '#404040' : '#E5E5E5',
                 backgroundColor: isDark ? '#171717' : '#FFFFFF',
                 color: isDark ? '#fff' : '#010101',
               }}
@@ -634,7 +646,6 @@ export default function Layout({ children }) {
                 : isSectionOverviewHub
                   ? 'max-w-7xl'
                   : pathname.startsWith('/overview') ||
-                      pathname.startsWith('/principles') ||
                       pathname.startsWith('/colors') ||
                       pathname.startsWith('/typography') ||
                       pathname.startsWith('/spacing') ||
@@ -647,7 +658,8 @@ export default function Layout({ children }) {
                       pathname.startsWith('/accessibility') ||
                       pathname.startsWith('/content') ||
                       pathname.startsWith('/components') ||
-                      pathname.startsWith('/developers')
+                      pathname.startsWith('/developers') ||
+                      pathname.startsWith('/arvo-mcp')
                     ? 'max-w-6xl'
                     : 'max-w-4xl'
             }`}

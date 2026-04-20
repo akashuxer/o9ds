@@ -69,7 +69,6 @@ export default function SectionOverviewPage({
   const canReset = query.trim() !== '' || readyOnly
 
   const inputStyle = {
-    borderColor: isDark ? '#404040' : '#E5E5E5',
     backgroundColor: isDark ? '#171717' : '#FFFFFF',
     color: isDark ? '#fff' : '#010101',
   }
@@ -98,7 +97,7 @@ export default function SectionOverviewPage({
               placeholder="Search by keyword"
               autoComplete="off"
               aria-label={`Search ${title} by keyword`}
-              className="w-full rounded-none border py-2.5 pl-9 pr-3 text-sm text-[#010101] focus:outline-none focus:ring-2 focus:ring-[#010101] focus:ring-offset-0 dark:text-white dark:focus:ring-white"
+              className="o9ds-doc-search-input w-full py-2.5 pl-9 pr-3 text-sm text-[#010101] dark:text-white"
               style={inputStyle}
             />
           </div>

@@ -122,8 +122,6 @@ import CodeBlock from '../components/CodeBlock'
 - `data-o9ds-code` — Code block pre.
 - `data-o9ds-inline-code` — Inline code.
 - `data-o9ds-size-selected` — Illustration size selector.
-- `data-o9ds-principles-btn` — View principles button.
-
 ---
 
 ## Layout Components (`src/LayoutComponents/`)
@@ -141,9 +139,9 @@ import CodeBlock from '../components/CodeBlock'
 
 ---
 
-## Principles Cards
+## Principles Cards (Overview)
 
-- Use `WhiteBgCard` (odd) and `GrayBgCard` (even). Grid: `sm:grid-cols-2`.
+- On **Overview** (`/overview#principles`), the five principles use `WhiteBgCard` with `unified` in a `sm:grid-cols-2` grid. Copy lives in `src/data/principlesContent.js`.
 
 ---
 
