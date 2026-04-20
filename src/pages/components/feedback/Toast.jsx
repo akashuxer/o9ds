@@ -53,8 +53,8 @@ export default function Toast() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Button label="Show success toast" onClick={() => toast?.success?.({ title: 'Saved', description: 'Your changes were published.' })} />
-                <O9Button label="Show danger toast" variant="danger" onClick={() => toast?.danger?.({ title: 'Failed', description: 'Could not save.' })} />
+                <O9Button label="Show success toast" onClick={() => toast?.show?.({ type: 'positive', title: 'Saved', message: 'Your changes were published.' })} />
+                <O9Button label="Show danger toast" variant="danger" onClick={() => toast?.show?.({ type: 'negative', title: 'Failed', message: 'Could not save.' })} />
               </LiveReference>
             </DocSection>
           </div>

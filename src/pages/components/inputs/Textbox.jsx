@@ -55,8 +55,8 @@ export default function Textbox() {
             <DocSection id="demo" title="Live demo">
               <LiveReference>
                 <div style={{ minWidth: 240 }}><O9Textbox label="Email" placeholder="you@example.com" /></div>
-                <div style={{ minWidth: 240 }}><O9Textbox label="With description" description="We'll never share this." /></div>
-                <div style={{ minWidth: 240 }}><O9Textbox label="With error" defaultValue="invalid" error="Please enter a valid value." /></div>
+                <div style={{ minWidth: 240 }}><O9Textbox label="Help text" placeholder="you@example.com" /></div>
+                <div style={{ minWidth: 240 }}><O9Textbox label="With error" defaultValue="invalid" isInvalid errorMsg="Please enter a valid value." /></div>
                 <div style={{ minWidth: 240 }}><O9Textbox label="Disabled" isDisabled /></div>
               </LiveReference>
             </DocSection>

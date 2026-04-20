@@ -50,9 +50,9 @@ export default function Search() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 280 }}><O9Search label="Search" /></div>
-                <div style={{ minWidth: 280 }}><O9Search label="With shortcut" shortcut="Ctrl+K" /></div>
-                <div style={{ minWidth: 280 }}><O9Search label="Disabled" isDisabled /></div>
+                <div style={{ minWidth: 280 }}><O9Search aria-label="Search" /></div>
+                <div style={{ minWidth: 280 }}><O9Search aria-label="With shortcut" shortcut="Ctrl+K" /></div>
+                <div style={{ minWidth: 280 }}><O9Search aria-label="Disabled" isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>

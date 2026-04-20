@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { O9CheckboxGroup } from '@o9ds/react'
+import { O9CheckboxGroup, O9Checkbox } from '@o9ds/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
@@ -49,15 +49,11 @@ export default function CheckboxGroup() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9CheckboxGroup
-                  label="Notifications"
-                  items={[
-                    { value: 'email', label: 'Email' },
-                    { value: 'sms', label: 'SMS' },
-                    { value: 'push', label: 'Push' },
-                  ]}
-                  defaultValue={['email']}
-                />
+                <O9CheckboxGroup label="Notifications">
+                  <O9Checkbox value="email" label="Email" defaultChecked />
+                  <O9Checkbox value="sms" label="SMS" />
+                  <O9Checkbox value="push" label="Push" />
+                </O9CheckboxGroup>
               </LiveReference>
             </DocSection>
           </div>

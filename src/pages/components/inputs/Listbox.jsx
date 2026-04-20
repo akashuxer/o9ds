@@ -55,8 +55,8 @@ export default function Listbox() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 220 }}><O9Listbox label="Single select" options={options} defaultValue="banana" /></div>
-                <div style={{ minWidth: 220 }}><O9Listbox label="Multi-select" options={options} multiple defaultValue={['apple', 'cherry']} /></div>
+                <div style={{ minWidth: 220 }}><O9Listbox label="Single select" items={options} defaultValue="banana" /></div>
+                <div style={{ minWidth: 220 }}><O9Listbox label="Multi-select" items={options} isMultiple defaultValue={['apple', 'cherry']} /></div>
               </LiveReference>
             </DocSection>
           </div>

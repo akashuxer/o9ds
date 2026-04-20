@@ -57,9 +57,9 @@ export default function DropdownIconButton() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9DropdownIconButton icon="more-vertical" tooltip="More actions" items={items} />
+                <O9DropdownIconButton icon="ellipsis-v" tooltip="More actions" items={items} />
                 <O9DropdownIconButton icon="settings" tooltip="Settings" items={items} variant="secondary" />
-                <O9DropdownIconButton icon="more-vertical" tooltip="More" items={items} variant="tertiary" size="sm" />
+                <O9DropdownIconButton icon="ellipsis-v" tooltip="More" items={items} variant="tertiary" size="sm" />
               </LiveReference>
             </DocSection>
           </div>
@@ -95,7 +95,7 @@ const items = [
 ];
 
 <O9DropdownIconButton
-  icon="more-vertical"
+  icon="ellipsis-v"
   tooltip="More actions"
   items={items}
   variant="tertiary"
@@ -106,7 +106,7 @@ const items = [
               <CodeBlock language="js" label="@o9ds/js" code={`import { O9DropdownIconButton } from '@o9ds/js';
 
 const dd = O9DropdownIconButton.initialize(el, {
-  icon: 'more-vertical',
+  icon: 'ellipsis-v',
   tooltip: 'More actions',
   items,
   onSelect: (item) => handleSelect(item),

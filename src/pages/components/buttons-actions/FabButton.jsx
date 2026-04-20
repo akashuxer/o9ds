@@ -60,7 +60,7 @@ export default function FabButton() {
                 <O9FabButton icon="plus" tooltip="Add" />
                 <O9FabButton icon="plus" label="Create" />
                 <O9FabButton icon="edit" tooltip="Edit" variant="secondary" />
-                <O9FabButton icon="bell" tooltip="Notifications" indicator="new" />
+                <O9FabButton icon="bell-o" tooltip="Notifications" indicator="new" />
               </LiveReference>
             </DocSection>
             <DocSection id="indicator" title="Indicator badge">

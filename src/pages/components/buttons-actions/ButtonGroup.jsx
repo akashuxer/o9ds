@@ -76,7 +76,7 @@ export default function ButtonGroup() {
             </DocSection>
             <DocSection id="icon-only" title="Icon-only">
               <LiveReference>
-                <O9ButtonGroup items={[{ value: 'left', icon: 'align-left' }, { value: 'center', icon: 'align-center' }, { value: 'right', icon: 'align-right' }]} iconOnly value="center" ariaLabel="Text alignment" />
+                <O9ButtonGroup items={[{ value: 'left', icon: 'align-left' }, { value: 'center', icon: 'align-center' }, { value: 'right', icon: 'align-right' }]} isIconOnly value="center" ariaLabel="Text alignment" />
               </LiveReference>
             </DocSection>
           </div>

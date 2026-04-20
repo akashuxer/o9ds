@@ -330,7 +330,7 @@ const _O9DropdownIconButton = class _O9DropdownIconButton {
 _O9DropdownIconButton.VARIANTS = ["primary", "secondary", "tertiary", "outline"];
 _O9DropdownIconButton.SIZES = ["sm", "md", "lg"];
 _O9DropdownIconButton.DEFAULTS = {
-  icon: "more-vertical",
+  icon: "ellipsis-v",
   tooltip: null,
   variant: "primary",
   size: "md",

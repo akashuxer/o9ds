@@ -55,7 +55,7 @@ export default function NumberInput() {
             <DocSection id="demo" title="Live demo">
               <LiveReference>
                 <div style={{ minWidth: 220 }}><O9NumberInput label="Quantity" defaultValue={1} min={0} max={100} /></div>
-                <div style={{ minWidth: 220 }}><O9NumberInput label="Price" defaultValue={9.99} step={0.01} precision={2} /></div>
+                <div style={{ minWidth: 220 }}><O9NumberInput label="Price" defaultValue={9.99} step={0.01} /></div>
                 <div style={{ minWidth: 220 }}><O9NumberInput label="Disabled" defaultValue={5} isDisabled /></div>
               </LiveReference>
             </DocSection>

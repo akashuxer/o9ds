@@ -58,9 +58,9 @@ export default function Combobox() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 240 }}><O9Combobox label="Fruit" options={options} placeholder="Type to filter" /></div>
-                <div style={{ minWidth: 240 }}><O9Combobox label="With default" options={options} defaultValue="banana" /></div>
-                <div style={{ minWidth: 240 }}><O9Combobox label="Disabled" options={options} isDisabled /></div>
+                <div style={{ minWidth: 240 }}><O9Combobox label="Fruit" items={options} placeholder="Type to filter" /></div>
+                <div style={{ minWidth: 240 }}><O9Combobox label="With default" items={options} defaultValue="banana" /></div>
+                <div style={{ minWidth: 240 }}><O9Combobox label="Disabled" items={options} isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>

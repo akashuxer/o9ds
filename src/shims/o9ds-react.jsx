@@ -6,7 +6,7 @@ import { createContext, forwardRef, useContext } from 'react'
 
 const noop = () => {}
 
-const ToastContext = createContext({ show: noop, dismiss: noop })
+const ToastContext = createContext({ show: noop, close: noop, closeAll: noop })
 
 export function OverlayProvider({ children }) {
   return children
@@ -17,7 +17,7 @@ export function TooltipProvider({ children }) {
 }
 
 export function O9ToastProvider({ children }) {
-  const value = { show: noop, dismiss: noop }
+  const value = { show: noop, close: noop, closeAll: noop }
   return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>
 }
 
@@ -25,11 +25,21 @@ export function useToast() {
   return useContext(ToastContext)
 }
 
+const HTML_SAFE = new Set([
+  'className', 'id', 'style', 'role', 'tabIndex', 'title', 'hidden', 'lang', 'dir',
+])
+
 function o9Stub(displayName) {
   const C = forwardRef((props, ref) => {
     const { children, ...rest } = props
+    const safeProps = {}
+    for (const key of Object.keys(rest)) {
+      if (HTML_SAFE.has(key) || key.startsWith('data-') || key.startsWith('aria-')) {
+        safeProps[key] = rest[key]
+      }
+    }
     return (
-      <div ref={ref} data-o9ds-stub={displayName} {...rest}>
+      <div ref={ref} data-o9ds-stub={displayName} {...safeProps}>
         {children}
       </div>
     )

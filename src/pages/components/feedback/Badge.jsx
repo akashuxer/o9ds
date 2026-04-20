@@ -48,10 +48,10 @@ export default function Badge() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9BadgeAlert type="info" description="Heads up — the system will be down on Sunday." />
-                <O9BadgeAlert type="success" description="Changes saved successfully." />
-                <O9BadgeAlert type="warning" description="Your session expires in 5 minutes." />
-                <O9BadgeAlert type="danger" description="Failed to save changes." />
+                <O9BadgeAlert type="info" message="Heads up — the system will be down on Sunday." />
+                <O9BadgeAlert type="positive" message="Changes saved successfully." />
+                <O9BadgeAlert type="warning" message="Your session expires in 5 minutes." />
+                <O9BadgeAlert type="negative" message="Failed to save changes." />
               </LiveReference>
             </DocSection>
           </div>

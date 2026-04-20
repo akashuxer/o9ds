@@ -62,7 +62,7 @@ export default function IconButton() {
                 <O9IconButton icon="plus" tooltip="Add" variant="primary" />
                 <O9IconButton icon="edit" tooltip="Edit" variant="secondary" />
                 <O9IconButton icon="close" tooltip="Close" variant="tertiary" />
-                <O9IconButton icon="settings" tooltip="Settings" variant="outline" />
+                <O9IconButton icon="cog" tooltip="Settings" variant="outline" />
                 <O9IconButton icon="bin" tooltip="Delete" variant="danger" />
               </LiveReference>
             </DocSection>

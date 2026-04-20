@@ -57,9 +57,9 @@ export default function SelectDropdown() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 240 }}><O9Select label="Fruit" options={options} placeholder="Pick one" /></div>
-                <div style={{ minWidth: 240 }}><O9Select label="With default" options={options} defaultValue="banana" /></div>
-                <div style={{ minWidth: 240 }}><O9Select label="Disabled" options={options} isDisabled /></div>
+                <div style={{ minWidth: 240 }}><O9Select label="Fruit" items={options} placeholder="Pick one" /></div>
+                <div style={{ minWidth: 240 }}><O9Select label="With default" items={options} defaultValue="banana" /></div>
+                <div style={{ minWidth: 240 }}><O9Select label="Disabled" items={options} isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>

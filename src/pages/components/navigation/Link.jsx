@@ -62,7 +62,7 @@ export default function Link() {
                 <O9Link href="#" label="Primary link" />
                 <O9Link href="#" label="Secondary link" variant="secondary" />
                 <O9Link href="#" label="With icon" icon="settings" />
-                <O9Link href="https://example.com" label="External link" external />
+                <O9Link href="https://example.com" label="External link" isExternal />
               </LiveReference>
             </DocSection>
             <DocSection id="sizes" title="Sizes">

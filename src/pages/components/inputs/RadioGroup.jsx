@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { O9RadioGroup } from '@o9ds/react'
+import { O9RadioGroup, O9Radio } from '@o9ds/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
@@ -49,15 +49,11 @@ export default function RadioGroup() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9RadioGroup
-                  label="Theme"
-                  items={[
-                    { value: 'light', label: 'Light' },
-                    { value: 'dark', label: 'Dark' },
-                    { value: 'system', label: 'System' },
-                  ]}
-                  defaultValue="light"
-                />
+                <O9RadioGroup name="theme" label="Theme" defaultValue="light">
+                  <O9Radio value="light" label="Light" />
+                  <O9Radio value="dark" label="Dark" />
+                  <O9Radio value="system" label="System" />
+                </O9RadioGroup>
               </LiveReference>
             </DocSection>
           </div>
