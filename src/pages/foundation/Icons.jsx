@@ -8,6 +8,7 @@ import PageWithToc from '../../LayoutComponents/PageWithToc'
 
 /** Icon spec SVGs live in `public/IconGraphic/` (dot-grid surface matches ComponentOverviewCard). */
 function iconGraphicSrc(filename) {
+  // Filenames must match git exactly — Linux deployments are case-sensitive (macOS often is not).
   return `/IconGraphic/${encodeURIComponent(filename)}`
 }
 
@@ -505,7 +506,7 @@ export default function Icons() {
               No shape within an icon should be smaller than 4.27×4.27px. Once a shape reaches the minimum size (defined as a &quot;small square&quot;), it must be a solid fill and can no longer be an outline. This ensures clarity and visibility at small scales.
             </p>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('Shape Size.svg')}
+              illustrationSrc={iconGraphicSrc('Shape size.svg')}
               imageAlt="Minimum shape size rules: small square threshold and when outlines become solid fills on the grid."
             />
           </div>
@@ -524,7 +525,7 @@ export default function Icons() {
               <li className="pl-1">We use sharp-edged icons as default. You may use curves only in circular elements.</li>
             </ul>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('strokes.svg')}
+              illustrationSrc={iconGraphicSrc('Strokes.svg')}
               imageAlt="Stroke weight and inner versus outer stroke behavior for o9 icons on the grid."
             />
           </div>
@@ -537,7 +538,7 @@ export default function Icons() {
               Create harmony across the icon set by consistently making 90° angles sit on the same increments. Use increments of 9° for other angles when needed.
             </p>
             <IconSpecExpandableFigure
-              illustrationSrc={iconGraphicSrc('angles.svg')}
+              illustrationSrc={iconGraphicSrc('Angles.svg')}
               imageAlt="Angle construction: 90 degree alignment and 9 degree increments on the icon grid."
             />
           </div>

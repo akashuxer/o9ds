@@ -3,14 +3,38 @@
 export const PRINCIPLES_INTRO =
   "The o9 Design System follows a set of core principles that define how interfaces are designed, built, and scaled across the platform. These are not optional guidelines—they are enforced standards that every component, pattern, and experience in o9DS must follow."
 
-/** Lead copy for the Overview “Get started” block (above principle infographics). */
-export const GET_STARTED_INTRO =
-  'Start with how o9 and Arvo fit together, then use the five core principles below—they guide every component, pattern, and experience in the system.'
-
 /** System-level infographic (`public/GetStarted/`). */
 export const GET_STARTED_SYSTEM_DIAGRAM = {
   src: '/GetStarted/o9ArvoSystem.png',
   alt: 'Infographic describing the o9 platform and Arvo design system relationship.',
+}
+
+/** Overview — What Arvo Represents: developer ergonomics */
+export const ARVO_TECHNICAL_ERGONOMICS = {
+  title: 'Technical & Developer Ergonomics',
+  lead: '"Arvo" is intentionally designed for speed, clarity, and scalability in development.',
+  bullets: [
+    'Short, 4-letter / 2-syllable name → easy to type and recall',
+    'Works seamlessly as a namespace',
+    'NPM: @o9/arvo-react',
+    'CSS: .arvo-button',
+    'Reduces typos and naming inconsistencies in fast-paced environments',
+    'Optimized for high-velocity development (“Aim 10x”)',
+  ],
+}
+
+/** Overview — global pronunciation & identity (structured for two-column layout) */
+export const ARVO_FUN_FACT = {
+  title: 'Fun Fact',
+  lead: '"Arvo" is globally resilient and easy to pronounce across languages.',
+  points: [
+    { label: 'Spanish / French', detail: 'Smooth pronunciation, no negative meaning' },
+    { label: 'Similar to “Árbol” (tree)', detail: 'Subtle association with growth & sustainability' },
+    { label: 'Japanese / Hindi', detail: 'Simple phonetic structure' },
+    { label: 'Transliteration', detail: 'Easily transliterated (A-ru-bo)' },
+    { label: 'Global identity', detail: 'Maintains a consistent identity across regions' },
+  ],
+  closing: 'A small name, designed to scale globally without friction',
 }
 
 export const DESIGN_PRINCIPLES = [

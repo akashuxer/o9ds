@@ -10,6 +10,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // See src/shims/o9ds-react.jsx — vendor package may ship without dist/ after pull.
+      '@o9ds/react': path.resolve(__dirname, './src/shims/o9ds-react.jsx'),
     },
   },
 })
