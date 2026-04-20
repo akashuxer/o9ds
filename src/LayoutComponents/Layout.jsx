@@ -349,8 +349,8 @@ export default function Layout({ children }) {
             <div className="min-w-0 flex-1 space-y-2 text-xs font-normal leading-relaxed sm:text-sm">
               <p>
                 <strong className="font-bold">This design system is actively evolving and not yet fully complete.</strong>{' '}
-                We are continuously improving components, documentation, and experiences as we work toward the
-                official Q3 2026 release.
+                We are continuously improving components, documentation, and experiences{' '}
+                <strong className="font-bold">as we work toward the official Q3 2026 release.</strong>
               </p>
               <p>
                 Developers can start using available o9DS components as they are ready. For areas not yet covered,
