@@ -3,6 +3,16 @@
 export const PRINCIPLES_INTRO =
   "The o9 Design System follows a set of core principles that define how interfaces are designed, built, and scaled across the platform. These are not optional guidelines—they are enforced standards that every component, pattern, and experience in o9DS must follow."
 
+/** Lead copy for the Overview “Get started” block (above principle infographics). */
+export const GET_STARTED_INTRO =
+  'Start with how o9 and Arvo fit together, then use the five core principles below—they guide every component, pattern, and experience in the system.'
+
+/** System-level infographic (`public/GetStarted/`). */
+export const GET_STARTED_SYSTEM_DIAGRAM = {
+  src: '/GetStarted/o9ArvoSystem.png',
+  alt: 'Infographic describing the o9 platform and Arvo design system relationship.',
+}
+
 export const DESIGN_PRINCIPLES = [
   {
     num: 1,
@@ -14,6 +24,8 @@ export const DESIGN_PRINCIPLES = [
       'Align visual and interaction language across features',
     ],
     rule: 'If a pattern already exists → reuse it',
+    infographic: '/GetStarted/1stPrinciple.png',
+    infographicAlt: 'Infographic: Predictable and consistent experience',
   },
   {
     num: 2,
@@ -25,6 +37,8 @@ export const DESIGN_PRINCIPLES = [
       'Optimize for high-frequency workflows',
     ],
     rule: 'Choose the option that reduces user effort at scale',
+    infographic: '/GetStarted/2ndPrinciple.png',
+    infographicAlt: 'Infographic: Efficiency over effort (enterprise-first)',
   },
   {
     num: 3,
@@ -36,6 +50,8 @@ export const DESIGN_PRINCIPLES = [
       'Apply progressive disclosure for complexity',
     ],
     rule: 'If everything looks important → nothing is',
+    infographic: '/GetStarted/3rdPrinciple.png',
+    infographicAlt: 'Infographic: Clarity through hierarchy and structure',
   },
   {
     num: 4,
@@ -47,6 +63,8 @@ export const DESIGN_PRINCIPLES = [
       'Maintain sufficient contrast and focus visibility',
     ],
     rule: "If it's not accessible → it's not complete",
+    infographic: '/GetStarted/4thPrinciple.png',
+    infographicAlt: 'Infographic: Accessibility by default',
   },
   {
     num: 5,
@@ -58,5 +76,7 @@ export const DESIGN_PRINCIPLES = [
       'Support extensibility without breaking system integrity',
     ],
     rule: 'Standardize first, extend second',
+    infographic: '/GetStarted/5thPrinciple.png',
+    infographicAlt: 'Infographic: Standardized yet flexible patterns',
   },
 ]
