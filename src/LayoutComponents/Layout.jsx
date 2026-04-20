@@ -346,12 +346,19 @@ export default function Layout({ children }) {
               color: isDark ? '#e7e5e4' : '#292524',
             }}
           >
-            <p className="min-w-0 flex-1 text-xs font-normal leading-relaxed sm:text-sm">
-              <strong className="font-bold">This design system is actively evolving and not yet fully complete.</strong>{' '}
-              We are continuously improving components, documentation, and experiences{' '}
-              <span className="font-semibold">as we work toward the official Q3 2026 release</span>. You may notice
-              occasional inconsistencies or gaps as updates are rolled out, which will be addressed over time.
-            </p>
+            <div className="min-w-0 flex-1 space-y-2 text-xs font-normal leading-relaxed sm:text-sm">
+              <p>
+                <strong className="font-bold">This design system is actively evolving and not yet fully complete.</strong>{' '}
+                We are continuously improving components, documentation, and experiences as we work toward the
+                official Q3 2026 release.
+              </p>
+              <p>
+                Developers can start using available o9DS components as they are ready. For areas not yet covered,
+                teams can continue using existing implementations in parallel. Components will be released
+                incrementally, enabling gradual adoption and migration to o9DS without waiting for the full system to
+                be completed.
+              </p>
+            </div>
             <button
               type="button"
               onClick={() => setShowEvolutionBanner(false)}
