@@ -5,6 +5,9 @@ import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
 import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
 
+/** Section hub pages (Foundations / Accessibility / … overview grids) — extra width so 3-column cards match. */
+const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns', '/content']
+
 const PAGE_TITLES = {
   '/': 'Platform UI',
   '/overview': 'Overview',
@@ -40,7 +43,7 @@ const PAGE_TITLES = {
   '/designers': 'For Designers',
   '/developers': 'For Developers',
   '/vibe-coders': 'For Vibe Coders',
-  '/accessibility': 'Accessibility — Overview',
+  '/accessibility': 'Accessibility',
   '/accessibility/overview': 'Accessibility — Introduction',
   '/accessibility/standards-and-principles': 'Standards and principles',
   '/accessibility/assistive-technology': 'Assistive technology',
@@ -195,6 +198,7 @@ function getPageTitle(pathname) {
 export default function Layout({ children }) {
   const { theme, toggleTheme } = useTheme()
   const { pathname } = useLocation()
+  const isSectionOverviewHub = SECTION_OVERVIEW_HUB_PATHS.includes(pathname)
   /** Full-width landing: sidebar only appears on routes other than `/`. */
   const isLandingHome = pathname === '/'
   const [searchQuery, setSearchQuery] = useState('')
@@ -353,7 +357,8 @@ export default function Layout({ children }) {
                 <strong className="font-bold">as we work toward the official Q3 2026 release.</strong>
               </p>
               <p>
-                Developers can start using available o9DS components as they are ready. For areas not yet covered,
+                Developers can start using available o9DS components, tokens, assets, etc. as they are ready. For areas
+                not yet covered,
                 teams can continue using existing implementations in parallel. Components will be released
                 incrementally, enabling gradual adoption and migration to o9DS without waiting for the full system to
                 be completed.
@@ -626,23 +631,25 @@ export default function Layout({ children }) {
             className={`mx-auto relative z-10 ${
               pathname === '/'
                 ? 'w-full max-w-none'
-                : pathname.startsWith('/overview') ||
-                    pathname.startsWith('/principles') ||
-                    pathname.startsWith('/colors') ||
-                    pathname.startsWith('/typography') ||
-                    pathname.startsWith('/spacing') ||
-                    pathname.startsWith('/borders') ||
-                    pathname.startsWith('/icons') ||
-                    pathname.startsWith('/illustrations') ||
-                    pathname.startsWith('/symbol') ||
-                    pathname.startsWith('/foundations') ||
-                    pathname.startsWith('/patterns') ||
-                    pathname.startsWith('/accessibility') ||
-                    pathname.startsWith('/content') ||
-                    pathname.startsWith('/components') ||
-                    pathname.startsWith('/developers')
-                  ? 'max-w-6xl'
-                  : 'max-w-4xl'
+                : isSectionOverviewHub
+                  ? 'max-w-7xl'
+                  : pathname.startsWith('/overview') ||
+                      pathname.startsWith('/principles') ||
+                      pathname.startsWith('/colors') ||
+                      pathname.startsWith('/typography') ||
+                      pathname.startsWith('/spacing') ||
+                      pathname.startsWith('/borders') ||
+                      pathname.startsWith('/icons') ||
+                      pathname.startsWith('/illustrations') ||
+                      pathname.startsWith('/symbol') ||
+                      pathname.startsWith('/foundations') ||
+                      pathname.startsWith('/patterns') ||
+                      pathname.startsWith('/accessibility') ||
+                      pathname.startsWith('/content') ||
+                      pathname.startsWith('/components') ||
+                      pathname.startsWith('/developers')
+                    ? 'max-w-6xl'
+                    : 'max-w-4xl'
             }`}
           >
             {children}

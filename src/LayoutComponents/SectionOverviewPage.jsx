@@ -165,7 +165,7 @@ export default function SectionOverviewPage({
             <strong className="text-o9ds-light-primary dark:text-white">Reset all</strong>.
           </div>
         ) : (
-          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 list-none p-0 m-0">
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 list-none p-0 m-0">
             {filtered.map((m) => {
               const ready = isReady(m.path)
               return (

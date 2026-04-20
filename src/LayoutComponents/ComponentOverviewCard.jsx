@@ -13,7 +13,7 @@ export default function ComponentOverviewCard({ title, description, illustration
 
   const imgClassName = hideFooter
     ? 'max-h-[min(70vh,560px)] w-auto max-w-full object-contain object-center'
-    : 'max-h-[120px] w-auto max-w-full object-contain object-center'
+    : 'max-h-[min(220px,85%)] w-full max-w-full object-contain object-center'
 
   return (
     <div
@@ -23,7 +23,7 @@ export default function ComponentOverviewCard({ title, description, illustration
     >
       {/* Fixed height in catalog mode; flexible height when hideFooter (e.g. Typography typeface) */}
       <div
-        className={`relative w-full shrink-0 overflow-hidden ${hideFooter ? '' : 'h-[168px] border-b border-[#E5E5E5] dark:border-neutral-700'}`}
+        className={`relative w-full shrink-0 overflow-hidden ${hideFooter ? '' : 'h-[min(260px,42vw)] min-h-[220px] border-b border-[#E5E5E5] dark:border-neutral-700 sm:h-[280px] sm:min-h-0'}`}
       >
         <div className="absolute inset-0 bg-white dark:bg-white" aria-hidden />
         <div
@@ -35,7 +35,7 @@ export default function ComponentOverviewCard({ title, description, illustration
           aria-hidden
         />
         <div
-          className={`relative z-10 flex w-full items-center justify-center px-4 ${hideFooter ? 'py-8 sm:py-10' : 'h-full py-5'}`}
+          className={`relative z-10 flex w-full items-center justify-center px-3 ${hideFooter ? 'py-8 sm:py-10' : 'h-full min-h-0 py-3 sm:px-4 sm:py-4'}`}
         >
           <img
             src={illustrationSrc}

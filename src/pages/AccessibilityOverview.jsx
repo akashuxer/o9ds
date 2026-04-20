@@ -13,7 +13,7 @@ const accessibilityIcon = (
 export default function AccessibilityOverview() {
   return (
     <SectionOverviewPage
-      title="Overview"
+      title="Accessibility"
       description="Inclusive design standards: WCAG 2.2 AA baseline, keyboard and screen reader guidance, shortcuts, semantics, visual accessibility, and testing. Search, filter by ready status, and open a topic."
       icon={accessibilityIcon}
       items={ACCESSIBILITY_CATALOG}
