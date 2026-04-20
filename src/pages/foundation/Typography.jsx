@@ -28,7 +28,7 @@ const NAMING_COLUMNS = [
 ]
 
 const VARIANT_CATEGORIZATION_COLUMNS = [
-  { key: 'name', label: 'Name' },
+  { key: 'name', label: 'Name', mono: true, tone: 'code' },
   { key: 'meaning', label: 'Meaning' },
 ]
 
@@ -128,8 +128,8 @@ function TokenNamingPatternCard() {
 function VariantNameCell({ label, letter }) {
   return (
     <span className="inline-block align-top text-left">
-      <span className="block font-mono text-sm font-medium text-violet-600 dark:text-violet-400">{label}</span>
-      <span className="block font-mono text-sm font-medium text-violet-600 dark:text-violet-400">&quot;{letter}&quot;</span>
+      <span className="block font-mono text-sm font-medium">{label}</span>
+      <span className="block font-mono text-sm font-medium">&quot;{letter}&quot;</span>
     </span>
   )
 }

@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'guarantees', label: 'What components guarantee' },
@@ -69,7 +70,7 @@ export default function UsageAccessibility() {
               <tbody>
                 {LABEL_ROWS.map(([family, source]) => (
                   <tr key={family} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 text-o9ds-light-primary dark:text-white">{family}</td>
+                    <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{family}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{source}</td>
                   </tr>
                 ))}

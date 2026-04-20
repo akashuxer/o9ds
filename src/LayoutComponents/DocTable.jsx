@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import { TABLE_IDENTIFIER_TONE_CLASS } from './codeHighlight'
+import { DOC_TABLE_FIRST_COLUMN_CLASS, TABLE_IDENTIFIER_TONE_CLASS } from './codeHighlight'
 
 function CopyIcon({ className }) {
   return (
@@ -35,7 +35,7 @@ function TokenRow({ token, value, px, varFormat, isLight, showCopy, tokenPreview
 
   return (
     <tr className="group border-b last:border-b-0" style={{ borderColor: isLight ? '#E5E5E5' : '#404040' }}>
-      <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#fff' }}>{token}</td>
+      <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{token}</td>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#010101' : '#e5e5e5' }}>{value}</td>
       <td className="py-2 px-3 font-mono text-sm" style={{ color: isLight ? '#303030' : '#a3a3a3' }}>{px}</td>
       <td className="py-2 px-3 align-middle">
@@ -126,6 +126,7 @@ function columnToneClass(tone) {
  * @param {boolean} [props.copyAlwaysVisible] - Token table: copy button always visible (not only on row hover)
  * @param {(row: object) => string} [props.rowCopy] - Generic table: if set, adds a copy column; function returns clipboard text per row
  * @param {boolean} [props.rowCopyAlwaysVisible] - Generic table: copy column always visible
+ * @param {boolean} [props.highlightFirstColumnIdentifier] - If true, column 0 gets identifier (violet) tone when `tone` is omitted
  */
 export default function DocTable({
   tokens,
@@ -136,6 +137,7 @@ export default function DocTable({
   tokenPreviewMode = 'bar',
   copyAlwaysVisible = false,
   rowCopyAlwaysVisible = false,
+  highlightFirstColumnIdentifier = false,
 }) {
   const { theme } = useTheme()
   const isLight = theme === 'light'
@@ -193,19 +195,23 @@ export default function DocTable({
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} className="group border-t" style={{ borderColor: isLight ? '#E5E5E5' : '#404040' }}>
-              {columns.map((col) => (
+              {columns.map((col, colIndex) => {
+                const tone =
+                  col.tone ?? (highlightFirstColumnIdentifier && colIndex === 0 ? 'code' : undefined)
+                return (
                 <td
                   key={col.key}
                   className={`py-2 px-3 ${col.mono ? 'font-mono text-sm' : ''} ${
-                    col.tone
-                      ? `${columnToneClass(col.tone)} font-medium o9ds-doc-table-cell--tone`
+                    tone
+                      ? `${columnToneClass(tone)} font-medium o9ds-doc-table-cell--tone`
                       : 'text-o9ds-light-secondary dark:text-neutral-400'
                   }`}
                   style={col.primary ? { color: isLight ? '#010101' : '#fff' } : undefined}
                 >
                   {row[col.key]}
                 </td>
-              ))}
+                )
+              })}
               {rowCopyFn && <RowCopyButton text={rowCopyFn(row)} isLight={isLight} alwaysVisible={rowCopyAlwaysVisible} />}
             </tr>
           ))}

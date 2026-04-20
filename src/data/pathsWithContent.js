@@ -5,6 +5,7 @@
 export const PATHS_WITH_CONTENT = new Set([
   '/',
   '/overview',
+  '/resources',
   '/foundations',
   '/colors',
   '/typography',

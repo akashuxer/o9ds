@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'what-public-means', label: 'What "public" means' },
@@ -257,7 +258,7 @@ fi`}
                   ['@o9ds/test-utils', '(none — internal)'],
                 ].map(([pkg, safe]) => (
                   <tr key={pkg} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{pkg}</td>
+                    <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{pkg}</td>
                     <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{safe}</td>
                   </tr>
                 ))}

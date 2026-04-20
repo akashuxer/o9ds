@@ -6,6 +6,7 @@ import Layout from './LayoutComponents/Layout'
 import ScrollToTop from './LayoutComponents/ScrollToTop'
 import Home from './pages/Home'
 import Overview from './pages/Overview'
+import Resources from './pages/Resources'
 import Colors from './pages/foundation/Colors'
 import Typography from './pages/foundation/Typography'
 import Components from './pages/Components'
@@ -60,6 +61,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/overview" element={<Overview />} />
+          <Route path="/resources" element={<Resources />} />
           <Route path="/principles" element={<Navigate to="/overview#principles" replace />} />
           <Route path="/foundations" element={<FoundationsOverview />} />
           <Route path="/colors" element={<Colors />} />

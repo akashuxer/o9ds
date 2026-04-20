@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'stack', label: 'Test stack' },
@@ -51,7 +52,7 @@ export default function TestingAndDrift() {
               <tbody>
                 {STACK.map(([tool, purpose]) => (
                   <tr key={tool} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{tool}</td>
+                    <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{tool}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{purpose}</td>
                   </tr>
                 ))}
@@ -92,7 +93,7 @@ packages/core/src/overlay/
               <tbody>
                 {COMMANDS.map(([cmd, scope]) => (
                   <tr key={cmd} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{cmd}</td>
+                    <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{cmd}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{scope}</td>
                   </tr>
                 ))}

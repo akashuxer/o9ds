@@ -11,6 +11,7 @@ const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns
 const PAGE_TITLES = {
   '/': 'Platform UI',
   '/overview': 'Overview',
+  '/resources': 'Resources / Links',
   '/foundations': 'Foundations',
   '/colors': 'Colors',
   '/colors/data-viz': 'Data Visualization Colors',
@@ -105,6 +106,7 @@ const sidebarSections = [
     title: 'GETTING STARTED',
     items: [
       { path: '/overview', label: 'Overview' },
+      { path: '/resources', label: 'Resources' },
       { path: '/designers', label: 'For Designers' },
       { path: '/developers', label: 'For Developers' },
       {
@@ -783,6 +785,7 @@ export default function Layout({ children }) {
                 : isSectionOverviewHub
                   ? 'max-w-7xl'
                   : pathname.startsWith('/overview') ||
+                      pathname.startsWith('/resources') ||
                       pathname.startsWith('/colors') ||
                       pathname.startsWith('/typography') ||
                       pathname.startsWith('/spacing') ||

@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'overview', label: 'End-to-end flow' },
@@ -113,7 +114,7 @@ Shared SCSS Mixins (form-input-base, loading-overlay, list-item, ...)
               <tbody>
                 {IMPACT_RULES.map(([change, verify]) => (
                   <tr key={change} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 text-o9ds-light-primary dark:text-white">{change}</td>
+                    <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{change}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{verify}</td>
                   </tr>
                 ))}

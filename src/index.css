@@ -546,9 +546,9 @@ html:not(.dark) main [data-o9ds-code] {
   border-color: #E5E5E5 !important;
 }
 /* Inline code: light mode F2F2F2 bg, dark mode neutral-700 */
-html[data-theme="light"] main code,
+html[data-theme="light"] main code:not([data-o9ds-syntax-block]),
 html[data-theme="light"] main [data-o9ds-inline-code],
-html:not(.dark) main code,
+html:not(.dark) main code:not([data-o9ds-syntax-block]),
 html:not(.dark) main [data-o9ds-inline-code] {
   background-color: #F2F2F2 !important;
   color: #010101 !important;
@@ -680,8 +680,8 @@ html.dark main td.o9ds-doc-table-cell--tone {
   color: #a78bfa !important; /* violet-400 */
 }
 /* code: keep monospace readable (do not inherit gray p color) */
-html[data-theme="light"] main code,
-html:not(.dark) main code {
+html[data-theme="light"] main code:not([data-o9ds-syntax-block]),
+html:not(.dark) main code:not([data-o9ds-syntax-block]) {
   color: #010101 !important;
 }
 /* Emphasis: always visible on light / dark surfaces */

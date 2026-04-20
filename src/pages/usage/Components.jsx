@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'naming', label: 'Naming conventions' },
@@ -59,7 +60,7 @@ export default function UsageComponents() {
               <tbody>
                 {NAMING_ROWS.map(([surface, pattern, example]) => (
                   <tr key={surface} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 text-o9ds-light-primary dark:text-white">{surface}</td>
+                    <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{surface}</td>
                     <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{pattern}</td>
                     <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{example}</td>
                   </tr>
@@ -228,12 +229,12 @@ el.addEventListener('pop:close', e => { /* ... */ });`}
               </thead>
               <tbody>
                 <tr className="border-t dark:border-neutral-700">
-                  <td className="py-2 px-3 text-o9ds-light-primary dark:text-white">Uncontrolled</td>
+                  <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>Uncontrolled</td>
                   <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{`default<Prop>`}</td>
                   <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{`<O9Checkbox defaultChecked />`}</td>
                 </tr>
                 <tr className="border-t dark:border-neutral-700">
-                  <td className="py-2 px-3 text-o9ds-light-primary dark:text-white">Controlled</td>
+                  <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>Controlled</td>
                   <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{`<Prop> + on<Prop>Change`}</td>
                   <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{`<O9Checkbox isChecked={c} onChange={setC} />`}</td>
                 </tr>

@@ -7,6 +7,12 @@ export const CODE_SYNTAX_STRING_CLASS = 'text-emerald-700 dark:text-emerald-400'
 export const TABLE_IDENTIFIER_TONE_CLASS = 'text-violet-600 dark:text-violet-400'
 
 /**
+ * First table body column (identifier tone). Pair with `font-mono text-sm` when the cell is code-like.
+ * Requires `o9ds-doc-table-cell--tone` so `main td` global color does not override (see index.css).
+ */
+export const DOC_TABLE_FIRST_COLUMN_CLASS = `font-medium o9ds-doc-table-cell--tone ${TABLE_IDENTIFIER_TONE_CLASS}`
+
+/**
  * Lightweight syntax coloring for doc code blocks (no extra dependencies).
  */
 const cls = {
@@ -83,26 +89,131 @@ function highlightHtmlLike(code) {
 }
 
 const JS_KEYWORDS =
-  /\b(?:const|let|var|function|return|if|else|for|while|async|await|import|export|from|default|type|interface|extends|implements|new|this|void|null|undefined|true|false|class|enum|switch|case|break|continue|try|catch|finally|throw|typeof|instanceof|yield)\b/g
+  /\b(?:const|let|var|function|return|if|else|for|while|async|await|import|export|from|default|type|interface|extends|implements|new|this|void|null|undefined|true|false|class|enum|switch|case|break|continue|try|catch|finally|throw|typeof|instanceof|yield|as|satisfies|readonly|keyof|namespace|declare|module)\b/g
 
-function highlightPlainCode(code) {
+/**
+ * PascalCase identifiers treated as plain text (globals / TS utility types), not React components — same blue as `<Tag>` would be wrong.
+ */
+const NOT_COMPONENT_IDENTIFIER = new Set([
+  'Array',
+  'ArrayBuffer',
+  'Atomics',
+  'BigInt',
+  'BigInt64Array',
+  'BigUint64Array',
+  'Boolean',
+  'Capitalize',
+  'ConstructorParameters',
+  'DataView',
+  'Date',
+  'Error',
+  'Exclude',
+  'Extract',
+  'Float32Array',
+  'Float64Array',
+  'Function',
+  'Infinity',
+  'Int16Array',
+  'Int32Array',
+  'Int8Array',
+  'Intl',
+  'InstanceType',
+  'JSON',
+  'Lowercase',
+  'Map',
+  'Math',
+  'NaN',
+  'NonNullable',
+  'Number',
+  'Object',
+  'Omit',
+  'Parameters',
+  'Partial',
+  'Pick',
+  'Promise',
+  'Proxy',
+  'Readonly',
+  'Record',
+  'Reflect',
+  'RegExp',
+  'Required',
+  'ReturnType',
+  'Set',
+  'SharedArrayBuffer',
+  'String',
+  'Symbol',
+  'ThisType',
+  'Uint16Array',
+  'Uint32Array',
+  'Uint8Array',
+  'Uint8ClampedArray',
+  'Uncapitalize',
+  'Uppercase',
+  'WeakMap',
+  'WeakSet',
+  'WebAssembly',
+])
+
+const COMPONENT_IDENTIFIER_RE = /\b([A-Z][\w$]*)\b/g
+
+/**
+ * After keywords: color PascalCase identifiers as `tag` (sky), matching `<Component>` in TSX.
+ * @param {string} chunk
+ * @param {{ n: number }} kr
+ */
+function splitTextWithComponentNames(chunk, kr) {
+  if (!chunk) return []
   const nodes = []
-  const keyRef = { n: 0 }
+  let last = 0
+  let m
+  const re = new RegExp(COMPONENT_IDENTIFIER_RE.source, 'g')
+  while ((m = re.exec(chunk)) !== null) {
+    if (m.index > last) {
+      nodes.push(span(kr.n++, chunk.slice(last, m.index), 'text'))
+    }
+    const name = m[1]
+    const kind = NOT_COMPONENT_IDENTIFIER.has(name) ? 'text' : 'tag'
+    nodes.push(span(kr.n++, name, kind))
+    last = m.index + m[0].length
+  }
+  if (last < chunk.length) {
+    nodes.push(span(kr.n++, chunk.slice(last), 'text'))
+  }
+  return nodes.length ? nodes.filter(Boolean) : []
+}
+
+/** Shell / npm / git — used for bash, sh, zsh */
+const SHELL_KEYWORDS =
+  /\b(?:cd|echo|export|grep|npm|pnpm|yarn|git|node|npx|sudo|curl|mkdir|rm|cp|mv|cat|ls|if|fi|then|else|elif|for|do|done|while|in|esac|case|apt|brew|docker|kubectl|chmod|env|source|exec|bash|sh|zsh|printf|wc|head|tail|sed|awk|find|xargs)\b/g
+
+/**
+ * JavaScript/TypeScript/TSX-style snippets: keywords, strings, comments.
+ * @param {string} code
+ * @param {RegExp} [keywordRe]
+ */
+/**
+ * @param {string} code
+ * @param {RegExp} [keywordRe]
+ * @param {{ n: number }} [keyRef] shared counter when composing with TSX highlighter
+ */
+function highlightJavaScriptLike(code, keywordRe = JS_KEYWORDS, keyRef) {
+  const nodes = []
+  const kr = keyRef ?? { n: 0 }
 
   const pushKeywords = (chunk) => {
     if (!chunk) return
     let last = 0
     let km
-    const r = new RegExp(JS_KEYWORDS.source, 'g')
+    const r = new RegExp(keywordRe.source, 'g')
     while ((km = r.exec(chunk)) !== null) {
       if (km.index > last) {
-        nodes.push(span(keyRef.n++, chunk.slice(last, km.index), 'text'))
+        nodes.push(...splitTextWithComponentNames(chunk.slice(last, km.index), kr))
       }
-      nodes.push(span(keyRef.n++, km[0], 'keyword'))
+      nodes.push(span(kr.n++, km[0], 'keyword'))
       last = km.index + km[0].length
     }
     if (last < chunk.length) {
-      nodes.push(span(keyRef.n++, chunk.slice(last), 'text'))
+      nodes.push(...splitTextWithComponentNames(chunk.slice(last), kr))
     }
   }
 
@@ -115,14 +226,137 @@ function highlightPlainCode(code) {
     }
     const tok = m[1]
     const kind = tok.startsWith('//') || tok.startsWith('/*') ? 'comment' : 'string'
-    nodes.push(span(keyRef.n++, tok, kind))
+    nodes.push(span(kr.n++, tok, kind))
     last = m.index + tok.length
   }
   if (last < code.length) {
     pushKeywords(code.slice(last))
   }
 
-  return nodes.length ? nodes.filter(Boolean) : [span(0, code, 'text')]
+  return nodes.length ? nodes.filter(Boolean) : [span(kr.n++, code, 'text')]
+}
+
+/** End index (exclusive) of `}` closing `{` at start */
+function endOfBalancedBraces(s, openIndex) {
+  if (s[openIndex] !== '{') return openIndex
+  let depth = 0
+  for (let i = openIndex; i < s.length; i++) {
+    const ch = s[i]
+    if (ch === '{') depth++
+    else if (ch === '}') {
+      depth--
+      if (depth === 0) return i + 1
+    }
+  }
+  return s.length
+}
+
+/**
+ * JSX opening tag attribute string: prop names (amber), punct, strings, `{…}` values (balanced braces).
+ * @param {string} attrChunk text between component name and `>` or `/>`
+ */
+function highlightJsxAttributes(attrChunk, keyRef) {
+  const out = []
+  if (!attrChunk) return out
+  const s = attrChunk
+  let i = 0
+
+  while (i < s.length) {
+    while (i < s.length && /\s/.test(s[i])) {
+      let ws = ''
+      while (i < s.length && /\s/.test(s[i])) ws += s[i++]
+      if (ws) out.push(span(keyRef.n++, ws, 'text'))
+    }
+    if (i >= s.length) break
+
+    const nameMatch = s.slice(i).match(/^([\w$][\w$.:-]*)/)
+    if (!nameMatch) {
+      out.push(span(keyRef.n++, s.slice(i), 'text'))
+      break
+    }
+    const name = nameMatch[1]
+    let k = i + name.length
+    while (k < s.length && /\s/.test(s[k])) k++
+
+    if (k >= s.length || s[k] !== '=') {
+      out.push(span(keyRef.n++, name, 'attr'))
+      i += name.length
+      continue
+    }
+
+    out.push(span(keyRef.n++, name, 'attr'))
+    i = k
+    out.push(span(keyRef.n++, '=', 'punct'))
+    i++
+    while (i < s.length && /\s/.test(s[i])) i++
+    if (i >= s.length) break
+
+    if (s[i] === '"' || s[i] === "'") {
+      const q = s[i]
+      let end = i + 1
+      while (end < s.length) {
+        if (s[end] === '\\') {
+          end += 2
+          continue
+        }
+        if (s[end] === q) {
+          end++
+          break
+        }
+        end++
+      }
+      out.push(span(keyRef.n++, s.slice(i, end), 'string'))
+      i = end
+      continue
+    }
+    if (s[i] === '{') {
+      const end = endOfBalancedBraces(s, i)
+      out.push(span(keyRef.n++, s.slice(i, end), 'string'))
+      i = end
+      continue
+    }
+    const uq = s.slice(i).match(/^[^\s/>]+/)
+    if (uq) {
+      out.push(span(keyRef.n++, uq[0], 'string'))
+      i += uq[0].length
+    } else {
+      i++
+    }
+  }
+  return out.filter(Boolean)
+}
+
+/**
+ * React/TSX: `<Component prop={…} />` gets sky tags, amber props; other code uses JS tokenizer.
+ * @param {{ n: number }} [keyRef] shared key counter for nested chunks
+ */
+function highlightTsxLike(code, keywordRe = JS_KEYWORDS, keyRef) {
+  const kr = keyRef ?? { n: 0 }
+  const tagRe = /<(\/?)([A-Za-z_][\w.:-]*)([^>]*)>/g
+  const nodes = []
+  let last = 0
+  let m
+  while ((m = tagRe.exec(code)) !== null) {
+    if (m.index > last) {
+      const gap = code.slice(last, m.index)
+      nodes.push(
+        ...(gap.includes('<') ? highlightTsxLike(gap, keywordRe, kr) : highlightJavaScriptLike(gap, keywordRe, kr)),
+      )
+    }
+    nodes.push(span(kr.n++, '<', 'punct'))
+    if (m[1]) nodes.push(span(kr.n++, '/', 'punct'))
+    nodes.push(span(kr.n++, m[2], 'tag'))
+    nodes.push(...highlightJsxAttributes(m[3], kr))
+    nodes.push(span(kr.n++, '>', 'punct'))
+    last = m.index + m[0].length
+  }
+  if (last < code.length) {
+    const tail = code.slice(last)
+    nodes.push(
+      ...(tail.includes('<') ? highlightTsxLike(tail, keywordRe, kr) : highlightJavaScriptLike(tail, keywordRe, kr)),
+    )
+  }
+  return nodes.length ? nodes.filter(Boolean) : highlightJavaScriptLike(code, keywordRe, kr)
 }
 
 const MERMAID_KEYWORD =
@@ -286,16 +520,46 @@ function highlightScss(code) {
   return out.length ? out : [<Fragment key="s0">{code}</Fragment>]
 }
 
+/** Map CodeBlock / IDE language labels to internal highlighter ids */
+function normalizeLanguage(language) {
+  const map = {
+    jsx: 'tsx',
+    typescript: 'ts',
+    javascript: 'js',
+    mjs: 'js',
+    cjs: 'js',
+    bash: 'bash',
+    sh: 'bash',
+    shell: 'bash',
+    zsh: 'bash',
+    json: 'json',
+    jsonc: 'json',
+    css: 'scss',
+    sass: 'scss',
+    yaml: 'text',
+    yml: 'text',
+    markdown: 'text',
+    md: 'text',
+  }
+  return map[language] ?? language
+}
+
 /**
  * @param {string} code
- * @param {'html' | 'markup' | 'ts' | 'js' | 'text' | 'mermaid' | 'scss' | 'auto'} language
+ * @param {'html' | 'markup' | 'ts' | 'js' | 'tsx' | 'jsx' | 'text' | 'mermaid' | 'scss' | 'bash' | 'json' | 'auto'} language
  */
 export function highlightCode(code, language = 'auto') {
   let lang = language
+  if (lang !== 'auto') {
+    lang = normalizeLanguage(lang)
+  }
   if (lang === 'auto') {
     const trimmed = code.trimStart()
     if (trimmed.startsWith('<') || /<\/?[\w-][\s\S]*>/.test(code)) {
       lang = 'html'
+    } else if (/<[A-Z][\w.]*(?:\s|\/>|>)/.test(code) || /<\/[A-Z]/.test(code)) {
+      /* PascalCase JSX — avoids TS generics like `Array<string>` (lowercase type name) */
+      lang = 'tsx'
     } else {
       lang = 'ts'
     }
@@ -303,14 +567,26 @@ export function highlightCode(code, language = 'auto') {
   if (lang === 'html' || lang === 'markup') {
     return highlightHtmlLike(code)
   }
+  if (lang === 'tsx') {
+    return highlightTsxLike(code)
+  }
   if (lang === 'ts' || lang === 'js') {
-    return highlightPlainCode(code)
+    return highlightJavaScriptLike(code)
+  }
+  if (lang === 'bash') {
+    return highlightJavaScriptLike(code, SHELL_KEYWORDS)
+  }
+  if (lang === 'json') {
+    return highlightJavaScriptLike(code)
   }
   if (lang === 'mermaid') {
     return highlightMermaid(code)
   }
   if (lang === 'scss') {
     return highlightScss(code)
+  }
+  if (lang === 'text') {
+    return [<Fragment key="plain">{code}</Fragment>]
   }
   return [<Fragment key="plain">{code}</Fragment>]
 }

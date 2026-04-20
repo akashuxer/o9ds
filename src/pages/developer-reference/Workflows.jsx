@@ -3,6 +3,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'choose', label: 'Choose a workflow' },
@@ -75,7 +76,7 @@ export default function Workflows() {
               <tbody>
                 {WORKFLOWS.map(([wf, when]) => (
                   <tr key={wf} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 text-o9ds-light-primary dark:text-white font-medium">{wf}</td>
+                    <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{wf}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{when}</td>
                   </tr>
                 ))}

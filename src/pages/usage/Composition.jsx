@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'extension-points', label: 'Documented extension points' },
@@ -190,7 +191,7 @@ root.querySelectorAll('.o9ds-cb__input').forEach(addAnalytics);
                   ['App SCSS targeting .o9ds-btn', 'Visual regressions.', 'Yes (a CSS fork)'],
                 ].map(([approach, breaks, fork]) => (
                   <tr key={approach} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{approach}</td>
+                    <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{approach}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{breaks}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{fork}</td>
                   </tr>

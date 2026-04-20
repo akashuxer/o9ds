@@ -5,6 +5,7 @@ import PageWithToc from '../LayoutComponents/PageWithToc'
 import DocTabs from '../LayoutComponents/DocTabs'
 import CodeBlock from '../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../LayoutComponents/codeHighlight'
 
 const TABS = ['Overview', 'Architecture', 'Multi-Framework', 'Distribution']
 
@@ -162,7 +163,7 @@ export default function Developers() {
                   <tbody>
                     {PACKAGES.map(([pkg, role, output]) => (
                       <tr key={pkg} className="border-t dark:border-neutral-700">
-                        <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{pkg}</td>
+                        <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{pkg}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{role}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{output}</td>
                       </tr>
@@ -244,7 +245,7 @@ export default function Developers() {
                   <tbody>
                     {TECH_STACK.map(([area, tool, version]) => (
                       <tr key={area} className="border-t dark:border-neutral-700">
-                        <td className="py-2 px-3 text-o9ds-light-primary dark:text-white">{area}</td>
+                        <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{area}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{tool}</td>
                         <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{version}</td>
                       </tr>
@@ -284,7 +285,7 @@ export default function Developers() {
                   <tbody>
                     {CORE_MODULES.map(([mod, purpose]) => (
                       <tr key={mod} className="border-t dark:border-neutral-700">
-                        <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{mod}</td>
+                        <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{mod}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{purpose}</td>
                       </tr>
                     ))}
@@ -426,7 +427,7 @@ $.closeAllOverlays();`}
                   <tbody>
                     {DIST_MATRIX.map(([pkg, dist, fmt, entries, side]) => (
                       <tr key={pkg} className="border-t dark:border-neutral-700">
-                        <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{pkg}</td>
+                        <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{pkg}</td>
                         <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{dist}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{fmt}</td>
                         <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{entries}</td>
@@ -453,7 +454,7 @@ $.closeAllOverlays();`}
                   <tbody>
                     {VERSION_BUMP.map(([change, bump]) => (
                       <tr key={change} className="border-t dark:border-neutral-700">
-                        <td className="py-2 px-3 text-o9ds-light-primary dark:text-white">{change}</td>
+                        <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{change}</td>
                         <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{bump}</td>
                       </tr>
                     ))}
@@ -478,7 +479,7 @@ $.closeAllOverlays();`}
                   <tbody>
                     {FEED_VIEWS.map(([view, audience, retention]) => (
                       <tr key={view} className="border-t dark:border-neutral-700">
-                        <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{view}</td>
+                        <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{view}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{audience}</td>
                         <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{retention}</td>
                       </tr>

@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'why-agents', label: 'Why agents' },
@@ -74,7 +75,7 @@ export default function AgenticPipeline() {
               <tbody>
                 {AGENTS.map(([agent, resp]) => (
                   <tr key={agent} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 text-o9ds-light-primary dark:text-white font-medium">{agent}</td>
+                    <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{agent}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{resp}</td>
                   </tr>
                 ))}
@@ -115,7 +116,7 @@ export default function AgenticPipeline() {
               <tbody>
                 {PIPELINE_TYPES.map(([pipe, trigger, agents]) => (
                   <tr key={pipe} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{pipe}</td>
+                    <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{pipe}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{trigger}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{agents}</td>
                   </tr>
@@ -160,7 +161,7 @@ pnpm pipeline new-component --descriptor descriptors/tooltip.json --dry-run`}
               <tbody>
                 {CONTEXT_FILES.map(([file, when]) => (
                   <tr key={file} className="border-t dark:border-neutral-700">
-                    <td className="py-2 px-3 font-mono text-o9ds-light-primary dark:text-white">{file}</td>
+                    <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{file}</td>
                     <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{when}</td>
                   </tr>
                 ))}

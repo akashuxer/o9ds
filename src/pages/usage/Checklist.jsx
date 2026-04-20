@@ -2,6 +2,7 @@ import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../LayoutComponents/DocSection'
+import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../../LayoutComponents/codeHighlight'
 
 const sections = [
   { id: 'pr-checklist', label: 'PR review checklist' },
@@ -204,7 +205,7 @@ function MatrixTable({ rows }) {
                 : 'text-[#bc1227] dark:text-[#f07a62]'
             return (
               <tr key={i} className="border-t dark:border-neutral-700">
-                <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{custom}</td>
+                <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{custom}</td>
                 <td className={`py-2 px-3 font-medium ${tone}`}>{status}</td>
               </tr>
             )

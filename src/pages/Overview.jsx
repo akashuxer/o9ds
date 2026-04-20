@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import ExpandableDocImage from '../LayoutComponents/ExpandableDocImage'
 import GrayBgCard from '../LayoutComponents/GrayBgCard'
@@ -247,6 +248,17 @@ export default function Overview() {
               unified
             />
           ))}
+        </div>
+        <div className="mt-10 rounded-xl border border-neutral-200/90 bg-gradient-to-br from-neutral-50 to-white p-6 dark:border-neutral-700 dark:from-neutral-900/50 dark:to-neutral-950">
+          <p className="m-0 text-sm font-semibold text-o9ds-light-primary dark:text-white">Resources hub</p>
+          <p className="mt-2 m-0 max-w-2xl text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            Design files, engineering entry points, adoption checklists, and the living Google Doc index—everything in one place on
+            the{' '}
+            <Link to="/resources" className="font-semibold text-violet-600 underline underline-offset-2 dark:text-violet-400">
+              Resources
+            </Link>{' '}
+            page.
+          </p>
         </div>
       </section>
 

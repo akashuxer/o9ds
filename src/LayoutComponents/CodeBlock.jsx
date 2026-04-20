@@ -11,7 +11,7 @@ function CopyIcon({ className }) {
 }
 
 /**
- * @param {{ code: string, label?: string, language?: 'html' | 'markup' | 'ts' | 'js' | 'text' | 'mermaid' | 'scss' | 'auto' }} props
+ * @param {{ code: string, label?: string, language?: 'html' | 'markup' | 'ts' | 'tsx' | 'js' | 'jsx' | 'bash' | 'json' | 'text' | 'mermaid' | 'scss' | 'auto' }} props
  */
 export default function CodeBlock({ code, label, language = 'auto' }) {
   const [copied, setCopied] = useState(false)
@@ -57,7 +57,7 @@ export default function CodeBlock({ code, label, language = 'auto' }) {
         style={preBg}
         data-o9ds-code
       >
-        <code>{highlightCode(code, language)}</code>
+        <code data-o9ds-syntax-block>{highlightCode(code, language)}</code>
       </pre>
     </div>
   )
