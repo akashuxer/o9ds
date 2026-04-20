@@ -274,6 +274,8 @@ html.dark body {
 
 :root {
   /* o9ds Design Tokens */
+  /* Matches $o9ds-border-3 in borderTokens.js — 1.5px stroke for underline fields / doc search */
+  --o9ds-border-3: 1.5px;
   --o9ds-shadow-blur: 4px; /* matches $o9ds-shadow-blur — backdrop-filter blur() on overlay scrims */
   --o9-black: #000000;
   --o9-white: #ffffff;
@@ -781,6 +783,32 @@ html.dark textarea:focus-visible,
 html.dark [tabindex]:not([tabindex="-1"]):focus-visible {
   outline: 2px solid #ffffff !important;
   outline-offset: 2px;
+}
+
+/* Doc search (sidebar + section overviews + o9con gallery): bottom border only — border-3 (1.5px); no 4-side border or global input outline */
+.o9ds-doc-search-input {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none !important;
+  border-bottom: var(--o9ds-border-3) solid var(--o9ds-doc-search-border, #e5e5e5) !important;
+  border-radius: 0;
+  box-shadow: none !important;
+}
+html[data-theme="dark"] .o9ds-doc-search-input,
+html.dark .o9ds-doc-search-input {
+  --o9ds-doc-search-border: #404040;
+}
+html[data-theme="light"] .o9ds-doc-search-input:focus,
+html[data-theme="light"] .o9ds-doc-search-input:focus-visible,
+html:not(.dark) .o9ds-doc-search-input:focus,
+html:not(.dark) .o9ds-doc-search-input:focus-visible,
+html[data-theme="dark"] .o9ds-doc-search-input:focus,
+html[data-theme="dark"] .o9ds-doc-search-input:focus-visible,
+html.dark .o9ds-doc-search-input:focus,
+html.dark .o9ds-doc-search-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-bottom-color: var(--o9ds-color-b-theme-focus) !important;
 }
 
 /* Modal / overlay scrim — SCSS: background: $o9ds-color-s-overlay-static; backdrop-filter: $o9ds-shadow-blur; */

@@ -446,7 +446,7 @@ export default function Home() {
 
         <section id="home-cards" className="scroll-mt-24 w-full">
           <h2 className="mb-10 max-w-4xl text-left text-[clamp(1.65rem,5.5vw,2.85rem)] font-medium leading-[1.12] tracking-[-0.03em] text-o9ds-light-primary motion-safe:animate-fade-in-up dark:text-white md:mb-14">
-            Building Blocks of o9DS
+            Building Blocks of Arova
           </h2>
           <div className="grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-9">
             {cards.map(({ title, desc, path, icon }, i) => {

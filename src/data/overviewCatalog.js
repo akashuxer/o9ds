@@ -72,16 +72,16 @@ export const FOUNDATIONS_CATALOG = [
 export const PATTERNS_CATALOG = [
   { path: '/patterns/forms', label: 'Forms', section: 'Patterns' },
   { path: '/patterns/search', label: 'Search', section: 'Patterns' },
+  { path: '/patterns/application-layouts', label: 'Application Layouts', section: 'Patterns' },
+  { path: '/patterns/notifications-alerts', label: 'Notifications / Alerts', section: 'Patterns' },
+  { path: '/patterns/truncation', label: 'Truncation', section: 'Patterns' },
+  { path: '/patterns/loading', label: 'Loading', section: 'Patterns' },
+  { path: '/patterns/export', label: 'Export', section: 'Patterns' },
+  { path: '/patterns/destructive-action', label: 'Destructive Action', section: 'Patterns' },
+  { path: '/patterns/navigation', label: 'Navigation', section: 'Patterns' },
+  { path: '/patterns/on-hover-always-visible', label: 'On Hover / Always Visible', section: 'Patterns' },
   { path: '/patterns/filters', label: 'Filters', section: 'Patterns' },
-  { path: '/patterns/tables', label: 'Tables', section: 'Patterns' },
-  { path: '/patterns/side-panels', label: 'Side Panels', section: 'Patterns' },
-  { path: '/patterns/modals', label: 'Modals', section: 'Patterns' },
-  { path: '/patterns/notifications', label: 'Notifications', section: 'Patterns' },
-  { path: '/patterns/empty-states', label: 'Empty States', section: 'Patterns' },
   { path: '/patterns/bulk-actions', label: 'Bulk Actions', section: 'Patterns' },
-  { path: '/patterns/nested-interactions', label: 'Nested Interactions', section: 'Patterns' },
-  { path: '/patterns/drag', label: 'Drag', section: 'Patterns' },
-  { path: '/patterns/disabled', label: 'Disabled', section: 'Patterns' },
 ]
 
 /** Do not list the section overview route itself (e.g. /accessibility) as a card — only child topics. */
