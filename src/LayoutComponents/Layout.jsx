@@ -598,7 +598,7 @@ export default function Layout({ children }) {
                 className="h-4 w-4 shrink-0 rounded-none border-2 border-[#010101] bg-white accent-[#010101] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#010101] focus-visible:ring-offset-0 dark:border-white dark:bg-black dark:accent-white dark:focus-visible:ring-white"
                 aria-label="Show only pages with ready documentation"
               />
-              Ready status
+              Ready/Partial Ready Status
             </label>
           </div>
           <nav
