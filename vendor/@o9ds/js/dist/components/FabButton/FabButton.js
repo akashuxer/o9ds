@@ -1,0 +1,247 @@
+import { O9Button } from "../Button/Button.js";
+import { O9IconButton } from "../IconButton/IconButton.js";
+import { createIndicator, removeIndicator, updateIndicator } from "@o9ds/utils";
+const VALID_VARIANTS = ["primary", "secondary"];
+const _O9FabButton = class _O9FabButton {
+  constructor(element, options) {
+    this._wrapperEl = null;
+    this._buttonEl = null;
+    this._innerButton = null;
+    this._indicatorEl = null;
+    this._container = element;
+    const variant = (options == null ? void 0 : options.variant) && VALID_VARIANTS.includes(options.variant) ? options.variant : _O9FabButton.DEFAULTS.variant;
+    this._options = {
+      ..._O9FabButton.DEFAULTS,
+      ...options,
+      variant,
+      icon: (options == null ? void 0 : options.icon) ?? _O9FabButton.DEFAULTS.icon,
+      label: (options == null ? void 0 : options.label) ?? _O9FabButton.DEFAULTS.label,
+      tooltip: (options == null ? void 0 : options.tooltip) ?? null,
+      onClick: (options == null ? void 0 : options.onClick) ?? null,
+      onFocus: (options == null ? void 0 : options.onFocus) ?? null,
+      onBlur: (options == null ? void 0 : options.onBlur) ?? null,
+      zIndex: (options == null ? void 0 : options.zIndex) ?? null
+    };
+    this._render();
+  }
+  static initialize(element, options) {
+    return new _O9FabButton(element, options);
+  }
+  _render() {
+    if (!this._container) return;
+    this._wrapperEl = document.createElement("div");
+    this._applyWrapperClasses();
+    this._applyZIndex();
+    this._buttonEl = document.createElement("button");
+    this._wrapperEl.appendChild(this._buttonEl);
+    this._createInnerButton();
+    if (this._options.indicator !== false && !this._options.isDisabled && !this._options.isLoading) {
+      this._createIndicator();
+    }
+    this._container.appendChild(this._wrapperEl);
+  }
+  _applyWrapperClasses() {
+    if (!this._wrapperEl) return;
+    const isWithLabel = this._options.label !== null;
+    this._wrapperEl.className = [
+      "o9ds-fab-btn",
+      `o9ds-fab-btn--${this._options.variant}`,
+      isWithLabel ? "o9ds-fab-btn--with-label" : "o9ds-fab-btn--icon-only",
+      this._options.isDisabled ? "is-disabled" : "",
+      this._options.isLoading ? "loading" : ""
+    ].filter(Boolean).join(" ");
+  }
+  _applyZIndex() {
+    if (!this._wrapperEl) return;
+    if (this._options.zIndex !== null) {
+      this._wrapperEl.style.zIndex = String(this._options.zIndex);
+    } else {
+      this._wrapperEl.style.removeProperty("z-index");
+    }
+  }
+  _createInnerButton() {
+    if (!this._buttonEl) return;
+    if (this._options.label !== null) {
+      this._innerButton = new O9Button(this._buttonEl, {
+        variant: this._options.variant,
+        size: "md",
+        icon: this._options.icon,
+        label: this._options.label,
+        isDisabled: this._options.isDisabled,
+        isLoading: this._options.isLoading,
+        tooltip: this._options.tooltip ?? void 0,
+        onClick: this._options.onClick ?? void 0
+      });
+    } else {
+      this._innerButton = new O9IconButton(this._buttonEl, {
+        variant: this._options.variant,
+        size: "lg",
+        icon: this._options.icon,
+        tooltip: this._options.tooltip ?? "",
+        isDisabled: this._options.isDisabled,
+        isLoading: this._options.isLoading,
+        onClick: this._options.onClick ?? void 0
+      });
+    }
+    if (this._options.onFocus) {
+      this._buttonEl.addEventListener("focus", this._options.onFocus);
+    }
+    if (this._options.onBlur) {
+      this._buttonEl.addEventListener("blur", this._options.onBlur);
+    }
+  }
+  _destroyInnerButton() {
+    var _a;
+    if (this._buttonEl && this._options.onFocus) {
+      this._buttonEl.removeEventListener("focus", this._options.onFocus);
+    }
+    if (this._buttonEl && this._options.onBlur) {
+      this._buttonEl.removeEventListener("blur", this._options.onBlur);
+    }
+    (_a = this._innerButton) == null ? void 0 : _a.destroy();
+    this._innerButton = null;
+  }
+  _createIndicator() {
+    if (this._options.indicator === false || !this._wrapperEl) return;
+    this._indicatorEl = createIndicator({
+      variant: this._options.indicator,
+      size: this._options.indicatorSize
+    });
+    this._wrapperEl.appendChild(this._indicatorEl);
+  }
+  _syncIndicatorVisibility() {
+    const shouldShow = this._options.indicator !== false && !this._options.isDisabled && !this._options.isLoading;
+    if (shouldShow && !this._indicatorEl) {
+      this._createIndicator();
+    } else if (!shouldShow && this._indicatorEl) {
+      this._indicatorEl = removeIndicator(this._indicatorEl);
+    }
+  }
+  setVariant(variant) {
+    if (!VALID_VARIANTS.includes(variant)) return;
+    this._options.variant = variant;
+    this._applyWrapperClasses();
+    if (this._innerButton) {
+      this._innerButton.setVariant(variant);
+    }
+    this._dispatchEvent("fab-btn:variant", { variant });
+  }
+  setIcon(iconName) {
+    this._options.icon = iconName;
+    if (this._innerButton) {
+      this._innerButton.setIcon(iconName);
+    }
+  }
+  setLabel(label) {
+    var _a, _b, _c;
+    const wasWithLabel = this._options.label !== null;
+    const isWithLabel = label !== null;
+    this._options.label = label;
+    if (wasWithLabel !== isWithLabel) {
+      this._destroyInnerButton();
+      (_a = this._buttonEl) == null ? void 0 : _a.remove();
+      this._buttonEl = document.createElement("button");
+      if (this._indicatorEl) {
+        (_b = this._wrapperEl) == null ? void 0 : _b.insertBefore(this._buttonEl, this._indicatorEl);
+      } else {
+        (_c = this._wrapperEl) == null ? void 0 : _c.appendChild(this._buttonEl);
+      }
+      this._createInnerButton();
+      this._applyWrapperClasses();
+    } else if (isWithLabel && this._innerButton instanceof O9Button) {
+      this._innerButton.setLabel(label);
+    }
+  }
+  setIndicator(variant) {
+    this._options.indicator = variant;
+    if (variant === false) {
+      this._indicatorEl = removeIndicator(this._indicatorEl);
+      return;
+    }
+    if (this._options.isDisabled || this._options.isLoading) return;
+    if (this._indicatorEl) {
+      updateIndicator(this._indicatorEl, { variant });
+    } else {
+      this._createIndicator();
+    }
+  }
+  setIndicatorSize(size) {
+    this._options.indicatorSize = size;
+    if (this._indicatorEl) {
+      updateIndicator(this._indicatorEl, { size });
+    }
+  }
+  setZIndex(zIndex) {
+    this._options.zIndex = zIndex;
+    this._applyZIndex();
+  }
+  disabled(state) {
+    if (state === void 0) {
+      return this._options.isDisabled;
+    }
+    this._options.isDisabled = state;
+    this._applyWrapperClasses();
+    if (this._innerButton) {
+      this._innerButton.disabled(state);
+    }
+    this._syncIndicatorVisibility();
+  }
+  setLoading(isLoading) {
+    this._options.isLoading = isLoading;
+    this._applyWrapperClasses();
+    if (this._innerButton) {
+      this._innerButton.setLoading(isLoading);
+    }
+    if (this._wrapperEl) {
+      if (isLoading) {
+        this._wrapperEl.setAttribute("aria-busy", "true");
+      } else {
+        this._wrapperEl.removeAttribute("aria-busy");
+      }
+    }
+    this._syncIndicatorVisibility();
+  }
+  focus() {
+    if (this._buttonEl && !this._options.isLoading) {
+      this._buttonEl.focus();
+    }
+  }
+  destroy() {
+    var _a, _b;
+    this._destroyInnerButton();
+    this._indicatorEl = removeIndicator(this._indicatorEl);
+    (_a = this._buttonEl) == null ? void 0 : _a.remove();
+    this._buttonEl = null;
+    (_b = this._wrapperEl) == null ? void 0 : _b.remove();
+    this._wrapperEl = null;
+    this._container = null;
+  }
+  _dispatchEvent(name, detail) {
+    var _a;
+    (_a = this._wrapperEl) == null ? void 0 : _a.dispatchEvent(new CustomEvent(name, {
+      bubbles: true,
+      cancelable: true,
+      detail
+    }));
+  }
+};
+_O9FabButton.VARIANTS = VALID_VARIANTS;
+_O9FabButton.DEFAULTS = {
+  variant: "primary",
+  icon: "plus",
+  label: null,
+  isDisabled: false,
+  isLoading: false,
+  indicator: false,
+  indicatorSize: "lg",
+  zIndex: null,
+  tooltip: null,
+  onClick: null,
+  onFocus: null,
+  onBlur: null
+};
+let O9FabButton = _O9FabButton;
+export {
+  O9FabButton
+};
+//# sourceMappingURL=FabButton.js.map

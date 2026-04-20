@@ -1,0 +1,1 @@
+{"version":3,"file":"tooltip-manager.d.ts","sourceRoot":"","sources":["../../src/tooltip/tooltip-manager.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EACV,cAAc,EAEd,kBAAkB,EAEnB,MAAM,SAAS,CAAC;AAmBjB,wBAAgB,oBAAoB,CAAC,IAAI,CAAC,EAAE,kBAAkB,GAAG,cAAc,CAyT9E;AAED,eAAO,MAAM,cAAc,EAAE,cAAuC,CAAC"}
