@@ -1,0 +1,23 @@
+.o9ds-overlay__mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  pointer-events: none;
+  transition: background-color 300ms ease, backdrop-filter 300ms ease;
+
+  &--visible {
+    background: var(--o9ds-color-s-overlay-static);
+    pointer-events: auto;
+  }
+
+  &--visible#{&}--blur {
+    backdrop-filter: blur(4px);
+  }
+
+  &--scoped {
+    position: absolute;
+  }
+}

@@ -1,0 +1,259 @@
+@use '../../mixins/typography' as *;
+@use '../../mixins/loading' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .o9ds-popover ────────────────────────────────────────────────────────────
+
+.o9ds-popover {
+  // ── Root layout ────────────────────────────────────────────────────────────
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  width: var(--o9ds-popover-width, auto);
+  min-width: $o9ds-popover-wmin;
+  max-width: $o9ds-popover-wmax;
+  max-height: $o9ds-popover-hmax;
+  background-color: var(--o9ds-color-s-layer-03, white);
+  box-shadow: $o9ds-shadow-down;
+  z-index: var(--o9ds-z-popover, 1000);
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Transition classes are applied by @o9ds/core enter()/exit().
+  // Only transition opacity — transform is used for positioning and must not animate.
+  &.o9ds-enter-from {
+    opacity: 0;
+  }
+
+  &.o9ds-enter-active {
+    transition: opacity 150ms ease;
+  }
+
+  &.o9ds-enter-to {
+    opacity: 1;
+  }
+
+  &.o9ds-exit-from {
+    opacity: 1;
+  }
+
+  &.o9ds-exit-active {
+    transition: opacity 150ms ease;
+  }
+
+  &.o9ds-exit-to {
+    opacity: 0;
+  }
+
+  // ── State: open ────────────────────────────────────────────────────────────
+  &.open {
+    display: flex;
+  }
+
+  // ── __arrow ────────────────────────────────────────────────────────────────
+  &__arrow {
+    display: none;
+    position: absolute;
+    left: var(--o9ds-popover-arrow-x, 0);
+    top: var(--o9ds-popover-arrow-y, 0);
+    width: 8px;
+    height: 8px;
+    background-color: var(--o9ds-color-s-layer-03, white);
+    transform: rotate(45deg);
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+
+  // ── __header ───────────────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $o9ds-space-8;
+    padding: $o9ds-space-8 $o9ds-space-12;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  // ── __header-left ──────────────────────────────────────────────────────────
+  &__header-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $o9ds-space-4;
+    flex: 1;
+    min-width: 0;
+  }
+
+  // ── __header-actions ───────────────────────────────────────────────────────
+  &__header-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $o9ds-space-4;
+    flex-shrink: 0;
+  }
+
+  // ── __title ────────────────────────────────────────────────────────────────
+  &__title {
+    @include o9ds-font-h16-m;
+    font-family: var(--o9-font-family);
+    color: var(--o9ds-color-t-primary);
+    height: 24px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // ── __back-btn ─────────────────────────────────────────────────────────────
+  &__back-btn {
+    flex-shrink: 0;
+  }
+
+  // ── __close-btn ────────────────────────────────────────────────────────────
+  &__close-btn {
+    flex-shrink: 0;
+  }
+
+  // ── __sticky-header ────────────────────────────────────────────────────────
+  &__sticky-header {
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    padding: $o9ds-space-8 $o9ds-space-12 0;
+    box-sizing: border-box;
+    z-index: 1;
+  }
+
+  // ── __body ─────────────────────────────────────────────────────────────────
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: $o9ds-space-8 $o9ds-space-12 $o9ds-space-16;
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--o9ds-color-s-layer-07, #ccc) transparent;
+  }
+
+  // ── __footer ───────────────────────────────────────────────────────────────
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $o9ds-space-6;
+    padding: $o9ds-space-8 $o9ds-space-12 $o9ds-space-16;
+    flex-shrink: 0;
+    box-sizing: border-box;
+
+    > * {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  // ── Modifier: --edge ───────────────────────────────────────────────────────
+  &--edge &__body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // ── Modifier: --with-arrow ─────────────────────────────────────────────────
+  &--with-arrow &__arrow {
+    display: block;
+  }
+
+  // ── Modifier: --inline ─────────────────────────────────────────────────────
+  &--inline {
+    min-width: 0;
+  }
+
+  // ── Modifier: --closable ───────────────────────────────────────────────────
+  &:not(&--closable) &__close-btn {
+    display: none;
+  }
+
+  // ── Loading skeleton mixin (Pattern B) ───────────────────────────────────
+  @mixin _popover-loading-skeleton {
+    pointer-events: none;
+
+    .o9ds-popover__footer {
+      display: none;
+    }
+
+    .o9ds-popover__title {
+      position: relative;
+      color: transparent;
+      overflow: hidden;
+      border-radius: var(--o9ds-radius-sm, 3px);
+      width: 60%;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: var(--o9ds-color-s-disabled, #f0f0f0);
+        border-radius: var(--o9ds-radius-sm, 3px);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          var(--o9ds-loading-shimmer-color, rgba(255, 255, 255, 0.4)) 50%,
+          transparent 100%
+        );
+        animation: o9ds-shimmer var(--o9ds-loading-shimmer-speed, 1.5s) infinite linear;
+        border-radius: var(--o9ds-radius-sm, 3px);
+      }
+    }
+
+    .o9ds-popover__body {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: $o9ds-space-12;
+
+      > * {
+        display: none;
+      }
+
+      &::before,
+      &::after {
+        content: '';
+        display: block;
+        height: 16px;
+        border-radius: var(--o9ds-radius-sm, 3px);
+        background-color: var(--o9ds-color-s-disabled, #f0f0f0);
+        position: relative;
+        overflow: hidden;
+      }
+
+      &::before {
+        width: 80%;
+      }
+
+      &::after {
+        width: 60%;
+      }
+    }
+  }
+
+  // ── State: loading (Pattern B — structured skeleton) ──────────────────────
+  &.loading {
+    @include _popover-loading-skeleton;
+  }
+
+  // Parent-controlled loading
+  [data-o9ds-loading='true'] &:not([data-o9ds-loading-ignore='true']) {
+    @include _popover-loading-skeleton;
+  }
+}

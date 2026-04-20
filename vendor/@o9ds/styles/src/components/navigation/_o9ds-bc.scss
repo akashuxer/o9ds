@@ -1,0 +1,157 @@
+@use '../../../../tokens/src/scss/all' as *;
+
+// Breadcrumb component styles
+// BEM Block: .o9ds-bc
+// Abbreviation: bc
+// Loading Pattern: A (simple overlay shimmer)
+
+.o9ds-bc {
+
+  // ── Layout ────────────────────────────────────────────────────────────────
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding-block: $o9ds-space-6;
+  position: relative;
+  box-sizing: border-box;
+
+  // ── Typography ────────────────────────────────────────────────────────────
+  font-family: var(--o9-font-family);
+  font-size: $o9ds-font-size-14;
+
+  // ── List container ────────────────────────────────────────────────────────
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: $o9ds-space-4;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // ── Item ──────────────────────────────────────────────────────────────────
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $o9ds-space-4;
+
+    &:not(:first-child)::before {
+      content: '/';
+      color: var(--o9ds-color-t-placeholder);
+      font-weight: $o9ds-regular;
+      font-size: $o9ds-font-size-14;
+      pointer-events: none;
+    }
+  }
+
+  // ── Link ──────────────────────────────────────────────────────────────────
+  &__lnk {
+    display: inline-flex;
+    align-items: center;
+    color: var(--o9ds-color-t-placeholder);
+    font-family: var(--o9-font-family);
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+    line-height: normal;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  // ── Icon (home) ───────────────────────────────────────────────────────────
+  &__ico {
+    font-size: $o9ds-icon-16;
+    color: var(--o9ds-color-t-placeholder);
+    flex-shrink: 0;
+    line-height: normal;
+    text-decoration: none;
+  }
+
+  // ── Current page label ────────────────────────────────────────────────────
+  &__lbl {
+    color: var(--o9ds-color-t-secondary);
+    font-family: var(--o9-font-family);
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-medium;
+    line-height: normal;
+  }
+
+  // ── Hover ─────────────────────────────────────────────────────────────────
+  .no-touch &__lnk:hover {
+    color: var(--o9ds-color-t-info-light);
+    text-decoration: underline;
+
+    .o9ds-bc__ico {
+      color: var(--o9ds-color-t-info-light);
+    }
+  }
+
+  // ── Focus ─────────────────────────────────────────────────────────────────
+  &__lnk:focus-visible {
+    color: var(--o9ds-color-t-info-light);
+    text-decoration: underline;
+    outline: 1px solid var(--o9ds-color-b-theme-focus);
+
+    .o9ds-bc__ico {
+      color: var(--o9ds-color-t-info-light);
+    }
+  }
+
+  // ── Disabled ──────────────────────────────────────────────────────────────
+  &.is-disabled &__lnk {
+    color: var(--o9ds-color-t-disabled);
+    cursor: not-allowed;
+    pointer-events: auto;
+    text-decoration: none;
+
+    .o9ds-bc__ico {
+      color: var(--o9ds-color-i-disabled);
+    }
+  }
+
+  // ── Loading State (Pattern A) ─────────────────────────────────────────────
+  &.loading {
+    pointer-events: none;
+    cursor: default;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-color: var(--o9ds-color-s-pulse-light);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--o9ds-color-s-pulse-dark) 50%,
+        transparent 100%
+      );
+      transform: translateX(-100%);
+      animation: o9ds-skeleton-shimmer 1.5s ease-in-out infinite;
+    }
+
+    .o9ds-bc__list,
+    .o9ds-bc__lnk,
+    .o9ds-bc__lbl,
+    .o9ds-bc__ico {
+      opacity: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &::before {
+        animation: none;
+      }
+    }
+  }
+}

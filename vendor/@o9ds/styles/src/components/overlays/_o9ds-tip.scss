@@ -1,0 +1,109 @@
+@use '../../mixins/typography' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .o9ds-tip ──────────────────────────────────────────────────────────────
+
+.o9ds-tip {
+  // ── Root layout ──────────────────────────────────────────────────────────
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $o9ds-space-4;
+  max-width: $o9ds-tooltip-wmax;
+  padding: $o9ds-space-4 $o9ds-space-6;
+  background-color: var(--o9ds-color-s-inverse);
+  color: var(--o9ds-color-t-inverse);
+  box-shadow: $o9ds-shadow-center;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  pointer-events: auto;
+
+  // Transition classes applied by @o9ds/core enter()/exit()
+  &.o9ds-enter-from {
+    opacity: 0;
+  }
+
+  &.o9ds-enter-active {
+    transition: opacity 120ms ease;
+  }
+
+  &.o9ds-enter-to {
+    opacity: 1;
+  }
+
+  &.o9ds-exit-from {
+    opacity: 1;
+  }
+
+  &.o9ds-exit-active {
+    transition: opacity 120ms ease;
+  }
+
+  &.o9ds-exit-to {
+    opacity: 0;
+  }
+
+  // ── __txt ────────────────────────────────────────────────────────────────
+  &__txt {
+    flex: 1 0 0;
+    min-width: 1px;
+    @include o9ds-font-l12-r;
+    line-height: normal;
+    color: var(--o9ds-color-t-inverse);
+  }
+
+  // ── __shortcut ───────────────────────────────────────────────────────────
+  &__shortcut {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: $o9ds-space-4;
+    background-color: var(--o9ds-color-s-on-inverse);
+    @include o9ds-font-l12-r;
+    line-height: normal;
+    color: var(--o9ds-color-t-inverse);
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  // ── Future: __hdr (rich tooltip header) ──────────────────────────────────
+  &__hdr {
+    width: 100%;
+    @include o9ds-font-l12-r;
+    line-height: normal;
+    color: var(--o9ds-color-t-inverse);
+  }
+
+  // ── Future: __bdy (rich tooltip body) ────────────────────────────────────
+  &__bdy {
+    width: 100%;
+    @include o9ds-font-l12-r;
+    line-height: normal;
+    color: var(--o9ds-color-t-inverse);
+  }
+
+  // ── Future: __ftr (rich tooltip footer) ──────────────────────────────────
+  &__ftr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $o9ds-space-4;
+    width: 100%;
+  }
+
+  // ── Future: --rich modifier ──────────────────────────────────────────────
+  &--rich {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: $o9ds-tooltip-wmax;
+    padding: $o9ds-space-10 $o9ds-space-12 $o9ds-space-12;
+  }
+}

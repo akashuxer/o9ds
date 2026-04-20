@@ -1,0 +1,189 @@
+@use '../../../tokens/src/scss/all' as *;
+
+// Shared form input mixins — consumed by all form input field elements.
+// Applied to the field/trigger element (e.g. .o9ds-txt__field, .o9ds-sel__field).
+// Background color belongs on the outer container; the field element stays transparent.
+// Used by: textbox, textarea, number-input, search, select, combobox,
+//          date-picker, time-picker, datetime-picker, daterange-picker
+//
+// CSS variable strategy: only height, font-size, and padding-inline are exposed
+// as CSS variables because they change per component size modifier. All color
+// tokens are applied statically — they are identical across every consumer and
+// never need runtime override.
+
+// form-input-base
+// Base layout, cursor, and font styles for the field element.
+// Height, font-size, and padding-inline are CSS variables so size modifiers can
+// override them.
+@mixin form-input-base {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  height: var(--o9ds-form-input-height, 32px);
+  padding-inline: var(--o9ds-form-input-padding-inline, #{$o9ds-space-8});
+  font-family: var(--o9ds-font-family);
+  font-size: var(--o9ds-form-input-font-size, #{$o9ds-font-size-14});
+  cursor: text;
+  border-radius: 0;
+  background: transparent;
+}
+
+// form-input-hover-bg
+// Applies a subtle background change on hover for non-disabled, non-readonly,
+// non-error inputs. Applied to the __field element (the visible surface).
+// Used by: textbox, textarea, number-input, search, select, combobox
+@mixin form-input-hover-bg {
+  background-color: var(--o9ds-form-input-bg-color, var(--o9ds-color-s-layer-04));
+
+  .no-touch *:not(.is-disabled):not(.has-error):not(.is-readonly):hover > & {
+    background-color: var(--o9ds-color-s-theme-hover-4);
+  }
+}
+
+// form-input-text-colors
+// Text, placeholder, and selection colors for the native input/textarea element.
+// All colors are static token references — no CSS variables needed.
+// Used by: textbox, textarea, number-input, search
+@mixin form-input-text-colors {
+  color: var(--o9ds-color-t-form-value);
+
+  &::placeholder {
+    color: var(--o9ds-color-t-placeholder);
+  }
+
+  &::selection {
+    background-color: var(--o9ds-color-s-theme);
+    color: var(--o9ds-color-t-inverse);
+  }
+
+  .is-disabled & {
+    color: var(--o9ds-color-t-disabled);
+
+    &::selection {
+      background-color: transparent;
+    }
+  }
+
+  .is-readonly & {
+    color: var(--o9ds-color-t-readonly);
+  }
+}
+
+// form-input-disabled-bg
+// Applies disabled background color and cursor to the field element.
+// Applied to the __field element; targets a .is-disabled class on the parent block.
+// Used by: textbox, textarea, number-input, search, select, combobox
+@mixin form-input-disabled-bg {
+  .is-disabled > & {
+    background-color: var(--o9ds-color-s-disabled);
+    color: var(--o9ds-color-t-disabled);
+    cursor: not-allowed;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// form-input-animated-border
+// Animated bottom border applied to the __border BEM child element.
+// The ::after pseudo-element slides in (scaleX) on hover and thickens on focus.
+// Used by: textbox, textarea, number-input, search, select, combobox,
+//          date-picker, time-picker, datetime-picker, daterange-picker
+//
+// All border colors use static token references. No component needs to override
+// these — they are identical across all form inputs.
+// ---------------------------------------------------------------------------
+
+// Structural base: absolute 1px border + animated ::after overlay.
+// Apply this to the __border element inside the component.
+@mixin form-input-animated-border-base {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0px;
+  height: 1px;
+  background: var(--o9ds-color-b-form);
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--o9ds-color-b-theme);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition:
+      transform $o9ds-motion-form-input,
+      height $o9ds-motion-form-input;
+    will-change: transform, height;
+  }
+}
+
+// All-in-one mixin: base structure + hover, focus, error, disabled, readonly states.
+// State selectors climb to the direct parent component root via "> &".
+@mixin form-input-animated-border-complete {
+  @include form-input-animated-border-base;
+
+  // Hover — non-touch devices only; parent must not be disabled, error, or readonly
+  .no-touch *:not(.is-disabled):not(.has-error):not(.is-readonly):hover > & {
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
+  // Focus — :focus-within on parent, skip disabled, readonly, and error
+  *:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) > & {
+    &::after {
+      background-color: var(--o9ds-color-b-theme-focus);
+      height: $o9ds-border-3;
+      transform: scaleX(1);
+    }
+  }
+
+  // Error — immediate full-width thick border, no transition
+  .has-error > & {
+    background: var(--o9ds-color-b-negative);
+
+    &::after {
+      background-color: var(--o9ds-color-b-negative);
+      height: $o9ds-border-3;
+      transform: scaleX(1);
+      transition: none;
+    }
+  }
+
+  // Disabled — flat 1px border, no animation
+  .is-disabled > & {
+    background: var(--o9ds-color-b-disabled);
+
+    &::after {
+      background-color: var(--o9ds-color-b-disabled);
+      height: 1px;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  // Readonly — transparent base, dashed border via ::after
+  .is-readonly > & {
+    background: transparent;
+
+    &::after {
+      background-color: transparent;
+      height: 0;
+      transform: none;
+      transition: none;
+      border-bottom: $o9ds-border-2 dashed var(--o9ds-color-b-readonly);
+    }
+  }
+}
+
+// form-input-default-width
+// Sets a consistent default width (300px) on form input components.
+// Consumers can override via --o9ds-form-input-width CSS variable or a width prop.
+// Apply this to the root (block-level) element of the component.
+// Used by: textbox, textarea, number-input, search, select, combobox,
+//          date-picker, time-picker, datetime-picker, daterange-picker
+@mixin form-input-default-width {
+  width: var(--o9ds-form-input-width, 300px);
+  max-width: 100%;
+}

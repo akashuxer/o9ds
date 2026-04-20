@@ -1,0 +1,27 @@
+{
+  "name": "@o9ds/tokens",
+  "version": "0.1.0-dev.1",
+  "description": "o9 Design System design tokens (SCSS source)",
+  "license": "UNLICENSED",
+  "private": false,
+  "sideEffects": false,
+  "exports": {
+    "./scss": "./src/scss/_all.scss",
+    "./scss/variables": "./src/scss/_variables.scss",
+    "./scss/colors": "./src/scss/_colors.scss",
+    "./scss/spacing": "./src/scss/_spacing.scss",
+    "./scss/typography": "./src/scss/_typography.scss",
+    "./scss/borders": "./src/scss/_borders.scss",
+    "./scss/widths": "./src/scss/_widths.scss",
+    "./scss/animation": "./src/scss/_animation.scss",
+    "./scss/root": "./src/scss/_root.scss",
+    "./css": "./dist/o9ds-tokens.css",
+    "./css/min": "./dist/o9ds-tokens.min.css"
+  },
+  "files": [
+    "src/",
+    "dist/",
+    "scripts/",
+    "_index.scss"
+  ]
+}

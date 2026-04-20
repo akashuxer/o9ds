@@ -1,0 +1,80 @@
+@use '../../../tokens/src/scss/borders' as *;
+
+// Shared indicator pattern — small status badge (dot) at the top-right of its parent.
+// Three semantic variants: unsaved (warning amber circle), new (negative red square),
+// unread (theme color square). Two sizes: sm (6px), lg (10px).
+// The parent element must have position: relative for absolute positioning to work.
+// Used by: fab-button (and future: tabs, nav items, avatars, etc.)
+
+// indicator-host
+// Apply to the parent element that hosts the indicator.
+// Ensures the indicator can be absolutely positioned relative to the parent.
+@mixin indicator-host {
+  position: relative;
+}
+
+// indicator-base
+// Core styles for the indicator container element.
+@mixin indicator-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 1;
+  border: 1px solid var(--o9ds-color-s-layer-01);
+  border-radius: $o9ds-radius-circle;
+  overflow: hidden;
+  padding: 0px;
+  box-sizing: border-box;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    display: block;
+    width: var(--o9ds-indicator-size);
+    height: var(--o9ds-indicator-size);
+    background-color: var(--o9ds-indicator-bg);
+  }
+}
+
+// indicator-sm
+// 6px dot size
+@mixin indicator-sm {
+  --o9ds-indicator-size: 6px;
+}
+
+// indicator-lg
+// 10px dot size
+@mixin indicator-lg {
+  --o9ds-indicator-size: 10px;
+}
+
+// indicator-unsaved
+// Warning amber circular dot
+@mixin indicator-unsaved {
+  --o9ds-indicator-bg: var(--o9ds-color-s-warning-static);
+
+  &::after {
+    border-radius: $o9ds-radius-circle;
+  }
+}
+
+// indicator-new
+// Negative red square dot
+@mixin indicator-new {
+  --o9ds-indicator-bg: var(--o9ds-color-s-negative-static);
+
+  &::after {
+    border-radius: 0;
+  }
+}
+
+// indicator-unread
+// Theme color square dot
+@mixin indicator-unread {
+  --o9ds-indicator-bg: var(--o9ds-color-s-theme);
+
+  &::after {
+    border-radius: 0;
+  }
+}

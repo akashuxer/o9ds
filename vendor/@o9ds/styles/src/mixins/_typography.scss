@@ -1,0 +1,190 @@
+@use '../../../tokens/src/scss/typography' as *;
+
+// HEADING MIXINS
+@mixin o9ds-font-h32-r {
+    font-size: $o9ds-font-size-32;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h20-r {
+    font-size: $o9ds-font-size-20;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h18-r {
+    font-size: $o9ds-font-size-18;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h16-m {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-h14-r {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h14-rc {
+    font-size: $o9ds-font-size-14;
+    text-transform: uppercase;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h14-m {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-h12-r {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h12-rc {
+    font-size: $o9ds-font-size-12;
+    text-transform: uppercase;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-h12-m {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-h12-mc {
+    font-size: $o9ds-font-size-12;
+    text-transform: uppercase;
+    font-weight: $o9ds-medium;
+}
+
+// PARAGRAPH MIXINS
+@mixin o9ds-font-p16-r {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-p16-m {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p14-r {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-p14-m {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p14-b {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-bold;
+}
+
+@mixin o9ds-font-p12-r {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-p12-m {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p12-ru {
+    font-size: $o9ds-font-size-12;
+    text-decoration: underline;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-p10-r {
+    font-size: $o9ds-font-size-10;
+    font-weight: $o9ds-regular;
+}
+
+// LABEL MIXINS
+@mixin o9ds-font-l16-r {
+    font-size: $o9ds-font-size-16;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l14-r {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l14-m {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-l14-ru {
+    font-size: $o9ds-font-size-14;
+    text-decoration: underline;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l12-r {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l12-m {
+    font-size: $o9ds-font-size-12;
+    font-weight: $o9ds-medium;
+}
+
+@mixin o9ds-font-l12-ru {
+    font-size: $o9ds-font-size-12;
+    text-decoration: underline;
+    font-weight: $o9ds-regular;
+}
+
+@mixin o9ds-font-l10-r {
+    font-size: $o9ds-font-size-10;
+    font-weight: $o9ds-regular;
+}
+
+
+// DO NOT USE BELOW MIXINS/TOKENS AS THEY ARE NOT PART OF THE DESIGN SYSTEM AND ARE ONLY USED FOR LEGACY REASONS 
+@mixin o9-font-reg-12 {
+    font-size: 12px;
+    font-weight: $o9ds-regular;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-12-important {
+    font-size: 12px !important;
+    font-weight: $o9ds-regular !important;
+    line-height: normal !important;
+}
+
+@mixin o9-font-reg-13 {
+    font-size: 13px;
+    font-weight: $o9ds-regular;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-13-important {
+    font-size: 13px !important;
+    font-weight: $o9ds-regular !important;
+    line-height: normal !important;
+}
+
+@mixin o9-font-reg-14 {
+    font-size: 14px;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-15 {
+    font-size: 15px;
+    line-height: normal;
+}
+
+$o9-font-reg-16: normal 16px var(--o9-font-family);
+$o9-font-reg-17: normal 17px var(--o9-font-family);
+$o9-font-reg-18: normal 18px var(--o9-font-family);

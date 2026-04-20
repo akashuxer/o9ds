@@ -1,0 +1,102 @@
+// CheckboxGroup component styles
+// BEM Block: .o9ds-cb-grp
+// Abbreviation: cb-grp
+// Loading Pattern: C (group disables pointer-events + aria-busy; children show Pattern A shimmer)
+
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/form-label' as *;
+@use '../../mixins/inline-alert' as *;
+
+// ─── .o9ds-cb-grp ────────────────────────────────────────────────────────────
+
+.o9ds-cb-grp {
+  // ── Base layout ──────────────────────────────────────────────────────────
+  display: flex;
+  flex-direction: column;
+  gap: $o9ds-space-8;
+
+  // ── __lbl (group label — shared form-label pattern) ──────────────────────
+  &__lbl {
+    @include form-label-base;
+    @include form-label-lg;
+    color: var(--o9ds-lbl-color, var(--o9ds-color-t-form-label));
+  }
+
+  // ── __bdy (body wrapping __items + inline-alert) ─────────────────────────
+  &__bdy {
+    display: flex;
+    flex-direction: column;
+    gap: $o9ds-space-8;
+  }
+
+  // ── __items (flex container for O9Checkbox children) ─────────────────────
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: $o9ds-space-8;
+  }
+
+  // ── Size: sm ─────────────────────────────────────────────────────────────
+  &--sm {
+    .o9ds-cb-grp__lbl {
+      @include form-label-sm;
+    }
+  }
+
+  // ── Layout: horizontal ───────────────────────────────────────────────────
+  &--horizontal {
+    .o9ds-cb-grp__items {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  // ── Layout: label-start (only with --horizontal) ─────────────────────────
+  // Root becomes row so __lbl and __bdy sit side-by-side
+  &--horizontal#{&}--label-start {
+    flex-direction: row;
+    gap: $o9ds-space-12;
+  }
+
+  // ── State: disabled ──────────────────────────────────────────────────────
+  &.is-disabled {
+    pointer-events: none;
+
+    .o9ds-cb-grp__lbl {
+      @include form-label-disabled;
+      color: var(--o9ds-lbl-color-disabled, var(--o9ds-color-t-disabled));
+    }
+  }
+
+  // ── State: readonly ──────────────────────────────────────────────────────
+  &.is-readonly {
+    .o9ds-cb-grp__items {
+      pointer-events: none;
+    }
+  }
+
+  // ── Inline alert ─────────────────────────────────────────────────────────
+  .o9ds-inline-alert {
+    @include inline-alert-base;
+
+    &__ico {
+      @include inline-alert-icon;
+    }
+
+    &__msg {
+      @include inline-alert-msg;
+    }
+
+    &--error {
+      @include inline-alert-error;
+    }
+  }
+
+  // ── Loading state (Pattern C) ────────────────────────────────────────────
+  // Group disables pointer-events + sets aria-busy; child O9Checkbox instances
+  // show their own shimmer via [data-o9ds-loading="true"] on __items.
+  &.loading,
+  &[data-o9ds-loading="true"] {
+    pointer-events: none;
+  }
+}

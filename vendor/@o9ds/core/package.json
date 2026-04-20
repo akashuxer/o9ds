@@ -1,0 +1,24 @@
+{
+  "name": "@o9ds/core",
+  "version": "0.1.0-dev.1",
+  "description": "o9 Design System framework-agnostic core utilities (overlay hub, positioning, focus, keyboard nav)",
+  "license": "UNLICENSED",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@o9ds/tokens": "0.1.0-dev.1"
+  }
+}

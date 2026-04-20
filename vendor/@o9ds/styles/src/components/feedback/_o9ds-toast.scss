@@ -1,0 +1,261 @@
+@use '../../../../tokens/src/scss/all' as *;
+
+// ---------------------------------------------------------------------------
+// Toast — Feedback
+// ---------------------------------------------------------------------------
+
+// ── Container ─────────────────────────────────────────────────────────────
+
+.o9ds-toast-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: $o9ds-space-8;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  pointer-events: none;
+
+  // Default: top-right
+  &--top-right,
+  &:not([class*='--']) {
+    top: 16px;
+    right: 16px;
+  }
+
+  &--top-left {
+    top: 16px;
+    left: 16px;
+  }
+
+  &--bottom-right {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  &--bottom-left {
+    bottom: 16px;
+    left: 16px;
+  }
+}
+
+// ── Toast card ────────────────────────────────────────────────────────────
+
+.o9ds-toast {
+  // Only dynamic values that change per type modifier
+  --o9ds-toast-border-color: var(--o9ds-color-b-info, #0037ff);
+  --o9ds-toast-title-color: var(--o9ds-color-t-info-dark, #002ed2);
+  --o9ds-toast-icon-color: var(--o9ds-color-i-info-dark);
+
+  width: 300px;
+  padding: $o9ds-space-12;
+  display: flex;
+  align-items: center;
+  gap: $o9ds-space-4;
+  background: var(--o9ds-color-s-layer-04);
+  border-left: $o9ds-border-2 solid var(--o9ds-toast-border-color);
+  box-shadow: $o9ds-shadow-left;
+  pointer-events: auto;
+  opacity: 1;
+  animation: o9ds-toast-enter $o9ds-motion-transition-expand;
+
+  // ── Fade state ──────────────────────────────────────────────────────
+  &.is-fading {
+    opacity: 0;
+    transition: opacity 1000ms ease-in-out;
+  }
+
+  // ── Paused (hover) ──────────────────────────────────────────────────
+  &.is-paused {
+    opacity: 1;
+    transition: none;
+  }
+
+  // ── Type modifiers ──────────────────────────────────────────────────
+
+  &--negative {
+    --o9ds-toast-border-color: var(--o9ds-color-b-negative);
+    --o9ds-toast-title-color: var(--o9ds-color-t-negative);
+    --o9ds-toast-icon-color: var(--o9ds-color-i-negative);
+  }
+
+  &--warning {
+    --o9ds-toast-border-color: var(--o9ds-color-b-warning);
+    --o9ds-toast-title-color: var(--o9ds-color-t-warning);
+    --o9ds-toast-icon-color: var(--o9ds-color-i-warning);
+  }
+
+  &--info {
+    --o9ds-toast-border-color: var(--o9ds-color-b-info);
+    --o9ds-toast-title-color: var(--o9ds-color-t-info-dark);
+    --o9ds-toast-icon-color: var(--o9ds-color-i-info-dark);
+  }
+
+  &--positive {
+    --o9ds-toast-border-color: var(--o9ds-color-b-positive);
+    --o9ds-toast-title-color: var(--o9ds-color-t-positive);
+    --o9ds-toast-icon-color: var(--o9ds-color-i-positive);
+  }
+
+  &--block {
+    --o9ds-toast-border-color: var(--o9ds-color-b-negative);
+    --o9ds-toast-title-color: var(--o9ds-color-t-negative);
+    --o9ds-toast-icon-color: var(--o9ds-color-i-negative);
+  }
+
+  &--neutral {
+    --o9ds-toast-border-color: var(--o9ds-color-b-neutral);
+    --o9ds-toast-title-color: var(--o9ds-color-t-neutral);
+    --o9ds-toast-icon-color: var(--o9ds-color-i-neutral);
+  }
+}
+
+// ── Icon ──────────────────────────────────────────────────────────────────
+
+.o9ds-toast__ico {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  align-self: baseline;
+  color: var(--o9ds-toast-icon-color);
+
+  &::before {
+    font-family: 'o9con', sans-serif;
+  }
+
+  .o9ds-toast--negative &::before { content: '\edd9'; }
+  .o9ds-toast--warning &::before  { content: '\ed72'; }
+  .o9ds-toast--info &::before     { content: '\ed71'; }
+  .o9ds-toast--positive &::before { content: '\ec1b'; }
+  .o9ds-toast--block &::before    { content: '\edd9'; }
+  .o9ds-toast--neutral &::before  { content: '\ebe2'; }
+}
+
+// ── Content ───────────────────────────────────────────────────────────────
+
+.o9ds-toast__content {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: $o9ds-space-8;
+  min-width: 0;
+}
+
+// ── Title ─────────────────────────────────────────────────────────────────
+
+.o9ds-toast__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: var(--o9ds-medium, 500);
+  color: var(--o9ds-toast-title-color);
+
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ── Message ───────────────────────────────────────────────────────────────
+
+.o9ds-toast__msg {
+  margin: 0;
+  font-size: var(--o9ds-size-12, 12px);
+  font-weight: var(--o9ds-regular, 400);
+  color: var(--o9ds-color-t-secondary, #303030);
+}
+
+// Title + message wrapper gap
+.o9ds-toast__title + .o9ds-toast__msg {
+  margin-top: $o9ds-space-4;
+}
+
+// ── Link ──────────────────────────────────────────────────────────────────
+
+.o9ds-toast__link {
+  display: block;
+}
+
+// ── Close button ──────────────────────────────────────────────────────────
+
+.o9ds-toast__close {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  align-self: baseline;
+  justify-content: center;
+  color: var(--o9ds-color-i-secondary);
+
+  .no-touch &:hover {
+    color: var(--o9ds-color-t-primary);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--o9ds-color-b-theme-focus);
+    outline-offset: $o9ds-space-2;
+  }
+}
+
+// ── Animations ────────────────────────────────────────────────────────────
+
+@keyframes o9ds-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes o9ds-toast-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+// Left-side positions animate from left
+.o9ds-toast-container--top-left,
+.o9ds-toast-container--bottom-left {
+  .o9ds-toast {
+    animation-name: o9ds-toast-enter-left;
+  }
+}
+
+@keyframes o9ds-toast-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// ── Reduced motion ────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .o9ds-toast {
+    animation: none;
+
+    &.is-fading {
+      transition: none;
+      opacity: 0;
+    }
+  }
+}

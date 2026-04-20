@@ -1,0 +1,37 @@
+@use '../../../tokens/src/scss/all' as *;
+
+// Shared list group mixins — section headers and dividers for grouped lists,
+// menus, and dropdown panels.
+// Used by: action-menu, select, combobox, multi-select, dropdown-button, list, listbox.
+//
+// Consumers declare these CSS custom properties on their block selector:
+
+// list-group-header
+// 32px height, uppercase 12px text, inline padding matching item padding.
+@mixin list-group-header {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 32px;
+  padding-inline: var(--o9ds-list-item-padding-inline, #{$o9ds-space-16});
+  font-family: var(--o9-font-family);
+  font-size: $o9ds-font-size-12;
+  font-weight: $o9ds-medium;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--o9ds-color-t-placeholder);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+// list-group-divider
+// 1px horizontal rule with 4px vertical spacing above and below.
+@mixin list-group-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--o9ds-color-b-subtle);
+  margin-block: $o9ds-space-4;
+  margin-inline: 0;
+}

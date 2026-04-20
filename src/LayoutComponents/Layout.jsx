@@ -6,7 +6,7 @@ import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsN
 import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
 
 /** Section hub pages (Foundations / Accessibility / … overview grids) — extra width so 3-column cards match. */
-const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns', '/content']
+const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns', '/content', '/usage']
 
 const PAGE_TITLES = {
   '/': 'Platform UI',
@@ -72,6 +72,24 @@ const PAGE_TITLES = {
   '/contribute': 'How to Contribute',
   '/faqs': 'FAQs',
   '/changelog': 'Changelog',
+  // USAGE section (consumer-facing contract)
+  '/usage': 'Usage Standards',
+  '/usage/public-api': 'Public API',
+  '/usage/components': 'Components Contract',
+  '/usage/styling': 'Styling',
+  '/usage/composition': 'Composition',
+  '/usage/accessibility': 'Accessibility (Consumer)',
+  '/usage/testing': 'Testing',
+  '/usage/versioning': 'Versioning',
+  '/usage/anti-patterns': 'Anti-Patterns',
+  '/usage/checklist': 'PR Checklist',
+  // DEVELOPER REFERENCE section (contributor-facing internals)
+  '/developer-reference/agentic-pipeline': 'Agentic Pipeline',
+  '/developer-reference/component-pipeline': 'Component Pipeline',
+  '/developer-reference/token-pipeline': 'Token Pipeline',
+  '/developer-reference/shared-patterns': 'Shared Patterns',
+  '/developer-reference/testing-and-drift': 'Testing & Drift',
+  '/developer-reference/workflows': 'Contributor Workflows',
 }
 
 const sidebarSections = [
@@ -121,6 +139,32 @@ const sidebarSections = [
     title: 'COMPONENTS',
     componentTree: true,
     items: [],
+  },
+  {
+    title: 'USAGE',
+    items: [
+      { path: '/usage', label: 'Overview' },
+      { path: '/usage/public-api', label: 'Public API' },
+      { path: '/usage/components', label: 'Components Contract' },
+      { path: '/usage/styling', label: 'Styling' },
+      { path: '/usage/composition', label: 'Composition' },
+      { path: '/usage/accessibility', label: 'Accessibility' },
+      { path: '/usage/testing', label: 'Testing' },
+      { path: '/usage/versioning', label: 'Versioning' },
+      { path: '/usage/anti-patterns', label: 'Anti-Patterns' },
+      { path: '/usage/checklist', label: 'PR Checklist' },
+    ],
+  },
+  {
+    title: 'DEVELOPER REFERENCE',
+    items: [
+      { path: '/developer-reference/agentic-pipeline', label: 'Agentic Pipeline' },
+      { path: '/developer-reference/component-pipeline', label: 'Component Pipeline' },
+      { path: '/developer-reference/token-pipeline', label: 'Token Pipeline' },
+      { path: '/developer-reference/shared-patterns', label: 'Shared Patterns' },
+      { path: '/developer-reference/testing-and-drift', label: 'Testing & Drift' },
+      { path: '/developer-reference/workflows', label: 'Contributor Workflows' },
+    ],
   },
   {
     title: 'ACCESSIBILITY',
@@ -647,7 +691,9 @@ export default function Layout({ children }) {
                       pathname.startsWith('/accessibility') ||
                       pathname.startsWith('/content') ||
                       pathname.startsWith('/components') ||
-                      pathname.startsWith('/developers')
+                      pathname.startsWith('/developers') ||
+                      pathname.startsWith('/usage') ||
+                      pathname.startsWith('/developer-reference')
                     ? 'max-w-6xl'
                     : 'max-w-4xl'
             }`}

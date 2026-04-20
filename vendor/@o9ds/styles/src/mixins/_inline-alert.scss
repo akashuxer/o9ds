@@ -1,0 +1,95 @@
+@use '../../../tokens/src/scss/all' as *;
+
+// Shared inline alert — icon + optional message used across form inputs, panels, etc.
+// Generic enough for error, success, warning, info, and neutral variants.
+// Block: .o9ds-inline-alert
+
+@mixin inline-alert-type($text-color, $icon-color, $icon-code) {
+  .o9ds-inline-alert__msg {
+    color: $text-color;
+  }
+
+  .o9ds-inline-alert__ico::before {
+    content: $icon-code;
+    color: $icon-color;
+  }
+}
+
+@mixin inline-alert-base {
+  display: inline-flex;
+  gap: var(--o9ds-inline-alert-gap, #{$o9ds-space-4});
+  align-items: flex-start;
+  font-family: var(--o9-font-family);
+  font-weight: $o9ds-regular;
+  font-size: var(--o9ds-inline-alert-font-size, #{$o9ds-font-size-12});
+  line-height: $o9ds-font-size-16;
+}
+
+@mixin inline-alert-icon {
+  flex: 0 0 auto;
+  font-family: $o9con;
+  font-size: $o9ds-icon-16;
+  line-height: normal;
+}
+
+@mixin inline-alert-msg {
+  min-width: 0;
+  word-break: break-word;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+// Type variants — each sets text color, icon color, and icon glyph
+@mixin inline-alert-error {
+  @include inline-alert-type(
+    var(--o9ds-color-t-negative),
+    var(--o9ds-color-i-negative),
+    '\edd9' // block icon
+  );
+}
+
+@mixin inline-alert-success {
+  @include inline-alert-type(
+    var(--o9ds-color-t-positive),
+    var(--o9ds-color-i-positive),
+    '\ec1b'
+  );
+}
+
+@mixin inline-alert-warning {
+  @include inline-alert-type(
+    var(--o9ds-color-t-warning),
+    var(--o9ds-color-i-warning),
+    '\ed72'
+  );
+}
+
+@mixin inline-alert-info {
+  @include inline-alert-type(
+    var(--o9ds-color-t-info-dark),
+    var(--o9ds-color-i-info-dark),
+    '\ed71'
+  );
+}
+
+@mixin inline-alert-neutral {
+  @include inline-alert-type(
+    var(--o9ds-color-t-neutral),
+    var(--o9ds-color-i-neutral),
+    '\ebe2'
+  );
+}
+
+// Inline error icon rendered inside a form input field (no message, icon only).
+// The consuming component places this element inside __field alongside the input.
+@mixin inline-error-icon {
+  flex: 0 0 auto;
+  font-family: $o9con;
+  font-size: $o9ds-icon-16;
+  color: var(--o9ds-color-i-negative);
+  display: none;
+
+  &::before {
+    content: '\edd9'; // block icon
+  }
+}

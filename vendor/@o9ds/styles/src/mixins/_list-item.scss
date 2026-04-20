@@ -1,0 +1,132 @@
+@use '../../../tokens/src/scss/all' as *;
+
+// Shared list/menu item mixins — consumed by action-menu, select, combobox,
+// multi-select, dropdown-button, list, listbox.
+// Each consumer applies these to its own BEM element class.
+//
+// Consumers declare these CSS custom properties on their block selector:
+//   --o9ds-list-item-height-single    (default: 32px)
+//   --o9ds-list-item-height-multi     (default: 40px)
+//   --o9ds-list-item-padding-inline   (default: $o9ds-space-16)
+//   --o9ds-list-item-padding-block    (default: $o9ds-space-4)
+//   --o9ds-list-item-gap              (default: $o9ds-space-8)
+//   --o9ds-list-item-text-color       (default: var(--o9ds-color-t-secondary))
+//   --o9ds-list-item-text-hover-color (default: var(--o9ds-color-t-primary))
+//   --o9ds-list-item-secondary-color  (default: var(--o9ds-color-t-placeholder))
+//   --o9ds-list-item-bg-hover         (default: var(--o9ds-color-s-theme-hover-4))
+
+// list-item-base
+// Flex layout, padding, cursor, and transition for all item types.
+@mixin list-item-base {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-inline-start: calc(var(--o9ds-list-item-padding-inline, #{$o9ds-space-16}) - 2px);
+  padding-inline-end: var(--o9ds-list-item-padding-inline, #{$o9ds-space-16});
+  padding-block: var(--o9ds-list-item-padding-block, #{$o9ds-space-4});
+  border-inline-start: 2px solid transparent;
+  gap: var(--o9ds-list-item-gap, #{$o9ds-space-8});
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--o9-font-family);
+  transition: background-color #{$o9ds-motion-form-input};
+}
+
+// list-item-single-line
+// Fixed 32px height with single-line text ellipsis.
+@mixin list-item-single-line {
+  height: var(--o9ds-list-item-height-single, 32px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// list-item-multi-line
+// Fixed 40px height with vertical text stack (primary + secondary label).
+@mixin list-item-multi-line {
+  height: var(--o9ds-list-item-height-multi, 40px);
+}
+
+// list-item-states
+// Interactive states: hover (background), keyboard focus (outline),
+// active/selected (background + inline-start border), and disabled.
+@mixin list-item-states {
+  .no-touch &:not(.is-disabled):hover {
+    background-color: var(--o9ds-list-item-bg-hover, var(--o9ds-color-s-theme-hover-4));
+    color: var(--o9ds-list-item-text-hover-color, var(--o9ds-color-t-primary));
+  }
+
+  // Keyboard navigation indicator (items that are the keyboard target but may
+  // not have native :focus-visible, e.g. in filterable menus where focus
+  // stays on the search input).
+  &.focused {
+    outline: 1px solid var(--o9ds-color-b-theme-focus);
+    outline-offset: -1px;
+  }
+
+  // Selected / toggled — includes the inline-start border indicator.
+  &.active {
+    background-color: var(--o9ds-color-s-theme-active-4);
+    border-inline-start-color: var(--o9ds-color-b-theme-active);
+    color: var(--o9ds-list-item-text-hover-color, var(--o9ds-color-t-primary));
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--o9ds-color-b-theme-focus);
+    outline-offset: -1px;
+  }
+
+  &.is-disabled {
+    opacity: $o9ds-opacity-low;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+// list-item-leading
+// Avatar (24px circle) and icon (16px) slots before the text content.
+@mixin list-item-leading {
+  &__avatar {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  &__ico {
+    flex: 0 0 auto;
+    font-family: $o9con;
+    font-size: $o9ds-icon-16;
+  }
+}
+
+// list-item-text
+// Primary label (14px) and secondary label (10px) typography.
+@mixin list-item-text {
+  &__txt {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  &__lbl {
+    font-size: $o9ds-font-size-14;
+    font-weight: $o9ds-regular;
+    color: var(--o9ds-list-item-text-color, var(--o9ds-color-t-secondary));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__secondary {
+    font-size: $o9ds-font-size-10;
+    font-weight: $o9ds-regular;
+    color: var(--o9ds-list-item-secondary-color, var(--o9ds-color-t-placeholder));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

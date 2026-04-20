@@ -1,0 +1,290 @@
+// Number Input component styles
+// BEM Block: .o9ds-number-input
+// Abbreviation: number-input
+// Loading Pattern: A (overlay shimmer)
+// Sizes: sm (24px), lg (32px, default)
+
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/form-input' as *;
+@use '../../mixins/form-label' as *;
+@use '../../mixins/inline-alert' as *;
+@use '../../mixins/loading' as *;
+
+// ─── .o9ds-number-input ──────────────────────────────────────────────────────
+
+.o9ds-number-input {
+  // Only dynamic values that change per size modifier
+  --o9ds-form-input-height: 32px;
+  --o9ds-form-input-font-size: #{$o9ds-font-size-14};
+
+  // ── Root layout ─────────────────────────────────────────────────────────
+  @include form-input-default-width;
+  display: inline-flex;
+  flex-direction: column;
+  gap: $o9ds-space-8;
+  position: relative;
+
+  // Full-width modifier
+  &--full-width {
+    --o9ds-form-input-width: 100%;
+  }
+
+  // ── __lbl (form label) ──────────────────────────────────────────────────
+  &__lbl {
+    @include form-label-base;
+    @include form-label-sm;
+
+    .is-disabled & {
+      @include form-label-disabled;
+    }
+  }
+
+  // ── __field (flex container for input + steppers) ────────────────────────
+  &__field {
+    @include form-input-base;
+    @include form-input-hover-bg;
+    @include form-input-disabled-bg;
+
+    gap: $o9ds-space-4;
+    height: var(--o9ds-form-input-height, 32px);
+    width: 100%;
+    padding-inline-end: 0; // steppers flush with right edge
+  }
+
+  // ── __input (native <input type="number">) ───────────────────────────────
+  &__input {
+    @include form-input-text-colors;
+
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    padding: 0;
+    padding-right: var(--o9ds-number-input-pad-r, 0);
+    border: 0;
+    background: transparent;
+    outline: 0;
+    font: inherit;
+    box-sizing: border-box;
+    appearance: textfield;
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &[readonly] {
+      cursor: default;
+    }
+  }
+
+  // ── __steppers (increment + decrement button wrapper) ────────────────────
+  &__steppers {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+
+    .is-readonly & {
+      display: none;
+    }
+  }
+
+  // ── __actions (right-side absolute container for inline error icon) ────
+  // Positioned to the left of steppers; right offset set dynamically by JS
+  // based on measured stepper width (0 when readonly / no steppers).
+  &__actions {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    pointer-events: auto;
+  }
+
+  // ── __border (animated bottom border, sibling of __field) ───────────────
+  // Sits immediately after __field in the flex column; negative margin pulls it
+  // flush against __field's bottom edge so it renders as the field's underline.
+  &__border {
+    @include form-input-animated-border-complete;
+    // align-self: stretch;
+    // margin-block-start: calc(-1 * var(--o9ds-form-input-border-width, 1px));
+    // height: var(--o9ds-form-input-border-width, 1px);
+    // background: var(--o9ds-form-input-border-color, var(--o9ds-color-b-form));
+    // pointer-events: none;
+    // position: relative;
+
+    // &::after {
+    //   content: "";
+    //   position: absolute;
+    //   left: 0;
+    //   right: 0;
+    //   top: 0;
+    //   bottom: 0;
+    //   background-color: var(--o9ds-form-input-border-hover-color, var(--o9ds-color-b-theme));
+    //   transform: scaleX(0);
+    //   transform-origin: left;
+    //   transition:
+    //     transform var(--o9ds-form-input-transition, #{$o9ds-motion-form-input}),
+    //     height var(--o9ds-form-input-transition, #{$o9ds-motion-form-input});
+    //   will-change: transform, height;
+    // }
+  }
+
+  // ── __err-ico (inline error icon inside field, trailing) ─────────────────
+  &__err-ico {
+    @include inline-error-icon;
+  }
+
+  // ── Inline alert (below field) ───────────────────────────────────────────
+  .o9ds-inline-alert {
+    @include inline-alert-base;
+    display: none;
+
+    &__ico {
+      @include inline-alert-icon;
+    }
+
+    &__msg {
+      @include inline-alert-msg;
+    }
+  }
+
+  // ── Size: sm ────────────────────────────────────────────────────────────
+  &--sm {
+    --o9ds-form-input-height: 24px;
+    --o9ds-form-input-font-size: #{$o9ds-font-size-12};
+  }
+
+  // ── Size: lg (default) ──────────────────────────────────────────────────
+  &--lg {
+    --o9ds-form-input-height: 32px;
+    --o9ds-form-input-font-size: #{$o9ds-font-size-14};
+  }
+
+  // ── Border state: focus ─────────────────────────────────────────────────
+  &:focus-within:not(.is-disabled):not(.is-readonly) {
+    .o9ds-number-input__border::after {
+      background-color: var(--o9ds-color-b-theme-focus);
+      height: $o9ds-border-3;
+      transform: scaleX(1);
+    }
+  }
+
+  // ── State: disabled ─────────────────────────────────────────────────────
+  &.is-disabled {
+    cursor: not-allowed;
+
+    .o9ds-number-input__field {
+      cursor: not-allowed;
+    }
+
+    .o9ds-number-input__border {
+      background: var(--o9ds-color-b-disabled);
+
+      &::after {
+        background-color: var(--o9ds-color-b-disabled);
+        height: 1px;
+        transform: none;
+        transition: none;
+      }
+    }
+  }
+
+  // ── State: readonly ─────────────────────────────────────────────────────
+  &.is-readonly {
+    .o9ds-number-input__field {
+      cursor: default;
+    }
+
+    .o9ds-number-input__border {
+      background: transparent;
+
+      &::after {
+        background-color: transparent;
+        height: 0;
+        transform: none;
+        transition: none;
+        border-bottom: #{$o9ds-border-2} dashed var(--o9ds-color-b-readonly);
+      }
+    }
+  }
+
+  // ── State: error ────────────────────────────────────────────────────────
+  &.has-error {
+    .o9ds-number-input__border {
+      background: var(--o9ds-color-b-negative);
+
+      &::after {
+        background-color: var(--o9ds-color-b-negative);
+        height: $o9ds-border-3;
+        transform: scaleX(1);
+        transition: none;
+      }
+    }
+  }
+
+  // Inline icon variant: error icon inside field, no alert below
+  &.has-error.error-inline {
+    .o9ds-number-input__err-ico {
+      display: block;
+    }
+
+    .o9ds-inline-alert {
+      display: none;
+    }
+  }
+
+  // Standard error variant: inline alert below field
+  &.has-error:not(.error-inline) {
+    .o9ds-inline-alert {
+      display: inline-flex;
+      @include inline-alert-error;
+    }
+  }
+
+  // ── State: at-min (JS-toggled, decrement disabled) ───────────────────────
+  &.at-min {
+    .o9ds-number-input__decrement-btn {
+      color: var(--o9ds-color-i-disabled);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  // ── State: at-max (JS-toggled, increment disabled) ───────────────────────
+  &.at-max {
+    .o9ds-number-input__increment-btn {
+      color: var(--o9ds-color-i-disabled);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  // ── Loading state (per-element shimmer on field + label) ─────────────────
+  &.loading,
+  [data-o9ds-loading="true"] &:not([data-o9ds-loading-ignore="true"]) {
+    pointer-events: none;
+
+    .o9ds-number-input__field {
+      @include loading-element-shimmer;
+    }
+
+    .o9ds-number-input__lbl {
+      @include loading-element-shimmer;
+    }
+  }
+}
+
+// ── Hover border animation (no-touch, not disabled/readonly/error) ────────────
+.no-touch .o9ds-number-input:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
+  .o9ds-number-input__border::after {
+    transform: scaleX(1);
+  }
+}

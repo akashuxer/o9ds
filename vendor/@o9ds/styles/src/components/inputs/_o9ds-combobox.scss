@@ -1,0 +1,407 @@
+@use '../../mixins/form-input' as *;
+@use '../../mixins/form-label' as *;
+@use '../../mixins/inline-alert' as *;
+@use '../../mixins/list-item' as *;
+@use '../../mixins/list-group' as *;
+@use '../../mixins/loading' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .o9ds-combobox ──────────────────────────────────────────────────────────
+
+.o9ds-combobox {
+  // ── CSS custom properties (only dynamic values that change per size) ─────
+  --o9ds-form-input-height: 32px;
+  --o9ds-form-input-font-size: #{$o9ds-font-size-14};
+  --o9ds-form-input-bg-color: var(--o9ds-color-s-layer-04);
+  --o9ds-form-input-hover-bg-color: var(--o9ds-color-s-theme-hover-4);
+
+  // ── Root layout ────────────────────────────────────────────────────────────
+  @include form-input-default-width;
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+  gap: $o9ds-space-8;
+  font-family: var(--o9-font-family);
+
+  // ── Modifier: --full-width ─────────────────────────────────────────────────
+  &--full-width {
+    --o9ds-form-input-width: 100%;
+  }
+
+  // ── Size: --sm ─────────────────────────────────────────────────────────────
+  &--sm {
+    --o9ds-form-input-height: 24px;
+    --o9ds-form-input-font-size: #{$o9ds-font-size-12};
+    --o9ds-list-item-height-single: 24px;
+    --o9ds-list-item-height-multi: 32px;
+
+    .o9ds-combobox__lbl {
+      @include form-label-sm;
+    }
+  }
+
+  // ── Size: --lg (default) ───────────────────────────────────────────────────
+  &--lg {
+    --o9ds-form-input-height: 32px;
+    --o9ds-form-input-font-size: #{$o9ds-font-size-14};
+
+    .o9ds-combobox__lbl {
+      @include form-label-lg;
+    }
+  }
+
+  // ── __lbl ──────────────────────────────────────────────────────────────────
+  &__lbl {
+    @include form-label-base;
+    @include form-label-lg;
+
+    &__req {
+      @include form-label-required-indicator;
+    }
+  }
+
+  &.is-disabled .o9ds-combobox__lbl {
+    @include form-label-disabled;
+  }
+
+  // ── __field ────────────────────────────────────────────────────────────────
+  &__field {
+    @include form-input-base;
+    @include form-input-hover-bg;
+    @include form-input-disabled-bg;
+
+    flex-direction: row;
+    gap: $o9ds-space-4;
+    width: 100%;
+    overflow: hidden;
+    padding: $o9ds-space-4 $o9ds-space-4 $o9ds-space-4 $o9ds-space-8;
+  }
+
+  &.is-disabled &__field {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &.is-disabled &__ico {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  &.is-disabled &__border {
+    background: var(--o9ds-color-b-disabled);
+
+    &::after {
+      background-color: var(--o9ds-color-b-disabled);
+      height: var(--o9ds-form-input-border-width, 1px);
+      transform: none;
+      transition: none;
+    }
+  }
+
+  &.is-readonly &__field {
+    cursor: default;
+  }
+
+  // ── __input (native text input) ────────────────────────────────────────────
+  &__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--o9ds-color-t-form-value);
+    font-size: var(--o9ds-form-input-font-size, #{$o9ds-font-size-14});
+    font-family: var(--o9-font-family);
+    outline: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    padding-right: var(--o9ds-combobox-pad-r, 0);
+    width: 100%;
+
+    &::placeholder {
+      color: var(--o9ds-color-t-placeholder);
+    }
+
+    .is-disabled & {
+      color: var(--o9ds-color-t-disabled);
+      cursor: not-allowed;
+    }
+
+    .is-readonly & {
+      cursor: default;
+    }
+  }
+
+  // ── __actions (right-side absolute container for clear + sep + error icon) ─
+  &__actions {
+    position: absolute;
+    right: calc(var(--o9ds-combobox-ico-width, 28px) + #{$o9ds-space-4});
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: $o9ds-space-4;
+    pointer-events: auto;
+  }
+
+  // ── __clear ────────────────────────────────────────────────────────────────
+  &__clear {
+    display: none;
+  }
+
+  &.has-value:not(.is-disabled):not(.is-readonly):not(.loading) &__clear {
+    display: inline-flex;
+  }
+
+  // ── __err-ico (inline error icon inside field, trailing) ────────────────
+  &__err-ico {
+    @include inline-error-icon;
+  }
+
+  // ── __sep (vertical separator between clear and chevron) ───────────────────
+  &__sep {
+    display: none;
+    width: 1px;
+    align-self: stretch;
+    margin-block: $o9ds-space-4;
+    background-color: var(--o9ds-color-b-divider);
+    flex-shrink: 0;
+  }
+
+  &.has-value:not(.is-disabled):not(.is-readonly):not(.loading) &__sep {
+    display: block;
+  }
+
+  // ── __ico (chevron icon button) ─────────────────────────────────────────────
+  &__ico {
+    flex: 0 0 auto;
+  }
+  
+  &__ico .o9ds-btn__ico {
+    transition: transform #{$o9ds-motion-form-input};
+  }
+
+  &.open &__ico .o9ds-btn__ico {
+    transform: rotate(180deg);
+  }
+
+  // ── __border ───────────────────────────────────────────────────────────────
+  &__border {
+    @include form-input-animated-border-base;
+  }
+
+  // ── __panel ────────────────────────────────────────────────────────────────
+  &__panel {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    min-width: 100%;
+    max-height: none;
+    background-color: var(--o9ds-color-s-layer-03);
+    box-shadow: $o9ds-shadow-down;
+    border-radius: 0;
+    z-index: var(--o9ds-z-popover, 1000);
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &.o9ds-enter-from {
+      opacity: 0;
+    }
+
+    &.o9ds-enter-active {
+      transition: opacity 150ms ease;
+    }
+
+    &.o9ds-enter-to {
+      opacity: 1;
+    }
+
+    &.o9ds-exit-from {
+      opacity: 1;
+    }
+
+    &.o9ds-exit-active {
+      transition: opacity 150ms ease;
+    }
+
+    &.o9ds-exit-to {
+      opacity: 0;
+    }
+
+    &.open {
+      display: flex;
+    }
+  }
+
+  &.open &__panel {
+    display: flex;
+  }
+
+  &.loading &__panel {
+    pointer-events: none;
+  }
+
+  // ── __scroll ───────────────────────────────────────────────────────────────
+  &__scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+    padding-block: $o9ds-space-4;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--o9ds-color-s-layer-07, #ccc) transparent;
+
+    &::-webkit-scrollbar {
+      width: var(--o9ds-scroll-width, 8px);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--o9ds-color-s-layer-07, #ccc);
+      border-radius: var(--o9ds-radius-16, 16px);
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+
+  // ── __opt ──────────────────────────────────────────────────────────────────
+  &__opt {
+    @include list-item-base;
+    @include list-item-single-line;
+    @include list-item-states;
+    @include list-item-leading;
+    @include list-item-text;
+  }
+
+  // ── __hdr ──────────────────────────────────────────────────────────────────
+  &__hdr {
+    @include list-group-header;
+  }
+
+  // ── __divider ──────────────────────────────────────────────────────────────
+  &__divider {
+    @include list-group-divider;
+  }
+
+  // ── __empty ────────────────────────────────────────────────────────────────
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $o9ds-space-16;
+    color: var(--o9ds-color-t-placeholder);
+    font-size: $o9ds-font-size-14;
+    font-family: var(--o9-font-family);
+  }
+
+  // ── Inline alert (below field) ────────────────────────────────────────────
+  .o9ds-inline-alert {
+    @include inline-alert-base;
+    display: none;
+
+    &__ico {
+      @include inline-alert-icon;
+    }
+
+    &__msg {
+      @include inline-alert-msg;
+    }
+  }
+
+  // ── Border state: focus ─────────────────────────────────────────────────
+  &:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) {
+    .o9ds-combobox__border::after {
+      background-color: var(--o9ds-color-b-theme-focus);
+      height: var(--o9ds-form-input-border-focus-width, #{$o9ds-border-3});
+      transform: scaleX(1);
+    }
+  }
+
+  // ── State: error ────────────────────────────────────────────────────────
+  &.has-error {
+    .o9ds-combobox__border {
+      background: var(--o9ds-color-b-negative);
+
+      &::after {
+        background-color: var(--o9ds-color-b-negative);
+        height: var(--o9ds-form-input-border-focus-width, #{$o9ds-border-3});
+        transform: scaleX(1);
+        transition: none;
+      }
+    }
+  }
+
+  // Inline icon variant: error icon inside field, no alert below
+  &.has-error.error-inline {
+    .o9ds-combobox__err-ico {
+      display: block;
+    }
+
+    .o9ds-inline-alert {
+      display: none;
+    }
+  }
+
+  // Standard error variant: inline alert below field
+  &.has-error:not(.error-inline) {
+    .o9ds-inline-alert {
+      display: inline-flex;
+      @include inline-alert-error;
+    }
+  }
+
+  // ── Loading pattern C: spinner replaces chevron ────────────────────────────
+  @mixin _combobox-loading {
+    pointer-events: none;
+
+    .o9ds-combobox__field {
+      cursor: default;
+    }
+
+    .o9ds-combobox__ico {
+      display: none;
+    }
+
+    .o9ds-combobox__input {
+      pointer-events: none;
+    }
+
+    .o9ds-combobox__field::after {
+      content: "";
+      flex: 0 0 auto;
+      display: block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--o9ds-color-b-disabled);
+      border-top-color: var(--o9ds-color-b-theme);
+      border-radius: 50%;
+      animation: o9ds-spin 0.7s linear infinite;
+    }
+  }
+
+  &.loading {
+    @include _combobox-loading;
+  }
+
+  [data-o9ds-loading='true'] &:not([data-o9ds-loading-ignore='true']) {
+    @include _combobox-loading;
+  }
+}
+
+// ── Hover border animation (no-touch, not disabled/readonly/error) ────────────
+.no-touch .o9ds-combobox:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
+  .o9ds-combobox__border::after {
+    transform: scaleX(1);
+  }
+}
+
+// ─── Spinner keyframe ─────────────────────────────────────────────────────────
+@keyframes o9ds-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

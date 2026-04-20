@@ -1,0 +1,142 @@
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../../src/mixins/typography' as *;
+
+// Badge Alert component styles
+// BEM Block: .o9ds-bdg-alert
+// Abbreviation: bdg-alert
+// Category: Feedback
+// Static display-only component — no interactive states, no loading pattern.
+// Three independent modifier axes: variant (primary/outline), type (6 types), size (sm/lg).
+
+.o9ds-bdg-alert {
+  // ── Layout / size tokens ────────────────────────────────────────────────
+  --o9ds-bdg-alert-height: $o9ds-badge-large;
+  --o9ds-bdg-alert-font-size: $o9ds-font-size-14;
+  --o9ds-bdg-alert-icon-size: $o9ds-icon-16;
+
+  // ── Color tokens (default: primary variant, positive type) ──────────────
+  --o9ds-bdg-alert-text-color: var(--o9ds-color-t-positive);
+  --o9ds-bdg-alert-icon-color: var(--o9ds-color-i-positive);
+  --o9ds-bdg-alert-bg: var(--o9ds-color-s-layer-04);
+  --o9ds-bdg-alert-border-color: transparent;
+  --o9ds-bdg-alert-border-width: 0px;
+
+  // ── Base layout ─────────────────────────────────────────────────────────
+  display: inline-flex;
+  align-items: center;
+  gap: $o9ds-space-4;
+  height: var(--o9ds-bdg-alert-height);
+  padding-block: $o9ds-space-4;
+  padding-inline-start: $o9ds-space-4;
+  padding-inline-end: $o9ds-space-6;
+  box-sizing: border-box;
+
+  // ── Typography ──────────────────────────────────────────────────────────
+  @include o9ds-font-l14-r;
+  white-space: nowrap;
+  text-align: center;
+
+  // ── Background / border (set by variant modifiers) ──────────────────────
+  background: var(--o9ds-bdg-alert-bg);
+  border: var(--o9ds-bdg-alert-border-width) solid var(--o9ds-bdg-alert-border-color);
+
+  // ── Elements ─────────────────────────────────────────────────────────────
+
+  &__ico {
+    flex: 0 0 auto;
+    font-family: $o9con;
+    font-size: var(--o9ds-bdg-alert-icon-size);
+    color: var(--o9ds-bdg-alert-icon-color);
+    line-height: normal;
+  }
+
+  &__msg {
+    color: var(--o9ds-bdg-alert-text-color);
+    font-size: var(--o9ds-bdg-alert-font-size);
+    line-height: normal;
+  }
+
+  // ── Variant modifiers ───────────────────────────────────────────────────
+
+  &--primary {
+    --o9ds-bdg-alert-bg: var(--o9ds-color-s-layer-04);
+    --o9ds-bdg-alert-border-width: 0px;
+    --o9ds-bdg-alert-border-color: transparent;
+  }
+
+  &--outline {
+    --o9ds-bdg-alert-bg: var(--o9ds-color-s-layer-01);
+    --o9ds-bdg-alert-border-width: 1px;
+    --o9ds-bdg-alert-border-color: var(--o9ds-color-b-divider);
+  }
+
+  // ── Type modifiers ──────────────────────────────────────────────────────
+
+  &--positive {
+    --o9ds-bdg-alert-text-color: var(--o9ds-color-t-positive);
+    --o9ds-bdg-alert-icon-color: var(--o9ds-color-i-positive);
+
+    .o9ds-bdg-alert__ico::before {
+      content: '\ec1b'; // o9con-check-circle
+    }
+  }
+
+  &--info {
+    --o9ds-bdg-alert-text-color: var(--o9ds-color-t-info-dark);
+    --o9ds-bdg-alert-icon-color: var(--o9ds-color-i-info-dark);
+
+    .o9ds-bdg-alert__ico::before {
+      content: '\ed71'; // o9con-info-circle-filled
+    }
+  }
+
+  &--neutral {
+    --o9ds-bdg-alert-text-color: var(--o9ds-color-t-neutral);
+    --o9ds-bdg-alert-icon-color: var(--o9ds-color-i-neutral);
+
+    .o9ds-bdg-alert__ico::before {
+      content: '\ebe2'; // o9con-speaker
+    }
+  }
+
+  &--warning {
+    --o9ds-bdg-alert-text-color: var(--o9ds-color-t-warning);
+    --o9ds-bdg-alert-icon-color: var(--o9ds-color-i-warning);
+
+    .o9ds-bdg-alert__ico::before {
+      content: '\ed72'; // o9con-exclamation-triangle-filled
+    }
+  }
+
+  &--negative {
+    --o9ds-bdg-alert-text-color: var(--o9ds-color-t-negative);
+    --o9ds-bdg-alert-icon-color: var(--o9ds-color-i-negative);
+
+    .o9ds-bdg-alert__ico::before {
+      content: '\edd9'; // o9con-blocker-action-filled-alt
+    }
+  }
+
+  &--block {
+    --o9ds-bdg-alert-text-color: var(--o9ds-color-t-negative);
+    --o9ds-bdg-alert-icon-color: var(--o9ds-color-i-negative);
+
+    .o9ds-bdg-alert__ico::before {
+      content: '\edd9'; // o9con-blocker-action-filled-alt
+    }
+  }
+
+  // ── Size modifiers ──────────────────────────────────────────────────────
+
+  &--sm {
+    --o9ds-bdg-alert-height: 20px;
+    --o9ds-bdg-alert-font-size: $o9ds-font-size-12;
+    --o9ds-bdg-alert-icon-size: $o9ds-icon-14;
+  }
+
+  &--lg {
+    --o9ds-bdg-alert-height: $o9ds-badge-large;
+    --o9ds-bdg-alert-font-size: $o9ds-font-size-14;
+    --o9ds-bdg-alert-icon-size: $o9ds-icon-16;
+  }
+}

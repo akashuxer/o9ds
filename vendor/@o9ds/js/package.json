@@ -1,0 +1,44 @@
+{
+  "name": "@o9ds/js",
+  "version": "0.1.0-dev.1",
+  "description": "o9 Design System vanilla JS component library",
+  "license": "UNLICENSED",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./plugin": {
+      "types": "./dist/plugin.d.ts",
+      "import": "./dist/plugin.js",
+      "require": "./dist/plugin.cjs"
+    },
+    "./auto": {
+      "types": "./dist/auto.d.ts",
+      "import": "./dist/auto.js",
+      "require": "./dist/auto.cjs"
+    }
+  },
+  "sideEffects": [
+    "./dist/auto.js",
+    "./dist/auto.cjs"
+  ],
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@o9ds/core": "0.1.0-dev.1",
+    "@o9ds/tokens": "0.1.0-dev.1",
+    "@o9ds/styles": "0.1.0-dev.1",
+    "@o9ds/utils": "0.1.0-dev.1"
+  },
+  "peerDependencies": {
+    "jquery": "^3.7.0"
+  }
+}

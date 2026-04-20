@@ -1,0 +1,66 @@
+// FAB Button (Floating Action Button) wrapper styles
+// BEM Block: .o9ds-fab-btn
+// Abbreviation: fab-btn
+// Loading Pattern: A (delegated to inner button)
+//
+// The FAB wraps an O9Button (with-label) or O9IconButton (icon-only).
+// It does NOT duplicate button variant/size logic — only adds:
+//   - Elevated box-shadow
+//   - Configurable z-index
+//   - position: relative (for indicator positioning)
+//   - Indicator element positioning
+//   - Disabled/loading shadow adjustments
+
+@use '../../mixins/indicator' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .o9ds-indicator (shared pattern, consumed here) ─────────────────────────
+
+.o9ds-indicator {
+  @include indicator-base;
+
+  &--sm { @include indicator-sm; }
+  &--lg { @include indicator-lg; }
+  &--unsaved { @include indicator-unsaved; }
+  &--new { @include indicator-new; }
+  &--unread { @include indicator-unread; }
+}
+
+// ─── .o9ds-fab-btn ───────────────────────────────────────────────────────────
+
+.o9ds-fab-btn {
+  display: inline-flex;
+  position: relative;
+  box-shadow: $o9ds-shadow-fab;
+  z-index: 1050;
+
+  // ── Indicator positioning ───────────────────────────────────────────────────
+
+  > .o9ds-indicator {
+    top: var(--o9ds-fab-btn-indicator-top, -6px);
+    right: var(--o9ds-fab-btn-indicator-right, -6px);
+  }
+
+  // ── Layout: with-label — indicator offsets differ ───────────────────────────
+
+  &--with-label > .o9ds-indicator {
+    --o9ds-fab-btn-indicator-top: -4px;
+    --o9ds-fab-btn-indicator-right: -4px;
+  }
+
+  // ── Disabled — shadow at reduced opacity ───────────────────────────────────
+
+  &.is-disabled {
+    > .o9ds-indicator {
+      display: none;
+    }
+  }
+
+  // ── Loading — indicator hidden, shadow remains ─────────────────────────────
+
+  &.loading {
+    > .o9ds-indicator {
+      display: none;
+    }
+  }
+}

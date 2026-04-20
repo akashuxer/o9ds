@@ -1,0 +1,198 @@
+@use '../../mixins/form-label' as *;
+@use '../../mixins/list-item' as *;
+@use '../../mixins/list-group' as *;
+@use '../../mixins/loading' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .o9ds-listbox ───────────────────────────────────────────────────────────
+
+.o9ds-listbox {
+  // ── CSS custom properties (only dynamic values that change per size) ─────
+  --o9ds-listbox-option-height: 32px;
+  --o9ds-list-item-height-single: var(--o9ds-listbox-option-height);
+
+  // ── Root layout ────────────────────────────────────────────────────────────
+  display: flex;
+  flex-direction: column;
+  gap: $o9ds-space-4;
+  font-family: var(--o9-font-family);
+  box-sizing: border-box;
+
+  // ── Size: --sm ─────────────────────────────────────────────────────────────
+  &--sm {
+    --o9ds-listbox-option-height: 24px;
+
+    .o9ds-listbox__lbl {
+      @include form-label-sm;
+    }
+  }
+
+  // ── Size: --md (default) ───────────────────────────────────────────────────
+  &--md {
+    .o9ds-listbox__lbl {
+      @include form-label-lg;
+    }
+  }
+
+  // ── Size: --lg ─────────────────────────────────────────────────────────────
+  &--lg {
+    .o9ds-listbox__lbl {
+      @include form-label-lg;
+    }
+  }
+
+  // ── __lbl ──────────────────────────────────────────────────────────────────
+  &__lbl {
+    @include form-label-base;
+    @include form-label-lg;
+
+    &__req {
+      @include form-label-required-indicator;
+    }
+  }
+
+  &.is-disabled &__lbl {
+    @include form-label-disabled;
+  }
+
+  // ── __search ───────────────────────────────────────────────────────────────
+  &__search {
+    padding: $o9ds-space-12 $o9ds-space-16;
+    flex-shrink: 0;
+    display: flex;
+  }
+
+  .o9ds-search {
+    flex-grow: 1;
+  }
+
+  // ── __list ─────────────────────────────────────────────────────────────────
+  &__list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-block: $o9ds-space-4;
+    outline: none;
+    border: 1px solid var(--o9ds-color-b-form);
+    border-radius: var(--o9ds-radius-4);
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--o9ds-color-s-layer-07, #ccc) transparent;
+  }
+
+  // ── __opt ──────────────────────────────────────────────────────────────────
+  &__opt {
+    @include list-item-base;
+    @include list-item-single-line;
+    @include list-item-states;
+    @include list-item-leading;
+    @include list-item-text;
+
+    // Override icon size/color from list-item-leading defaults
+    &__ico {
+      font-size: 20px;
+      color: var(--o9ds-color-i-secondary);
+    }
+
+    // Keyboard navigation highlight
+    &.highlighted {
+      outline: 1px solid var(--o9ds-color-b-theme-focus);
+      outline-offset: -1px;
+    }
+  }
+
+  // ── __grp ──────────────────────────────────────────────────────────────────
+  &__grp {
+    // role="group" container; no extra styles needed
+  }
+
+  // ── __grp-hdr ──────────────────────────────────────────────────────────────
+  &__grp-hdr {
+    @include list-group-header;
+
+    padding: $o9ds-space-8 $o9ds-space-12;
+    letter-spacing: 0.5px;
+  }
+
+  // ── __divider ──────────────────────────────────────────────────────────────
+  &__divider {
+    @include list-group-divider;
+  }
+
+  // ── __empty ────────────────────────────────────────────────────────────────
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $o9ds-space-16;
+    color: var(--o9ds-color-t-tertiary);
+    font-size: $o9ds-font-size-14;
+    font-family: var(--o9-font-family);
+    text-align: center;
+  }
+
+  // ── __skeleton ─────────────────────────────────────────────────────────────
+  &__skeleton {
+    display: none;
+  }
+
+  &__skeleton-row {
+    display: flex;
+    align-items: center;
+    height: var(--o9ds-listbox-option-height, 32px);
+    padding-inline: $o9ds-space-12;
+    gap: $o9ds-space-8;
+  }
+
+  &__skeleton-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border-radius: var(--o9ds-radius-4);
+    background: var(--o9ds-color-s-layer-05, #e0e0e0);
+    animation: o9ds-shimmer 1.5s ease-in-out infinite;
+  }
+
+  &__skeleton-text {
+    height: 12px;
+    flex: 1 1 auto;
+    border-radius: var(--o9ds-radius-4);
+    background: var(--o9ds-color-s-layer-05, #e0e0e0);
+    animation: o9ds-shimmer 1.5s ease-in-out infinite;
+  }
+
+  // ── State: disabled ────────────────────────────────────────────────────────
+  &.is-disabled {
+    opacity: var(--o9ds-opacity-low, 0.4);
+    pointer-events: none;
+  }
+
+  // ── Loading state (Pattern B: skeleton rows) ───────────────────────────────
+  @mixin _listbox-loading {
+    .o9ds-listbox__list {
+      pointer-events: none;
+    }
+
+    .o9ds-listbox__opt {
+      display: none;
+    }
+
+    .o9ds-listbox__skeleton {
+      display: block;
+    }
+  }
+
+  &.loading {
+    @include _listbox-loading;
+  }
+
+  [data-o9ds-loading='true'] &:not([data-o9ds-loading-ignore='true']) {
+    @include _listbox-loading;
+  }
+}
+
+// ─── Shimmer keyframe ─────────────────────────────────────────────────────────
+@keyframes o9ds-shimmer {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}

@@ -1,0 +1,506 @@
+@use '../../../../tokens/src/scss/all' as *;
+
+// Button component styles
+// BEM Block: .o9ds-btn (text button), .o9ds-icon-btn (icon-only button)
+// Abbreviation: btn
+// Loading Pattern: A (simple overlay shimmer)
+
+// ─── Shared button base mixin ────────────────────────────────────────────────
+
+@mixin btn-base {
+  // Layout
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--o9ds-btn-gap);
+  height: var(--o9ds-btn-height);
+  padding-block: var(--o9ds-btn-padding-block);
+  padding-inline: var(--o9ds-btn-padding-inline);
+  max-width: $o9ds-btn-wmax;
+
+  // Typography
+  font-size: var(--o9ds-btn-font-size);
+  font-weight: var(--o9ds-btn-font-weight, #{$o9ds-regular});
+  line-height: normal;
+  font-family: var(--o9-font-family);
+  white-space: nowrap;
+  text-decoration: none;
+
+  // Appearance
+  background-color: var(--o9ds-btn-bg-color);
+  color: var(--o9ds-btn-text-color);
+  border: 1px solid var(--o9ds-btn-border-color);
+  border-radius: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  vertical-align: middle;
+  user-select: none;
+  -webkit-user-select: none;
+  box-sizing: border-box;
+  outline: none;
+
+  // Icon color
+  .o9ds-btn__ico,
+  [class^="o9con-"],
+  [class*=" o9con-"] {
+    font-size: var(--o9ds-btn-icon-size);
+    color: var(--o9ds-btn-icon-color);
+    flex-shrink: 0;
+    line-height: normal;
+  }
+
+  
+
+  // Label element
+  .o9ds-btn__lbl {
+    color: var(--o9ds-btn-text-color);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  // ── Focus ────────────────────────────────────────────────────────────────
+  &:focus-visible {
+    outline: 1px solid var(--o9ds-color-b-theme-focus);
+    outline-offset: $o9ds-space-2;
+  }
+
+  &.focus-border:focus-visible {
+    outline-offset: -1px;
+  }
+
+  // ── Disabled ─────────────────────────────────────────────────────────────
+  &:disabled {
+    --o9ds-btn-bg-color: var(--o9ds-color-s-disabled);
+    --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+    --o9ds-btn-border-color: transparent;
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+
+  // .is-disabled mirrors :disabled for <a> elements using btn classes
+  &.is-disabled {
+    --o9ds-btn-bg-color: var(--o9ds-color-s-disabled);
+    --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+    --o9ds-btn-border-color: transparent;
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+}
+
+// ─── Loading Pattern A mixin ─────────────────────────────────────────────────
+
+@mixin btn-loading {
+  pointer-events: none;
+  cursor: default;
+
+  // Background skeleton layer
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--o9ds-color-s-pulse-light);
+  }
+
+  // Shimmer sweep layer
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--o9ds-color-s-pulse-dark) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: o9ds-skeleton-shimmer 1.5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  // Hide real content
+  color: transparent;
+  border-width: 0;
+
+  .o9ds-btn__lbl,
+  .o9ds-btn__ico,
+  [class^="o9con-"],
+  [class*=" o9con-"] {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+    }
+  }
+}
+
+// ─── .o9ds-btn ───────────────────────────────────────────────────────────────
+
+.o9ds-btn {
+  // ── CSS custom properties (secondary/md defaults) ─────────────────────────
+  --o9ds-btn-height: 32px;
+  --o9ds-btn-padding-block: #{$o9ds-space-6};
+  --o9ds-btn-padding-inline: #{$o9ds-space-12};
+  --o9ds-btn-gap: #{$o9ds-space-4};
+  --o9ds-btn-font-size: #{$o9ds-font-size-14};
+  --o9ds-btn-icon-size: #{$o9ds-icon-20};
+  --o9ds-btn-bg-color: var(--o9ds-color-s-layer-05);
+  --o9ds-btn-text-color: var(--o9ds-color-t-secondary);
+  --o9ds-btn-icon-color: var(--o9ds-color-i-secondary);
+  --o9ds-btn-border-color: transparent;
+
+  @include btn-base;
+
+  // ── Size: Small ───────────────────────────────────────────────────────────
+  &--sm {
+    --o9ds-btn-height: 24px;
+    --o9ds-btn-padding-block: #{$o9ds-space-4};
+    --o9ds-btn-padding-inline: #{$o9ds-space-8};
+    --o9ds-btn-gap: #{$o9ds-space-4};
+    --o9ds-btn-icon-size: #{$o9ds-icon-16};
+    --o9ds-btn-font-size: #{$o9ds-font-size-12};
+  }
+
+  // ── Size: Medium (default) ────────────────────────────────────────────────
+  &--md {
+    --o9ds-btn-height: 32px;
+    --o9ds-btn-padding-block: #{$o9ds-space-6};
+    --o9ds-btn-padding-inline: #{$o9ds-space-12};
+    --o9ds-btn-gap: #{$o9ds-space-4};
+    --o9ds-btn-icon-size: #{$o9ds-icon-20};
+    --o9ds-btn-font-size: #{$o9ds-font-size-14};
+  }
+
+  // ── Size: Large ───────────────────────────────────────────────────────────
+  &--lg {
+    --o9ds-btn-height: 40px;
+    --o9ds-btn-padding-block: #{$o9ds-space-10};
+    --o9ds-btn-padding-inline: #{$o9ds-space-12};
+    --o9ds-btn-gap: #{$o9ds-space-6};
+    --o9ds-btn-icon-size: #{$o9ds-icon-24};
+    --o9ds-btn-font-size: #{$o9ds-font-size-16};
+  }
+
+  // ── Layout: Full Width ────────────────────────────────────────────────────
+  &--full-width {
+    width: 100%;
+    min-width: 0;
+  }
+
+  // ── Layout: Icon Only ─────────────────────────────────────────────────────
+  &--icon-only {
+    --o9ds-btn-padding-inline: #{$o9ds-space-6};
+    min-width: var(--o9ds-btn-height);
+    width: var(--o9ds-btn-height);
+
+    &.o9ds-btn--sm {
+      --o9ds-btn-padding-inline: #{$o9ds-space-4};
+    }
+  }
+
+  // ── Loading State ─────────────────────────────────────────────────────────
+  &.loading,
+  [data-o9ds-loading="true"] & {
+    @include btn-loading;
+  }
+
+  [data-o9ds-loading="true"] &[data-o9ds-loading-ignore="true"] {
+    pointer-events: auto;
+    cursor: pointer;
+    color: var(--o9ds-btn-text-color);
+
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .o9ds-btn__lbl,
+    .o9ds-btn__ico,
+    [class^="o9con-"],
+    [class*=" o9con-"] {
+      opacity: 1;
+    }
+  }
+}
+
+// ─── .o9ds-icon-btn ──────────────────────────────────────────────────────────
+
+.o9ds-icon-btn {
+  // ── CSS custom properties (secondary/md defaults) ─────────────────────────
+  --o9ds-btn-height: 32px;
+  --o9ds-btn-padding-block: #{$o9ds-space-6};
+  --o9ds-btn-padding-inline: #{$o9ds-space-6};
+  --o9ds-btn-gap: 0;
+  --o9ds-btn-font-size: 0;
+  --o9ds-btn-icon-size: #{$o9ds-icon-20};
+  --o9ds-btn-bg-color: var(--o9ds-color-s-layer-05);
+  --o9ds-btn-text-color: var(--o9ds-color-t-secondary);
+  --o9ds-btn-icon-color: var(--o9ds-color-i-secondary);
+  --o9ds-btn-border-color: transparent;
+
+  @include btn-base;
+
+  // Square dimensions — width = height for all sizes
+  width: var(--o9ds-btn-height);
+  min-width: var(--o9ds-btn-height);
+
+  // ── Size: Extra Small (xs) — Icon Button only ──────────────────────────────
+  &.o9ds-btn--xs {
+    --o9ds-btn-height: 16px;
+    --o9ds-btn-padding-block: 0;
+    --o9ds-btn-padding-inline: 0;
+    --o9ds-btn-icon-size: #{$o9ds-icon-16};
+  }
+
+  // ── Size: Small ───────────────────────────────────────────────────────────
+  &.o9ds-btn--sm {
+    --o9ds-btn-height: 24px;
+    --o9ds-btn-padding-block: #{$o9ds-space-4};
+    --o9ds-btn-padding-inline: #{$o9ds-space-4};
+    --o9ds-btn-icon-size: #{$o9ds-icon-16};
+  }
+
+  // ── Size: Medium (default) ────────────────────────────────────────────────
+  &.o9ds-btn--md {
+    --o9ds-btn-height: 32px;
+    --o9ds-btn-padding-block: #{$o9ds-space-6};
+    --o9ds-btn-padding-inline: #{$o9ds-space-6};
+    --o9ds-btn-icon-size: #{$o9ds-icon-20};
+  }
+
+  // ── Size: Large ───────────────────────────────────────────────────────────
+  &.o9ds-btn--lg {
+    --o9ds-btn-height: 40px;
+    --o9ds-btn-padding-block: #{$o9ds-space-10};
+    --o9ds-btn-padding-inline: #{$o9ds-space-10};
+    --o9ds-btn-icon-size: #{$o9ds-icon-24};
+  }
+
+  // ── Contextual modifiers ──────────────────────────────────────────────────
+
+  &--in-chip {
+    --o9ds-btn-bg-color: transparent;
+    --o9ds-btn-height: 16px;
+    --o9ds-btn-padding-block: 0;
+    --o9ds-btn-padding-inline: 0;
+    --o9ds-btn-icon-size: 12px;
+  }
+
+  &--in-input,
+  &--in-search {
+    --o9ds-btn-bg-color: transparent;
+
+    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-hover-2);
+    }
+  }
+
+  &--in-menu {
+    --o9ds-btn-bg-color: transparent;
+
+    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-hover-2);
+    }
+  }
+
+  // .is-disabled mirrors :disabled for <a> elements using icon-btn classes
+  &.is-disabled {
+    --o9ds-btn-bg-color: var(--o9ds-color-s-disabled);
+    --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+    --o9ds-btn-border-color: transparent;
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+
+  // ── Loading State ─────────────────────────────────────────────────────────
+  &.loading,
+  [data-o9ds-loading="true"] & {
+    @include btn-loading;
+  }
+
+  [data-o9ds-loading="true"] &[data-o9ds-loading-ignore="true"] {
+    pointer-events: auto;
+    cursor: pointer;
+    color: var(--o9ds-btn-icon-color);
+
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .o9ds-btn__ico,
+    [class^="o9con-"],
+    [class*=" o9con-"] {
+      opacity: 1;
+    }
+  }
+}
+
+// ─── Shared variant modifiers (.o9ds-btn + .o9ds-icon-btn) ───────────────────
+// Defined once here at specificity 0-2-0 (.o9ds-btn.o9ds-btn--primary,
+// .o9ds-icon-btn.o9ds-btn--primary) so they always beat the single-class
+// block defaults above regardless of source order.
+
+.o9ds-btn,
+.o9ds-icon-btn {
+
+  // ── Variant: Primary ────────────────────────────────────────────────────
+  &.o9ds-btn--primary {
+    --o9ds-btn-bg-color: var(--o9ds-color-s-theme);
+    --o9ds-btn-text-color: var(--o9ds-color-t-inverse);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-inverse);
+    --o9ds-btn-border-color: transparent;
+
+    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-hover-1);
+      --o9ds-btn-text-color: var(--o9ds-color-t-inverse);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-inverse);
+    }
+
+    &:where(:not(:disabled):not(.is-disabled)):active,
+    &:where(:not(:disabled):not(.is-disabled)).active,
+    &:where(:not(:disabled):not(.is-disabled)).open {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-active-5);
+      --o9ds-btn-text-color: var(--o9ds-color-t-active-inverse);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-active-inverse);
+    }
+
+    &:disabled,
+    &.is-disabled {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-disabled);
+      --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+      --o9ds-btn-border-color: transparent;
+    }
+  }
+
+  // ── Variant: Secondary ──────────────────────────────────────────────────
+  &.o9ds-btn--secondary {
+    --o9ds-btn-bg-color: var(--o9ds-color-s-layer-05);
+    --o9ds-btn-text-color: var(--o9ds-color-t-secondary);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-secondary);
+    --o9ds-btn-border-color: transparent;
+
+    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-hover-2);
+      --o9ds-btn-text-color: var(--o9ds-color-t-theme-hover);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-theme);
+    }
+
+    &:where(:not(:disabled):not(.is-disabled)):active,
+    &:where(:not(:disabled):not(.is-disabled)).active,
+    &:where(:not(:disabled):not(.is-disabled)).open {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-active-2);
+      --o9ds-btn-text-color: var(--o9ds-color-t-theme-active);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-theme-active);
+    }
+
+    &:disabled,
+    &.is-disabled {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-disabled);
+      --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+      --o9ds-btn-border-color: transparent;
+    }
+  }
+
+  // ── Variant: Tertiary ───────────────────────────────────────────────────
+  &.o9ds-btn--tertiary {
+    --o9ds-btn-bg-color: transparent;
+    --o9ds-btn-text-color: var(--o9ds-color-t-secondary);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-secondary);
+    --o9ds-btn-border-color: transparent;
+
+    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-hover-2);
+      --o9ds-btn-text-color: var(--o9ds-color-t-theme-hover);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-theme);
+    }
+
+    &:where(:not(:disabled):not(.is-disabled)):active,
+    &:where(:not(:disabled):not(.is-disabled)).active,
+    &:where(:not(:disabled):not(.is-disabled)).open {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-active-2);
+      --o9ds-btn-text-color: var(--o9ds-color-t-theme-active);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-theme-active);
+    }
+
+    &:disabled,
+    &.is-disabled {
+      --o9ds-btn-bg-color: transparent;
+      --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+      --o9ds-btn-border-color: transparent;
+    }
+  }
+
+  // ── Variant: Outline ────────────────────────────────────────────────────
+  &.o9ds-btn--outline {
+    --o9ds-btn-bg-color: transparent;
+    --o9ds-btn-text-color: var(--o9ds-color-t-theme);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-theme);
+    --o9ds-btn-border-color: var(--o9ds-color-b-theme);
+
+    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-hover-2);
+      --o9ds-btn-text-color: var(--o9ds-color-t-theme-hover);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-theme);
+      --o9ds-btn-border-color: transparent;
+    }
+
+    &:where(:not(:disabled):not(.is-disabled)):active,
+    &:where(:not(:disabled):not(.is-disabled)).active,
+    &:where(:not(:disabled):not(.is-disabled)).open {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-theme-active-2);
+      --o9ds-btn-text-color: var(--o9ds-color-t-theme-active);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-theme-active);
+      --o9ds-btn-border-color: transparent;
+    }
+
+    &:disabled,
+    &.is-disabled {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-disabled);
+      --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+      --o9ds-btn-border-color: var(--o9ds-color-b-disabled);
+    }
+  }
+
+  // ── Variant: Danger ─────────────────────────────────────────────────────
+  &.o9ds-btn--danger {
+    --o9ds-btn-bg-color: var(--o9ds-color-s-negative);
+    --o9ds-btn-text-color: var(--o9ds-color-t-white-static);
+    --o9ds-btn-icon-color: var(--o9ds-color-i-white-static);
+    --o9ds-btn-border-color: transparent;
+
+    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-negative-hover);
+      --o9ds-btn-text-color: var(--o9ds-color-t-white-static);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-white-static);
+    }
+
+    &:where(:not(:disabled):not(.is-disabled)):active,
+    &:where(:not(:disabled):not(.is-disabled)).active,
+    &:where(:not(:disabled):not(.is-disabled)).open {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-negative-active);
+      --o9ds-btn-text-color: var(--o9ds-color-t-white-static);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-white-static);
+    }
+
+    &:disabled,
+    &.is-disabled {
+      --o9ds-btn-bg-color: var(--o9ds-color-s-disabled);
+      --o9ds-btn-text-color: var(--o9ds-color-t-disabled);
+      --o9ds-btn-icon-color: var(--o9ds-color-i-disabled);
+      --o9ds-btn-border-color: transparent;
+    }
+  }
+}

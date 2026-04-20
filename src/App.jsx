@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { OverlayProvider, TooltipProvider, O9ToastProvider } from '@o9ds/react'
 import { ThemeProvider } from './context/ThemeContext'
 import { DocsShellProvider } from './context/DocsShellContext'
 import Layout from './LayoutComponents/Layout'
@@ -21,6 +22,22 @@ import Developers from './pages/Developers'
 import FoundationsOverview from './pages/FoundationsOverview'
 import PatternsOverview from './pages/PatternsOverview'
 import AccessibilityOverview from './pages/AccessibilityOverview'
+import UsageIndex from './pages/usage/Index'
+import UsagePublicApi from './pages/usage/PublicApi'
+import UsageComponents from './pages/usage/Components'
+import UsageStyling from './pages/usage/Styling'
+import UsageComposition from './pages/usage/Composition'
+import UsageAccessibility from './pages/usage/Accessibility'
+import UsageTesting from './pages/usage/Testing'
+import UsageVersioning from './pages/usage/Versioning'
+import UsageAntiPatterns from './pages/usage/AntiPatterns'
+import UsageChecklist from './pages/usage/Checklist'
+import DevRefAgenticPipeline from './pages/developer-reference/AgenticPipeline'
+import DevRefComponentPipeline from './pages/developer-reference/ComponentPipeline'
+import DevRefTokenPipeline from './pages/developer-reference/TokenPipeline'
+import DevRefSharedPatterns from './pages/developer-reference/SharedPatterns'
+import DevRefTestingAndDrift from './pages/developer-reference/TestingAndDrift'
+import DevRefWorkflows from './pages/developer-reference/Workflows'
 import AccessibilityOverviewArticle from './pages/accessibility/OverviewArticle'
 import AccessibilityStandardsAndPrinciples from './pages/accessibility/StandardsAndPrinciples'
 import AccessibilityAssistiveTechnology from './pages/accessibility/AssistiveTechnology'
@@ -35,6 +52,9 @@ export default function App() {
   return (
     <ThemeProvider>
       <DocsShellProvider>
+      <OverlayProvider>
+      <TooltipProvider>
+      <O9ToastProvider>
       <BrowserRouter>
         <ScrollToTop />
         <Layout>
@@ -101,9 +121,31 @@ export default function App() {
           <Route path="/contribute" element={<Placeholder title="How to Contribute" />} />
           <Route path="/faqs" element={<Placeholder title="FAQs" />} />
           <Route path="/changelog" element={<Placeholder title="Changelog" />} />
+          {/* Usage — consumer-facing contract */}
+          <Route path="/usage" element={<UsageIndex />} />
+          <Route path="/usage/public-api" element={<UsagePublicApi />} />
+          <Route path="/usage/components" element={<UsageComponents />} />
+          <Route path="/usage/styling" element={<UsageStyling />} />
+          <Route path="/usage/composition" element={<UsageComposition />} />
+          <Route path="/usage/accessibility" element={<UsageAccessibility />} />
+          <Route path="/usage/testing" element={<UsageTesting />} />
+          <Route path="/usage/versioning" element={<UsageVersioning />} />
+          <Route path="/usage/anti-patterns" element={<UsageAntiPatterns />} />
+          <Route path="/usage/checklist" element={<UsageChecklist />} />
+          {/* Developer Reference — contributor internals */}
+          <Route path="/developer-reference" element={<Navigate to="/developers" replace />} />
+          <Route path="/developer-reference/agentic-pipeline" element={<DevRefAgenticPipeline />} />
+          <Route path="/developer-reference/component-pipeline" element={<DevRefComponentPipeline />} />
+          <Route path="/developer-reference/token-pipeline" element={<DevRefTokenPipeline />} />
+          <Route path="/developer-reference/shared-patterns" element={<DevRefSharedPatterns />} />
+          <Route path="/developer-reference/testing-and-drift" element={<DevRefTestingAndDrift />} />
+          <Route path="/developer-reference/workflows" element={<DevRefWorkflows />} />
         </Routes>
         </Layout>
       </BrowserRouter>
+      </O9ToastProvider>
+      </TooltipProvider>
+      </OverlayProvider>
       </DocsShellProvider>
     </ThemeProvider>
   )

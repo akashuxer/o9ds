@@ -1,0 +1,25 @@
+{
+  "name": "@o9ds/styles",
+  "version": "0.1.0-dev.1",
+  "description": "o9 Design System shared SCSS mixins, component styles, and shared patterns",
+  "license": "UNLICENSED",
+  "private": false,
+  "sideEffects": true,
+  "exports": {
+    ".": "./src/_index.scss",
+    "./scss/*": "./src/*",
+    "./mixins/*": "./src/mixins/*",
+    "./base": "./src/base/_global.scss",
+    "./css": "./dist/o9ds.css",
+    "./css/min": "./dist/o9ds.min.css"
+  },
+  "files": [
+    "src/",
+    "dist/",
+    "scripts/",
+    "_index.scss"
+  ],
+  "dependencies": {
+    "@o9ds/tokens": "0.1.0-dev.1"
+  }
+}

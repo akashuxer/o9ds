@@ -1,0 +1,261 @@
+// Textarea component styles
+// BEM Block: .o9ds-textarea
+// Abbreviation: textarea
+// Loading Pattern: A (overlay shimmer)
+// Sizes: sm (default), lg — size controls label only, field is identical
+
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/form-input' as *;
+@use '../../mixins/form-label' as *;
+@use '../../mixins/form-char-counter' as *;
+@use '../../mixins/inline-alert' as *;
+@use '../../mixins/loading' as *;
+
+// ─── .o9ds-textarea ──────────────────────────────────────────────────────────
+
+.o9ds-textarea {
+  // Field dimensions — constant across both sizes (only the label changes)
+  --o9ds-form-input-font-size: #{$o9ds-font-size-14};
+  --o9ds-form-input-padding-block: #{$o9ds-space-6};
+  --o9ds-form-input-padding-inline: #{$o9ds-space-12};
+
+  // ── Root layout ─────────────────────────────────────────────────────────
+  display: inline-flex;
+  flex-direction: column;
+  gap: $o9ds-space-8;
+  position: relative;
+
+  &.is-readonly {}
+
+  // Full-width modifier
+  &--full-width {
+    width: 100%;
+
+    .o9ds-textarea__field {
+      width: 100%;
+    }
+  }
+
+  // ── __lbl (form label) ──────────────────────────────────────────────────
+  &__lbl {
+    @include form-label-base;
+    @include form-label-sm;
+
+    .is-disabled & {
+      @include form-label-disabled;
+    }
+  }
+
+  // ── __field (container wrapping the native textarea) ─────────────────────
+  &__field {
+    @include form-input-base;
+    @include form-input-hover-bg;
+    @include form-input-disabled-bg;
+
+    display: flex;
+    align-items: flex-start;
+    gap: $o9ds-space-4;
+    height: auto;
+    min-height: 32px;
+    width: 100%;
+    padding: var(--o9ds-form-input-padding-block) var(--o9ds-form-input-padding-inline);
+    position: relative;
+  }
+
+  // ── __ico (leading icon, aligned to first line of text) ────────────────
+  &__ico {
+    flex: 0 0 auto;
+    font-size: $o9ds-icon-16;
+    color: var(--o9ds-color-i-secondary);
+    align-self: flex-start;
+    padding-top: var(--o9ds-form-input-padding-block, #{$o9ds-space-8});
+
+    .is-disabled & {
+      color: var(--o9ds-color-i-disabled);
+    }
+  }
+
+  // ── __input (native <textarea>) ─────────────────────────────────────────
+  &__input {
+    @include form-input-text-colors;
+
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    outline: 0;
+    font: inherit;
+    font-weight: $o9ds-regular;
+    line-height: normal;
+    box-sizing: border-box;
+    resize: none;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &[readonly] {
+      cursor: default;
+    }
+  }
+
+  // Allow vertical resize when auto-resize is off
+  &:not(&--auto-resize) &__input {
+    resize: vertical;
+  }
+
+  // ── __border (animated bottom border, inside __field) ───────────────────
+  &__border {
+    @include form-input-animated-border-base;
+  }
+
+  // ── __err-ico (inline error icon inside field) ──────────────────────────
+  &__err-ico {
+    @include inline-error-icon;
+  }
+
+  // ── __counter (character counter, below field) ──────────────────────────
+  &__counter {
+    @include form-char-counter-base;
+
+    .is-disabled & {
+      @include form-char-counter-disabled;
+    }
+
+    .has-error:not(.error-inline) & {
+      display: none;
+    }
+  }
+
+  // ── Inline alert (below field) ──────────────────────────────────────────
+  .o9ds-inline-alert {
+    @include inline-alert-base;
+    display: none;
+
+    &__ico {
+      @include inline-alert-icon;
+    }
+
+    &__msg {
+      @include inline-alert-msg;
+    }
+  }
+
+  // ── Size: sm (default) — label sm is the base ──────────────────────────
+  &--sm {}
+
+  // ── Size: lg — only changes label to large ────────────────────────────
+  &--lg {
+    .o9ds-textarea__lbl {
+      @include form-label-lg;
+    }
+  }
+
+  // ── Auto-resize modifier ───────────────────────────────────────────────
+  &--auto-resize &__input {
+    overflow: hidden;
+    resize: none;
+  }
+
+  // ── Border state: focus ─────────────────────────────────────────────────
+  &:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) {
+    .o9ds-textarea__border::after {
+      background-color: var(--o9ds-color-b-theme-focus);
+      height: $o9ds-border-3;
+      transform: scaleX(1);
+    }
+  }
+
+  // ── State: disabled ─────────────────────────────────────────────────────
+  &.is-disabled {
+    cursor: not-allowed;
+
+    .o9ds-textarea__field {
+      cursor: not-allowed;
+    }
+
+    .o9ds-textarea__border {
+      background: var(--o9ds-color-b-disabled);
+
+      &::after {
+        background-color: var(--o9ds-color-b-disabled);
+        height: 1px;
+        transform: none;
+        transition: none;
+      }
+    }
+  }
+
+  // ── State: readonly ─────────────────────────────────────────────────────
+  &.is-readonly {
+    .o9ds-textarea__field {
+      cursor: default;
+    }
+
+    .o9ds-textarea__border {
+      background: transparent;
+
+      &::after {
+        background-color: transparent;
+        height: 0;
+        transform: none;
+        transition: none;
+        border-bottom: #{$o9ds-border-2} dashed var(--o9ds-color-b-readonly);
+      }
+    }
+  }
+
+  // ── State: error ────────────────────────────────────────────────────────
+  &.has-error {
+    .o9ds-textarea__border {
+      background: var(--o9ds-color-b-negative);
+
+      &::after {
+        background-color: var(--o9ds-color-b-negative);
+        height: $o9ds-border-3;
+        transform: scaleX(1);
+        transition: none;
+      }
+    }
+  }
+
+  &.has-error.error-inline {
+    .o9ds-textarea__err-ico {
+      display: block;
+    }
+
+    .o9ds-inline-alert {
+      display: none;
+    }
+  }
+
+  &.has-error:not(.error-inline) {
+    .o9ds-inline-alert {
+      display: inline-flex;
+      @include inline-alert-error;
+    }
+  }
+
+  // ── Loading state (per-element shimmer on field + label) ────────────────
+  &.loading,
+  [data-o9ds-loading="true"] &:not([data-o9ds-loading-ignore="true"]) {
+    pointer-events: none;
+
+    .o9ds-textarea__field {
+      @include loading-element-shimmer;
+    }
+
+    .o9ds-textarea__lbl {
+      @include loading-element-shimmer;
+    }
+  }
+}
+
+// Hover border animation (no-touch only, not disabled/readonly/error)
+.no-touch .o9ds-textarea:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
+  .o9ds-textarea__border::after {
+    transform: scaleX(1);
+  }
+}

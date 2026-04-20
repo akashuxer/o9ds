@@ -1,0 +1,24 @@
+{
+  "name": "@o9ds/assets",
+  "version": "0.1.0-dev.1",
+  "description": "o9 Design System static assets: icon font, web fonts, and illustrations. Pre-built CSS with zero token dependencies.",
+  "license": "UNLICENSED",
+  "private": false,
+  "sideEffects": true,
+  "exports": {
+    "./fonts/css": "./fonts/fonts.css",
+    "./fonts/files/*": "./fonts/*",
+    "./o9con/css": "./o9con/css/o9con.css",
+    "./o9con/files/*": "./o9con/fonts/*",
+    "./o9illus/css": "./o9illus/o9illus.css",
+    "./o9illus/files/*": "./o9illus/*",
+    "./dist/*": "./dist/*"
+  },
+  "files": [
+    "o9con/",
+    "o9illus/",
+    "fonts/",
+    "dist/",
+    "scripts/"
+  ]
+}

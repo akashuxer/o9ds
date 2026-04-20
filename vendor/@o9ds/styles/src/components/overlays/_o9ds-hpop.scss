@@ -1,0 +1,366 @@
+@use '../../mixins/list-item' as *;
+@use '../../mixins/list-group' as *;
+@use '../../mixins/loading' as *;
+@use '../../mixins/typography' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .o9ds-hpop ────────────────────────────────────────────────────────────────
+// Composes O9Popover — panel chrome (header, footer, body, shadow, arrow,
+// positioning, transitions) lives in _o9ds-popover.scss. This file only styles
+// HybridPopover-specific elements rendered inside the Popover slots.
+
+.o9ds-hpop {
+  --o9ds-hpop-width: 320px;
+  --o9ds-hpop-min-width: 280px;
+  --o9ds-hpop-max-width: 500px;
+  --o9ds-hpop-min-height: 272px;
+
+  width: var(--o9ds-hpop-width);
+  min-width: var(--o9ds-hpop-min-width);
+  max-width: var(--o9ds-hpop-max-width);
+  min-height: var(--o9ds-hpop-min-height);
+  max-height: 90vh;
+
+  // ── __sticky ──────────────────────────────────────────────────────────────
+  // Vertical flex column inside Popover's stickyHeader slot.
+  &__sticky {
+    display: flex;
+    flex-direction: column;
+    gap: $o9ds-space-8;
+    padding: $o9ds-space-12 $o9ds-space-16;
+    background-color: var(--o9ds-color-s-layer-03);
+    box-sizing: border-box;
+  }
+
+  // ── __search ──────────────────────────────────────────────────────────────
+  &__search {
+    display: flex;
+
+    .o9ds-search {
+      width: 100%;
+    }
+  }
+
+  // ── __cond ────────────────────────────────────────────────────────────────
+  &__cond {
+    display: flex;
+  }
+
+  // ── __banner ──────────────────────────────────────────────────────────────
+  &__banner {
+    flex-shrink: 0;
+    padding: 0 $o9ds-space-16;
+  }
+
+  // ── __list ────────────────────────────────────────────────────────────────
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── __sa (select-all) ─────────────────────────────────────────────────────
+  &__sa {
+    @include list-item-base;
+    @include list-item-single-line;
+    @include list-item-states;
+
+    &--group {
+      padding-inline-start: $o9ds-space-16;
+    }
+  }
+
+  // ── __grp ─────────────────────────────────────────────────────────────────
+  &__grp {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── __grp-hdr ─────────────────────────────────────────────────────────────
+  &__grp-hdr {
+    @include list-group-header;
+  }
+
+  // ── __divider ─────────────────────────────────────────────────────────────
+  &__divider {
+    @include list-group-divider;
+  }
+
+  // ── __opt (filter option row) ─────────────────────────────────────────────
+  &__opt {
+    @include list-item-base;
+    @include list-item-single-line;
+    @include list-item-states;
+    @include list-item-leading;
+    @include list-item-text;
+  }
+
+  // ── __opt sub-elements ────────────────────────────────────────────────────
+  &__opt__drag {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $o9ds-icon-16;
+    color: var(--o9ds-color-i-secondary);
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__opt__spacer {
+    flex: 0 0 $o9ds-icon-16;
+  }
+
+  &__opt__check {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  &__opt__lbl {
+    @include o9ds-font-l14-r;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--o9ds-color-t-form-label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--o9-font-family);
+  }
+
+  &__opt__secondary {
+    @include o9ds-font-p12-r;
+    color: var(--o9ds-color-t-placeholder);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__opt__exclude {
+    flex: 0 0 auto;
+    font-family: $o9con;
+    font-size: $o9ds-icon-16;
+    color: var(--o9ds-color-i-negative);
+  }
+
+  &__opt__chev {
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+  }
+
+  // Selected state via checked checkbox/radio source of truth
+  &__opt[data-checked='true'] {
+    background-color: var(--o9ds-color-s-theme-active-4);
+    border-inline-start-color: var(--o9ds-color-b-theme-active);
+  }
+
+  // ── __empty ───────────────────────────────────────────────────────────────
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $o9ds-space-32 $o9ds-space-16;
+    gap: $o9ds-space-12;
+    text-align: center;
+    font-family: var(--o9-font-family);
+  }
+
+  &__empty-illus {
+    width: $o9illus-96;
+    height: $o9illus-96;
+    flex-shrink: 0;
+  }
+
+  &__empty-title {
+    @include o9ds-font-h14-m;
+    color: var(--o9ds-color-t-form-label);
+  }
+
+  &__empty-msg {
+    @include o9ds-font-p12-r;
+    color: var(--o9ds-color-t-tertiary);
+  }
+
+  &__empty-action {
+    margin-top: $o9ds-space-8;
+  }
+
+  // ── __skeleton / __skeleton-hdr (Pattern B) ───────────────────────────────
+  &__skeleton {
+    width: 100%;
+    height: 32px;
+    margin-block: $o9ds-space-4;
+    background-color: var(--o9ds-color-s-pulse-light, var(--o9ds-color-s-disabled));
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--o9ds-loading-shimmer-color, rgba(255, 255, 255, 0.3)) 50%,
+        transparent 100%
+      );
+      animation: o9ds-shimmer var(--o9ds-loading-shimmer-speed, 1.5s) infinite linear;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+  }
+
+  &__skeleton-hdr {
+    height: 12px;
+    width: 80px;
+    margin-block: $o9ds-space-4;
+    background-color: var(--o9ds-color-s-pulse-light, var(--o9ds-color-s-disabled));
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--o9ds-loading-shimmer-color, rgba(255, 255, 255, 0.3)) 50%,
+        transparent 100%
+      );
+      animation: o9ds-shimmer var(--o9ds-loading-shimmer-speed, 1.5s) infinite linear;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+  }
+
+  // ── __resize ──────────────────────────────────────────────────────────────
+  &__resize {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  // ── __handle ──────────────────────────────────────────────────────────────
+  &__handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    pointer-events: auto;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity $o9ds-motion-form-input;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-color: var(--o9ds-color-i-secondary);
+      border-style: solid;
+    }
+
+    &--bl {
+      bottom: -2px;
+      left: -2px;
+      cursor: nesw-resize;
+
+      &::after {
+        bottom: 2px;
+        left: 2px;
+        border-width: 0 0 1px 1px;
+      }
+    }
+
+    &--br {
+      bottom: -2px;
+      right: -2px;
+      cursor: nwse-resize;
+
+      &::after {
+        bottom: 2px;
+        right: 2px;
+        border-width: 0 1px 1px 0;
+      }
+    }
+
+    // Visibility (auto-hide near viewport edge) is controlled by
+    // createResizeHandle setting inline `style.display = 'none'`.
+  }
+
+  .no-touch &:hover &__handle {
+    opacity: 1;
+  }
+
+  // ── State: is-resizing ────────────────────────────────────────────────────
+  &.is-resizing {
+    user-select: none;
+
+    .o9ds-hpop__handle {
+      opacity: 1;
+    }
+
+    .o9ds-hpop__handle--bl {
+      cursor: nesw-resize;
+    }
+
+    .o9ds-hpop__handle--br {
+      cursor: nwse-resize;
+    }
+  }
+
+  // ── State: is-dragging ────────────────────────────────────────────────────
+  &.is-dragging {
+    .o9ds-hpop__opt__drag {
+      cursor: grabbing;
+    }
+  }
+
+  // ── Loading (Pattern B) ───────────────────────────────────────────────────
+  // Hides sticky header and Popover footer, shows skeleton rows, blocks interaction.
+  @mixin _hpop-loading {
+    pointer-events: none;
+
+    .o9ds-hpop__sticky {
+      display: none;
+    }
+
+    .o9ds-pop__ftr,
+    .o9ds-popover__footer {
+      display: none;
+    }
+  }
+
+  &.loading {
+    @include _hpop-loading;
+  }
+
+  [data-o9ds-loading='true'] &:not([data-o9ds-loading-ignore='true']) {
+    @include _hpop-loading;
+  }
+}
+
+// ─── Sortable / DnD related blocks ──────────────────────────────────────────
+
+.o9ds-hpop__opt.o9ds-sortable--ghost {
+  opacity: $o9ds-opacity-low;
+}
+
+.o9ds-hpop__opt.o9ds-sortable--dragging {
+  box-shadow: $o9ds-shadow-down;
+  z-index: 10;
+  background-color: var(--o9ds-color-s-layer-03);
+}
+
+.o9ds-hpop__opt.o9ds-sortable--drop-above {
+  border-top: 2px solid var(--o9ds-color-b-theme-active);
+}
+
+.o9ds-hpop__opt.o9ds-sortable--drop-below {
+  border-bottom: 2px solid var(--o9ds-color-b-theme-active);
+}

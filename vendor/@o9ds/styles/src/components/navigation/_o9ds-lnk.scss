@@ -1,0 +1,172 @@
+@use '../../../../tokens/src/scss/all' as *;
+
+// Link component styles
+// BEM Block: .o9ds-lnk
+// Abbreviation: lnk
+// Loading Pattern: A (simple overlay shimmer)
+
+.o9ds-lnk {
+  // ── CSS custom properties ─────────────────────────────────────────────────
+  --o9ds-lnk-font-size: #{$o9ds-font-size-14};
+  --o9ds-lnk-font-weight: #{$o9ds-regular};
+  --o9ds-lnk-text-color: var(--o9ds-color-t-info-dark);
+  --o9ds-lnk-icon-color: var(--o9ds-color-t-info-dark);
+
+  // ── Layout ────────────────────────────────────────────────────────────────
+  display: inline-flex;
+  align-items: center;
+  gap: $o9ds-space-2;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  vertical-align: baseline;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  // ── Typography ────────────────────────────────────────────────────────────
+  font-family: var(--o9-font-family);
+  font-size: var(--o9ds-lnk-font-size);
+  font-weight: var(--o9ds-lnk-font-weight);
+  line-height: normal;
+  color: var(--o9ds-lnk-text-color);
+  text-decoration: none;
+
+  // ── Icon elements ─────────────────────────────────────────────────────────
+  &__ico,
+  &__ext {
+    font-size: $o9ds-icon-16;
+    color: var(--o9ds-lnk-icon-color);
+    flex-shrink: 0;
+    line-height: normal;
+    text-decoration: none;
+  }
+
+  // ── Label element ─────────────────────────────────────────────────────────
+  &__lbl {
+    text-decoration: underline;
+    color: var(--o9ds-lnk-text-color);
+  }
+
+  // ── Size: Small ───────────────────────────────────────────────────────────
+  &--sm {
+    --o9ds-lnk-font-size: #{$o9ds-font-size-12};
+  }
+
+  // ── Size: Large (default) ─────────────────────────────────────────────────
+  &--lg {
+    --o9ds-lnk-font-size: #{$o9ds-font-size-14};
+  }
+
+  // ── Variant: Primary (default) ────────────────────────────────────────────
+  &--primary {
+    --o9ds-lnk-text-color: var(--o9ds-color-t-info-dark);
+    --o9ds-lnk-icon-color: var(--o9ds-color-t-info-dark);
+  }
+
+  // ── Variant: Secondary ────────────────────────────────────────────────────
+  &--secondary {
+    --o9ds-lnk-text-color: var(--o9ds-color-t-secondary);
+    --o9ds-lnk-icon-color: var(--o9ds-color-t-secondary);
+  }
+
+  // ── Hover ─────────────────────────────────────────────────────────────────
+  .no-touch &:not(.is-disabled):hover {
+    --o9ds-lnk-text-color: var(--o9ds-color-t-info-light);
+    --o9ds-lnk-icon-color: var(--o9ds-color-t-info-light);
+    text-decoration: none;
+
+    .o9ds-lnk__lbl {
+      text-decoration: none;
+    }
+  }
+
+  // ── Focus ─────────────────────────────────────────────────────────────────
+  &:focus-visible {
+    --o9ds-lnk-text-color: var(--o9ds-color-t-info-light);
+    --o9ds-lnk-icon-color: var(--o9ds-color-t-info-light);
+    outline: 1px solid var(--o9ds-color-b-theme-focus);
+    text-decoration: none;
+
+    .o9ds-lnk__lbl {
+      text-decoration: none;
+    }
+  }
+
+  // ── Active ────────────────────────────────────────────────────────────────
+  &:not(.is-disabled):active,
+  &:not(.is-disabled).active {
+    --o9ds-lnk-text-color: var(--o9ds-color-t-info-light);
+    --o9ds-lnk-icon-color: var(--o9ds-color-t-info-light);
+    --o9ds-lnk-font-weight: #{$o9ds-medium};
+    text-decoration: none;
+
+    .o9ds-lnk__lbl {
+      text-decoration: none;
+    }
+  }
+
+  // ── Visited ───────────────────────────────────────────────────────────────
+  &.visited {
+    --o9ds-lnk-text-color: var(--o9ds-color-t-utility-purple);
+    --o9ds-lnk-icon-color: var(--o9ds-color-t-utility-purple);
+  }
+
+  // ── Disabled ──────────────────────────────────────────────────────────────
+  &.is-disabled {
+    --o9ds-lnk-text-color: var(--o9ds-color-t-disabled);
+    --o9ds-lnk-icon-color: var(--o9ds-color-i-disabled);
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+
+  // ── Loading State (Pattern A) ─────────────────────────────────────────────
+  &.loading {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-color: var(--o9ds-color-s-pulse-light);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--o9ds-color-s-pulse-dark) 50%,
+        transparent 100%
+      );
+      transform: translateX(-100%);
+      animation: o9ds-skeleton-shimmer 1.5s ease-in-out infinite;
+    }
+
+    color: transparent;
+
+    .o9ds-lnk__lbl,
+    .o9ds-lnk__ico,
+    .o9ds-lnk__ext {
+      opacity: 0;
+      text-decoration: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &::before {
+        animation: none;
+      }
+    }
+  }
+}

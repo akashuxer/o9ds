@@ -1,0 +1,149 @@
+@use '../../../../tokens/src/scss/all' as *;
+
+// DropdownButton (o9ds-dd-btn) & DropdownIconButton (o9ds-dd-icon-btn)
+// BEM Block: o9ds-dd-btn / o9ds-dd-icon-btn
+// Abbreviation: dd-btn / dd-icon-btn
+// Loading Pattern: A (inherited from .o9ds-btn base class on trigger element)
+//
+// Both trigger elements also carry .o9ds-btn, so all base layout, colors,
+// focus, disabled, hover, and loading states are fully inherited from _o9ds-btn.scss.
+// This file only adds: caret layout, open-state rotation, and compact mode.
+
+// ─── .o9ds-dd-btn ────────────────────────────────────────────────────────────
+
+.o9ds-dd-btn {
+  // ── CSS custom properties ─────────────────────────────────────────────────
+  --o9ds-dd-btn-caret-size: #{$o9ds-icon-16};
+  --o9ds-dd-btn-gap: #{$o9ds-space-4};
+
+  // Override btn gap — caret is tighter than a leading icon
+  --o9ds-btn-gap: var(--o9ds-dd-btn-gap);
+
+  // ── Icon ─────────────────────────────────────────────────────────────────
+  &__icon {
+    flex-shrink: 0;
+    line-height: normal;
+    pointer-events: none;
+  }
+
+  // ── Label ────────────────────────────────────────────────────────────────
+  &__lbl {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  // ── Caret ────────────────────────────────────────────────────────────────
+  // Sets --o9ds-btn-icon-size on this element so the btn-base icon rule
+  // (font-size: var(--o9ds-btn-icon-size), specificity 0-2-0) resolves to
+  // the caret size rather than the leading icon size.
+  &__caret {
+    --o9ds-btn-icon-size: var(--o9ds-dd-btn-caret-size);
+    color: inherit;
+    width: var(--o9ds-dd-btn-caret-size);
+    height: var(--o9ds-dd-btn-caret-size);
+    flex-shrink: 0;
+    line-height: normal;
+    pointer-events: none;
+    transition: transform #{$o9ds-motion-form-input};
+  }
+
+  // ── Open state: caret rotates 180deg ─────────────────────────────────────
+  &.open &__caret {
+    transform: rotate(180deg);
+  }
+
+  // ── Size: Small ───────────────────────────────────────────────────────────
+  &.o9ds-btn--sm {
+    --o9ds-dd-btn-caret-size: #{$o9ds-icon-12};
+  }
+
+  // ── Size: Medium (default) ────────────────────────────────────────────────
+  // --o9ds-dd-btn-caret-size: $o9ds-icon-16 (block default above)
+
+  // ── Size: Large ───────────────────────────────────────────────────────────
+  &.o9ds-btn--lg {
+    --o9ds-dd-btn-gap: #{$o9ds-space-6};
+    // caret stays at 16px (same as md)
+  }
+
+  // ── Toolbar context ───────────────────────────────────────────────────────
+  .o9ds-toolbar & {
+    --o9ds-btn-bg-color: transparent;
+  }
+}
+
+// ─── .o9ds-dd-icon-btn ───────────────────────────────────────────────────────
+
+.o9ds-dd-icon-btn {
+  // ── CSS custom properties ─────────────────────────────────────────────────
+  --o9ds-dd-icon-btn-caret-size: #{$o9ds-icon-16};
+
+  // Override btn gap
+  --o9ds-btn-gap: #{$o9ds-space-4};
+
+  // Override padding for md/lg (default)
+  --o9ds-btn-padding-inline: #{$o9ds-space-8};
+  --o9ds-btn-padding-block: #{$o9ds-space-8};
+
+  // ── Icon ─────────────────────────────────────────────────────────────────
+  &__icon {
+    flex-shrink: 0;
+    line-height: normal;
+    pointer-events: none;
+  }
+
+  // ── Caret ────────────────────────────────────────────────────────────────
+  &__caret {
+    --o9ds-btn-icon-size: var(--o9ds-dd-icon-btn-caret-size);
+    color: inherit;
+    width: var(--o9ds-dd-icon-btn-caret-size);
+    height: var(--o9ds-dd-icon-btn-caret-size);
+    flex-shrink: 0;
+    line-height: normal;
+    pointer-events: none;
+    transition: transform #{$o9ds-motion-form-input};
+  }
+
+  // ── Open state: caret rotates 180deg ─────────────────────────────────────
+  &.open &__caret {
+    transform: rotate(180deg);
+  }
+
+  // ── Compact modifier: square, caret hidden ────────────────────────────────
+  &--compact {
+    width: var(--o9ds-btn-height);
+    min-width: var(--o9ds-btn-height);
+    padding-inline: 0;
+    justify-content: center;
+    --o9ds-btn-gap: 0;
+  }
+
+  &--compact &__caret {
+    display: none;
+  }
+
+  // ── Size: Small ───────────────────────────────────────────────────────────
+  &.o9ds-btn--sm {
+    --o9ds-dd-icon-btn-caret-size: #{$o9ds-icon-12};
+    --o9ds-btn-padding-block: #{$o9ds-space-4};
+    --o9ds-btn-padding-inline: #{$o9ds-space-6};
+  }
+
+  // ── Size: Medium (default) ────────────────────────────────────────────────
+  // --o9ds-dd-icon-btn-caret-size: $o9ds-icon-16 (block default above)
+  &.o9ds-btn--md {
+    --o9ds-dd-icon-btn-caret-size: #{$o9ds-icon-20};
+  }
+
+  // ── Size: Large ───────────────────────────────────────────────────────────
+  &.o9ds-btn--lg {
+    --o9ds-dd-icon-btn-caret-size: #{$o9ds-icon-20};
+  }
+
+  // ── Toolbar context ───────────────────────────────────────────────────────
+  .o9ds-toolbar & {
+    --o9ds-btn-bg-color: transparent;
+  }
+}

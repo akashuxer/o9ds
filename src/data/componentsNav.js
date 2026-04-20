@@ -23,6 +23,7 @@ export const COMPONENTS_NAV_TREE = [
       { path: '/components/button', label: 'Button' },
       { path: '/components/button-group', label: 'Button Group' },
       { path: '/components/dropdown-button', label: 'Dropdown Button' },
+      { path: '/components/dropdown-icon-button', label: 'Dropdown Icon Button' },
       { path: '/components/fab-button', label: 'FAB' },
       { path: '/components/icon-button', label: 'Icon Button' },
       { path: '/components/split-button', label: 'Split Button' },
@@ -78,11 +79,13 @@ export const COMPONENTS_NAV_TREE = [
       { path: '/components/dropdown-tree', label: 'Dropdown Tree' },
       { path: '/components/text-editor', label: 'Editor' },
       { path: '/components/file-input', label: 'File Input' },
+      { path: '/components/listbox', label: 'Listbox' },
       { path: '/components/multi-select', label: 'Multi-Select' },
       { path: '/components/number-input', label: 'Number Input' },
       { path: '/components/otp-input', label: 'OTP Input' },
       { path: '/components/property-filter', label: 'Property Filter' },
-      { path: '/components/radio-group', label: 'RadioGroup' },
+      { path: '/components/radio', label: 'Radio' },
+      { path: '/components/radio-group', label: 'Radio Group' },
       { path: '/components/search', label: 'Search' },
       { path: '/components/select-dropdown', label: 'Select Dropdown' },
       { path: '/components/slider', label: 'Slider' },
@@ -149,30 +152,41 @@ export const COMPONENTS_NAV_TREE = [
  * Drives the green dot in ComponentTreeNav. Keep in sync with PATHS_WITH_CONTENT in pathsWithContent.js.
  */
 export const COMPONENT_DOC_ROUTES = new Set([
+  // Actions
   '/components/button',
   '/components/icon-button',
   '/components/button-group',
   '/components/dropdown-button',
+  '/components/dropdown-icon-button',
   '/components/fab-button',
+  // Navigation
   '/components/link',
   '/components/button-link',
   '/components/icon-button-link',
   '/components/tabstrip',
   '/components/breadcrumb',
+  // Inputs
   '/components/textbox',
   '/components/textarea',
   '/components/number-input',
+  '/components/search',
   '/components/checkbox',
   '/components/checkbox-group',
+  '/components/radio',
   '/components/radio-group',
   '/components/switch',
   '/components/select-dropdown',
   '/components/combobox',
-  '/components/toast',
-  '/components/badge',
-  '/components/action-menu',
+  '/components/listbox',
+  // Overlays
   '/components/popover',
+  '/components/hybrid-popover',
+  '/components/action-menu',
   '/components/tooltip',
+  // Feedback
+  '/components/badge',
+  '/components/toast',
+  // Data display
   '/components/cards',
 ])
 
