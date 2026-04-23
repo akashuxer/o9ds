@@ -29,9 +29,17 @@ Design system documentation for **o9 Design Lab** — built from the o9 brand id
    ```bash
    npm run build
    ```
-   Output goes to `dist/`.
+   Output goes to `dist/`. The build regenerates **WebP** copies of `public/**/*.png`, then runs **`images:audit`** (PNG↔WebP parity and size checks).
 
-**Deploy (Vercel):** `vercel.json` rewrites all paths to `index.html` so client-side routes (e.g. `/components/button`) work on refresh and direct URL entry.
+**Performance & delivery:** See **`performance.md`** for bundling (lazy routes, vendor chunks), the image pipeline, font/CJK notes, caching rules, and a changelog to keep updated. Cursor agents also follow **`.cursor/rules/o9ds-performance.mdc`**.
+
+**Other commands:**
+- `npm run images:webp` — regenerate WebP files only (after adding or editing PNGs under `public/`).
+- `npm run images:audit` — validate PNG/WebP coverage without a full build.
+
+**Deploy (Vercel):** `vercel.json` rewrites all paths to `index.html` so client-side routes (e.g. `/components/button`) work on refresh and direct URL entry. It also sets **cache headers** (hashed `/assets/*` long-lived; HTML revalidated). Optional **Netlify** config lives in `netlify.toml`.
+
+**Fonts:** `index.html` does **not** link `/o9SansFont/o9Sans.css` or `/o9ConIconFont/o9con.css` — o9 Sans and o9con load **once** via the Vite bundle (`src/main.jsx` → `@o9ds/assets`). Keep `@font-face` URLs in vendored CSS correct for production; `public/o9SansFont/` and `public/o9ConIconFont/` remain useful for reference or legacy paths.
 
 **Regenerate component stubs:** After editing `src/data/componentsNav.js`, run `npm run generate:component-stubs` to refresh `allStubComponents.js` and the per-slug files under `src/pages/components/<category>/`.
 
@@ -52,11 +60,13 @@ o9ds Website/
 │
 ├── scripts/
 │   ├── generate-component-stubs.mjs  # Regenerate stub pages + allStubComponents.js
-│   └── generate-o9con-icons.mjs      # Regenerate src/tokens/o9conIcons.js from public/o9ConIconFont/o9con.css
+│   ├── generate-o9con-icons.mjs      # Regenerate src/tokens/o9conIcons.js from public/o9ConIconFont/o9con.css
+│   ├── optimize-public-png-to-webp.mjs  # Build: PNG → WebP under public/ (also run via vite build)
+│   └── audit-public-images.mjs       # PNG↔WebP parity + size guardrails (npm run images:audit)
 │
 ├── public/                 # Static assets (served as-is)
 │   ├── placeholder.svg       # Effects blur preview (mask overlay demo)
-│   ├── o9DocGraphics/      # Documentation graphics (architecture PNG, home hero SVG, component anatomy SVGs)
+│   ├── o9DocGraphics/      # Documentation graphics (PNGs + generated WebP siblings, hero SVGs, etc.)
 │   ├── o9illus/
 │   │   ├── light/          # Light-mode illustration SVGs
 │   │   └── dark/           # Dark-mode illustration SVGs
@@ -65,8 +75,8 @@ o9ds Website/
 │   └── favicon.svg
 │
 ├── src/
-│   ├── main.jsx            # App bootstrap
-│   ├── App.jsx             # Routes and layout wrapper
+│   ├── main.jsx            # App bootstrap (o9ds fonts/styles/icons — single load)
+│   ├── App.jsx             # Routes (lazy-loaded pages) and layout wrapper
 │   ├── index.css           # Global styles, tokens, light/dark rules
 │   │
 │   ├── LayoutComponents/   # Layout & shared UI (reuse — do not recreate)
@@ -126,10 +136,16 @@ o9ds Website/
 │   │   ├── sectionOverviewIllustrations.js
 │   │   └── componentOverviewIllustrations.js
 │   │
-│   └── utils/
-│       └── colorUtils.js
+│   ├── utils/
+│   │   ├── colorUtils.js
+│   │   └── publicRaster.js     # PNG → WebP URL helper for <picture> delivery
+│   │
+│   └── components/media/
+│       └── PublicRasterPicture.jsx  # WebP preferred, PNG fallback (no layout change)
 │
-├── .cursor/rules/          # Cursor/IDE rules
+├── .cursor/rules/          # Cursor/IDE rules (includes o9ds-performance.mdc)
+├── performance.md          # Performance, images, caching, benchmarks — keep updated
+├── netlify.toml            # Optional Netlify headers (Vercel uses vercel.json)
 ├── STRUCTURE.md            # Page structure and conventions
 └── README.md
 ```
@@ -155,7 +171,9 @@ o9ds Website/
 | `src/data/componentPageMeta.js` | Intro copy for generated component stub pages |
 | `src/data/pathsWithContent.js` | Routes with ready docs (green dot in nav + section overviews) |
 | `src/data/overviewCatalog.js` | Overview card lists for Foundations, Patterns, Accessibility, Content |
-| `vercel.json` | SPA fallback for production hosting |
+| `vercel.json` | SPA fallback + cache headers for production (see `performance.md`) |
+| `performance.md` | Performance budgets, image pipeline, fonts, deploy caching, changelog |
+| `netlify.toml` | Optional Netlify deploy + headers |
 | `src/LayoutComponents/Layout.jsx` | Sidebar nav, page titles |
 
 ### Sidebar structure
@@ -178,7 +196,7 @@ o9ds Website/
 | `/elevation` | Redirects to `/effects` (legacy path) |
 | `/icons` | Assets → Iconography (o9con gallery) |
 | `/illustrations` | Assets → Illustrations (o9Illus gallery) |
-| `/components` | Components overview (search, Ready status, category) |
+| `/components` | Components overview (search, Ready/Partial Ready Status, category) |
 | `/patterns` | Patterns overview (grid) |
 | `/accessibility` | Accessibility overview (grid) |
 | `/content` | Content guidelines overview (grid) |

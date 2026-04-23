@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BackgroundRippleEffect } from '@/components/ui/BackgroundRippleEffect'
+import PublicRasterPicture from '@/components/media/PublicRasterPicture'
 import { useTheme } from '../context/ThemeContext'
 import { useDocsShell } from '../context/DocsShellContext'
 
@@ -82,7 +83,7 @@ function HomeBlockCardIllustration({ illustrationSrc, isLight, loading = 'lazy',
         }}
       />
       <div className="relative z-10 h-full min-h-0 w-full">
-        <img
+        <PublicRasterPicture
           src={illustrationSrc}
           alt=""
           className="absolute inset-3 z-[1] h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] max-h-none object-contain object-center sm:inset-4 sm:h-[calc(100%-2rem)] sm:w-[calc(100%-2rem)] motion-safe:transition-[transform,filter] motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:scale-[1.04] motion-safe:group-hover:brightness-[1.02] dark:brightness-[0.98] dark:group-hover:brightness-100"

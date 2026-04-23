@@ -1,52 +1,54 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { OverlayProvider, TooltipProvider, O9ToastProvider } from '@o9ds/react'
 import { ThemeProvider } from './context/ThemeContext'
 import { DocsShellProvider } from './context/DocsShellContext'
 import Layout from './LayoutComponents/Layout'
 import ScrollToTop from './LayoutComponents/ScrollToTop'
-import Home from './pages/Home'
-import Overview from './pages/Overview'
-import Resources from './pages/Resources'
-import Colors from './pages/foundation/Colors'
-import Typography from './pages/foundation/Typography'
-import Components from './pages/Components'
-import Spacing from './pages/foundation/Spacing'
-import Icons from './pages/foundation/Icons'
-import ComponentDocPage from './pages/components/ComponentDocPage'
-import Placeholder from './pages/Placeholder'
-import Borders from './pages/foundation/Borders'
-import Effects from './pages/foundation/Effects'
-import Illustrations from './pages/foundation/Illustrations'
-import Symbol from './pages/foundation/Symbol'
-import Developers from './pages/Developers'
-import FoundationsOverview from './pages/FoundationsOverview'
-import PatternsOverview from './pages/PatternsOverview'
-import AccessibilityOverview from './pages/AccessibilityOverview'
-import UsageIndex from './pages/usage/Index'
-import UsagePublicApi from './pages/usage/PublicApi'
-import UsageComponents from './pages/usage/Components'
-import UsageStyling from './pages/usage/Styling'
-import UsageComposition from './pages/usage/Composition'
-import UsageAccessibility from './pages/usage/Accessibility'
-import UsageTesting from './pages/usage/Testing'
-import UsageVersioning from './pages/usage/Versioning'
-import UsageAntiPatterns from './pages/usage/AntiPatterns'
-import UsageChecklist from './pages/usage/Checklist'
-import DevRefAgenticPipeline from './pages/developer-reference/AgenticPipeline'
-import DevRefComponentPipeline from './pages/developer-reference/ComponentPipeline'
-import DevRefTokenPipeline from './pages/developer-reference/TokenPipeline'
-import DevRefSharedPatterns from './pages/developer-reference/SharedPatterns'
-import DevRefTestingAndDrift from './pages/developer-reference/TestingAndDrift'
-import DevRefWorkflows from './pages/developer-reference/Workflows'
-import AccessibilityOverviewArticle from './pages/accessibility/OverviewArticle'
-import AccessibilityStandardsAndPrinciples from './pages/accessibility/StandardsAndPrinciples'
-import AccessibilityAssistiveTechnology from './pages/accessibility/AssistiveTechnology'
-import AccessibilityScreenReaderAndAria from './pages/accessibility/ScreenReaderAndAria'
-import AccessibilityKeyboardAndFocus from './pages/accessibility/KeyboardAndFocus'
-import AccessibilityVisualAccessibility from './pages/accessibility/VisualAccessibility'
-import AccessibilityTestingAndQA from './pages/accessibility/TestingAndQA'
-import AccessibilityShortcuts from './pages/accessibility/Shortcuts'
-import ContentOverview from './pages/ContentOverview'
+
+const Home = lazy(() => import('./pages/Home'))
+const Overview = lazy(() => import('./pages/Overview'))
+const Resources = lazy(() => import('./pages/Resources'))
+const Colors = lazy(() => import('./pages/foundation/Colors'))
+const Typography = lazy(() => import('./pages/foundation/Typography'))
+const Components = lazy(() => import('./pages/Components'))
+const Spacing = lazy(() => import('./pages/foundation/Spacing'))
+const Icons = lazy(() => import('./pages/foundation/Icons'))
+const ComponentDocPage = lazy(() => import('./pages/components/ComponentDocPage'))
+const Placeholder = lazy(() => import('./pages/Placeholder'))
+const Borders = lazy(() => import('./pages/foundation/Borders'))
+const Effects = lazy(() => import('./pages/foundation/Effects'))
+const Illustrations = lazy(() => import('./pages/foundation/Illustrations'))
+const Symbol = lazy(() => import('./pages/foundation/Symbol'))
+const Developers = lazy(() => import('./pages/Developers'))
+const FoundationsOverview = lazy(() => import('./pages/FoundationsOverview'))
+const PatternsOverview = lazy(() => import('./pages/PatternsOverview'))
+const AccessibilityOverview = lazy(() => import('./pages/AccessibilityOverview'))
+const UsageIndex = lazy(() => import('./pages/usage/Index'))
+const UsagePublicApi = lazy(() => import('./pages/usage/PublicApi'))
+const UsageComponents = lazy(() => import('./pages/usage/Components'))
+const UsageStyling = lazy(() => import('./pages/usage/Styling'))
+const UsageComposition = lazy(() => import('./pages/usage/Composition'))
+const UsageAccessibility = lazy(() => import('./pages/usage/Accessibility'))
+const UsageTesting = lazy(() => import('./pages/usage/Testing'))
+const UsageVersioning = lazy(() => import('./pages/usage/Versioning'))
+const UsageAntiPatterns = lazy(() => import('./pages/usage/AntiPatterns'))
+const UsageChecklist = lazy(() => import('./pages/usage/Checklist'))
+const DevRefAgenticPipeline = lazy(() => import('./pages/developer-reference/AgenticPipeline'))
+const DevRefComponentPipeline = lazy(() => import('./pages/developer-reference/ComponentPipeline'))
+const DevRefTokenPipeline = lazy(() => import('./pages/developer-reference/TokenPipeline'))
+const DevRefSharedPatterns = lazy(() => import('./pages/developer-reference/SharedPatterns'))
+const DevRefTestingAndDrift = lazy(() => import('./pages/developer-reference/TestingAndDrift'))
+const DevRefWorkflows = lazy(() => import('./pages/developer-reference/Workflows'))
+const AccessibilityOverviewArticle = lazy(() => import('./pages/accessibility/OverviewArticle'))
+const AccessibilityStandardsAndPrinciples = lazy(() => import('./pages/accessibility/StandardsAndPrinciples'))
+const AccessibilityAssistiveTechnology = lazy(() => import('./pages/accessibility/AssistiveTechnology'))
+const AccessibilityScreenReaderAndAria = lazy(() => import('./pages/accessibility/ScreenReaderAndAria'))
+const AccessibilityKeyboardAndFocus = lazy(() => import('./pages/accessibility/KeyboardAndFocus'))
+const AccessibilityVisualAccessibility = lazy(() => import('./pages/accessibility/VisualAccessibility'))
+const AccessibilityTestingAndQA = lazy(() => import('./pages/accessibility/TestingAndQA'))
+const AccessibilityShortcuts = lazy(() => import('./pages/accessibility/Shortcuts'))
+const ContentOverview = lazy(() => import('./pages/ContentOverview'))
 
 export default function App() {
   return (
@@ -58,6 +60,7 @@ export default function App() {
       <BrowserRouter>
         <ScrollToTop />
         <Layout>
+        <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/overview" element={<Overview />} />
@@ -143,6 +146,7 @@ export default function App() {
           <Route path="/developer-reference/testing-and-drift" element={<DevRefTestingAndDrift />} />
           <Route path="/developer-reference/workflows" element={<DevRefWorkflows />} />
         </Routes>
+        </Suspense>
         </Layout>
       </BrowserRouter>
       </O9ToastProvider>

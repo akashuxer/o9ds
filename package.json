@@ -6,15 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build:o9ds-styles": "node vendor/@o9ds/styles/scripts/build.mjs",
-    "build": "npm run build:o9ds-styles && vite build",
+    "images:webp": "node scripts/optimize-public-png-to-webp.mjs",
+    "images:audit": "node scripts/audit-public-images.mjs",
+    "build": "npm run build:o9ds-styles && vite build && npm run images:audit",
     "preview": "vite preview",
     "vendor:o9ds": "node scripts/vendor-o9ds.mjs",
     "generate:component-stubs": "node scripts/generate-component-stubs.mjs",
     "generate:o9con-icons": "node scripts/generate-o9con-icons.mjs"
   },
   "dependencies": {
-    "@mdx-js/react": "^3.1.1",
-    "@mdx-js/rollup": "^3.1.1",
     "@o9ds/assets": "file:./vendor/@o9ds/assets",
     "@o9ds/core": "file:./vendor/@o9ds/core",
     "@o9ds/js": "file:./vendor/@o9ds/js",
@@ -24,15 +24,14 @@
     "@o9ds/utils": "file:./vendor/@o9ds/utils",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
-    "rehype-slug": "^6.0.0",
-    "remark-gfm": "^4.0.1"
+    "react-router-dom": "^6.20.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "sass": "^1.99.0",
+    "sharp": "^0.33.5",
     "tailwindcss": "^3.3.6",
     "vite": "^5.0.0"
   }

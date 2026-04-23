@@ -1,3 +1,5 @@
+import PublicRasterPicture from '@/components/media/PublicRasterPicture'
+
 /**
  * Catalog tile: fixed-height illustration band (white + dot grid + SVG),
  * theme-aware footer with a 2-line description slot (ellipsis + native tooltip when truncated).
@@ -37,7 +39,7 @@ export default function ComponentOverviewCard({ title, description, illustration
         <div
           className={`relative z-10 flex w-full items-center justify-center px-3 ${hideFooter ? 'py-8 sm:py-10' : 'h-full min-h-0 py-3 sm:px-4 sm:py-4'}`}
         >
-          <img
+          <PublicRasterPicture
             src={illustrationSrc}
             alt={hideFooter ? imageAlt : ''}
             className={imgClassName}

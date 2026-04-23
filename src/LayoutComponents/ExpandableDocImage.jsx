@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import PublicRasterPicture from '@/components/media/PublicRasterPicture'
 
 /**
  * Doc infographic: click (or Enter/Space on the trigger) opens a full-viewport lightbox
@@ -76,7 +77,7 @@ export default function ExpandableDocImage({
         aria-expanded={open}
         aria-label={triggerLabel}
       >
-        <img
+        <PublicRasterPicture
           src={src}
           alt=""
           width={width}
@@ -119,7 +120,7 @@ export default function ExpandableDocImage({
               >
                 Close
               </button>
-              <img
+              <PublicRasterPicture
                 src={src}
                 alt={alt}
                 width={width}
