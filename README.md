@@ -1,6 +1,6 @@
-# o9 Design System Website
+# Arvo: o9 Design System
 
-Design system documentation for **o9 Design Lab** — built from the o9 brand identity and [o9ds.figma.site](https://o9ds.figma.site/) inspiration.
+Arvo (o9 Design System) is a centralized system of foundations, components, patterns, and guidelines that standardizes how interfaces are designed and built across the o9 platform—aligning design, engineering, accessibility, and brand into one scalable system.
 
 ---
 

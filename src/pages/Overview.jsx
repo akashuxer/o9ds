@@ -133,14 +133,14 @@ export default function Overview() {
         <div className="pb-8 lg:pb-10">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
             <p className="text-[2rem] font-bold leading-[1.1] tracking-tight text-o9ds-light-primary dark:text-white sm:text-[2.5rem] md:text-[2.75rem]">
-              o9 Arvo
+              Arvo: o9 Design System
             </p>
             <button
               type="button"
               onClick={onPronounceO9Arvo}
               className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-neutral-300 bg-white text-o9ds-light-primary transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800"
-              aria-label="Play pronunciation: o9 Arvo"
-              title="Hear pronunciation: o9 Arvo"
+              aria-label="Play pronunciation: Arvo (o9 Design System)"
+              title="Hear pronunciation: Arvo (o9 Design System)"
             >
               <span className="o9con o9con-speaker o9ds-icon-24" aria-hidden />
             </button>
@@ -158,7 +158,7 @@ export default function Overview() {
         </h2>
         <div className="space-y-5 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400 sm:text-[17px]">
           <p>
-            o9 Arvo (o9 Design System) is a centralized system of foundations, components, patterns, and guidelines that
+            Arvo (o9 Design System) is a centralized system of foundations, components, patterns, and guidelines that
             standardizes how interfaces are designed and built across the o9 platform—aligning design, engineering,
             accessibility, and brand into one scalable system.
           </p>
