@@ -31,11 +31,35 @@ Design system documentation for **o9 Design Lab** — built from the o9 brand id
    ```
    Output goes to `dist/`. The build regenerates **WebP** copies of `public/**/*.png`, then runs **`images:audit`** (PNG↔WebP parity and size checks).
 
-**Performance & delivery:** See **`performance.md`** for bundling (lazy routes, vendor chunks), the image pipeline, font/CJK notes, caching rules, and a changelog to keep updated. Cursor agents also follow **`.cursor/rules/o9ds-performance.mdc`**.
+### Common commands
 
-**Other commands:**
-- `npm run images:webp` — regenerate WebP files only (after adding or editing PNGs under `public/`).
-- `npm run images:audit` — validate PNG/WebP coverage without a full build.
+| Command | When to use |
+|--------|-------------|
+| `npm install` | After clone or when dependencies change. |
+| `npm run dev` | Local development (Vite; URL in terminal, e.g. `http://localhost:5173`). |
+| `npm run build` | Production build → `dist/` (runs o9ds styles, **WebP** generation, **`images:audit`**). |
+| `npm run preview` | Serve `dist/` locally to verify production output. |
+| `npm run images:webp` | Regenerate **`public/**/*.webp`** from PNGs only (no full build). |
+| `npm run images:audit` | Check PNG↔WebP parity and image size rules. |
+| `STRICT_IMAGES=1 npm run images:audit` | Same as above; **warnings fail** (e.g. strict CI). |
+| `npm run vendor:o9ds` | Refresh vendored `@o9ds/*` packages (when using that workflow). |
+| `npm run generate:component-stubs` | After editing `src/data/componentsNav.js` — refreshes stubs under `src/pages/components/`. |
+| `npm run generate:o9con-icons` | After updating `public/o9ConIconFont/o9con.css` — refreshes `src/tokens/o9conIcons.js`. |
+| `npm run build:o9ds-styles` | Build vendored o9ds CSS only (usually invoked by `npm run build`). |
+
+More detail on performance, images, and caching: **`performance.md`**.
+
+### Say it once, reuse everywhere (Cursor + docs)
+
+Avoid repeating the same “use this icon / token / card / code block” instructions in every chat:
+
+1. **Cursor rules** (`.cursor/rules/*.mdc`) apply automatically when their `globs` match the files you edit, or when `alwaysApply` is true. Key files:
+   - **`o9ds-authoring-patterns.mdc`** — o9con usage, semantic tokens, `CodeBlock` / `DocSection`, pointers to canonical pages (`Icons.jsx`, `Colors.jsx`, `Button.jsx`).
+   - **`o9ds-layout-components.mdc`** — reuse `PageWithToc`, `WhiteBgCard`, `DocTable`, etc.
+   - **`o9ds-component-docs.mdc`** — four-tab structure for `/components/*` pages.
+   - **`o9ds-performance.mdc`** — bundles, WebP, `vercel.json` header order.
+2. **In Cursor chat**, pull context with **`@`** — e.g. `@.cursor/rules/o9ds-authoring-patterns.mdc`, `@src/pages/foundation/Icons.jsx`, `@performance.md`.
+3. **When you standardize something new**, add it once in a **reference page**, then add **one bullet** to `o9ds-authoring-patterns.mdc` pointing to that file.
 
 **Deploy (Vercel):** `vercel.json` rewrites all paths to `index.html` so client-side routes (e.g. `/components/button`) work on refresh and direct URL entry. It also sets **cache headers** (hashed `/assets/*` long-lived; HTML revalidated). Optional **Netlify** config lives in `netlify.toml`.
 
