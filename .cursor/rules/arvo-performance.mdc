@@ -16,6 +16,10 @@ Full detail, metrics, and changelog: **`performance.md`** (keep it updated when 
 - **Deploy headers:** When editing **`vercel.json`**, remember **last matching header wins** — long-cache rules for `/assets/*` must come **after** broad HTML revalidate rules. Mirror the same idea on Netlify (`netlify.toml`).
 - **Build:** `npm run build` must stay green with **`images:audit`** at the end; fix missing WebP or oversized PNGs per `scripts/audit-public-images.mjs`.
 
+## Git commits & pushes
+
+- Use a **clear, descriptive commit message** every time: short **subject line** (what changed, imperative mood) and optional **body** for why / scope. No empty or vague messages like `fix` or `updates` when pushing to `main` / shared branches.
+
 ## Avoid without explicit approval
 
 - Redesigning or restructuring layouts for performance (user constraint: preserve visual composition).

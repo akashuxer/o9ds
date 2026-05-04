@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import DocTable from '../LayoutComponents/DocTable'
 import PageHeader from '../LayoutComponents/PageHeader'
 import PageWithToc from '../LayoutComponents/PageWithToc'
+import { TABLE_IDENTIFIER_TONE_CLASS } from '../LayoutComponents/codeHighlight'
 import { RESOURCES_DEVELOPMENT, RESOURCES_DOCS, RESOURCES_FIGMA } from '../data/resourcesLinks'
 import { RESOURCES_TEAM_GROUPS } from '../data/resourcesTeam'
 
@@ -14,47 +15,53 @@ const tocSections = [
   { id: 'on-this-site', label: 'On this site' },
 ]
 
-/** Match DocTable secondary column — no accent color on links */
-const RESOURCE_LINK_CLASS =
-  'text-arvo-light-secondary underline decoration-neutral-400/90 underline-offset-[3px] transition hover:text-arvo-light-primary hover:decoration-arvo-light-primary dark:text-neutral-400 dark:decoration-neutral-600 dark:hover:text-neutral-200 dark:hover:decoration-neutral-300'
+/** Violet only on anchors; hints stay neutral */
+const RESOURCE_PURPLE_LINK_CLASS = `font-mono text-sm font-medium underline decoration-violet-400/70 underline-offset-[3px] transition hover:opacity-90 dark:decoration-violet-500/50 ${TABLE_IDENTIFIER_TONE_CLASS}`
 
-function resourceLabelColumn(label, hint) {
-  if (!hint) return label
-  return (
-    <>
-      {label}{' '}
-      <span className="font-normal text-arvo-light-secondary dark:text-neutral-500">({hint})</span>
-    </>
-  )
-}
+/**
+ * Single column: resource title links to the first URL in `links`; hint is non-linked.
+ * Extra link entries render as additional violet links (rare in current data).
+ */
+function ResourceLinkCell({ label, hint, links = [] }) {
+  const linked = links.filter((x) => x.href)
+  const primary = linked[0]
 
-function LinksCell({ items }) {
   return (
-    <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-arvo-light-secondary dark:text-neutral-400">
-      {items.map((item, i) => (
-        <Fragment key={`${item.text}-${i}`}>
-          {i > 0 && (
-            <span className="select-none text-neutral-300 dark:text-neutral-600" aria-hidden>
-              |
-            </span>
-          )}
-          {item.href ? (
-            <a href={item.href} target="_blank" rel="noopener noreferrer" className={RESOURCE_LINK_CLASS}>
-              {item.text}
-            </a>
-          ) : (
-            <span className="text-arvo-light-secondary dark:text-neutral-500">{item.text}</span>
-          )}
-        </Fragment>
-      ))}
+    <span className="inline-flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+      {primary ? (
+        <a href={primary.href} target="_blank" rel="noopener noreferrer" className={RESOURCE_PURPLE_LINK_CLASS}>
+          {label}
+        </a>
+      ) : (
+        <span className="font-mono text-sm text-arvo-light-secondary dark:text-neutral-400">{label}</span>
+      )}
+      {hint ? (
+        <span className="text-sm font-normal text-arvo-light-secondary dark:text-neutral-500">({hint})</span>
+      ) : null}
+      {linked.length > 1
+        ? linked.slice(1).map((item, i) => (
+            <Fragment key={`${item.text}-${i}`}>
+              <span className="select-none text-sm text-neutral-300 dark:text-neutral-600" aria-hidden>
+                |
+              </span>
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={RESOURCE_PURPLE_LINK_CLASS}
+              >
+                {item.text}
+              </a>
+            </Fragment>
+          ))
+        : null}
     </span>
   )
 }
 
 function resourceRowsFromSpec(spec) {
   return spec.map((row) => ({
-    label: resourceLabelColumn(row.label, row.hint),
-    links: <LinksCell items={row.links} />,
+    resource: <ResourceLinkCell label={row.label} hint={row.hint} links={row.links} />,
   }))
 }
 
@@ -68,18 +75,7 @@ function SectionIntro({ kicker, title, id }) {
 }
 
 export default function Resources() {
-  const docsColumns = [
-    { key: 'label', label: 'Resource', mono: true, tone: 'code' },
-    { key: 'links', label: 'Links' },
-  ]
-  const devColumns = [
-    { key: 'label', label: 'Resource', mono: true, tone: 'code' },
-    { key: 'links', label: 'Links' },
-  ]
-  const figmaColumns = [
-    { key: 'label', label: 'Resource', mono: true, tone: 'code' },
-    { key: 'links', label: 'Links' },
-  ]
+  const resourceColumn = [{ key: 'resource', label: 'Resource' }]
 
   return (
     <PageWithToc sections={tocSections}>
@@ -101,17 +97,17 @@ export default function Resources() {
 
         <section className="space-y-4">
           <SectionIntro kicker="Docs" title="Documentation & references" id="docs" />
-          <DocTable columns={docsColumns} rows={resourceRowsFromSpec(RESOURCES_DOCS)} />
+          <DocTable columns={resourceColumn} rows={resourceRowsFromSpec(RESOURCES_DOCS)} />
         </section>
 
         <section className="space-y-4">
           <SectionIntro kicker="Development" title="Repository, registry & tracking" id="development" />
-          <DocTable columns={devColumns} rows={resourceRowsFromSpec(RESOURCES_DEVELOPMENT)} />
+          <DocTable columns={resourceColumn} rows={resourceRowsFromSpec(RESOURCES_DEVELOPMENT)} />
         </section>
 
         <section className="space-y-4">
           <SectionIntro kicker="Figma" title="Libraries & assets" id="figma" />
-          <DocTable columns={figmaColumns} rows={resourceRowsFromSpec(RESOURCES_FIGMA)} />
+          <DocTable columns={resourceColumn} rows={resourceRowsFromSpec(RESOURCES_FIGMA)} />
         </section>
 
         <section id="team" className="scroll-mt-24 space-y-6 border-t border-neutral-200 pt-12 dark:border-neutral-800">

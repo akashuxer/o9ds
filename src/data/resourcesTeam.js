@@ -30,7 +30,7 @@ export const RESOURCES_TEAM_GROUPS = [
       { name: 'Amalie', description: 'Icons & illustration design.' },
       { name: 'Antonia', description: 'Motion & video design.' },
       { name: 'Tatiana', description: 'Motion design and transitions.' },
-      { name: 'Camilla / Priska', description: 'Project and timeline management.' },
+      { name: 'Camilla', description: 'Project and timeline management.' },
     ],
   },
 ]
