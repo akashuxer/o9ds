@@ -1,27 +1,20 @@
 import { useState, useMemo } from 'react'
-import { O9Tooltip, O9Button } from '@o9ds/react'
+import { ArvoTooltip, ArvoButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, CssVarsGrid, LiveReference, SimpleTable } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'content', type: 'string', required: 'Yes', desc: 'Text content displayed in the tooltip.' },
-  { prop: 'placement', type: '12 placements', default: "'bottom-center'", desc: 'Preferred placement. Auto-flips on viewport overflow.' },
-  { prop: 'shortcut', type: 'string', default: 'undefined', desc: 'Keyboard shortcut hint shown alongside content (e.g. Ctrl+S).' },
-  { prop: 'children', type: 'ReactElement', required: 'Yes', desc: 'Single interactive child element that serves as the tooltip trigger.' },
-]
+const DESCRIPTOR = getDescriptor('tooltip')
+const PROPS = DESCRIPTOR.props
+const CSS_VARS = DESCRIPTOR.cssVarGroups
 
-const CSS_VARS = [
-  { category: 'Layout', vars: ['--o9ds-tip-max-w', '--o9ds-tip-padding-inline', '--o9ds-tip-padding-block', '--o9ds-tip-gap'] },
-  { category: 'Typography', vars: ['--o9ds-tip-font-size'] },
-  { category: 'Colors', vars: ['--o9ds-tip-bg', '--o9ds-tip-text-color', '--o9ds-tip-shortcut-bg'] },
-  { category: 'Effects', vars: ['--o9ds-tip-shadow'] },
-]
+
 
 export default function Tooltip() {
   const [tab, setTab] = useState('Overview')
@@ -50,15 +43,15 @@ export default function Tooltip() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Tooltip content="Save document">
-                  <O9Button label="Save" />
-                </O9Tooltip>
-                <O9Tooltip content="Save document" shortcut="Ctrl+S">
-                  <O9Button label="With shortcut" />
-                </O9Tooltip>
-                <O9Tooltip content="Top placement" placement="top-center">
-                  <O9Button label="Top" variant="secondary" />
-                </O9Tooltip>
+                <ArvoTooltip content="Save document">
+                  <ArvoButton label="Save" />
+                </ArvoTooltip>
+                <ArvoTooltip content="Save document" shortcut="Ctrl+S">
+                  <ArvoButton label="With shortcut" />
+                </ArvoTooltip>
+                <ArvoTooltip content="Top placement" placement="top-center">
+                  <ArvoButton label="Top" variant="secondary" />
+                </ArvoTooltip>
               </LiveReference>
             </DocSection>
             <DocSection id="behavior" title="Behavior">
@@ -98,34 +91,34 @@ export default function Tooltip() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Tooltip } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoTooltip } from '@arvo/react';
 
-<O9Tooltip content="Save document">
+<ArvoTooltip content="Save document">
   <button>Save</button>
-</O9Tooltip>
+</ArvoTooltip>
 
 // With shortcut
-<O9Tooltip content="Save document" shortcut="Ctrl+S">
+<ArvoTooltip content="Save document" shortcut="Ctrl+S">
   <button>Save</button>
-</O9Tooltip>
+</ArvoTooltip>
 
 // Custom placement
-<O9Tooltip content="More options" placement="top-end">
+<ArvoTooltip content="More options" placement="top-end">
   <button aria-label="More options">…</button>
-</O9Tooltip>
+</ArvoTooltip>
 
 // On a disabled element (keep it focusable)
-<O9Tooltip content="You do not have permission to delete">
+<ArvoTooltip content="You do not have permission to delete">
   <button aria-disabled="true" tabIndex={0}>Delete</button>
-</O9Tooltip>`} />
-              <DocParagraph>Many o9 components also accept a <DocCode>tooltip</DocCode> prop directly (Button, IconButton, FabButton, etc.) — use that built-in option instead of wrapping with <DocCode>O9Tooltip</DocCode> when possible.</DocParagraph>
+</ArvoTooltip>`} />
+              <DocParagraph>Many o9 components also accept a <DocCode>tooltip</DocCode> prop directly (Button, IconButton, FabButton, etc.) — use that built-in option instead of wrapping with <DocCode>ArvoTooltip</DocCode> when possible.</DocParagraph>
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Tooltip, setupTooltips } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoTooltip, setupTooltips } from '@arvo/js';
 
 setupTooltips({ hoverDelay: 500, gap: 6 });
 
-const tip = O9Tooltip.initialize(triggerEl, {
+const tip = ArvoTooltip.initialize(triggerEl, {
   content: 'Save document',
   placement: 'bottom-center',
   shortcut: 'Ctrl+S',
@@ -148,7 +141,7 @@ tip.destroy();`} />
             </DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Tooltip.initialize(trigger, options)', returns: 'O9Tooltip', desc: 'Factory — attaches tooltip behavior.' },
+                { method: 'ArvoTooltip.initialize(trigger, options)', returns: 'ArvoTooltip', desc: 'Factory — attaches tooltip behavior.' },
                 { method: 'update(options)', desc: 'Update content, placement, or shortcut.' },
                 { method: 'destroy()', desc: 'Remove all event listeners and clean up.' },
               ]} />

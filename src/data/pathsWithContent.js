@@ -90,6 +90,10 @@ export const PATHS_WITH_CONTENT = new Set([
   '/components/popover',
   '/components/hybrid-popover',
   '/components/tooltip',
+  '/components/alert-dialog',
+
+  // Inputs (additional)
+  '/components/chip',
 
   // Data Display
   '/components/cards',

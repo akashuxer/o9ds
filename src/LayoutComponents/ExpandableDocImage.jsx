@@ -72,7 +72,7 @@ export default function ExpandableDocImage({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`group block w-full max-w-4xl mx-auto border-0 bg-transparent p-0 cursor-zoom-in rounded text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-o9ds-light-primary dark:focus-visible:ring-white focus-visible:ring-offset-o9ds-light-bg dark:focus-visible:ring-offset-neutral-950 ${triggerClassName}`.trim()}
+        className={`group block w-full max-w-4xl mx-auto border-0 bg-transparent p-0 cursor-zoom-in rounded text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-arvo-light-primary dark:focus-visible:ring-white focus-visible:ring-offset-arvo-light-bg dark:focus-visible:ring-offset-neutral-950 ${triggerClassName}`.trim()}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-label={triggerLabel}
@@ -104,9 +104,9 @@ export default function ExpandableDocImage({
             <div
               className="absolute inset-0 z-0 cursor-zoom-out"
               style={{
-                backgroundColor: 'var(--o9ds-color-s-overlay-static, rgba(0, 0, 0, 0.65))',
-                backdropFilter: 'blur(var(--o9ds-shadow-blur))',
-                WebkitBackdropFilter: 'blur(var(--o9ds-shadow-blur))',
+                backgroundColor: 'var(--arvo-color-s-overlay-static, rgba(0, 0, 0, 0.65))',
+                backdropFilter: 'blur(var(--arvo-shadow-blur))',
+                WebkitBackdropFilter: 'blur(var(--arvo-shadow-blur))',
               }}
               onClick={close}
               aria-hidden="true"
@@ -116,7 +116,7 @@ export default function ExpandableDocImage({
                 ref={closeBtnRef}
                 type="button"
                 onClick={close}
-                className="self-end rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-o9ds-light-primary shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700/80"
+                className="self-end rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-arvo-light-primary shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700/80"
               >
                 Close
               </button>

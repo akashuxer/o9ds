@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // o9ds Brand Colors
+        // o9 brand palette (the company), shared across Arvo products
         o9: {
           black: '#000000',
           white: '#ffffff',
@@ -42,7 +42,7 @@ export default {
           overlay: '#171717',
         },
         // Light mode design tokens (use without dark: for light, dark: for dark)
-        'o9ds-light': {
+        'arvo-light': {
           bg: '#FFFFFF',
           primary: '#010101',
           secondary: '#303030',
@@ -111,7 +111,7 @@ export default {
     },
   },
   plugins: [],
-  // o9ds: 0 radius policy — no border radius
+  // Arvo: 0 radius policy — no border radius
   corePlugins: {
     borderRadius: false,
   },

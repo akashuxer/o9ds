@@ -32,50 +32,50 @@ textarea:focus-visible {
   outline-offset: 2px;
 }`
 
-/** o9ds-font-l12-r — label token (12px / 400) for interactive form labels. */
+/** arvo-font-l12-r — label token (12px / 400) for interactive form labels. */
 const tokenLabelL12RClassName =
-  'mb-1 block text-xs font-normal text-[var(--o9ds-text-primary)] dark:text-white'
+  'mb-1 block text-xs font-normal text-[var(--arvo-text-primary)] dark:text-white'
 
-/** Bottom border only (default: --o9ds-color-b-form); focus emphasizes bottom edge. 8px horizontal padding. */
+/** Bottom border only (default: --arvo-color-b-form); focus emphasizes bottom edge. 8px horizontal padding. */
 const tokenFieldClassName =
-  'w-full rounded-none border-0 border-b border-[color:var(--o9ds-color-b-form)] px-2 py-2 text-sm bg-white text-[var(--o9ds-text-primary)] placeholder:text-[var(--o9ds-color-t-placeholder)] focus:outline-none focus-visible:outline-none focus-visible:border-b-2 focus-visible:border-b-[#010101] dark:bg-[#010101] dark:text-white dark:placeholder:text-neutral-500 dark:focus-visible:border-b-white'
+  'w-full rounded-none border-0 border-b border-[color:var(--arvo-color-b-form)] px-2 py-2 text-sm bg-white text-[var(--arvo-text-primary)] placeholder:text-[var(--arvo-color-t-placeholder)] focus:outline-none focus-visible:outline-none focus-visible:border-b-2 focus-visible:border-b-[#010101] dark:bg-[#010101] dark:text-white dark:placeholder:text-neutral-500 dark:focus-visible:border-b-white'
 
-/** Same as default field, but error border/focus use --o9ds-color-b-negative. */
+/** Same as default field, but error border/focus use --arvo-color-b-negative. */
 const tokenFieldErrorClassName =
-  'w-full rounded-none border-0 border-b-2 border-[color:var(--o9ds-color-b-negative)] px-2 py-2 text-sm bg-white text-[var(--o9ds-text-primary)] placeholder:text-[var(--o9ds-color-t-placeholder)] focus:outline-none focus-visible:outline-none focus-visible:border-b-2 focus-visible:border-b-[color:var(--o9ds-color-b-negative)] dark:bg-[#010101] dark:text-white dark:placeholder:text-neutral-500'
+  'w-full rounded-none border-0 border-b-2 border-[color:var(--arvo-color-b-negative)] px-2 py-2 text-sm bg-white text-[var(--arvo-text-primary)] placeholder:text-[var(--arvo-color-t-placeholder)] focus:outline-none focus-visible:outline-none focus-visible:border-b-2 focus-visible:border-b-[color:var(--arvo-color-b-negative)] dark:bg-[#010101] dark:text-white dark:placeholder:text-neutral-500'
 
 /** Card surface: #F2F2F2 in light; dark panel unchanged for contrast with #010101 inputs. */
 const tokenFormDemoSurfaceClassName =
-  'space-y-4 overflow-hidden border border-o9ds-light-border bg-[#F2F2F2] p-4 dark:border-neutral-700 dark:bg-[rgba(38,38,38,0.5)]'
+  'space-y-4 overflow-hidden border border-arvo-light-border bg-[#F2F2F2] p-4 dark:border-neutral-700 dark:bg-[rgba(38,38,38,0.5)]'
 
 const tokenButtonSecondaryClassName =
-  'rounded-none border border-o9ds-light-border dark:border-neutral-600 bg-transparent px-4 py-2 text-sm font-medium text-o9ds-light-primary dark:text-white'
+  'rounded-none border border-arvo-light-border dark:border-neutral-600 bg-transparent px-4 py-2 text-sm font-medium text-arvo-light-primary dark:text-white'
 
 const tokenButtonPrimaryClassName =
-  'rounded-none border border-o9ds-light-primary dark:border-white bg-o9ds-light-primary dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-o9ds-light-primary'
+  'rounded-none border border-arvo-light-primary dark:border-white bg-arvo-light-primary dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-arvo-light-primary'
 
 /** Destructive confirm (e.g. Delete) in alert demos */
 const tokenButtonDestructiveClassName =
-  'rounded-none border border-[color:var(--o9ds-color-b-negative)] bg-[color:var(--o9ds-color-b-negative)] px-4 py-2 text-sm font-medium text-white dark:border-red-500 dark:bg-red-600'
+  'rounded-none border border-[color:var(--arvo-color-b-negative)] bg-[color:var(--arvo-color-b-negative)] px-4 py-2 text-sm font-medium text-white dark:border-red-500 dark:bg-red-600'
 
-/** o9ds-font-h16-m + color-t-primary — dialog titles on Keyboard & focus demos */
-const kbDialogTitleClassName = 'text-base font-medium text-[color:var(--o9ds-color-t-primary)]'
+/** arvo-font-h16-m + color-t-primary — dialog titles on Keyboard & focus demos */
+const kbDialogTitleClassName = 'text-base font-medium text-[color:var(--arvo-color-t-primary)]'
 
 /** Labels inside a11y demo dialogs */
 const kbDialogLabelClassName =
-  'mb-1 block text-xs font-normal text-[color:var(--o9ds-color-t-primary)]'
+  'mb-1 block text-xs font-normal text-[color:var(--arvo-color-t-primary)]'
 
 /** Underline inputs: field fill s-layer-04 (index.css); focus = b-theme-focus bottom border only */
 const kbDialogFieldClassName =
-  'kb-a11y-dialog-field w-full rounded-none border-0 px-2 py-2 text-sm text-[color:var(--o9ds-color-t-primary)] placeholder:text-[var(--o9ds-color-t-placeholder)]'
+  'kb-a11y-dialog-field w-full rounded-none border-0 px-2 py-2 text-sm text-[color:var(--arvo-color-t-primary)] placeholder:text-[var(--arvo-color-t-placeholder)]'
 
 const kbDialogHowToClassName =
-  'mt-2 max-w-xl text-xs leading-relaxed text-o9ds-light-secondary dark:text-neutral-500'
+  'mt-2 max-w-xl text-xs leading-relaxed text-arvo-light-secondary dark:text-neutral-500'
 
 function KbDialogHowTo({ children }) {
   return (
     <p className={kbDialogHowToClassName}>
-      <strong className="font-semibold text-o9ds-light-primary dark:text-white">How to try it: </strong>
+      <strong className="font-semibold text-arvo-light-primary dark:text-white">How to try it: </strong>
       {children}
     </p>
   )
@@ -100,7 +100,7 @@ function getFocusableInDialog(container) {
 /** Tab order scope for closing an open list and moving focus (dialog vs page main). */
 function getDropdownTabOrderContainer(focusOrderContainerRef, triggerEl) {
   if (focusOrderContainerRef?.current) return focusOrderContainerRef.current
-  return triggerEl?.closest('[data-o9ds-kb-a11y-dialog]') ?? triggerEl?.closest('main') ?? document.body
+  return triggerEl?.closest('[data-arvo-kb-a11y-dialog]') ?? triggerEl?.closest('main') ?? document.body
 }
 
 function moveFocusRelativeToTrigger(trigger, container, shiftKey) {
@@ -228,7 +228,7 @@ function KeyboardA11yDemoDialog({
   return createPortal(
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6">
       <div
-        className="o9ds-mask-overlay absolute inset-0 cursor-default"
+        className="arvo-mask-overlay absolute inset-0 cursor-default"
         onClick={close}
         aria-hidden="true"
       />
@@ -238,16 +238,16 @@ function KeyboardA11yDemoDialog({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={containerInitialFocus ? -1 : undefined}
-        data-o9ds-kb-a11y-dialog
-        className="relative z-10 flex w-full max-w-lg flex-col border border-o9ds-light-border bg-[color:var(--o9ds-color-s-layer-03)] shadow-lg dark:border-neutral-600"
+        data-arvo-kb-a11y-dialog
+        className="relative z-10 flex w-full max-w-lg flex-col border border-arvo-light-border bg-[color:var(--arvo-color-s-layer-03)] shadow-lg dark:border-neutral-600"
         onKeyDown={handleDialogFocusTrapKeyDown(dialogRef, close, onEscapeKey)}
       >
         <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
           <div className="flex min-w-0 flex-1 items-center gap-3">
             {variant === 'alert' ? (
               <span
-                className="o9con o9con-exclamation-triangle o9ds-icon-20 shrink-0"
-                style={{ color: 'var(--o9ds-color-i-warning)' }}
+                className="o9con o9con-exclamation-triangle arvo-icon-20 shrink-0"
+                style={{ color: 'var(--arvo-color-i-warning)' }}
                 aria-hidden
               />
             ) : null}
@@ -258,7 +258,7 @@ function KeyboardA11yDemoDialog({
           <button
             type="button"
             onClick={close}
-            className="flex h-9 w-9 shrink-0 items-center justify-center border border-[color:var(--o9ds-color-b-form)] text-[color:var(--o9ds-color-t-primary)] transition-opacity hover:opacity-80"
+            className="flex h-9 w-9 shrink-0 items-center justify-center border border-[color:var(--arvo-color-b-form)] text-[color:var(--arvo-color-t-primary)] transition-opacity hover:opacity-80"
             aria-label="Close"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -345,12 +345,12 @@ function TabStripInitialFocusDemo() {
         View Example
       </button>
       <KbDialogHowTo>
-        Activate <strong className="text-o9ds-light-primary dark:text-white">View Example</strong> (click or when the button is focused, press{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Enter</strong> or <strong className="text-o9ds-light-primary dark:text-white">Space</strong>
-        ). On open, focus should land on the <strong className="text-o9ds-light-primary dark:text-white">Overview</strong> tab. Use{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-o9ds-light-primary dark:text-white">Right Arrow</strong> to
-        change tabs; use <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> / <strong className="text-o9ds-light-primary dark:text-white">Shift+Tab</strong> to
-        move through the dialog. Press <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> or use the close control / footer buttons to dismiss.
+        Activate <strong className="text-arvo-light-primary dark:text-white">View Example</strong> (click or when the button is focused, press{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Enter</strong> or <strong className="text-arvo-light-primary dark:text-white">Space</strong>
+        ). On open, focus should land on the <strong className="text-arvo-light-primary dark:text-white">Overview</strong> tab. Use{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-arvo-light-primary dark:text-white">Right Arrow</strong> to
+        change tabs; use <strong className="text-arvo-light-primary dark:text-white">Tab</strong> / <strong className="text-arvo-light-primary dark:text-white">Shift+Tab</strong> to
+        move through the dialog. Press <strong className="text-arvo-light-primary dark:text-white">Esc</strong> or use the close control / footer buttons to dismiss.
       </KbDialogHowTo>
       <KeyboardA11yDemoDialog
         open={open}
@@ -364,7 +364,7 @@ function TabStripInitialFocusDemo() {
           role="tablist"
           aria-label="Example tabs"
           className="relative mt-1 flex gap-6"
-          data-o9ds-tabs
+          data-arvo-tabs
           onKeyDown={handleTabListKeyDown}
         >
           {TAB_INITIAL_FOCUS_TABS.map((tab) => (
@@ -376,22 +376,22 @@ function TabStripInitialFocusDemo() {
               aria-controls={`a11y-kb-tab-panel-${tab}`}
               id={`a11y-kb-tab-${tab}`}
               tabIndex={activeTab === tab ? 0 : -1}
-              data-o9ds-tab-active={activeTab === tab ? '' : undefined}
+              data-arvo-tab-active={activeTab === tab ? '' : undefined}
               onClick={() => {
                 setActiveTab(tab)
                 window.setTimeout(() => document.getElementById(`a11y-kb-tab-${tab}`)?.focus(), 0)
               }}
               className={`relative z-10 pb-3 text-sm font-medium transition-colors ${
                 activeTab === tab
-                  ? 'text-[color:var(--o9ds-color-t-primary)]'
-                  : 'text-[color:var(--o9ds-color-t-secondary)] hover:text-[color:var(--o9ds-color-t-primary)]'
+                  ? 'text-[color:var(--arvo-color-t-primary)]'
+                  : 'text-[color:var(--arvo-color-t-secondary)] hover:text-[color:var(--arvo-color-t-primary)]'
               }`}
             >
               {tab}
             </button>
           ))}
           <span
-            className="pointer-events-none absolute -bottom-px z-20 h-0.5 bg-[color:var(--o9ds-color-b-theme-focus)] transition-[left,width] duration-300 ease-out"
+            className="pointer-events-none absolute -bottom-px z-20 h-0.5 bg-[color:var(--arvo-color-b-theme-focus)] transition-[left,width] duration-300 ease-out"
             style={{
               left: tabIndicator.left,
               width: tabIndicator.width,
@@ -406,11 +406,11 @@ function TabStripInitialFocusDemo() {
             id={`a11y-kb-tab-panel-${tab}`}
             aria-labelledby={`a11y-kb-tab-${tab}`}
             hidden={activeTab !== tab}
-            className="pt-3 text-sm text-[color:var(--o9ds-color-t-secondary)]"
+            className="pt-3 text-sm text-[color:var(--arvo-color-t-secondary)]"
           >
             <p>
-              Panel for <strong className="text-[color:var(--o9ds-color-t-primary)]">{tab}</strong>. On open, initial focus moves to the{' '}
-              <strong className="text-[color:var(--o9ds-color-t-primary)]">active tab</strong> in the tab list (not the header close control).
+              Panel for <strong className="text-[color:var(--arvo-color-t-primary)]">{tab}</strong>. On open, initial focus moves to the{' '}
+              <strong className="text-[color:var(--arvo-color-t-primary)]">active tab</strong> in the tab list (not the header close control).
             </p>
           </div>
         ))}
@@ -442,22 +442,22 @@ function FormBodyInitialFocusDemo({ howToPurpose = 'initial' }) {
   const howTo =
     howToPurpose === 'trap' ? (
       <>
-        Open the dialog, then press <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> and{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Shift+Tab</strong> many times—focus should stay inside the dialog (close control, fields, footer) and
-        never jump to the page behind the overlay. Press <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> to close.
+        Open the dialog, then press <strong className="text-arvo-light-primary dark:text-white">Tab</strong> and{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Shift+Tab</strong> many times—focus should stay inside the dialog (close control, fields, footer) and
+        never jump to the page behind the overlay. Press <strong className="text-arvo-light-primary dark:text-white">Esc</strong> to close.
       </>
     ) : howToPurpose === 'return' ? (
       <>
-        Open the dialog, then close with <strong className="text-o9ds-light-primary dark:text-white">Esc</strong>,{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">OK</strong>, <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>, or the header
-        close control—keyboard focus should move back to this <strong className="text-o9ds-light-primary dark:text-white">View Example</strong> button.
+        Open the dialog, then close with <strong className="text-arvo-light-primary dark:text-white">Esc</strong>,{' '}
+        <strong className="text-arvo-light-primary dark:text-white">OK</strong>, <strong className="text-arvo-light-primary dark:text-white">Cancel</strong>, or the header
+        close control—keyboard focus should move back to this <strong className="text-arvo-light-primary dark:text-white">View Example</strong> button.
       </>
     ) : (
       <>
-        Open with a click or, when <strong className="text-o9ds-light-primary dark:text-white">View Example</strong> is focused,{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Enter</strong> / <strong className="text-o9ds-light-primary dark:text-white">Space</strong>. Initial focus
-        should land in the <strong className="text-o9ds-light-primary dark:text-white">Name</strong> field; <strong className="text-o9ds-light-primary dark:text-white">Tab</strong>{' '}
-        through <strong className="text-o9ds-light-primary dark:text-white">Email</strong> and the footer. <strong className="text-o9ds-light-primary dark:text-white">Esc</strong>{' '}
+        Open with a click or, when <strong className="text-arvo-light-primary dark:text-white">View Example</strong> is focused,{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Enter</strong> / <strong className="text-arvo-light-primary dark:text-white">Space</strong>. Initial focus
+        should land in the <strong className="text-arvo-light-primary dark:text-white">Name</strong> field; <strong className="text-arvo-light-primary dark:text-white">Tab</strong>{' '}
+        through <strong className="text-arvo-light-primary dark:text-white">Email</strong> and the footer. <strong className="text-arvo-light-primary dark:text-white">Esc</strong>{' '}
         closes the dialog.
       </>
     )
@@ -526,10 +526,10 @@ function FooterOnlyInitialFocusDemo() {
         View Example
       </button>
       <KbDialogHowTo>
-        Open the dialog; initial focus should be on <strong className="text-o9ds-light-primary dark:text-white">OK</strong>. Use{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> / <strong className="text-o9ds-light-primary dark:text-white">Shift+Tab</strong> to move between{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">OK</strong>, <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>, and the header
-        close control. <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes.
+        Open the dialog; initial focus should be on <strong className="text-arvo-light-primary dark:text-white">OK</strong>. Use{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Tab</strong> / <strong className="text-arvo-light-primary dark:text-white">Shift+Tab</strong> to move between{' '}
+        <strong className="text-arvo-light-primary dark:text-white">OK</strong>, <strong className="text-arvo-light-primary dark:text-white">Cancel</strong>, and the header
+        close control. <strong className="text-arvo-light-primary dark:text-white">Esc</strong> closes.
       </KbDialogHowTo>
       <KeyboardA11yDemoDialog
         open={open}
@@ -539,8 +539,8 @@ function FooterOnlyInitialFocusDemo() {
         titleId={titleId}
         primaryFooterRef={okRef}
       >
-        <p className="text-sm leading-relaxed text-[color:var(--o9ds-color-t-secondary)]">
-          No tab strip or inputs here—only this message and the footer actions. Initial focus is on <strong className="text-[color:var(--o9ds-color-t-primary)]">OK</strong>.
+        <p className="text-sm leading-relaxed text-[color:var(--arvo-color-t-secondary)]">
+          No tab strip or inputs here—only this message and the footer actions. Initial focus is on <strong className="text-[color:var(--arvo-color-t-primary)]">OK</strong>.
         </p>
       </KeyboardA11yDemoDialog>
     </>
@@ -562,8 +562,8 @@ function ContainerInitialFocusDemo() {
       </button>
       <KbDialogHowTo>
         Open the dialog; initial focus is on the dialog surface (not the close button). Press{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> once to move focus to the header close control; there are no footer buttons in this variant.{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes.
+        <strong className="text-arvo-light-primary dark:text-white">Tab</strong> once to move focus to the header close control; there are no footer buttons in this variant.{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Esc</strong> closes.
       </KbDialogHowTo>
       <KeyboardA11yDemoDialog
         open={open}
@@ -574,8 +574,8 @@ function ContainerInitialFocusDemo() {
         showFooter={false}
         containerInitialFocus
       >
-        <p className="text-sm leading-relaxed text-[color:var(--o9ds-color-t-secondary)]">
-          Message-only content. The dialog container receives initial focus; use <strong className="text-[color:var(--o9ds-color-t-primary)]">Tab</strong> to reach
+        <p className="text-sm leading-relaxed text-[color:var(--arvo-color-t-secondary)]">
+          Message-only content. The dialog container receives initial focus; use <strong className="text-[color:var(--arvo-color-t-primary)]">Tab</strong> to reach
           the close control.
         </p>
       </KeyboardA11yDemoDialog>
@@ -598,9 +598,9 @@ function AlertHighStakesDialogDemo() {
         View Example
       </button>
       <KbDialogHowTo>
-        Open the dialog. Initial focus is on <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong> (safer action). Use{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> to reach <strong className="text-o9ds-light-primary dark:text-white">Delete</strong>.{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes the dialog.
+        Open the dialog. Initial focus is on <strong className="text-arvo-light-primary dark:text-white">Cancel</strong> (safer action). Use{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Tab</strong> to reach <strong className="text-arvo-light-primary dark:text-white">Delete</strong>.{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Esc</strong> closes the dialog.
       </KbDialogHowTo>
       <KeyboardA11yDemoDialog
         open={open}
@@ -617,7 +617,7 @@ function AlertHighStakesDialogDemo() {
         primaryLabel="Delete"
         primaryActionClassName={tokenButtonDestructiveClassName}
       >
-        <p className="text-sm leading-relaxed text-[color:var(--o9ds-color-t-secondary)]">
+        <p className="text-sm leading-relaxed text-[color:var(--arvo-color-t-secondary)]">
           This action cannot be undone. The selected items will be permanently removed.
         </p>
       </KeyboardA11yDemoDialog>
@@ -732,16 +732,16 @@ function DropdownOverlaySelect({
   }
 
   const triggerClassName = [
-    'inline-flex min-w-[10rem] items-center justify-between gap-2 rounded-none border-[1.5px] px-3 py-2 text-sm font-medium text-[color:var(--o9ds-color-t-primary)] transition-[border-color,background-color] outline-none ring-0 focus:border-[color:var(--o9ds-color-b-theme-focus)] focus:outline-none',
+    'inline-flex min-w-[10rem] items-center justify-between gap-2 rounded-none border-[1.5px] px-3 py-2 text-sm font-medium text-[color:var(--arvo-color-t-primary)] transition-[border-color,background-color] outline-none ring-0 focus:border-[color:var(--arvo-color-b-theme-focus)] focus:outline-none',
     open
-      ? 'border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-04)] dark:bg-neutral-700'
-      : 'border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-03)]',
+      ? 'border-[color:var(--arvo-color-b-divider)] bg-[color:var(--arvo-color-s-layer-04)] dark:bg-neutral-700'
+      : 'border-[color:var(--arvo-color-b-divider)] bg-[color:var(--arvo-color-s-layer-03)]',
   ].join(' ')
 
   const chevronClass = open ? 'o9con-chevron-up' : 'o9con-chevron-down'
 
   return (
-    <div ref={rootRef} data-o9ds-kb-dropdown className="relative inline-block">
+    <div ref={rootRef} data-arvo-kb-dropdown className="relative inline-block">
       <button
         ref={triggerRef}
         type="button"
@@ -754,14 +754,14 @@ function DropdownOverlaySelect({
         onKeyDown={onTriggerKeyDown}
       >
         <span>Example</span>
-        <span className={`o9con ${chevronClass} o9ds-icon-20 shrink-0 text-[color:var(--o9ds-color-t-primary)]`} aria-hidden />
+        <span className={`o9con ${chevronClass} arvo-icon-20 shrink-0 text-[color:var(--arvo-color-t-primary)]`} aria-hidden />
       </button>
       {open ? (
         <ul
           id={listId}
           role="listbox"
           aria-label={ariaLabel}
-          className="absolute left-0 top-full z-20 mt-0 min-w-full border border-[color:var(--o9ds-color-b-form)] bg-[color:var(--o9ds-color-s-layer-03)] py-1 shadow-[0_4px_16px_rgba(1,1,1,0.12)] dark:border-neutral-600 dark:shadow-[0_4px_16px_rgba(0,0,0,0.45)]"
+          className="absolute left-0 top-full z-20 mt-0 min-w-full border border-[color:var(--arvo-color-b-form)] bg-[color:var(--arvo-color-s-layer-03)] py-1 shadow-[0_4px_16px_rgba(1,1,1,0.12)] dark:border-neutral-600 dark:shadow-[0_4px_16px_rgba(0,0,0,0.45)]"
         >
           {DROPDOWN_OVERLAY_OPTIONS.map((label, i) => (
             <li key={label} role="presentation">
@@ -772,7 +772,7 @@ function DropdownOverlaySelect({
                 type="button"
                 role="option"
                 tabIndex={-1}
-                className="w-full border-[1.5px] border-transparent px-3 py-2.5 text-left text-sm text-[color:var(--o9ds-color-t-primary)] hover:bg-[color:var(--o9ds-color-s-layer-04)] focus:border-[color:var(--o9ds-color-b-theme-focus)] focus:bg-[color:var(--o9ds-color-s-layer-04)] focus:outline-none"
+                className="w-full border-[1.5px] border-transparent px-3 py-2.5 text-left text-sm text-[color:var(--arvo-color-t-primary)] hover:bg-[color:var(--arvo-color-s-layer-04)] focus:border-[color:var(--arvo-color-b-theme-focus)] focus:bg-[color:var(--arvo-color-s-layer-04)] focus:outline-none"
                 onKeyDown={(e) => onOptionKeyDown(e, i)}
                 onClick={closeAndReturnFocus}
               >
@@ -792,14 +792,14 @@ function DropdownInitialFocusDemo() {
 
   return (
     <div
-      className="max-w-2xl space-y-3 border border-o9ds-light-border bg-[#FAFAFA] p-4 dark:border-neutral-700 dark:bg-neutral-900/40"
-      data-o9ds-kb-dropdown-demo
+      className="max-w-2xl space-y-3 border border-arvo-light-border bg-[#FAFAFA] p-4 dark:border-neutral-700 dark:bg-neutral-900/40"
+      data-arvo-kb-dropdown-demo
     >
       <KbDialogHowTo>
-        Activate <strong className="text-o9ds-light-primary dark:text-white">Example</strong> to open the overlay. Focus should move to the{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">first option</strong>. Use arrow keys to move;{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> closes the list and moves to the next focusable control on the page;{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> or click outside closes the list and returns focus to the trigger.
+        Activate <strong className="text-arvo-light-primary dark:text-white">Example</strong> to open the overlay. Focus should move to the{' '}
+        <strong className="text-arvo-light-primary dark:text-white">first option</strong>. Use arrow keys to move;{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Tab</strong> closes the list and moves to the next focusable control on the page;{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Esc</strong> or click outside closes the list and returns focus to the trigger.
       </KbDialogHowTo>
       <DropdownOverlaySelect listId="a11y-kb-dropdown-demo-list" open={open} onOpenChange={setOpen} />
     </div>
@@ -836,12 +836,12 @@ function NestedEscStackDemo() {
         View Example
       </button>
       <KbDialogHowTo>
-        Open the dialog, then use the same <strong className="text-o9ds-light-primary dark:text-white">Example</strong> dropdown as in{' '}
-        <em className="text-o9ds-light-primary dark:text-white">Dropdown or select menu opens</em>. With the list open,{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> closes the menu and moves focus to the next control in the dialog (for example{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>);{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">first Esc</strong> closes only the menu (focus returns to the trigger).{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Second Esc</strong> closes the dialog.
+        Open the dialog, then use the same <strong className="text-arvo-light-primary dark:text-white">Example</strong> dropdown as in{' '}
+        <em className="text-arvo-light-primary dark:text-white">Dropdown or select menu opens</em>. With the list open,{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Tab</strong> closes the menu and moves focus to the next control in the dialog (for example{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Cancel</strong>);{' '}
+        <strong className="text-arvo-light-primary dark:text-white">first Esc</strong> closes only the menu (focus returns to the trigger).{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Second Esc</strong> closes the dialog.
       </KbDialogHowTo>
       <KeyboardA11yDemoDialog
         open={open}
@@ -853,7 +853,7 @@ function NestedEscStackDemo() {
         onEscapeKey={onEscapeKey}
         primaryFooterRef={okRef}
       >
-        <div className="space-y-3 text-sm text-[color:var(--o9ds-color-t-secondary)]">
+        <div className="space-y-3 text-sm text-[color:var(--arvo-color-t-secondary)]">
           <p>Demonstrates stacked dismissible layers: inner list first, then the dialog.</p>
           <DropdownOverlaySelect
             listId="a11y-kb-nested-menu-list"
@@ -884,8 +884,8 @@ function SingleEscSimpleModalDemo() {
         View Example
       </button>
       <KbDialogHowTo>
-        Only this dialog is open—<strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes it in one step and focus returns to the button. The same idea applies to a{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">dropdown at layout level</strong> (not inside another overlay): one Esc dismisses that list.
+        Only this dialog is open—<strong className="text-arvo-light-primary dark:text-white">Esc</strong> closes it in one step and focus returns to the button. The same idea applies to a{' '}
+        <strong className="text-arvo-light-primary dark:text-white">dropdown at layout level</strong> (not inside another overlay): one Esc dismisses that list.
       </KbDialogHowTo>
       <KeyboardA11yDemoDialog
         open={open}
@@ -896,7 +896,7 @@ function SingleEscSimpleModalDemo() {
         dialogTitle="Single-layer dialog"
         primaryFooterRef={okRef}
       >
-        <p className="text-sm text-[color:var(--o9ds-color-t-secondary)]">
+        <p className="text-sm text-[color:var(--arvo-color-t-secondary)]">
           There is no nested menu here—Esc closes this overlay immediately.
         </p>
       </KeyboardA11yDemoDialog>
@@ -921,8 +921,8 @@ function RovingTabindexToolbarDemo() {
     <div
       role="toolbar"
       aria-label="Example clipboard actions"
-      className="inline-flex flex-wrap gap-1 border border-o9ds-light-border bg-[#FAFAFA] p-2 dark:border-neutral-700 dark:bg-neutral-900/40"
-      data-o9ds-kb-roving-demo
+      className="inline-flex flex-wrap gap-1 border border-arvo-light-border bg-[#FAFAFA] p-2 dark:border-neutral-700 dark:bg-neutral-900/40"
+      data-arvo-kb-roving-demo
     >
       {ROVING_TOOLBAR_LABELS.map((label, i) => (
         <button
@@ -994,11 +994,11 @@ function FocusAfterDeleteListDemo() {
 
   return (
     <div
-      className="max-w-3xl space-y-3 border border-o9ds-light-border bg-[color:var(--o9ds-color-s-layer-03)] p-4 dark:border-neutral-600"
-      data-o9ds-kb-delete-focus-demo
+      className="max-w-3xl space-y-3 border border-arvo-light-border bg-[color:var(--arvo-color-s-layer-03)] p-4 dark:border-neutral-600"
+      data-arvo-kb-delete-focus-demo
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span id={filterLabelId} className="text-sm font-medium text-[color:var(--o9ds-color-t-secondary)]">
+        <span id={filterLabelId} className="text-sm font-medium text-[color:var(--arvo-color-t-secondary)]">
           Filter By
         </span>
         <ul
@@ -1018,7 +1018,7 @@ function FocusAfterDeleteListDemo() {
                   tabIndex={activeIndex === index ? 0 : -1}
                   aria-describedby={tipId}
                   aria-label={`${item.label} filter. Clear with Delete, Backspace, Enter, or Space.`}
-                  className="group relative inline-flex min-h-[2.25rem] items-center overflow-visible border-[1.5px] border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-03)] px-3 py-1.5 text-sm font-medium text-[color:var(--o9ds-color-t-primary)] outline-none ring-0 transition-[border-color,background-color] hover:bg-[color:var(--o9ds-color-s-theme-hover-2)] focus:border-[color:var(--o9ds-color-b-theme-focus)] focus:outline-none"
+                  className="group relative inline-flex min-h-[2.25rem] items-center overflow-visible border-[1.5px] border-[color:var(--arvo-color-b-divider)] bg-[color:var(--arvo-color-s-layer-03)] px-3 py-1.5 text-sm font-medium text-[color:var(--arvo-color-t-primary)] outline-none ring-0 transition-[border-color,background-color] hover:bg-[color:var(--arvo-color-s-theme-hover-2)] focus:border-[color:var(--arvo-color-b-theme-focus)] focus:outline-none"
                   onFocus={() => setActiveIndex(index)}
                   onClick={() => removeAt(index)}
                   onKeyDown={(e) => {
@@ -1039,7 +1039,7 @@ function FocusAfterDeleteListDemo() {
                   </span>
                   <span className="relative z-0 whitespace-nowrap">{item.label}</span>
                   <span
-                    className="pointer-events-none absolute right-0.5 top-1/2 z-10 flex h-6 w-6 -translate-y-1/2 items-center justify-center border-[1.5px] border-[color:var(--o9ds-color-b-divider)] bg-[color:var(--o9ds-color-s-layer-04)] text-sm leading-none text-[color:var(--o9ds-color-t-primary)] opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus:opacity-100"
+                    className="pointer-events-none absolute right-0.5 top-1/2 z-10 flex h-6 w-6 -translate-y-1/2 items-center justify-center border-[1.5px] border-[color:var(--arvo-color-b-divider)] bg-[color:var(--arvo-color-s-layer-04)] text-sm leading-none text-[color:var(--arvo-color-t-primary)] opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus:opacity-100"
                     aria-hidden
                   >
                     ×
@@ -1051,14 +1051,14 @@ function FocusAfterDeleteListDemo() {
         </ul>
       </div>
       {items.length === 0 ? (
-        <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400" role="status">
+        <p className="text-sm text-arvo-light-secondary dark:text-neutral-400" role="status">
           All filters cleared—focus could move to an “Add filter” control in a real flow.
         </p>
       ) : null}
       <KbDialogHowTo>
-        Use <strong className="text-o9ds-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-o9ds-light-primary dark:text-white">Right Arrow</strong> to move between chips (roving tabindex). Hover applies the theme hover-2 surface; hover or focus shows the <strong className="text-o9ds-light-primary dark:text-white">Clear</strong> tooltip and × layered on the chip (no extra padding for the ×). Default stroke is divider color; focused stroke is <strong className="text-o9ds-light-primary dark:text-white">1.5px</strong> theme-focus—no separate outline. Press{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Delete</strong>, <strong className="text-o9ds-light-primary dark:text-white">Backspace</strong>,{' '}
-        <strong className="text-o9ds-light-primary dark:text-white">Enter</strong>, or <strong className="text-o9ds-light-primary dark:text-white">Space</strong> to clear that chip—focus moves to the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip (or the new first chip if you cleared the first).
+        Use <strong className="text-arvo-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-arvo-light-primary dark:text-white">Right Arrow</strong> to move between chips (roving tabindex). Hover applies the theme hover-2 surface; hover or focus shows the <strong className="text-arvo-light-primary dark:text-white">Clear</strong> tooltip and × layered on the chip (no extra padding for the ×). Default stroke is divider color; focused stroke is <strong className="text-arvo-light-primary dark:text-white">1.5px</strong> theme-focus—no separate outline. Press{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Delete</strong>, <strong className="text-arvo-light-primary dark:text-white">Backspace</strong>,{' '}
+        <strong className="text-arvo-light-primary dark:text-white">Enter</strong>, or <strong className="text-arvo-light-primary dark:text-white">Space</strong> to clear that chip—focus moves to the <strong className="text-arvo-light-primary dark:text-white">previous</strong> chip (or the new first chip if you cleared the first).
       </KbDialogHowTo>
     </div>
   )
@@ -1091,14 +1091,14 @@ function SubmitInvalidDemo() {
 
   return (
     <form
-      data-o9ds-kb-form-demo
+      data-arvo-kb-form-demo
       className={`${tokenFormDemoSurfaceClassName} max-w-xl`}
       onSubmit={handleSubmit}
       aria-label="Example: focus first invalid field on submit"
       noValidate
     >
-      <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-        Press <strong className="text-o9ds-light-primary dark:text-white">Submit</strong> with empty values: focus moves to the first required field in DOM order; if the first is filled and the second is empty, focus moves to the second.
+      <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+        Press <strong className="text-arvo-light-primary dark:text-white">Submit</strong> with empty values: focus moves to the first required field in DOM order; if the first is filled and the second is empty, focus moves to the second.
       </p>
       <div className="space-y-4">
         <div>
@@ -1118,7 +1118,7 @@ function SubmitInvalidDemo() {
             className={showErr1 ? tokenFieldErrorClassName : tokenFieldClassName}
           />
           {showErr1 ? (
-            <p id="kb-submit-inv-err-1" className="mt-1 text-xs text-[color:var(--o9ds-color-t-negative)]" role="alert">
+            <p id="kb-submit-inv-err-1" className="mt-1 text-xs text-[color:var(--arvo-color-t-negative)]" role="alert">
               This field is required.
             </p>
           ) : null}
@@ -1140,13 +1140,13 @@ function SubmitInvalidDemo() {
             className={showErr2 ? tokenFieldErrorClassName : tokenFieldClassName}
           />
           {showErr2 ? (
-            <p id="kb-submit-inv-err-2" className="mt-1 text-xs text-[color:var(--o9ds-color-t-negative)]" role="alert">
+            <p id="kb-submit-inv-err-2" className="mt-1 text-xs text-[color:var(--arvo-color-t-negative)]" role="alert">
               This field is required.
             </p>
           ) : null}
         </div>
       </div>
-      <div className="flex flex-wrap gap-3 border-t border-o9ds-light-border pt-4 dark:border-neutral-600">
+      <div className="flex flex-wrap gap-3 border-t border-arvo-light-border pt-4 dark:border-neutral-600">
         <button type="submit" className={tokenButtonPrimaryClassName}>
           Submit
         </button>
@@ -1177,38 +1177,38 @@ export default function KeyboardAndFocus() {
       tocSections={toc}
     >
       <section id="a11y-kb-intro" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Introduction</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Introduction</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
           Keyboard accessibility ensures users can operate every interactive part of the experience without a mouse. This is essential for users with motor impairments, screen reader users, keyboard-only users, power users, and people in temporary or situational constraints.
         </p>
       </section>
 
       <section id="a11y-kb-principle" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Core keyboard principle</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed font-medium">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Core keyboard principle</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed font-medium">
           If a user can perform an action with a mouse, they must also be able to perform it with a keyboard.
         </p>
       </section>
 
       <section id="a11y-kb-layout" className="space-y-6 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Keyboard operability: single-column vs multi-column layouts</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-          Keyboard users move through the page in <strong className="text-o9ds-light-primary dark:text-white">DOM order</strong>, not necessarily in the order the layout “looks” when scanned visually. That relationship is straightforward in a single-column, linear layout: reading order and tab order usually match if the DOM follows the same top-to-bottom sequence.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Keyboard operability: single-column vs multi-column layouts</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+          Keyboard users move through the page in <strong className="text-arvo-light-primary dark:text-white">DOM order</strong>, not necessarily in the order the layout “looks” when scanned visually. That relationship is straightforward in a single-column, linear layout: reading order and tab order usually match if the DOM follows the same top-to-bottom sequence.
         </p>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Single-column (linear) layouts</h3>
-          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Single-column (linear) layouts</h3>
+          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400">
             <li>Tab typically follows one vertical flow; fewer opportunities for visual order to disagree with DOM order.</li>
             <li>Still validate reading order for responsive breakpoints—content that reorders at different widths must keep a sensible tab sequence.</li>
           </ul>
-          <p className="pt-2 text-sm font-medium text-o9ds-light-primary dark:text-white">Example</p>
-          <p className="text-xs text-o9ds-light-secondary dark:text-neutral-500">
+          <p className="pt-2 text-sm font-medium text-arvo-light-primary dark:text-white">Example</p>
+          <p className="text-xs text-arvo-light-secondary dark:text-neutral-500">
             DOM order for single column (top → bottom), then the footer actions—Tab follows that sequence.
           </p>
           <form
             className={tokenFormDemoSurfaceClassName}
-            data-o9ds-kb-form-demo
+            data-arvo-kb-form-demo
             onSubmit={(e) => e.preventDefault()}
             aria-label="Demo single-column form"
           >
@@ -1232,7 +1232,7 @@ export default function KeyboardAndFocus() {
                 <input id="kb-demo-linear-3" name="linear3" type="text" autoComplete="off" className={tokenFieldClassName} placeholder="Short summary" />
               </div>
             </div>
-            <div className="flex flex-wrap gap-3 border-t border-o9ds-light-border pt-4 dark:border-neutral-600">
+            <div className="flex flex-wrap gap-3 border-t border-arvo-light-border pt-4 dark:border-neutral-600">
               <button type="button" className={tokenButtonSecondaryClassName}>
                 Cancel
               </button>
@@ -1243,30 +1243,30 @@ export default function KeyboardAndFocus() {
           </form>
         </div>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Multi-column layouts (e.g. two columns)</h3>
-          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Multi-column layouts (e.g. two columns)</h3>
+          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400">
             <li>
-              Visual reading order may be left column then right column, or main column then rail—keyboard focus follows the <strong className="text-o9ds-light-primary dark:text-white">order of elements in the DOM</strong>.
+              Visual reading order may be left column then right column, or main column then rail—keyboard focus follows the <strong className="text-arvo-light-primary dark:text-white">order of elements in the DOM</strong>.
             </li>
             <li>
               If the DOM is ordered incorrectly (for example, sidebar before main in the DOM but main appears first visually), Tab will jump in a way that feels broken. Structure the DOM to match the intended task and reading order, then use CSS for placement.
             </li>
             <li>
-              Avoid positive <code className="px-1" data-o9ds-inline-code>tabindex</code> values to “patch” order—fix document structure instead.
+              Avoid positive <code className="px-1" data-arvo-inline-code>tabindex</code> values to “patch” order—fix document structure instead.
             </li>
             <li>
               At narrow widths, multi-column layouts often stack into a single column; test keyboard order in both stacked and side-by-side states.
             </li>
           </ul>
-          <p className="pt-2 text-sm font-medium text-o9ds-light-primary dark:text-white">Example</p>
-          <p className="text-xs text-o9ds-light-secondary dark:text-neutral-500">
-            DOM order is <strong className="text-o9ds-light-primary dark:text-white">left column (top → bottom)</strong>, then{' '}
-            <strong className="text-o9ds-light-primary dark:text-white">right column (top → bottom)</strong>, then the footer actions—Tab follows that sequence.
+          <p className="pt-2 text-sm font-medium text-arvo-light-primary dark:text-white">Example</p>
+          <p className="text-xs text-arvo-light-secondary dark:text-neutral-500">
+            DOM order is <strong className="text-arvo-light-primary dark:text-white">left column (top → bottom)</strong>, then{' '}
+            <strong className="text-arvo-light-primary dark:text-white">right column (top → bottom)</strong>, then the footer actions—Tab follows that sequence.
           </p>
           <form
             className={tokenFormDemoSurfaceClassName}
-            data-o9ds-kb-form-demo
+            data-arvo-kb-form-demo
             onSubmit={(e) => e.preventDefault()}
             aria-label="Demo two-column form"
           >
@@ -1312,7 +1312,7 @@ export default function KeyboardAndFocus() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3 border-t border-o9ds-light-border pt-4 dark:border-neutral-600">
+            <div className="flex flex-wrap gap-3 border-t border-arvo-light-border pt-4 dark:border-neutral-600">
               <button type="button" className={tokenButtonSecondaryClassName}>
                 Cancel
               </button>
@@ -1325,56 +1325,56 @@ export default function KeyboardAndFocus() {
       </section>
 
       <section id="a11y-kb-standard" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Standard expectations</h2>
-        <ul className="list-disc list-outside pl-5 space-y-2 text-o9ds-light-secondary dark:text-neutral-400 text-sm">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Standard expectations</h2>
+        <ul className="list-disc list-outside pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 text-sm">
           <li>
-            <strong className="text-o9ds-light-primary dark:text-white">Tab / Shift+Tab</strong> — Move forward and backward between tab stops.
+            <strong className="text-arvo-light-primary dark:text-white">Tab / Shift+Tab</strong> — Move forward and backward between tab stops.
           </li>
           <li>
-            <strong className="text-o9ds-light-primary dark:text-white">Enter / Space</strong> — Activate controls according to native behavior.
+            <strong className="text-arvo-light-primary dark:text-white">Enter / Space</strong> — Activate controls according to native behavior.
           </li>
           <li>
-            <strong className="text-o9ds-light-primary dark:text-white">Arrow keys</strong> — Move within composite widgets (menus, tablists, radio groups, listboxes, toolbars).
+            <strong className="text-arvo-light-primary dark:text-white">Arrow keys</strong> — Move within composite widgets (menus, tablists, radio groups, listboxes, toolbars).
           </li>
           <li>
-            <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> — Close the topmost dismissible layer (see the section <em>Single vs Multi esc key</em> below).
+            <strong className="text-arvo-light-primary dark:text-white">Esc</strong> — Close the topmost dismissible layer (see the section <em>Single vs Multi esc key</em> below).
           </li>
         </ul>
       </section>
 
       <section id="a11y-kb-focus-visible" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Keyboard-only focus: <code className="text-base px-1" data-o9ds-inline-code>:focus</code> vs <code className="text-base px-1" data-o9ds-inline-code>:focus-visible</code></h2>
-        <div className="space-y-3 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Keyboard-only focus: <code className="text-base px-1" data-arvo-inline-code>:focus</code> vs <code className="text-base px-1" data-arvo-inline-code>:focus-visible</code></h2>
+        <div className="space-y-3 text-sm text-arvo-light-secondary dark:text-neutral-400">
           <p>
-            <strong className="text-o9ds-light-primary dark:text-white">:focus</strong> matches when an element receives focus from <em>any</em> input modality—keyboard, mouse, programmatic focus, etc. Styling every focus with a strong ring can mean users see a focus ring after clicking with a mouse, which some teams find visually noisy.
+            <strong className="text-arvo-light-primary dark:text-white">:focus</strong> matches when an element receives focus from <em>any</em> input modality—keyboard, mouse, programmatic focus, etc. Styling every focus with a strong ring can mean users see a focus ring after clicking with a mouse, which some teams find visually noisy.
           </p>
           <p>
-            <strong className="text-o9ds-light-primary dark:text-white">:focus-visible</strong> is designed so the browser shows the focus indicator when it is most relevant—typically when focus arrives via keyboard (or when keyboard-like navigation is used), and often <em>not</em> for simple mouse clicks on buttons and links. This reduces visual clutter for pointer users while preserving a clear indicator for keyboard users.
+            <strong className="text-arvo-light-primary dark:text-white">:focus-visible</strong> is designed so the browser shows the focus indicator when it is most relevant—typically when focus arrives via keyboard (or when keyboard-like navigation is used), and often <em>not</em> for simple mouse clicks on buttons and links. This reduces visual clutter for pointer users while preserving a clear indicator for keyboard users.
           </p>
         </div>
-        <div className="border border-o9ds-light-border dark:border-neutral-700 p-5 space-y-2">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Best practice for this design system</h3>
-          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            <li>Avoid showing a prominent focus ring on every mouse click when the platform supports <code className="px-1" data-o9ds-inline-code>:focus-visible</code>.</li>
-            <li>Ensure keyboard users still get a <strong className="text-o9ds-light-primary dark:text-white">strong, high-contrast</strong> visible indicator—meet contrast requirements against adjacent colors.</li>
+        <div className="border border-arvo-light-border dark:border-neutral-700 p-5 space-y-2">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Best practice for this design system</h3>
+          <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400">
+            <li>Avoid showing a prominent focus ring on every mouse click when the platform supports <code className="px-1" data-arvo-inline-code>:focus-visible</code>.</li>
+            <li>Ensure keyboard users still get a <strong className="text-arvo-light-primary dark:text-white">strong, high-contrast</strong> visible indicator—meet contrast requirements against adjacent colors.</li>
           </ul>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 pt-2">
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 pt-2">
             This balances accessibility with visual cleanliness: keyboard users get an unambiguous focus location; pointer users are not overwhelmed by rings on every click.
           </p>
         </div>
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5" data-o9ds-kb-focus-demo>
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Live comparison</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            <strong className="text-o9ds-light-primary dark:text-white">:focus btn</strong> — the demo outline uses{' '}
-            <code className="px-1" data-o9ds-inline-code>:focus</code> only (#010101 in light, white in dark): you should see the ring after a <em>mouse click</em> and when the control is focused.{' '}
-            <strong className="text-o9ds-light-primary dark:text-white">:focus-visible btn</strong> — outline only on{' '}
-            <code className="px-1" data-o9ds-inline-code>:focus-visible</code> with the same colors: many browsers hide the ring on a simple click but show it when focus moves with the keyboard.
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5" data-arvo-kb-focus-demo>
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Live comparison</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            <strong className="text-arvo-light-primary dark:text-white">:focus btn</strong> — the demo outline uses{' '}
+            <code className="px-1" data-arvo-inline-code>:focus</code> only (#010101 in light, white in dark): you should see the ring after a <em>mouse click</em> and when the control is focused.{' '}
+            <strong className="text-arvo-light-primary dark:text-white">:focus-visible btn</strong> — outline only on{' '}
+            <code className="px-1" data-arvo-inline-code>:focus-visible</code> with the same colors: many browsers hide the ring on a simple click but show it when focus moves with the keyboard.
           </p>
           <div className="flex flex-wrap items-start gap-4">
-            <button type="button" className={`o9ds-a11y-focus-only ${tokenButtonSecondaryClassName}`}>
+            <button type="button" className={`arvo-a11y-focus-only ${tokenButtonSecondaryClassName}`}>
               :focus btn
             </button>
-            <button type="button" className={`o9ds-a11y-focus-visible-only ${tokenButtonSecondaryClassName}`}>
+            <button type="button" className={`arvo-a11y-focus-visible-only ${tokenButtonSecondaryClassName}`}>
               :focus-visible btn
             </button>
           </div>
@@ -1383,21 +1383,21 @@ export default function KeyboardAndFocus() {
       </section>
 
       <section id="a11y-kb-order" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Focus order and DOM order</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Focus order and DOM order</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
           Focus order must follow a logical sequence aligned with reading and task completion. In most interfaces that means top-to-bottom, left-to-right <em>as reflected in the DOM</em> for multi-column pages. Do not create a visual order that conflicts with DOM order—keyboard users will follow Tab through the DOM, not through the visual scan path unless the two match.
         </p>
       </section>
 
       <section id="a11y-kb-submit-invalid" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Forms: move focus to the first invalid field on submit</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
-          When the user activates the <strong className="text-o9ds-light-primary dark:text-white">primary submit action</strong> and validation fails, move <strong className="text-o9ds-light-primary dark:text-white">keyboard focus to the first field in error</strong> (usually in DOM order). That matches how sighted users scan for errors and lets screen reader users land on the control that needs correction. Optionally pair with a polite live region for an error count—see <strong className="text-o9ds-light-primary dark:text-white">Screen reader and ARIA</strong> → <em>Live regions</em>.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Forms: move focus to the first invalid field on submit</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
+          When the user activates the <strong className="text-arvo-light-primary dark:text-white">primary submit action</strong> and validation fails, move <strong className="text-arvo-light-primary dark:text-white">keyboard focus to the first field in error</strong> (usually in DOM order). That matches how sighted users scan for errors and lets screen reader users land on the control that needs correction. Optionally pair with a polite live region for an error count—see <strong className="text-arvo-light-primary dark:text-white">Screen reader and ARIA</strong> → <em>Live regions</em>.
         </p>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
-          For very long forms, an alternative is moving focus to an <strong className="text-o9ds-light-primary dark:text-white">error summary</strong> at the top with links to each field; pick one pattern and use it consistently.
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
+          For very long forms, an alternative is moving focus to an <strong className="text-arvo-light-primary dark:text-white">error summary</strong> at the top with links to each field; pick one pattern and use it consistently.
         </p>
-        <p className="text-sm font-semibold text-o9ds-light-primary dark:text-white">Example</p>
+        <p className="text-sm font-semibold text-arvo-light-primary dark:text-white">Example</p>
         <SubmitInvalidDemo />
         <CodeBlock
           code={`form.addEventListener('submit', (event) => {
@@ -1412,67 +1412,67 @@ export default function KeyboardAndFocus() {
       </section>
 
       <section id="a11y-kb-tabindex" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Focusable vs programmatically focusable</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">
-          <strong className="text-o9ds-light-primary dark:text-white">tabindex=&quot;0&quot;</strong> — Inserts the element in the normal tab order (for custom controls that are not natively focusable).{' '}
-          <strong className="text-o9ds-light-primary dark:text-white">tabindex=&quot;-1&quot;</strong> — Removes the element from the tab sequence but allows programmatic focus (dialog containers, managed targets, roving tabindex siblings).{' '}
-          <strong className="text-o9ds-light-primary dark:text-white">tabindex &gt; 0</strong> — Avoid: it overrides natural order and almost always harms predictability.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Focusable vs programmatically focusable</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm">
+          <strong className="text-arvo-light-primary dark:text-white">tabindex=&quot;0&quot;</strong> — Inserts the element in the normal tab order (for custom controls that are not natively focusable).{' '}
+          <strong className="text-arvo-light-primary dark:text-white">tabindex=&quot;-1&quot;</strong> — Removes the element from the tab sequence but allows programmatic focus (dialog containers, managed targets, roving tabindex siblings).{' '}
+          <strong className="text-arvo-light-primary dark:text-white">tabindex &gt; 0</strong> — Avoid: it overrides natural order and almost always harms predictability.
         </p>
       </section>
 
       <section id="a11y-kb-initial" className="space-y-8 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Define initial focus and tab order</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-          Establishing clear <strong className="text-o9ds-light-primary dark:text-white">initial focus</strong> when opening interactive containers (popups, modals, side panels, popovers, drawers, dropdown lists) is essential for accessibility and for a predictable experience. The first focused element should match the user’s task and reduce unnecessary Tab presses.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Define initial focus and tab order</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+          Establishing clear <strong className="text-arvo-light-primary dark:text-white">initial focus</strong> when opening interactive containers (popups, modals, side panels, popovers, drawers, dropdown lists) is essential for accessibility and for a predictable experience. The first focused element should match the user’s task and reduce unnecessary Tab presses.
         </p>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">a. Tab component present</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            When a modal, side panel, popover, or similar container includes a tab strip, move <strong className="text-o9ds-light-primary dark:text-white">initial focus to the active tab</strong> (the selected tab panel’s corresponding tab). That aligns with user expectation that the tab interface controls the view.
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">a. Tab component present</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            When a modal, side panel, popover, or similar container includes a tab strip, move <strong className="text-arvo-light-primary dark:text-white">initial focus to the active tab</strong> (the selected tab panel’s corresponding tab). That aligns with user expectation that the tab interface controls the view.
           </p>
           <TabStripInitialFocusDemo />
         </div>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">b. Form elements or buttons in the body</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            If the body contains form fields or actionable buttons, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">first meaningful form element or button</strong> so keyboard and screen reader users can start interacting immediately. Order fields logically (labels, required indicators, and errors must remain programmatically associated).
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">b. Form elements or buttons in the body</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            If the body contains form fields or actionable buttons, move initial focus to the <strong className="text-arvo-light-primary dark:text-white">first meaningful form element or button</strong> so keyboard and screen reader users can start interacting immediately. Order fields logically (labels, required indicators, and errors must remain programmatically associated).
           </p>
           <FormBodyInitialFocusDemo />
         </div>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">c. Dropdown or select menu opens</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            When a dropdown or select list opens, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">first option</strong> (or the currently selected option, depending on pattern) inside the menu. That supports quick selection and predictable arrow-key navigation within the list.
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">c. Dropdown or select menu opens</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            When a dropdown or select list opens, move initial focus to the <strong className="text-arvo-light-primary dark:text-white">first option</strong> (or the currently selected option, depending on pattern) inside the menu. That supports quick selection and predictable arrow-key navigation within the list.
           </p>
           <DropdownInitialFocusDemo />
         </div>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">d. Alert or high-stakes confirmation dialog</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            For warning or destructive confirmations, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">secondary (safer) action first</strong>—for example Cancel or Dismiss—so users do not accidentally activate Delete or OK on the first keypress. This is a common pattern to reduce accidental destructive actions.
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">d. Alert or high-stakes confirmation dialog</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            For warning or destructive confirmations, move initial focus to the <strong className="text-arvo-light-primary dark:text-white">secondary (safer) action first</strong>—for example Cancel or Dismiss—so users do not accidentally activate Delete or OK on the first keypress. This is a common pattern to reduce accidental destructive actions.
           </p>
-          <p className="text-xs text-o9ds-light-secondary dark:text-neutral-500">
-            The demo uses the same dialog shell as the other examples on this page, with an <strong className="text-o9ds-light-primary dark:text-white">alert</strong> header using the o9con <strong className="text-o9ds-light-primary dark:text-white">exclamation triangle</strong> icon at <strong className="text-o9ds-light-primary dark:text-white">20px</strong> and initial focus on <strong className="text-o9ds-light-primary dark:text-white">Cancel</strong>.
+          <p className="text-xs text-arvo-light-secondary dark:text-neutral-500">
+            The demo uses the same dialog shell as the other examples on this page, with an <strong className="text-arvo-light-primary dark:text-white">alert</strong> header using the o9con <strong className="text-arvo-light-primary dark:text-white">exclamation triangle</strong> icon at <strong className="text-arvo-light-primary dark:text-white">20px</strong> and initial focus on <strong className="text-arvo-light-primary dark:text-white">Cancel</strong>.
           </p>
           <AlertHighStakesDialogDemo />
         </div>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">e. No tabs and no form controls in the body—footer actions only</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            If the body has no tab strip and no form fields, move initial focus to the <strong className="text-o9ds-light-primary dark:text-white">primary button in the footer</strong> (when that is the main affordance), so users can complete or dismiss without hunting for focus.
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">e. No tabs and no form controls in the body—footer actions only</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            If the body has no tab strip and no form fields, move initial focus to the <strong className="text-arvo-light-primary dark:text-white">primary button in the footer</strong> (when that is the main affordance), so users can complete or dismiss without hunting for focus.
           </p>
           <FooterOnlyInitialFocusDemo />
         </div>
 
-        <div className="space-y-4 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">f. No interactive elements in the body or footer</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            If there are no focusable controls in the body or footer (rare), set initial focus to the <strong className="text-o9ds-light-primary dark:text-white">container element</strong> using <code className="px-1" data-o9ds-inline-code>tabindex=&quot;-1&quot;</code> and appropriate dialog labeling. The first <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> press should move focus to the <strong className="text-o9ds-light-primary dark:text-white">close control</strong> (for example the “X” in the header), so users are never stranded without a path to dismiss.
+        <div className="space-y-4 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">f. No interactive elements in the body or footer</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            If there are no focusable controls in the body or footer (rare), set initial focus to the <strong className="text-arvo-light-primary dark:text-white">container element</strong> using <code className="px-1" data-arvo-inline-code>tabindex=&quot;-1&quot;</code> and appropriate dialog labeling. The first <strong className="text-arvo-light-primary dark:text-white">Tab</strong> press should move focus to the <strong className="text-arvo-light-primary dark:text-white">close control</strong> (for example the “X” in the header), so users are never stranded without a path to dismiss.
           </p>
           <ContainerInitialFocusDemo />
         </div>
@@ -1490,32 +1490,32 @@ export default function KeyboardAndFocus() {
       </section>
 
       <section id="a11y-kb-trap" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Focus trapping</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
-          Focus trapping keeps keyboard focus <strong className="text-o9ds-light-primary dark:text-white">inside an active overlay</strong> until the user dismisses it. While the overlay is open, Tab and Shift+Tab should cycle within that container—not move to links and buttons in the background. That prevents accidental interaction outside the intended context and reduces confusion.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Focus trapping</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
+          Focus trapping keeps keyboard focus <strong className="text-arvo-light-primary dark:text-white">inside an active overlay</strong> until the user dismisses it. While the overlay is open, Tab and Shift+Tab should cycle within that container—not move to links and buttons in the background. That prevents accidental interaction outside the intended context and reduces confusion.
         </p>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">Applies to:</p>
-        <ul className="list-disc list-outside pl-5 space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm">Applies to:</p>
+        <ul className="list-disc list-outside pl-5 space-y-1 text-sm text-arvo-light-secondary dark:text-neutral-400">
           <li>Modal dialogs and alert dialogs</li>
           <li>Modal popovers and blocking panels</li>
           <li>Side panels and drawers that capture focus</li>
           <li>Open dropdown or listbox surfaces while they are expanded (focus may be managed inside the list or on the trigger, depending on pattern—consistency matters)</li>
         </ul>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm pt-2">
-          <strong className="text-o9ds-light-primary dark:text-white">Behavior:</strong> Tab from the last focusable element moves to the first inside the trap; Shift+Tab from the first moves to the last. Background content should not be interactive while a modal layer blocks the page.
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm pt-2">
+          <strong className="text-arvo-light-primary dark:text-white">Behavior:</strong> Tab from the last focusable element moves to the first inside the trap; Shift+Tab from the first moves to the last. Background content should not be interactive while a modal layer blocks the page.
         </p>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm">
           Non-modal panels that do not block the page may not use a full trap; still document focus behavior so keyboard users are not dropped into an inconsistent state.
         </p>
         <FormBodyInitialFocusDemo howToPurpose="trap" />
       </section>
 
       <section id="a11y-kb-return" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Focus return</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
-          After closing dialogs, windows, side panels, or dropdowns, <strong className="text-o9ds-light-primary dark:text-white">focus should return to the element that triggered the action</strong> (the opener), unless the workflow intentionally moves the user elsewhere (for example after successful submit). This preserves a clear navigation path and reduces disorientation.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Focus return</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
+          After closing dialogs, windows, side panels, or dropdowns, <strong className="text-arvo-light-primary dark:text-white">focus should return to the element that triggered the action</strong> (the opener), unless the workflow intentionally moves the user elsewhere (for example after successful submit). This preserves a clear navigation path and reduces disorientation.
         </p>
-        <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400">
           <li>When selecting an option from a dropdown, return focus to the trigger (or follow platform pattern) so the next Tab continues predictably.</li>
           <li>If opening a control spawns another overlay, move focus into the new layer and return it to the appropriate trigger when that layer closes.</li>
           <li>Chains of overlays should unwind focus in reverse order of opening when possible.</li>
@@ -1524,38 +1524,38 @@ export default function KeyboardAndFocus() {
       </section>
 
       <section id="a11y-kb-esc" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Single vs Multi esc key</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed mb-4">
-          When multiple dismissible layers are stacked (for example a dropdown inside a modal), <strong className="text-o9ds-light-primary dark:text-white">Esc should dismiss the topmost layer first</strong>. A second Esc dismisses the next layer down. After closing, restore focus as described in focus return—typically to the trigger of the layer that just closed.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Single vs Multi esc key</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm leading-relaxed mb-4">
+          When multiple dismissible layers are stacked (for example a dropdown inside a modal), <strong className="text-arvo-light-primary dark:text-white">Esc should dismiss the topmost layer first</strong>. A second Esc dismisses the next layer down. After closing, restore focus as described in focus return—typically to the trigger of the layer that just closed.
         </p>
         <DocTable columns={escColumns} rows={escRows} />
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: nested dropdown inside a dialog</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Matches the first row: open the modal, then open the in-dialog menu. The first <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes only the menu; the second closes the dialog.
+        <div className="space-y-3 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Example: nested dropdown inside a dialog</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            Matches the first row: open the modal, then open the in-dialog menu. The first <strong className="text-arvo-light-primary dark:text-white">Esc</strong> closes only the menu; the second closes the dialog.
           </p>
           <NestedEscStackDemo />
         </div>
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: single overlay (dialog only)</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Matches the second row: only one layer is active, so <strong className="text-o9ds-light-primary dark:text-white">Esc</strong> closes it once. A standalone dropdown on the page (layout level, not nested in another overlay) behaves the same—one Esc dismisses that list.
+        <div className="space-y-3 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Example: single overlay (dialog only)</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            Matches the second row: only one layer is active, so <strong className="text-arvo-light-primary dark:text-white">Esc</strong> closes it once. A standalone dropdown on the page (layout level, not nested in another overlay) behaves the same—one Esc dismisses that list.
           </p>
           <SingleEscSimpleModalDemo />
         </div>
       </section>
 
       <section id="a11y-kb-nested" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Nested overlays (detail)</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
-          The same principles apply to menus inside dialogs, typeahead lists inside modals, and secondary popovers: <strong className="text-o9ds-light-primary dark:text-white">close the innermost interactive layer first</strong>, return focus to its trigger, then allow the next Esc (or explicit close) to close the parent. Document the behavior per component so QA can test predictable Esc stacks.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Nested overlays (detail)</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
+          The same principles apply to menus inside dialogs, typeahead lists inside modals, and secondary popovers: <strong className="text-arvo-light-primary dark:text-white">close the innermost interactive layer first</strong>, return focus to its trigger, then allow the next Esc (or explicit close) to close the parent. Document the behavior per component so QA can test predictable Esc stacks.
         </p>
       </section>
 
       <section id="a11y-kb-roving" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Roving tabindex</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">
-          One item in a composite widget uses <code className="px-1" data-o9ds-inline-code>tabindex=&quot;0&quot;</code>; siblings use <code className="px-1" data-o9ds-inline-code>tabindex=&quot;-1&quot;</code>. Arrow keys move within the set; Tab moves into and out of the widget. Use for tablists, menus, toolbars, custom radio groups, and chip lists modeled as one composite.
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Roving tabindex</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm">
+          One item in a composite widget uses <code className="px-1" data-arvo-inline-code>tabindex=&quot;0&quot;</code>; siblings use <code className="px-1" data-arvo-inline-code>tabindex=&quot;-1&quot;</code>. Arrow keys move within the set; Tab moves into and out of the widget. Use for tablists, menus, toolbars, custom radio groups, and chip lists modeled as one composite.
         </p>
         <CodeBlock
           code={`<div role="tablist" aria-label="Views">
@@ -1565,18 +1565,18 @@ export default function KeyboardAndFocus() {
 </div>`}
           label="Tablist pattern"
         />
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: toolbar with roving focus</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            <strong className="text-o9ds-light-primary dark:text-white">Tab</strong> into the toolbar, then use <strong className="text-o9ds-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-o9ds-light-primary dark:text-white">Right Arrow</strong> to move between buttons. Only one control keeps <code className="px-1" data-o9ds-inline-code>tabindex=0</code> at a time.
+        <div className="space-y-3 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Example: toolbar with roving focus</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            <strong className="text-arvo-light-primary dark:text-white">Tab</strong> into the toolbar, then use <strong className="text-arvo-light-primary dark:text-white">Left Arrow</strong> / <strong className="text-arvo-light-primary dark:text-white">Right Arrow</strong> to move between buttons. Only one control keeps <code className="px-1" data-arvo-inline-code>tabindex=0</code> at a time.
           </p>
           <RovingTabindexToolbarDemo />
         </div>
       </section>
 
       <section id="a11y-kb-active" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">aria-activedescendant</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">aria-activedescendant</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm">
           Use when focus remains on a single input or container while the active descendant changes—common for combobox, autocomplete, listbox, and tag inputs with suggestions.
         </p>
         <CodeBlock
@@ -1590,26 +1590,26 @@ export default function KeyboardAndFocus() {
       </section>
 
       <section id="a11y-kb-delete" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Focus shift on element deletion (screen reader friendly)</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
-          In interactive lists—filter chips, selected members, tag lists—when the user deletes item <strong className="text-o9ds-light-primary dark:text-white">N</strong>, move focus to the <strong className="text-o9ds-light-primary dark:text-white">preceding item (N−1)</strong>, not to the following item (N+1).
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Focus shift on element deletion (screen reader friendly)</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
+          In interactive lists—filter chips, selected members, tag lists—when the user deletes item <strong className="text-arvo-light-primary dark:text-white">N</strong>, move focus to the <strong className="text-arvo-light-primary dark:text-white">preceding item (N−1)</strong>, not to the following item (N+1).
         </p>
-        <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <ul className="list-disc list-outside pl-5 space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400">
           <li>
-            Focusing <strong className="text-o9ds-light-primary dark:text-white">N−1</strong> keeps users near where the removal happened; screen readers can announce the updated list context without skipping the fact that an item was removed.
+            Focusing <strong className="text-arvo-light-primary dark:text-white">N−1</strong> keeps users near where the removal happened; screen readers can announce the updated list context without skipping the fact that an item was removed.
           </li>
           <li>
-            Moving immediately to <strong className="text-o9ds-light-primary dark:text-white">N+1</strong> can confuse users: the list length changed and focus jumps forward in a way that may obscure that an item at the previous position was deleted.
+            Moving immediately to <strong className="text-arvo-light-primary dark:text-white">N+1</strong> can confuse users: the list length changed and focus jumps forward in a way that may obscure that an item at the previous position was deleted.
           </li>
           <li>
-            If there is <strong className="text-o9ds-light-primary dark:text-white">no previous item</strong> (N was first), move focus to the <strong className="text-o9ds-light-primary dark:text-white">next remaining item</strong>, or to a sensible container fallback (for example the related input or “add” control).
+            If there is <strong className="text-arvo-light-primary dark:text-white">no previous item</strong> (N was first), move focus to the <strong className="text-arvo-light-primary dark:text-white">next remaining item</strong>, or to a sensible container fallback (for example the related input or “add” control).
           </li>
           <li>If the list becomes empty, move focus to the control used to add items or to the parent region.</li>
         </ul>
-        <div className="space-y-3 border border-o9ds-light-border dark:border-neutral-700 p-5">
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Example: filter chips</h3>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Roving tabindex and arrow keys move between chips. Clearing a chip moves focus to the <strong className="text-o9ds-light-primary dark:text-white">previous</strong> chip (or the new first chip when the first was cleared).
+        <div className="space-y-3 border border-arvo-light-border dark:border-neutral-700 p-5">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Example: filter chips</h3>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            Roving tabindex and arrow keys move between chips. Clearing a chip moves focus to the <strong className="text-arvo-light-primary dark:text-white">previous</strong> chip (or the new first chip when the first was cleared).
           </p>
           <FocusAfterDeleteListDemo />
         </div>

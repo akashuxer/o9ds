@@ -8,9 +8,9 @@ export const TABLE_IDENTIFIER_TONE_CLASS = 'text-violet-600 dark:text-violet-400
 
 /**
  * First table body column (identifier tone). Pair with `font-mono text-sm` when the cell is code-like.
- * Requires `o9ds-doc-table-cell--tone` so `main td` global color does not override (see index.css).
+ * Requires `arvo-doc-table-cell--tone` so `main td` global color does not override (see index.css).
  */
-export const DOC_TABLE_FIRST_COLUMN_CLASS = `font-medium o9ds-doc-table-cell--tone ${TABLE_IDENTIFIER_TONE_CLASS}`
+export const DOC_TABLE_FIRST_COLUMN_CLASS = `font-medium arvo-doc-table-cell--tone ${TABLE_IDENTIFIER_TONE_CLASS}`
 
 /**
  * Lightweight syntax coloring for doc code blocks (no extra dependencies).
@@ -20,7 +20,7 @@ const cls = {
   tag: 'text-sky-600 dark:text-sky-400',
   attr: 'text-amber-700 dark:text-amber-300',
   string: CODE_SYNTAX_STRING_CLASS,
-  text: 'text-o9ds-light-primary dark:text-neutral-200',
+  text: 'text-arvo-light-primary dark:text-neutral-200',
   keyword: 'text-violet-600 dark:text-violet-400',
   comment: 'text-neutral-500 dark:text-neutral-500 italic',
   mArrow: 'text-sky-600 dark:text-sky-300 font-semibold',

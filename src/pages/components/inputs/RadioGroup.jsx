@@ -1,26 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9RadioGroup, O9Radio } from '@o9ds/react'
+import { ArvoRadioGroup, ArvoRadio } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', required: 'Yes', desc: 'Group label rendered as the legend-equivalent.' },
-  { prop: 'items', type: 'RadioGroupItem[]', required: 'Yes', desc: 'Items: { value, label, disabled?, description? }.' },
-  { prop: 'value', type: 'string | null', desc: 'Controlled selected value.' },
-  { prop: 'defaultValue', type: 'string | null', desc: 'Uncontrolled initial value.' },
-  { prop: 'orientation', type: "'vertical' | 'horizontal'", default: "'vertical'", desc: 'Layout direction.' },
-  { prop: 'description', type: 'string', desc: 'Help text rendered under the group label.' },
-  { prop: 'error', type: 'string', desc: 'Error message; sets aria-invalid on the group.' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the group as required.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable the entire group.' },
-  { prop: 'onChange', type: '(value: string) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('radio-group')
+const PROPS = DESCRIPTOR.props
+
 
 export default function RadioGroup() {
   const [tab, setTab] = useState('Overview')
@@ -49,11 +41,11 @@ export default function RadioGroup() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9RadioGroup name="theme" label="Theme" defaultValue="light">
-                  <O9Radio value="light" label="Light" />
-                  <O9Radio value="dark" label="Dark" />
-                  <O9Radio value="system" label="System" />
-                </O9RadioGroup>
+                <ArvoRadioGroup name="theme" label="Theme" defaultValue="light">
+                  <ArvoRadio value="light" label="Light" />
+                  <ArvoRadio value="dark" label="Dark" />
+                  <ArvoRadio value="system" label="System" />
+                </ArvoRadioGroup>
               </LiveReference>
             </DocSection>
           </div>
@@ -80,7 +72,7 @@ export default function RadioGroup() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9RadioGroup } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoRadioGroup } from '@arvo/react';
 
 const items = [
   { value: 'light', label: 'Light' },
@@ -88,19 +80,19 @@ const items = [
   { value: 'system', label: 'System' },
 ];
 
-<O9RadioGroup label="Theme" items={items} defaultValue="light" />
+<ArvoRadioGroup label="Theme" items={items} defaultValue="light" />
 
 // Controlled
 const [theme, setTheme] = useState('light');
-<O9RadioGroup label="Theme" items={items} value={theme} onChange={setTheme} />
+<ArvoRadioGroup label="Theme" items={items} value={theme} onChange={setTheme} />
 
 // Horizontal
-<O9RadioGroup label="Density" items={items} orientation="horizontal" />`} />
+<ArvoRadioGroup label="Density" items={items} orientation="horizontal" />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9RadioGroup } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoRadioGroup } from '@arvo/js';
 
-const grp = O9RadioGroup.initialize(el, {
+const grp = ArvoRadioGroup.initialize(el, {
   label: 'Theme',
   items,
   defaultValue: 'light',
@@ -115,7 +107,7 @@ grp.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9RadioGroup.initialize(el, options)', returns: 'O9RadioGroup', desc: 'Factory.' },
+                { method: 'ArvoRadioGroup.initialize(el, options)', returns: 'ArvoRadioGroup', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string | null | void', desc: 'Get/set selected value.' },
                 { method: 'setError(message | false)', desc: 'Set/clear error message.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },

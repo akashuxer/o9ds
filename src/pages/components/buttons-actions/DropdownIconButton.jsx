@@ -1,26 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9DropdownIconButton } from '@o9ds/react'
+import { ArvoDropdownIconButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'icon', type: 'string', required: 'Yes', desc: 'Icon name without o9con- prefix.' },
-  { prop: 'tooltip', type: 'string', required: 'Yes', desc: 'Accessible label and tooltip. Maps to aria-label and title.' },
-  { prop: 'items', type: 'ActionMenuItem[]', required: 'Yes', desc: 'Menu item configurations.' },
-  { prop: 'variant', type: "'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger'", default: "'primary'", desc: 'Inherited from O9IconButton.' },
-  { prop: 'size', type: "'xs' | 'sm' | 'md' | 'lg'", default: "'md'", desc: 'Inherited from O9IconButton.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable the button and prevent the menu from opening.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Skeleton shimmer overlay.' },
-  { prop: 'placement', type: 'PopoverPlacement', default: "'bottom-end'", desc: 'Menu placement relative to the trigger.' },
-  { prop: 'onSelect', type: '(item) => void', desc: 'Fires when an item is activated.' },
-  { prop: 'onOpenChange', type: '(open: boolean) => void', desc: 'Fires when the menu opens/closes.' },
-]
+const DESCRIPTOR = getDescriptor('dropdown-icon-button')
+const PROPS = DESCRIPTOR.props
+
 
 export default function DropdownIconButton() {
   const [tab, setTab] = useState('Overview')
@@ -43,7 +35,7 @@ export default function DropdownIconButton() {
       <div className="space-y-8">
         <PageHeader
           title="Dropdown Icon Button"
-          description="An icon-only trigger that opens an action menu. Composes O9IconButton + O9ActionMenu — ideal for row actions, table cell menus, and dense toolbars."
+          description="An icon-only trigger that opens an action menu. Composes ArvoIconButton + ArvoActionMenu — ideal for row actions, table cell menus, and dense toolbars."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />
@@ -57,9 +49,9 @@ export default function DropdownIconButton() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9DropdownIconButton icon="ellipsis-v" tooltip="More actions" items={items} />
-                <O9DropdownIconButton icon="settings" tooltip="Settings" items={items} variant="secondary" />
-                <O9DropdownIconButton icon="ellipsis-v" tooltip="More" items={items} variant="tertiary" size="sm" />
+                <ArvoDropdownIconButton icon="ellipsis-v" tooltip="More actions" items={items} />
+                <ArvoDropdownIconButton icon="settings" tooltip="Settings" items={items} variant="secondary" />
+                <ArvoDropdownIconButton icon="ellipsis-v" tooltip="More" items={items} variant="tertiary" size="sm" />
               </LiveReference>
             </DocSection>
           </div>
@@ -86,7 +78,7 @@ export default function DropdownIconButton() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9DropdownIconButton } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoDropdownIconButton } from '@arvo/react';
 
 const items = [
   { id: 'edit', label: 'Edit row', icon: 'edit' },
@@ -94,7 +86,7 @@ const items = [
   { id: 'delete', label: 'Delete row', icon: 'bin', tone: 'danger' },
 ];
 
-<O9DropdownIconButton
+<ArvoDropdownIconButton
   icon="ellipsis-v"
   tooltip="More actions"
   items={items}
@@ -103,9 +95,9 @@ const items = [
 />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9DropdownIconButton } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoDropdownIconButton } from '@arvo/js';
 
-const dd = O9DropdownIconButton.initialize(el, {
+const dd = ArvoDropdownIconButton.initialize(el, {
   icon: 'ellipsis-v',
   tooltip: 'More actions',
   items,
@@ -123,7 +115,7 @@ dd.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9DropdownIconButton.initialize(el, options)', returns: 'O9DropdownIconButton', desc: 'Factory.' },
+                { method: 'ArvoDropdownIconButton.initialize(el, options)', returns: 'ArvoDropdownIconButton', desc: 'Factory.' },
                 { method: 'open() / close() / toggle()', desc: 'Menu open state.' },
                 { method: 'isOpen()', returns: 'boolean', desc: 'Whether the menu is currently open.' },
                 { method: 'setIcon(name)', desc: 'Update the trigger icon.' },

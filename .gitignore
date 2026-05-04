@@ -1,6 +1,6 @@
 node_modules
 # Only ignore the Vite build output at the repo root.
-# Without the leading slash, this would also ignore vendor/@o9ds/*/dist trees
+# Without the leading slash, this would also ignore vendor/@arvo/*/dist trees
 # that we DO commit so the app is self-contained on Vercel and for new clones.
 /dist
 .DS_Store

@@ -1,0 +1,407 @@
+@use '../../mixins/form-input' as *;
+@use '../../mixins/form-label' as *;
+@use '../../mixins/inline-alert' as *;
+@use '../../mixins/list-item' as *;
+@use '../../mixins/list-group' as *;
+@use '../../mixins/loading' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .arvo-combobox ──────────────────────────────────────────────────────────
+
+.arvo-combobox {
+  // ── CSS custom properties (only dynamic values that change per size) ─────
+  --arvo-form-input-height: 32px;
+  --arvo-form-input-font-size: #{$arvo-font-size-14};
+  --arvo-form-input-bg-color: var(--arvo-color-s-layer-04);
+  --arvo-form-input-hover-bg-color: var(--arvo-color-s-theme-hover-4);
+
+  // ── Root layout ────────────────────────────────────────────────────────────
+  @include form-input-default-width;
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+  gap: $arvo-space-8;
+  font-family: var(--o9-font-family);
+
+  // ── Modifier: --full-width ─────────────────────────────────────────────────
+  &--full-width {
+    --arvo-form-input-width: 100%;
+  }
+
+  // ── Size: --sm ─────────────────────────────────────────────────────────────
+  &--sm {
+    --arvo-form-input-height: 24px;
+    --arvo-form-input-font-size: #{$arvo-font-size-12};
+    --arvo-list-item-height-single: 24px;
+    --arvo-list-item-height-multi: 32px;
+
+    .arvo-combobox__lbl {
+      @include form-label-sm;
+    }
+  }
+
+  // ── Size: --lg (default) ───────────────────────────────────────────────────
+  &--lg {
+    --arvo-form-input-height: 32px;
+    --arvo-form-input-font-size: #{$arvo-font-size-14};
+
+    .arvo-combobox__lbl {
+      @include form-label-lg;
+    }
+  }
+
+  // ── __lbl ──────────────────────────────────────────────────────────────────
+  &__lbl {
+    @include form-label-base;
+    @include form-label-lg;
+
+    &__req {
+      @include form-label-required-indicator;
+    }
+  }
+
+  &.is-disabled .arvo-combobox__lbl {
+    @include form-label-disabled;
+  }
+
+  // ── __field ────────────────────────────────────────────────────────────────
+  &__field {
+    @include form-input-base;
+    @include form-input-hover-bg;
+    @include form-input-disabled-bg;
+
+    flex-direction: row;
+    gap: $arvo-space-4;
+    width: 100%;
+    overflow: hidden;
+    padding: $arvo-space-4 $arvo-space-4 $arvo-space-4 $arvo-space-8;
+  }
+
+  &.is-disabled &__field {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &.is-disabled &__ico {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  &.is-disabled &__border {
+    background: var(--arvo-color-b-disabled);
+
+    &::after {
+      background-color: var(--arvo-color-b-disabled);
+      height: var(--arvo-form-input-border-width, 1px);
+      transform: none;
+      transition: none;
+    }
+  }
+
+  &.is-readonly &__field {
+    cursor: default;
+  }
+
+  // ── __input (native text input) ────────────────────────────────────────────
+  &__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--arvo-color-t-form-value);
+    font-size: var(--arvo-form-input-font-size, #{$arvo-font-size-14});
+    font-family: var(--o9-font-family);
+    outline: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    padding-right: var(--arvo-combobox-pad-r, 0);
+    width: 100%;
+
+    &::placeholder {
+      color: var(--arvo-color-t-placeholder);
+    }
+
+    .is-disabled & {
+      color: var(--arvo-color-t-disabled);
+      cursor: not-allowed;
+    }
+
+    .is-readonly & {
+      cursor: default;
+    }
+  }
+
+  // ── __actions (right-side absolute container for clear + sep + error icon) ─
+  &__actions {
+    position: absolute;
+    right: calc(var(--arvo-combobox-ico-width, 28px) + #{$arvo-space-4});
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: $arvo-space-4;
+    pointer-events: auto;
+  }
+
+  // ── __clear ────────────────────────────────────────────────────────────────
+  &__clear {
+    display: none;
+  }
+
+  &.has-value:not(.is-disabled):not(.is-readonly):not(.loading) &__clear {
+    display: inline-flex;
+  }
+
+  // ── __err-ico (inline error icon inside field, trailing) ────────────────
+  &__err-ico {
+    @include error-tooltip-icon;
+  }
+
+  // ── __sep (vertical separator between clear and chevron) ───────────────────
+  &__sep {
+    display: none;
+    width: 1px;
+    align-self: stretch;
+    margin-block: $arvo-space-4;
+    background-color: var(--arvo-color-b-divider);
+    flex-shrink: 0;
+  }
+
+  &.has-value:not(.is-disabled):not(.is-readonly):not(.loading) &__sep {
+    display: block;
+  }
+
+  // ── __ico (chevron icon button) ─────────────────────────────────────────────
+  &__ico {
+    flex: 0 0 auto;
+  }
+  
+  &__ico .arvo-btn__ico {
+    transition: transform #{$arvo-motion-form-input};
+  }
+
+  &.open &__ico .arvo-btn__ico {
+    transform: rotate(180deg);
+  }
+
+  // ── __border ───────────────────────────────────────────────────────────────
+  &__border {
+    @include form-input-animated-border-base;
+  }
+
+  // ── __panel ────────────────────────────────────────────────────────────────
+  &__panel {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    min-width: 100%;
+    max-height: none;
+    background-color: var(--arvo-color-s-layer-03);
+    box-shadow: $arvo-shadow-down;
+    border-radius: 0;
+    z-index: var(--arvo-z-popover, 1000);
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &.arvo-enter-from {
+      opacity: 0;
+    }
+
+    &.arvo-enter-active {
+      transition: opacity 150ms ease;
+    }
+
+    &.arvo-enter-to {
+      opacity: 1;
+    }
+
+    &.arvo-exit-from {
+      opacity: 1;
+    }
+
+    &.arvo-exit-active {
+      transition: opacity 150ms ease;
+    }
+
+    &.arvo-exit-to {
+      opacity: 0;
+    }
+
+    &.open {
+      display: flex;
+    }
+  }
+
+  &.open &__panel {
+    display: flex;
+  }
+
+  &.loading &__panel {
+    pointer-events: none;
+  }
+
+  // ── __scroll ───────────────────────────────────────────────────────────────
+  &__scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+    padding-block: $arvo-space-4;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--arvo-color-s-layer-07, #ccc) transparent;
+
+    &::-webkit-scrollbar {
+      width: var(--arvo-scroll-width, 8px);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--arvo-color-s-layer-07, #ccc);
+      border-radius: var(--arvo-radius-16, 16px);
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+
+  // ── __opt ──────────────────────────────────────────────────────────────────
+  &__opt {
+    @include list-item-base;
+    @include list-item-single-line;
+    @include list-item-states;
+    @include list-item-leading;
+    @include list-item-text;
+  }
+
+  // ── __hdr ──────────────────────────────────────────────────────────────────
+  &__hdr {
+    @include list-group-header;
+  }
+
+  // ── __divider ──────────────────────────────────────────────────────────────
+  &__divider {
+    @include list-group-divider;
+  }
+
+  // ── __empty ────────────────────────────────────────────────────────────────
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $arvo-space-16;
+    color: var(--arvo-color-t-placeholder);
+    font-size: $arvo-font-size-14;
+    font-family: var(--o9-font-family);
+  }
+
+  // ── Inline alert (below field) ────────────────────────────────────────────
+  .arvo-inline-alert {
+    @include inline-alert-base;
+    display: none;
+
+    &__ico {
+      @include inline-alert-icon;
+    }
+
+    &__msg {
+      @include inline-alert-msg;
+    }
+  }
+
+  // ── Border state: focus ─────────────────────────────────────────────────
+  &:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) {
+    .arvo-combobox__border::after {
+      background-color: var(--arvo-color-b-theme-focus);
+      height: var(--arvo-form-input-border-focus-width, #{$arvo-border-3});
+      transform: scaleX(1);
+    }
+  }
+
+  // ── State: error ────────────────────────────────────────────────────────
+  &.has-error {
+    .arvo-combobox__border {
+      background: var(--arvo-color-b-negative);
+
+      &::after {
+        background-color: var(--arvo-color-b-negative);
+        height: var(--arvo-form-input-border-focus-width, #{$arvo-border-3});
+        transform: scaleX(1);
+        transition: none;
+      }
+    }
+  }
+
+  // Inline icon variant: error icon inside field, no alert below
+  &.has-error.error-tooltip {
+    .arvo-combobox__err-ico {
+      display: block;
+    }
+
+    .arvo-inline-alert {
+      display: none;
+    }
+  }
+
+  // Standard error variant: inline alert below field
+  &.has-error:not(.error-tooltip) {
+    .arvo-inline-alert {
+      display: inline-flex;
+      @include inline-alert-error;
+    }
+  }
+
+  // ── Loading pattern C: spinner replaces chevron ────────────────────────────
+  @mixin _combobox-loading {
+    pointer-events: none;
+
+    .arvo-combobox__field {
+      cursor: default;
+    }
+
+    .arvo-combobox__ico {
+      display: none;
+    }
+
+    .arvo-combobox__input {
+      pointer-events: none;
+    }
+
+    .arvo-combobox__field::after {
+      content: "";
+      flex: 0 0 auto;
+      display: block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--arvo-color-b-disabled);
+      border-top-color: var(--arvo-color-b-theme);
+      border-radius: 50%;
+      animation: arvo-spin 0.7s linear infinite;
+    }
+  }
+
+  &.loading {
+    @include _combobox-loading;
+  }
+
+  [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
+    @include _combobox-loading;
+  }
+}
+
+// ── Hover border animation (no-touch, not disabled/readonly/error) ────────────
+.no-touch .arvo-combobox:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
+  .arvo-combobox__border::after {
+    transform: scaleX(1);
+  }
+}
+
+// ─── Spinner keyframe ─────────────────────────────────────────────────────────
+@keyframes arvo-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

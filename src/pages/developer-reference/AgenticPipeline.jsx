@@ -15,7 +15,7 @@ const sections = [
 
 const AGENTS = [
   ['Orchestrator', 'Coordinates agent sequence, manages checkpoints, handles errors'],
-  ['Shared Pattern', 'Implements reusable SCSS mixins + @o9ds/utils DOM utilities before component work begins'],
+  ['Shared Pattern', 'Implements reusable SCSS mixins + @arvo/utils DOM utilities before component work begins'],
   ['Scaffolding', 'Generates boilerplate files across all packages from a component descriptor'],
   ['SCSS Implementation', 'Writes full component SCSS with tokens, states, BEM structure, loading pattern'],
   ['React Implementation', 'Writes React component with props, refs, hooks, ARIA attributes'],
@@ -68,15 +68,15 @@ export default function AgenticPipeline() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Agent</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Responsibility</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Agent</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Responsibility</th>
                 </tr>
               </thead>
               <tbody>
                 {AGENTS.map(([agent, resp]) => (
                   <tr key={agent} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{agent}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{resp}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{resp}</td>
                   </tr>
                 ))}
               </tbody>
@@ -108,17 +108,17 @@ export default function AgenticPipeline() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Pipeline</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Trigger</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Agents involved</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Pipeline</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Trigger</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Agents involved</th>
                 </tr>
               </thead>
               <tbody>
                 {PIPELINE_TYPES.map(([pipe, trigger, agents]) => (
                   <tr key={pipe} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{pipe}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{trigger}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{agents}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{trigger}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{agents}</td>
                   </tr>
                 ))}
               </tbody>
@@ -154,15 +154,15 @@ pnpm pipeline new-component --descriptor descriptors/tooltip.json --dry-run`}
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">File</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">When to use</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">File</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">When to use</th>
                 </tr>
               </thead>
               <tbody>
                 {CONTEXT_FILES.map(([file, when]) => (
                   <tr key={file} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{file}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{when}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{when}</td>
                   </tr>
                 ))}
               </tbody>

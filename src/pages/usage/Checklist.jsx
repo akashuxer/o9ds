@@ -14,9 +14,9 @@ const sections = [
 const PR_CHECKLIST = `## Design system usage checklist
 
 Imports
-- [ ] All \`@o9ds/*\` imports use the package root or a documented sub-export.
-- [ ] No imports from \`@o9ds/<pkg>/src/...\`, \`@o9ds/<pkg>/dist/...\`, internal hooks, or unexported helpers.
-- [ ] No direct imports from \`@o9ds/core\` or \`@o9ds/utils\` in product code.
+- [ ] All \`@arvo/*\` imports use the package root or a documented sub-export.
+- [ ] No imports from \`@arvo/<pkg>/src/...\`, \`@arvo/<pkg>/dist/...\`, internal hooks, or unexported helpers.
+- [ ] No direct imports from \`@arvo/core\` or \`@arvo/utils\` in product code.
 
 Components
 - [ ] Every interactive component has an accessible name (\`label\`, \`aria-label\`, or \`aria-labelledby\`).
@@ -25,14 +25,14 @@ Components
 - [ ] No mutation of props after render (React) or options after init (JS).
 - [ ] No reading or writing of internal instance fields (_state, options, ...).
 - [ ] Vanilla JS instances call \`destroy()\` before their host element is removed.
-- [ ] Loading is driven by \`isLoading\` / \`setLoading()\` / \`data-o9ds-loading\`.
+- [ ] Loading is driven by \`isLoading\` / \`setLoading()\` / \`data-arvo-loading\`.
 
 Styling
-- [ ] Visual customization uses tokens or per-component CSS variables (--o9ds-{abbr}-*).
-- [ ] No CSS targets \`.o9ds-*\` block, element, or modifier classes from the app.
-- [ ] No \`!important\` on rules that touch @o9ds/* components.
+- [ ] Visual customization uses tokens or per-component CSS variables (--arvo-{abbr}-*).
+- [ ] No CSS targets \`.arvo-*\` block, element, or modifier classes from the app.
+- [ ] No \`!important\` on rules that touch @arvo/* components.
 - [ ] No hardcoded hex codes / px spacing where a token exists.
-- [ ] No copies of @o9ds/styles SCSS partials in the app.
+- [ ] No copies of @arvo/styles SCSS partials in the app.
 - [ ] Inline \`style\` is used only for layout, never for visual treatment with a CSS variable.
 
 Accessibility
@@ -45,108 +45,108 @@ Accessibility
 
 Composition / extension
 - [ ] No app-side reimplementation of an O9* component.
-- [ ] No prototype patches or wrappers that monkey-patch @o9ds/* exports.
-- [ ] Providers (OverlayProvider, TooltipProvider, O9ToastProvider) mounted at the appropriate root scope.
+- [ ] No prototype patches or wrappers that monkey-patch @arvo/* exports.
+- [ ] Providers (OverlayProvider, TooltipProvider, ArvoToastProvider) mounted at the appropriate root scope.
 - [ ] Vanilla JS apps call \`setupOverlayPlugin($)\` / \`setupTooltips()\` exactly once at boot.
 
 Testing
-- [ ] Tests query by role + accessible name (or getByLabelText); no \`o9ds-*\` classname queries.
+- [ ] Tests query by role + accessible name (or getByLabelText); no \`arvo-*\` classname queries.
 - [ ] No structural snapshots of O9* component DOM.
 - [ ] aria-busy, aria-expanded, aria-invalid, aria-checked are asserted.
-- [ ] No mocking of @o9ds/* modules to bypass real integration.
+- [ ] No mocking of @arvo/* modules to bypass real integration.
 
 Versioning
-- [ ] All @o9ds/* packages remain on the same lockstep version after this PR.
-- [ ] If the PR upgrades @o9ds/*, the changeset has been read and deprecation warnings are addressed.`
+- [ ] All @arvo/* packages remain on the same lockstep version after this PR.
+- [ ] If the PR upgrades @arvo/*, the changeset has been read and deprecation warnings are addressed.`
 
 const MATRICES = [
   {
-    title: 'Buttons (O9Button, O9IconButton, O9FabButton, O9ButtonGroup, O9DropdownButton, O9DropdownIconButton)',
+    title: 'Buttons (ArvoButton, ArvoIconButton, ArvoFabButton, ArvoButtonGroup, ArvoDropdownButton, ArvoDropdownIconButton)',
     rows: [
       ['Choose variant, size, icon, isFullWidth, isLoading, isSelected, isDisabled', 'Safe'],
-      ['Set --o9ds-btn-bg-color, --o9ds-btn-text-color, --o9ds-btn-border-color, --o9ds-btn-padding-*, --o9ds-btn-icon-size', 'Safe'],
+      ['Set --arvo-btn-bg-color, --arvo-btn-text-color, --arvo-btn-border-color, --arvo-btn-padding-*, --arvo-btn-icon-size', 'Safe'],
       ['Wrap in app-side component (e.g. <CtaButton>)', 'Safe'],
-      ['Add data-o9ds-loading on parent / data-o9ds-loading-ignore on individual button', 'Safe'],
-      ['Use O9DropdownButton for menu trigger; supply menu via documented props', 'Safe with restrictions'],
-      ['Compose O9Button with O9Tooltip for icon-only contexts', 'Safe with restrictions: icon-only buttons still need label'],
+      ['Add data-arvo-loading on parent / data-arvo-loading-ignore on individual button', 'Safe'],
+      ['Use ArvoDropdownButton for menu trigger; supply menu via documented props', 'Safe with restrictions'],
+      ['Compose ArvoButton with ArvoTooltip for icon-only contexts', 'Safe with restrictions: icon-only buttons still need label'],
       ['Customize the focus ring offset / color', 'Unsupported — focus is part of the a11y contract'],
-      ['Override .o9ds-btn, .o9ds-btn--*, .o9ds-btn__lbl, .o9ds-btn__ico', 'Unsupported'],
-      ['Render a <button class="o9ds-btn ..."> directly in product code', 'Unsupported'],
+      ['Override .arvo-btn, .arvo-btn--*, .arvo-btn__lbl, .arvo-btn__ico', 'Unsupported'],
+      ['Render a <button class="arvo-btn ..."> directly in product code', 'Unsupported'],
       ['Replace the loading skeleton with a custom spinner', 'Unsupported'],
     ],
   },
   {
-    title: 'Form inputs (O9Textbox, O9Textarea, O9NumberInput, O9Search, O9Select, O9Combobox)',
+    title: 'Form inputs (ArvoTextbox, ArvoTextarea, ArvoNumberInput, ArvoSearch, ArvoSelect, ArvoCombobox)',
     rows: [
       ['Set width or isFullWidth', 'Safe'],
       ['Use label, description, placeholder, helpText, prefix, suffix, clearable, shortcut', 'Safe'],
       ['Validate with hasError / setError(msg | false) and isRequired/isReadonly/isDisabled', 'Safe'],
-      ['Override --o9ds-form-input-* and per-component --o9ds-{abbr}-* CSS variables', 'Safe'],
+      ['Override --arvo-form-input-* and per-component --arvo-{abbr}-* CSS variables', 'Safe'],
       ['Right-side dynamic actions via form-input-actions-overlay shared pattern', 'Safe with restrictions: documented action slots only'],
       ['Render a custom dropdown row via renderOption (where exposed)', 'Safe with restrictions: row must remain a single accessible option'],
       ['Mix controlled value + defaultValue', 'Unsupported'],
-      ['Override .o9ds-{abbr}__input, .o9ds-{abbr}__menu, .o9ds-{abbr}__option', 'Unsupported'],
+      ['Override .arvo-{abbr}__input, .arvo-{abbr}__menu, .arvo-{abbr}__option', 'Unsupported'],
       ['Replace placeholder with a custom label inside the input', 'Unsupported'],
     ],
   },
   {
-    title: 'Selection controls (O9Checkbox, O9CheckboxGroup, O9Radio, O9RadioGroup, O9Switch)',
+    title: 'Selection controls (ArvoCheckbox, ArvoCheckboxGroup, ArvoRadio, ArvoRadioGroup, ArvoSwitch)',
     rows: [
       ['Use isChecked/defaultChecked, isIndeterminate, isDisabled, isReadonly, isInvalid, label, description', 'Safe'],
-      ['Group multiple Radios / Checkboxes with O9RadioGroup / O9CheckboxGroup and a label', 'Safe'],
-      ['Set --o9ds-cb-*, --o9ds-rb-*, --o9ds-sw-* CSS variables', 'Safe'],
-      ['Use a single O9Radio outside of an O9RadioGroup', 'Unsupported — groups own keyboard nav and labelling'],
-      ['Override .o9ds-cb__box, .o9ds-rb__dot, .o9ds-sw__thumb', 'Unsupported'],
+      ['Group multiple Radios / Checkboxes with ArvoRadioGroup / ArvoCheckboxGroup and a label', 'Safe'],
+      ['Set --arvo-cb-*, --arvo-rb-*, --arvo-sw-* CSS variables', 'Safe'],
+      ['Use a single ArvoRadio outside of an ArvoRadioGroup', 'Unsupported — groups own keyboard nav and labelling'],
+      ['Override .arvo-cb__box, .arvo-rb__dot, .arvo-sw__thumb', 'Unsupported'],
       ['Toggle the underlying <input> via DOM mutation', 'Unsupported'],
     ],
   },
   {
-    title: 'Listbox / menus (O9Listbox, O9ActionMenu)',
+    title: 'Listbox / menus (ArvoListbox, ArvoActionMenu)',
     rows: [
       ['Pass options / items data; selectionMode, multiple, disabled per item', 'Safe'],
-      ['O9ActionMenu trailingActions, inlinePopover, inlineHybridPopover', 'Safe'],
+      ['ArvoActionMenu trailingActions, inlinePopover, inlineHybridPopover', 'Safe'],
       ['Set per-component CSS variables', 'Safe'],
       ['Render arbitrary children inside an item', 'Safe with restrictions: must remain a single accessible item'],
       ['Reorder items at runtime through public APIs', 'Safe'],
       ['Override keyboard handlers (Arrow / Home / End / typeahead)', 'Unsupported'],
-      ['Override .o9ds-list-item, .o9ds-action-menu__list', 'Unsupported'],
+      ['Override .arvo-list-item, .arvo-action-menu__list', 'Unsupported'],
     ],
   },
   {
-    title: 'Overlays (O9Popover, O9HybridPopover, O9Tooltip)',
+    title: 'Overlays (ArvoPopover, ArvoHybridPopover, ArvoTooltip)',
     rows: [
       ['Use isOpen / defaultOpen + onOpenChange, placement, offset, modal', 'Safe'],
-      ['O9HybridPopover groups, items, search, inline, empty, conditional configs', 'Safe'],
-      ['Set --o9ds-pop-*, --o9ds-hpop-*, --o9ds-tip-* CSS variables, plus width/maxWidth/maxHeight', 'Safe'],
+      ['ArvoHybridPopover groups, items, search, inline, empty, conditional configs', 'Safe'],
+      ['Set --arvo-pop-*, --arvo-hpop-*, --arvo-tip-* CSS variables, plus width/maxWidth/maxHeight', 'Safe'],
       ['Use TooltipProvider to centralize delays and dismissal', 'Safe'],
       ['Manually portal the overlay (createPortal)', 'Unsupported — breaks the overlay hub'],
       ['Open / close by mutating CSS classes', 'Unsupported'],
-      ['Override .o9ds-pop__bdy, .o9ds-hpop__hdr', 'Unsupported'],
+      ['Override .arvo-pop__bdy, .arvo-hpop__hdr', 'Unsupported'],
     ],
   },
   {
-    title: 'Toasts (O9ToastProvider, useToast, O9Toast)',
+    title: 'Toasts (ArvoToastProvider, useToast, ArvoToast)',
     rows: [
-      ['Mount O9ToastProvider once at app root with position, max', 'Safe'],
+      ['Mount ArvoToastProvider once at app root with position, max', 'Safe'],
       ['Call useToast() to push toasts with type, title, description, actions, duration', 'Safe'],
       ['Set toast CSS variables for theming', 'Safe'],
-      ['Mount multiple O9ToastProvider instances at the same scope', 'Unsupported'],
+      ['Mount multiple ArvoToastProvider instances at the same scope', 'Unsupported'],
       ['Append toast nodes manually to the toast container', 'Unsupported'],
     ],
   },
   {
-    title: 'Navigation (O9Tabstrip, O9Breadcrumb, O9Link, O9ButtonLink, O9IconButtonLink)',
+    title: 'Navigation (ArvoTabstrip, ArvoBreadcrumb, ArvoLink, ArvoButtonLink, ArvoIconButtonLink)',
     rows: [
       ['Pass items, defaultActiveId/activeId, onChange', 'Safe'],
       ['Provide router-aware as adapters when component documents an integration prop', 'Safe with restrictions'],
       ['Set per-component CSS variables', 'Safe'],
-      ['Render a custom tab content panel below O9Tabstrip', 'Safe'],
-      ['Override .o9ds-tabs__tab, .o9ds-bc__sep', 'Unsupported'],
+      ['Render a custom tab content panel below ArvoTabstrip', 'Safe'],
+      ['Override .arvo-tabs__tab, .arvo-bc__sep', 'Unsupported'],
       ['Re-implement keyboard handling (Left/Right/Home/End for tabs)', 'Unsupported'],
     ],
   },
   {
-    title: 'Feedback (O9BadgeAlert, O9Toast)',
+    title: 'Feedback (ArvoBadgeAlert, ArvoToast)',
     rows: [
       ['Set type (info, success, warning, danger), variant, size, title, description, actions, dismissible', 'Safe'],
       ['Set CSS variables for theming', 'Safe'],
@@ -155,18 +155,18 @@ const MATRICES = [
     ],
   },
   {
-    title: 'Tokens (@o9ds/tokens)',
+    title: 'Tokens (@arvo/tokens)',
     rows: [
-      ['Read tokens via SCSS ($o9ds-*) or CSS variables (var(--o9ds-*))', 'Safe'],
+      ['Read tokens via SCSS ($arvo-*) or CSS variables (var(--arvo-*))', 'Safe'],
       ['Override token CSS variables on an app-scoped wrapper for theming', 'Safe'],
-      ['Read a token at runtime via getComputedStyle().getPropertyValue("--o9ds-*")', 'Safe with restrictions'],
+      ['Read a token at runtime via getComputedStyle().getPropertyValue("--arvo-*")', 'Safe with restrictions'],
       ["Hardcode a token's current numeric value into JS or CSS", 'Unsupported'],
       ['Redefine token CSS variables in unsupported scopes (e.g., on body)', 'Unsupported'],
-      ['Import individual SCSS partials from @o9ds/tokens/src/scss/_*.scss', 'Unsupported'],
+      ['Import individual SCSS partials from @arvo/tokens/src/scss/_*.scss', 'Unsupported'],
     ],
   },
   {
-    title: 'Icons (@o9ds/assets/icons, o9con-*)',
+    title: 'Icons (@arvo/assets/icons, o9con-*)',
     rows: [
       ['Use a documented icon name with <i class="o9con o9con-{name}" aria-hidden="true">', 'Safe'],
       ["Pass an icon name into a component's icon prop", 'Safe'],
@@ -176,12 +176,12 @@ const MATRICES = [
     ],
   },
   {
-    title: 'Mixins (@o9ds/styles/mixins/*)',
+    title: 'Mixins (@arvo/styles/mixins/*)',
     rows: [
-      ["@use '@o9ds/styles/mixins/<name>' and apply the documented mixins", 'Safe'],
+      ["@use '@arvo/styles/mixins/<name>' and apply the documented mixins", 'Safe'],
       ['Compose mixins inside an app-level utility class', 'Safe'],
       ["Re-implement a mixin's CSS by hand into product code", 'Unsupported'],
-      ["@use '@o9ds/styles/src/components/_*.scss' directly", 'Unsupported'],
+      ["@use '@arvo/styles/src/components/_*.scss' directly", 'Unsupported'],
     ],
   },
 ]
@@ -192,8 +192,8 @@ function MatrixTable({ rows }) {
       <table className="w-full text-sm">
         <thead>
           <tr className="dark:bg-neutral-800/50">
-            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white w-3/4">Customization</th>
-            <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Status</th>
+            <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white w-3/4">Customization</th>
+            <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -228,7 +228,7 @@ export default function UsageChecklist() {
 
         <DocSection id="pr-checklist" title="PR review checklist">
           <DocParagraph>
-            Copy this into <DocCode>.github/PULL_REQUEST_TEMPLATE.md</DocCode> (or your equivalent) for any repo that consumes <DocCode>@o9ds/*</DocCode>.
+            Copy this into <DocCode>.github/PULL_REQUEST_TEMPLATE.md</DocCode> (or your equivalent) for any repo that consumes <DocCode>@arvo/*</DocCode>.
           </DocParagraph>
           <CodeBlock language="text" label="PR template" code={PR_CHECKLIST} />
         </DocSection>
@@ -245,7 +245,7 @@ export default function UsageChecklist() {
           <div className="space-y-8 mt-6">
             {MATRICES.map(({ title, rows }) => (
               <div key={title} className="space-y-3">
-                <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">{title}</h3>
+                <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">{title}</h3>
                 <MatrixTable rows={rows} />
               </div>
             ))}
@@ -255,11 +255,11 @@ export default function UsageChecklist() {
         <DocSection id="governance" title="Governance recommendations">
           <DocParagraph>Stability is a mix of code, tooling, and policy. To keep this contract real, every consuming repo should adopt:</DocParagraph>
           <DocList items={[
-            <span key="1"><DocStrong>Banned import lint rule</DocStrong> (<DocCode>no-restricted-imports</DocCode>) covering deep <DocCode>@o9ds/*</DocCode> paths and <DocCode>@o9ds/core</DocCode> / <DocCode>@o9ds/utils</DocCode> from product code.</span>,
-            <span key="2"><DocStrong>Stylelint</DocStrong> rule blocking selectors that target <DocCode>^.o9ds-</DocCode> from app stylesheets, plus a rule against <DocCode>!important</DocCode> in stylesheets that touch <DocCode>@o9ds/*</DocCode> components.</span>,
-            <span key="3"><DocStrong>CI grep guards</DocStrong> for <DocCode>{`from '@o9ds/.*?/(src|dist|components|hooks|providers|internal)`}</DocCode>.</span>,
+            <span key="1"><DocStrong>Banned import lint rule</DocStrong> (<DocCode>no-restricted-imports</DocCode>) covering deep <DocCode>@arvo/*</DocCode> paths and <DocCode>@arvo/core</DocCode> / <DocCode>@arvo/utils</DocCode> from product code.</span>,
+            <span key="2"><DocStrong>Stylelint</DocStrong> rule blocking selectors that target <DocCode>^.arvo-</DocCode> from app stylesheets, plus a rule against <DocCode>!important</DocCode> in stylesheets that touch <DocCode>@arvo/*</DocCode> components.</span>,
+            <span key="3"><DocStrong>CI grep guards</DocStrong> for <DocCode>{`from '@arvo/.*?/(src|dist|components|hooks|providers|internal)`}</DocCode>.</span>,
             <span key="4"><DocStrong>PR template</DocStrong> with the checklist above.</span>,
-            <span key="5"><DocStrong>A periodic audit</DocStrong> (per release or quarterly) listing all CSS overrides against <DocCode>@o9ds/*</DocCode> and any <DocCode>data-o9ds-internal-*</DocCode> reads — and a track of unsupported usage as technical debt.</span>,
+            <span key="5"><DocStrong>A periodic audit</DocStrong> (per release or quarterly) listing all CSS overrides against <DocCode>@arvo/*</DocCode> and any <DocCode>data-arvo-internal-*</DocCode> reads — and a track of unsupported usage as technical debt.</span>,
             <span key="6"><DocStrong>A formal deprecation policy</DocStrong> in the design system: deprecation warning in a <DocCode>minor</DocCode>, removal in the next <DocCode>major</DocCode>, with a documented migration path.</span>,
             <span key="7"><DocStrong>An explicit adoption policy</DocStrong>: how new versions are rolled out (canary → staging → prod), who owns regression sign-off, and what the rollback path is.</span>,
           ]} />
@@ -268,7 +268,7 @@ export default function UsageChecklist() {
 
         <DocSection id="policy" title="One-sentence policy (again)">
           <DocCallout title="Policy">
-            <DocStrong>Teams must consume the o9 Design System (@o9ds/*) only through its documented public contract and must not depend on internal implementation details in code, styling, testing, or behavior orchestration.</DocStrong>
+            <DocStrong>Teams must consume the Arvo Design System (@arvo/*) only through its documented public contract and must not depend on internal implementation details in code, styling, testing, or behavior orchestration.</DocStrong>
           </DocCallout>
           <DocParagraph>That single rule is the source of every checklist item above.</DocParagraph>
         </DocSection>

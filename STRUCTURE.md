@@ -1,4 +1,4 @@
-# o9 Design System — Page Structure & Conventions
+# Arvo Design System — Page Structure & Conventions
 
 This document defines the structure to follow for all pages in the design system docs.
 
@@ -54,10 +54,10 @@ import PageHeader from '../LayoutComponents/PageHeader'
 Pages with tabs (Colors, Illustrations, Button):
 
 ```jsx
-<div className="mt-6 flex gap-6 border-b dark:border-neutral-700" data-o9ds-tabs>
+<div className="mt-6 flex gap-6 border-b dark:border-neutral-700" data-arvo-tabs>
   {tabs.map((tab) => (
     <button
-      data-o9ds-tab-active={activeTab === tab ? '' : undefined}
+      data-arvo-tab-active={activeTab === tab ? '' : undefined}
       className="pb-3 text-sm font-medium border-b-2 ..."
     >
       {tab}
@@ -74,8 +74,8 @@ Pages with tabs (Colors, Illustrations, Button):
 ## Cards
 
 ### Light mode
-- **Default white** (`#FFFFFF`): hover → `#F2F2F2` bg + `#010101` border. Use `data-o9ds-card="light-white"`.
-- **Default surface** (`#F2F2F2`): hover → `#010101` border only. Use `data-o9ds-card="light"`.
+- **Default white** (`#FFFFFF`): hover → `#F2F2F2` bg + `#010101` border. Use `data-arvo-card="light-white"`.
+- **Default surface** (`#F2F2F2`): hover → `#010101` border only. Use `data-arvo-card="light"`.
 
 ### Dark mode
 - Hover → `#FFFFFF` border. Avatar hover → `#FFFFFF` bg, `#010101` icon.
@@ -114,14 +114,14 @@ import CodeBlock from '../components/CodeBlock'
 
 ## Data Attributes
 
-- `data-o9ds-card` — Card hover behavior (`light` | `light-white` | `dark`).
-- `data-o9ds-avatar` — Avatar styling (F2F2F2 default, invert on hover).
-- `data-o9ds-avatar-header` — Excludes avatar from hover.
-- `data-o9ds-tabs` — Tab bar.
-- `data-o9ds-tab-active` — Active tab.
-- `data-o9ds-code` — Code block pre.
-- `data-o9ds-inline-code` — Inline code.
-- `data-o9ds-size-selected` — Illustration size selector.
+- `data-arvo-card` — Card hover behavior (`light` | `light-white` | `dark`).
+- `data-arvo-avatar` — Avatar styling (F2F2F2 default, invert on hover).
+- `data-arvo-avatar-header` — Excludes avatar from hover.
+- `data-arvo-tabs` — Tab bar.
+- `data-arvo-tab-active` — Active tab.
+- `data-arvo-code` — Code block pre.
+- `data-arvo-inline-code` — Inline code.
+- `data-arvo-size-selected` — Illustration size selector.
 ---
 
 ## Layout Components (`src/LayoutComponents/`)
@@ -161,7 +161,7 @@ All design system components must be **implemented from scratch**. No third-part
 
 ### Goal
 - Full control over behavior, accessibility, theming, scalability
-- Consistency with o9 Design System
+- Consistency with Arvo Design System
 
 ### Development Order
 1. **Foundations first** — tokens, spacing, typography, colors

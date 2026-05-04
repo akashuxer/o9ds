@@ -1,17 +1,26 @@
 /**
  * Generates one JSX stub per catalog component under src/pages/components/<categoryId>/
- * (except button + cards). Writes allStubComponents.js at the components root.
+ * (skipping any slug that already has a hand-authored real page). Writes
+ * allStubComponents.js at the components root with one re-export per stub.
+ *
  * Run: node scripts/generate-component-stubs.mjs
+ *
+ * Real pages are tracked by COMPONENT_DOC_ROUTES in src/data/componentsNav.js
+ * — keep that set in sync when promoting a stub to a real page.
  */
 import { mkdirSync, writeFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { getAllComponentPageMeta, slugToComponentModuleName } from '../src/data/componentPageMeta.js'
+import { COMPONENT_DOC_ROUTES } from '../src/data/componentsNav.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const componentsDir = join(__dirname, '../src/pages/components')
 
-const SKIP = new Set(['button', 'cards'])
+// All slugs that already have a real, hand-authored page — never overwrite them.
+const SKIP = new Set(
+  Array.from(COMPONENT_DOC_ROUTES).map((p) => p.replace('/components/', '')),
+)
 
 const stubTemplate = `import { stubComponentPage } from '../stubComponentPage'
 

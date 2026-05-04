@@ -1,23 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Radio } from '@o9ds/react'
+import { ArvoRadio } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string | ReactNode', desc: 'Inline label rendered next to the radio.' },
-  { prop: 'value', type: 'string', required: 'Yes', desc: 'The value this radio represents within its RadioGroup.' },
-  { prop: 'isChecked', type: 'boolean', desc: 'Controlled checked state. Usually managed by the parent RadioGroup.' },
-  { prop: 'description', type: 'string', desc: 'Help text below the label.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'isReadonly', type: 'boolean', default: 'false', desc: 'Disable selection but keep tabbable.' },
-  { prop: 'onChange', type: '(value: string, event) => void', desc: 'Change callback. Usually consumed by the RadioGroup.' },
-]
+const DESCRIPTOR = getDescriptor('radio')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Radio() {
   const [tab, setTab] = useState('Overview')
@@ -42,13 +37,13 @@ export default function Radio() {
         {tab === 'Overview' && (
           <div className="space-y-12">
             <DocSection id="purpose" title="Purpose">
-              <DocParagraph>Use Radio for a single mutually-exclusive choice. The standalone <DocCode>O9Radio</DocCode> is rarely used directly — wrap radios in <DocStrong>Radio Group</DocStrong> for proper grouping, labelling, and keyboard navigation.</DocParagraph>
+              <DocParagraph>Use Radio for a single mutually-exclusive choice. The standalone <DocCode>ArvoRadio</DocCode> is rarely used directly — wrap radios in <DocStrong>Radio Group</DocStrong> for proper grouping, labelling, and keyboard navigation.</DocParagraph>
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Radio value="opt-1" label="Default" />
-                <O9Radio value="opt-2" label="Checked" defaultChecked />
-                <O9Radio value="opt-3" label="Disabled" isDisabled />
+                <ArvoRadio value="opt-1" label="Default" />
+                <ArvoRadio value="opt-2" label="Checked" defaultChecked />
+                <ArvoRadio value="opt-3" label="Disabled" isDisabled />
               </LiveReference>
             </DocSection>
           </div>
@@ -74,18 +69,18 @@ export default function Radio() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react — almost always inside a RadioGroup" code={`import { O9RadioGroup, O9Radio } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react — almost always inside a RadioGroup" code={`import { ArvoRadioGroup, ArvoRadio } from '@arvo/react';
 
-<O9RadioGroup label="Theme" defaultValue="light">
-  <O9Radio value="light" label="Light" />
-  <O9Radio value="dark" label="Dark" />
-  <O9Radio value="system" label="System" />
-</O9RadioGroup>`} />
+<ArvoRadioGroup label="Theme" defaultValue="light">
+  <ArvoRadio value="light" label="Light" />
+  <ArvoRadio value="dark" label="Dark" />
+  <ArvoRadio value="system" label="System" />
+</ArvoRadioGroup>`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Radio } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoRadio } from '@arvo/js';
 
-const rb = O9Radio.initialize(el, {
+const rb = ArvoRadio.initialize(el, {
   value: 'light',
   label: 'Light',
   onChange: (value) => console.log(value),
@@ -98,7 +93,7 @@ rb.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Radio.initialize(el, options)', returns: 'O9Radio', desc: 'Factory.' },
+                { method: 'ArvoRadio.initialize(el, options)', returns: 'ArvoRadio', desc: 'Factory.' },
                 { method: 'checked(state?)', returns: 'boolean | void', desc: 'Get/set checked state.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },
                 { method: 'destroy()', desc: 'Tear down.' },

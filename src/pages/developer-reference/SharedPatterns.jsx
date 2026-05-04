@@ -46,9 +46,9 @@ export default function SharedPatterns() {
         <DocSection id="shape" title="Pattern shape">
           <DocParagraph>Each pattern can ship up to three artifacts, depending on what's needed:</DocParagraph>
           <DocList items={[
-            <span key="1"><DocStrong>SCSS mixin</DocStrong> in <DocCode>@o9ds/styles/src/mixins/_{`{pattern-name}`}.scss</DocCode> — the styling solution.</span>,
-            <span key="2"><DocStrong>DOM utility</DocStrong> in <DocCode>@o9ds/utils/src/{`{pattern-name}`}.ts</DocCode> — the imperative DOM logic when behavior is involved (e.g. inline-alert insertion, char counter sync).</span>,
-            <span key="3"><DocStrong>Internal React component</DocStrong> in <DocCode>@o9ds/react/src/internal/{`{pattern-name}`}.tsx</DocCode> — the React-side wrapper consumed by component implementations.</span>,
+            <span key="1"><DocStrong>SCSS mixin</DocStrong> in <DocCode>@arvo/styles/src/mixins/_{`{pattern-name}`}.scss</DocCode> — the styling solution.</span>,
+            <span key="2"><DocStrong>DOM utility</DocStrong> in <DocCode>@arvo/utils/src/{`{pattern-name}`}.ts</DocCode> — the imperative DOM logic when behavior is involved (e.g. inline-alert insertion, char counter sync).</span>,
+            <span key="3"><DocStrong>Internal React component</DocStrong> in <DocCode>@arvo/react/src/internal/{`{pattern-name}`}.tsx</DocCode> — the React-side wrapper consumed by component implementations.</span>,
           ]} />
           <DocParagraph>
             Components consume only the pattern's documented mixin / utility / internal component. The internal partials inside a pattern are not part of the contract.
@@ -64,15 +64,15 @@ export default function SharedPatterns() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Pattern</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Purpose</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Pattern</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Purpose</th>
                 </tr>
               </thead>
               <tbody>
                 {PATTERN_EXAMPLES.map(([name, purpose]) => (
                   <tr key={name} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{name}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{purpose}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{purpose}</td>
                   </tr>
                 ))}
               </tbody>
@@ -83,12 +83,12 @@ export default function SharedPatterns() {
 
         <DocSection id="authoring" title="Authoring a new pattern">
           <DocParagraph>Trigger the Shared Pattern agent (<DocCode>.cursor/agents/shared-pattern.md</DocCode>) before any component work that depends on a new pattern.</DocParagraph>
-          <ol className="list-decimal pl-5 space-y-2 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+          <ol className="list-decimal pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
             <li>Add the pattern entry to <DocCode>SHARED-PATTERNS-REGISTRY.json</DocCode> with status <DocCode>"planned"</DocCode>.</li>
             <li>Run the Shared Pattern agent with the registry, an existing implemented mixin for style reference, and the project conventions.</li>
             <li>The agent creates the SCSS mixin, the optional DOM utility, the optional internal React component.</li>
             <li>Update the registry status to <DocCode>"ready"</DocCode>.</li>
-            <li>Verify SCSS compiles: <DocCode>pnpm --filter @o9ds/styles build</DocCode>.</li>
+            <li>Verify SCSS compiles: <DocCode>pnpm --filter @arvo/styles build</DocCode>.</li>
           </ol>
         </DocSection>
 
@@ -96,10 +96,10 @@ export default function SharedPatterns() {
           <CodeBlock
             language="scss"
             label="Component SCSS — @use the mixin"
-            code={`@use '@o9ds/styles/mixins/form-input';
-@use '@o9ds/styles/mixins/loading';
+            code={`@use '@arvo/styles/mixins/form-input';
+@use '@arvo/styles/mixins/loading';
 
-.o9ds-txt {
+.arvo-txt {
   @include form-input.base;
   @include form-input.size('md');
   @include loading.shimmer-surface;
@@ -108,14 +108,14 @@ export default function SharedPatterns() {
           <CodeBlock
             language="ts"
             label="JS — import the utility"
-            code={`import { ensureInlineAlert, removeInlineAlert } from '@o9ds/utils';
+            code={`import { ensureInlineAlert, removeInlineAlert } from '@arvo/utils';
 
 ensureInlineAlert(host, { message, tone: 'error' });
 // ...
 removeInlineAlert(host);`}
           />
           <DocParagraph>
-            React components import the same utilities (where applicable) plus the internal React wrappers under <DocCode>@o9ds/react/src/internal/</DocCode>. These are intentionally not exported from the package barrel — they're part of the implementation contract, not the consumer API.
+            React components import the same utilities (where applicable) plus the internal React wrappers under <DocCode>@arvo/react/src/internal/</DocCode>. These are intentionally not exported from the package barrel — they're part of the implementation contract, not the consumer API.
           </DocParagraph>
         </DocSection>
       </div>

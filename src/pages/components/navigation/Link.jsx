@@ -1,34 +1,20 @@
 import { useState, useMemo } from 'react'
-import { O9Link } from '@o9ds/react'
+import { ArvoLink } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, CssVarsGrid, KeyboardTable, AriaTable, MethodsTable, EventsTable, SimpleTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', required: 'Yes', desc: 'Link text content.' },
-  { prop: 'href', type: 'string', required: 'Yes', desc: 'Destination URL.' },
-  { prop: 'variant', type: "'primary' | 'secondary'", default: "'primary'", desc: 'Visual style variant.' },
-  { prop: 'size', type: "'sm' | 'lg'", default: "'lg'", desc: 'Font size (sm=12px, lg=14px). Icon stays 16px.' },
-  { prop: 'icon', type: 'string', default: 'undefined', desc: 'Leading icon name without o9con- prefix.' },
-  { prop: 'external', type: 'boolean', default: 'false', desc: 'Show trailing external icon and auto-set target="_blank".' },
-  { prop: 'target', type: 'string', default: 'undefined', desc: 'Native target attribute.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Prevent navigation. Removes href, adds aria-disabled.' },
-  { prop: 'visited', type: 'boolean', default: 'false', desc: 'Apply visited color (utility-purple).' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Show skeleton shimmer overlay.' },
-  { prop: 'onClick', type: '(event) => void', default: 'undefined', desc: 'Click handler.' },
-]
+const DESCRIPTOR = getDescriptor('link')
+const PROPS = DESCRIPTOR.props
+const CSS_VARS = DESCRIPTOR.cssVarGroups
 
-const CSS_VARS = [
-  { category: 'Layout', vars: ['--o9ds-lnk-gap'] },
-  { category: 'Typography', vars: ['--o9ds-lnk-font-size', '--o9ds-lnk-font-weight', '--o9ds-lnk-line-height'] },
-  { category: 'Icon', vars: ['--o9ds-lnk-icon-size'] },
-  { category: 'Color', vars: ['--o9ds-lnk-text-color', '--o9ds-lnk-icon-color'] },
-]
+
 
 export default function Link() {
   const [tab, setTab] = useState('Overview')
@@ -59,16 +45,16 @@ export default function Link() {
             </DocSection>
             <DocSection id="variants" title="Variants">
               <LiveReference>
-                <O9Link href="#" label="Primary link" />
-                <O9Link href="#" label="Secondary link" variant="secondary" />
-                <O9Link href="#" label="With icon" icon="settings" />
-                <O9Link href="https://example.com" label="External link" isExternal />
+                <ArvoLink href="#" label="Primary link" />
+                <ArvoLink href="#" label="Secondary link" variant="secondary" />
+                <ArvoLink href="#" label="With icon" icon="settings" />
+                <ArvoLink href="https://example.com" label="External link" isExternal />
               </LiveReference>
             </DocSection>
             <DocSection id="sizes" title="Sizes">
               <LiveReference>
-                <O9Link href="#" label="Small (12px)" size="sm" />
-                <O9Link href="#" label="Large (14px)" size="lg" />
+                <ArvoLink href="#" label="Small (12px)" size="sm" />
+                <ArvoLink href="#" label="Large (14px)" size="lg" />
               </LiveReference>
             </DocSection>
           </div>
@@ -96,18 +82,18 @@ export default function Link() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Link } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoLink } from '@arvo/react';
 
-<O9Link href="/page" label="Learn more" />
-<O9Link href="/page" label="Settings" icon="settings" />
-<O9Link href="https://example.com" label="Visit site" external />
-<O9Link href="/page" label="Details" variant="secondary" />
-<O9Link href="/page" label="Unavailable" isDisabled />`} />
+<ArvoLink href="/page" label="Learn more" />
+<ArvoLink href="/page" label="Settings" icon="settings" />
+<ArvoLink href="https://example.com" label="Visit site" external />
+<ArvoLink href="/page" label="Details" variant="secondary" />
+<ArvoLink href="/page" label="Unavailable" isDisabled />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Link } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoLink } from '@arvo/js';
 
-const lnk = O9Link.initialize(el, {
+const lnk = ArvoLink.initialize(el, {
   variant: 'primary',
   href: '/page',
   label: 'Learn more',
@@ -129,7 +115,7 @@ lnk.destroy();`} />
             </DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Link.initialize(el, options)', returns: 'O9Link', desc: 'Factory.' },
+                { method: 'ArvoLink.initialize(el, options)', returns: 'ArvoLink', desc: 'Factory.' },
                 { method: 'setLabel(text)', desc: 'Update link label.' },
                 { method: 'setHref(href)', desc: 'Update destination URL.' },
                 { method: 'setIcon(name | null)', desc: 'Set or remove the leading icon.' },
@@ -164,7 +150,7 @@ lnk.destroy();`} />
             </DocSection>
             <DocSection id="focus" title="Focus">
               <DocList items={[
-                <span key="1">Focus ring uses <DocCode>outline: 1px solid var(--o9ds-color-b-theme-focus)</DocCode> around the full link content area.</span>,
+                <span key="1">Focus ring uses <DocCode>outline: 1px solid var(--arvo-color-b-theme-focus)</DocCode> around the full link content area.</span>,
                 <span key="2">Disabled links remain focusable (aria-disabled pattern) so screen reader users can discover them.</span>,
                 <span key="3">Hover styles scoped to <DocCode>.no-touch</DocCode>.</span>,
               ]} />

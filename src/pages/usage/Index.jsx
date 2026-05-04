@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import PageHeader from '../../LayoutComponents/PageHeader'
 
 const TILES = [
-  { path: '/usage/public-api', title: 'Public API & imports', desc: 'Allowed entry points per @o9ds/* package; banned deep imports.' },
+  { path: '/usage/public-api', title: 'Public API & imports', desc: 'Allowed entry points per @arvo/* package; banned deep imports.' },
   { path: '/usage/components', title: 'Component contract', desc: 'Props, options, methods, events, controlled vs uncontrolled state.' },
   { path: '/usage/styling', title: 'Styling & theming', desc: 'Tokens, CSS variables, BEM rules, override safety.' },
   { path: '/usage/composition', title: 'Composition & extension', desc: 'Wrappers, providers, parent loading, anti-fork rules.' },
@@ -23,13 +23,13 @@ const PRINCIPLES = [
 ]
 
 const QUICK_CHECK = [
-  'Am I importing only from @o9ds/<pkg> top-level (or a documented sub-export like @o9ds/js/plugin, @o9ds/styles/css, @o9ds/tokens/scss)?',
+  'Am I importing only from @arvo/<pkg> top-level (or a documented sub-export like @arvo/js/plugin, @arvo/styles/css, @arvo/tokens/scss)?',
   'Am I using only documented props/options/methods/events for the component?',
-  'Am I styling only through documented --o9ds-* CSS variables, tokens, or composition slots?',
-  'Am I avoiding .o9ds-* internal selector overrides, !important, and internal DOM assumptions?',
+  'Am I styling only through documented --arvo-* CSS variables, tokens, or composition slots?',
+  'Am I avoiding .arvo-* internal selector overrides, !important, and internal DOM assumptions?',
   'Am I preserving the accessibility wiring shown in the component docs page?',
-  'Are my tests based on roles, labels, and visible behavior rather than o9ds-* classnames?',
-  'Would this still work if @o9ds/* swapped its internal markup or state model in the next minor release?',
+  'Are my tests based on roles, labels, and visible behavior rather than arvo-* classnames?',
+  'Would this still work if @arvo/* swapped its internal markup or state model in the next minor release?',
 ]
 
 export default function UsageIndex() {
@@ -37,7 +37,7 @@ export default function UsageIndex() {
     <div className="space-y-12 max-w-6xl">
       <PageHeader
         title="Usage Standards"
-        description="The canonical contract between @o9ds/* and the applications consuming it. Every guideline here exists to keep your application upgrade-safe across @o9ds/* releases."
+        description="The canonical contract between @arvo/* and the applications consuming it. Every guideline here exists to keep your application upgrade-safe across @arvo/* releases."
         icon={
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -45,67 +45,67 @@ export default function UsageIndex() {
         }
       />
 
-      <section className="border-l-4 border-l-[#010101] dark:border-l-white pl-4 pr-4 py-3 bg-o9ds-light-surface dark:bg-neutral-800/40">
-        <p className="text-sm m-0 text-o9ds-light-secondary dark:text-neutral-300 leading-relaxed">
-          <strong className="text-o9ds-light-primary dark:text-white font-semibold">If you read one rule:</strong>{' '}
-          Only consume what <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/*</code> explicitly exposes. Never depend on how it happens to work internally today.
+      <section className="border-l-4 border-l-[#010101] dark:border-l-white pl-4 pr-4 py-3 bg-arvo-light-surface dark:bg-neutral-800/40">
+        <p className="text-sm m-0 text-arvo-light-secondary dark:text-neutral-300 leading-relaxed">
+          <strong className="text-arvo-light-primary dark:text-white font-semibold">If you read one rule:</strong>{' '}
+          Only consume what <code data-arvo-inline-code className="px-1 py-0.5">@arvo/*</code> explicitly exposes. Never depend on how it happens to work internally today.
         </p>
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Why this exists</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-          <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/*</code> is published as a <strong className="font-medium text-o9ds-light-primary dark:text-white">lockstep</strong> version set across eight packages
-          (<code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/react</code>, <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/js</code>, <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/core</code>,
-          {' '}<code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/styles</code>, <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/tokens</code>, <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/assets</code>,
-          {' '}<code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/utils</code>, <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/test-utils</code>). When one is bumped, all consumers move together. That model only works
+        <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Why this exists</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+          <code data-arvo-inline-code className="px-1 py-0.5">@arvo/*</code> is published as a <strong className="font-medium text-arvo-light-primary dark:text-white">lockstep</strong> version set across eight packages
+          (<code data-arvo-inline-code className="px-1 py-0.5">@arvo/react</code>, <code data-arvo-inline-code className="px-1 py-0.5">@arvo/js</code>, <code data-arvo-inline-code className="px-1 py-0.5">@arvo/core</code>,
+          {' '}<code data-arvo-inline-code className="px-1 py-0.5">@arvo/styles</code>, <code data-arvo-inline-code className="px-1 py-0.5">@arvo/tokens</code>, <code data-arvo-inline-code className="px-1 py-0.5">@arvo/assets</code>,
+          {' '}<code data-arvo-inline-code className="px-1 py-0.5">@arvo/utils</code>, <code data-arvo-inline-code className="px-1 py-0.5">@arvo/test-utils</code>). When one is bumped, all consumers move together. That model only works
           if every consuming app stays inside the public contract: documented components and props, methods, events, tokens, CSS variables, composition patterns, and upgrade paths.
         </p>
       </section>
 
       <section className="space-y-6">
-        <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">The six enforcement principles</h2>
+        <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">The six enforcement principles</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {PRINCIPLES.map(({ title, body }, i) => (
-            <div key={title} className="border p-4 dark:border-neutral-700" data-o9ds-card="light">
-              <p className="text-xs font-semibold uppercase tracking-wider text-o9ds-light-secondary dark:text-neutral-500 m-0 mb-1">
+            <div key={title} className="border p-4 dark:border-neutral-700" data-arvo-card="light">
+              <p className="text-xs font-semibold uppercase tracking-wider text-arvo-light-secondary dark:text-neutral-500 m-0 mb-1">
                 {String(i + 1).padStart(2, '0')}
               </p>
-              <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white m-0 mb-2">{title}</h3>
-              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">{body}</p>
+              <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white m-0 mb-2">{title}</h3>
+              <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed m-0">{body}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="space-y-6">
-        <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">How this section is organized</h2>
+        <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">How this section is organized</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {TILES.map(({ path, title, desc }) => (
             <Link
               key={path}
               to={path}
-              className="group block border p-5 transition-colors hover:border-o9ds-light-primary dark:hover:border-white"
-              data-o9ds-card="light"
+              className="group block border p-5 transition-colors hover:border-arvo-light-primary dark:hover:border-white"
+              data-arvo-card="light"
             >
-              <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white m-0 mb-2 group-hover:underline">
+              <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white m-0 mb-2 group-hover:underline">
                 {title}
               </h3>
-              <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">{desc}</p>
+              <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed m-0">{desc}</p>
             </Link>
           ))}
         </div>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Quick "is this safe?" checklist</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-          Before merging any <code data-o9ds-inline-code className="px-1 py-0.5">@o9ds/*</code> usage, ask:
+        <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Quick "is this safe?" checklist</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+          Before merging any <code data-arvo-inline-code className="px-1 py-0.5">@arvo/*</code> usage, ask:
         </p>
-        <ol className="list-decimal pl-5 space-y-2 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+        <ol className="list-decimal pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
           {QUICK_CHECK.map((q, i) => <li key={i}>{q}</li>)}
         </ol>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
           If any answer is "no", you are depending on private implementation detail. Rework, or open a request with the design system team for a supported extension point.
         </p>
       </section>

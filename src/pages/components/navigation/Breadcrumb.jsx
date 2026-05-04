@@ -1,37 +1,27 @@
 import { useState, useMemo } from 'react'
-import { O9Breadcrumb } from '@o9ds/react'
+import { ArvoBreadcrumb } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, CssVarsGrid, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'items', type: 'O9BreadcrumbItem[]', default: '[]', required: 'Yes', desc: 'Array of breadcrumb items. Last item is the current page.' },
-  { prop: 'separator', type: 'string', default: "'/'", desc: 'Separator character (CSS-generated via ::before).' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable all navigable links.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Show skeleton shimmer overlay.' },
-  { prop: 'ariaLabel', type: 'string', default: "'Breadcrumb'", desc: 'Accessible label for the <nav> element.' },
-  { prop: 'onNavigate', type: '(detail) => void', desc: 'Navigation handler. Fires when a link is clicked.' },
-]
+const DESCRIPTOR = getDescriptor('breadcrumb')
+const PROPS = DESCRIPTOR.props
+const CSS_VARS = DESCRIPTOR.cssVarGroups
 
-const CSS_VARS = [
-  { category: 'Layout', vars: ['--o9ds-bc-height', '--o9ds-bc-padding-block', '--o9ds-bc-gap'] },
-  { category: 'Typography', vars: ['--o9ds-bc-font-size', '--o9ds-bc-font-weight', '--o9ds-bc-font-weight-current'] },
-  { category: 'Icon', vars: ['--o9ds-bc-icon-size'] },
-  { category: 'Color', vars: ['--o9ds-bc-link-color', '--o9ds-bc-link-color-hover', '--o9ds-bc-current-color', '--o9ds-bc-separator-color', '--o9ds-bc-disabled-color'] },
-  { category: 'Focus', vars: ['--o9ds-bc-focus-border'] },
-]
+
 
 export default function Breadcrumb() {
   const [tab, setTab] = useState('Overview')
   const sections = useMemo(() => {
     if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'demo', label: 'Live demo' }]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]
-    if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'item', label: 'O9BreadcrumbItem' }, { id: 'css-vars', label: 'CSS variables' }, { id: 'methods', label: 'Methods (JS)' }, { id: 'events', label: 'Events (JS)' }]
+    if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'item', label: 'ArvoBreadcrumbItem' }, { id: 'css-vars', label: 'CSS variables' }, { id: 'methods', label: 'Methods (JS)' }, { id: 'events', label: 'Events (JS)' }]
     if (tab === 'Accessibility') return [{ id: 'keyboard', label: 'Keyboard' }, { id: 'aria', label: 'ARIA' }, { id: 'pattern', label: 'WAI-ARIA pattern' }]
     return []
   }, [tab])
@@ -62,7 +52,7 @@ export default function Breadcrumb() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Breadcrumb items={items} />
+                <ArvoBreadcrumb items={items} />
               </LiveReference>
             </DocSection>
           </div>
@@ -89,9 +79,9 @@ export default function Breadcrumb() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Breadcrumb } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoBreadcrumb } from '@arvo/react';
 
-<O9Breadcrumb
+<ArvoBreadcrumb
   items={[
     { label: '', icon: 'home', href: '/' },
     { label: 'Products', href: '/products' },
@@ -102,9 +92,9 @@ export default function Breadcrumb() {
 />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Breadcrumb } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoBreadcrumb } from '@arvo/js';
 
-const bc = O9Breadcrumb.initialize(el, {
+const bc = ArvoBreadcrumb.initialize(el, {
   items: [
     { label: '', icon: 'home', href: '/' },
     { label: 'Products', href: '/products' },
@@ -119,8 +109,8 @@ bc.setLoading(true);
 bc.destroy();`} />
             </DocSection>
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
-            <DocSection id="item" title="O9BreadcrumbItem shape">
-              <CodeBlock language="ts" code={`interface O9BreadcrumbItem {
+            <DocSection id="item" title="ArvoBreadcrumbItem shape">
+              <CodeBlock language="ts" code={`interface ArvoBreadcrumbItem {
   label: string;       // Item text. Empty string for icon-only items.
   href?: string;       // Destination URL. Omit for the current page item.
   icon?: string;       // Icon name (without o9con- prefix). Typically 'home' for the first item.
@@ -129,7 +119,7 @@ bc.destroy();`} />
             <DocSection id="css-vars" title="CSS variables"><CssVarsGrid groups={CSS_VARS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Breadcrumb.initialize(el, options)', returns: 'O9Breadcrumb', desc: 'Factory.' },
+                { method: 'ArvoBreadcrumb.initialize(el, options)', returns: 'ArvoBreadcrumb', desc: 'Factory.' },
                 { method: 'setItems(items)', desc: 'Replace all breadcrumb items.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },
                 { method: 'setLoading(b)', desc: 'Toggle loading state.' },

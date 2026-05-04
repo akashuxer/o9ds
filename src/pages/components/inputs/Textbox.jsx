@@ -1,31 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Textbox } from '@o9ds/react'
+import { ArvoTextbox } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', desc: 'Field label rendered above the input.' },
-  { prop: 'value', type: 'string', desc: 'Controlled value.' },
-  { prop: 'defaultValue', type: 'string', desc: 'Uncontrolled initial value.' },
-  { prop: 'placeholder', type: 'string', desc: 'Placeholder text. Do not use as a label.' },
-  { prop: 'description', type: 'string', desc: 'Help text rendered below the input. Wires aria-describedby.' },
-  { prop: 'error', type: 'string', desc: 'Error message. Sets aria-invalid and aria-describedby.' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the field as required.' },
-  { prop: 'isReadonly', type: 'boolean', default: 'false', desc: 'Disables editing while keeping the value tabbable.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disables interaction.' },
-  { prop: 'isFullWidth', type: 'boolean', default: 'false', desc: 'Expand to fill container width.' },
-  { prop: 'prefix', type: 'string | ReactNode', desc: 'Prefix content rendered inside the input.' },
-  { prop: 'suffix', type: 'string | ReactNode', desc: 'Suffix content rendered inside the input.' },
-  { prop: 'clearable', type: 'boolean', default: 'false', desc: 'Show a clear (×) button when the value is non-empty.' },
-  { prop: 'maxLength', type: 'number', desc: 'Maximum character count (renders a counter).' },
-  { prop: 'onChange', type: '(value, event) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('textbox')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Textbox() {
   const [tab, setTab] = useState('Overview')
@@ -54,10 +41,10 @@ export default function Textbox() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 240 }}><O9Textbox label="Email" placeholder="you@example.com" /></div>
-                <div style={{ minWidth: 240 }}><O9Textbox label="Help text" placeholder="you@example.com" /></div>
-                <div style={{ minWidth: 240 }}><O9Textbox label="With error" defaultValue="invalid" isInvalid errorMsg="Please enter a valid value." /></div>
-                <div style={{ minWidth: 240 }}><O9Textbox label="Disabled" isDisabled /></div>
+                <div style={{ minWidth: 240 }}><ArvoTextbox label="Email" placeholder="you@example.com" /></div>
+                <div style={{ minWidth: 240 }}><ArvoTextbox label="Help text" placeholder="you@example.com" /></div>
+                <div style={{ minWidth: 240 }}><ArvoTextbox label="With error" defaultValue="invalid" isInvalid errorMsg="Please enter a valid value." /></div>
+                <div style={{ minWidth: 240 }}><ArvoTextbox label="Disabled" isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>
@@ -85,17 +72,17 @@ export default function Textbox() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Textbox } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoTextbox } from '@arvo/react';
 
 // Uncontrolled
-<O9Textbox label="Email" placeholder="you@example.com" defaultValue="" />
+<ArvoTextbox label="Email" placeholder="you@example.com" defaultValue="" />
 
 // Controlled
 const [value, setValue] = useState('');
-<O9Textbox label="Email" value={value} onChange={(v) => setValue(v)} />
+<ArvoTextbox label="Email" value={value} onChange={(v) => setValue(v)} />
 
 // With validation
-<O9Textbox
+<ArvoTextbox
   label="Email"
   isRequired
   hasError
@@ -103,15 +90,15 @@ const [value, setValue] = useState('');
 />
 
 // Prefix / suffix
-<O9Textbox label="Amount" prefix="$" suffix="USD" />
+<ArvoTextbox label="Amount" prefix="$" suffix="USD" />
 
 // Clearable + max length
-<O9Textbox label="Bio" clearable maxLength={120} />`} />
+<ArvoTextbox label="Bio" clearable maxLength={120} />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Textbox } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoTextbox } from '@arvo/js';
 
-const txt = O9Textbox.initialize(el, {
+const txt = ArvoTextbox.initialize(el, {
   label: 'Email',
   placeholder: 'you@example.com',
   onChange: (value) => console.log(value),
@@ -128,7 +115,7 @@ txt.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Textbox.initialize(el, options)', returns: 'O9Textbox', desc: 'Factory.' },
+                { method: 'ArvoTextbox.initialize(el, options)', returns: 'ArvoTextbox', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string | void', desc: 'Get/set the current value.' },
                 { method: 'setError(message | false)', desc: 'Set or clear the error message.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },

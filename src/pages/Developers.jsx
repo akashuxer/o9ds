@@ -10,19 +10,19 @@ import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../LayoutComponents/codeHighlight'
 const TABS = ['Overview', 'Architecture', 'Multi-Framework', 'Distribution']
 
 const PACKAGES = [
-  ['@o9ds/tokens', 'SCSS design tokens — color, spacing, typography, borders, widths, animation', 'SCSS source (no build step) + prebuilt CSS'],
-  ['@o9ds/styles', 'Component SCSS, shared mixins, icon font, illustrations, web fonts', 'SCSS source + prebuilt CSS'],
-  ['@o9ds/core', 'Framework-agnostic behavioral logic — overlay hub, positioning, focus, keyboard, animation, mask', 'Vite dist/ (ESM + CJS + types)'],
-  ['@o9ds/utils', 'Form label, char counter, inline alert helpers', 'Vite dist/ (ESM + CJS + types)'],
-  ['@o9ds/react', 'React components, hooks, providers', 'Vite dist/ (ESM + CJS + types)'],
-  ['@o9ds/js', 'Vanilla JS components, jQuery plugin system', 'Vite dist/ (ESM + CJS + types)'],
-  ['@o9ds/assets', 'Fonts, o9con icon font, o9illus illustrations', 'Static asset directories + prebuilt CSS'],
-  ['@o9ds/docs', 'Docusaurus site with MDX component pages', 'Static build (planned)'],
+  ['@arvo/tokens', 'SCSS design tokens — color, spacing, typography, borders, widths, animation', 'SCSS source (no build step) + prebuilt CSS'],
+  ['@arvo/styles', 'Component SCSS, shared mixins, icon font, illustrations, web fonts', 'SCSS source + prebuilt CSS'],
+  ['@arvo/core', 'Framework-agnostic behavioral logic — overlay hub, positioning, focus, keyboard, animation, mask', 'Vite dist/ (ESM + CJS + types)'],
+  ['@arvo/utils', 'Form label, char counter, inline alert helpers', 'Vite dist/ (ESM + CJS + types)'],
+  ['@arvo/react', 'React components, hooks, providers', 'Vite dist/ (ESM + CJS + types)'],
+  ['@arvo/js', 'Vanilla JS components, jQuery plugin system', 'Vite dist/ (ESM + CJS + types)'],
+  ['@arvo/assets', 'Fonts, o9con icon font, o9illus illustrations', 'Static asset directories + prebuilt CSS'],
+  ['@arvo/docs', 'Docusaurus site with MDX component pages', 'Static build (planned)'],
 ]
 
 const PRINCIPLES = [
   ['Single source of truth', 'Tokens originate in Figma, component specs originate in descriptors, generated code is never hand-edited.'],
-  ['Framework-agnostic core', 'Shared logic (overlays, positioning, focus, keyboard) lives in @o9ds/core. React and JS packages are thin adapters.'],
+  ['Framework-agnostic core', 'Shared logic (overlays, positioning, focus, keyboard) lives in @arvo/core. React and JS packages are thin adapters.'],
   ['Mechanical consistency', 'Naming, prop patterns, CSS variable structures, and cross-platform parity are validated by automated agents, not by review alone.'],
   ['Stateless agents', 'Each agent receives a descriptor plus prior outputs, produces artifacts, and has no side effects beyond its declared outputs. Agents are portable Markdown prompts.'],
   ['Incremental delivery', 'Each phase produces shippable artifacts. Later phases extend earlier ones without blocking them from delivering value.'],
@@ -67,12 +67,12 @@ const FEED_VIEWS = [
 ]
 
 const DIST_MATRIX = [
-  ['@o9ds/tokens', 'src/', 'SCSS', './scss, ./scss/{category}', 'No'],
-  ['@o9ds/styles', 'src/', 'SCSS', '., ./icons, ./fonts, ./illustrations, ./base, ./mixins/*', 'Yes'],
-  ['@o9ds/core', 'dist/', 'ESM, CJS, .d.ts', '.', 'No'],
-  ['@o9ds/utils', 'dist/', 'ESM, CJS, .d.ts', '.', 'No'],
-  ['@o9ds/react', 'dist/', 'ESM, CJS, .d.ts', '.', 'No'],
-  ['@o9ds/js', 'dist/', 'ESM, CJS, .d.ts', '., ./plugin, ./auto', './auto only'],
+  ['@arvo/tokens', 'src/', 'SCSS', './scss, ./scss/{category}', 'No'],
+  ['@arvo/styles', 'src/', 'SCSS', '., ./icons, ./fonts, ./illustrations, ./base, ./mixins/*', 'Yes'],
+  ['@arvo/core', 'dist/', 'ESM, CJS, .d.ts', '.', 'No'],
+  ['@arvo/utils', 'dist/', 'ESM, CJS, .d.ts', '.', 'No'],
+  ['@arvo/react', 'dist/', 'ESM, CJS, .d.ts', '.', 'No'],
+  ['@arvo/js', 'dist/', 'ESM, CJS, .d.ts', '., ./plugin, ./auto', './auto only'],
 ]
 
 export default function Developers() {
@@ -96,8 +96,8 @@ export default function Developers() {
     ]
     if (activeTab === 'Multi-Framework') return [
       { id: 'mf-strategy', label: 'Strategy' },
-      { id: 'mf-react', label: '@o9ds/react' },
-      { id: 'mf-js', label: '@o9ds/js' },
+      { id: 'mf-react', label: '@arvo/react' },
+      { id: 'mf-js', label: '@arvo/js' },
       { id: 'mf-parity', label: 'Parity enforcement' },
       { id: 'mf-future', label: 'Future framework support' },
     ]
@@ -115,7 +115,7 @@ export default function Developers() {
       <div className="space-y-8">
         <PageHeader
           title="For Developers"
-          description="The o9 Design System is a dual-platform component library (React + vanilla JS) backed by shared design tokens, SCSS styles, framework-agnostic core utilities, and an agent-driven development pipeline. It is distributed as scoped npm packages via Azure Artifacts."
+          description="The Arvo Design System is a dual-platform component library (React + vanilla JS) backed by shared design tokens, SCSS styles, framework-agnostic core utilities, and an agent-driven development pipeline. It is distributed as scoped npm packages via Azure Artifacts."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>}
         />
 
@@ -125,25 +125,25 @@ export default function Developers() {
           <div className="space-y-12">
             <DocSection id="mission" title="Mission">
               <DocParagraph>
-                o9ds is the canonical, packaged design system for o9 platform applications. It is treated the same as any external packaged library — the development of o9ds is intentionally separate from product UI work (Platform Compliance, NovaAI/Kibo migrations, and other improvements live elsewhere).
+                Arvo is the canonical, packaged design system for o9 platform applications. It is treated the same as any external packaged library — the development of Arvo is intentionally separate from product UI work (Platform Compliance, NovaAI/Kibo migrations, and other improvements live elsewhere).
               </DocParagraph>
               <DocCallout title="Scope discipline">
-                Do not mix o9ds scope with the Kibo Q3 improvement plan. o9ds is an external, packaged system that platform UI is consuming, and is not a shared development layer.
+                Do not mix Arvo scope with the Kibo Q3 improvement plan. Arvo is an external, packaged system that platform UI is consuming, and is not a shared development layer.
               </DocCallout>
             </DocSection>
 
             <DocSection id="audiences" title="Audiences">
               <div className="grid gap-4 sm:grid-cols-2">
-                <Link to="/usage" className="block border p-5 transition-colors hover:border-o9ds-light-primary dark:hover:border-white" data-o9ds-card="light">
-                  <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white m-0 mb-2">Consumers</h3>
-                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">
-                    Building product UIs against <DocCode>@o9ds/*</DocCode>. See the <DocStrong>Usage</DocStrong> section for the public contract: imports, props, styling, accessibility, testing, versioning.
+                <Link to="/usage" className="block border p-5 transition-colors hover:border-arvo-light-primary dark:hover:border-white" data-arvo-card="light">
+                  <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white m-0 mb-2">Consumers</h3>
+                  <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed m-0">
+                    Building product UIs against <DocCode>@arvo/*</DocCode>. See the <DocStrong>Usage</DocStrong> section for the public contract: imports, props, styling, accessibility, testing, versioning.
                   </p>
                 </Link>
-                <Link to="/developer-reference/agentic-pipeline" className="block border p-5 transition-colors hover:border-o9ds-light-primary dark:hover:border-white" data-o9ds-card="light">
-                  <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white m-0 mb-2">Contributors</h3>
-                  <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">
-                    Building or maintaining <DocCode>@o9ds/*</DocCode> itself. See the <DocStrong>Developer Reference</DocStrong> section for architecture, agentic pipeline, component pipeline, shared patterns, and contributor workflows.
+                <Link to="/developer-reference/agentic-pipeline" className="block border p-5 transition-colors hover:border-arvo-light-primary dark:hover:border-white" data-arvo-card="light">
+                  <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white m-0 mb-2">Contributors</h3>
+                  <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed m-0">
+                    Building or maintaining <DocCode>@arvo/*</DocCode> itself. See the <DocStrong>Developer Reference</DocStrong> section for architecture, agentic pipeline, component pipeline, shared patterns, and contributor workflows.
                   </p>
                 </Link>
               </div>
@@ -155,17 +155,17 @@ export default function Developers() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="dark:bg-neutral-800/50">
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Package</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Role</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Output</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Package</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Role</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Output</th>
                     </tr>
                   </thead>
                   <tbody>
                     {PACKAGES.map(([pkg, role, output]) => (
                       <tr key={pkg} className="border-t dark:border-neutral-700">
                         <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{pkg}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{role}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{output}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{role}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{output}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -176,9 +176,9 @@ export default function Developers() {
             <DocSection id="principles" title="Guiding principles">
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {PRINCIPLES.map(([title, body]) => (
-                  <div key={title} className="border p-4 dark:border-neutral-700" data-o9ds-card="light">
-                    <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white m-0 mb-2">{title}</h3>
-                    <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">{body}</p>
+                  <div key={title} className="border p-4 dark:border-neutral-700" data-arvo-card="light">
+                    <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white m-0 mb-2">{title}</h3>
+                    <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed m-0">{body}</p>
                   </div>
                 ))}
               </div>
@@ -205,12 +205,12 @@ export default function Developers() {
                 label="Layered monorepo (top to bottom)"
                 code={`┌─────────────────────────────────────────────────────────────────┐
 │  Consumers: product applications                                │
-│  └─ install @o9ds/* via Azure Artifacts (lockstep version set)  │
+│  └─ install @arvo/* via Azure Artifacts (lockstep version set)  │
 └─────────────────────────────────────────────────────────────────┘
             ▲                                ▲
             │                                │
 ┌─────────────────────┐          ┌─────────────────────┐
-│ @o9ds/react         │          │ @o9ds/js            │
+│ @arvo/react         │          │ @arvo/js            │
 │  React adapters,    │          │  JS classes,        │
 │  hooks, providers   │          │  jQuery plugins     │
 └─────────────────────┘          └─────────────────────┘
@@ -218,18 +218,18 @@ export default function Developers() {
             └────────────┬───────────────────┘
                          │
             ┌────────────────────────┐
-            │ @o9ds/core (behaviour) │  @o9ds/utils (DOM helpers)
+            │ @arvo/core (behaviour) │  @arvo/utils (DOM helpers)
             └────────────────────────┘
                          ▲
             ┌────────────────────────┐
-            │ @o9ds/styles  (SCSS)   │  @o9ds/assets (icon font, illus, fonts)
+            │ @arvo/styles  (SCSS)   │  @arvo/assets (icon font, illus, fonts)
             └────────────────────────┘
                          ▲
             ┌────────────────────────┐
-            │ @o9ds/tokens (SCSS)    │
+            │ @arvo/tokens (SCSS)    │
             └────────────────────────┘`}
               />
-              <DocParagraph>Peer dependencies (not bundled): <DocCode>react ^18 || ^19</DocCode>, <DocCode>react-dom ^18 || ^19</DocCode> for <DocCode>@o9ds/react</DocCode>; <DocCode>jquery ^3.7</DocCode> for <DocCode>@o9ds/js</DocCode>.</DocParagraph>
+              <DocParagraph>Peer dependencies (not bundled): <DocCode>react ^18 || ^19</DocCode>, <DocCode>react-dom ^18 || ^19</DocCode> for <DocCode>@arvo/react</DocCode>; <DocCode>jquery ^3.7</DocCode> for <DocCode>@arvo/js</DocCode>.</DocParagraph>
             </DocSection>
 
             <DocSection id="tech-stack" title="Technology stack">
@@ -237,17 +237,17 @@ export default function Developers() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="dark:bg-neutral-800/50">
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Area</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Tool</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Version</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Area</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Tool</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Version</th>
                     </tr>
                   </thead>
                   <tbody>
                     {TECH_STACK.map(([area, tool, version]) => (
                       <tr key={area} className="border-t dark:border-neutral-700">
                         <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{area}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{tool}</td>
-                        <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{version}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{tool}</td>
+                        <td className="py-2 px-3 font-mono text-arvo-light-secondary dark:text-neutral-400">{version}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -257,36 +257,36 @@ export default function Developers() {
 
             <DocSection id="tokens" title="Token architecture">
               <DocParagraph>Tokens flow through two layers:</DocParagraph>
-              <ol className="list-decimal pl-5 space-y-2 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-                <li><DocStrong>Compile-time</DocStrong> — SCSS variables (<DocCode>$o9ds-*</DocCode>) defined in <DocCode>@o9ds/tokens/src/scss/</DocCode>. Used inside mixins and the styles package during Sass compilation.</li>
-                <li><DocStrong>Runtime</DocStrong> — CSS custom properties (<DocCode>--o9ds-*</DocCode>) emitted onto <DocCode>:root</DocCode> by <DocCode>_root.scss</DocCode>. Theme, brand, and mode layers compose via mixins so consuming applications can override at any cascade level.</li>
+              <ol className="list-decimal pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+                <li><DocStrong>Compile-time</DocStrong> — SCSS variables (<DocCode>$arvo-*</DocCode>) defined in <DocCode>@arvo/tokens/src/scss/</DocCode>. Used inside mixins and the styles package during Sass compilation.</li>
+                <li><DocStrong>Runtime</DocStrong> — CSS custom properties (<DocCode>--arvo-*</DocCode>) emitted onto <DocCode>:root</DocCode> by <DocCode>_root.scss</DocCode>. Theme, brand, and mode layers compose via mixins so consuming applications can override at any cascade level.</li>
               </ol>
               <DocParagraph><DocStrong>Token categories:</DocStrong> {TOKEN_CATEGORIES.join(' · ')}.</DocParagraph>
               <DocParagraph>
-                <DocStrong>CSS variable discipline:</DocStrong> Component-level CSS variables (<DocCode>--o9ds-{`{abbr}`}-*</DocCode>) are created only when the value changes per size, variant, state, or parent override. Static token references are used directly.
+                <DocStrong>CSS variable discipline:</DocStrong> Component-level CSS variables (<DocCode>--arvo-{`{abbr}`}-*</DocCode>) are created only when the value changes per size, variant, state, or parent override. Static token references are used directly.
               </DocParagraph>
               <DocParagraph>
                 <DocStrong>Why tokens live outside the platform:</DocStrong> One version across all applications (no copy-paste drift), independent versioning, cross-application consistency, and a reduced platform bundle.
               </DocParagraph>
             </DocSection>
 
-            <DocSection id="core-modules" title="Shared core modules (@o9ds/core)">
+            <DocSection id="core-modules" title="Shared core modules (@arvo/core)">
               <DocParagraph>
-                Framework-agnostic behavior modules consumed by both <DocCode>@o9ds/react</DocCode> (via hooks) and <DocCode>@o9ds/js</DocCode> (via direct import). This layer ensures behavioral parity between React and vanilla JS is structural, not coincidental.
+                Framework-agnostic behavior modules consumed by both <DocCode>@arvo/react</DocCode> (via hooks) and <DocCode>@arvo/js</DocCode> (via direct import). This layer ensures behavioral parity between React and vanilla JS is structural, not coincidental.
               </DocParagraph>
               <div className="border overflow-hidden dark:border-neutral-700">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="dark:bg-neutral-800/50">
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Module</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Purpose</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Module</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Purpose</th>
                     </tr>
                   </thead>
                   <tbody>
                     {CORE_MODULES.map(([mod, purpose]) => (
                       <tr key={mod} className="border-t dark:border-neutral-700">
                         <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{mod}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{purpose}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{purpose}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -299,7 +299,7 @@ export default function Developers() {
                 Shared patterns sit between the raw token layer and the component layer. They encode specific visual behaviors (animated form borders, loading skeletons, inline alerts) that would otherwise be duplicated across every component that needs them.
               </DocParagraph>
               <DocParagraph>
-                Each pattern is a styling solution (SCSS mixin in <DocCode>@o9ds/styles</DocCode>). When DOM is involved, a logic solution (utility in <DocCode>@o9ds/utils</DocCode>). Both are registered in <DocCode>SHARED-PATTERNS-REGISTRY.json</DocCode> and enforced by the pipeline. A component cannot scaffold until its declared patterns have ready status.
+                Each pattern is a styling solution (SCSS mixin in <DocCode>@arvo/styles</DocCode>). When DOM is involved, a logic solution (utility in <DocCode>@arvo/utils</DocCode>). Both are registered in <DocCode>SHARED-PATTERNS-REGISTRY.json</DocCode> and enforced by the pipeline. A component cannot scaffold until its declared patterns have ready status.
               </DocParagraph>
               <DocParagraph>
                 See the <Link to="/developer-reference/shared-patterns" className="underline">Shared Patterns</Link> page for the active pattern registry.
@@ -310,7 +310,7 @@ export default function Developers() {
               <DocParagraph>CSS classes follow BEM with aggressive abbreviation for compactness across a library of 70+ components:</DocParagraph>
               <CodeBlock
                 language="text"
-                code={`.o9ds-{abbr}__{element}--{modifier}`}
+                code={`.arvo-{abbr}__{element}--{modifier}`}
               />
               <DocParagraph>
                 Abbreviations are documented in each component descriptor: <DocCode>btn</DocCode>, <DocCode>cb</DocCode>, <DocCode>rb</DocCode>, <DocCode>sw</DocCode>, <DocCode>sel</DocCode>, <DocCode>dd</DocCode>, <DocCode>txt</DocCode>, <DocCode>pop</DocCode>, <DocCode>bc</DocCode>, <DocCode>num</DocCode>, …
@@ -323,29 +323,29 @@ export default function Developers() {
           <div className="space-y-12">
             <DocSection id="mf-strategy" title="Strategy">
               <DocParagraph>
-                The design system ships two framework targets from a single source of architectural truth. The <DocCode>@o9ds/core</DocCode> layer is deliberately framework-agnostic so that React and vanilla JS adapters share the same overlay, focus, and keyboard primitives.
+                The design system ships two framework targets from a single source of architectural truth. The <DocCode>@arvo/core</DocCode> layer is deliberately framework-agnostic so that React and vanilla JS adapters share the same overlay, focus, and keyboard primitives.
               </DocParagraph>
             </DocSection>
 
-            <DocSection id="mf-react" title="@o9ds/react">
+            <DocSection id="mf-react" title="@arvo/react">
               <DocList items={[
                 <span key="1">Every component uses <DocCode>forwardRef</DocCode> and extends native HTML element attributes.</span>,
-                <span key="2">Hooks (<DocCode>useOverlay</DocCode>, <DocCode>useFocusTrap</DocCode>, <DocCode>useKeyboardNav</DocCode>, <DocCode>usePositioning</DocCode>) wrap <DocCode>@o9ds/core</DocCode> modules.</span>,
+                <span key="2">Hooks (<DocCode>useOverlay</DocCode>, <DocCode>useFocusTrap</DocCode>, <DocCode>useKeyboardNav</DocCode>, <DocCode>usePositioning</DocCode>) wrap <DocCode>@arvo/core</DocCode> modules.</span>,
                 <span key="3"><DocCode>OverlayProvider</DocCode> configures container constraints, z-index layering, and route-change behavior for the application.</span>,
               ]} />
               <CodeBlock
                 language="tsx"
                 label="Component pattern"
-                code={`import { O9Button } from '@o9ds/react';
+                code={`import { ArvoButton } from '@arvo/react';
 
-<O9Button variant="primary" size="md" onClick={handleClick}>
+<ArvoButton variant="primary" size="md" onClick={handleClick}>
   Save
-</O9Button>`}
+</ArvoButton>`}
               />
               <CodeBlock
                 language="tsx"
                 label="Provider pattern"
-                code={`import { OverlayProvider } from '@o9ds/react';
+                code={`import { OverlayProvider } from '@arvo/react';
 
 <OverlayProvider config={{ containerSelector: '#app', zIndexBase: 1000 }}>
   <App />
@@ -353,9 +353,9 @@ export default function Developers() {
               />
             </DocSection>
 
-            <DocSection id="mf-js" title="@o9ds/js">
+            <DocSection id="mf-js" title="@arvo/js">
               <DocList items={[
-                <span key="1">Class-based lifecycle: <DocCode>O9Component.initialize(element, options)</DocCode> → instance methods → <DocCode>.destroy()</DocCode>.</span>,
+                <span key="1">Class-based lifecycle: <DocCode>ArvoComponent.initialize(element, options)</DocCode> → instance methods → <DocCode>.destroy()</DocCode>.</span>,
                 <span key="2">Dual-purpose getter/setter API: <DocCode>disabled()</DocCode> returns state; <DocCode>disabled(true)</DocCode> sets it.</span>,
                 <span key="3">Three entry points: <DocCode>main</DocCode> (direct class usage), <DocCode>plugin</DocCode> (selective jQuery registration), <DocCode>auto</DocCode> (side-effect import that registers all plugins).</span>,
                 <span key="4">Overlay bridge for jQuery consumers: <DocCode>$.setupOverlays()</DocCode>, <DocCode>$.openOverlay()</DocCode>, <DocCode>$.closeAllOverlays()</DocCode>.</span>,
@@ -363,8 +363,8 @@ export default function Developers() {
               <CodeBlock
                 language="js"
                 label="Class-based pattern"
-                code={`import { O9Button } from '@o9ds/js';
-const btn = O9Button.initialize(element, { variant: 'primary', size: 'md' });
+                code={`import { ArvoButton } from '@arvo/js';
+const btn = ArvoButton.initialize(element, { variant: 'primary', size: 'md' });
 btn.disabled(true);   // setter: disable
 btn.disabled();       // getter: returns true
 btn.destroy();        // cleanup`}
@@ -372,11 +372,11 @@ btn.destroy();        // cleanup`}
               <CodeBlock
                 language="js"
                 label="jQuery plugin usage"
-                code={`import { registerO9Plugins } from '@o9ds/js/plugin';
-registerO9Plugins($);                            // all components
-registerO9Plugins($, ['o9Button', 'o9Textbox']); // selective
+                code={`import { registerArvoPlugins } from '@arvo/js/plugin';
+registerArvoPlugins($);                                  // all components
+registerArvoPlugins($, ['arvoButton', 'arvoTextbox']);   // selective
 
-$('#save-btn').o9Button({ variant: 'primary' });`}
+$('#save-btn').arvoButton({ variant: 'primary' });`}
               />
               <CodeBlock
                 language="js"
@@ -398,7 +398,7 @@ $.closeAllOverlays();`}
 
             <DocSection id="mf-future" title="Future framework support">
               <DocParagraph>
-                Adding a new framework target (Angular, Svelte, Web Components) requires writing thin adapter components over the same <DocCode>@o9ds/core</DocCode> modules. The styles, tokens, shared patterns, and behavioral logic remain unchanged.
+                Adding a new framework target (Angular, Svelte, Web Components) requires writing thin adapter components over the same <DocCode>@arvo/core</DocCode> modules. The styles, tokens, shared patterns, and behavioral logic remain unchanged.
               </DocParagraph>
             </DocSection>
           </div>
@@ -408,7 +408,7 @@ $.closeAllOverlays();`}
           <div className="space-y-12">
             <DocSection id="registry" title="Registry">
               <DocParagraph>
-                Azure Artifacts serves as the private npm registry for <DocCode>@o9ds</DocCode> scoped packages. Consuming applications reference the feed via <DocCode>.npmrc</DocCode> and install packages identically to any public npm dependency. The feed proxies public <DocCode>npmjs.com</DocCode>, so a single registry serves both private and third-party packages.
+                Azure Artifacts serves as the private npm registry for <DocCode>@arvo</DocCode> scoped packages. Consuming applications reference the feed via <DocCode>.npmrc</DocCode> and install packages identically to any public npm dependency. The feed proxies public <DocCode>npmjs.com</DocCode>, so a single registry serves both private and third-party packages.
               </DocParagraph>
             </DocSection>
 
@@ -417,21 +417,21 @@ $.closeAllOverlays();`}
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="dark:bg-neutral-800/50">
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Package</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Dist</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Formats</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Entry points</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Side effects</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Package</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Dist</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Formats</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Entry points</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Side effects</th>
                     </tr>
                   </thead>
                   <tbody>
                     {DIST_MATRIX.map(([pkg, dist, fmt, entries, side]) => (
                       <tr key={pkg} className="border-t dark:border-neutral-700">
                         <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{pkg}</td>
-                        <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{dist}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{fmt}</td>
-                        <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{entries}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{side}</td>
+                        <td className="py-2 px-3 font-mono text-arvo-light-secondary dark:text-neutral-400">{dist}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{fmt}</td>
+                        <td className="py-2 px-3 font-mono text-arvo-light-secondary dark:text-neutral-400">{entries}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{side}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -447,15 +447,15 @@ $.closeAllOverlays();`}
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="dark:bg-neutral-800/50">
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Change</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Bump</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Change</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Bump</th>
                     </tr>
                   </thead>
                   <tbody>
                     {VERSION_BUMP.map(([change, bump]) => (
                       <tr key={change} className="border-t dark:border-neutral-700">
                         <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{change}</td>
-                        <td className="py-2 px-3 font-mono text-o9ds-light-secondary dark:text-neutral-400">{bump}</td>
+                        <td className="py-2 px-3 font-mono text-arvo-light-secondary dark:text-neutral-400">{bump}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -471,17 +471,17 @@ $.closeAllOverlays();`}
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="dark:bg-neutral-800/50">
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">View</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Audience</th>
-                      <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Retention</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">View</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Audience</th>
+                      <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Retention</th>
                     </tr>
                   </thead>
                   <tbody>
                     {FEED_VIEWS.map(([view, audience, retention]) => (
                       <tr key={view} className="border-t dark:border-neutral-700">
                         <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{view}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{audience}</td>
-                        <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{retention}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{audience}</td>
+                        <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{retention}</td>
                       </tr>
                     ))}
                   </tbody>

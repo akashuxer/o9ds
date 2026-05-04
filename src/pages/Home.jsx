@@ -22,7 +22,7 @@ const HOME_CARD_ILLUSTRATIONS = {
 const cards = [
   {
     title: 'Get Started',
-    desc: 'Orientation, principles, and how teams adopt o9DS.',
+    desc: 'Orientation, principles, and how teams adopt Arvo.',
     path: '/overview',
     icon: 'getStarted',
   },
@@ -209,9 +209,9 @@ function RotatingFlipWord() {
 
 /** Hero illustration paths — auto-advancing carousel (see TabletHeroFrame). */
 const HERO_SLIDES = [
-  { src: '/hero-1.svg', alt: 'o9 Design System — hero illustration 1 of 3' },
-  { src: '/hero-2.svg', alt: 'o9 Design System — hero illustration 2 of 3' },
-  { src: '/hero-3.svg', alt: 'o9 Design System — hero illustration 3 of 3' },
+  { src: '/hero-1.svg', alt: 'Arvo Design System — hero illustration 1 of 3' },
+  { src: '/hero-2.svg', alt: 'Arvo Design System — hero illustration 2 of 3' },
+  { src: '/hero-3.svg', alt: 'Arvo Design System — hero illustration 3 of 3' },
 ]
 
 const HERO_CAROUSEL_INTERVAL_MS = 5200
@@ -386,13 +386,13 @@ export default function Home() {
 
   /** Card PNGs: inject preloads as soon as Home mounts (no cost on other routes). */
   useLayoutEffect(() => {
-    if (document.querySelector('link[data-o9ds-preload="home-cards"]')) return
+    if (document.querySelector('link[data-arvo-preload="home-cards"]')) return
     Object.values(HOME_CARD_ILLUSTRATIONS).forEach((href) => {
       const l = document.createElement('link')
       l.rel = 'preload'
       l.as = 'image'
       l.href = href
-      l.setAttribute('data-o9ds-preload', 'home-cards')
+      l.setAttribute('data-arvo-preload', 'home-cards')
       document.head.appendChild(l)
     })
   }, [])
@@ -423,20 +423,20 @@ export default function Home() {
               </p>
 
               <h1
-                className="text-balance text-left text-[clamp(2rem,4.5vw+1rem,3.75rem)] font-semibold leading-[1.04] tracking-[-0.038em] text-o9ds-light-primary motion-safe:animate-fade-in-up motion-reduce:animate-none dark:text-white md:text-[clamp(2.15rem,4.8vw+1rem,4.1rem)] lg:text-[clamp(2.25rem,3.8vw+1.35rem,4.35rem)] xl:text-[clamp(2.4rem,4.2vw+1.25rem,4.85rem)]"
+                className="text-balance text-left text-[clamp(2rem,4.5vw+1rem,3.75rem)] font-semibold leading-[1.04] tracking-[-0.038em] text-arvo-light-primary motion-safe:animate-fade-in-up motion-reduce:animate-none dark:text-white md:text-[clamp(2.15rem,4.8vw+1rem,4.1rem)] lg:text-[clamp(2.25rem,3.8vw+1.35rem,4.35rem)] xl:text-[clamp(2.4rem,4.2vw+1.25rem,4.85rem)]"
                 style={{ animationDelay: '40ms' }}
               >
-                <span className="text-o9ds-light-primary dark:text-white">Build experiences that feel </span>
+                <span className="text-arvo-light-primary dark:text-white">Build experiences that feel </span>
                 <span className="inline-block overflow-visible align-baseline">
                   <RotatingFlipWord />
                 </span>
               </h1>
 
               <p
-                className="mt-6 max-w-xl text-xl font-medium leading-snug text-o9ds-light-primary motion-safe:animate-fade-in-up dark:text-neutral-200 md:text-2xl md:leading-relaxed"
+                className="mt-6 max-w-xl text-xl font-medium leading-snug text-arvo-light-primary motion-safe:animate-fade-in-up dark:text-neutral-200 md:text-2xl md:leading-relaxed"
                 style={{ animationDelay: '90ms' }}
               >
-                Design with o9DS. Ship faster with confidence. Scale seamlessly across o9UI.
+                Design with Arvo. Ship faster with confidence. Scale seamlessly across o9UI.
               </p>
 
               <div className="mt-10 flex justify-start motion-safe:animate-fade-in-up motion-reduce:animate-none" style={{ animationDelay: '160ms' }}>
@@ -466,7 +466,7 @@ export default function Home() {
         </section>
 
         <section id="home-cards" className="scroll-mt-24 w-full">
-          <h2 className="mb-10 max-w-4xl text-left text-[clamp(1.65rem,5.5vw,2.85rem)] font-medium leading-[1.12] tracking-[-0.03em] text-o9ds-light-primary motion-safe:animate-fade-in-up dark:text-white md:mb-14">
+          <h2 className="mb-10 max-w-4xl text-left text-[clamp(1.65rem,5.5vw,2.85rem)] font-medium leading-[1.12] tracking-[-0.03em] text-arvo-light-primary motion-safe:animate-fade-in-up dark:text-white md:mb-14">
             Building Blocks of Arvo
           </h2>
           <div className="grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-9">
@@ -476,13 +476,13 @@ export default function Home() {
               return (
                 <div
                   key={path}
-                  className="flex flex-col overflow-hidden border shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-[box-shadow,transform,border-color] duration-300 hover:border-o9ds-light-primary/25 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] motion-safe:hover:-translate-y-1 motion-safe:animate-fade-in-up dark:border-neutral-700 dark:shadow-[0_2px_12px_rgba(0,0,0,0.35)] dark:hover:border-neutral-500 dark:hover:shadow-[0_16px_48px_rgba(0,0,0,0.45)]"
+                  className="flex flex-col overflow-hidden border shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-[box-shadow,transform,border-color] duration-300 hover:border-arvo-light-primary/25 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] motion-safe:hover:-translate-y-1 motion-safe:animate-fade-in-up dark:border-neutral-700 dark:shadow-[0_2px_12px_rgba(0,0,0,0.35)] dark:hover:border-neutral-500 dark:hover:shadow-[0_16px_48px_rgba(0,0,0,0.45)]"
                   style={{
                     animationDelay: `${i * 45}ms`,
                     borderColor: isLight ? '#E5E5E5' : '#404040',
                     backgroundColor: isLight ? '#FFFFFF' : 'transparent',
                   }}
-                  data-o9ds-card={isLight ? 'light-white' : 'dark'}
+                  data-arvo-card={isLight ? 'light-white' : 'dark'}
                 >
                   <Link to={path} onClick={() => enterDocs()} className="group block min-w-0 flex-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-o9-shock dark:focus-visible:ring-[#7ca8ff]">
                     <HomeBlockCardIllustration
@@ -492,13 +492,13 @@ export default function Home() {
                       fetchPriority={isAboveFoldCard ? 'low' : 'auto'}
                     />
                     <div className="bg-[#FAFAFA] px-5 pb-6 pt-5 dark:bg-neutral-900/80 sm:px-6">
-                      <h3 className="mb-2 text-lg font-semibold tracking-tight text-o9ds-light-primary dark:text-white sm:text-xl">
+                      <h3 className="mb-2 text-lg font-semibold tracking-tight text-arvo-light-primary dark:text-white sm:text-xl">
                         {title}
                       </h3>
-                      <p className="text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400 sm:text-[0.9375rem] sm:leading-relaxed">
+                      <p className="text-sm leading-relaxed text-arvo-light-secondary dark:text-neutral-400 sm:text-[0.9375rem] sm:leading-relaxed">
                         {desc}
                       </p>
-                      <span className="mt-5 inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.12em] text-o9ds-light-primary dark:text-white sm:text-xs sm:tracking-[0.14em]">
+                      <span className="mt-5 inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.12em] text-arvo-light-primary dark:text-white sm:text-xs sm:tracking-[0.14em]">
                         <span>Learn more</span>
                         <svg
                           className="h-3 w-3 shrink-0 stroke-current motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-x-1 motion-reduce:transition-none"

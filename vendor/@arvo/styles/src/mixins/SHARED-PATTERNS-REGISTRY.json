@@ -1,0 +1,262 @@
+{
+  "$schema": "Shared Patterns Registry — single source of truth for all reusable SCSS mixins and @arvo/utils logic shared across components. The orchestrator's pre-flight check reads this file to determine whether a pattern is ready before allowing the component pipeline to proceed.",
+
+  "patterns": {
+    "form-input-base": {
+      "status": "ready",
+      "description": "Base layout, cursor, and font styles shared by all form input components",
+      "scss": {
+        "file": "mixins/_form-input.scss",
+        "mixins": ["form-input-base"]
+      },
+      "util": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
+      "tokens": ["--arvo-form-input-height", "--arvo-form-input-padding-inline", "--arvo-form-input-font-size", "--arvo-form-input-font-family"]
+    },
+
+    "form-input-animated-border": {
+      "status": "ready",
+      "description": "Animated bottom border that scales on hover and thickens on focus, with error/readonly variants",
+      "scss": {
+        "file": "mixins/_form-input.scss",
+        "mixins": ["form-input-animated-border-base", "form-input-animated-border-complete"]
+      },
+      "util": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
+      "tokens": ["--arvo-form-input-border-color", "--arvo-form-input-border-width", "--arvo-form-input-focus-border-width", "--arvo-form-input-error-border-color"]
+    },
+
+    "form-input-hover-bg": {
+      "status": "ready",
+      "description": "Subtle background change on hover for non-disabled, non-readonly inputs",
+      "scss": {
+        "file": "mixins/_form-input.scss",
+        "mixins": ["form-input-hover-bg"]
+      },
+      "util": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox"],
+      "tokens": ["--arvo-form-input-bg-color", "--arvo-form-input-hover-bg-color"]
+    },
+
+    "form-input-disabled-bg": {
+      "status": "ready",
+      "description": "Disabled background and cursor styles for form inputs",
+      "scss": {
+        "file": "mixins/_form-input.scss",
+        "mixins": ["form-input-disabled-bg"]
+      },
+      "util": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox"],
+      "tokens": ["--arvo-form-input-disabled-bg-color", "--arvo-form-input-disabled-text-color"]
+    },
+
+    "form-input-text-colors": {
+      "status": "ready",
+      "description": "Text, placeholder, and selection color tokens for form inputs",
+      "scss": {
+        "file": "mixins/_form-input.scss",
+        "mixins": ["form-input-text-colors"]
+      },
+      "util": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search"],
+      "tokens": ["--arvo-form-input-text-color", "--arvo-form-input-placeholder-color", "--arvo-form-input-selection-bg"]
+    },
+
+    "form-label": {
+      "status": "ready",
+      "description": "Form field label with two sizes (sm/lg), disabled state, and required asterisk indicator",
+      "scss": {
+        "file": "mixins/_form-label.scss",
+        "mixins": ["form-label-base", "form-label-sm", "form-label-lg", "form-label-disabled", "form-label-required-indicator"]
+      },
+      "util": {
+        "file": "utils/src/form-label.ts",
+        "exports": ["createFormLabel", "updateFormLabel"]
+      },
+      "react": {
+        "file": "react/src/components/FormLabel/FormLabel.tsx",
+        "exports": ["FormLabel"],
+        "note": "Internal component — not re-exported from @arvo/react public index"
+      },
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "checkbox", "checkbox-group", "radio", "radio-group", "switch", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
+      "tokens": ["--arvo-lbl-color", "--arvo-lbl-color-disabled", "--arvo-lbl-required-color", "--arvo-lbl-gap"]
+    },
+
+    "form-char-counter": {
+      "status": "ready",
+      "description": "Character counter display showing current/max length with zero-padded formatting",
+      "scss": {
+        "file": "mixins/_form-char-counter.scss",
+        "mixins": ["form-char-counter-base", "form-char-counter-disabled"]
+      },
+      "util": {
+        "file": "utils/src/form-char-counter.ts",
+        "exports": ["createCharCounter", "updateCharCounter", "formatCharCount"]
+      },
+      "react": null,
+      "usedBy": ["textbox", "textarea"],
+      "tokens": ["--arvo-counter-color", "--arvo-counter-color-disabled", "--arvo-counter-font-size"]
+    },
+
+    "inline-alert": {
+      "status": "ready",
+      "description": "Compact icon + message inline alert used for validation errors, warnings, success, and info feedback. Also provides an error tooltip icon variant for form inputs.",
+      "scss": {
+        "file": "mixins/_inline-alert.scss",
+        "mixins": ["inline-alert-base", "inline-alert-icon", "inline-alert-msg", "inline-alert-error", "inline-alert-success", "inline-alert-warning", "inline-alert-info", "inline-alert-neutral", "error-tooltip-icon"]
+      },
+      "util": {
+        "file": "utils/src/inline-alert.ts",
+        "exports": ["createInlineAlert", "updateInlineAlert", "getDefaultErrorMsg", "createErrorTooltipIcon", "updateErrorTooltipIcon"]
+      },
+      "react": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
+      "tokens": ["--arvo-inline-alert-gap", "--arvo-inline-alert-font-size", "--arvo-inline-alert-icon-size", "--arvo-color-t-negative", "--arvo-color-i-negative"]
+    },
+
+    "loading-overlay-a": {
+      "status": "ready",
+      "description": "Simple shimmer overlay that covers the entire element (Pattern A for atomic components)",
+      "scss": {
+        "file": "mixins/_loading.scss",
+        "mixins": ["loading-overlay-a"]
+      },
+      "util": null,
+      "usedBy": ["button", "icon-button", "textbox", "textarea", "number-input", "search", "select", "checkbox", "radio", "switch"],
+      "tokens": ["--arvo-loading-shimmer-color", "--arvo-loading-shimmer-speed"]
+    },
+
+    "loading-skeleton-b": {
+      "status": "planned",
+      "description": "Structured skeleton that mimics content layout (Pattern B for complex components)",
+      "scss": {
+        "file": "mixins/_loading.scss",
+        "mixins": ["loading-skeleton-b"]
+      },
+      "util": null,
+      "usedBy": ["card", "table", "modal"],
+      "tokens": ["--arvo-loading-shimmer-color", "--arvo-loading-shimmer-speed"]
+    },
+
+    "indicator": {
+      "status": "implemented",
+      "description": "Small status badge (dot/square) positioned at the top-right of its parent. Indicates unsaved changes (warning amber circle), new notifications (negative red square), or unread items (theme color square). Available in sm (6px) and lg (10px) sizes. Has a 1px layer-01 border ring for visual separation from the underlying surface.",
+      "scss": {
+        "file": "mixins/_indicator.scss",
+        "mixins": ["indicator-base", "indicator-sm", "indicator-lg", "indicator-unsaved", "indicator-new", "indicator-unread", "indicator-host"]
+      },
+      "util": {
+        "file": "utils/src/indicator.ts",
+        "exports": ["createIndicator", "updateIndicator", "removeIndicator"]
+      },
+      "react": {
+        "file": "react/src/components/Indicator/Indicator.tsx",
+        "exports": ["ArvoIndicator"],
+        "note": "Internal component — not re-exported from @arvo/react public index"
+      },
+      "usedBy": ["fab-button"],
+      "tokens": [
+        "--arvo-indicator-size",
+        "--arvo-indicator-bg",
+        "--arvo-indicator-offset-top",
+        "--arvo-indicator-offset-right"
+      ],
+      "referenceCSS": ".arvo-indicator { display: inline-flex; align-items: center; width: var(--arvo-indicator-size); height: var(--arvo-indicator-size); border: 1px solid var(--arvo-color-s-layer-01); position: absolute; z-index: 1; } .arvo-indicator--unsaved { border-radius: $arvo-radius-circle; background: var(--arvo-color-s-warning-static); } .arvo-indicator--new { background: var(--arvo-color-s-negative-static); } .arvo-indicator--unread { background: var(--arvo-color-s-theme); } .arvo-indicator--sm { --arvo-indicator-size: 6px; } .arvo-indicator--lg { --arvo-indicator-size: 10px; }"
+    },
+
+    "list-item": {
+      "status": "implemented",
+      "description": "Base layout, typography, interactive states, and leading content slots for list/menu items",
+      "scss": {
+        "file": "mixins/_list-item.scss",
+        "mixins": [
+          "list-item-base",
+          "list-item-single-line",
+          "list-item-multi-line",
+          "list-item-states",
+          "list-item-leading",
+          "list-item-text"
+        ]
+      },
+      "util": null,
+      "react": null,
+      "usedBy": ["action-menu", "sel", "combobox", "multi-sel", "dd-btn", "list", "listbox"],
+      "tokens": [
+        "--arvo-list-item-height-single",
+        "--arvo-list-item-height-multi",
+        "--arvo-list-item-padding-inline",
+        "--arvo-list-item-padding-block",
+        "--arvo-list-item-gap",
+        "--arvo-list-item-text-color",
+        "--arvo-list-item-text-hover-color",
+        "--arvo-list-item-secondary-color",
+        "--arvo-list-item-bg-hover"
+      ]
+    },
+
+    "list-group": {
+      "status": "implemented",
+      "description": "Section headers and dividers for grouped lists, menus, and dropdown panels",
+      "scss": {
+        "file": "mixins/_list-group.scss",
+        "mixins": ["list-group-header", "list-group-divider"]
+      },
+      "util": null,
+      "react": null,
+      "usedBy": ["action-menu", "sel", "combobox", "multi-sel", "dd-btn", "list", "listbox"],
+      "tokens": [
+        "--arvo-list-group-header-height",
+        "--arvo-list-group-header-color",
+        "--arvo-list-group-header-font-size"
+      ]
+    },
+
+    "form-input-default-width": {
+      "status": "ready",
+      "description": "Sets a consistent default width (300px) on form input components. Exposes --arvo-form-input-width CSS variable and a width prop (CSS value string). fullWidth is shorthand for width: 100%.",
+      "scss": {
+        "file": "mixins/_form-input.scss",
+        "mixins": ["form-input-default-width"]
+      },
+      "util": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
+      "tokens": ["--arvo-form-input-width"]
+    },
+
+    "dnd-sortable-list": {
+      "status": "ready",
+      "description": "Vertical sortable list with pointer and keyboard reorder, cross-group policy, ghost placeholder, drop-line indicator, and live-region announcements",
+      "scss": null,
+      "util": {
+        "file": "core/src/dnd/sortable-list.ts",
+        "exports": ["createSortableList"]
+      },
+      "usedBy": ["hybrid-popover"],
+      "tokens": []
+    },
+
+    "resize-handle": {
+      "status": "ready",
+      "description": "Pointer-driven panel resize with corner handles, viewport-aware clamping, and directional auto-hide",
+      "scss": null,
+      "util": {
+        "file": "core/src/resize/resize-handle.ts",
+        "exports": ["createResizeHandle"]
+      },
+      "usedBy": ["hybrid-popover"],
+      "tokens": []
+    },
+
+    "form-input-actions-overlay": {
+      "status": "planned",
+      "description": "Positions right-side dynamic actions (clear, error icon, shortcut indicator) absolutely within the field so they do not shift the component width. Dynamically sets padding-right on the input via --arvo-form-input-pad-r CSS variable measured by ResizeObserver. When actions are hidden, padding resets so text fills the full width.",
+      "scss": {
+        "file": "mixins/_form-input.scss",
+        "mixins": ["form-input-actions-overlay"]
+      },
+      "util": null,
+      "usedBy": ["textbox", "textarea", "number-input", "search", "combobox"],
+      "tokens": ["--arvo-form-input-pad-r"]
+    }
+  }
+}

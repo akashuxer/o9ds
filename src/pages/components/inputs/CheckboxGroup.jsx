@@ -1,26 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9CheckboxGroup, O9Checkbox } from '@o9ds/react'
+import { ArvoCheckboxGroup, ArvoCheckbox } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', required: 'Yes', desc: 'Group label rendered as the legend-equivalent for assistive tech.' },
-  { prop: 'items', type: 'CheckboxGroupItem[]', required: 'Yes', desc: 'Items: { value, label, disabled?, description? }.' },
-  { prop: 'value', type: 'string[]', desc: 'Controlled selected values.' },
-  { prop: 'defaultValue', type: 'string[]', desc: 'Uncontrolled initial selected values.' },
-  { prop: 'orientation', type: "'vertical' | 'horizontal'", default: "'vertical'", desc: 'Layout direction.' },
-  { prop: 'description', type: 'string', desc: 'Help text rendered under the group label.' },
-  { prop: 'error', type: 'string', desc: 'Error message; sets aria-invalid on the group.' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the group as required.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable the entire group.' },
-  { prop: 'onChange', type: '(values: string[]) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('checkbox-group')
+const PROPS = DESCRIPTOR.props
+
 
 export default function CheckboxGroup() {
   const [tab, setTab] = useState('Overview')
@@ -49,11 +41,11 @@ export default function CheckboxGroup() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9CheckboxGroup label="Notifications">
-                  <O9Checkbox value="email" label="Email" defaultChecked />
-                  <O9Checkbox value="sms" label="SMS" />
-                  <O9Checkbox value="push" label="Push" />
-                </O9CheckboxGroup>
+                <ArvoCheckboxGroup label="Notifications">
+                  <ArvoCheckbox value="email" label="Email" defaultChecked />
+                  <ArvoCheckbox value="sms" label="SMS" />
+                  <ArvoCheckbox value="push" label="Push" />
+                </ArvoCheckboxGroup>
               </LiveReference>
             </DocSection>
           </div>
@@ -80,7 +72,7 @@ export default function CheckboxGroup() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9CheckboxGroup } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoCheckboxGroup } from '@arvo/react';
 
 const items = [
   { value: 'email', label: 'Email' },
@@ -88,19 +80,19 @@ const items = [
   { value: 'push', label: 'Push' },
 ];
 
-<O9CheckboxGroup label="Notifications" items={items} defaultValue={['email']} />
+<ArvoCheckboxGroup label="Notifications" items={items} defaultValue={['email']} />
 
 // Controlled
 const [v, setV] = useState(['email']);
-<O9CheckboxGroup label="Notifications" items={items} value={v} onChange={setV} />
+<ArvoCheckboxGroup label="Notifications" items={items} value={v} onChange={setV} />
 
 // Horizontal layout
-<O9CheckboxGroup label="Permissions" items={items} orientation="horizontal" />`} />
+<ArvoCheckboxGroup label="Permissions" items={items} orientation="horizontal" />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9CheckboxGroup } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoCheckboxGroup } from '@arvo/js';
 
-const grp = O9CheckboxGroup.initialize(el, {
+const grp = ArvoCheckboxGroup.initialize(el, {
   label: 'Notifications',
   items,
   defaultValue: ['email'],
@@ -115,7 +107,7 @@ grp.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9CheckboxGroup.initialize(el, options)', returns: 'O9CheckboxGroup', desc: 'Factory.' },
+                { method: 'ArvoCheckboxGroup.initialize(el, options)', returns: 'ArvoCheckboxGroup', desc: 'Factory.' },
                 { method: 'value(values?)', returns: 'string[] | void', desc: 'Get/set selected values.' },
                 { method: 'setError(message | false)', desc: 'Set/clear error message.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },

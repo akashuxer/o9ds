@@ -60,13 +60,13 @@ html.dark .home-hero-flip-word {
   }
 }
 
-.o9ds-cell-ripple {
+.arvo-cell-ripple {
   animation: cell-ripple-wave var(--duration, 600ms) ease-out var(--delay, 0ms) 1;
   animation-fill-mode: none;
 }
 
-html[data-theme="dark"] .o9ds-cell-ripple,
-html.dark .o9ds-cell-ripple {
+html[data-theme="dark"] .arvo-cell-ripple,
+html.dark .arvo-cell-ripple {
   animation-name: cell-ripple-wave-dark;
 }
 
@@ -119,151 +119,151 @@ html[data-theme="dark"],
 html.dark {
   color-scheme: dark;
   background-color: #000 !important;
-  /* Same global opacity-1 as light — $o9ds-color-s-overlay-static */
-  --o9ds-color-s-overlay-static: #01010199;
+  /* Same global opacity-1 as light — $arvo-color-s-overlay-static */
+  --arvo-color-s-overlay-static: #01010199;
   /* Semantic text tokens (o9 theme) — matches semanticColorTokens.js + globalColorTokens.js */
-  --o9ds-color-t-primary: #e5e5e5;
-  --o9ds-color-t-secondary: #cccccc;
-  --o9ds-color-t-tertiary: #b2b2b2;
-  --o9ds-color-t-placeholder: #b2b2b2;
-  --o9ds-color-t-negative: #f07a62;
-  --o9ds-color-t-positive: #2fe09d;
-  --o9ds-color-t-warning: #ffef5c;
-  /* Icon: semanticColorTokens o9ds-color-i-warning (orangish-09 dark) */
-  --o9ds-color-i-warning: #ffef5c;
-  --o9ds-color-t-disabled: #666666;
-  --o9ds-color-t-readonly: #cccccc;
-  --o9ds-color-t-info-light: #b8c7ff;
-  --o9ds-color-t-info-dark: #8aa3ff;
-  --o9ds-color-t-inverse: #010101;
-  --o9ds-doc-inverse-text-surface: #f2f2f2;
-  /* Border: form field — semanticColorTokens o9ds-color-b-form (gray-05 dark) */
-  --o9ds-color-b-form: #808080;
-  /* Border: input error — semanticColorTokens o9ds-color-b-negative (redish-06 dark) */
-  --o9ds-color-b-negative: #f07a62;
+  --arvo-color-t-primary: #e5e5e5;
+  --arvo-color-t-secondary: #cccccc;
+  --arvo-color-t-tertiary: #b2b2b2;
+  --arvo-color-t-placeholder: #b2b2b2;
+  --arvo-color-t-negative: #f07a62;
+  --arvo-color-t-positive: #2fe09d;
+  --arvo-color-t-warning: #ffef5c;
+  /* Icon: semanticColorTokens arvo-color-i-warning (orangish-09 dark) */
+  --arvo-color-i-warning: #ffef5c;
+  --arvo-color-t-disabled: #666666;
+  --arvo-color-t-readonly: #cccccc;
+  --arvo-color-t-info-light: #b8c7ff;
+  --arvo-color-t-info-dark: #8aa3ff;
+  --arvo-color-t-inverse: #010101;
+  --arvo-doc-inverse-text-surface: #f2f2f2;
+  /* Border: form field — semanticColorTokens arvo-color-b-form (gray-05 dark) */
+  --arvo-color-b-form: #808080;
+  /* Border: input error — semanticColorTokens arvo-color-b-negative (redish-06 dark) */
+  --arvo-color-b-negative: #f07a62;
   /* Surfaces — dialogs / form regions; theme focus border (dark) */
-  --o9ds-color-s-layer-03: #4c4c4c;
-  --o9ds-color-s-layer-04: #303030;
-  --o9ds-color-b-theme-focus: #ffffff;
-  /* semanticColorTokens: o9ds-color-b-divider, o9ds-color-s-theme-hover-2 */
-  --o9ds-color-b-divider: #303030;
-  --o9ds-color-s-theme-hover-2: #666666;
+  --arvo-color-s-layer-03: #4c4c4c;
+  --arvo-color-s-layer-04: #303030;
+  --arvo-color-b-theme-focus: #ffffff;
+  /* semanticColorTokens: arvo-color-b-divider, arvo-color-s-theme-hover-2 */
+  --arvo-color-b-divider: #303030;
+  --arvo-color-s-theme-hover-2: #666666;
 
-  --o9ds-color-s-theme: #FFFFFF;
-  --o9ds-color-s-theme-hover-1: #E5E5E5;
-  --o9ds-color-s-theme-hover-2: #666666;
-  --o9ds-color-s-theme-hover-3: #303030;
-  --o9ds-color-s-theme-hover-4: #4C4C4C;
-  --o9ds-color-s-theme-active-1: #FFFFFF;
-  --o9ds-color-s-theme-active-2: #303030;
-  --o9ds-color-s-theme-active-3: #4C4C4C;
-  --o9ds-color-s-theme-active-4: #303030;
-  --o9ds-color-s-theme-active-5: #CCCCCC;
-  --o9ds-color-b-theme: #FFFFFF;
-  --o9ds-color-b-theme-hover: #FFFFFF;
-  --o9ds-color-b-theme-hover-2: #E5E5E5;
-  --o9ds-color-b-theme-active: #FFFFFF;
-  --o9ds-color-b-theme-focus: #FFFFFF;
-  --o9ds-color-t-theme: #FFFFFF;
-  --o9ds-color-t-theme-hover: #FFFFFF;
-  --o9ds-color-t-theme-active: #FFFFFF;
-  --o9ds-color-i-theme: #FFFFFF;
-  --o9ds-color-i-theme-hover: #FFFFFF;
-  --o9ds-color-i-theme-active: #FFFFFF;
-  --o9ds-color-s-base: #202020;
-  --o9ds-color-s-layer-01: #121212;
-  --o9ds-color-s-layer-02: #202020;
-  --o9ds-color-s-layer-03: #202020;
-  --o9ds-color-s-layer-04: #303030;
-  --o9ds-color-s-layer-05: #303030;
-  --o9ds-color-s-layer-06: #303030;
-  --o9ds-color-s-layer-07: #4C4C4C;
-  --o9ds-color-s-placeholder: #CCCCCC;
-  --o9ds-color-s-placeholder-2: #E5E5E5;
-  --o9ds-color-s-brand: #202020;
-  --o9ds-color-s-hover: #808080;
-  --o9ds-color-s-active: #010101;
-  --o9ds-color-s-disabled: #303030;
-  --o9ds-color-s-readonly: #303030;
-  --o9ds-color-s-negative: #F07A62;
-  --o9ds-color-s-negative-hover: #D9311B;
-  --o9ds-color-s-negative-active: #BC1227;
-  --o9ds-color-s-negative-static: #D9311B;
-  --o9ds-color-s-neutral: #FFFFFF;
-  --o9ds-color-s-inverse: #FFFFFF;
-  --o9ds-color-s-direct: #010101;
-  --o9ds-color-s-on-inverse: #F2F2F2;
-  --o9ds-color-s-pulse-light: #202020;
-  --o9ds-color-s-pulse-dark: #303030;
-  --o9ds-color-s-white-static: #FFFFFF;
-  --o9ds-color-s-black-static: #121212;
-  --o9ds-color-s-overlay-static: rgba(1, 1, 1, 0.6);
-  --o9ds-color-s-shadow-static-1: rgba(76, 76, 76, 0.2);
-  --o9ds-color-s-shadow-static-2: rgba(76, 76, 76, 0.0588235294);
-  --o9ds-color-s-warning-static: #E39600;
-  --o9ds-color-s-currenttime: #926200;
-  --o9ds-color-s-ancestorfrozen: #073725;
-  --o9ds-color-s-frozen: #00804F;
-  --o9ds-color-s-frozenleaf: #015132;
-  --o9ds-color-b-divider: #303030;
-  --o9ds-color-b-base: #202020;
-  --o9ds-color-b-subtle: #121212;
-  --o9ds-color-b-dark: #666666;
-  --o9ds-color-b-separator: #4C4C4C;
-  --o9ds-color-b-inverse: #FFFFFF;
-  --o9ds-color-b-hover: #4C4C4C;
-  --o9ds-color-b-active-static: #808080;
-  --o9ds-color-b-negative: #F07A62;
-  --o9ds-color-b-warning: #FFEF5C;
-  --o9ds-color-b-positive: #2FE09D;
-  --o9ds-color-b-info: #8AA3FF;
-  --o9ds-color-b-neutral: #FFFFFF;
-  --o9ds-color-b-focus-inverse: #FFFFFF;
-  --o9ds-color-b-form: #808080;
-  --o9ds-color-b-disabled: #666666;
-  --o9ds-color-b-readonly: #666666;
-  --o9ds-color-t-primary: #E5E5E5;
-  --o9ds-color-t-secondary: #CCCCCC;
-  --o9ds-color-t-tertiary: #B2B2B2;
-  --o9ds-color-t-placeholder: #B2B2B2;
-  --o9ds-color-t-hover: #FFFFFF;
-  --o9ds-color-t-active: #FFFFFF;
-  --o9ds-color-t-inverse: #010101;
-  --o9ds-color-t-active-inverse: #010101;
-  --o9ds-color-t-white-static: #FFFFFF;
-  --o9ds-color-t-black-static: #202020;
-  --o9ds-color-t-disabled: #666666;
-  --o9ds-color-t-readonly: #CCCCCC;
-  --o9ds-color-t-positive: #2FE09D;
-  --o9ds-color-t-negative: #F07A62;
-  --o9ds-color-t-warning: #FFEF5C;
-  --o9ds-color-t-info-light: #B8C7FF;
-  --o9ds-color-t-info-dark: #8AA3FF;
-  --o9ds-color-t-neutral: #FFFFFF;
-  --o9ds-color-t-form-label: #E5E5E5;
-  --o9ds-color-t-form-value: #F2F2F2;
-  --o9ds-color-t-utility-purple: #A67DDE;
-  --o9ds-color-i-primary: #E5E5E5;
-  --o9ds-color-i-secondary: #CCCCCC;
-  --o9ds-color-i-tertiary: #B2B2B2;
-  --o9ds-color-i-placeholder: #B2B2B2;
-  --o9ds-color-i-hover: #FFFFFF;
-  --o9ds-color-i-active: #FFFFFF;
-  --o9ds-color-i-inverse: #010101;
-  --o9ds-color-i-active-inverse: #010101;
-  --o9ds-color-i-white-static: #FFFFFF;
-  --o9ds-color-i-black-static: #202020;
-  --o9ds-color-i-disabled: #666666;
-  --o9ds-color-i-readonly: #CCCCCC;
-  --o9ds-color-i-positive: #2FE09D;
-  --o9ds-color-i-negative: #F07A62;
-  --o9ds-color-i-negative-static: #D9311B;
-  --o9ds-color-i-warning: #FFEF5C;
-  --o9ds-color-i-warning-static: #D9311B;
-  --o9ds-color-i-info-light: #B8C7FF;
-  --o9ds-color-i-info-dark: #8AA3FF;
-  --o9ds-color-i-neutral: #FFFFFF;
-  --o9ds-color-i-utility-purple: #A67DDE;
+  --arvo-color-s-theme: #FFFFFF;
+  --arvo-color-s-theme-hover-1: #E5E5E5;
+  --arvo-color-s-theme-hover-2: #666666;
+  --arvo-color-s-theme-hover-3: #303030;
+  --arvo-color-s-theme-hover-4: #4C4C4C;
+  --arvo-color-s-theme-active-1: #FFFFFF;
+  --arvo-color-s-theme-active-2: #303030;
+  --arvo-color-s-theme-active-3: #4C4C4C;
+  --arvo-color-s-theme-active-4: #303030;
+  --arvo-color-s-theme-active-5: #CCCCCC;
+  --arvo-color-b-theme: #FFFFFF;
+  --arvo-color-b-theme-hover: #FFFFFF;
+  --arvo-color-b-theme-hover-2: #E5E5E5;
+  --arvo-color-b-theme-active: #FFFFFF;
+  --arvo-color-b-theme-focus: #FFFFFF;
+  --arvo-color-t-theme: #FFFFFF;
+  --arvo-color-t-theme-hover: #FFFFFF;
+  --arvo-color-t-theme-active: #FFFFFF;
+  --arvo-color-i-theme: #FFFFFF;
+  --arvo-color-i-theme-hover: #FFFFFF;
+  --arvo-color-i-theme-active: #FFFFFF;
+  --arvo-color-s-base: #202020;
+  --arvo-color-s-layer-01: #121212;
+  --arvo-color-s-layer-02: #202020;
+  --arvo-color-s-layer-03: #202020;
+  --arvo-color-s-layer-04: #303030;
+  --arvo-color-s-layer-05: #303030;
+  --arvo-color-s-layer-06: #303030;
+  --arvo-color-s-layer-07: #4C4C4C;
+  --arvo-color-s-placeholder: #CCCCCC;
+  --arvo-color-s-placeholder-2: #E5E5E5;
+  --arvo-color-s-brand: #202020;
+  --arvo-color-s-hover: #808080;
+  --arvo-color-s-active: #010101;
+  --arvo-color-s-disabled: #303030;
+  --arvo-color-s-readonly: #303030;
+  --arvo-color-s-negative: #F07A62;
+  --arvo-color-s-negative-hover: #D9311B;
+  --arvo-color-s-negative-active: #BC1227;
+  --arvo-color-s-negative-static: #D9311B;
+  --arvo-color-s-neutral: #FFFFFF;
+  --arvo-color-s-inverse: #FFFFFF;
+  --arvo-color-s-direct: #010101;
+  --arvo-color-s-on-inverse: #F2F2F2;
+  --arvo-color-s-pulse-light: #202020;
+  --arvo-color-s-pulse-dark: #303030;
+  --arvo-color-s-white-static: #FFFFFF;
+  --arvo-color-s-black-static: #121212;
+  --arvo-color-s-overlay-static: rgba(1, 1, 1, 0.6);
+  --arvo-color-s-shadow-static-1: rgba(76, 76, 76, 0.2);
+  --arvo-color-s-shadow-static-2: rgba(76, 76, 76, 0.0588235294);
+  --arvo-color-s-warning-static: #E39600;
+  --arvo-color-s-currenttime: #926200;
+  --arvo-color-s-ancestorfrozen: #073725;
+  --arvo-color-s-frozen: #00804F;
+  --arvo-color-s-frozenleaf: #015132;
+  --arvo-color-b-divider: #303030;
+  --arvo-color-b-base: #202020;
+  --arvo-color-b-subtle: #121212;
+  --arvo-color-b-dark: #666666;
+  --arvo-color-b-separator: #4C4C4C;
+  --arvo-color-b-inverse: #FFFFFF;
+  --arvo-color-b-hover: #4C4C4C;
+  --arvo-color-b-active-static: #808080;
+  --arvo-color-b-negative: #F07A62;
+  --arvo-color-b-warning: #FFEF5C;
+  --arvo-color-b-positive: #2FE09D;
+  --arvo-color-b-info: #8AA3FF;
+  --arvo-color-b-neutral: #FFFFFF;
+  --arvo-color-b-focus-inverse: #FFFFFF;
+  --arvo-color-b-form: #808080;
+  --arvo-color-b-disabled: #666666;
+  --arvo-color-b-readonly: #666666;
+  --arvo-color-t-primary: #E5E5E5;
+  --arvo-color-t-secondary: #CCCCCC;
+  --arvo-color-t-tertiary: #B2B2B2;
+  --arvo-color-t-placeholder: #B2B2B2;
+  --arvo-color-t-hover: #FFFFFF;
+  --arvo-color-t-active: #FFFFFF;
+  --arvo-color-t-inverse: #010101;
+  --arvo-color-t-active-inverse: #010101;
+  --arvo-color-t-white-static: #FFFFFF;
+  --arvo-color-t-black-static: #202020;
+  --arvo-color-t-disabled: #666666;
+  --arvo-color-t-readonly: #CCCCCC;
+  --arvo-color-t-positive: #2FE09D;
+  --arvo-color-t-negative: #F07A62;
+  --arvo-color-t-warning: #FFEF5C;
+  --arvo-color-t-info-light: #B8C7FF;
+  --arvo-color-t-info-dark: #8AA3FF;
+  --arvo-color-t-neutral: #FFFFFF;
+  --arvo-color-t-form-label: #E5E5E5;
+  --arvo-color-t-form-value: #F2F2F2;
+  --arvo-color-t-utility-purple: #A67DDE;
+  --arvo-color-i-primary: #E5E5E5;
+  --arvo-color-i-secondary: #CCCCCC;
+  --arvo-color-i-tertiary: #B2B2B2;
+  --arvo-color-i-placeholder: #B2B2B2;
+  --arvo-color-i-hover: #FFFFFF;
+  --arvo-color-i-active: #FFFFFF;
+  --arvo-color-i-inverse: #010101;
+  --arvo-color-i-active-inverse: #010101;
+  --arvo-color-i-white-static: #FFFFFF;
+  --arvo-color-i-black-static: #202020;
+  --arvo-color-i-disabled: #666666;
+  --arvo-color-i-readonly: #CCCCCC;
+  --arvo-color-i-positive: #2FE09D;
+  --arvo-color-i-negative: #F07A62;
+  --arvo-color-i-negative-static: #D9311B;
+  --arvo-color-i-warning: #FFEF5C;
+  --arvo-color-i-warning-static: #D9311B;
+  --arvo-color-i-info-light: #B8C7FF;
+  --arvo-color-i-info-dark: #8AA3FF;
+  --arvo-color-i-neutral: #FFFFFF;
+  --arvo-color-i-utility-purple: #A67DDE;
 
 
 }
@@ -273,10 +273,10 @@ html.dark body {
 }
 
 :root {
-  /* o9ds Design Tokens */
-  /* Matches $o9ds-border-3 in borderTokens.js — 1.5px stroke for underline fields / doc search */
-  --o9ds-border-3: 1.5px;
-  --o9ds-shadow-blur: 4px; /* matches $o9ds-shadow-blur — backdrop-filter blur() on overlay scrims */
+  /* Arvo Design Tokens */
+  /* Matches $arvo-border-3 in borderTokens.js — 1.5px stroke for underline fields / doc search */
+  --arvo-border-3: 1.5px;
+  --arvo-shadow-blur: 4px; /* matches $arvo-shadow-blur — backdrop-filter blur() on overlay scrims */
   --o9-black: #000000;
   --o9-white: #ffffff;
   --o9-shock: #0037ff;
@@ -290,156 +290,156 @@ html.dark body {
 /* Light mode semantic colors */
 html[data-theme="light"],
 html:not(.dark) {
-  --o9ds-bg: #FFFFFF;
-  --o9ds-bg-surface: #F2F2F2;
-  --o9ds-text-primary: #010101;
-  --o9ds-text-secondary: #303030;
-  --o9ds-border: #E5E5E5;
-  /* Border: form field — semanticColorTokens o9ds-color-b-form (gray-11 light) */
-  --o9ds-color-b-form: #949494;
-  /* Border: input error — semanticColorTokens o9ds-color-b-negative (redish-09 light) */
-  --o9ds-color-b-negative: #bc1227;
-  /* Semantic: maps to $o9ds-global-opacity-1 — modal/overlay scrim */
-  --o9ds-color-s-overlay-static: #01010199;
+  --arvo-bg: #FFFFFF;
+  --arvo-bg-surface: #F2F2F2;
+  --arvo-text-primary: #010101;
+  --arvo-text-secondary: #303030;
+  --arvo-border: #E5E5E5;
+  /* Border: form field — semanticColorTokens arvo-color-b-form (gray-11 light) */
+  --arvo-color-b-form: #949494;
+  /* Border: input error — semanticColorTokens arvo-color-b-negative (redish-09 light) */
+  --arvo-color-b-negative: #bc1227;
+  /* Semantic: maps to $arvo-global-opacity-1 — modal/overlay scrim */
+  --arvo-color-s-overlay-static: #01010199;
   /* Semantic text tokens (o9 theme) — matches semanticColorTokens.js + globalColorTokens.js */
-  --o9ds-color-t-primary: #010101;
-  --o9ds-color-t-secondary: #303030;
-  --o9ds-color-t-tertiary: #4c4c4c;
-  --o9ds-color-t-placeholder: #666666;
-  --o9ds-color-t-negative: #bc1227;
-  --o9ds-color-t-positive: #0c7951;
-  --o9ds-color-t-warning: #926200;
-  /* Icon: semanticColorTokens o9ds-color-i-warning (orangish-10 light) */
-  --o9ds-color-i-warning: #926200;
-  --o9ds-color-t-disabled: #b2b2b2;
-  --o9ds-color-t-readonly: #303030;
-  --o9ds-color-t-info-light: #0037ff;
-  --o9ds-color-t-info-dark: #002ed2;
-  --o9ds-color-t-inverse: #ffffff;
+  --arvo-color-t-primary: #010101;
+  --arvo-color-t-secondary: #303030;
+  --arvo-color-t-tertiary: #4c4c4c;
+  --arvo-color-t-placeholder: #666666;
+  --arvo-color-t-negative: #bc1227;
+  --arvo-color-t-positive: #0c7951;
+  --arvo-color-t-warning: #926200;
+  /* Icon: semanticColorTokens arvo-color-i-warning (orangish-10 light) */
+  --arvo-color-i-warning: #926200;
+  --arvo-color-t-disabled: #b2b2b2;
+  --arvo-color-t-readonly: #303030;
+  --arvo-color-t-info-light: #0037ff;
+  --arvo-color-t-info-dark: #002ed2;
+  --arvo-color-t-inverse: #ffffff;
   /* Typography doc: inverse token swatch surface */
-  --o9ds-doc-inverse-text-surface: #010101;
-  /* Surfaces — semanticColorTokens o9ds-color-s-layer-03 / 04; focus border — o9ds-color-b-theme-focus */
-  --o9ds-color-s-layer-03: #ffffff;
-  --o9ds-color-s-layer-04: #f2f2f2;
-  --o9ds-color-b-theme-focus: #010101;
-  /* semanticColorTokens: o9ds-color-b-divider, o9ds-color-s-theme-hover-2 */
-  --o9ds-color-b-divider: #e5e5e5;
-  --o9ds-color-s-theme-hover-2: #cccccc;
-  --o9ds-color-s-theme: #010101;
-  --o9ds-color-s-theme-hover-1: #4C4C4C;
-  --o9ds-color-s-theme-hover-2: #CCCCCC;
-  --o9ds-color-s-theme-hover-3: #E5E5E5;
-  --o9ds-color-s-theme-hover-4: #E5E5E5;
-  --o9ds-color-s-theme-active-1: #010101;
-  --o9ds-color-s-theme-active-2: #E5E5E5;
-  --o9ds-color-s-theme-active-3: #F2F2F2;
-  --o9ds-color-s-theme-active-4: #F2F2F2;
-  --o9ds-color-s-theme-active-5: #303030;
-  --o9ds-color-b-theme: #010101;
-  --o9ds-color-b-theme-hover: #010101;
-  --o9ds-color-b-theme-hover-2: #4C4C4C;
-  --o9ds-color-b-theme-active: #010101;
-  --o9ds-color-b-theme-focus: #010101;
-  --o9ds-color-t-theme: #010101;
-  --o9ds-color-t-theme-hover: #010101;
-  --o9ds-color-t-theme-active: #010101;
-  --o9ds-color-i-theme: #010101;
-  --o9ds-color-i-theme-hover: #010101;
-  --o9ds-color-i-theme-active: #010101;
-  --o9ds-color-s-base: #F2F2F2;
-  --o9ds-color-s-layer-01: #FFFFFF;
-  --o9ds-color-s-layer-02: #F2F2F2;
-  --o9ds-color-s-layer-03: #FFFFFF;
-  --o9ds-color-s-layer-04: #F2F2F2;
-  --o9ds-color-s-layer-05: #F2F2F2;
-  --o9ds-color-s-layer-06: #FFFFFF;
-  --o9ds-color-s-layer-07: #CCCCCC;
-  --o9ds-color-s-placeholder: #FFFFFF;
-  --o9ds-color-s-placeholder-2: #4C4C4C;
-  --o9ds-color-s-active: #FFFFFF;
-  --o9ds-color-s-brand: #F2F2F2;
-  --o9ds-color-s-hover: #B2B2B2;
-  --o9ds-color-s-disabled: #E5E5E5;
-  --o9ds-color-s-readonly: #F2F2F2;
-  --o9ds-color-s-negative: #BC1227;
-  --o9ds-color-s-negative-hover: #931D07;
-  --o9ds-color-s-negative-active: #660914;
-  --o9ds-color-s-negative-static: #D9311B;
-  --o9ds-color-s-neutral: #010101;
-  --o9ds-color-s-inverse: #010101;
-  --o9ds-color-s-direct: #FFFFFF;
-  --o9ds-color-s-on-inverse: #303030;
-  --o9ds-color-s-pulse-light: #F2F2F2;
-  --o9ds-color-s-pulse-dark: #E5E5E5;
-  --o9ds-color-s-white-static: #FFFFFF;
-  --o9ds-color-s-black-static: #121212;
-  --o9ds-color-s-overlay-static: rgba(1, 1, 1, 0.6);
-  --o9ds-color-s-shadow-static-1: rgba(76, 76, 76, 0.2);
-  --o9ds-color-s-shadow-static-2: rgba(76, 76, 76, 0.0588235294);
-  --o9ds-color-s-warning-static: #E39600;
-  --o9ds-color-s-currenttime: #E39600;
-  --o9ds-color-s-ancestorfrozen: #26A644;
-  --o9ds-color-s-frozen: #6EDE8A;
-  --o9ds-color-s-frozenleaf: #E1F3E4;
-  --o9ds-color-b-divider: #E5E5E5;
-  --o9ds-color-b-base: #F2F2F2;
-  --o9ds-color-b-subtle: #F2F2F2;
-  --o9ds-color-b-dark: #B2B2B2;
-  --o9ds-color-b-separator: #E5E5E5;
-  --o9ds-color-b-inverse: #010101;
-  --o9ds-color-b-hover: #CCCCCC;
-  --o9ds-color-b-active-static: #808080;
-  --o9ds-color-b-negative: #BC1227;
-  --o9ds-color-b-warning: #926200;
-  --o9ds-color-b-positive: #0C7951;
-  --o9ds-color-b-info: #0037FF;
-  --o9ds-color-b-neutral: #010101;
-  --o9ds-color-b-focus-inverse: #FFFFFF;
-  --o9ds-color-b-form: #949494;
-  --o9ds-color-b-disabled: #CCCCCC;
-  --o9ds-color-b-readonly: #808080;
-  --o9ds-color-t-primary: #010101;
-  --o9ds-color-t-secondary: #303030;
-  --o9ds-color-t-tertiary: #4C4C4C;
-  --o9ds-color-t-placeholder: #666666;
-  --o9ds-color-t-hover: #010101;
-  --o9ds-color-t-active: #010101;
-  --o9ds-color-t-inverse: #FFFFFF;
-  --o9ds-color-t-active-inverse: #FFFFFF;
-  --o9ds-color-t-white-static: #FFFFFF;
-  --o9ds-color-t-black-static: #121212;
-  --o9ds-color-t-disabled: #B2B2B2;
-  --o9ds-color-t-readonly: #303030;
-  --o9ds-color-t-positive: #0C7951;
-  --o9ds-color-t-negative: #BC1227;
-  --o9ds-color-t-warning: #926200;
-  --o9ds-color-t-info-light: #0037FF;
-  --o9ds-color-t-info-dark: #002ED2;
-  --o9ds-color-t-neutral: #010101;
-  --o9ds-color-t-form-label: #303030;
-  --o9ds-color-t-form-value: #202020;
-  --o9ds-color-t-utility-purple: #7433CC;
-  --o9ds-color-i-primary: #010101;
-  --o9ds-color-i-secondary: #303030;
-  --o9ds-color-i-tertiary: #4C4C4C;
-  --o9ds-color-i-placeholder: #666666;
-  --o9ds-color-i-hover: #010101;
-  --o9ds-color-i-active: #010101;
-  --o9ds-color-i-inverse: #FFFFFF;
-  --o9ds-color-i-active-inverse: #FFFFFF;
-  --o9ds-color-i-white-static: #FFFFFF;
-  --o9ds-color-i-black-static: #121212;
-  --o9ds-color-i-disabled: #B2B2B2;
-  --o9ds-color-i-readonly: #303030;
-  --o9ds-color-i-positive: #0C7951;
-  --o9ds-color-i-negative: #BC1227;
-  --o9ds-color-i-negative-static: #D9311B;
-  --o9ds-color-i-warning: #926200;
-  --o9ds-color-i-warning-static: #D9311B;
-  --o9ds-color-i-info-light: #0037FF;
-  --o9ds-color-i-info-dark: #002ED2;
-  --o9ds-color-i-neutral: #010101;
-  --o9ds-color-i-utility-purple: #7433CC;
+  --arvo-doc-inverse-text-surface: #010101;
+  /* Surfaces — semanticColorTokens arvo-color-s-layer-03 / 04; focus border — arvo-color-b-theme-focus */
+  --arvo-color-s-layer-03: #ffffff;
+  --arvo-color-s-layer-04: #f2f2f2;
+  --arvo-color-b-theme-focus: #010101;
+  /* semanticColorTokens: arvo-color-b-divider, arvo-color-s-theme-hover-2 */
+  --arvo-color-b-divider: #e5e5e5;
+  --arvo-color-s-theme-hover-2: #cccccc;
+  --arvo-color-s-theme: #010101;
+  --arvo-color-s-theme-hover-1: #4C4C4C;
+  --arvo-color-s-theme-hover-2: #CCCCCC;
+  --arvo-color-s-theme-hover-3: #E5E5E5;
+  --arvo-color-s-theme-hover-4: #E5E5E5;
+  --arvo-color-s-theme-active-1: #010101;
+  --arvo-color-s-theme-active-2: #E5E5E5;
+  --arvo-color-s-theme-active-3: #F2F2F2;
+  --arvo-color-s-theme-active-4: #F2F2F2;
+  --arvo-color-s-theme-active-5: #303030;
+  --arvo-color-b-theme: #010101;
+  --arvo-color-b-theme-hover: #010101;
+  --arvo-color-b-theme-hover-2: #4C4C4C;
+  --arvo-color-b-theme-active: #010101;
+  --arvo-color-b-theme-focus: #010101;
+  --arvo-color-t-theme: #010101;
+  --arvo-color-t-theme-hover: #010101;
+  --arvo-color-t-theme-active: #010101;
+  --arvo-color-i-theme: #010101;
+  --arvo-color-i-theme-hover: #010101;
+  --arvo-color-i-theme-active: #010101;
+  --arvo-color-s-base: #F2F2F2;
+  --arvo-color-s-layer-01: #FFFFFF;
+  --arvo-color-s-layer-02: #F2F2F2;
+  --arvo-color-s-layer-03: #FFFFFF;
+  --arvo-color-s-layer-04: #F2F2F2;
+  --arvo-color-s-layer-05: #F2F2F2;
+  --arvo-color-s-layer-06: #FFFFFF;
+  --arvo-color-s-layer-07: #CCCCCC;
+  --arvo-color-s-placeholder: #FFFFFF;
+  --arvo-color-s-placeholder-2: #4C4C4C;
+  --arvo-color-s-active: #FFFFFF;
+  --arvo-color-s-brand: #F2F2F2;
+  --arvo-color-s-hover: #B2B2B2;
+  --arvo-color-s-disabled: #E5E5E5;
+  --arvo-color-s-readonly: #F2F2F2;
+  --arvo-color-s-negative: #BC1227;
+  --arvo-color-s-negative-hover: #931D07;
+  --arvo-color-s-negative-active: #660914;
+  --arvo-color-s-negative-static: #D9311B;
+  --arvo-color-s-neutral: #010101;
+  --arvo-color-s-inverse: #010101;
+  --arvo-color-s-direct: #FFFFFF;
+  --arvo-color-s-on-inverse: #303030;
+  --arvo-color-s-pulse-light: #F2F2F2;
+  --arvo-color-s-pulse-dark: #E5E5E5;
+  --arvo-color-s-white-static: #FFFFFF;
+  --arvo-color-s-black-static: #121212;
+  --arvo-color-s-overlay-static: rgba(1, 1, 1, 0.6);
+  --arvo-color-s-shadow-static-1: rgba(76, 76, 76, 0.2);
+  --arvo-color-s-shadow-static-2: rgba(76, 76, 76, 0.0588235294);
+  --arvo-color-s-warning-static: #E39600;
+  --arvo-color-s-currenttime: #E39600;
+  --arvo-color-s-ancestorfrozen: #26A644;
+  --arvo-color-s-frozen: #6EDE8A;
+  --arvo-color-s-frozenleaf: #E1F3E4;
+  --arvo-color-b-divider: #E5E5E5;
+  --arvo-color-b-base: #F2F2F2;
+  --arvo-color-b-subtle: #F2F2F2;
+  --arvo-color-b-dark: #B2B2B2;
+  --arvo-color-b-separator: #E5E5E5;
+  --arvo-color-b-inverse: #010101;
+  --arvo-color-b-hover: #CCCCCC;
+  --arvo-color-b-active-static: #808080;
+  --arvo-color-b-negative: #BC1227;
+  --arvo-color-b-warning: #926200;
+  --arvo-color-b-positive: #0C7951;
+  --arvo-color-b-info: #0037FF;
+  --arvo-color-b-neutral: #010101;
+  --arvo-color-b-focus-inverse: #FFFFFF;
+  --arvo-color-b-form: #949494;
+  --arvo-color-b-disabled: #CCCCCC;
+  --arvo-color-b-readonly: #808080;
+  --arvo-color-t-primary: #010101;
+  --arvo-color-t-secondary: #303030;
+  --arvo-color-t-tertiary: #4C4C4C;
+  --arvo-color-t-placeholder: #666666;
+  --arvo-color-t-hover: #010101;
+  --arvo-color-t-active: #010101;
+  --arvo-color-t-inverse: #FFFFFF;
+  --arvo-color-t-active-inverse: #FFFFFF;
+  --arvo-color-t-white-static: #FFFFFF;
+  --arvo-color-t-black-static: #121212;
+  --arvo-color-t-disabled: #B2B2B2;
+  --arvo-color-t-readonly: #303030;
+  --arvo-color-t-positive: #0C7951;
+  --arvo-color-t-negative: #BC1227;
+  --arvo-color-t-warning: #926200;
+  --arvo-color-t-info-light: #0037FF;
+  --arvo-color-t-info-dark: #002ED2;
+  --arvo-color-t-neutral: #010101;
+  --arvo-color-t-form-label: #303030;
+  --arvo-color-t-form-value: #202020;
+  --arvo-color-t-utility-purple: #7433CC;
+  --arvo-color-i-primary: #010101;
+  --arvo-color-i-secondary: #303030;
+  --arvo-color-i-tertiary: #4C4C4C;
+  --arvo-color-i-placeholder: #666666;
+  --arvo-color-i-hover: #010101;
+  --arvo-color-i-active: #010101;
+  --arvo-color-i-inverse: #FFFFFF;
+  --arvo-color-i-active-inverse: #FFFFFF;
+  --arvo-color-i-white-static: #FFFFFF;
+  --arvo-color-i-black-static: #121212;
+  --arvo-color-i-disabled: #B2B2B2;
+  --arvo-color-i-readonly: #303030;
+  --arvo-color-i-positive: #0C7951;
+  --arvo-color-i-negative: #BC1227;
+  --arvo-color-i-negative-static: #D9311B;
+  --arvo-color-i-warning: #926200;
+  --arvo-color-i-warning-static: #D9311B;
+  --arvo-color-i-info-light: #0037FF;
+  --arvo-color-i-info-dark: #002ED2;
+  --arvo-color-i-neutral: #010101;
+  --arvo-color-i-utility-purple: #7433CC;
 }
 
 /* Light mode: card/section borders - default #E5E5E5, no black in default state */
@@ -454,21 +454,21 @@ html:not(.dark) main section.border {
 /* Card hover: white default -> F2F2F2 bg + 010101 border; F2F2F2 default -> 010101 border only */
 html[data-theme="light"] main a.border:hover,
 html[data-theme="light"] main a.group:hover,
-html[data-theme="light"] main [data-o9ds-card="light"]:hover,
-html[data-theme="light"] main [data-o9ds-card="light-white"]:hover,
+html[data-theme="light"] main [data-arvo-card="light"]:hover,
+html[data-theme="light"] main [data-arvo-card="light-white"]:hover,
 html:not(.dark) main a.border:hover,
 html:not(.dark) main a.group:hover,
-html:not(.dark) main [data-o9ds-card="light"]:hover,
-html:not(.dark) main [data-o9ds-card="light-white"]:hover {
+html:not(.dark) main [data-arvo-card="light"]:hover,
+html:not(.dark) main [data-arvo-card="light-white"]:hover {
   border-color: #010101 !important;
 }
-html[data-theme="light"] main [data-o9ds-card="light-white"]:hover,
-html:not(.dark) main [data-o9ds-card="light-white"]:hover {
+html[data-theme="light"] main [data-arvo-card="light-white"]:hover,
+html:not(.dark) main [data-arvo-card="light-white"]:hover {
   background-color: #F2F2F2 !important;
 }
 /* Default: no pure #FFF on light-mode cards (use off-white surface) */
-html[data-theme="light"] main [data-o9ds-card="light-white"],
-html:not(.dark) main [data-o9ds-card="light-white"] {
+html[data-theme="light"] main [data-arvo-card="light-white"],
+html:not(.dark) main [data-arvo-card="light-white"] {
   background-color: #fafafa !important;
 }
 /* Dark mode: table borders/dividers #404040 */
@@ -482,24 +482,24 @@ html.dark main div.border.overflow-hidden:has(table) tr {
 }
 
 /* Principles cards: white bg both modes; subtle border; avatar gray */
-html[data-theme="light"] main [data-o9ds-card="principles"],
-html:not(.dark) main [data-o9ds-card="principles"],
-html[data-theme="dark"] main [data-o9ds-card="principles"],
-html.dark main [data-o9ds-card="principles"] {
+html[data-theme="light"] main [data-arvo-card="principles"],
+html:not(.dark) main [data-arvo-card="principles"],
+html[data-theme="dark"] main [data-arvo-card="principles"],
+html.dark main [data-arvo-card="principles"] {
   background-color: #FFFFFF !important;
 }
 /* Principles cards: border hover light #010101, dark #FFFFFF */
-html[data-theme="light"] main [data-o9ds-card="principles"]:hover,
-html:not(.dark) main [data-o9ds-card="principles"]:hover {
+html[data-theme="light"] main [data-arvo-card="principles"]:hover,
+html:not(.dark) main [data-arvo-card="principles"]:hover {
   border-color: #010101 !important;
 }
-html[data-theme="dark"] main [data-o9ds-card="principles"]:hover,
-html.dark main [data-o9ds-card="principles"]:hover {
+html[data-theme="dark"] main [data-arvo-card="principles"]:hover,
+html.dark main [data-arvo-card="principles"]:hover {
   border-color: #FFFFFF !important;
 }
 /* Dark mode: card base bg #000 */
-html[data-theme="dark"] main [data-o9ds-card],
-html.dark main [data-o9ds-card],
+html[data-theme="dark"] main [data-arvo-card],
+html.dark main [data-arvo-card],
 html[data-theme="dark"] main div.border.p-4,
 html[data-theme="dark"] main div.border.p-6,
 html.dark main div.border.p-4,
@@ -507,10 +507,10 @@ html.dark main div.border.p-6 {
   background-color: #000 !important;
 }
 /* Doc illustration panels: light surface + dots (override dark card rule for div.border.p-*) */
-html[data-theme="light"] main div.border[data-o9ds-doc-figure],
-html:not(.dark) main div.border[data-o9ds-doc-figure],
-html[data-theme="dark"] main div.border[data-o9ds-doc-figure],
-html.dark main div.border[data-o9ds-doc-figure] {
+html[data-theme="light"] main div.border[data-arvo-doc-figure],
+html:not(.dark) main div.border[data-arvo-doc-figure],
+html[data-theme="dark"] main div.border[data-arvo-doc-figure],
+html.dark main div.border[data-arvo-doc-figure] {
   background-color: #fafafa !important;
   border-color: #e5e5e5 !important;
   background-image: radial-gradient(circle, rgba(148, 163, 184, 0.35) 1px, transparent 1px) !important;
@@ -519,102 +519,102 @@ html.dark main div.border[data-o9ds-doc-figure] {
 /* Dark mode: card hover - FFF border */
 html[data-theme="dark"] main a.border:hover,
 html[data-theme="dark"] main a.group:hover,
-html[data-theme="dark"] main [data-o9ds-card]:hover,
+html[data-theme="dark"] main [data-arvo-card]:hover,
 html.dark main a.border:hover,
 html.dark main a.group:hover,
-html.dark main [data-o9ds-card]:hover {
+html.dark main [data-arvo-card]:hover {
   border-color: #FFFFFF !important;
 }
 /* Tab bars: subtle border in light mode */
-html[data-theme="light"] main [data-o9ds-tabs],
-html:not(.dark) main [data-o9ds-tabs] {
+html[data-theme="light"] main [data-arvo-tabs],
+html:not(.dark) main [data-arvo-tabs] {
   border-bottom-color: #E5E5E5 !important;
 }
 /* Sliding active tab indicator (span) — sit above baseline border so it is visible in light mode */
-html[data-theme="light"] main [data-o9ds-tabs] > span[aria-hidden="true"],
-html:not(.dark) main [data-o9ds-tabs] > span[aria-hidden="true"] {
+html[data-theme="light"] main [data-arvo-tabs] > span[aria-hidden="true"],
+html:not(.dark) main [data-arvo-tabs] > span[aria-hidden="true"] {
   background-color: #010101 !important;
   bottom: -1px !important;
   z-index: 20 !important;
 }
-html[data-theme="dark"] main [data-o9ds-tabs] > span[aria-hidden="true"],
-html.dark main [data-o9ds-tabs] > span[aria-hidden="true"] {
+html[data-theme="dark"] main [data-arvo-tabs] > span[aria-hidden="true"],
+html.dark main [data-arvo-tabs] > span[aria-hidden="true"] {
   background-color: #ffffff !important;
   bottom: -1px !important;
   z-index: 20 !important;
 }
 /* Code blocks: F2F2F2 bg, E5E5E5 border - light mode */
-html[data-theme="light"] main [data-o9ds-code],
-html:not(.dark) main [data-o9ds-code] {
+html[data-theme="light"] main [data-arvo-code],
+html:not(.dark) main [data-arvo-code] {
   background-color: #F2F2F2 !important;
   border-color: #E5E5E5 !important;
 }
 /* Inline code: light mode F2F2F2 bg, dark mode neutral-700 */
-html[data-theme="light"] main code:not([data-o9ds-syntax-block]),
-html[data-theme="light"] main [data-o9ds-inline-code],
-html:not(.dark) main code:not([data-o9ds-syntax-block]),
-html:not(.dark) main [data-o9ds-inline-code] {
+html[data-theme="light"] main code:not([data-arvo-syntax-block]),
+html[data-theme="light"] main [data-arvo-inline-code],
+html:not(.dark) main code:not([data-arvo-syntax-block]),
+html:not(.dark) main [data-arvo-inline-code] {
   background-color: #F2F2F2 !important;
   color: #010101 !important;
 }
-html[data-theme="dark"] main [data-o9ds-inline-code],
-html.dark main [data-o9ds-inline-code] {
+html[data-theme="dark"] main [data-arvo-inline-code],
+html.dark main [data-arvo-inline-code] {
   background-color: #404040 !important;
   color: #e5e5e5 !important;
 }
 
 /* Illustration: selected size button - white text on black */
-html[data-theme="light"] main button[data-o9ds-size-selected],
-html:not(.dark) main button[data-o9ds-size-selected] {
+html[data-theme="light"] main button[data-arvo-size-selected],
+html:not(.dark) main button[data-arvo-size-selected] {
   color: #FFFFFF !important;
 }
 
 /* Tab buttons: ensure active/hover text visible + active tab bottom border 010101 */
-html[data-theme="light"] main [data-o9ds-tabs] button[data-o9ds-tab-active],
-html:not(.dark) main [data-o9ds-tabs] button[data-o9ds-tab-active] {
+html[data-theme="light"] main [data-arvo-tabs] button[data-arvo-tab-active],
+html:not(.dark) main [data-arvo-tabs] button[data-arvo-tab-active] {
   color: #010101 !important;
   border-bottom-color: #010101 !important;
 }
-html[data-theme="light"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]),
-html:not(.dark) main [data-o9ds-tabs] button:not([data-o9ds-tab-active]) {
+html[data-theme="light"] main [data-arvo-tabs] button:not([data-arvo-tab-active]),
+html:not(.dark) main [data-arvo-tabs] button:not([data-arvo-tab-active]) {
   color: #303030 !important;
 }
-html[data-theme="light"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover,
-html:not(.dark) main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover {
+html[data-theme="light"] main [data-arvo-tabs] button:not([data-arvo-tab-active]):hover,
+html:not(.dark) main [data-arvo-tabs] button:not([data-arvo-tab-active]):hover {
   color: #010101 !important;
 }
 /* Dark mode tabs */
-html[data-theme="dark"] main [data-o9ds-tabs] button[data-o9ds-tab-active],
-html.dark main [data-o9ds-tabs] button[data-o9ds-tab-active] {
+html[data-theme="dark"] main [data-arvo-tabs] button[data-arvo-tab-active],
+html.dark main [data-arvo-tabs] button[data-arvo-tab-active] {
   color: #FFFFFF !important;
 }
-html[data-theme="dark"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]),
-html.dark main [data-o9ds-tabs] button:not([data-o9ds-tab-active]) {
+html[data-theme="dark"] main [data-arvo-tabs] button:not([data-arvo-tab-active]),
+html.dark main [data-arvo-tabs] button:not([data-arvo-tab-active]) {
   color: #a3a3a3 !important;
 }
-html[data-theme="dark"] main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover,
-html.dark main [data-o9ds-tabs] button:not([data-o9ds-tab-active]):hover {
+html[data-theme="dark"] main [data-arvo-tabs] button:not([data-arvo-tab-active]):hover,
+html.dark main [data-arvo-tabs] button:not([data-arvo-tab-active]):hover {
   color: #FFFFFF !important;
 }
 /* Light mode: avatar/icon boxes - default */
-html[data-theme="light"] main [data-o9ds-avatar],
-html:not(.dark) main [data-o9ds-avatar] {
+html[data-theme="light"] main [data-arvo-avatar],
+html:not(.dark) main [data-arvo-avatar] {
   background-color: #F2F2F2 !important;
   color: #010101 !important;
 }
 /* Avatar hover: invert colors - light mode (exclude page header) */
-html[data-theme="light"] main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
-html[data-theme="light"] main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]),
-html:not(.dark) main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
-html:not(.dark) main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]) {
+html[data-theme="light"] main [data-arvo-avatar]:not([data-arvo-avatar-header]):hover,
+html[data-theme="light"] main .group:hover [data-arvo-avatar]:not([data-arvo-avatar-header]),
+html:not(.dark) main [data-arvo-avatar]:not([data-arvo-avatar-header]):hover,
+html:not(.dark) main .group:hover [data-arvo-avatar]:not([data-arvo-avatar-header]) {
   background-color: #010101 !important;
   color: #FFFFFF !important;
 }
 /* Avatar hover: dark mode - bg #FFF, text #010101 (exclude page header) */
-html[data-theme="dark"] main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
-html[data-theme="dark"] main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]),
-html.dark main [data-o9ds-avatar]:not([data-o9ds-avatar-header]):hover,
-html.dark main .group:hover [data-o9ds-avatar]:not([data-o9ds-avatar-header]) {
+html[data-theme="dark"] main [data-arvo-avatar]:not([data-arvo-avatar-header]):hover,
+html[data-theme="dark"] main .group:hover [data-arvo-avatar]:not([data-arvo-avatar-header]),
+html.dark main [data-arvo-avatar]:not([data-arvo-avatar-header]):hover,
+html.dark main .group:hover [data-arvo-avatar]:not([data-arvo-avatar-header]) {
   background-color: #FFFFFF !important;
   color: #010101 !important;
 }
@@ -633,8 +633,8 @@ html.dark aside nav a[aria-current="page"] {
 }
 
 /* View principles button - light mode */
-html[data-theme="light"] main a[data-o9ds-principles-btn],
-html:not(.dark) main a[data-o9ds-principles-btn] {
+html[data-theme="light"] main a[data-arvo-principles-btn],
+html:not(.dark) main a[data-arvo-principles-btn] {
   color: #F2F2F2 !important;
 }
 /* Force light mode text visibility - overrides conflicting Tailwind utilities */
@@ -675,17 +675,17 @@ html:not(.dark) main pre {
   color: #303030 !important;
 }
 /* DocTable identifier columns: violet (same family as code keyword / $var) — beats global td !important */
-html[data-theme="light"] main td.o9ds-doc-table-cell--tone,
-html:not(.dark) main td.o9ds-doc-table-cell--tone {
+html[data-theme="light"] main td.arvo-doc-table-cell--tone,
+html:not(.dark) main td.arvo-doc-table-cell--tone {
   color: #7c3aed !important; /* violet-600 */
 }
-html[data-theme="dark"] main td.o9ds-doc-table-cell--tone,
-html.dark main td.o9ds-doc-table-cell--tone {
+html[data-theme="dark"] main td.arvo-doc-table-cell--tone,
+html.dark main td.arvo-doc-table-cell--tone {
   color: #a78bfa !important; /* violet-400 */
 }
 /* code: keep monospace readable (do not inherit gray p color) */
-html[data-theme="light"] main code:not([data-o9ds-syntax-block]),
-html:not(.dark) main code:not([data-o9ds-syntax-block]) {
+html[data-theme="light"] main code:not([data-arvo-syntax-block]),
+html:not(.dark) main code:not([data-arvo-syntax-block]) {
   color: #010101 !important;
 }
 /* Emphasis: always visible on light / dark surfaces */
@@ -717,25 +717,25 @@ body {
 }
 
 /* Semantic token swatches: ensure inline color wins over global !important rules */
-main .o9ds-swatch,
-main [data-o9ds-swatch] {
-  color: var(--o9ds-swatch-color) !important;
+main .arvo-swatch,
+main [data-arvo-swatch] {
+  color: var(--arvo-swatch-color) !important;
 }
 
-/* Typography type-style variant previews: --o9ds-type-variant-color references --o9ds-color-t-* on html */
-html[data-theme="light"] main td [data-o9ds-type-variant-preview],
-html:not(.dark) main td [data-o9ds-type-variant-preview],
-html[data-theme="dark"] main td [data-o9ds-type-variant-preview],
-html.dark main td [data-o9ds-type-variant-preview] {
-  color: var(--o9ds-type-variant-color) !important;
+/* Typography type-style variant previews: --arvo-type-variant-color references --arvo-color-t-* on html */
+html[data-theme="light"] main td [data-arvo-type-variant-preview],
+html:not(.dark) main td [data-arvo-type-variant-preview],
+html[data-theme="dark"] main td [data-arvo-type-variant-preview],
+html.dark main td [data-arvo-type-variant-preview] {
+  color: var(--arvo-type-variant-color) !important;
 }
 
 /* o9con icon sizes - use with .o9con base */
-.o9ds-icon-14 { font-size: 14px; }
-.o9ds-icon-16 { font-size: 16px; }
-.o9ds-icon-20 { font-size: 20px; }
-.o9ds-icon-24 { font-size: 24px; }
-.o9ds-icon-32 { font-size: 32px; }
+.arvo-icon-14 { font-size: 14px; }
+.arvo-icon-16 { font-size: 16px; }
+.arvo-icon-20 { font-size: 20px; }
+.arvo-icon-24 { font-size: 24px; }
+.arvo-icon-32 { font-size: 32px; }
 
 /* Visually hidden but available to assistive tech (do not use display:none / visibility:hidden). */
 .o9-msg-sr-only {
@@ -750,7 +750,7 @@ html.dark main td [data-o9ds-type-variant-preview] {
   border: 0;
 }
 
-/* o9ds: 0 radius policy — no border radius */
+/* Arvo: 0 radius policy — no border radius */
 *,
 *::before,
 *::after {
@@ -790,105 +790,105 @@ html.dark [tabindex]:not([tabindex="-1"]):focus-visible {
 }
 
 /* Doc search (sidebar + section overviews + o9con gallery): bottom border only — border-3 (1.5px); no 4-side border or global input outline */
-.o9ds-doc-search-input {
+.arvo-doc-search-input {
   -webkit-appearance: none;
   appearance: none;
   border: none !important;
-  border-bottom: var(--o9ds-border-3) solid var(--o9ds-doc-search-border, #e5e5e5) !important;
+  border-bottom: var(--arvo-border-3) solid var(--arvo-doc-search-border, #e5e5e5) !important;
   border-radius: 0;
   box-shadow: none !important;
 }
-html[data-theme="dark"] .o9ds-doc-search-input,
-html.dark .o9ds-doc-search-input {
-  --o9ds-doc-search-border: #404040;
+html[data-theme="dark"] .arvo-doc-search-input,
+html.dark .arvo-doc-search-input {
+  --arvo-doc-search-border: #404040;
 }
-html[data-theme="light"] .o9ds-doc-search-input:focus,
-html[data-theme="light"] .o9ds-doc-search-input:focus-visible,
-html:not(.dark) .o9ds-doc-search-input:focus,
-html:not(.dark) .o9ds-doc-search-input:focus-visible,
-html[data-theme="dark"] .o9ds-doc-search-input:focus,
-html[data-theme="dark"] .o9ds-doc-search-input:focus-visible,
-html.dark .o9ds-doc-search-input:focus,
-html.dark .o9ds-doc-search-input:focus-visible {
+html[data-theme="light"] .arvo-doc-search-input:focus,
+html[data-theme="light"] .arvo-doc-search-input:focus-visible,
+html:not(.dark) .arvo-doc-search-input:focus,
+html:not(.dark) .arvo-doc-search-input:focus-visible,
+html[data-theme="dark"] .arvo-doc-search-input:focus,
+html[data-theme="dark"] .arvo-doc-search-input:focus-visible,
+html.dark .arvo-doc-search-input:focus,
+html.dark .arvo-doc-search-input:focus-visible {
   outline: none !important;
   box-shadow: none !important;
-  border-bottom-color: var(--o9ds-color-b-theme-focus) !important;
+  border-bottom-color: var(--arvo-color-b-theme-focus) !important;
 }
 
-/* Modal / overlay scrim — SCSS: background: $o9ds-color-s-overlay-static; backdrop-filter: $o9ds-shadow-blur; */
-.o9ds-mask-overlay {
-  background: var(--o9ds-color-s-overlay-static);
-  backdrop-filter: blur(var(--o9ds-shadow-blur));
-  -webkit-backdrop-filter: blur(var(--o9ds-shadow-blur));
+/* Modal / overlay scrim — SCSS: background: $arvo-color-s-overlay-static; backdrop-filter: $arvo-shadow-blur; */
+.arvo-mask-overlay {
+  background: var(--arvo-color-s-overlay-static);
+  backdrop-filter: blur(var(--arvo-shadow-blur));
+  -webkit-backdrop-filter: blur(var(--arvo-shadow-blur));
 }
 
 /* Keyboard a11y demo dialogs — underline fields; focus = thicker bottom border (b-theme-focus), no ring */
-[data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field {
+[data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field {
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: var(--o9ds-color-b-form);
-  background-color: var(--o9ds-color-s-layer-04);
+  border-bottom-color: var(--arvo-color-b-form);
+  background-color: var(--arvo-color-s-layer-04);
 }
-html[data-theme="light"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
-html[data-theme="light"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
-html:not(.dark) [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
-html:not(.dark) [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
-html[data-theme="dark"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
-html[data-theme="dark"] [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
-html.dark [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
-html.dark [data-o9ds-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible {
+html[data-theme="light"] [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html[data-theme="light"] [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
+html:not(.dark) [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html:not(.dark) [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
+html[data-theme="dark"] [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html[data-theme="dark"] [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible,
+html.dark [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus,
+html.dark [data-arvo-kb-a11y-dialog] .kb-a11y-dialog-field:focus-visible {
   outline: none !important;
   box-shadow: none !important;
   border-bottom-width: 2px;
-  border-bottom-color: var(--o9ds-color-b-theme-focus);
+  border-bottom-color: var(--arvo-color-b-theme-focus);
 }
 
 /* Keyboard & focus doc — overlay listbox: border-only focus (no global outline ring) */
-html[data-theme="light"] [data-o9ds-kb-dropdown] button:focus,
-html[data-theme="light"] [data-o9ds-kb-dropdown] button:focus-visible,
-html:not(.dark) [data-o9ds-kb-dropdown] button:focus,
-html:not(.dark) [data-o9ds-kb-dropdown] button:focus-visible,
-html[data-theme="dark"] [data-o9ds-kb-dropdown] button:focus,
-html[data-theme="dark"] [data-o9ds-kb-dropdown] button:focus-visible,
-html.dark [data-o9ds-kb-dropdown] button:focus,
-html.dark [data-o9ds-kb-dropdown] button:focus-visible {
+html[data-theme="light"] [data-arvo-kb-dropdown] button:focus,
+html[data-theme="light"] [data-arvo-kb-dropdown] button:focus-visible,
+html:not(.dark) [data-arvo-kb-dropdown] button:focus,
+html:not(.dark) [data-arvo-kb-dropdown] button:focus-visible,
+html[data-theme="dark"] [data-arvo-kb-dropdown] button:focus,
+html[data-theme="dark"] [data-arvo-kb-dropdown] button:focus-visible,
+html.dark [data-arvo-kb-dropdown] button:focus,
+html.dark [data-arvo-kb-dropdown] button:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }
 
 /* Keyboard & focus doc — left: :focus only (ring on click); right: :focus-visible only */
-[data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-only:focus {
+[data-arvo-kb-focus-demo] button.arvo-a11y-focus-only:focus {
   outline: 2px solid #010101 !important;
   outline-offset: 2px;
 }
-html[data-theme="dark"] [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-only:focus,
-html.dark [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-only:focus {
+html[data-theme="dark"] [data-arvo-kb-focus-demo] button.arvo-a11y-focus-only:focus,
+html.dark [data-arvo-kb-focus-demo] button.arvo-a11y-focus-only:focus {
   outline-color: #ffffff !important;
 }
-[data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus {
+[data-arvo-kb-focus-demo] button.arvo-a11y-focus-visible-only:focus {
   outline: none !important;
 }
-[data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus-visible {
+[data-arvo-kb-focus-demo] button.arvo-a11y-focus-visible-only:focus-visible {
   outline: 2px solid #010101 !important;
   outline-offset: 2px;
 }
-html[data-theme="dark"] [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus-visible,
-html.dark [data-o9ds-kb-focus-demo] button.o9ds-a11y-focus-visible-only:focus-visible {
+html[data-theme="dark"] [data-arvo-kb-focus-demo] button.arvo-a11y-focus-visible-only:focus-visible,
+html.dark [data-arvo-kb-focus-demo] button.arvo-a11y-focus-visible-only:focus-visible {
   outline-color: #ffffff !important;
 }
 
 /* Keyboard doc form demos: underline fields — focus only on bottom border, not global input outline */
-html[data-theme="light"] main [data-o9ds-kb-form-demo] input:focus,
-html[data-theme="light"] main [data-o9ds-kb-form-demo] input:focus-visible,
-html:not(.dark) main [data-o9ds-kb-form-demo] input:focus,
-html:not(.dark) main [data-o9ds-kb-form-demo] input:focus-visible {
+html[data-theme="light"] main [data-arvo-kb-form-demo] input:focus,
+html[data-theme="light"] main [data-arvo-kb-form-demo] input:focus-visible,
+html:not(.dark) main [data-arvo-kb-form-demo] input:focus,
+html:not(.dark) main [data-arvo-kb-form-demo] input:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }
-html[data-theme="dark"] main [data-o9ds-kb-form-demo] input:focus,
-html[data-theme="dark"] main [data-o9ds-kb-form-demo] input:focus-visible,
-html.dark main [data-o9ds-kb-form-demo] input:focus,
-html.dark main [data-o9ds-kb-form-demo] input:focus-visible {
+html[data-theme="dark"] main [data-arvo-kb-form-demo] input:focus,
+html[data-theme="dark"] main [data-arvo-kb-form-demo] input:focus-visible,
+html.dark main [data-arvo-kb-form-demo] input:focus,
+html.dark main [data-arvo-kb-form-demo] input:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }

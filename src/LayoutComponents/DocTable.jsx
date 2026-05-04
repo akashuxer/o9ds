@@ -41,7 +41,7 @@ function TokenRow({ token, value, px, varFormat, isLight, showCopy, tokenPreview
       <td className="py-2 px-3 align-middle">
         {tokenPreviewMode === 'fontSize' ? (
           <span
-            className="font-sans leading-none text-o9ds-light-primary dark:text-white"
+            className="font-sans leading-none text-arvo-light-primary dark:text-white"
             style={{ fontSize: value, fontWeight: 400 }}
           >
             Aa
@@ -149,10 +149,10 @@ export default function DocTable({
         <table className="w-full text-sm">
           <thead>
             <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
-              <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Token Name</th>
-              <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Value (rem)</th>
-              <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Value (px)</th>
-              <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Preview</th>
+              <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Token Name</th>
+              <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Value (rem)</th>
+              <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Value (px)</th>
+              <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Preview</th>
               {showCopy && <th className="py-2 px-3 w-12" aria-label="Copy" />}
             </tr>
           </thead>
@@ -185,7 +185,7 @@ export default function DocTable({
         <thead>
           <tr style={{ backgroundColor: isLight ? '#F2F2F2' : undefined }} className="dark:bg-neutral-800/50">
             {columns.map((col) => (
-              <th key={col.key} className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">
+              <th key={col.key} className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">
                 {col.label}
               </th>
             ))}
@@ -203,8 +203,8 @@ export default function DocTable({
                   key={col.key}
                   className={`py-2 px-3 ${col.mono ? 'font-mono text-sm' : ''} ${
                     tone
-                      ? `${columnToneClass(tone)} font-medium o9ds-doc-table-cell--tone`
-                      : 'text-o9ds-light-secondary dark:text-neutral-400'
+                      ? `${columnToneClass(tone)} font-medium arvo-doc-table-cell--tone`
+                      : 'text-arvo-light-secondary dark:text-neutral-400'
                   }`}
                   style={col.primary ? { color: isLight ? '#010101' : '#fff' } : undefined}
                 >

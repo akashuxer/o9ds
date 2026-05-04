@@ -38,8 +38,8 @@ export default function DocTabs({ tabs, activeTab, onSelect }) {
     <div
       ref={tabListRef}
       role="tablist"
-      className="relative mt-6 flex gap-6 border-b border-o9ds-light-border dark:border-neutral-700"
-      data-o9ds-tabs
+      className="relative mt-6 flex gap-6 border-b border-arvo-light-border dark:border-neutral-700"
+      data-arvo-tabs
       onKeyDown={handleKeyDown}
     >
       {tabs.map((tab) => (
@@ -49,18 +49,18 @@ export default function DocTabs({ tabs, activeTab, onSelect }) {
           aria-selected={activeTab === tab}
           tabIndex={activeTab === tab ? 0 : -1}
           onClick={() => onSelect(tab)}
-          data-o9ds-tab-active={activeTab === tab ? '' : undefined}
+          data-arvo-tab-active={activeTab === tab ? '' : undefined}
           className={`relative z-10 pb-3 text-sm font-medium transition-colors ${
             activeTab === tab
-              ? 'text-o9ds-light-primary dark:text-white'
-              : 'text-o9ds-light-secondary hover:text-o9ds-light-primary dark:text-neutral-400 dark:hover:text-neutral-300'
+              ? 'text-arvo-light-primary dark:text-white'
+              : 'text-arvo-light-secondary hover:text-arvo-light-primary dark:text-neutral-400 dark:hover:text-neutral-300'
           }`}
         >
           {tab}
         </button>
       ))}
       <span
-        className="absolute -bottom-px z-20 h-0.5 bg-o9ds-light-primary dark:bg-white transition-[left,width] duration-300 ease-out"
+        className="absolute -bottom-px z-20 h-0.5 bg-arvo-light-primary dark:bg-white transition-[left,width] duration-300 ease-out"
         style={{
           left: indicator.left,
           width: indicator.width,

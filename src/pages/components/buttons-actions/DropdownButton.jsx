@@ -1,26 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9DropdownButton } from '@o9ds/react'
+import { ArvoDropdownButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', required: 'Yes', desc: 'Visible button label.' },
-  { prop: 'items', type: 'ActionMenuItem[]', required: 'Yes', desc: 'Menu item configurations consumed by the inner ActionMenu.' },
-  { prop: 'variant', type: "'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger'", default: "'primary'", desc: 'Inherited from O9Button.' },
-  { prop: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", desc: 'Inherited from O9Button.' },
-  { prop: 'icon', type: 'string', default: 'undefined', desc: 'Optional leading icon.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable the button and prevent the menu from opening.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Skeleton shimmer overlay.' },
-  { prop: 'placement', type: 'PopoverPlacement', default: "'bottom-start'", desc: 'Menu placement relative to the trigger.' },
-  { prop: 'onSelect', type: '(item) => void', desc: 'Fires when an item is activated.' },
-  { prop: 'onOpenChange', type: '(open: boolean) => void', desc: 'Fires when the menu opens/closes.' },
-]
+const DESCRIPTOR = getDescriptor('dropdown-button')
+const PROPS = DESCRIPTOR.props
+
 
 export default function DropdownButton() {
   const [tab, setTab] = useState('Overview')
@@ -43,7 +35,7 @@ export default function DropdownButton() {
       <div className="space-y-8">
         <PageHeader
           title="Dropdown Button"
-          description="A button that opens an action menu. Composes O9Button + O9ActionMenu — the trigger gets aria-haspopup, aria-expanded, aria-controls, and focus return automatically."
+          description="A button that opens an action menu. Composes ArvoButton + ArvoActionMenu — the trigger gets aria-haspopup, aria-expanded, aria-controls, and focus return automatically."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />
@@ -57,8 +49,8 @@ export default function DropdownButton() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9DropdownButton label="Actions" items={items} onSelect={(item) => console.log(item)} />
-                <O9DropdownButton label="More" items={items} variant="secondary" />
+                <ArvoDropdownButton label="Actions" items={items} onSelect={(item) => console.log(item)} />
+                <ArvoDropdownButton label="More" items={items} variant="secondary" />
               </LiveReference>
             </DocSection>
           </div>
@@ -86,7 +78,7 @@ export default function DropdownButton() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9DropdownButton } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoDropdownButton } from '@arvo/react';
 
 const items = [
   { id: 'edit', label: 'Edit', icon: 'edit' },
@@ -94,7 +86,7 @@ const items = [
   { id: 'delete', label: 'Delete', icon: 'bin', tone: 'danger' },
 ];
 
-<O9DropdownButton
+<ArvoDropdownButton
   label="Actions"
   items={items}
   variant="primary"
@@ -103,9 +95,9 @@ const items = [
 />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9DropdownButton } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoDropdownButton } from '@arvo/js';
 
-const dd = O9DropdownButton.initialize(el, {
+const dd = ArvoDropdownButton.initialize(el, {
   label: 'Actions',
   items,
   variant: 'primary',
@@ -121,7 +113,7 @@ dd.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9DropdownButton.initialize(el, options)', returns: 'O9DropdownButton', desc: 'Factory.' },
+                { method: 'ArvoDropdownButton.initialize(el, options)', returns: 'ArvoDropdownButton', desc: 'Factory.' },
                 { method: 'open()', desc: 'Open the menu.' },
                 { method: 'close()', desc: 'Close the menu.' },
                 { method: 'toggle()', desc: 'Toggle the menu.' },

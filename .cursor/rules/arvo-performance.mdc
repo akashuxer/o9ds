@@ -1,0 +1,27 @@
+---
+description: Performance, bundling, public images, and deploy caching for the Arvo Vite site
+alwaysApply: true
+---
+
+# Arvo — performance & delivery (agent checklist)
+
+Full detail, metrics, and changelog: **`performance.md`** (keep it updated when changing bundling, images, fonts, or cache config).
+
+## Must follow
+
+- **Routes:** New top-level pages go behind `React.lazy` in `src/App.jsx` with the existing `Suspense` boundary; avoid eager static imports for large page modules.
+- **Raster in `public/`:** Use **`PublicRasterPicture`** (or patterns that call `publicPngToWebpUrl`) for PNG delivery; keep **`src` as the `.png` path**; run **`npm run images:webp`** or **`npm run build`** after adding/changing PNGs so a sibling **`.webp`** exists.
+- **Fonts/CSS:** Do **not** re-add `<link>` to `/o9SansFont/o9Sans.css` or `/o9ConIconFont/o9con.css` in `index.html` — single source is the Vite bundle via `src/main.jsx` (avoids duplicate downloads).
+- **Chunks:** When touching `vite.config.js`, preserve **`manualChunks`** for `react-vendor`, `router`, **`arvo-vendor`** (include `vendor/@arvo` paths), and `vendor`; keep the **WebP `buildStart`** plugin for production builds.
+- **Deploy headers:** When editing **`vercel.json`**, remember **last matching header wins** — long-cache rules for `/assets/*` must come **after** broad HTML revalidate rules. Mirror the same idea on Netlify (`netlify.toml`).
+- **Build:** `npm run build` must stay green with **`images:audit`** at the end; fix missing WebP or oversized PNGs per `scripts/audit-public-images.mjs`.
+
+## Avoid without explicit approval
+
+- Redesigning or restructuring layouts for performance (user constraint: preserve visual composition).
+- Adding **AVIF** without updating **`performance.md`** and team sign-off (maintenance cost).
+- Re-introducing unused **MDX/remark** deps unless MDX is actually wired in **`vite.config.js`**.
+
+## When editing related files
+
+Update **`performance.md`** changelog table and any stale numbers if you change chunking, image pipeline, or caching behavior.

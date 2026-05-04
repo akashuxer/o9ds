@@ -1,4 +1,4 @@
-# o9ds website — performance & delivery
+# Arvo website — performance & delivery
 
 Living document. **Update this file** when you change bundling, images, fonts, caching, or deploy config.
 
@@ -15,10 +15,11 @@ Living document. **Update this file** when you change bundling, images, fonts, c
 | Area | Implementation |
 |------|------------------|
 | **Code splitting** | `React.lazy` + `Suspense` for route-level pages in `src/App.jsx`. |
-| **Vendor chunks** | `vite.config.js` `manualChunks`: `react-vendor`, `router`, `o9ds-vendor` (includes `vendor/@o9ds/`), `vendor`. |
+| **Vendor chunks** | `vite.config.js` `manualChunks`: `react-vendor`, `router`, `arvo-vendor` (includes `vendor/@arvo/`), `vendor`. |
 | **WebP** | `scripts/optimize-public-png-to-webp.mjs` (Sharp); hooked from Vite `buildStart` in `vite.config.js`. |
 | **Markup** | `src/components/media/PublicRasterPicture.jsx` + `src/utils/publicRaster.js` — `<picture>` + WebP `<source>`, PNG on `<img>`, `display: contents` so layout matches a lone `<img>`. |
 | **Wiring** | `ExpandableDocImage`, `ComponentOverviewCard`, `Home` card art use `PublicRasterPicture`. |
+| **Rebrand to Arvo** | Re-vendored `vendor/@arvo/*` from the monorepo, renamed package scope (`@arvo/`), CSS tokens (`--arvo-*`), Tailwind (`arvo-light`), localStorage key (`arvo-theme`), and bundle chunk id (`arvo-vendor`). Component doc tables now read from descriptor JSON via `scripts/sync-from-descriptors.mjs`. |
 | **Duplicate CSS removed** | `index.html` no longer links `/o9SansFont/o9Sans.css` or `/o9ConIconFont/o9con.css`; fonts/icons load once via Vite bundle from `src/main.jsx`. |
 | **Deps trimmed** | Removed unused `@mdx-js/*`, `rehype-slug`, `remark-gfm` (re-add if MDX is wired later). |
 | **Guardrails** | `scripts/audit-public-images.mjs`; runs at end of `npm run build` via `images:audit`. |
@@ -67,14 +68,14 @@ Values below are from **Vite build output** and **local Lighthouse 11** against 
 |--------|----------------------------|------------------------|
 | Single app chunk (gzip) | ~**304.5 kB** one file | — |
 | Entry `index` chunk (gzip) | (merged above) | ~**12.9 kB** |
-| Initial route `/` (gzip sum, parallel) | ~**304.5 kB** | ~**113 kB** (index + react + o9ds + router + vendor + Home) |
+| Initial route `/` (gzip sum, parallel) | ~**304.5 kB** | ~**113 kB** (index + react + arvo + router + vendor + Home) |
 | Heavy route example | merged | `ComponentDocPage` ~**42.7 kB gzip** when visited |
 
 ### CSS (production build)
 
 | Metric | Before | After |
 |--------|--------|--------|
-| Total CSS (gzip) | ~**43 kB** one file | ~**43 kB** split: app CSS + `o9ds-vendor` CSS (better cache boundaries) |
+| Total CSS (gzip) | ~**43 kB** one file | ~**43 kB** split: app CSS + `arvo-vendor` CSS (better cache boundaries) |
 
 ### Raster (`public/`)
 
@@ -108,7 +109,7 @@ Values below are from **Vite build output** and **local Lighthouse 11** against 
 
 ## Fonts (CJK & long-term)
 
-**Reality:** `@o9ds/assets/fonts/css` bundles **large Noto Sans JP/KR/SC `.ttf`** files (multi‑MB each) into `dist/assets/`.
+**Reality:** `@arvo/assets/fonts/css` bundles **large Noto Sans JP/KR/SC `.ttf`** files (multi‑MB each) into `dist/assets/`.
 
 **Safest path (phased, preserve fidelity):**
 
@@ -161,6 +162,7 @@ Values below are from **Vite build output** and **local Lighthouse 11** against 
 
 | Date | Change |
 |------|--------|
+| 2026-05-04 | Rebranded doc site from `o9ds` to `Arvo`: re-vendored packages from monorepo (`vendor/@arvo/*`), CSS tokens (`--arvo-*`), bundle chunk (`arvo-vendor`), and descriptor-driven component doc tables. |
 | _YYYY-MM-DD_ | _e.g. Added lazy routes, WebP pipeline, vercel header order fix_ |
 
 _Add a row whenever you merge performance-related PRs._
@@ -174,4 +176,6 @@ _Add a row whenever you merge performance-related PRs._
 - `src/components/media/PublicRasterPicture.jsx`  
 - `scripts/optimize-public-png-to-webp.mjs`, `scripts/audit-public-images.mjs`  
 - `vercel.json`, `netlify.toml`  
-- `index.html` — head resources (no duplicate o9Sans/o9con links)  
+- `index.html` — head resources (no duplicate o9Sans/o9con links)
+- `scripts/vendor-arvo.mjs` — refresh `vendor/@arvo/*` from `../o9-design-system/packages`
+- `scripts/sync-from-descriptors.mjs` — regenerate `src/data/componentDescriptors.generated.js`

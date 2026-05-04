@@ -1,25 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Listbox } from '@o9ds/react'
+import { ArvoListbox } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', desc: 'Label for the listbox (visible or via aria-label).' },
-  { prop: 'options', type: 'ListboxOption[]', required: 'Yes', desc: 'Options: { value, label, disabled?, description? }.' },
-  { prop: 'value', type: 'string | string[] | null', desc: 'Controlled selected value(s). string for single, string[] for multi.' },
-  { prop: 'defaultValue', type: 'string | string[] | null', desc: 'Uncontrolled initial value.' },
-  { prop: 'multiple', type: 'boolean', default: 'false', desc: 'Multi-select mode.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable the listbox.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Skeleton shimmer overlay.' },
-  { prop: 'maxHeight', type: 'number | string', desc: 'Max height before the listbox scrolls.' },
-  { prop: 'onChange', type: '(value, option) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('listbox')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Listbox() {
   const [tab, setTab] = useState('Overview')
@@ -55,8 +48,8 @@ export default function Listbox() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 220 }}><O9Listbox label="Single select" items={options} defaultValue="banana" /></div>
-                <div style={{ minWidth: 220 }}><O9Listbox label="Multi-select" items={options} isMultiple defaultValue={['apple', 'cherry']} /></div>
+                <div style={{ minWidth: 220 }}><ArvoListbox label="Single select" items={options} defaultValue="banana" /></div>
+                <div style={{ minWidth: 220 }}><ArvoListbox label="Multi-select" items={options} isMultiple defaultValue={['apple', 'cherry']} /></div>
               </LiveReference>
             </DocSection>
           </div>
@@ -83,21 +76,21 @@ export default function Listbox() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Listbox } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoListbox } from '@arvo/react';
 
-<O9Listbox label="Items" options={options} defaultValue="banana" />
+<ArvoListbox label="Items" options={options} defaultValue="banana" />
 
 // Multi-select
-<O9Listbox label="Items" options={options} multiple defaultValue={['apple', 'cherry']} />
+<ArvoListbox label="Items" options={options} multiple defaultValue={['apple', 'cherry']} />
 
 // Controlled
 const [v, setV] = useState(null);
-<O9Listbox label="Items" options={options} value={v} onChange={(value) => setV(value)} />`} />
+<ArvoListbox label="Items" options={options} value={v} onChange={(value) => setV(value)} />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Listbox } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoListbox } from '@arvo/js';
 
-const lb = O9Listbox.initialize(el, {
+const lb = ArvoListbox.initialize(el, {
   label: 'Items',
   options,
   multiple: true,
@@ -113,7 +106,7 @@ lb.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Listbox.initialize(el, options)', returns: 'O9Listbox', desc: 'Factory.' },
+                { method: 'ArvoListbox.initialize(el, options)', returns: 'ArvoListbox', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string | string[] | null | void', desc: 'Get/set selected value(s).' },
                 { method: 'setOptions(options)', desc: 'Replace the options.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },

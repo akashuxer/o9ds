@@ -1,10 +1,10 @@
-# o9 Design System Architecture Reference
+# Arvo Architecture Reference
 
 ## *Monorepo Architecture, Packaging, and Delivery*
 
 ---
 
-*Canonical architecture reference for the o9 Design System monorepo.*  
+*Canonical architecture reference for the Arvo Design System monorepo.*  
 *For deep-dive appendices, see the numbered documents in AgentArchitecture/.*
 
 ### 
@@ -15,22 +15,22 @@
 
 **Repository**  |  [o9git \- o9.DesignSystem](https://o9git.visualstudio.com/CoreDev/_git/o9.DesignSystem)  
 **Artifacts Feed** (package registry)  |  [o9git/CoreDev \- o9UI](https://o9git.visualstudio.com/CoreDev/_artifacts/feed/o9UI)  
-**Component Status Tracking**  |  [o9ds Component Status](https://docs.google.com/document/d/1J1cHfuLgkYUP56dxKiCAAHOsdE4eQ8Q66wK3YS977IM/edit?usp=sharing)  
-**Component Review Notes/Tasks**  |  [o9ds Component Review](https://docs.google.com/document/d/19-_NTyQS4y3ImONsvUXH4XT-s8zaH2NSoGXT-tRn7bg/edit?usp=sharing)
+**Component Status Tracking**  |  [Arvo Component Status](https://docs.google.com/document/d/1J1cHfuLgkYUP56dxKiCAAHOsdE4eQ8Q66wK3YS977IM/edit?usp=sharing)  
+**Component Review Notes/Tasks**  |  [Arvo Component Review](https://docs.google.com/document/d/19-_NTyQS4y3ImONsvUXH4XT-s8zaH2NSoGXT-tRn7bg/edit?usp=sharing)
 
 ##### *Docs*
 
 **Document Site** (host pending)  |  [o9ds.vercel.app](https://o9ds.vercel.app/)  
-**API Doc** (temp dev support)  **|**  [o9ds Components \- API](https://docs.google.com/document/d/1b81Q-a7PCTRKEzIBFaS708x_7gO0LQmRxlRSaDx-4QA/edit?usp=sharing)  
-**o9ds Tracks & Open Topics**  |  [o9ds Planning Tracks & Open Topics](https://docs.google.com/document/d/1eA1lUJNcqk5wNXt5IzwkbSZEoZ5giIHF7r48KlHH-Nc/edit?usp=sharing)   
-**Compliance Metrics** (reference)  |  [o9ds Compliance Metrics Reference](https://docs.google.com/document/d/1-qcyy_JLxsguomfFz9rO972wLKZeT-Wl2CwtQRGnx8k/edit?usp=sharing)
+**API Doc** (temp dev support)  **|**  [Arvo Components \- API](https://docs.google.com/document/d/1b81Q-a7PCTRKEzIBFaS708x_7gO0LQmRxlRSaDx-4QA/edit?usp=sharing)  
+**Arvo Tracks & Open Topics**  |  [Arvo Planning Tracks & Open Topics](https://docs.google.com/document/d/1eA1lUJNcqk5wNXt5IzwkbSZEoZ5giIHF7r48KlHH-Nc/edit?usp=sharing)   
+**Compliance Metrics** (reference)  |  [Arvo Compliance Metrics Reference](https://docs.google.com/document/d/1-qcyy_JLxsguomfFz9rO972wLKZeT-Wl2CwtQRGnx8k/edit?usp=sharing)
 
 ##### *Figma*
 
-**Figma Project  | **  [o9ds Platform Design System | Figma Project](https://www.figma.com/files/953513455932500110/project/250726221?fuid=1020089521679916452)  
-**Foundation Library**  **|**  [o9ds Foundation Library | Figma](https://www.figma.com/design/rjhpdeZqzdnJas17N4PqzY/o9ds-Foundation-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6)  
-**Component Library**  |  [o9ds Component Library | Figma](https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--o9ds-Component-Library--in-progress-?m=auto&t=sZOcFEWwB08Rvp8Y-6)  
-**o9ds Assets  | ** [o9ds Icons and Illustrations](https://www.figma.com/design/KG4bUj8RekcQiRDrfjjJzf/o9ds-Icon-and-Illustrations-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6)
+**Figma Project  | **  [Arvo Platform Design System | Figma Project](https://www.figma.com/files/953513455932500110/project/250726221?fuid=1020089521679916452)  
+**Foundation Library**  **|**  [Arvo Foundation Library | Figma](https://www.figma.com/design/rjhpdeZqzdnJas17N4PqzY/arvo-Foundation-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6)  
+**Component Library**  |  [Arvo Component Library | Figma](https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?m=auto&t=sZOcFEWwB08Rvp8Y-6)  
+**Arvo Assets  | ** [Arvo Icons and Illustrations](https://www.figma.com/design/KG4bUj8RekcQiRDrfjjJzf/arvo-Icon-and-Illustrations-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6)
 
 # **Team**
 
@@ -71,7 +71,7 @@
 
 [**4\. Component Architecture**](#4.-component-architecture)
 
-[Shared Core  |  @o9ds/core](#shared-core-|-@o9ds/core)
+[Shared Core  |  @arvo/core](#shared-core-|-@arvo/core)
 
 [Shared Patterns](#shared-patterns)
 
@@ -79,9 +79,9 @@
 
 [**5\. Multi-Framework Strategy**](#5.-multi-framework-strategy)
 
-[React  |  @o9ds/react](#react-|-@o9ds/react)
+[React  |  @arvo/react](#react-|-@arvo/react)
 
-[Vanilla JS  |  @o9ds/js](#vanilla-js-|-@o9ds/js)
+[Vanilla JS  |  @arvo/js](#vanilla-js-|-@arvo/js)
 
 [Parity Enforcement](#parity-enforcement)
 
@@ -125,18 +125,18 @@
 
 ## **Purpose** {#purpose}
 
-This document describes the full architecture of the o9 Design System: what it contains, how it is built, how it ships, and how teams consume, contribute to, and maintain it. It is written for architects, lead developers, and anyone integrating the library into a product.
+This document describes the full architecture of the Arvo Design System: what it contains, how it is built, how it ships, and how teams consume, contribute to, and maintain it. It is written for architects, lead developers, and anyone integrating the library into a product.
 
 ## **Scope** {#scope}
 
-The o9 Design System is a dual-platform component library (React \+ vanilla JS) backed by shared design tokens, SCSS styles, framework-agnostic core utilities, and an agent-driven development pipeline. It is distributed as scoped npm packages via Azure Artifacts.
+The Arvo Design System is a dual-platform component library (React \+ vanilla JS) backed by shared design tokens, SCSS styles, framework-agnostic core utilities, and an agent-driven development pipeline. It is distributed as scoped npm packages via Azure Artifacts.
 
 ## **Guiding Principles** {#guiding-principles}
 
 | Principle | Implication |
 | :---- | :---- |
 | Single source of truth | Tokens originate in Figma, component specs originate in descriptors, generated code is never hand-edited. |
-| Framework-agnostic core | Shared logic (overlays, positioning, focus, keyboard) lives in @o9ds/core. React and JS packages are thin adapters. |
+| Framework-agnostic core | Shared logic (overlays, positioning, focus, keyboard) lives in @arvo/core. React and JS packages are thin adapters. |
 | Mechanical consistency | Naming, prop patterns, CSS variable structures, and cross-platform parity are validated by automated agents, not by review alone. |
 | Stateless agents | Each agent receives a descriptor plus prior outputs, produces artifacts, and has no side effects beyond its declared outputs. Agents are portable Markdown prompts that run identically in any LLM-enabled environment. |
 | Incremental delivery | Each phase produces shippable artifacts. Later phases extend earlier ones without blocking them from delivering value. |
@@ -145,9 +145,9 @@ The o9 Design System is a dual-platform component library (React \+ vanilla JS) 
 
 # **1\. Project Scope/Timeline** {#1.-project-scope/timeline}
 
-Do not mix this scope with that of the Kibo Q3 improvement plan. o9ds is an external, packaged system that platform UI is consuming, and is not in a shared development layer.
+Do not mix this scope with that of the Kibo Q3 improvement plan. Arvo is an external, packaged system that platform UI is consuming, and is not in a shared development layer.
 
-Platform Compliance, NovaAI/Kibo migrations, and any coming improvement to o9 UI is NOT part of o9ds. 
+Platform Compliance, NovaAI/Kibo migrations, and any coming improvement to o9 UI is NOT part of Arvo. 
 
 **Treat this system the same as any external packaged library.**
 
@@ -159,7 +159,7 @@ Platform Compliance, NovaAI/Kibo migrations, and any coming improvement to o9 UI
 
 * Batch 1 Components (35/36 complete)  
 * Kibo/o9React setup to consume pnpm package **✅**  
-* Dependencies removed and consumed from o9ds, includes:  
+* Dependencies removed and consumed from Arvo, includes:  
   * o9cons, illustrations, fonts **✅**  
   * Foundation tokens (scss colors, borders, spacing, ….) **✅**  
   * Remove prior component support, all component scripts & scss
@@ -168,10 +168,10 @@ Platform Compliance, NovaAI/Kibo migrations, and any coming improvement to o9 UI
 
 * Document site (temporary hosting, public)  
 * Component storybook (temporary deployment, public)  
-* Information and references for collaborating within o9ds  
+* Information and references for collaborating within Arvo  
   * Agentic workflow/pipeline usage with examples (each task)  
   * Do’s and Don’ts  
-  * Project .md files available for quick setup when switching task within o9ds
+  * Project .md files available for quick setup when switching task within Arvo
 
 ## **Phase 2** {#phase-2}
 
@@ -204,7 +204,7 @@ Platform Compliance, NovaAI/Kibo migrations, and any coming improvement to o9 UI
 
 ## **Component Batches | Status** {#component-batches-|-status}
 
-**Component Status Tracking** | [o9ds-status.md](https://docs.google.com/document/d/1J1cHfuLgkYUP56dxKiCAAHOsdE4eQ8Q66wK3YS977IM/edit?usp=sharing)
+**Component Status Tracking** | [arvo-status.md](https://docs.google.com/document/d/1J1cHfuLgkYUP56dxKiCAAHOsdE4eQ8Q66wK3YS977IM/edit?usp=sharing)
 
 | Batch 1 \- Apr 20 | Batch 2 \- May 4 | Batch 3 \~ May 11-18 | Batch 4 \~ June 1 \- Q3 |
 | :---: | :---: | :---: | :---: |
@@ -220,14 +220,14 @@ Platform Compliance, NovaAI/Kibo migrations, and any coming improvement to o9 UI
 
 | Package | Role | Output |
 | :---- | :---- | :---- |
-| @o9ds/tokens | SCSS design tokens | color, spacing, typography, borders, widths, animation | SCSS source (no build step) |
-| @o9ds/styles | Component SCSS, shared mixins, icon font, illustrations, web fonts | SCSS source (no build step) |
-| @o9ds/core | Framework-agnostic behavioral logic | overlay hub, positioning, focus, keyboard, animation, mask | Vite dist/ (ESM \+ CJS \+ types) |
-| @o9ds/utils | Form label, char counter, inline alert helpers | Vite dist/ (ESM \+ CJS \+ types) |
-| @o9ds/react | React components, hooks, providers | Vite dist/ (ESM \+ CJS \+ types) |
-| @o9ds/js | Vanilla JS components, jQuery plugin system | Vite dist/ (ESM \+ CJS \+ types) |
-| @o9ds/assets | Fonts, o9con, o9illus | Static asset directories |
-| @o9ds/docs | Docusaurus site with MDX component pages | Static build (pending) |
+| @arvo/tokens | SCSS design tokens | color, spacing, typography, borders, widths, animation | SCSS source (no build step) |
+| @arvo/styles | Component SCSS, shared mixins, icon font, illustrations, web fonts | SCSS source (no build step) |
+| @arvo/core | Framework-agnostic behavioral logic | overlay hub, positioning, focus, keyboard, animation, mask | Vite dist/ (ESM \+ CJS \+ types) |
+| @arvo/utils | Form label, char counter, inline alert helpers | Vite dist/ (ESM \+ CJS \+ types) |
+| @arvo/react | React components, hooks, providers | Vite dist/ (ESM \+ CJS \+ types) |
+| @arvo/js | Vanilla JS components, jQuery plugin system | Vite dist/ (ESM \+ CJS \+ types) |
+| @arvo/assets | Fonts, o9con, o9illus | Static asset directories |
+| @arvo/docs | Docusaurus site with MDX component pages | Static build (pending) |
 
 ## **Package Dependency Graph** {#package-dependency-graph}
 
@@ -236,8 +236,8 @@ Platform Compliance, NovaAI/Kibo migrations, and any coming improvement to o9 UI
 Peer dependencies (not bundled):
 
 * react ^18 || ^19  
-* react-dom ^18 || ^19 for @o9ds/react  
-* jquery ^3.7 for @o9ds/js.
+* react-dom ^18 || ^19 for @arvo/react  
+* jquery ^3.7 for @arvo/js.
 
 ## **Technology Stack** {#technology-stack}
 
@@ -258,8 +258,8 @@ Peer dependencies (not bundled):
 
 Tokens flow through two layers:
 
-1. **Compile-time** | SCSS variables (*$o9ds-\**) defined in @o9ds/tokens/src/scss/. Used inside mixins and the styles package during Sass compilation.  
-2. **Runtime** | CSS custom properties (*\--o9ds-\**) emitted onto :root by \_root.scss. Theme, brand, and mode layers compose via mixins so consuming applications can override at any cascade level.
+1. **Compile-time** | SCSS variables (*$arvo-\**) defined in @arvo/tokens/src/scss/. Used inside mixins and the styles package during Sass compilation.  
+2. **Runtime** | CSS custom properties (*\--arvo-\**) emitted onto :root by \_root.scss. Theme, brand, and mode layers compose via mixins so consuming applications can override at any cascade level.
 
 **Token categories:**
 
@@ -270,7 +270,7 @@ Tokens flow through two layers:
 * Widths  
 * Animation
 
-**CSS variable discipline:** Component-level CSS variables (*\--o9ds-{abbr}-\**) are created only when the value changes per size, variant, state, or parent override. Static token references are used directly.
+**CSS variable discipline:** Component-level CSS variables (*\--arvo-{abbr}-\**) are created only when the value changes per size, variant, state, or parent override. Static token references are used directly.
 
 **Why tokens live outside the platform:**
 
@@ -281,9 +281,9 @@ Tokens flow through two layers:
 
 # **4\. Component Architecture** {#4.-component-architecture}
 
-## **Shared Core**  |  @o9ds/core {#shared-core-|-@o9ds/core}
+## **Shared Core**  |  @arvo/core {#shared-core-|-@arvo/core}
 
-Framework-agnostic behavior modules consumed by both *@o9ds/react (via hooks)* and *@o9ds/js (via direct import).*
+Framework-agnostic behavior modules consumed by both *@arvo/react (via hooks)* and *@arvo/js (via direct import).*
 
 | Module | Purpose |
 | :---- | :---- |
@@ -300,13 +300,13 @@ This layer ensures that behavioral parity between React and vanilla JS is struct
 
 Shared patterns sit between the raw token layer and the component layer. They encode specific visual behaviors (*e.g.,* *animated form borders, loading skeletons, inline alerts*) that would otherwise be duplicated across every component that needs them.
 
-Each pattern is a styling solution (*SCSS mixin in @o9ds/styles*). When DOM is involved, a logic solution (*utility in @o9ds/utils*). Both are registered in *SHARED-PATTERNS-REGISTRY.json* and enforced by the pipeline. A component cannot scaffold until its declared patterns have ready status.
+Each pattern is a styling solution (*SCSS mixin in @arvo/styles*). When DOM is involved, a logic solution (*utility in @arvo/utils*). Both are registered in *SHARED-PATTERNS-REGISTRY.json* and enforced by the pipeline. A component cannot scaffold until its declared patterns have ready status.
 
 ## **BEM and Naming** {#bem-and-naming}
 
 CSS classes follow BEM with aggressive abbreviation for compactness across a library of 70+ components:
 
-| .o9ds-{abbr}\_\_{element}\--{modifier} |
+| .arvo-{abbr}\_\_{element}\--{modifier} |
 | :---- |
 
 Abbreviations are documented in each component descriptor: btn, cb, rb, sw, sel, dd, txt, pop, bc, num, …
@@ -315,25 +315,25 @@ Abbreviations are documented in each component descriptor: btn, cb, rb, sw, sel,
 
 The design system ships two framework targets from a single source of architectural truth.
 
-## **React**  |  @o9ds/react {#react-|-@o9ds/react}
+## **React**  |  @arvo/react {#react-|-@arvo/react}
 
 * Every component uses forwardRef and extends native HTML element attributes.  
-* Hooks (useOverlay, useFocusTrap, useKeyboardNav, usePositioning) wrap @o9ds/core modules.  
+* Hooks (useOverlay, useFocusTrap, useKeyboardNav, usePositioning) wrap @arvo/core modules.  
 * OverlayProvider configures container constraints, z-index layering, and route-change behavior for the application.
 
 #### Component pattern:
 
-| import { O9Button } from '@o9ds/react';\<O9Button variant\="primary" size\="md" onClick\={handleClick}\>  Save\</O9Button\> |
+| import { ArvoButton } from '@arvo/react';\<ArvoButton variant\="primary" size\="md" onClick\={handleClick}\>  Save\</ArvoButton\> |
 | :---- |
 
 #### Provider pattern:
 
-| import { OverlayProvider } from '@o9ds/react';\<OverlayProvider config\={{ containerSelector: '\#app', zIndexBase: 1000 }}\>  \<App /\>\</OverlayProvider\> |
+| import { OverlayProvider } from '@arvo/react';\<OverlayProvider config\={{ containerSelector: '\#app', zIndexBase: 1000 }}\>  \<App /\>\</OverlayProvider\> |
 | :---- |
 
-## **Vanilla JS**  |  @o9ds/js {#vanilla-js-|-@o9ds/js}
+## **Vanilla JS**  |  @arvo/js {#vanilla-js-|-@arvo/js}
 
-* Class-based lifecycle: O9Component.initialize(element, options) → instance methods → .destroy().  
+* Class-based lifecycle: ArvoComponent.initialize(element, options) → instance methods → .destroy().  
 * Dual-purpose getter/setter API: disabled() returns state; disabled(true) sets it.  
 * Three entry points:  
   * main \- direct class usage  
@@ -343,12 +343,12 @@ The design system ships two framework targets from a single source of architectu
 
 #### Class-based pattern:
 
-| import { O9Button } from '@o9ds/js';const btn \= O9Button.initialize(element, { variant: 'primary', size: 'md' });btn.disabled(true);   *// getter/setter: set disabled*btn.disabled();       *// getter/setter: returns true*btn.destroy();        *// cleanup* |
+| import { ArvoButton } from '@arvo/js';const btn \= ArvoButton.initialize(element, { variant: 'primary', size: 'md' });btn.disabled(true);   *// getter/setter: set disabled*btn.disabled();       *// getter/setter: returns true*btn.destroy();        *// cleanup* |
 | :---- |
 
 #### jQuery plugin usage:
 
-| *// Register all or a subset*import { registerO9Plugins } from '@o9ds/js/plugin';registerO9Plugins($);                           *// all components*registerO9Plugins($, \['o9Button', 'o9Textbox'\]); *// selective**// Use via $.fn*$('\#save-btn').o9Button({ variant: 'primary' }); |
+| *// Register all or a subset*import { registerArvoPlugins } from '@arvo/js/plugin';registerArvoPlugins($);                           *// all components*registerArvoPlugins($, \['arvoButton', 'arvoTextbox'\]); *// selective**// Use via $.fn*$('\#save-btn').arvoButton({ variant: 'primary' }); |
 | :---- |
 
 #### Overlay bridge (jQuery):
@@ -362,7 +362,7 @@ React and JS implementations produce identical HTML structure, CSS classes, ARIA
 
 ## **Future Framework Support** {#future-framework-support}
 
-The @o9ds/core layer is deliberately framework-agnostic. Adding a new framework target (Angular, Svelte, Web Components) requires writing thin adapter components over the same core modules. The styles, tokens, shared patterns, and behavioral logic remain unchanged.
+The @arvo/core layer is deliberately framework-agnostic. Adding a new framework target (Angular, Svelte, Web Components) requires writing thin adapter components over the same core modules. The styles, tokens, shared patterns, and behavioral logic remain unchanged.
 
 # **6\. Agentic Development Pipeline** {#6.-agentic-development-pipeline}
 
@@ -375,7 +375,7 @@ Agents are portable Markdown prompts. They run in Cursor as subagents but can be
 | Agent | Responsibility |
 | :---- | :---- |
 | **Orchestrator** | Coordinates agent sequence, manages checkpoints, handles errors |
-| **Shared Pattern** | Implements reusable SCSS mixins \+ @o9ds/utils DOM utilities before component work begins |
+| **Shared Pattern** | Implements reusable SCSS mixins \+ @arvo/utils DOM utilities before component work begins |
 | **Scaffolding** | Generates boilerplate files across all packages from a component descriptor |
 | **SCSS Implementation** | Writes full component SCSS with tokens, states, BEM structure, loading pattern |
 | **React Implementation** | Writes React component with props, refs, hooks, ARIA attributes |
@@ -424,13 +424,13 @@ pnpm pipeline new-component --descriptor descriptors/tooltip.json --dry-run
 
 ## **Figma Code Connect** {#figma-code-connect}
 
-Code Connect maps Figma design components to their codebase implementations. When a developer or agent inspects a Figma component through the MCP server, it returns the corresponding @o9ds/react or @o9ds/js usage snippet (not raw CSS or layout properties).
+Code Connect maps Figma design components to their codebase implementations. When a developer or agent inspects a Figma component through the MCP server, it returns the corresponding @arvo/react or @arvo/js usage snippet (not raw CSS or layout properties).
 
 The Figma MCP server provides:
 
 * **Code Connect snippets** \- mapped component usage for the selected Figma node.  
 * **Screenshots** \- visual reference of the design intent.  
-* **Design tokens as CSS variables** \- mapped to the \--o9ds-\* token system.  
+* **Design tokens as CSS variables** \- mapped to the \--arvo-\* token system.  
 * **Component documentation links** \- direct references to Storybook stories and doc pages.
 
 Code Connect mappings are maintained alongside component source and updated whenever the component API changes. This closes the loop between design and implementation. 
@@ -441,18 +441,18 @@ Code Connect mappings are maintained alongside component source and updated when
 
 ## **Registry** {#registry}
 
-Azure Artifacts serves as the private npm registry for `@o9ds` scoped packages. Consuming applications reference the feed via `.npmrc` and install packages identically to any public npm dependency. The feed proxies public npmjs.com, so a single registry serves both private and third-party packages.
+Azure Artifacts serves as the private npm registry for `@arvo` scoped packages. Consuming applications reference the feed via `.npmrc` and install packages identically to any public npm dependency. The feed proxies public npmjs.com, so a single registry serves both private and third-party packages.
 
 ## **Distribution Matrix** {#distribution-matrix}
 
 | Package | Dist | Formats | Entry Points | Side Effects |
 | :---- | :---: | :---- | :---- | :---: |
-| @o9ds/tokens | src/ | SCSS | ./scss, ./scss/{category} | No |
-| @o9ds/styles | src/ | SCSS | ., ./icons, ./fonts, ./illustrations, ./base, ./mixins/\* | Yes |
-| @o9ds/core | dist/ | ESM, CJS, .d.ts | . | No |
-| @o9ds/utils | dist/ | ESM, CJS, .d.ts | . | No |
-| @o9ds/react | dist/ | ESM, CJS, .d.ts | . | No |
-| @o9ds/js | dist/ | ESM, CJS, .d.ts | ., ./plugin, ./auto | ./auto only |
+| @arvo/tokens | src/ | SCSS | ./scss, ./scss/{category} | No |
+| @arvo/styles | src/ | SCSS | ., ./icons, ./fonts, ./illustrations, ./base, ./mixins/\* | Yes |
+| @arvo/core | dist/ | ESM, CJS, .d.ts | . | No |
+| @arvo/utils | dist/ | ESM, CJS, .d.ts | . | No |
+| @arvo/react | dist/ | ESM, CJS, .d.ts | . | No |
+| @arvo/js | dist/ | ESM, CJS, .d.ts | ., ./plugin, ./auto | ./auto only |
 
 ## **Versioning** {#versioning}
 
@@ -483,7 +483,7 @@ All packages follow semantic versioning managed by Changesets. Version bumps are
 
 # **10\. Repository Structure** {#10.-repository-structure}
 
-| o9-design-system/ ├── packages/ │   ├── tokens/           @o9ds/tokens    \- SCSS design tokens │   ├── assets/           @o9ds/assets    \- Fonts, icons, illustrations │   ├── styles/           @o9ds/styles    \- Component SCSS, shared mixins │   ├── core/             @o9ds/core      \- Framework-agnostic behavioral logic │   ├── utils/            @o9ds/utils     \- DOM utilities │   ├── react/            @o9ds/react     \- React components │   └── js/               @o9ds/js        \- Vanilla JS components ├── apps/ │   └── docs/             @o9ds/docs      \- Docusaurus documentation site ├── descriptors/          Component JSON descriptors (pipeline input) ├── architecture/         Numbered architecture appendices (00–16) ├── .cursor/ │   ├── agents/           Agent definitions (Markdown prompts) │   └── rules/            Project convention rules ├── .storybook/           Storybook configuration ├── turbo.json            Turborepo task definitions ├── tsconfig.base.json    Shared TypeScript config ├── vite.config.base.ts   Shared Vite externals ├── vitest.workspace.ts   Vitest workspace definition └── pnpm-workspace.yaml   Workspace package globs |
+| o9-design-system/ ├── packages/ │   ├── tokens/           @arvo/tokens    \- SCSS design tokens │   ├── assets/           @arvo/assets    \- Fonts, icons, illustrations │   ├── styles/           @arvo/styles    \- Component SCSS, shared mixins │   ├── core/             @arvo/core      \- Framework-agnostic behavioral logic │   ├── utils/            @arvo/utils     \- DOM utilities │   ├── react/            @arvo/react     \- React components │   └── js/               @arvo/js        \- Vanilla JS components ├── apps/ │   └── docs/             @arvo/docs      \- Docusaurus documentation site ├── descriptors/          Component JSON descriptors (pipeline input) ├── architecture/         Numbered architecture appendices (00–16) ├── .cursor/ │   ├── agents/           Agent definitions (Markdown prompts) │   └── rules/            Project convention rules ├── .storybook/           Storybook configuration ├── turbo.json            Turborepo task definitions ├── tsconfig.base.json    Shared TypeScript config ├── vite.config.base.ts   Shared Vite externals ├── vitest.workspace.ts   Vitest workspace definition └── pnpm-workspace.yaml   Workspace package globs |
 | :---- |
 
 # **Architecture Appendices** {#architecture-appendices}

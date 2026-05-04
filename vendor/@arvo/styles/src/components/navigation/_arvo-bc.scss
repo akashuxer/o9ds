@@ -1,0 +1,157 @@
+@use '../../../../tokens/src/scss/all' as *;
+
+// Breadcrumb component styles
+// BEM Block: .arvo-bc
+// Abbreviation: bc
+// Loading Pattern: A (simple overlay shimmer)
+
+.arvo-bc {
+
+  // ── Layout ────────────────────────────────────────────────────────────────
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding-block: $arvo-space-6;
+  position: relative;
+  box-sizing: border-box;
+
+  // ── Typography ────────────────────────────────────────────────────────────
+  font-family: var(--o9-font-family);
+  font-size: $arvo-font-size-14;
+
+  // ── List container ────────────────────────────────────────────────────────
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: $arvo-space-4;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // ── Item ──────────────────────────────────────────────────────────────────
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $arvo-space-4;
+
+    &:not(:first-child)::before {
+      content: '/';
+      color: var(--arvo-color-t-placeholder);
+      font-weight: $arvo-regular;
+      font-size: $arvo-font-size-14;
+      pointer-events: none;
+    }
+  }
+
+  // ── Link ──────────────────────────────────────────────────────────────────
+  &__lnk {
+    display: inline-flex;
+    align-items: center;
+    color: var(--arvo-color-t-placeholder);
+    font-family: var(--o9-font-family);
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-regular;
+    line-height: normal;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  // ── Icon (home) ───────────────────────────────────────────────────────────
+  &__ico {
+    font-size: $arvo-icon-16;
+    color: var(--arvo-color-t-placeholder);
+    flex-shrink: 0;
+    line-height: normal;
+    text-decoration: none;
+  }
+
+  // ── Current page label ────────────────────────────────────────────────────
+  &__lbl {
+    color: var(--arvo-color-t-secondary);
+    font-family: var(--o9-font-family);
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-medium;
+    line-height: normal;
+  }
+
+  // ── Hover ─────────────────────────────────────────────────────────────────
+  .no-touch &__lnk:hover {
+    color: var(--arvo-color-t-info-light);
+    text-decoration: underline;
+
+    .arvo-bc__ico {
+      color: var(--arvo-color-t-info-light);
+    }
+  }
+
+  // ── Focus ─────────────────────────────────────────────────────────────────
+  &__lnk:focus-visible {
+    color: var(--arvo-color-t-info-light);
+    text-decoration: underline;
+    outline: 1px solid var(--arvo-color-b-theme-focus);
+
+    .arvo-bc__ico {
+      color: var(--arvo-color-t-info-light);
+    }
+  }
+
+  // ── Disabled ──────────────────────────────────────────────────────────────
+  &.is-disabled &__lnk {
+    color: var(--arvo-color-t-disabled);
+    cursor: not-allowed;
+    pointer-events: auto;
+    text-decoration: none;
+
+    .arvo-bc__ico {
+      color: var(--arvo-color-i-disabled);
+    }
+  }
+
+  // ── Loading State (Pattern A) ─────────────────────────────────────────────
+  &.loading {
+    pointer-events: none;
+    cursor: default;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-color: var(--arvo-color-s-pulse-light);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--arvo-color-s-pulse-dark) 50%,
+        transparent 100%
+      );
+      transform: translateX(-100%);
+      animation: arvo-skeleton-shimmer 1.5s ease-in-out infinite;
+    }
+
+    .arvo-bc__list,
+    .arvo-bc__lnk,
+    .arvo-bc__lbl,
+    .arvo-bc__ico {
+      opacity: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &::before {
+        animation: none;
+      }
+    }
+  }
+}

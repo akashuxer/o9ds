@@ -8,7 +8,7 @@ import { getAllComponentPageMeta } from '../data/componentPageMeta'
 import { getComponentOverviewIllustrationSrc } from '../data/componentOverviewIllustrations'
 
 const componentIcon = (
-  <svg className="h-6 w-6 text-o9ds-light-secondary dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+  <svg className="h-6 w-6 text-arvo-light-secondary dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
   </svg>
 )
@@ -84,7 +84,7 @@ export default function Components() {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <div className="relative flex-1 min-w-[200px] max-w-xl">
-            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-o9ds-light-secondary dark:text-neutral-500" />
+            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-arvo-light-secondary dark:text-neutral-500" />
             <input
               type="search"
               value={query}
@@ -92,7 +92,7 @@ export default function Components() {
               placeholder="Search by keyword"
               autoComplete="off"
               aria-label="Search components by keyword"
-              className="o9ds-doc-search-input w-full py-2.5 pl-9 pr-3 text-sm text-[#010101] dark:text-white"
+              className="arvo-doc-search-input w-full py-2.5 pl-9 pr-3 text-sm text-[#010101] dark:text-white"
               style={inputStyle}
             />
           </div>
@@ -144,25 +144,25 @@ export default function Components() {
           </div>
         </div>
 
-        <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-          Showing <strong className="text-o9ds-light-primary dark:text-white font-semibold">{filtered.length}</strong> of{' '}
+        <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+          Showing <strong className="text-arvo-light-primary dark:text-white font-semibold">{filtered.length}</strong> of{' '}
           {allMeta.length} components
           {category !== 'all' && (
             <>
               {' '}
-              in <strong className="text-o9ds-light-primary dark:text-white font-semibold">{COMPONENTS_NAV_TREE.find((g) => g.id === category)?.label}</strong>
+              in <strong className="text-arvo-light-primary dark:text-white font-semibold">{COMPONENTS_NAV_TREE.find((g) => g.id === category)?.label}</strong>
             </>
           )}
         </p>
 
         {filtered.length === 0 ? (
           <div
-            className="rounded-none border px-6 py-12 text-center text-sm text-o9ds-light-secondary dark:text-neutral-400"
+            className="rounded-none border px-6 py-12 text-center text-sm text-arvo-light-secondary dark:text-neutral-400"
             style={{ borderColor: isDark ? '#404040' : '#E5E5E5', backgroundColor: isDark ? '#0a0a0a' : '#FAFAFA' }}
           >
-            No components match your search or filters. Try a different keyword, choose <strong className="text-o9ds-light-primary dark:text-white">All categories</strong>, turn off{' '}
-            <strong className="text-o9ds-light-primary dark:text-white">Ready status</strong>, then use{' '}
-            <strong className="text-o9ds-light-primary dark:text-white">Reset all</strong>.
+            No components match your search or filters. Try a different keyword, choose <strong className="text-arvo-light-primary dark:text-white">All categories</strong>, turn off{' '}
+            <strong className="text-arvo-light-primary dark:text-white">Ready status</strong>, then use{' '}
+            <strong className="text-arvo-light-primary dark:text-white">Reset all</strong>.
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 list-none p-0 m-0">

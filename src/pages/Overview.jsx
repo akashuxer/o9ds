@@ -13,7 +13,7 @@ import {
 } from '../data/principlesContent'
 
 const codeInline =
-  'ml-1 inline rounded-sm border border-neutral-300 bg-neutral-100 px-1.5 py-0.5 text-sm font-mono text-o9ds-light-primary dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200'
+  'ml-1 inline rounded-sm border border-neutral-300 bg-neutral-100 px-1.5 py-0.5 text-sm font-mono text-arvo-light-primary dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200'
 
 function ErgonomicsBullet({ line }) {
   const npm = line.match(/^NPM:\s*(.+)$/)
@@ -132,33 +132,33 @@ export default function Overview() {
       <section>
         <div className="pb-8 lg:pb-10">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
-            <p className="text-[2rem] font-bold leading-[1.1] tracking-tight text-o9ds-light-primary dark:text-white sm:text-[2.5rem] md:text-[2.75rem]">
-              Arvo: o9 Design System
+            <p className="text-[2rem] font-bold leading-[1.1] tracking-tight text-arvo-light-primary dark:text-white sm:text-[2.5rem] md:text-[2.75rem]">
+              Arvo Design System
             </p>
             <button
               type="button"
               onClick={onPronounceO9Arvo}
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-neutral-300 bg-white text-o9ds-light-primary transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800"
-              aria-label="Play pronunciation: Arvo (o9 Design System)"
-              title="Hear pronunciation: Arvo (o9 Design System)"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-neutral-300 bg-white text-arvo-light-primary transition-colors hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800"
+              aria-label="Play pronunciation: Arvo (Arvo Design System)"
+              title="Hear pronunciation: Arvo (Arvo Design System)"
             >
-              <span className="o9con o9con-speaker o9ds-icon-24" aria-hidden />
+              <span className="o9con o9con-speaker arvo-icon-24" aria-hidden />
             </button>
           </div>
-          <p className="mt-4 max-w-2xl text-base font-medium leading-relaxed text-o9ds-light-secondary dark:text-neutral-300 sm:text-lg md:text-xl">
+          <p className="mt-4 max-w-2xl text-base font-medium leading-relaxed text-arvo-light-secondary dark:text-neutral-300 sm:text-lg md:text-xl">
             A Value System for Adaptive, Intelligent Enterprise Experiences
           </p>
         </div>
       </section>
 
-      {/* What Arvo represents (replaces What is o9ds) */}
+      {/* What Arvo represents */}
       <section id="what-arvo-represents" className="animate-fade-in-up scroll-mt-24" style={{ animationDelay: '80ms' }}>
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-6 sm:text-2xl">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white mb-6 sm:text-2xl">
           What Arvo Represents
         </h2>
-        <div className="space-y-5 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400 sm:text-[17px]">
+        <div className="space-y-5 text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400 sm:text-[17px]">
           <p>
-            Arvo (o9 Design System) is a centralized system of foundations, components, patterns, and guidelines that
+            Arvo (Arvo Design System) is a centralized system of foundations, components, patterns, and guidelines that
             standardizes how interfaces are designed and built across the o9 platform—aligning design, engineering,
             accessibility, and brand into one scalable system.
           </p>
@@ -166,13 +166,13 @@ export default function Overview() {
             className="border-l-2 py-1 pl-5 dark:border-neutral-600"
             style={{ borderColor: isLight ? '#010101' : '#a3a3a3' }}
           >
-            <p className="font-semibold text-o9ds-light-primary dark:text-white">Arvo is not just a design system.</p>
+            <p className="font-semibold text-arvo-light-primary dark:text-white">Arvo is not just a design system.</p>
             <p className="mt-2">
               It is the experience layer of o9&apos;s operating model, built to support APEX, the Digital Brain, and
               connected decision-making.
             </p>
           </div>
-          <p className="text-o9ds-light-primary dark:text-neutral-200">
+          <p className="text-arvo-light-primary dark:text-neutral-200">
             It moves beyond UI standardization to enable a living, adaptive platform experience—designed for scale,
             intelligence, and continuous evolution.
           </p>
@@ -183,11 +183,11 @@ export default function Overview() {
           style={{ borderColor: isLight ? '#E5E5E5' : undefined }}
         >
           <div>
-            <h3 className="mb-3 text-lg font-semibold text-o9ds-light-primary dark:text-white">
+            <h3 className="mb-3 text-lg font-semibold text-arvo-light-primary dark:text-white">
               {ARVO_TECHNICAL_ERGONOMICS.title}
             </h3>
-            <p className="mb-4 italic text-o9ds-light-secondary dark:text-neutral-300">{ARVO_TECHNICAL_ERGONOMICS.lead}</p>
-            <ul className="list-disc space-y-2 pl-5 text-o9ds-light-secondary dark:text-neutral-400 marker:text-[#010101] dark:marker:text-neutral-500">
+            <p className="mb-4 italic text-arvo-light-secondary dark:text-neutral-300">{ARVO_TECHNICAL_ERGONOMICS.lead}</p>
+            <ul className="list-disc space-y-2 pl-5 text-arvo-light-secondary dark:text-neutral-400 marker:text-[#010101] dark:marker:text-neutral-500">
               {ARVO_TECHNICAL_ERGONOMICS.bullets.map((line) => (
                 <li key={line}>
                   <ErgonomicsBullet line={line} />
@@ -203,7 +203,7 @@ export default function Overview() {
             }}
           >
             <div className="mb-6 flex flex-wrap items-center gap-3">
-              <h3 className="text-xl font-bold tracking-tight text-o9ds-light-primary dark:text-white">
+              <h3 className="text-xl font-bold tracking-tight text-arvo-light-primary dark:text-white">
                 {ARVO_FUN_FACT.title}
               </h3>
               <span
@@ -214,7 +214,7 @@ export default function Overview() {
               </span>
             </div>
             <p
-              className="mb-8 max-w-2xl border-l-2 pl-4 text-[17px] font-medium leading-relaxed text-o9ds-light-primary dark:text-neutral-100 sm:pl-5 sm:text-lg"
+              className="mb-8 max-w-2xl border-l-2 pl-4 text-[17px] font-medium leading-relaxed text-arvo-light-primary dark:text-neutral-100 sm:pl-5 sm:text-lg"
               style={{ borderColor: isLight ? '#010101' : '#fafafa' }}
             >
               {ARVO_FUN_FACT.lead}
@@ -226,16 +226,16 @@ export default function Overview() {
                   className="flex flex-col gap-1.5 border py-3 pl-4 pr-3 sm:flex-row sm:items-start sm:gap-6 sm:py-3.5 dark:border-neutral-600 dark:bg-neutral-950/40"
                   style={{ borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#FFFFFF' : undefined }}
                 >
-                  <span className="shrink-0 text-[13px] font-semibold uppercase tracking-wide text-o9ds-light-primary dark:text-white sm:w-[min(12rem,34%)] sm:pt-0.5">
+                  <span className="shrink-0 text-[13px] font-semibold uppercase tracking-wide text-arvo-light-primary dark:text-white sm:w-[min(12rem,34%)] sm:pt-0.5">
                     {label}
                   </span>
-                  <span className="min-w-0 text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400 sm:border-l sm:pl-6 dark:sm:border-neutral-600">
+                  <span className="min-w-0 text-sm leading-relaxed text-arvo-light-secondary dark:text-neutral-400 sm:border-l sm:pl-6 dark:sm:border-neutral-600">
                     {detail}
                   </span>
                 </div>
               ))}
             </div>
-            <p className="mt-8 border-t pt-6 text-center text-sm font-semibold tracking-tight text-o9ds-light-primary dark:text-white sm:text-base">
+            <p className="mt-8 border-t pt-6 text-center text-sm font-semibold tracking-tight text-arvo-light-primary dark:text-white sm:text-base">
               <span aria-hidden className="mr-2 text-neutral-500 dark:text-neutral-500">
                 →
               </span>
@@ -259,17 +259,17 @@ export default function Overview() {
 
       {/* Why we built it - Cards */}
       <section id="why-we-built-it">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-3">Why we built it</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">Address platform-wide inconsistencies and enable scalable product development.</p>
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white mb-3">Why we built it</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 mb-6">Address platform-wide inconsistencies and enable scalable product development.</p>
         <div className="grid gap-4 sm:grid-cols-2">
           {whyWeBuiltIt.map((item, i) => (
             <div
               key={item}
-              className="border dark:border-neutral-700 p-4 transition-all duration-300 hover:border-o9ds-light-primary dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50 hover:shadow-md hover:-translate-y-0.5 animate-fade-in-up"
+              className="border dark:border-neutral-700 p-4 transition-all duration-300 hover:border-arvo-light-primary dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50 hover:shadow-md hover:-translate-y-0.5 animate-fade-in-up"
               style={{ animationDelay: `${100 + i * 50}ms`, borderColor: isLight ? '#E5E5E5' : undefined, backgroundColor: isLight ? '#F2F2F2' : undefined }}
-              data-o9ds-card="light"
+              data-arvo-card="light"
             >
-              <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">{item}</p>
+              <p className="text-sm font-medium text-arvo-light-primary dark:text-white">{item}</p>
             </div>
           ))}
         </div>
@@ -281,11 +281,11 @@ export default function Overview() {
           className="mb-8 border-t pt-10 dark:border-neutral-700"
           style={{ borderColor: isLight ? '#E5E5E5' : undefined }}
         >
-          <h2 className="text-2xl font-bold tracking-tight text-o9ds-light-primary dark:text-white sm:text-[28px]">
+          <h2 className="text-2xl font-bold tracking-tight text-arvo-light-primary dark:text-white sm:text-[28px]">
             Core principles
           </h2>
         </div>
-        <p className="mb-8 max-w-2xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+        <p className="mb-8 max-w-2xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
           {PRINCIPLES_INTRO}
         </p>
         <div className="grid gap-8 sm:grid-cols-2 sm:gap-6">
@@ -297,7 +297,7 @@ export default function Overview() {
               desc={desc}
               media={
                 infographic ? (
-                  <div className="overflow-hidden rounded-sm border" data-o9ds-doc-figure>
+                  <div className="overflow-hidden rounded-sm border" data-arvo-doc-figure>
                     <ExpandableDocImage
                       src={infographic}
                       alt={infographicAlt || `Principle ${num} infographic`}
@@ -319,8 +319,8 @@ export default function Overview() {
 
       {/* Business Impact - Cards */}
       <section id="business-impact">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white mb-4">Business Impact</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 mb-6">The o9 Design System unifies design, development, accessibility, and brand into one scalable system.</p>
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white mb-4">Business Impact</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 mb-6">The Arvo Design System unifies design, development, accessibility, and brand into one scalable system.</p>
         <div className="grid gap-4 sm:grid-cols-2">
           {businessImpact.map(({ title, desc }, i) => (
             <GrayBgCard

@@ -89,7 +89,7 @@ export default function SectionOverviewPage({
 
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <div className="relative flex-1 min-w-[200px] max-w-xl">
-            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-o9ds-light-secondary dark:text-neutral-500" />
+            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-arvo-light-secondary dark:text-neutral-500" />
             <input
               type="search"
               value={query}
@@ -97,7 +97,7 @@ export default function SectionOverviewPage({
               placeholder="Search by keyword"
               autoComplete="off"
               aria-label={`Search ${title} by keyword`}
-              className="o9ds-doc-search-input w-full py-2.5 pl-9 pr-3 text-sm text-[#010101] dark:text-white"
+              className="arvo-doc-search-input w-full py-2.5 pl-9 pr-3 text-sm text-[#010101] dark:text-white"
               style={inputStyle}
             />
           </div>
@@ -134,8 +134,8 @@ export default function SectionOverviewPage({
         </div>
 
         {items.length > 0 && (
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400">
-            Showing <strong className="text-o9ds-light-primary dark:text-white font-semibold">{filtered.length}</strong> of {items.length}{' '}
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
+            Showing <strong className="text-arvo-light-primary dark:text-white font-semibold">{filtered.length}</strong> of {items.length}{' '}
             entries
           </p>
         )}
@@ -147,7 +147,7 @@ export default function SectionOverviewPage({
               desc={getDocumentationStatusDescription(documentationCatalogId)}
             />
             <div
-              className="rounded-none border px-6 py-12 text-center text-sm text-o9ds-light-secondary dark:text-neutral-400"
+              className="rounded-none border px-6 py-12 text-center text-sm text-arvo-light-secondary dark:text-neutral-400"
               style={{ borderColor: isDark ? '#404040' : '#E5E5E5', backgroundColor: isDark ? '#0a0a0a' : '#FAFAFA' }}
             >
               No topics are listed for this overview yet. Add rows to <code className="font-mono text-xs">src/data/overviewCatalog.js</code> when
@@ -156,12 +156,12 @@ export default function SectionOverviewPage({
           </div>
         ) : filtered.length === 0 ? (
           <div
-            className="rounded-none border px-6 py-12 text-center text-sm text-o9ds-light-secondary dark:text-neutral-400"
+            className="rounded-none border px-6 py-12 text-center text-sm text-arvo-light-secondary dark:text-neutral-400"
             style={{ borderColor: isDark ? '#404040' : '#E5E5E5', backgroundColor: isDark ? '#0a0a0a' : '#FAFAFA' }}
           >
             No entries match your search or filters. Try another keyword or turn off{' '}
-            <strong className="text-o9ds-light-primary dark:text-white">Ready status</strong>, then use{' '}
-            <strong className="text-o9ds-light-primary dark:text-white">Reset all</strong>.
+            <strong className="text-arvo-light-primary dark:text-white">Ready status</strong>, then use{' '}
+            <strong className="text-arvo-light-primary dark:text-white">Reset all</strong>.
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 list-none p-0 m-0">

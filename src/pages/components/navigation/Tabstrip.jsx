@@ -1,28 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Tabstrip } from '@o9ds/react'
+import { ArvoTabstrip } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, SimpleTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'tabs', type: 'TabItem[]', required: 'Yes', desc: 'Array of tab configurations.' },
-  { prop: 'selectedId', type: 'string | null', default: 'null', desc: 'ID of the selected tab.' },
-  { prop: 'variant', type: "'primary' | 'secondary' | 'tertiary'", default: "'primary'", desc: 'Visual style variant.' },
-  { prop: 'size', type: "'sm' | 'lg'", default: "'lg'", desc: 'Tab height and font size.' },
-  { prop: 'closable', type: 'boolean', default: 'false', desc: 'Show close button on tabs.' },
-  { prop: 'pinnable', type: 'boolean', default: 'false', desc: 'Show pin button on tabs.' },
-  { prop: 'actionsVisibility', type: "'hover' | 'always'", default: "'hover'", desc: 'When tab actions are visible.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable the entire tabstrip.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Pattern C loading state.' },
-  { prop: 'onSelect', type: '(detail) => void', desc: 'Selection callback.' },
-  { prop: 'onClose', type: '(detail) => void', desc: 'Close callback.' },
-  { prop: 'onPin', type: '(detail) => void', desc: 'Pin/unpin callback.' },
-]
+const DESCRIPTOR = getDescriptor('tabstrip')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Tabstrip() {
   const [tab, setTab] = useState('Overview')
@@ -65,7 +55,7 @@ export default function Tabstrip() {
                 ['tertiary', 'Icon-only unselected; expands to icon + label on selection.'],
               ]} />
               <LiveReference>
-                <O9Tabstrip tabs={tabsData} selectedId={selected} onSelect={({ id }) => setSelected(id)} />
+                <ArvoTabstrip tabs={tabsData} selectedId={selected} onSelect={({ id }) => setSelected(id)} />
               </LiveReference>
             </DocSection>
             <DocSection id="sizes" title="Sizes">
@@ -99,7 +89,7 @@ export default function Tabstrip() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Tabstrip } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoTabstrip } from '@arvo/react';
 
 const tabs = [
   { id: 'overview', label: 'Overview', icon: 'home' },
@@ -107,13 +97,13 @@ const tabs = [
   { id: 'settings', label: 'Settings', icon: 'gear' },
 ];
 
-<O9Tabstrip
+<ArvoTabstrip
   tabs={tabs}
   selectedId="overview"
   onSelect={({ id }) => setActiveTab(id)}
 />
 
-<O9Tabstrip
+<ArvoTabstrip
   tabs={tabs}
   closable
   pinnable
@@ -121,13 +111,13 @@ const tabs = [
   onPin={({ id, pinned }) => togglePin(id, pinned)}
 />
 
-<O9Tabstrip tabs={tabs} variant="secondary" size="sm" />
-<O9Tabstrip tabs={tabs} variant="tertiary" />`} />
+<ArvoTabstrip tabs={tabs} variant="secondary" size="sm" />
+<ArvoTabstrip tabs={tabs} variant="tertiary" />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Tabstrip } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoTabstrip } from '@arvo/js';
 
-const strip = O9Tabstrip.initialize(el, {
+const strip = ArvoTabstrip.initialize(el, {
   variant: 'primary',
   size: 'lg',
   tabs,
@@ -160,7 +150,7 @@ strip.destroy();`} />
             </DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Tabstrip.initialize(el, options)', returns: 'O9Tabstrip', desc: 'Factory.' },
+                { method: 'ArvoTabstrip.initialize(el, options)', returns: 'ArvoTabstrip', desc: 'Factory.' },
                 { method: 'select(id)', desc: 'Programmatically select a tab.' },
                 { method: 'selectedId()', returns: 'string | null', desc: 'Read current selection.' },
                 { method: 'addTab(tab)', desc: 'Add a new tab.' },

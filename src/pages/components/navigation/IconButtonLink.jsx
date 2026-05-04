@@ -1,25 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9IconButtonLink } from '@o9ds/react'
+import { ArvoIconButtonLink } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'icon', type: 'string', required: 'Yes', desc: 'Icon name without o9con- prefix.' },
-  { prop: 'href', type: 'string', required: 'Yes', desc: 'Destination URL.' },
-  { prop: 'tooltip', type: 'string', required: 'Yes', desc: 'Accessible label and hover tooltip. Maps to aria-label and title.' },
-  { prop: 'variant', type: "'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger'", default: "'primary'", desc: 'Visual style variant.' },
-  { prop: 'size', type: "'xs' | 'sm' | 'md' | 'lg'", default: "'md'", desc: 'Size.' },
-  { prop: 'target', type: 'string', default: 'undefined', desc: 'Native target attribute. Auto-adds rel when _blank.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Prevent navigation.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Skeleton shimmer overlay.' },
-  { prop: 'onClick', type: '(event) => void', default: 'undefined', desc: 'Click handler.' },
-]
+const DESCRIPTOR = getDescriptor('icon-button-link')
+const PROPS = DESCRIPTOR.props
+
 
 export default function IconButtonLink() {
   const [tab, setTab] = useState('Overview')
@@ -50,10 +43,10 @@ export default function IconButtonLink() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9IconButtonLink href="#" icon="external-link" tooltip="Open" />
-                <O9IconButtonLink href="#" icon="arrow-right" tooltip="Navigate" variant="secondary" />
-                <O9IconButtonLink href="#" icon="settings" tooltip="Settings" variant="tertiary" size="sm" />
-                <O9IconButtonLink href="https://example.com" icon="external-link" tooltip="External" target="_blank" />
+                <ArvoIconButtonLink href="#" icon="external-link" tooltip="Open" />
+                <ArvoIconButtonLink href="#" icon="arrow-right" tooltip="Navigate" variant="secondary" />
+                <ArvoIconButtonLink href="#" icon="settings" tooltip="Settings" variant="tertiary" size="sm" />
+                <ArvoIconButtonLink href="https://example.com" icon="external-link" tooltip="External" target="_blank" />
               </LiveReference>
             </DocSection>
           </div>
@@ -81,17 +74,17 @@ export default function IconButtonLink() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9IconButtonLink } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoIconButtonLink } from '@arvo/react';
 
-<O9IconButtonLink href="/page" icon="external-link" tooltip="Open" />
-<O9IconButtonLink href="/page" icon="arrow-right" tooltip="Navigate" variant="secondary" />
-<O9IconButtonLink href="/page" icon="external-link" tooltip="Disabled" isDisabled />
-<O9IconButtonLink href="https://example.com" icon="external-link" tooltip="External" target="_blank" />`} />
+<ArvoIconButtonLink href="/page" icon="external-link" tooltip="Open" />
+<ArvoIconButtonLink href="/page" icon="arrow-right" tooltip="Navigate" variant="secondary" />
+<ArvoIconButtonLink href="/page" icon="external-link" tooltip="Disabled" isDisabled />
+<ArvoIconButtonLink href="https://example.com" icon="external-link" tooltip="External" target="_blank" />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9IconButtonLink } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoIconButtonLink } from '@arvo/js';
 
-const lnk = O9IconButtonLink.initialize(el, {
+const lnk = ArvoIconButtonLink.initialize(el, {
   variant: 'secondary',
   icon: 'external-link',
   href: '/page',

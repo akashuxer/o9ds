@@ -1,0 +1,102 @@
+// CheckboxGroup component styles
+// BEM Block: .arvo-cb-grp
+// Abbreviation: cb-grp
+// Loading Pattern: C (group disables pointer-events + aria-busy; children show Pattern A shimmer)
+
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/form-label' as *;
+@use '../../mixins/inline-alert' as *;
+
+// ─── .arvo-cb-grp ────────────────────────────────────────────────────────────
+
+.arvo-cb-grp {
+  // ── Base layout ──────────────────────────────────────────────────────────
+  display: flex;
+  flex-direction: column;
+  gap: $arvo-space-8;
+
+  // ── __lbl (group label — shared form-label pattern) ──────────────────────
+  &__lbl {
+    @include form-label-base;
+    @include form-label-lg;
+    color: var(--arvo-lbl-color, var(--arvo-color-t-form-label));
+  }
+
+  // ── __bdy (body wrapping __items + inline-alert) ─────────────────────────
+  &__bdy {
+    display: flex;
+    flex-direction: column;
+    gap: $arvo-space-8;
+  }
+
+  // ── __items (flex container for ArvoCheckbox children) ─────────────────────
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: $arvo-space-8;
+  }
+
+  // ── Size: sm ─────────────────────────────────────────────────────────────
+  &--sm {
+    .arvo-cb-grp__lbl {
+      @include form-label-sm;
+    }
+  }
+
+  // ── Layout: horizontal ───────────────────────────────────────────────────
+  &--horizontal {
+    .arvo-cb-grp__items {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  // ── Layout: label-start (only with --horizontal) ─────────────────────────
+  // Root becomes row so __lbl and __bdy sit side-by-side
+  &--horizontal#{&}--label-start {
+    flex-direction: row;
+    gap: $arvo-space-12;
+  }
+
+  // ── State: disabled ──────────────────────────────────────────────────────
+  &.is-disabled {
+    pointer-events: none;
+
+    .arvo-cb-grp__lbl {
+      @include form-label-disabled;
+      color: var(--arvo-lbl-color-disabled, var(--arvo-color-t-disabled));
+    }
+  }
+
+  // ── State: readonly ──────────────────────────────────────────────────────
+  &.is-readonly {
+    .arvo-cb-grp__items {
+      pointer-events: none;
+    }
+  }
+
+  // ── Inline alert ─────────────────────────────────────────────────────────
+  .arvo-inline-alert {
+    @include inline-alert-base;
+
+    &__ico {
+      @include inline-alert-icon;
+    }
+
+    &__msg {
+      @include inline-alert-msg;
+    }
+
+    &--error {
+      @include inline-alert-error;
+    }
+  }
+
+  // ── Loading state (Pattern C) ────────────────────────────────────────────
+  // Group disables pointer-events + sets aria-busy; child ArvoCheckbox instances
+  // show their own shimmer via [data-arvo-loading="true"] on __items.
+  &.loading,
+  &[data-arvo-loading="true"] {
+    pointer-events: none;
+  }
+}

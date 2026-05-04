@@ -1,0 +1,27 @@
+{
+  "name": "@arvo/core",
+  "version": "1.0.0-dev.2",
+  "description": "Arvo Design System framework-agnostic core utilities (overlay hub, positioning, focus, keyboard nav)",
+  "license": "UNLICENSED",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@arvo/tokens": "1.0.0-dev.2"
+  }
+}

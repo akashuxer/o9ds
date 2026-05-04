@@ -1,0 +1,259 @@
+@use '../../mixins/typography' as *;
+@use '../../mixins/loading' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .arvo-popover ────────────────────────────────────────────────────────────
+
+.arvo-popover {
+  // ── Root layout ────────────────────────────────────────────────────────────
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  width: var(--arvo-popover-width, auto);
+  min-width: $arvo-popover-wmin;
+  max-width: $arvo-popover-wmax;
+  max-height: $arvo-popover-hmax;
+  background-color: var(--arvo-color-s-layer-03, white);
+  box-shadow: $arvo-shadow-down;
+  z-index: var(--arvo-z-popover, 1000);
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Transition classes are applied by @arvo/core enter()/exit().
+  // Only transition opacity — transform is used for positioning and must not animate.
+  &.arvo-enter-from {
+    opacity: 0;
+  }
+
+  &.arvo-enter-active {
+    transition: opacity 150ms ease;
+  }
+
+  &.arvo-enter-to {
+    opacity: 1;
+  }
+
+  &.arvo-exit-from {
+    opacity: 1;
+  }
+
+  &.arvo-exit-active {
+    transition: opacity 150ms ease;
+  }
+
+  &.arvo-exit-to {
+    opacity: 0;
+  }
+
+  // ── State: open ────────────────────────────────────────────────────────────
+  &.open {
+    display: flex;
+  }
+
+  // ── __arrow ────────────────────────────────────────────────────────────────
+  &__arrow {
+    display: none;
+    position: absolute;
+    left: var(--arvo-popover-arrow-x, 0);
+    top: var(--arvo-popover-arrow-y, 0);
+    width: 8px;
+    height: 8px;
+    background-color: var(--arvo-color-s-layer-03, white);
+    transform: rotate(45deg);
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+
+  // ── __header ───────────────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $arvo-space-8;
+    padding: $arvo-space-8 $arvo-space-12;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  // ── __header-left ──────────────────────────────────────────────────────────
+  &__header-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $arvo-space-4;
+    flex: 1;
+    min-width: 0;
+  }
+
+  // ── __header-actions ───────────────────────────────────────────────────────
+  &__header-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $arvo-space-4;
+    flex-shrink: 0;
+  }
+
+  // ── __title ────────────────────────────────────────────────────────────────
+  &__title {
+    @include arvo-font-h16-m;
+    font-family: var(--o9-font-family);
+    color: var(--arvo-color-t-primary);
+    height: 24px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // ── __back-btn ─────────────────────────────────────────────────────────────
+  &__back-btn {
+    flex-shrink: 0;
+  }
+
+  // ── __close-btn ────────────────────────────────────────────────────────────
+  &__close-btn {
+    flex-shrink: 0;
+  }
+
+  // ── __sticky-header ────────────────────────────────────────────────────────
+  &__sticky-header {
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    padding: $arvo-space-8 $arvo-space-12 0;
+    box-sizing: border-box;
+    z-index: 1;
+  }
+
+  // ── __body ─────────────────────────────────────────────────────────────────
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: $arvo-space-8 $arvo-space-12 $arvo-space-16;
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--arvo-color-s-layer-07, #ccc) transparent;
+  }
+
+  // ── __footer ───────────────────────────────────────────────────────────────
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $arvo-space-6;
+    padding: $arvo-space-8 $arvo-space-12 $arvo-space-16;
+    flex-shrink: 0;
+    box-sizing: border-box;
+
+    > * {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  // ── Modifier: --edge ───────────────────────────────────────────────────────
+  &--edge &__body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // ── Modifier: --with-arrow ─────────────────────────────────────────────────
+  &--with-arrow &__arrow {
+    display: block;
+  }
+
+  // ── Modifier: --inline ─────────────────────────────────────────────────────
+  &--inline {
+    min-width: 0;
+  }
+
+  // ── Modifier: --closable ───────────────────────────────────────────────────
+  &:not(&--closable) &__close-btn {
+    display: none;
+  }
+
+  // ── Loading skeleton mixin (Pattern B) ───────────────────────────────────
+  @mixin _popover-loading-skeleton {
+    pointer-events: none;
+
+    .arvo-popover__footer {
+      display: none;
+    }
+
+    .arvo-popover__title {
+      position: relative;
+      color: transparent;
+      overflow: hidden;
+      border-radius: var(--arvo-radius-sm, 3px);
+      width: 60%;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: var(--arvo-color-s-disabled, #f0f0f0);
+        border-radius: var(--arvo-radius-sm, 3px);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          var(--arvo-loading-shimmer-color, rgba(255, 255, 255, 0.4)) 50%,
+          transparent 100%
+        );
+        animation: arvo-shimmer var(--arvo-loading-shimmer-speed, 1.5s) infinite linear;
+        border-radius: var(--arvo-radius-sm, 3px);
+      }
+    }
+
+    .arvo-popover__body {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: $arvo-space-12;
+
+      > * {
+        display: none;
+      }
+
+      &::before,
+      &::after {
+        content: '';
+        display: block;
+        height: 16px;
+        border-radius: var(--arvo-radius-sm, 3px);
+        background-color: var(--arvo-color-s-disabled, #f0f0f0);
+        position: relative;
+        overflow: hidden;
+      }
+
+      &::before {
+        width: 80%;
+      }
+
+      &::after {
+        width: 60%;
+      }
+    }
+  }
+
+  // ── State: loading (Pattern B — structured skeleton) ──────────────────────
+  &.loading {
+    @include _popover-loading-skeleton;
+  }
+
+  // Parent-controlled loading
+  [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
+    @include _popover-loading-skeleton;
+  }
+}

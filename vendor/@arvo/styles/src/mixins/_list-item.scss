@@ -1,0 +1,132 @@
+@use '../../../tokens/src/scss/all' as *;
+
+// Shared list/menu item mixins — consumed by action-menu, select, combobox,
+// multi-select, dropdown-button, list, listbox.
+// Each consumer applies these to its own BEM element class.
+//
+// Consumers declare these CSS custom properties on their block selector:
+//   --arvo-list-item-height-single    (default: 32px)
+//   --arvo-list-item-height-multi     (default: 40px)
+//   --arvo-list-item-padding-inline   (default: $arvo-space-16)
+//   --arvo-list-item-padding-block    (default: $arvo-space-4)
+//   --arvo-list-item-gap              (default: $arvo-space-8)
+//   --arvo-list-item-text-color       (default: var(--arvo-color-t-secondary))
+//   --arvo-list-item-text-hover-color (default: var(--arvo-color-t-primary))
+//   --arvo-list-item-secondary-color  (default: var(--arvo-color-t-placeholder))
+//   --arvo-list-item-bg-hover         (default: var(--arvo-color-s-theme-hover-4))
+
+// list-item-base
+// Flex layout, padding, cursor, and transition for all item types.
+@mixin list-item-base {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-inline-start: calc(var(--arvo-list-item-padding-inline, #{$arvo-space-16}) - 2px);
+  padding-inline-end: var(--arvo-list-item-padding-inline, #{$arvo-space-16});
+  padding-block: var(--arvo-list-item-padding-block, #{$arvo-space-4});
+  border-inline-start: 2px solid transparent;
+  gap: var(--arvo-list-item-gap, #{$arvo-space-8});
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--o9-font-family);
+  transition: background-color #{$arvo-motion-form-input};
+}
+
+// list-item-single-line
+// Fixed 32px height with single-line text ellipsis.
+@mixin list-item-single-line {
+  height: var(--arvo-list-item-height-single, 32px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// list-item-multi-line
+// Fixed 40px height with vertical text stack (primary + secondary label).
+@mixin list-item-multi-line {
+  height: var(--arvo-list-item-height-multi, 40px);
+}
+
+// list-item-states
+// Interactive states: hover (background), keyboard focus (outline),
+// active/selected (background + inline-start border), and disabled.
+@mixin list-item-states {
+  .no-touch &:not(.is-disabled):hover {
+    background-color: var(--arvo-list-item-bg-hover, var(--arvo-color-s-theme-hover-4));
+    color: var(--arvo-list-item-text-hover-color, var(--arvo-color-t-primary));
+  }
+
+  // Keyboard navigation indicator (items that are the keyboard target but may
+  // not have native :focus-visible, e.g. in filterable menus where focus
+  // stays on the search input).
+  &.focused {
+    outline: 1px solid var(--arvo-color-b-theme-focus);
+    outline-offset: -1px;
+  }
+
+  // Selected / toggled — includes the inline-start border indicator.
+  &.active {
+    background-color: var(--arvo-color-s-theme-active-4);
+    border-inline-start-color: var(--arvo-color-b-theme-active);
+    color: var(--arvo-list-item-text-hover-color, var(--arvo-color-t-primary));
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--arvo-color-b-theme-focus);
+    outline-offset: -1px;
+  }
+
+  &.is-disabled {
+    opacity: $arvo-opacity-low;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+// list-item-leading
+// Avatar (24px circle) and icon (16px) slots before the text content.
+@mixin list-item-leading {
+  &__avatar {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  &__ico {
+    flex: 0 0 auto;
+    font-family: $o9con;
+    font-size: $arvo-icon-16;
+  }
+}
+
+// list-item-text
+// Primary label (14px) and secondary label (10px) typography.
+@mixin list-item-text {
+  &__txt {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  &__lbl {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-regular;
+    color: var(--arvo-list-item-text-color, var(--arvo-color-t-secondary));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__secondary {
+    font-size: $arvo-font-size-10;
+    font-weight: $arvo-regular;
+    color: var(--arvo-list-item-secondary-color, var(--arvo-color-t-placeholder));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

@@ -26,8 +26,10 @@ import Popover from './overlays/Popover'
 import HybridPopover from './overlays/HybridPopover'
 import ActionMenu from './overlays/ActionMenu'
 import Tooltip from './overlays/Tooltip'
+import AlertDialog from './overlays/AlertDialog'
 import Badge from './feedback/Badge'
 import Toast from './feedback/Toast'
+import Chip from './inputs/Chip'
 import Cards from './data-display/Cards'
 import * as StubPages from './allStubComponents'
 import GenericComponentDoc from './GenericComponentDoc'
@@ -65,8 +67,10 @@ const REAL_PAGES = {
   'hybrid-popover': HybridPopover,
   'action-menu': ActionMenu,
   tooltip: Tooltip,
+  'alert-dialog': AlertDialog,
   badge: Badge,
   toast: Toast,
+  chip: Chip,
   cards: Cards,
 }
 

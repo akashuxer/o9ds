@@ -1,0 +1,84 @@
+export interface ArvoTextareaOptions {
+    value?: string;
+    placeholder?: string;
+    isDisabled?: boolean;
+    isReadOnly?: boolean;
+    label?: string;
+    isRequired?: boolean;
+    isInvalid?: boolean;
+    size?: 'sm' | 'lg';
+    icon?: string;
+    rows?: number;
+    maxLength?: number | null;
+    hasCounter?: boolean;
+    autoResize?: boolean;
+    resizable?: 'none' | 'vertical' | 'both';
+    errorMsg?: string;
+    errorDisplay?: 'inline' | 'tooltip' | 'none';
+    isLoading?: boolean;
+    isFullWidth?: boolean;
+    onInput?: (event: Event) => void;
+    onChange?: (event: Event) => void;
+    onFocus?: (event: Event) => void;
+    onBlur?: (event: Event) => void;
+}
+type RequiredTextareaOptions = Required<Omit<ArvoTextareaOptions, 'onInput' | 'onChange' | 'onFocus' | 'onBlur' | 'label' | 'errorMsg' | 'maxLength' | 'icon'>> & {
+    label: string | null;
+    errorMsg: string | null;
+    maxLength: number | null;
+    icon: string | null;
+    onInput: ((event: Event) => void) | null;
+    onChange: ((event: Event) => void) | null;
+    onFocus: ((event: Event) => void) | null;
+    onBlur: ((event: Event) => void) | null;
+};
+export declare class ArvoTextarea {
+    private _element;
+    private _options;
+    private _textareaEl;
+    private _fieldEl;
+    private _borderEl;
+    private _labelEl;
+    private _counterEl;
+    private _icoEl;
+    private _errIcoEl;
+    private _errIcoConnector;
+    private _inlineAlertEl;
+    private _previousValue;
+    private _inputId;
+    private _errorId;
+    private _boundHandleInput;
+    private _boundHandleChange;
+    private _boundHandleFocus;
+    private _boundHandleBlur;
+    static readonly SIZES: readonly ["sm", "lg"];
+    static readonly RESIZABLE: readonly ["none", "vertical", "both"];
+    static readonly DEFAULTS: RequiredTextareaOptions;
+    static initialize(element: HTMLDivElement, options?: ArvoTextareaOptions): ArvoTextarea;
+    constructor(element: HTMLDivElement, options?: ArvoTextareaOptions);
+    private _render;
+    private _bindEvents;
+    private _handleInput;
+    private _handleChange;
+    private _handleFocus;
+    private _handleBlur;
+    private _recalcAutoResize;
+    private _dispatchEvent;
+    value(): string;
+    value(newValue: string): void;
+    clear(): void;
+    validate(): {
+        valid: boolean;
+        errors: string[];
+    };
+    setError(message: string | false): void;
+    focus(): void;
+    disabled(): boolean;
+    disabled(state: boolean): void;
+    icon(): string | null;
+    icon(name: string | null): void;
+    setLoading(isLoading: boolean): void;
+    destroy(): void;
+}
+export {};
+//# sourceMappingURL=Textarea.d.ts.map

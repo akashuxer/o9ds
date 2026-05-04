@@ -41,14 +41,14 @@ const OPACITY_COLUMNS = [
   { key: 'usage', label: 'Usage' },
 ]
 
-/** Illustrative directional shadows (preview — aligns with $o9ds-shadow-* box-shadow presets). */
+/** Illustrative directional shadows (preview — aligns with $arvo-shadow-* box-shadow presets). */
 const SHADOW_GALLERY_LEVELS = [
-  { token: '$o9ds-shadow-left', pillLabel: 'shadow-left', boxShadow: '-10px 0 10px 0 rgba(0, 0, 0, 0.12)' },
-  { token: '$o9ds-shadow-right', pillLabel: 'shadow-right', boxShadow: '10px 0 10px 0 rgba(0, 0, 0, 0.12)' },
-  { token: '$o9ds-shadow-down', pillLabel: 'shadow-down', boxShadow: '0 10px 20px 0 rgba(0, 0, 0, 0.12)' },
-  { token: '$o9ds-shadow-up', pillLabel: 'shadow-up', boxShadow: '0 -10px 20px 0 rgba(0, 0, 0, 0.12)' },
-  { token: '$o9ds-shadow-center', pillLabel: 'shadow-center', boxShadow: '0 4px 40px 0 rgba(0, 0, 0, 0.14)' },
-  { token: '$o9ds-shadow-fab', pillLabel: 'shadow-fab', boxShadow: '0 -10px 20px 0 rgba(0, 0, 0, 0.12)' },
+  { token: '$arvo-shadow-left', pillLabel: 'shadow-left', boxShadow: '-10px 0 10px 0 rgba(0, 0, 0, 0.12)' },
+  { token: '$arvo-shadow-right', pillLabel: 'shadow-right', boxShadow: '10px 0 10px 0 rgba(0, 0, 0, 0.12)' },
+  { token: '$arvo-shadow-down', pillLabel: 'shadow-down', boxShadow: '0 10px 20px 0 rgba(0, 0, 0, 0.12)' },
+  { token: '$arvo-shadow-up', pillLabel: 'shadow-up', boxShadow: '0 -10px 20px 0 rgba(0, 0, 0, 0.12)' },
+  { token: '$arvo-shadow-center', pillLabel: 'shadow-center', boxShadow: '0 4px 40px 0 rgba(0, 0, 0, 0.14)' },
+  { token: '$arvo-shadow-fab', pillLabel: 'shadow-fab', boxShadow: '0 -10px 20px 0 rgba(0, 0, 0, 0.12)' },
 ]
 
 function CopyIcon({ className }) {
@@ -92,7 +92,7 @@ function CopyClipboardButton({ text, className = '' }) {
       {copied ? (
         <CheckIcon className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
       ) : (
-        <CopyIcon className="h-3.5 w-3.5 text-o9ds-light-secondary dark:text-neutral-400" />
+        <CopyIcon className="h-3.5 w-3.5 text-arvo-light-secondary dark:text-neutral-400" />
       )}
     </button>
   )
@@ -134,7 +134,7 @@ function TokenPill({ children, copyText, forceLight, noCopy }) {
 function DottedLightDocPanel({ children, title }) {
   return (
     <div
-      data-o9ds-doc-figure
+      data-arvo-doc-figure
       className="rounded-xl border border-[#e5e5e5] bg-[#fafafa] px-6 py-6 [background-image:radial-gradient(circle,rgba(148,163,184,0.35)_1px,transparent_1px)] [background-size:14px_14px] dark:!border-[#e5e5e5] dark:!bg-[#fafafa]"
     >
       {title ? <p className="mb-4 text-sm font-medium text-[#303030]">{title}</p> : null}
@@ -176,15 +176,15 @@ function BlurPreviewGallery() {
           <div
             className="absolute inset-0"
             style={{
-              backgroundColor: 'var(--o9ds-color-s-overlay-static)',
-              backdropFilter: 'blur(var(--o9ds-shadow-blur))',
-              WebkitBackdropFilter: 'blur(var(--o9ds-shadow-blur))',
+              backgroundColor: 'var(--arvo-color-s-overlay-static)',
+              backdropFilter: 'blur(var(--arvo-shadow-blur))',
+              WebkitBackdropFilter: 'blur(var(--arvo-shadow-blur))',
             }}
             aria-hidden
           />
         </div>
         <TokenPill forceLight noCopy>
-          $o9ds-shadow-blur
+          $arvo-shadow-blur
         </TokenPill>
       </div>
     </DottedLightDocPanel>
@@ -194,7 +194,7 @@ function BlurPreviewGallery() {
 function Spinner() {
   return (
     <div
-      className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-o9ds-light-primary dark:border-neutral-600 dark:border-t-white"
+      className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-arvo-light-primary dark:border-neutral-600 dark:border-t-white"
       role="status"
       aria-label="Loading"
     />
@@ -205,11 +205,11 @@ function BlurInteractiveDemo() {
   const [open, setOpen] = useState(false)
   return (
     <div className="rounded-xl border border-neutral-200 bg-neutral-50/80 px-6 py-6 dark:border-neutral-700 dark:bg-neutral-900/40">
-      <p className="mb-4 text-sm font-medium text-o9ds-light-secondary dark:text-neutral-400">Interactive example</p>
+      <p className="mb-4 text-sm font-medium text-arvo-light-secondary dark:text-neutral-400">Interactive example</p>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-o9ds-light-primary shadow-sm transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700/80"
+        className="rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-arvo-light-primary shadow-sm transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700/80"
       >
         Click me
       </button>
@@ -219,27 +219,27 @@ function BlurInteractiveDemo() {
             type="button"
             className="absolute inset-0 border-0"
             style={{
-              backgroundColor: 'var(--o9ds-color-s-overlay-static)',
-              backdropFilter: 'blur(var(--o9ds-shadow-blur))',
-              WebkitBackdropFilter: 'blur(var(--o9ds-shadow-blur))',
+              backgroundColor: 'var(--arvo-color-s-overlay-static)',
+              backdropFilter: 'blur(var(--arvo-shadow-blur))',
+              WebkitBackdropFilter: 'blur(var(--arvo-shadow-blur))',
             }}
             onClick={() => setOpen(false)}
             aria-label="Close overlay"
           />
           <div className="relative z-10 flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-neutral-200 bg-white p-8 shadow-xl dark:border-neutral-600 dark:bg-neutral-900">
-            <h3 id="blur-demo-title" className="text-lg font-semibold text-o9ds-light-primary dark:text-white">
+            <h3 id="blur-demo-title" className="text-lg font-semibold text-arvo-light-primary dark:text-white">
               Blurred backdrop
             </h3>
             <Spinner />
-            <p className="text-center text-sm text-o9ds-light-secondary dark:text-neutral-400">
+            <p className="text-center text-sm text-arvo-light-secondary dark:text-neutral-400">
               Same SCSS pairing as Mask Overlay:{' '}
-              <code className="font-mono text-xs px-1" data-o9ds-inline-code>background: $o9ds-color-s-overlay-static</code> and{' '}
-              <code className="font-mono text-xs px-1" data-o9ds-inline-code>backdrop-filter: $o9ds-shadow-blur</code> (this demo uses equivalent runtime styles).
+              <code className="font-mono text-xs px-1" data-arvo-inline-code>background: $arvo-color-s-overlay-static</code> and{' '}
+              <code className="font-mono text-xs px-1" data-arvo-inline-code>backdrop-filter: $arvo-shadow-blur</code> (this demo uses equivalent runtime styles).
             </p>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-o9ds-light-primary hover:bg-neutral-50 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-800"
+              className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-arvo-light-primary hover:bg-neutral-50 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-800"
             >
               Close
             </button>
@@ -253,7 +253,7 @@ function BlurInteractiveDemo() {
 function OpacityPreviewGallery() {
   return (
     <div className="rounded-xl border border-neutral-200 bg-neutral-50/80 p-6 dark:border-neutral-700 dark:bg-neutral-900/40">
-      <p className="mb-4 text-sm font-medium text-o9ds-light-secondary dark:text-neutral-400">Opacity preview</p>
+      <p className="mb-4 text-sm font-medium text-arvo-light-secondary dark:text-neutral-400">Opacity preview</p>
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
         {OPACITY_TOKEN_ROWS.map((row) => (
           <div key={row.name} className="flex flex-col items-center gap-3">
@@ -294,27 +294,27 @@ export default function Effects() {
         />
 
         <WhiteBgCard className="max-w-3xl" unified>
-          <p className="m-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-            Use the SCSS variables below with <code className="font-mono text-sm px-1" data-o9ds-inline-code>box-shadow</code>,{' '}
-            <code className="font-mono text-sm px-1" data-o9ds-inline-code>backdrop-filter</code>, and{' '}
-            <code className="font-mono text-sm px-1" data-o9ds-inline-code>opacity</code>. Preview galleries are illustrative; token tables list
-            the o9ds names you ship in code.
+          <p className="m-0 text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+            Use the SCSS variables below with <code className="font-mono text-sm px-1" data-arvo-inline-code>box-shadow</code>,{' '}
+            <code className="font-mono text-sm px-1" data-arvo-inline-code>backdrop-filter</code>, and{' '}
+            <code className="font-mono text-sm px-1" data-arvo-inline-code>opacity</code>. Preview galleries are illustrative; token tables list
+            the Arvo names you ship in code.
           </p>
         </WhiteBgCard>
 
         <section id="shadow-tokens" className="scroll-mt-24 space-y-6">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Shadow tokens
           </h2>
 
           <div>
-            <p className="mb-6 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-              A shadow simulates light falling on a surface so panels and floating UI feel lifted. o9ds maps shadows to semantic shadow colors (
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>$o9ds-color-s-shadow-static-1</code>,{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>$o9ds-color-s-shadow-static-2</code>
+            <p className="mb-6 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+              A shadow simulates light falling on a surface so panels and floating UI feel lifted. Arvo maps shadows to semantic shadow colors (
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-color-s-shadow-static-1</code>,{' '}
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-color-s-shadow-static-2</code>
               ) so the same token string works across themes.
             </p>
           </div>
@@ -323,7 +323,7 @@ export default function Effects() {
             label="SCSS example"
             language="scss"
             code={`.dropdown-panel {
-  box-shadow: $o9ds-shadow-down;
+  box-shadow: $arvo-shadow-down;
 }`}
           />
 
@@ -338,34 +338,34 @@ export default function Effects() {
         </section>
 
         <section id="blur" className="scroll-mt-24 space-y-6">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Blur Tokens
           </h2>
 
           <div className="max-w-3xl space-y-4">
-            <p className="m-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            <p className="m-0 text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
               Blur is not used on its own: it belongs to the mask overlay stack for modals and drawers that open as viewport overlays. The scrim covers the page under the panel; the Mask Overlay component combines{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>backdrop-filter</code> with{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>$o9ds-shadow-blur</code> and the overlay fill so the background reads dimmed and frosted instead of sharp and bright.
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>backdrop-filter</code> with{' '}
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-shadow-blur</code> and the overlay fill so the background reads dimmed and frosted instead of sharp and bright.
             </p>
-            <p className="m-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            <p className="m-0 text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
               Set the scrim background to{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>$o9ds-color-s-overlay-static</code> whenever you apply{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>$o9ds-shadow-blur</code> on{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>backdrop-filter</code>.{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>$o9ds-shadow-blur</code> resolves to{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>blur(4px)</code>, so assign it directly to{' '}
-              <code className="font-mono text-sm px-1" data-o9ds-inline-code>backdrop-filter</code>. A transparent scrim with blur only is out of spec; use Mask Overlay or the same SCSS pairing.
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-color-s-overlay-static</code> whenever you apply{' '}
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-shadow-blur</code> on{' '}
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>backdrop-filter</code>.{' '}
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-shadow-blur</code> resolves to{' '}
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>blur(4px)</code>, so assign it directly to{' '}
+              <code className="font-mono text-sm px-1" data-arvo-inline-code>backdrop-filter</code>. A transparent scrim with blur only is out of spec; use Mask Overlay or the same SCSS pairing.
             </p>
             <CodeBlock
               label="SCSS example (mask overlay scrim)"
               language="scss"
-              code={`.o9ds-mask-overlay {
-  background: $o9ds-color-s-overlay-static;
-  backdrop-filter: $o9ds-shadow-blur;
+              code={`.arvo-mask-overlay {
+  background: $arvo-color-s-overlay-static;
+  backdrop-filter: $arvo-shadow-blur;
 }`}
             />
           </div>
@@ -377,15 +377,15 @@ export default function Effects() {
         </section>
 
         <section id="opacity-tokens" className="scroll-mt-24 space-y-6">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Opacity tokens
           </h2>
 
           <div>
-            <p className="mb-6 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            <p className="mb-6 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
               Opacity controls how much of a layer shows through—from subtle hovers to disabled states. Values are expressed as decimals (0–1)
               and percentages; apply them to images, icons, and surfaces without altering layout dimensions.
             </p>
@@ -395,7 +395,7 @@ export default function Effects() {
             label="SCSS example"
             language="scss"
             code={`.hero-art {
-  opacity: $o9ds-opacity-80;
+  opacity: $arvo-opacity-80;
 }`}
           />
 

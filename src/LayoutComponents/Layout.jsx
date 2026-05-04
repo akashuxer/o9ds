@@ -242,7 +242,7 @@ function getPageTitle(pathname) {
   if (componentsMatch) {
     return componentsMatch[1].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
   }
-  return 'o9ds Design System'
+  return 'Arvo Design System'
 }
 
 export default function Layout({ children }) {
@@ -264,7 +264,7 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     const pageName = getPageTitle(pathname)
-    document.title = `o9ds Design System - ${pageName}`
+    document.title = `Arvo Design System - ${pageName}`
   }, [pathname])
 
   useEffect(() => {
@@ -421,10 +421,10 @@ export default function Layout({ children }) {
                 <strong className="font-bold">as we work toward the official Q3 2026 release.</strong>
               </p>
               <p>
-                Developers can start using available o9DS components, tokens, assets, etc. as they are ready. For areas
+                Developers can start using available Arvo components, tokens, assets, etc. as they are ready. For areas
                 not yet covered,
                 teams can continue using existing implementations in parallel. Components will be released
-                incrementally, enabling gradual adoption and migration to o9DS without waiting for the full system to
+                incrementally, enabling gradual adoption and migration to Arvo without waiting for the full system to
                 be completed.
               </p>
             </div>
@@ -483,7 +483,7 @@ export default function Layout({ children }) {
             <Link to="/" className="flex items-center gap-2 sm:gap-3 min-w-0 hover:opacity-90 transition-opacity" aria-label="Go to home">
               <div className="flex min-w-0 shrink-0 items-center gap-1">
                 <span
-                  className="o9con o9con-o9-logo flex h-[50px] shrink-0 items-center justify-center leading-none text-o9ds-light-primary dark:text-white text-[46px]"
+                  className="o9con o9con-o9-logo flex h-[50px] shrink-0 items-center justify-center leading-none text-arvo-light-primary dark:text-white text-[46px]"
                   aria-hidden
                 />
                 <div
@@ -578,7 +578,7 @@ export default function Layout({ children }) {
               placeholder="Search documentation..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="o9ds-doc-search-input w-full px-3 py-2 text-sm"
+              className="arvo-doc-search-input w-full px-3 py-2 text-sm"
               style={{
                 backgroundColor: isDark ? '#171717' : '#FFFFFF',
                 color: isDark ? '#fff' : '#010101',
@@ -766,7 +766,7 @@ export default function Layout({ children }) {
 
         {/* Main content */}
         <main
-          className={`o9ds-main flex-1 min-w-0 py-8 sm:py-10 ${
+          className={`arvo-main flex-1 min-w-0 py-8 sm:py-10 ${
             isLandingHome ? 'px-4 sm:px-6' : 'px-4 sm:px-6 md:px-8'
           } ${
             isLandingHome ? 'ml-0' : 'ml-0 lg:ml-64 min-[2560px]:ml-0'

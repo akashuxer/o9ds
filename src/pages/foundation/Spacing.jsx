@@ -49,15 +49,15 @@ export default function Spacing() {
         />
 
         <section id="spacing-scale-tokens" className="scroll-mt-24 space-y-8">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Spacing Scale / Tokens
           </h2>
 
-          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-            Use the SCSS variables below for padding, margin, and gap. Values scale from 1px to 80px on the same system as the rest of o9ds.
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+            Use the SCSS variables below for padding, margin, and gap. Values scale from 1px to 80px on the same system as the rest of arvo.
           </p>
 
           <DocTable
@@ -69,35 +69,35 @@ export default function Spacing() {
         </section>
 
         <section id="applying-padding" className="scroll-mt-24 space-y-4 max-w-3xl">
-          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying padding</h2>
+          <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Applying padding</h2>
           <CodeBlock
             label="SCSS"
             language="scss"
             code={`.card {
-  padding: $o9ds-space-16;
+  padding: $arvo-space-16;
 }`}
           />
         </section>
 
         <section id="applying-margin" className="scroll-mt-24 space-y-4 max-w-3xl">
-          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying margin</h2>
+          <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Applying margin</h2>
           <CodeBlock
             label="SCSS"
             language="scss"
             code={`.section {
-  margin-bottom: $o9ds-space-24;
+  margin-bottom: $arvo-space-24;
 }`}
           />
         </section>
 
         <section id="applying-gap" className="scroll-mt-24 space-y-4 max-w-3xl">
-          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying gap</h2>
+          <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Applying gap</h2>
           <CodeBlock
             label="SCSS"
             language="scss"
             code={`.toolbar {
   display: flex;
-  gap: $o9ds-space-16;
+  gap: $arvo-space-16;
 }`}
           />
         </section>

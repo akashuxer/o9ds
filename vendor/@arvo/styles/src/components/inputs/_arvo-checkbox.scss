@@ -1,0 +1,288 @@
+// Checkbox component styles
+// BEM Block: .arvo-checkbox
+// Abbreviation: checkbox
+// Loading Pattern: A (overlay shimmer)
+
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/loading' as *;
+@use '../../mixins/inline-alert' as *;
+
+// ─── .arvo-checkbox ──────────────────────────────────────────────────────────
+
+.arvo-checkbox {
+  // ── CSS custom properties (only dynamic values that change per size) ─────
+  --arvo-checkbox-box-size: 18px;
+  --arvo-checkbox-icon-size: 16px;
+  --arvo-checkbox-label-font-size: #{$arvo-font-size-14};
+
+  // ── Root layout ──────────────────────────────────────────────────────────
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  user-select: none;
+
+  // ── Size: lg (default) ─────────────────────────────────────────────────
+  &--lg {
+    --arvo-checkbox-box-size: 18px;
+    --arvo-checkbox-icon-size: 18px;
+    --arvo-checkbox-label-font-size: #{$arvo-font-size-14};
+  }
+
+  // ── Size: sm ───────────────────────────────────────────────────────────
+  &--sm {
+    --arvo-checkbox-box-size: 16px;
+    --arvo-checkbox-icon-size: 16px;
+    --arvo-checkbox-label-font-size: #{$arvo-font-size-12};
+  }
+
+  // ── __field (click/hover area wrapping input + label) ──────────────────
+  &__field {
+    display: inline-flex;
+    align-items: center;
+    gap: $arvo-space-8;
+    cursor: pointer;
+  }
+
+  // ── __input (native checkbox styled as custom box) ─────────────────────
+  &__input {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: var(--arvo-checkbox-box-size);
+    height: var(--arvo-checkbox-box-size);
+    border: 1px solid var(--arvo-color-b-form);
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    // Checkmark icon — shown when :checked
+    &::before {
+      content: '\ea82';
+      font-family: $o9con;
+      font-size: var(--arvo-checkbox-icon-size);
+      color: var(--arvo-color-i-inverse);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    // Indeterminate dash — shown when [data-indeterminate]
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 1px;
+      background: var(--arvo-color-i-inverse);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    // ── Checked state ──────────────────────────────────────────────────
+    &:checked {
+      background-color: var(--arvo-color-s-theme);
+      border-color: transparent;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    // ── Indeterminate state ────────────────────────────────────────────
+    &[data-indeterminate] {
+      background-color: var(--arvo-color-s-theme);
+      border-color: transparent;
+
+      &::before {
+        opacity: 0;
+      }
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    // ── Focus ──────────────────────────────────────────────────────────
+    &:focus-visible {
+      outline: 2px solid var(--arvo-color-b-theme-focus);
+      outline-offset: 1px;
+    }
+
+    // ── Disabled ───────────────────────────────────────────────────────
+    &:disabled {
+      cursor: not-allowed;
+      background-color: transparent;
+      border-color: var(--arvo-color-b-disabled);
+    }
+
+    &:disabled:checked {
+      background-color: var(--arvo-color-s-disabled);
+
+      &::before {
+        color: var(--arvo-color-i-disabled);
+      }
+    }
+
+    &:disabled[data-indeterminate] {
+      background-color: var(--arvo-color-s-disabled);
+
+      &::after {
+        background: var(--arvo-color-i-disabled);
+      }
+    }
+  }
+
+  // ── __lbl (visible label text) ──────────────────────────────────────────
+  &__lbl {
+    font-size: var(--arvo-checkbox-label-font-size);
+    color: var(--arvo-color-t-primary);
+  }
+
+  // ── State: disabled ────────────────────────────────────────────────────
+  &.is-disabled {
+    pointer-events: none;
+
+    .arvo-checkbox__field {
+      cursor: not-allowed;
+    }
+
+    .arvo-checkbox__lbl {
+      color: var(--arvo-color-t-disabled);
+    }
+  }
+
+  // ── State: readonly ────────────────────────────────────────────────────
+  &.is-readonly {
+    .arvo-checkbox__field {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .arvo-checkbox__input {
+      border-style: dashed;
+      border-width: 1.5px;
+      border-color: var(--arvo-color-b-readonly);
+      background-color: transparent;
+    }
+
+    .arvo-checkbox__input:checked {
+      background-color: var(--arvo-color-s-layer-04);
+      border-color: var(--arvo-color-b-readonly);
+
+      &::before {
+        color: var(--arvo-color-t-readonly);
+      }
+    }
+
+    .arvo-checkbox__input[data-indeterminate] {
+      background-color: var(--arvo-color-s-layer-04);
+      border-color: var(--arvo-color-b-readonly);
+
+      &::after {
+        background: var(--arvo-color-t-readonly);
+      }
+    }
+
+    .arvo-checkbox__lbl {
+      color: var(--arvo-color-t-readonly);
+    }
+  }
+
+  // ── State: error ───────────────────────────────────────────────────────
+  &.has-error:not([data-excluded]) {
+    .arvo-checkbox__input {
+      border-color: var(--arvo-color-b-negative);
+    }
+
+    .arvo-checkbox__input:checked {
+      background-color: var(--arvo-color-s-negative);
+      border-color: transparent;
+    }
+
+    .arvo-checkbox__input[data-indeterminate] {
+      background-color: var(--arvo-color-s-negative);
+      border-color: transparent;
+    }
+
+    .arvo-checkbox__input:focus-visible {
+      outline-color: var(--arvo-color-b-negative);
+    }
+  }
+
+  // ── State: excluded ────────────────────────────────────────────────────
+  &[data-excluded] {
+    .arvo-checkbox__input {
+      border-color: var(--arvo-color-b-negative);
+      background-color: var(--arvo-color-s-negative);
+    }
+
+    .arvo-checkbox__input:checked {
+      background-color: var(--arvo-color-s-negative);
+      border-color: transparent;
+    }
+
+    .arvo-checkbox__input[data-indeterminate] {
+      background-color: var(--arvo-color-s-negative);
+      border-color: transparent;
+    }
+
+    .arvo-checkbox__input:focus-visible {
+      outline-color: var(--arvo-color-b-negative);
+    }
+  }
+
+  // ── Inline alert ───────────────────────────────────────────────────────
+  .arvo-inline-alert {
+    @include inline-alert-base;
+    margin-top: $arvo-space-8;
+
+    &__ico {
+      @include inline-alert-icon;
+    }
+
+    &__msg {
+      @include inline-alert-msg;
+    }
+
+    &--error {
+      @include inline-alert-error;
+    }
+  }
+
+  // ── Loading state (per-element shimmer on __input + __lbl) ──────────────
+  &.loading,
+  [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
+    pointer-events: none;
+
+    .arvo-checkbox__input {
+      @include loading-element-shimmer;
+    }
+
+    .arvo-checkbox__lbl {
+      @include loading-element-shimmer;
+    }
+  }
+}
+
+// Hover state (no-touch only, not disabled, not readonly)
+.no-touch .arvo-checkbox:not(.is-disabled):not(.is-readonly):hover {
+  .arvo-checkbox__input:not(:disabled) {
+    border-color: var(--arvo-color-b-theme-hover);
+  }
+}
+
+// Hover: excluded variant
+.no-touch .arvo-checkbox[data-excluded]:not(.is-disabled):not(.is-readonly):hover {
+  .arvo-checkbox__input:not(:disabled) {
+    background-color: var(--arvo-color-s-negative-hover, var(--arvo-color-s-negative));
+  }
+}

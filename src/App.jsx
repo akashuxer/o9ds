@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { OverlayProvider, TooltipProvider, O9ToastProvider } from '@o9ds/react'
+import { OverlayProvider, TooltipProvider, ArvoToastProvider } from '@arvo/react'
 import { ThemeProvider } from './context/ThemeContext'
 import { DocsShellProvider } from './context/DocsShellContext'
 import Layout from './LayoutComponents/Layout'
@@ -56,7 +56,7 @@ export default function App() {
       <DocsShellProvider>
       <OverlayProvider>
       <TooltipProvider>
-      <O9ToastProvider>
+      <ArvoToastProvider>
       <BrowserRouter>
         <ScrollToTop />
         <Layout>
@@ -149,7 +149,7 @@ export default function App() {
         </Suspense>
         </Layout>
       </BrowserRouter>
-      </O9ToastProvider>
+      </ArvoToastProvider>
       </TooltipProvider>
       </OverlayProvider>
       </DocsShellProvider>

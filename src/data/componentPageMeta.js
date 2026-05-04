@@ -34,14 +34,14 @@ export function getAllComponentPageMeta() {
 }
 
 const DEFAULT_DESC =
-  'o9DS component. Documentation will be expanded in a future iteration. Use design tokens and patterns from this design system until full guidance is published.'
+  'Arvo component. Documentation will be expanded in a future iteration. Use design tokens and patterns from this design system until full guidance is published.'
 
 /** One-line description shown under the page title (stub and generated pages). */
 export function getComponentPageDescription(slug) {
   if (!slug) return DEFAULT_DESC
   const meta = getAllComponentPageMeta().find((x) => x.slug === slug)
   if (!meta) return DEFAULT_DESC
-  return `${meta.label} — ${meta.section} component in the o9 Design System. Usage, API, and accessibility guidance will be added in an upcoming documentation pass.`
+  return `${meta.label} — ${meta.section} component in the Arvo Design System. Usage, API, and accessibility guidance will be added in an upcoming documentation pass.`
 }
 
 /** PascalCase export name for a slug (e.g. multi-select → MultiSelect). */

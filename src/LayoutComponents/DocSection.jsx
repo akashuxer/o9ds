@@ -6,7 +6,7 @@ export default function DocSection({ id, title, children, className = '' }) {
   return (
     <section id={id} className={`scroll-mt-24 space-y-3 ${className}`}>
       {title && (
-        <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">
+        <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">
           {title}
         </h2>
       )}
@@ -20,7 +20,7 @@ export function DocSubsection({ title, children, className = '' }) {
   return (
     <div className={`space-y-2 ${className}`}>
       {title && (
-        <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">
+        <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">
           {title}
         </h3>
       )}
@@ -32,7 +32,7 @@ export function DocSubsection({ title, children, className = '' }) {
 /** Standard paragraph styling for body prose inside doc pages. */
 export function DocParagraph({ children, className = '' }) {
   return (
-    <p className={`text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed ${className}`}>
+    <p className={`text-arvo-light-secondary dark:text-neutral-400 leading-relaxed ${className}`}>
       {children}
     </p>
   )
@@ -43,7 +43,7 @@ export function DocList({ items, ordered = false, className = '' }) {
   const Tag = ordered ? 'ol' : 'ul'
   const listClass = ordered ? 'list-decimal' : 'list-disc'
   return (
-    <Tag className={`${listClass} pl-5 space-y-1.5 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed ${className}`}>
+    <Tag className={`${listClass} pl-5 space-y-1.5 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed ${className}`}>
       {items.map((item, i) => (
         <li key={i}>{item}</li>
       ))}
@@ -54,14 +54,14 @@ export function DocList({ items, ordered = false, className = '' }) {
 /** Inline strong emphasis matching the design system's typography pattern. */
 export function DocStrong({ children }) {
   return (
-    <strong className="text-o9ds-light-primary dark:text-white font-medium">{children}</strong>
+    <strong className="text-arvo-light-primary dark:text-white font-medium">{children}</strong>
   )
 }
 
-/** Inline code chip matching the global [data-o9ds-inline-code] styling. */
+/** Inline code chip matching the global [data-arvo-inline-code] styling. */
 export function DocCode({ children }) {
   return (
-    <code className="px-1 py-0.5" data-o9ds-inline-code>
+    <code className="px-1 py-0.5" data-arvo-inline-code>
       {children}
     </code>
   )
@@ -75,13 +75,13 @@ export function DocCallout({ tone = 'rule', title, children }) {
     warn: 'border-l-4 border-l-[#bc1227] dark:border-l-[#f07a62]',
   }
   return (
-    <div className={`border ${toneStyles[tone] || toneStyles.rule} pl-4 pr-4 py-3 bg-o9ds-light-surface dark:bg-neutral-800/40`}>
+    <div className={`border ${toneStyles[tone] || toneStyles.rule} pl-4 pr-4 py-3 bg-arvo-light-surface dark:bg-neutral-800/40`}>
       {title && (
-        <p className="text-sm font-semibold text-o9ds-light-primary dark:text-white mb-1 m-0">
+        <p className="text-sm font-semibold text-arvo-light-primary dark:text-white mb-1 m-0">
           {title}
         </p>
       )}
-      <div className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+      <div className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
         {children}
       </div>
     </div>

@@ -1,33 +1,20 @@
 import { useState, useMemo } from 'react'
-import { O9ButtonGroup } from '@o9ds/react'
+import { ArvoButtonGroup } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, CssVarsGrid, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'items', type: 'ButtonGroupItemConfig[]', default: '[]', desc: 'Array of item configs. Each: { value, label?, icon?, disabled?, excluded? }' },
-  { prop: 'value', type: 'string | string[] | null', default: 'null', desc: 'Selected value(s). string for single-select, string[] for multi-select.' },
-  { prop: 'variant', type: "'primary' | 'secondary'", default: "'primary'", desc: 'Visual variant controlling active item colors.' },
-  { prop: 'size', type: "'sm' | 'lg'", default: "'lg'", desc: 'Group size. sm=24px, lg=32px.' },
-  { prop: 'multiSelect', type: 'boolean', default: 'false', desc: 'Allow multiple items selected simultaneously.' },
-  { prop: 'iconOnly', type: 'boolean', default: 'false', desc: 'All items render icon-only.' },
-  { prop: 'hasOverflow', type: 'boolean', default: 'false', desc: 'Enable overflow detection. Clipped items appear in an overflow menu.' },
-  { prop: 'expandOnSelect', type: 'boolean', default: 'false', desc: 'Selected item expands to show label; others collapse to icon-only (single-select).' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable the entire group and child buttons.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Loading state (Pattern C).' },
-  { prop: 'ariaLabel', type: 'string', required: 'Yes', desc: 'Accessible label for the toolbar.' },
-  { prop: 'onChange', type: '(detail) => void', desc: 'Selection change callback.' },
-]
+const DESCRIPTOR = getDescriptor('button-group')
+const PROPS = DESCRIPTOR.props
+const CSS_VARS = DESCRIPTOR.cssVarGroups
 
-const CSS_VARS = [
-  { category: 'Layout', vars: ['--o9ds-btn-grp-gap', '--o9ds-btn-grp-height'] },
-  { category: 'Animation', vars: ['--o9ds-btn-grp-expand-duration', '--o9ds-btn-grp-expand-easing'] },
-]
+
 
 const ITEMS = [
   { value: 'bold', label: 'Bold', icon: 'bold' },
@@ -71,12 +58,12 @@ export default function ButtonGroup() {
                 <span key="4"><DocStrong>Compact action bar</DocStrong> — icon-only group with overflow support.</span>,
               ]} />
               <LiveReference>
-                <O9ButtonGroup items={ITEMS} value={single} ariaLabel="Text formatting" onChange={({ value }) => setSingle(value)} />
+                <ArvoButtonGroup items={ITEMS} value={single} ariaLabel="Text formatting" onChange={({ value }) => setSingle(value)} />
               </LiveReference>
             </DocSection>
             <DocSection id="icon-only" title="Icon-only">
               <LiveReference>
-                <O9ButtonGroup items={[{ value: 'left', icon: 'align-left' }, { value: 'center', icon: 'align-center' }, { value: 'right', icon: 'align-right' }]} isIconOnly value="center" ariaLabel="Text alignment" />
+                <ArvoButtonGroup items={[{ value: 'left', icon: 'align-left' }, { value: 'center', icon: 'align-center' }, { value: 'right', icon: 'align-right' }]} isIconOnly value="center" ariaLabel="Text alignment" />
               </LiveReference>
             </DocSection>
           </div>
@@ -104,7 +91,7 @@ export default function ButtonGroup() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9ButtonGroup } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoButtonGroup } from '@arvo/react';
 
 const items = [
   { value: 'bold', label: 'Bold', icon: 'bold' },
@@ -113,7 +100,7 @@ const items = [
 ];
 
 // Single-select
-<O9ButtonGroup
+<ArvoButtonGroup
   items={items}
   value="bold"
   ariaLabel="Text formatting"
@@ -121,7 +108,7 @@ const items = [
 />
 
 // Multi-select
-<O9ButtonGroup
+<ArvoButtonGroup
   items={items}
   value={['bold', 'italic']}
   multiSelect
@@ -130,12 +117,12 @@ const items = [
 />
 
 // Icon-only with expand-on-select
-<O9ButtonGroup items={items} iconOnly expandOnSelect value="bold" ariaLabel="Text formatting" />`} />
+<ArvoButtonGroup items={items} iconOnly expandOnSelect value="bold" ariaLabel="Text formatting" />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9ButtonGroup } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoButtonGroup } from '@arvo/js';
 
-const group = O9ButtonGroup.initialize(el, {
+const group = ArvoButtonGroup.initialize(el, {
   items,
   value: 'bold',
   ariaLabel: 'Text formatting',
@@ -155,7 +142,7 @@ group.destroy();`} />
             <DocSection id="css-vars" title="CSS variables"><CssVarsGrid groups={CSS_VARS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9ButtonGroup.initialize(el, options)', returns: 'O9ButtonGroup', desc: 'Factory.' },
+                { method: 'ArvoButtonGroup.initialize(el, options)', returns: 'ArvoButtonGroup', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string|string[]|null|void', desc: 'Get/set selected value(s).' },
                 { method: 'disabled(b?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },
                 { method: 'setVariant(v)', desc: 'Change visual variant.' },

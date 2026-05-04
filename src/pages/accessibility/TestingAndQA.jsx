@@ -37,15 +37,15 @@ export default function TestingAndQA() {
       tocSections={toc}
     >
       <section id="a11y-test-intro" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Introduction</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Introduction</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
           Accessibility must be tested, not assumed. Every component and workflow should be checked through multiple interaction modes.
         </p>
       </section>
 
       <section id="a11y-test-modes" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Required interaction combinations</h2>
-        <ul className="list-disc list-inside space-y-2 text-o9ds-light-secondary dark:text-neutral-400 text-sm">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Required interaction combinations</h2>
+        <ul className="list-disc list-inside space-y-2 text-arvo-light-secondary dark:text-neutral-400 text-sm">
           <li>mouse only</li>
           <li>keyboard only</li>
           <li>mouse + keyboard</li>
@@ -54,54 +54,54 @@ export default function TestingAndQA() {
       </section>
 
       <section id="a11y-test-checklist" className="space-y-6 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Core testing checklist</h2>
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Core testing checklist</h2>
 
         <div>
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">1. Keyboard-only</h3>
-          <ul className="list-disc list-inside space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">1. Keyboard-only</h3>
+          <ul className="list-disc list-inside space-y-1 text-sm text-arvo-light-secondary dark:text-neutral-400">
             <li>All interactive elements reachable; logical focus order; visible indicators</li>
             <li>All actions work without a mouse; overlays open/close; focus return; arrow keys in composites</li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">2. Screen reader</h3>
-          <ul className="list-disc list-inside space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">2. Screen reader</h3>
+          <ul className="list-disc list-inside space-y-1 text-sm text-arvo-light-secondary dark:text-neutral-400">
             <li>Names, roles, states; descriptions when needed; required/invalid announced</li>
             <li>Dynamic updates announced; no redundant duplicate labels</li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">3. Zoom (200%)</h3>
-          <ul className="list-disc list-inside space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">3. Zoom (200%)</h3>
+          <ul className="list-disc list-inside space-y-1 text-sm text-arvo-light-secondary dark:text-neutral-400">
             <li>No content disappears; dialogs usable; popovers not clipped; controls reachable; layouts do not break tasks</li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">4. Contrast</h3>
-          <ul className="list-disc list-inside space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">4. Contrast</h3>
+          <ul className="list-disc list-inside space-y-1 text-sm text-arvo-light-secondary dark:text-neutral-400">
             <li>Text, placeholders, icons, borders, focus rings, state tokens—in light and dark themes</li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">5. Semantic inspection</h3>
-          <ul className="list-disc list-inside space-y-1 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">5. Semantic inspection</h3>
+          <ul className="list-disc list-inside space-y-1 text-sm text-arvo-light-secondary dark:text-neutral-400">
             <li>DevTools: role, name, state, description, focusability, tree relationships</li>
           </ul>
         </div>
       </section>
 
       <section id="a11y-test-sr" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Screen reader test environments</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm">Recommended baseline: NVDA + Chrome or Firefox on Windows; VoiceOver + Safari on macOS.</p>
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Screen reader test environments</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm">Recommended baseline: NVDA + Chrome or Firefox on Windows; VoiceOver + Safari on macOS.</p>
       </section>
 
       <section id="a11y-test-failures" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Common failures to watch for</h2>
-        <ul className="list-disc list-inside space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Common failures to watch for</h2>
+        <ul className="list-disc list-inside space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400">
           <li>Clickable div without keyboard support</li>
           <li>Icon-only buttons without accessible name</li>
           <li>Missing labels; broken tab order; hidden focus</li>
@@ -115,15 +115,15 @@ export default function TestingAndQA() {
       </section>
 
       <section id="a11y-test-qa-table" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Suggested QA checklist format</h2>
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Suggested QA checklist format</h2>
         <DocTable columns={qaColumns} rows={qaRows} />
       </section>
 
       <section id="a11y-test-bugs" className="space-y-4 scroll-mt-24">
-        <h2 className="text-xl font-bold text-o9ds-light-primary dark:text-white">Report accessibility bugs with context</h2>
-        <p className="text-o9ds-light-secondary dark:text-neutral-400 text-sm mb-2">Include: affected page or component; expected vs actual behavior; browser and OS; assistive technology; steps to reproduce; screenshots or recordings; screen reader output; code reference if known.</p>
-        <div className="border border-o9ds-light-border dark:border-neutral-700 p-4 text-sm text-o9ds-light-secondary dark:text-neutral-400">
-          <p className="font-medium text-o9ds-light-primary dark:text-white mb-1">Good bug example</p>
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Report accessibility bugs with context</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm mb-2">Include: affected page or component; expected vs actual behavior; browser and OS; assistive technology; steps to reproduce; screenshots or recordings; screen reader output; code reference if known.</p>
+        <div className="border border-arvo-light-border dark:border-neutral-700 p-4 text-sm text-arvo-light-secondary dark:text-neutral-400">
+          <p className="font-medium text-arvo-light-primary dark:text-white mb-1">Good bug example</p>
           <p>
             “Keyboard focus moves behind the modal after opening the overflow menu inside the dialog. Reproducible in Chrome on Windows with keyboard only. Expected: focus remains inside modal. Actual: Tab moves to background page links.”
           </p>

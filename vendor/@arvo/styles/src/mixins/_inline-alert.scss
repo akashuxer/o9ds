@@ -1,0 +1,96 @@
+@use '../../../tokens/src/scss/all' as *;
+
+// Shared inline alert — icon + optional message used across form inputs, panels, etc.
+// Generic enough for error, success, warning, info, and neutral variants.
+// Block: .arvo-inline-alert
+
+@mixin inline-alert-type($text-color, $icon-color, $icon-code) {
+  .arvo-inline-alert__msg {
+    color: $text-color;
+  }
+
+  .arvo-inline-alert__ico::before {
+    content: $icon-code;
+    color: $icon-color;
+  }
+}
+
+@mixin inline-alert-base {
+  display: inline-flex;
+  gap: var(--arvo-inline-alert-gap, #{$arvo-space-4});
+  align-items: flex-start;
+  font-family: var(--o9-font-family);
+  font-weight: $arvo-regular;
+  font-size: var(--arvo-inline-alert-font-size, #{$arvo-font-size-12});
+  line-height: $arvo-font-size-16;
+}
+
+@mixin inline-alert-icon {
+  flex: 0 0 auto;
+  font-family: $o9con;
+  font-size: $arvo-icon-16;
+  line-height: normal;
+}
+
+@mixin inline-alert-msg {
+  min-width: 0;
+  word-break: break-word;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+// Type variants — each sets text color, icon color, and icon glyph
+@mixin inline-alert-error {
+  @include inline-alert-type(
+    var(--arvo-color-t-negative),
+    var(--arvo-color-i-negative),
+    '\edd9' // block icon
+  );
+}
+
+@mixin inline-alert-success {
+  @include inline-alert-type(
+    var(--arvo-color-t-positive),
+    var(--arvo-color-i-positive),
+    '\ec1b'
+  );
+}
+
+@mixin inline-alert-warning {
+  @include inline-alert-type(
+    var(--arvo-color-t-warning),
+    var(--arvo-color-i-warning),
+    '\ed72'
+  );
+}
+
+@mixin inline-alert-info {
+  @include inline-alert-type(
+    var(--arvo-color-t-info-dark),
+    var(--arvo-color-i-info-dark),
+    '\ed71'
+  );
+}
+
+@mixin inline-alert-neutral {
+  @include inline-alert-type(
+    var(--arvo-color-t-neutral),
+    var(--arvo-color-i-neutral),
+    '\ebe2'
+  );
+}
+
+// Error tooltip icon rendered inside a form input field (no message, icon only).
+// The consuming component places this element inside __field alongside the input;
+// it becomes visible when the parent has `.has-error.error-tooltip`.
+@mixin error-tooltip-icon {
+  flex: 0 0 auto;
+  font-family: $o9con;
+  font-size: $arvo-icon-16;
+  color: var(--arvo-color-i-negative);
+  display: none;
+
+  &::before {
+    content: '\edd9'; // block icon
+  }
+}

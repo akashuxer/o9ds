@@ -20,7 +20,7 @@ export default function WhiteBgCard({ number, icon, title, desc, media, bullets 
         backgroundColor: isUnified ? '#FFFFFF' : isLight ? '#FAFAFA' : undefined,
         ...style,
       }}
-      data-o9ds-card={isUnified ? 'principles' : (isLight ? 'light-white' : 'dark')}
+      data-arvo-card={isUnified ? 'principles' : (isLight ? 'light-white' : 'dark')}
     >
       {number != null && (
         <div
@@ -32,7 +32,7 @@ export default function WhiteBgCard({ number, icon, title, desc, media, bullets 
                 ? { backgroundColor: '#E5E5E5', color: '#010101' }
                 : { backgroundColor: '#fff', color: '#000' }
           }
-          data-o9ds-avatar
+          data-arvo-avatar
         >
           {number}
         </div>
@@ -40,21 +40,21 @@ export default function WhiteBgCard({ number, icon, title, desc, media, bullets 
       {icon != null && number == null && (
         <span
           className="flex h-12 w-12 items-center justify-center mb-4 transition-colors dark:bg-neutral-700 dark:text-neutral-400 group-hover:text-white"
-          data-o9ds-avatar={isLight ? '' : undefined}
+          data-arvo-avatar={isLight ? '' : undefined}
         >
           {icon}
         </span>
       )}
       {title && (
-        <h3 className="text-lg font-semibold text-o9ds-light-primary dark:text-white mb-2">{title}</h3>
+        <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">{title}</h3>
       )}
-      {desc && <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4 leading-relaxed">{desc}</p>}
+      {desc && <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 leading-relaxed">{desc}</p>}
       {media != null && <div className="mb-4">{media}</div>}
       {bullets.length > 0 && (
-        <ul className="space-y-2 text-sm text-o9ds-light-secondary dark:text-neutral-400 mb-4">
+        <ul className="space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4">
           {bullets.map((b, i) => (
             <li key={i} className="flex gap-2">
-              <span className="text-o9ds-light-secondary dark:text-neutral-500 shrink-0">•</span>
+              <span className="text-arvo-light-secondary dark:text-neutral-500 shrink-0">•</span>
               {b}
             </li>
           ))}
@@ -63,8 +63,8 @@ export default function WhiteBgCard({ number, icon, title, desc, media, bullets 
       {children}
       {decisionRule != null && (
         <div className="pt-2 mt-4">
-          <p className="text-xs font-semibold text-o9ds-light-secondary dark:text-neutral-500 uppercase tracking-wider mb-1">Decision rule</p>
-          <p className="text-sm font-medium text-o9ds-light-primary dark:text-white">{decisionRule}</p>
+          <p className="text-xs font-semibold text-arvo-light-secondary dark:text-neutral-500 uppercase tracking-wider mb-1">Decision rule</p>
+          <p className="text-sm font-medium text-arvo-light-primary dark:text-white">{decisionRule}</p>
         </div>
       )}
     </div>

@@ -81,10 +81,10 @@ export default function GenericComponentDoc({ slug, description: descriptionProp
         {activeTab === 'Overview' && (
           <div className="space-y-10 pt-2">
             <section id="stub-purpose" className="scroll-mt-24 space-y-3">
-              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Purpose</h2>
-              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+              <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Purpose</h2>
+              <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
                 This page reserves the full four-tab documentation structure (Overview, Usage, Code/APIs, Accessibility) for{' '}
-                <strong className="text-o9ds-light-primary dark:text-white font-medium">{title}</strong>. Content will be added in a future
+                <strong className="text-arvo-light-primary dark:text-white font-medium">{title}</strong>. Content will be added in a future
                 iteration.
               </p>
             </section>
@@ -95,9 +95,9 @@ export default function GenericComponentDoc({ slug, description: descriptionProp
         {activeTab === 'Usage' && (
           <div className="space-y-10 pt-2">
             <section id="stub-usage" className="scroll-mt-24 space-y-3">
-              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Usage</h2>
-              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-                Usage guidance—when to choose this component, layout, and pairing with other o9DS patterns—will be documented here.
+              <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Usage</h2>
+              <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+                Usage guidance—when to choose this component, layout, and pairing with other Arvo patterns—will be documented here.
               </p>
             </section>
             <DocumentationStatusCard id="stub-status-usage" />
@@ -107,8 +107,8 @@ export default function GenericComponentDoc({ slug, description: descriptionProp
         {activeTab === 'Code/APIs' && (
           <div className="space-y-10 pt-2">
             <section id="stub-code" className="scroll-mt-24 space-y-3">
-              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Code / APIs</h2>
-              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+              <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Code / APIs</h2>
+              <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
                 Props, package imports, tokens, and implementation examples will be added here. Refer to sibling components with full docs (e.g.
                 Button, Cards) for the expected structure.
               </p>
@@ -120,8 +120,8 @@ export default function GenericComponentDoc({ slug, description: descriptionProp
         {activeTab === 'Accessibility' && (
           <div className="space-y-10 pt-2">
             <section id="stub-a11y" className="scroll-mt-24 space-y-3">
-              <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Accessibility</h2>
-              <p className="text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+              <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Accessibility</h2>
+              <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
                 Keyboard, screen reader, and ARIA guidance will be documented here. Prefer native HTML semantics where possible.
               </p>
             </section>

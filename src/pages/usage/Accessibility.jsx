@@ -33,7 +33,7 @@ export default function UsageAccessibility() {
       <div className="space-y-12">
         <PageHeader
           title="Accessibility contract"
-          description="@o9ds/* components ship in an accessible state by default — correct roles, ARIA, focus management, and keyboard support. That guarantee depends on consumers preserving the contract."
+          description="@arvo/* components ship in an accessible state by default — correct roles, ARIA, focus management, and keyboard support. That guarantee depends on consumers preserving the contract."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
         />
 
@@ -57,21 +57,21 @@ export default function UsageAccessibility() {
         </DocSection>
 
         <DocSection id="consumer-provides" title="What you must provide">
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Labels</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Labels</h3>
           <DocParagraph>Every form input and every icon-only control needs an accessible name.</DocParagraph>
           <div className="border overflow-hidden dark:border-neutral-700">
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Component family</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Required label source</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Component family</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Required label source</th>
                 </tr>
               </thead>
               <tbody>
                 {LABEL_ROWS.map(([family, source]) => (
                   <tr key={family} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{family}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{source}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{source}</td>
                   </tr>
                 ))}
               </tbody>
@@ -79,12 +79,12 @@ export default function UsageAccessibility() {
           </div>
           <DocParagraph>Don't use placeholder text as a label substitute. Placeholders disappear on input and are not announced as labels.</DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Descriptions and help text</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Descriptions and help text</h3>
           <DocParagraph>
             Use the <DocCode>description</DocCode> / <DocCode>helpText</DocCode> / <DocCode>error</DocCode> props (per component) for supplemental content. The component wires <DocCode>aria-describedby</DocCode> correctly. Don't roll your own <DocCode>{`<p>`}</DocCode> linked manually unless the component has no description prop.
           </DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Required and invalid states</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Required and invalid states</h3>
           <DocList items={[
             <span key="1"><DocCode>isRequired</DocCode> — adds <DocCode>aria-required="true"</DocCode>. Show your visible required indicator via the prop, not by appending <DocCode>*</DocCode> to the label string.</span>,
             <span key="2"><DocCode>hasError</DocCode> / <DocCode>setError(msg)</DocCode> — renders the error message and sets <DocCode>aria-invalid="true"</DocCode> plus <DocCode>aria-describedby</DocCode> to the message.</span>,
@@ -92,101 +92,101 @@ export default function UsageAccessibility() {
         </DocSection>
 
         <DocSection id="donts" title="Don'ts">
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Don't strip labels or roles</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Don't strip labels or roles</h3>
           <CodeBlock
             language="tsx"
             label="Forbidden"
             code={`// FORBIDDEN — icon button with no accessible name.
-<O9IconButton icon="trash" />              // missing label
+<ArvoIconButton icon="trash" />              // missing label
 
 // FORBIDDEN — overriding the component's role.
-<O9Combobox role="textbox" />              // breaks the combobox pattern`}
+<ArvoCombobox role="textbox" />              // breaks the combobox pattern`}
           />
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Don't kill the focus ring</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Don't kill the focus ring</h3>
           <CodeBlock
             language="scss"
             label="Forbidden"
             code={`/* FORBIDDEN. */
-.o9ds-btn { outline: none !important; }
+.arvo-btn { outline: none !important; }
 *:focus { outline: 0; }`}
           />
           <DocParagraph>
-            If the focus ring overlaps an adjacent element in a dense layout, use the documented <DocCode>.focus-border</DocCode> utility (already applied automatically by <DocCode>O9ButtonGroup</DocCode>), which inverts the offset to <DocCode>-1px</DocCode>. Don't remove it.
+            If the focus ring overlaps an adjacent element in a dense layout, use the documented <DocCode>.focus-border</DocCode> utility (already applied automatically by <DocCode>ArvoButtonGroup</DocCode>), which inverts the offset to <DocCode>-1px</DocCode>. Don't remove it.
           </DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Don't re-implement keyboard behavior</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Don't re-implement keyboard behavior</h3>
           <DocParagraph>
             The component already implements the WAI-ARIA pattern. Adding your own keydown handler interferes with it. If you need additional shortcuts, add them at a higher container scope and ensure they don't conflict.
           </DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Don't break focus trap and return</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Don't break focus trap and return</h3>
           <DocList items={[
             'Don\'t portal the overlay yourself (use the component, don\'t bypass it).',
             <span key="2">Don't programmatically <DocCode>el.focus()</DocCode> something else while the overlay is open.</span>,
             <span key="3">Don't close the overlay by removing it from the DOM (always call <DocCode>close()</DocCode> / <DocCode>onOpenChange(false)</DocCode>).</span>,
           ]} />
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Don't mix multiple labelling sources</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Don't mix multiple labelling sources</h3>
           <DocParagraph>
             Pick one of <DocCode>label</DocCode>, <DocCode>aria-label</DocCode>, or <DocCode>aria-labelledby</DocCode>. Setting more than one creates conflicting accessible names; screen readers may pick the worse one.
           </DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Don't change the rendered tag</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Don't change the rendered tag</h3>
           <DocParagraph>
-            The library does not support tag swapping (<DocCode>{`<O9Button as="div" />`}</DocCode> / <DocCode>{`<O9Link as="span" />`}</DocCode>). The chosen element type is part of the accessibility contract — a <DocCode>Button</DocCode> is a <DocCode>{`<button>`}</DocCode> because that gives keyboard activation and form participation for free.
+            The library does not support tag swapping (<DocCode>{`<ArvoButton as="div" />`}</DocCode> / <DocCode>{`<ArvoLink as="span" />`}</DocCode>). The chosen element type is part of the accessibility contract — a <DocCode>Button</DocCode> is a <DocCode>{`<button>`}</DocCode> because that gives keyboard activation and form participation for free.
           </DocParagraph>
         </DocSection>
 
         <DocSection id="composition" title="Composition rules">
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Disclosures (button + popover/menu/dialog)</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Disclosures (button + popover/menu/dialog)</h3>
           <DocParagraph>
-            Use the dedicated component (<DocCode>O9DropdownButton</DocCode>, <DocCode>O9DropdownIconButton</DocCode>, <DocCode>O9ActionMenu</DocCode>, <DocCode>O9HybridPopover</DocCode>, …) rather than wiring <DocCode>O9Button</DocCode> to <DocCode>O9Popover</DocCode> manually. The dedicated component sets <DocCode>aria-haspopup</DocCode>, <DocCode>aria-expanded</DocCode>, <DocCode>aria-controls</DocCode>, and focus return for you.
+            Use the dedicated component (<DocCode>ArvoDropdownButton</DocCode>, <DocCode>ArvoDropdownIconButton</DocCode>, <DocCode>ArvoActionMenu</DocCode>, <DocCode>ArvoHybridPopover</DocCode>, …) rather than wiring <DocCode>ArvoButton</DocCode> to <DocCode>ArvoPopover</DocCode> manually. The dedicated component sets <DocCode>aria-haspopup</DocCode>, <DocCode>aria-expanded</DocCode>, <DocCode>aria-controls</DocCode>, and focus return for you.
           </DocParagraph>
           <CodeBlock
             language="tsx"
             label="Manual composition (only when necessary)"
-            code={`<O9Button
+            code={`<ArvoButton
   aria-haspopup="dialog"
   aria-expanded={isOpen}
   aria-controls={popId}
   onClick={() => setOpen(o => !o)}
 />
-<O9Popover id={popId} isOpen={isOpen} onOpenChange={setOpen} ... />`}
+<ArvoPopover id={popId} isOpen={isOpen} onOpenChange={setOpen} ... />`}
           />
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Tooltips</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Tooltips</h3>
           <CodeBlock
             language="tsx"
             label="Icon button still needs label — tooltip is supplemental"
-            code={`<O9Tooltip label="Delete">
-  <O9IconButton icon="trash" label="Delete row" />
-</O9Tooltip>`}
+            code={`<ArvoTooltip label="Delete">
+  <ArvoIconButton icon="trash" label="Delete row" />
+</ArvoTooltip>`}
           />
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Radio / Checkbox groups</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Radio / Checkbox groups</h3>
           <DocParagraph>
-            Always use <DocCode>O9RadioGroup</DocCode> / <DocCode>O9CheckboxGroup</DocCode> to wrap individual radios/checkboxes that share a question. The group provides the legend-equivalent and arrow-key roving focus that single inputs cannot.
+            Always use <DocCode>ArvoRadioGroup</DocCode> / <DocCode>ArvoCheckboxGroup</DocCode> to wrap individual radios/checkboxes that share a question. The group provides the legend-equivalent and arrow-key roving focus that single inputs cannot.
           </DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Loading state</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Loading state</h3>
           <DocParagraph>
             <DocCode>isLoading</DocCode> automatically sets <DocCode>aria-busy="true"</DocCode> on the element. Don't add it yourself; don't override it. While loading, the component suppresses interaction at the API level, so callbacks won't fire.
           </DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Modal vs non-modal overlays</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Modal vs non-modal overlays</h3>
           <DocParagraph>
             Popover / HybridPopover / ActionMenu include a <DocCode>modal</DocCode> mode. Use modal when the underlying page should be inert; use non-modal for casual disclosures. Don't simulate modality by manually adding an overlay backdrop.
           </DocParagraph>
 
-          <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white">Reduced motion</h3>
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Reduced motion</h3>
           <DocParagraph>
-            <DocCode>@o9ds/styles/base</DocCode> respects <DocCode>prefers-reduced-motion</DocCode>. Don't add motion to your wrappers without the same guard.
+            <DocCode>@arvo/styles/base</DocCode> respects <DocCode>prefers-reduced-motion</DocCode>. Don't add motion to your wrappers without the same guard.
           </DocParagraph>
           <CodeBlock
             language="scss"
             code={`@media (prefers-reduced-motion: no-preference) {
-  .my-card { transition: transform var(--o9ds-duration-fast) var(--o9ds-easing-standard); }
+  .my-card { transition: transform var(--arvo-duration-fast) var(--arvo-easing-standard); }
 }`}
           />
         </DocSection>

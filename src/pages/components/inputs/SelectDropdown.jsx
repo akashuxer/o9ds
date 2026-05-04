@@ -1,28 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Select } from '@o9ds/react'
+import { ArvoSelect } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', desc: 'Field label rendered above the trigger.' },
-  { prop: 'options', type: 'SelectOption[]', required: 'Yes', desc: 'Options: { value, label, disabled?, description? }.' },
-  { prop: 'value', type: 'string | null', desc: 'Controlled selected value.' },
-  { prop: 'defaultValue', type: 'string | null', desc: 'Uncontrolled initial value.' },
-  { prop: 'placeholder', type: 'string', desc: 'Placeholder shown when no value is selected.' },
-  { prop: 'description', type: 'string', desc: 'Help text below the trigger.' },
-  { prop: 'error', type: 'string', desc: 'Error message; sets aria-invalid.' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the field as required.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'isFullWidth', type: 'boolean', default: 'false', desc: 'Expand to fill container width.' },
-  { prop: 'onChange', type: '(value: string | null, option) => void', desc: 'Change callback.' },
-  { prop: 'onOpenChange', type: '(open: boolean) => void', desc: 'Fires when the dropdown opens/closes.' },
-]
+const DESCRIPTOR = getDescriptor('select-dropdown')
+const PROPS = DESCRIPTOR.props
+
 
 export default function SelectDropdown() {
   const [tab, setTab] = useState('Overview')
@@ -57,9 +47,9 @@ export default function SelectDropdown() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 240 }}><O9Select label="Fruit" items={options} placeholder="Pick one" /></div>
-                <div style={{ minWidth: 240 }}><O9Select label="With default" items={options} defaultValue="banana" /></div>
-                <div style={{ minWidth: 240 }}><O9Select label="Disabled" items={options} isDisabled /></div>
+                <div style={{ minWidth: 240 }}><ArvoSelect label="Fruit" items={options} placeholder="Pick one" /></div>
+                <div style={{ minWidth: 240 }}><ArvoSelect label="With default" items={options} defaultValue="banana" /></div>
+                <div style={{ minWidth: 240 }}><ArvoSelect label="Disabled" items={options} isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>
@@ -86,7 +76,7 @@ export default function SelectDropdown() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Select } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoSelect } from '@arvo/react';
 
 const options = [
   { value: 'apple', label: 'Apple' },
@@ -94,16 +84,16 @@ const options = [
   { value: 'cherry', label: 'Cherry' },
 ];
 
-<O9Select label="Fruit" options={options} placeholder="Pick one" />
+<ArvoSelect label="Fruit" options={options} placeholder="Pick one" />
 
 // Controlled
 const [v, setV] = useState(null);
-<O9Select label="Fruit" options={options} value={v} onChange={(value) => setV(value)} />`} />
+<ArvoSelect label="Fruit" options={options} value={v} onChange={(value) => setV(value)} />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Select } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoSelect } from '@arvo/js';
 
-const sel = O9Select.initialize(el, {
+const sel = ArvoSelect.initialize(el, {
   label: 'Fruit',
   options,
   onChange: (value, option) => console.log(value),
@@ -119,7 +109,7 @@ sel.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Select.initialize(el, options)', returns: 'O9Select', desc: 'Factory.' },
+                { method: 'ArvoSelect.initialize(el, options)', returns: 'ArvoSelect', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string | null | void', desc: 'Get/set selected value.' },
                 { method: 'open() / close() / toggle()', desc: 'Control the dropdown.' },
                 { method: 'isOpen()', returns: 'boolean', desc: 'Whether the dropdown is open.' },

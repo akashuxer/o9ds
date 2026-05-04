@@ -1,23 +1,18 @@
 import { useState, useMemo } from 'react'
-import { useToast, O9Button } from '@o9ds/react'
+import { useToast, ArvoButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'type', type: "'info' | 'success' | 'warning' | 'danger'", default: "'info'", desc: 'Tone semantic.' },
-  { prop: 'title', type: 'string', desc: 'Heading content.' },
-  { prop: 'description', type: 'string', desc: 'Body content.' },
-  { prop: 'duration', type: 'number', default: '5000', desc: 'Auto-dismiss after N milliseconds. Set 0 for sticky.' },
-  { prop: 'actions', type: 'ToastAction[]', desc: 'Inline actions: { label, onClick }.' },
-  { prop: 'dismissible', type: 'boolean', default: 'true', desc: 'Show a close button.' },
-  { prop: 'onDismiss', type: '() => void', desc: 'Fires when the toast is dismissed.' },
-]
+const DESCRIPTOR = getDescriptor('toast')
+const PROPS = DESCRIPTOR.props
+
 
 const PROVIDER_PROPS = [
   { prop: 'position', type: "'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center'", default: "'top-right'", desc: 'Where the toast container mounts.' },
@@ -41,7 +36,7 @@ export default function Toast() {
       <div className="space-y-8">
         <PageHeader
           title="Toast"
-          description="Ephemeral floating notification managed by O9ToastProvider. Use useToast() (React) or the singleton manager (JS) to push toasts from anywhere in the app."
+          description="Ephemeral floating notification managed by ArvoToastProvider. Use useToast() (React) or the singleton manager (JS) to push toasts from anywhere in the app."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />
@@ -53,8 +48,8 @@ export default function Toast() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Button label="Show success toast" onClick={() => toast?.show?.({ type: 'positive', title: 'Saved', message: 'Your changes were published.' })} />
-                <O9Button label="Show danger toast" variant="danger" onClick={() => toast?.show?.({ type: 'negative', title: 'Failed', message: 'Could not save.' })} />
+                <ArvoButton label="Show success toast" onClick={() => toast?.show?.({ type: 'positive', title: 'Saved', message: 'Your changes were published.' })} />
+                <ArvoButton label="Show danger toast" variant="danger" onClick={() => toast?.show?.({ type: 'negative', title: 'Failed', message: 'Could not save.' })} />
               </LiveReference>
             </DocSection>
           </div>
@@ -82,12 +77,12 @@ export default function Toast() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9ToastProvider, useToast } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoToastProvider, useToast } from '@arvo/react';
 
 // Once at app root
-<O9ToastProvider position="top-right" max={5}>
+<ArvoToastProvider position="top-right" max={5}>
   <App />
-</O9ToastProvider>
+</ArvoToastProvider>
 
 // Anywhere in the tree
 function SaveButton() {
@@ -113,27 +108,27 @@ toast.info({
 });`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Toast } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoToast } from '@arvo/js';
 
 // Once at app boot
-O9Toast.setup({ position: 'top-right', max: 5 });
+ArvoToast.setup({ position: 'top-right', max: 5 });
 
 // Push a toast
-O9Toast.success({ title: 'Saved', description: 'Your changes were published.' });
-O9Toast.danger({ title: 'Failed', actions: [{ label: 'Retry', onClick: retry }] });
+ArvoToast.success({ title: 'Saved', description: 'Your changes were published.' });
+ArvoToast.danger({ title: 'Failed', actions: [{ label: 'Retry', onClick: retry }] });
 
 // Programmatic dismissal
-const id = O9Toast.info({ title: 'Loading…', duration: 0 });
-O9Toast.dismiss(id);`} />
+const id = ArvoToast.info({ title: 'Loading…', duration: 0 });
+ArvoToast.dismiss(id);`} />
             </DocSection>
             <DocSection id="props" title="Toast props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="provider-props" title="Provider / setup options"><PropsTable rows={PROVIDER_PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Toast.setup(options)', desc: 'Configure position, max, gap.' },
-                { method: 'O9Toast.info(options) / success / warning / danger', returns: 'string', desc: 'Push a toast and return its id.' },
-                { method: 'O9Toast.dismiss(id)', desc: 'Dismiss a specific toast.' },
-                { method: 'O9Toast.dismissAll()', desc: 'Dismiss all toasts.' },
+                { method: 'ArvoToast.setup(options)', desc: 'Configure position, max, gap.' },
+                { method: 'ArvoToast.info(options) / success / warning / danger', returns: 'string', desc: 'Push a toast and return its id.' },
+                { method: 'ArvoToast.dismiss(id)', desc: 'Dismiss a specific toast.' },
+                { method: 'ArvoToast.dismissAll()', desc: 'Dismiss all toasts.' },
               ]} />
             </DocSection>
             <DocSection id="events" title="Custom events (JS)">

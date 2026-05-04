@@ -1,0 +1,490 @@
+@use './colors' as *;
+
+// ROOT CSS VARIABLES
+//   CSS variables to be set/overwritten via o9.style.util.js as per user configurations.
+//
+//   Layering:
+//     1. Foundation
+//     2. Theme semantic contract
+//     3. Brand theme mappings
+//     4. Mode mappings
+//     5. User override signal
+//
+//   Supports:
+//     Dynamic theming, fonts, light/dark mode
+//     Custom user scrollbar/themes
+//
+
+// =====================================
+// 1. FOUNDATION
+// =====================================
+
+:root {
+    --o9-font-family: o9Sans, NotoSans, Arial, sans-serif;
+}
+
+// =====================================
+// 2. THEME SEMANTIC CONTRACT
+// =====================================
+
+:root {
+    // Theme Surface Tokens
+    --arvo-color-s-theme: initial;
+    --arvo-color-s-theme-hover-1: initial;
+    --arvo-color-s-theme-hover-2: initial;
+    --arvo-color-s-theme-hover-3: initial;
+    --arvo-color-s-theme-hover-4: initial;
+    --arvo-color-s-theme-active-1: initial;
+    --arvo-color-s-theme-active-2: initial;
+    --arvo-color-s-theme-active-3: initial;
+    --arvo-color-s-theme-active-4: initial;
+    --arvo-color-s-theme-active-5: initial;
+
+    // Theme Border Tokens
+    --arvo-color-b-theme: initial;
+    --arvo-color-b-theme-hover: initial;
+    --arvo-color-b-theme-hover-2: initial;
+    --arvo-color-b-theme-active: initial;
+    --arvo-color-b-theme-focus: initial;
+
+    // Theme Text Tokens
+    --arvo-color-t-theme: initial;
+    --arvo-color-t-theme-hover: initial;
+    --arvo-color-t-theme-active: initial;
+
+    // Theme Icon Tokens
+    --arvo-color-i-theme: initial;
+    --arvo-color-i-theme-hover: initial;
+    --arvo-color-i-theme-active: initial;
+}
+
+@mixin o9-theme-vars(
+    $surface,
+    $surface-hover-1,
+    $surface-hover-2,
+    $surface-hover-3,
+    $surface-hover-4,
+    $surface-active-1,
+    $surface-active-2,
+    $surface-active-3,
+    $surface-active-4,
+    $surface-active-5,
+    $border,
+    $border-hover,
+    $border-hover-2,
+    $border-active,
+    $border-focus,
+    $text,
+    $text-hover,
+    $text-active,
+    $icon,
+    $icon-hover,
+    $icon-active
+) {
+    --arvo-color-s-theme: #{$surface};
+    --arvo-color-s-theme-hover-1: #{$surface-hover-1};
+    --arvo-color-s-theme-hover-2: #{$surface-hover-2};
+    --arvo-color-s-theme-hover-3: #{$surface-hover-3};
+    --arvo-color-s-theme-hover-4: #{$surface-hover-4};
+    --arvo-color-s-theme-active-1: #{$surface-active-1};
+    --arvo-color-s-theme-active-2: #{$surface-active-2};
+    --arvo-color-s-theme-active-3: #{$surface-active-3};
+    --arvo-color-s-theme-active-4: #{$surface-active-4};
+    --arvo-color-s-theme-active-5: #{$surface-active-5};
+
+    --arvo-color-b-theme: #{$border};
+    --arvo-color-b-theme-hover: #{$border-hover};
+    --arvo-color-b-theme-hover-2: #{$border-hover-2};
+    --arvo-color-b-theme-active: #{$border-active};
+    --arvo-color-b-theme-focus: #{$border-focus};
+
+    --arvo-color-t-theme: #{$text};
+    --arvo-color-t-theme-hover: #{$text-hover};
+    --arvo-color-t-theme-active: #{$text-active};
+
+    --arvo-color-i-theme: #{$icon};
+    --arvo-color-i-theme-hover: #{$icon-hover};
+    --arvo-color-i-theme-active: #{$icon-active};
+}
+
+// =====================================
+// 3. BRAND THEME MAPPINGS
+// =====================================
+
+html[data-theme="o9black"] {
+    @include o9-theme-vars(
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-09,
+        $arvo-global-onyxblack-08,
+        $arvo-global-onyxblack-07,
+        $arvo-global-onyxblack-07,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-07,
+        $arvo-global-onyxblack-06,
+        $arvo-global-onyxblack-06,
+        $arvo-global-onyxblack-11,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10,
+        $arvo-global-onyxblack-10
+    );
+}
+
+html[data-theme="o9default"] {
+    @include o9-theme-vars(
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-10,
+        $arvo-global-skyblue-08,
+        $arvo-global-skyblue-07,
+        $arvo-global-skyblue-07,
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-07,
+        $arvo-global-skyblue-06,
+        $arvo-global-skyblue-06,
+        $arvo-global-skyblue-11,
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-10,
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-10,
+        $arvo-global-skyblue-10,
+        $arvo-global-skyblue-09,
+        $arvo-global-skyblue-10,
+        $arvo-global-skyblue-10
+    );
+}
+
+html[data-theme="o9green"] {
+    @include o9-theme-vars(
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-10,
+        $arvo-global-forestgreen-08,
+        $arvo-global-forestgreen-07,
+        $arvo-global-forestgreen-07,
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-07,
+        $arvo-global-forestgreen-06,
+        $arvo-global-forestgreen-06,
+        $arvo-global-forestgreen-11,
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-10,
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-10,
+        $arvo-global-forestgreen-10,
+        $arvo-global-forestgreen-09,
+        $arvo-global-forestgreen-10,
+        $arvo-global-forestgreen-10
+    );
+}
+
+html[data-theme="o9indigo"] {
+    @include o9-theme-vars(
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-09,
+        $arvo-global-midnightindigo-08,
+        $arvo-global-midnightindigo-07,
+        $arvo-global-midnightindigo-07,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-07,
+        $arvo-global-midnightindigo-06,
+        $arvo-global-midnightindigo-06,
+        $arvo-global-midnightindigo-11,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-09,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10,
+        $arvo-global-midnightindigo-10
+    );
+}
+
+html[data-theme="o9theme"] {
+    @include o9-theme-vars(
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-09,
+        $arvo-global-o9theme-08,
+        $arvo-global-o9theme-07,
+        $arvo-global-o9theme-07,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-07,
+        $arvo-global-o9theme-06,
+        $arvo-global-o9theme-06,
+        $arvo-global-o9theme-11,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-09,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10,
+        $arvo-global-o9theme-10
+    );
+}
+
+// =====================================
+// 4. MODE MAPPINGS
+// =====================================
+
+// Light mode is the default — :root provides fallback values when no data-mode is set.
+:root,
+html[data-mode="light"] {
+    // Surface Tokens
+    --arvo-color-s-base: #{$arvo-global-gray-01};
+    --arvo-color-s-layer-01: #{$arvo-global-white};
+    --arvo-color-s-layer-02: #{$arvo-global-gray-01};
+    --arvo-color-s-layer-03: #{$arvo-global-white};
+    --arvo-color-s-layer-04: #{$arvo-global-gray-01};
+    --arvo-color-s-layer-05: #{$arvo-global-gray-01};
+    --arvo-color-s-layer-06: #{$arvo-global-white};
+    --arvo-color-s-layer-07: #{$arvo-global-gray-03};
+    --arvo-color-s-placeholder: #{$arvo-global-white};
+    --arvo-color-s-placeholder-2: #{$arvo-global-gray-07};
+    --arvo-color-s-active: #{$arvo-global-white};
+    --arvo-color-s-brand: #{$arvo-global-gray-01};
+    --arvo-color-s-hover: #{$arvo-global-gray-04};
+    --arvo-color-s-disabled: #{$arvo-global-gray-02};
+    --arvo-color-s-readonly: #{$arvo-global-gray-01};
+    --arvo-color-s-negative: #{$arvo-global-redish-09};
+    --arvo-color-s-negative-hover: #{$arvo-global-redish-10};
+    --arvo-color-s-negative-active: #{$arvo-global-redish-11};
+    --arvo-color-s-negative-static: #{$arvo-global-redish-08};
+    --arvo-color-s-neutral: #{$arvo-global-black};
+    --arvo-color-s-inverse: #{$arvo-global-black};
+    --arvo-color-s-direct: #{$arvo-global-white};
+    --arvo-color-s-on-inverse: #{$arvo-global-gray-08};
+    --arvo-color-s-pulse-light: #{$arvo-global-gray-01};
+    --arvo-color-s-pulse-dark: #{$arvo-global-gray-02};
+    --arvo-color-s-white-static: #{$arvo-global-white};
+    --arvo-color-s-black-static: #{$arvo-global-gray-10};
+    --arvo-color-s-overlay-static: #{$arvo-global-opacity-1};
+    --arvo-color-s-shadow-static-1: #{$arvo-global-opacity-2};
+    --arvo-color-s-shadow-static-2: #{$arvo-global-opacity-3};
+    --arvo-color-s-warning-static: #{$arvo-global-orangish-07};
+    --arvo-color-s-currenttime: #{$arvo-global-orangish-07};
+    --arvo-color-s-ancestorfrozen: #{$arvo-global-green-07};
+    --arvo-color-s-frozen: #{$arvo-global-green-06};
+    --arvo-color-s-frozenleaf: #{$arvo-global-green-05};
+
+    // Border Tokens
+    --arvo-color-b-divider: #{$arvo-global-gray-02};
+    --arvo-color-b-base: #{$arvo-global-gray-01};
+    --arvo-color-b-subtle: #{$arvo-global-gray-01};
+    --arvo-color-b-dark: #{$arvo-global-gray-04};
+    --arvo-color-b-separator: #{$arvo-global-gray-02};
+    --arvo-color-b-inverse: #{$arvo-global-black};
+    --arvo-color-b-hover: #{$arvo-global-gray-03};
+    --arvo-color-b-active-static: #{$arvo-global-gray-05};
+    --arvo-color-b-negative: #{$arvo-global-redish-09};
+    --arvo-color-b-warning: #{$arvo-global-orangish-10};
+    --arvo-color-b-positive: #{$arvo-global-greenish-10};
+    --arvo-color-b-info: #{$arvo-global-bluish-09};
+    --arvo-color-b-neutral: #{$arvo-global-black};
+    --arvo-color-b-focus-inverse: #{$arvo-global-white};
+    --arvo-color-b-form: #{$arvo-global-gray-11};
+    --arvo-color-b-disabled: #{$arvo-global-gray-03};
+    --arvo-color-b-readonly: #{$arvo-global-gray-05};
+
+    // Text Tokens
+    --arvo-color-t-primary: #{$arvo-global-black};
+    --arvo-color-t-secondary: #{$arvo-global-gray-08};
+    --arvo-color-t-tertiary: #{$arvo-global-gray-07};
+    --arvo-color-t-placeholder: #{$arvo-global-gray-06};
+    --arvo-color-t-hover: #{$arvo-global-black};
+    --arvo-color-t-active: #{$arvo-global-black};
+    --arvo-color-t-inverse: #{$arvo-global-white};
+    --arvo-color-t-active-inverse: #{$arvo-global-white};
+    --arvo-color-t-white-static: #{$arvo-global-white};
+    --arvo-color-t-black-static: #{$arvo-global-gray-10};
+    --arvo-color-t-disabled: #{$arvo-global-gray-04};
+    --arvo-color-t-readonly: #{$arvo-global-gray-08};
+    --arvo-color-t-positive: #{$arvo-global-greenish-10};
+    --arvo-color-t-negative: #{$arvo-global-redish-09};
+    --arvo-color-t-warning: #{$arvo-global-orangish-10};
+    --arvo-color-t-info-light: #{$arvo-global-bluish-09};
+    --arvo-color-t-info-dark: #{$arvo-global-bluish-10};
+    --arvo-color-t-neutral: #{$arvo-global-black};
+    --arvo-color-t-form-label: #{$arvo-global-gray-08};
+    --arvo-color-t-form-value: #{$arvo-global-gray-09};
+    --arvo-color-t-utility-purple: #{$arvo-global-purple-dark};
+
+    // Icon Tokens
+    --arvo-color-i-primary: #{$arvo-global-black};
+    --arvo-color-i-secondary: #{$arvo-global-gray-08};
+    --arvo-color-i-tertiary: #{$arvo-global-gray-07};
+    --arvo-color-i-placeholder: #{$arvo-global-gray-06};
+    --arvo-color-i-hover: #{$arvo-global-black};
+    --arvo-color-i-active: #{$arvo-global-black};
+    --arvo-color-i-inverse: #{$arvo-global-white};
+    --arvo-color-i-active-inverse: #{$arvo-global-white};
+    --arvo-color-i-white-static: #{$arvo-global-white};
+    --arvo-color-i-black-static: #{$arvo-global-gray-10};
+    --arvo-color-i-disabled: #{$arvo-global-gray-04};
+    --arvo-color-i-readonly: #{$arvo-global-gray-08};
+    --arvo-color-i-positive: #{$arvo-global-greenish-10};
+    --arvo-color-i-negative: #{$arvo-global-redish-09};
+    --arvo-color-i-negative-static: #{$arvo-global-redish-08};
+    --arvo-color-i-warning: #{$arvo-global-orangish-10};
+    --arvo-color-i-warning-static: #{$arvo-global-redish-08};
+    --arvo-color-i-info-light: #{$arvo-global-bluish-09};
+    --arvo-color-i-info-dark: #{$arvo-global-bluish-10};
+    --arvo-color-i-neutral: #{$arvo-global-black};
+    --arvo-color-i-utility-purple: #{$arvo-global-purple-dark};
+}
+
+html[data-mode="dark"] {
+    @include o9-theme-vars(
+        $arvo-global-dark-07,
+        $arvo-global-dark-08,
+        $arvo-global-dark-13,
+        $arvo-global-dark-12,
+        $arvo-global-dark-09,
+        $arvo-global-dark-07,
+        $arvo-global-dark-12,
+        $arvo-global-o9theme-09,
+        $arvo-global-gray-08,
+        $arvo-global-dark-06,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07,
+        $arvo-global-dark-08,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07,
+        $arvo-global-dark-07
+    );
+    // Surface Tokens
+    --arvo-color-s-base: #{$arvo-global-gray-09};
+    --arvo-color-s-layer-01: #{$arvo-global-gray-10};
+    --arvo-color-s-layer-02: #{$arvo-global-gray-09};
+    --arvo-color-s-layer-03: #{$arvo-global-gray-09};
+    --arvo-color-s-layer-04: #{$arvo-global-gray-08};
+    --arvo-color-s-layer-05: #{$arvo-global-gray-08};
+    --arvo-color-s-layer-06: #{$arvo-global-gray-08};
+    --arvo-color-s-layer-07: #{$arvo-global-gray-07};
+    --arvo-color-s-placeholder: #{$arvo-global-gray-03};
+    --arvo-color-s-placeholder-2: #{$arvo-global-gray-02};
+    --arvo-color-s-brand: #{$arvo-global-gray-09};
+    --arvo-color-s-hover: #{$arvo-global-gray-05};
+    --arvo-color-s-active: #{$arvo-global-black};
+    --arvo-color-s-disabled: #{$arvo-global-gray-08};
+    --arvo-color-s-readonly: #{$arvo-global-gray-08};
+    --arvo-color-s-negative: #{$arvo-global-redish-06};
+    --arvo-color-s-negative-hover: #{$arvo-global-redish-08};
+    --arvo-color-s-negative-active: #{$arvo-global-redish-09};
+    --arvo-color-s-negative-static: #{$arvo-global-redish-08};
+    --arvo-color-s-neutral: #{$arvo-global-white};
+    --arvo-color-s-inverse: #{$arvo-global-white};
+    --arvo-color-s-direct: #{$arvo-global-black};
+    --arvo-color-s-on-inverse: #{$arvo-global-gray-01};
+    --arvo-color-s-pulse-light: #{$arvo-global-gray-09};
+    --arvo-color-s-pulse-dark: #{$arvo-global-gray-08};
+    --arvo-color-s-white-static: #{$arvo-global-white};
+    --arvo-color-s-black-static: #{$arvo-global-gray-10};
+    --arvo-color-s-overlay-static: #{$arvo-global-opacity-1};
+    --arvo-color-s-shadow-static-1: #{$arvo-global-opacity-2};
+    --arvo-color-s-shadow-static-2: #{$arvo-global-opacity-3};
+    --arvo-color-s-warning-static: #{$arvo-global-orangish-07};
+    --arvo-color-s-currenttime: #{$arvo-global-orangish-10};
+    --arvo-color-s-ancestorfrozen: #{$arvo-global-green-10};
+    --arvo-color-s-frozen: #{$arvo-global-green-08};
+    --arvo-color-s-frozenleaf: #{$arvo-global-green-09};
+
+    // Border Tokens
+    --arvo-color-b-divider: #{$arvo-global-gray-08};
+    --arvo-color-b-base: #{$arvo-global-gray-09};
+    --arvo-color-b-subtle: #{$arvo-global-gray-10};
+    --arvo-color-b-dark: #{$arvo-global-gray-06};
+    --arvo-color-b-separator: #{$arvo-global-gray-07};
+    --arvo-color-b-inverse: #{$arvo-global-white};
+    --arvo-color-b-hover: #{$arvo-global-gray-07};
+    --arvo-color-b-active-static: #{$arvo-global-gray-05};
+    --arvo-color-b-negative: #{$arvo-global-redish-06};
+    --arvo-color-b-warning: #{$arvo-global-orangish-09};
+    --arvo-color-b-positive: #{$arvo-global-greenish-09};
+    --arvo-color-b-info: #{$arvo-global-bluish-08};
+    --arvo-color-b-neutral: #{$arvo-global-white};
+    --arvo-color-b-focus-inverse: #{$arvo-global-white};
+    --arvo-color-b-form: #{$arvo-global-gray-05};
+    --arvo-color-b-disabled: #{$arvo-global-gray-06};
+    --arvo-color-b-readonly: #{$arvo-global-gray-06};
+
+    // Text Tokens
+    --arvo-color-t-primary: #{$arvo-global-gray-02};
+    --arvo-color-t-secondary: #{$arvo-global-gray-03};
+    --arvo-color-t-tertiary: #{$arvo-global-gray-04};
+    --arvo-color-t-placeholder: #{$arvo-global-gray-04};
+    --arvo-color-t-hover: #{$arvo-global-white};
+    --arvo-color-t-active: #{$arvo-global-white};
+    --arvo-color-t-inverse: #{$arvo-global-black};
+    --arvo-color-t-active-inverse: #{$arvo-global-black};
+    --arvo-color-t-white-static: #{$arvo-global-white};
+    --arvo-color-t-black-static: #{$arvo-global-gray-09};
+    --arvo-color-t-disabled: #{$arvo-global-gray-06};
+    --arvo-color-t-readonly: #{$arvo-global-gray-03};
+    --arvo-color-t-positive: #{$arvo-global-greenish-09};
+    --arvo-color-t-negative: #{$arvo-global-redish-06};
+    --arvo-color-t-warning: #{$arvo-global-orangish-09};
+    --arvo-color-t-info-light: #{$arvo-global-bluish-07};
+    --arvo-color-t-info-dark: #{$arvo-global-bluish-08};
+    --arvo-color-t-neutral: #{$arvo-global-white};
+    --arvo-color-t-form-label: #{$arvo-global-gray-02};
+    --arvo-color-t-form-value: #{$arvo-global-gray-01};
+    --arvo-color-t-utility-purple: #{$arvo-global-purple-light};
+
+    // Icon Tokens
+    --arvo-color-i-primary: #{$arvo-global-gray-02};
+    --arvo-color-i-secondary: #{$arvo-global-gray-03};
+    --arvo-color-i-tertiary: #{$arvo-global-gray-04};
+    --arvo-color-i-placeholder: #{$arvo-global-gray-04};
+    --arvo-color-i-hover: #{$arvo-global-white};
+    --arvo-color-i-active: #{$arvo-global-white};
+    --arvo-color-i-inverse: #{$arvo-global-black};
+    --arvo-color-i-active-inverse: #{$arvo-global-black};
+    --arvo-color-i-white-static: #{$arvo-global-white};
+    --arvo-color-i-black-static: #{$arvo-global-gray-09};
+    --arvo-color-i-disabled: #{$arvo-global-gray-06};
+    --arvo-color-i-readonly: #{$arvo-global-gray-03};
+    --arvo-color-i-positive: #{$arvo-global-greenish-09};
+    --arvo-color-i-negative: #{$arvo-global-redish-06};
+    --arvo-color-i-negative-static: #{$arvo-global-redish-08};
+    --arvo-color-i-warning: #{$arvo-global-orangish-09};
+    --arvo-color-i-warning-static: #{$arvo-global-redish-08};
+    --arvo-color-i-info-light: #{$arvo-global-bluish-07};
+    --arvo-color-i-info-dark: #{$arvo-global-bluish-08};
+    --arvo-color-i-neutral: #{$arvo-global-white};
+    --arvo-color-i-utility-purple: #{$arvo-global-purple-light};
+}
+
+// =====================================
+// 5. USER OVERRIDE SIGNAL
+// =====================================
+
+// html[data-user-theme="on"] {
+    // Indicates user applied theme which overrides existing css tokens.
+    // data-theme remains as base theme.
+    // data-user-theme is strictly a signal indicating whether user set theme is applied.
+    // No styles should be set here unless we need to restrict user set theme for specific components / areas.
+// }

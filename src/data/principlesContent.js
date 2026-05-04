@@ -1,7 +1,7 @@
-/** Shared copy for the five o9DS design principles (Overview + legacy /principles redirect). */
+/** Shared copy for the five Arvo design principles (Overview + legacy /principles redirect). */
 
 export const PRINCIPLES_INTRO =
-  "The o9 Design System follows a set of core principles that define how interfaces are designed, built, and scaled across the platform. These are not optional guidelines—they are enforced standards that every component, pattern, and experience in o9DS must follow."
+  "The Arvo Design System follows a set of core principles that define how interfaces are designed, built, and scaled across the platform. These are not optional guidelines—they are enforced standards that every component, pattern, and experience in Arvo must follow."
 
 /** System-level infographic (`public/GetStarted/`). */
 export const GET_STARTED_SYSTEM_DIAGRAM = {

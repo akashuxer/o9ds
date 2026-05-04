@@ -1,6 +1,6 @@
-# Arvo: o9 Design System
+# Arvo Design System Docs Site
 
-Arvo (o9 Design System) is a centralized system of foundations, components, patterns, and guidelines that standardizes how interfaces are designed and built across the o9 platform—aligning design, engineering, accessibility, and brand into one scalable system.
+Arvo is a centralized design system of foundations, components, patterns, and guidelines that standardizes how interfaces are designed and built across the o9 platform—aligning design, engineering, accessibility, and brand into one scalable system.
 
 ---
 
@@ -10,8 +10,8 @@ Arvo (o9 Design System) is a centralized system of foundations, components, patt
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/akashUxer-12/o9ds.git
-   cd o9ds
+   git clone https://github.com/akashUxer-12/arvo.git
+   cd arvo
    ```
 
 2. Install dependencies:
@@ -37,15 +37,16 @@ Arvo (o9 Design System) is a centralized system of foundations, components, patt
 |--------|-------------|
 | `npm install` | After clone or when dependencies change. |
 | `npm run dev` | Local development (Vite; URL in terminal, e.g. `http://localhost:5173`). |
-| `npm run build` | Production build → `dist/` (runs o9ds styles, **WebP** generation, **`images:audit`**). |
+| `npm run build` | Production build → `dist/` (runs Arvo styles, **WebP** generation, **`images:audit`**). |
 | `npm run preview` | Serve `dist/` locally to verify production output. |
 | `npm run images:webp` | Regenerate **`public/**/*.webp`** from PNGs only (no full build). |
 | `npm run images:audit` | Check PNG↔WebP parity and image size rules. |
 | `STRICT_IMAGES=1 npm run images:audit` | Same as above; **warnings fail** (e.g. strict CI). |
-| `npm run vendor:o9ds` | Refresh vendored `@o9ds/*` packages (when using that workflow). |
+| `npm run vendor:arvo` | Refresh vendored `@arvo/*` packages (when using that workflow). |
 | `npm run generate:component-stubs` | After editing `src/data/componentsNav.js` — refreshes stubs under `src/pages/components/`. |
 | `npm run generate:o9con-icons` | After updating `public/o9ConIconFont/o9con.css` — refreshes `src/tokens/o9conIcons.js`. |
-| `npm run build:o9ds-styles` | Build vendored o9ds CSS only (usually invoked by `npm run build`). |
+| `npm run build:arvo-styles` | Build vendored Arvo CSS only (usually invoked by `npm run build`). |
+| `npm run sync:descriptors` | Regenerate `src/data/componentDescriptors.generated.js` from `../o9-design-system/descriptors/*.json` (props, CSS vars, methods, events, ARIA, keyboard tables). |
 
 More detail on performance, images, and caching: **`performance.md`**.
 
@@ -54,16 +55,16 @@ More detail on performance, images, and caching: **`performance.md`**.
 Avoid repeating the same “use this icon / token / card / code block” instructions in every chat:
 
 1. **Cursor rules** (`.cursor/rules/*.mdc`) apply automatically when their `globs` match the files you edit, or when `alwaysApply` is true. Key files:
-   - **`o9ds-authoring-patterns.mdc`** — o9con usage, semantic tokens, `CodeBlock` / `DocSection`, pointers to canonical pages (`Icons.jsx`, `Colors.jsx`, `Button.jsx`).
-   - **`o9ds-layout-components.mdc`** — reuse `PageWithToc`, `WhiteBgCard`, `DocTable`, etc.
-   - **`o9ds-component-docs.mdc`** — four-tab structure for `/components/*` pages.
-   - **`o9ds-performance.mdc`** — bundles, WebP, `vercel.json` header order.
-2. **In Cursor chat**, pull context with **`@`** — e.g. `@.cursor/rules/o9ds-authoring-patterns.mdc`, `@src/pages/foundation/Icons.jsx`, `@performance.md`.
-3. **When you standardize something new**, add it once in a **reference page**, then add **one bullet** to `o9ds-authoring-patterns.mdc` pointing to that file.
+   - **`arvo-authoring-patterns.mdc`** — o9con usage, semantic tokens, `CodeBlock` / `DocSection`, pointers to canonical pages (`Icons.jsx`, `Colors.jsx`, `Button.jsx`).
+   - **`arvo-layout-components.mdc`** — reuse `PageWithToc`, `WhiteBgCard`, `DocTable`, etc.
+   - **`arvo-component-docs.mdc`** — four-tab structure for `/components/*` pages.
+   - **`arvo-performance.mdc`** — bundles, WebP, `vercel.json` header order.
+2. **In Cursor chat**, pull context with **`@`** — e.g. `@.cursor/rules/arvo-authoring-patterns.mdc`, `@src/pages/foundation/Icons.jsx`, `@performance.md`.
+3. **When you standardize something new**, add it once in a **reference page**, then add **one bullet** to `arvo-authoring-patterns.mdc` pointing to that file.
 
 **Deploy (Vercel):** `vercel.json` rewrites all paths to `index.html` so client-side routes (e.g. `/components/button`) work on refresh and direct URL entry. It also sets **cache headers** (hashed `/assets/*` long-lived; HTML revalidated). Optional **Netlify** config lives in `netlify.toml`.
 
-**Fonts:** `index.html` does **not** link `/o9SansFont/o9Sans.css` or `/o9ConIconFont/o9con.css` — o9 Sans and o9con load **once** via the Vite bundle (`src/main.jsx` → `@o9ds/assets`). Keep `@font-face` URLs in vendored CSS correct for production; `public/o9SansFont/` and `public/o9ConIconFont/` remain useful for reference or legacy paths.
+**Fonts:** `index.html` does **not** link `/o9SansFont/o9Sans.css` or `/o9ConIconFont/o9con.css` — o9 Sans and o9con load **once** via the Vite bundle (`src/main.jsx` → `@arvo/assets`). Keep `@font-face` URLs in vendored CSS correct for production; `public/o9SansFont/` and `public/o9ConIconFont/` remain useful for reference or legacy paths.
 
 **Regenerate component stubs:** After editing `src/data/componentsNav.js`, run `npm run generate:component-stubs` to refresh `allStubComponents.js` and the per-slug files under `src/pages/components/<category>/`.
 
@@ -74,7 +75,7 @@ Avoid repeating the same “use this icon / token / card / code block” instruc
 ## Folder Structure
 
 ```
-o9ds Website/
+Arvo Website/
 ├── index.html              # Entry HTML
 ├── package.json            # Scripts and dependencies
 ├── vite.config.js          # Build config
@@ -99,7 +100,7 @@ o9ds Website/
 │   └── favicon.svg
 │
 ├── src/
-│   ├── main.jsx            # App bootstrap (o9ds fonts/styles/icons — single load)
+│   ├── main.jsx            # App bootstrap (Arvo fonts/styles/icons — single load)
 │   ├── App.jsx             # Routes (lazy-loaded pages) and layout wrapper
 │   ├── index.css           # Global styles, tokens, light/dark rules
 │   │
@@ -129,7 +130,7 @@ o9ds Website/
 │   │   ├── spacingTokens.js
 │   │   ├── effectsTokens.js        # Shadow, blur, opacity (Effects page tables)
 │   │   ├── typographyTokens.js
-│   │   ├── o9ds.typography.scss    # Typography reference SCSS
+│   │   ├── arvo.typography.scss    # Typography reference SCSS
 │   │   ├── borderTokens.js
 │   │   ├── iconTokens.js
 │   │   ├── illustrationTokens.js
@@ -156,7 +157,7 @@ o9ds Website/
 │   │   ├── componentPageMeta.js        # Stub page titles / descriptions
 │   │   ├── pathsWithContent.js         # Sidebar + section overview green dots (ready docs)
 │   │   ├── overviewCatalog.js          # Card lists for Foundations / Patterns / Accessibility / Content
-│   │   ├── principlesContent.js        # Five o9DS design principles (Overview)
+│   │   ├── principlesContent.js        # Five Arvo design principles (Overview)
 │   │   ├── sectionOverviewIllustrations.js
 │   │   └── componentOverviewIllustrations.js
 │   │
@@ -167,7 +168,7 @@ o9ds Website/
 │   └── components/media/
 │       └── PublicRasterPicture.jsx  # WebP preferred, PNG fallback (no layout change)
 │
-├── .cursor/rules/          # Cursor/IDE rules (includes o9ds-performance.mdc)
+├── .cursor/rules/          # Cursor/IDE rules (includes arvo-performance.mdc)
 ├── performance.md          # Performance, images, caching, benchmarks — keep updated
 ├── netlify.toml            # Optional Netlify headers (Vercel uses vercel.json)
 ├── STRUCTURE.md            # Page structure and conventions
@@ -183,13 +184,13 @@ o9ds Website/
 | `src/tokens/brandColors.js` | Brand palettes, neutrals |
 | `src/tokens/globalColorTokens.js` | Global colors (neutral, theme, dark, feedback, utility) |
 | `src/tokens/semanticColorTokens.js` | Semantic mappings (surface, border, text, icon) |
-| `src/tokens/spacingTokens.js` | Spacing scale (`$o9ds-space-*`) |
+| `src/tokens/spacingTokens.js` | Spacing scale (`$arvo-space-*`) |
 | `src/tokens/effectsTokens.js` | Shadow, blur, opacity tokens (Effects page) |
 | `src/tokens/borderTokens.js` | Border radius and width |
 | `src/tokens/iconTokens.js` | Icon size tokens (o9con) |
 | `src/tokens/illustrationTokens.js` | Illustration size tokens (o9Illus) |
 | `src/tokens/o9conIcons.js` | o9con icon class names and metadata (**generated** — run `npm run generate:o9con-icons` after updating `public/o9ConIconFont/o9con.css`) |
-| `src/index.css` | Global styles, 0-radius policy, `data-o9ds-*` rules |
+| `src/index.css` | Global styles, 0-radius policy, `data-arvo-*` rules |
 | `src/App.jsx` | Route definitions |
 | `src/data/componentsNav.js` | Component catalog tree and `/components/:slug` slugs |
 | `src/data/componentPageMeta.js` | Intro copy for generated component stub pages |
@@ -236,11 +237,11 @@ o9ds Website/
 
 ## Clipboard / Copy Behavior
 
-- **Spacing:** Copy button per row → SCSS token name (e.g. `$o9ds-space-16`).
-- **Effects:** Copy button per row → full SCSS snippet where defined (e.g. `box-shadow: $o9ds-shadow-down;`, mask overlay `background` + `backdrop-filter` for blur, `opacity: $o9ds-opacity-80;`).
+- **Spacing:** Copy button per row → SCSS token name (e.g. `$arvo-space-16`).
+- **Effects:** Copy button per row → full SCSS snippet where defined (e.g. `box-shadow: $arvo-shadow-down;`, mask overlay `background` + `backdrop-filter` for blur, `opacity: $arvo-opacity-80;`).
 - **Borders:** Copy button per row →
-  - Radius: `border-radius: var(--o9ds-radius-16);`
-  - Width: `border-width: var(--o9ds-border-1);`
+  - Radius: `border-radius: var(--arvo-radius-16);`
+  - Width: `border-width: var(--arvo-border-1);`
 - **Code blocks:** Copy button → full snippet (SCSS variables, HTML, etc.)
 
 ---

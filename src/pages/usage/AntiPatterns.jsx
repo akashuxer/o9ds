@@ -21,8 +21,8 @@ const sections = [
 
 function Why({ children }) {
   return (
-    <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed mt-2">
-      <strong className="text-o9ds-light-primary dark:text-white font-medium">Why it breaks:</strong> {children}
+    <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed mt-2">
+      <strong className="text-arvo-light-primary dark:text-white font-medium">Why it breaks:</strong> {children}
     </p>
   )
 }
@@ -33,7 +33,7 @@ export default function UsageAntiPatterns() {
       <div className="space-y-12">
         <PageHeader
           title="Anti-patterns"
-          description="The 12 patterns below cause the overwhelming majority of upgrade failures and visual regressions. Banning them in code review removes most of the long-term instability that comes from @o9ds/* adoption."
+          description="The 12 patterns below cause the overwhelming majority of upgrade failures and visual regressions. Banning them in code review removes most of the long-term instability that comes from @arvo/* adoption."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
         />
 
@@ -46,16 +46,16 @@ export default function UsageAntiPatterns() {
             language="ts"
             label="Forbidden vs correct"
             code={`// FORBIDDEN
-import { Button } from '@o9ds/react/src/components/Button/Button';
-import { O9Combobox } from '@o9ds/react/dist/components/Combobox/Combobox.js';
-import { useControllableState } from '@o9ds/react/src/hooks/useControllableState';
-import { O9Popover } from '@o9ds/js/src/components/Popover/Popover';
-import '@o9ds/styles/src/components/_button.scss';
+import { Button } from '@arvo/react/src/components/Button/Button';
+import { ArvoCombobox } from '@arvo/react/dist/components/Combobox/Combobox.js';
+import { useControllableState } from '@arvo/react/src/hooks/useControllableState';
+import { ArvoPopover } from '@arvo/js/src/components/Popover/Popover';
+import '@arvo/styles/src/components/_button.scss';
 
 // CORRECT
-import { O9Button, O9Combobox } from '@o9ds/react';
-import { O9Popover } from '@o9ds/js';
-import '@o9ds/styles'; // or '@o9ds/styles/css'`}
+import { ArvoButton, ArvoCombobox } from '@arvo/react';
+import { ArvoPopover } from '@arvo/js';
+import '@arvo/styles'; // or '@arvo/styles/css'`}
           />
           <Why>Internal source paths can be moved, renamed, merged, or deleted without a major bump. Anything outside the package's documented entry points is private.</Why>
         </DocSection>
@@ -65,16 +65,16 @@ import '@o9ds/styles'; // or '@o9ds/styles/css'`}
             language="scss"
             label="Forbidden CSS"
             code={`/* FORBIDDEN */
-.o9ds-btn { background: tomato; }
-.o9ds-cb__input + .o9ds-cb__box { border-color: red; }
-.checkout .o9ds-pop__bdy > div:nth-child(2) { padding: 0; }`}
+.arvo-btn { background: tomato; }
+.arvo-cb__input + .arvo-cb__box { border-color: red; }
+.checkout .arvo-pop__bdy > div:nth-child(2) { padding: 0; }`}
           />
           <CodeBlock
             language="ts"
             label="Forbidden JS — querying internal classnames"
             code={`// FORBIDDEN
-const trigger = document.querySelector('.o9ds-dd-btn__trg');
-container.querySelectorAll('.o9ds-list-item').forEach(...);
+const trigger = document.querySelector('.arvo-dd-btn__trg');
+container.querySelectorAll('.arvo-list-item').forEach(...);
 
 // CORRECT — use roles, callbacks, or component-provided data
 screen.getByRole('button', { name: 'Open menu' });`}
@@ -87,7 +87,7 @@ screen.getByRole('button', { name: 'Open menu' });`}
             language="ts"
             label="Forbidden vs correct"
             code={`// FORBIDDEN
-document.querySelector('.o9ds-cb__input').checked = true;
+document.querySelector('.arvo-cb__input').checked = true;
 button.classList.add('loading');
 button.setAttribute('aria-busy', 'true');
 input.removeAttribute('disabled');
@@ -109,7 +109,7 @@ button.props.isDisabled = true;
 
 // FORBIDDEN — mutating JS options after init.
 const opts = { label: 'Save' };
-const btn = O9Button.initialize(el, opts);
+const btn = ArvoButton.initialize(el, opts);
 opts.label = 'Updated';            // ignored
 btn.options.label = 'Updated';     // not part of API
 btn._state.loading = true;         // not part of API
@@ -153,11 +153,11 @@ el.addEventListener('cb:change', handler);`}
 
 /* CORRECT */
 .my-card {
-  background: var(--o9ds-color-bg-canvas);
-  color: var(--o9ds-color-text-primary);
-  padding: var(--o9ds-space-12);
-  font-size: var(--o9ds-font-size-md);
-  border-radius: var(--o9ds-border-radius-md);
+  background: var(--arvo-color-bg-canvas);
+  color: var(--arvo-color-text-primary);
+  padding: var(--arvo-space-12);
+  font-size: var(--arvo-font-size-md);
+  border-radius: var(--arvo-border-radius-md);
 }`}
           />
           <Why>Tokens get retuned for theming, dark mode, brand updates, accessibility (contrast). Hardcoded values silently desync from the rest of the UI.</Why>
@@ -167,20 +167,20 @@ el.addEventListener('cb:change', handler);`}
           <CodeBlock
             language="tsx"
             label="Forbidden vs correct"
-            code={`// FORBIDDEN — verbatim copy of @o9ds/react/Button
+            code={`// FORBIDDEN — verbatim copy of @arvo/react/Button
 export function MyButton({ label, ... }) {
   return (
-    <button className="o9ds-btn o9ds-btn--primary o9ds-btn--md">
-      <span className="o9ds-btn__lbl">{label}</span>
+    <button className="arvo-btn arvo-btn--primary arvo-btn--md">
+      <span className="arvo-btn__lbl">{label}</span>
     </button>
   );
 }
 
 // CORRECT — compose, don't fork.
-import { O9Button, type O9ButtonProps } from '@o9ds/react';
+import { ArvoButton, type ArvoButtonProps } from '@arvo/react';
 
-export function MyButton(props: Omit<O9ButtonProps, 'variant'>) {
-  return <O9Button variant="primary" {...props} />;
+export function MyButton(props: Omit<ArvoButtonProps, 'variant'>) {
+  return <ArvoButton variant="primary" {...props} />;
 }`}
           />
           <Why>Every fix the design system makes (focus ring, ARIA, loading state, parent-controlled loading) skips the fork. Visually it looks the same; semantically it slowly diverges.</Why>
@@ -191,12 +191,12 @@ export function MyButton(props: Omit<O9ButtonProps, 'variant'>) {
             language="scss"
             label="Forbidden vs correct"
             code={`/* FORBIDDEN */
-.o9ds-btn { background: red !important; }
-.o9ds-cb__box { border-color: green !important; }
+.arvo-btn { background: red !important; }
+.arvo-cb__box { border-color: green !important; }
 * { outline: none !important; }
 
 /* CORRECT — set the documented CSS variable on the right scope. */
-.danger-zone { --o9ds-btn-bg-color: var(--o9ds-color-danger-500); }`}
+.danger-zone { --arvo-btn-bg-color: var(--arvo-color-danger-500); }`}
           />
           <Why>Specificity wars freeze the cascade against today's selectors. The next markup refactor produces a visual regression that can only be patched with another <DocCode>!important</DocCode>.</Why>
         </DocSection>
@@ -206,9 +206,9 @@ export function MyButton(props: Omit<O9ButtonProps, 'variant'>) {
             language="ts"
             label="Forbidden vs correct"
             code={`// FORBIDDEN
-expect(container.querySelector('.o9ds-btn--loading')).toBeInTheDocument();
+expect(container.querySelector('.arvo-btn--loading')).toBeInTheDocument();
 expect(asFragment()).toMatchSnapshot();
-expect(el).toHaveClass('o9ds-cb__input');
+expect(el).toHaveClass('arvo-cb__input');
 
 // CORRECT
 const btn = screen.getByRole('button', { name: 'Save' });
@@ -220,7 +220,7 @@ expect(screen.getByRole('checkbox', { name: 'Agree' })).toBeChecked();`}
 
         <DocSection id="ap-10" title="10. Skipping release-note review and regression testing">
           <DocList items={[
-            <span key="1">Auto-updating <DocCode>@o9ds/*</DocCode> via Renovate/Dependabot without reading the changeset.</span>,
+            <span key="1">Auto-updating <DocCode>@arvo/*</DocCode> via Renovate/Dependabot without reading the changeset.</span>,
             'Jumping multiple major versions in one upgrade.',
             <span key="3">Treating a "minor" bump as zero risk because "the API didn't change."</span>,
           ]} />
@@ -232,7 +232,7 @@ expect(screen.getByRole('checkbox', { name: 'Agree' })).toBeChecked();`}
             language="tsx"
             label="Forbidden vs correct"
             code={`// FORBIDDEN — using the JS class directly inside React.
-import { O9Button as JsButton } from '@o9ds/js';
+import { ArvoButton as JsButton } from '@arvo/js';
 function Page() {
   const ref = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -242,17 +242,17 @@ function Page() {
 }
 
 // CORRECT
-import { O9Button } from '@o9ds/react';
-<O9Button label="Save" />
+import { ArvoButton } from '@arvo/react';
+<ArvoButton label="Save" />
 
-// FORBIDDEN — using @o9ds/core directly in product code.
-import { OverlayHub } from '@o9ds/core';
+// FORBIDDEN — using @arvo/core directly in product code.
+import { OverlayHub } from '@arvo/core';
 
 // CORRECT
-import { OverlayProvider } from '@o9ds/react';
-import { setupOverlayPlugin } from '@o9ds/js';`}
+import { OverlayProvider } from '@arvo/react';
+import { setupOverlayPlugin } from '@arvo/js';`}
           />
-          <Why><DocCode>@o9ds/core</DocCode> is shared logic for the wrappers. Bypassing the wrapper duplicates wiring, drifts from accessibility wiring, and breaks lifecycle integration.</Why>
+          <Why><DocCode>@arvo/core</DocCode> is shared logic for the wrappers. Bypassing the wrapper duplicates wiring, drifts from accessibility wiring, and breaks lifecycle integration.</Why>
         </DocSection>
 
         <DocSection id="ap-12" title="12. Using experimental / undocumented props in production">
@@ -261,14 +261,14 @@ import { setupOverlayPlugin } from '@o9ds/js';`}
           </DocParagraph>
           <DocList items={[
             'Undocumented combinations of documented props.',
-            <span key="2">Internal-only data attributes (<DocCode>data-o9ds-internal-*</DocCode>) you discover by inspecting the DOM.</span>,
+            <span key="2">Internal-only data attributes (<DocCode>data-arvo-internal-*</DocCode>) you discover by inspecting the DOM.</span>,
             <span key="3">Props that are documented as <DocCode>@experimental</DocCode> or <DocCode>@deprecated</DocCode>.</span>,
           ]} />
           <DocParagraph>Treat experimental APIs as RFC-level: usable only behind a feature flag, with a plan to migrate when the API stabilizes.</DocParagraph>
         </DocSection>
 
         <DocSection id="quick-ref" title="Quick reference — the 12">
-          <ol className="list-decimal pl-5 space-y-1.5 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+          <ol className="list-decimal pl-5 space-y-1.5 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
             <li><DocStrong>Deep imports</DocStrong> into private modules.</li>
             <li><DocStrong>Internal selector coupling</DocStrong> in CSS or JS.</li>
             <li><DocStrong>Direct DOM mutation</DocStrong> to control component state.</li>

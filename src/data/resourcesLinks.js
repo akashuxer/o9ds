@@ -8,8 +8,8 @@
 export const RESOURCES_GOOGLE_DOC_INDEX =
   'https://docs.google.com/document/d/10f5ULiuXAm5XneXt3AHSY0ftBGE6F_De/edit?usp=sharing'
 
-/** o9Arvo taxonomy (ideation) — same family of working doc as index */
-export const O9ARVO_TAXONOMY_DOC_URL =
+/** Arvo taxonomy (ideation) — same family of working doc as index */
+export const ARVO_TAXONOMY_DOC_URL =
   'https://docs.google.com/document/d/10f5ULiuXAm5XneXt3AHSY0ftBGE6F_De/edit?usp=sharing&ouid=102674649323145107743&rtpof=true&sd=true'
 
 /** Architecture reference (Google Doc) */
@@ -21,18 +21,18 @@ export const RESOURCES_DOCS = [
   {
     label: 'Document Site',
     hint: 'host pending',
-    links: [{ text: 'o9ds.vercel.app', href: 'https://o9ds.vercel.app/' }],
+    links: [{ text: 'arvo.vercel.app', href: 'https://arvo.vercel.app/' }],
   },
   {
-    label: 'o9Arvo Taxonomy',
+    label: 'Arvo Taxonomy',
     hint: 'ideation',
-    links: [{ text: 'o9Arvo Taxonomy (ideation)', href: O9ARVO_TAXONOMY_DOC_URL }],
+    links: [{ text: 'Arvo Taxonomy (ideation)', href: ARVO_TAXONOMY_DOC_URL }],
   },
   {
     label: 'Tracks & Open Topics',
     links: [
       {
-        text: 'o9ds Planning Tracks & Open Topics',
+        text: 'Arvo Planning Tracks & Open Topics',
         href: 'https://docs.google.com/document/d/1eA1lUJNcqk5wNXt5IzwkbSZEoZ5giIHF7r48KlHH-Nc/edit?usp=sharing',
       },
     ],
@@ -42,13 +42,13 @@ export const RESOURCES_DOCS = [
     hint: 'not migration',
     links: [
       {
-        text: 'o9ds Compliance Metrics Reference',
+        text: 'Arvo Compliance Metrics Reference',
         href: 'https://docs.google.com/document/d/1-qcyy_JLxsguomfFz9rO972wLKZeT-Wl2CwtQRGnx8k/edit?usp=sharing',
       },
     ],
   },
   {
-    label: 'o9 Design System Architecture Reference',
+    label: 'Arvo Design System Architecture Reference',
     links: [{ text: 'Architecture', href: ARCHITECTURE_REFERENCE_DOC_URL }],
   },
 ]
@@ -68,7 +68,7 @@ export const RESOURCES_DEVELOPMENT = [
     label: 'Component Status Tracking',
     links: [
       {
-        text: 'o9ds Component Status',
+        text: 'Arvo Component Status',
         href: 'https://docs.google.com/document/d/1J1cHfuLgkYUP56dxKiCAAHOsdE4eQ8Q66wK3YS977IM/edit?usp=sharing',
       },
     ],
@@ -77,7 +77,7 @@ export const RESOURCES_DEVELOPMENT = [
     label: 'Component Review Notes/Tasks',
     links: [
       {
-        text: 'o9ds Component Review',
+        text: 'Arvo Component Review',
         href: 'https://docs.google.com/document/d/19-_NTyQS4y3ImONsvUXH4XT-s8zaH2NSoGXT-tRn7bg/edit?usp=sharing',
       },
     ],
@@ -86,7 +86,7 @@ export const RESOURCES_DEVELOPMENT = [
     label: 'Kibo Migration',
     links: [
       {
-        text: 'o9ds Kibo Migration (PR #666696)',
+        text: 'Arvo Kibo Migration (PR #666696)',
         href: 'https://o9git.visualstudio.com/CoreDev/_git/o9.Kibo/pullrequest/666696',
       },
     ],
@@ -96,7 +96,7 @@ export const RESOURCES_DEVELOPMENT = [
     hint: 'sample',
     links: [
       {
-        text: 'o9ds NovaAI Migration — Sample',
+        text: 'Arvo NovaAI Migration — Sample',
         href: 'https://o9git.visualstudio.com/CoreDev/_git/o9.nova.ui/pullrequest/668492?path=/apps/nova.ui/src/features/reports/component/ViewReportDetails.tsx',
       },
     ],
@@ -109,7 +109,7 @@ export const RESOURCES_FIGMA = [
     label: 'Figma Project',
     links: [
       {
-        text: 'o9ds Platform Design System | Figma Project',
+        text: 'Arvo Platform Design System | Figma Project',
         href: 'https://www.figma.com/files/953513455932500110/project/250726221?fuid=1020089521679916452',
       },
     ],
@@ -118,8 +118,8 @@ export const RESOURCES_FIGMA = [
     label: 'Foundation Library',
     links: [
       {
-        text: 'o9ds Foundation Library | Figma',
-        href: 'https://www.figma.com/design/rjhpdeZqzdnJas17N4PqzY/o9ds-Foundation-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6',
+        text: 'Arvo Foundation Library | Figma',
+        href: 'https://www.figma.com/design/rjhpdeZqzdnJas17N4PqzY/arvo-Foundation-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6',
       },
     ],
   },
@@ -127,17 +127,17 @@ export const RESOURCES_FIGMA = [
     label: 'Component Library',
     links: [
       {
-        text: 'o9ds Component Library | Figma',
-        href: 'https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--o9ds-Component-Library--in-progress-?m=auto&t=sZOcFEWwB08Rvp8Y-6',
+        text: 'Arvo Component Library | Figma',
+        href: 'https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?m=auto&t=sZOcFEWwB08Rvp8Y-6',
       },
     ],
   },
   {
-    label: 'o9ds Assets',
+    label: 'Arvo Assets',
     links: [
       {
-        text: 'o9ds Icons and Illustrations',
-        href: 'https://www.figma.com/design/KG4bUj8RekcQiRDrfjjJzf/o9ds-Icon-and-Illustrations-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6',
+        text: 'Arvo Icons and Illustrations',
+        href: 'https://www.figma.com/design/KG4bUj8RekcQiRDrfjjJzf/arvo-Icon-and-Illustrations-Library?m=auto&t=sZOcFEWwB08Rvp8Y-6',
       },
     ],
   },

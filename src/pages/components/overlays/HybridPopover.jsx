@@ -5,24 +5,13 @@ import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'triggerRef', type: 'React.RefObject<HTMLElement | null>', desc: 'Ref to the trigger element.' },
-  { prop: 'isOpen / defaultOpen / onOpenChange', type: 'open-state API', desc: 'Same controlled/uncontrolled API as O9Popover.' },
-  { prop: 'variant', type: "'multi' | 'single' | 'reorder'", default: "'multi'", desc: 'Selection mode. multi → checkboxes; single → radios; reorder → drag-and-drop only.' },
-  { prop: 'items', type: 'HybridPopoverItem[]', desc: 'Flat item list when groups are not used.' },
-  { prop: 'groups', type: 'HybridPopoverGroup[]', desc: 'Grouped item structure: { id, label, items }.' },
-  { prop: 'value', type: 'string | string[] | null', desc: 'Controlled selected value(s). string[] for multi, string for single.' },
-  { prop: 'onChange', type: '(value, detail) => void', desc: 'Selection change callback.' },
-  { prop: 'search', type: 'SearchConfig | boolean', desc: 'Show the search input. Pass an object to configure placeholder, debounce, badge counter.' },
-  { prop: 'conditional', type: 'ConditionalConfig', desc: 'And/Or toggle for multi mode.' },
-  { prop: 'enableReorder', type: 'boolean', default: 'false', desc: 'Enable drag-and-drop reordering.' },
-  { prop: 'inline', type: 'boolean', default: 'false', desc: 'Render inline (no popover wrapper).' },
-  { prop: 'empty', type: 'EmptyConfig', desc: 'Empty-state configuration when no items match.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Pattern B skeleton loading.' },
-]
+const DESCRIPTOR = getDescriptor('hybrid-popover')
+const PROPS = DESCRIPTOR.props
+
 
 export default function HybridPopover() {
   const [tab, setTab] = useState('Overview')
@@ -47,7 +36,7 @@ export default function HybridPopover() {
         {tab === 'Overview' && (
           <div className="space-y-12">
             <DocSection id="purpose" title="Purpose">
-              <DocParagraph>Use Hybrid Popover for any complex filter / picker overlay that needs more than a flat select. The component handles search, grouping, multi-select, conditional logic, drag reordering, and select-all — all wired into the same overlay shell as O9Popover.</DocParagraph>
+              <DocParagraph>Use Hybrid Popover for any complex filter / picker overlay that needs more than a flat select. The component handles search, grouping, multi-select, conditional logic, drag reordering, and select-all — all wired into the same overlay shell as ArvoPopover.</DocParagraph>
             </DocSection>
             <DocSection id="modes" title="Modes">
               <DocList items={[
@@ -83,7 +72,7 @@ export default function HybridPopover() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9HybridPopover } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoHybridPopover } from '@arvo/react';
 import { useRef, useState } from 'react';
 
 const triggerRef = useRef(null);
@@ -91,7 +80,7 @@ const [value, setValue] = useState<string[]>([]);
 
 <button ref={triggerRef}>Filter</button>
 
-<O9HybridPopover
+<ArvoHybridPopover
   triggerRef={triggerRef}
   variant="multi"
   search={{ placeholder: 'Search…', counter: true }}
@@ -111,15 +100,15 @@ const [value, setValue] = useState<string[]>([]);
 />
 
 // Single-select with flat items
-<O9HybridPopover triggerRef={triggerRef} variant="single" items={items} value={value} onChange={setValue} />
+<ArvoHybridPopover triggerRef={triggerRef} variant="single" items={items} value={value} onChange={setValue} />
 
 // Reorder mode (no selection)
-<O9HybridPopover triggerRef={triggerRef} variant="reorder" items={cols} enableReorder />`} />
+<ArvoHybridPopover triggerRef={triggerRef} variant="reorder" items={cols} enableReorder />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9HybridPopover } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoHybridPopover } from '@arvo/js';
 
-const hpop = O9HybridPopover.initialize(trigger, {
+const hpop = ArvoHybridPopover.initialize(trigger, {
   variant: 'multi',
   groups,
   value: [],
@@ -139,7 +128,7 @@ hpop.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9HybridPopover.initialize(trigger, options)', returns: 'O9HybridPopover', desc: 'Factory.' },
+                { method: 'ArvoHybridPopover.initialize(trigger, options)', returns: 'ArvoHybridPopover', desc: 'Factory.' },
                 { method: 'open() / close() / toggle() / isOpen()', desc: 'Open state control (delegates to inner Popover).' },
                 { method: 'value(v?)', returns: 'string | string[] | null | void', desc: 'Get/set selected value(s).' },
                 { method: 'setItems(items) / setGroups(groups)', desc: 'Replace items or groups.' },

@@ -1,0 +1,66 @@
+// FAB Button (Floating Action Button) wrapper styles
+// BEM Block: .arvo-fab-btn
+// Abbreviation: fab-btn
+// Loading Pattern: A (delegated to inner button)
+//
+// The FAB wraps an ArvoButton (with-label) or ArvoIconButton (icon-only).
+// It does NOT duplicate button variant/size logic — only adds:
+//   - Elevated box-shadow
+//   - Configurable z-index
+//   - position: relative (for indicator positioning)
+//   - Indicator element positioning
+//   - Disabled/loading shadow adjustments
+
+@use '../../mixins/indicator' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .arvo-indicator (shared pattern, consumed here) ─────────────────────────
+
+.arvo-indicator {
+  @include indicator-base;
+
+  &--sm { @include indicator-sm; }
+  &--lg { @include indicator-lg; }
+  &--unsaved { @include indicator-unsaved; }
+  &--new { @include indicator-new; }
+  &--unread { @include indicator-unread; }
+}
+
+// ─── .arvo-fab-btn ───────────────────────────────────────────────────────────
+
+.arvo-fab-btn {
+  display: inline-flex;
+  position: relative;
+  box-shadow: $arvo-shadow-fab;
+  z-index: 1050;
+
+  // ── Indicator positioning ───────────────────────────────────────────────────
+
+  > .arvo-indicator {
+    top: var(--arvo-fab-btn-indicator-top, -6px);
+    right: var(--arvo-fab-btn-indicator-right, -6px);
+  }
+
+  // ── Layout: with-label — indicator offsets differ ───────────────────────────
+
+  &--with-label > .arvo-indicator {
+    --arvo-fab-btn-indicator-top: -4px;
+    --arvo-fab-btn-indicator-right: -4px;
+  }
+
+  // ── Disabled — shadow at reduced opacity ───────────────────────────────────
+
+  &.is-disabled {
+    > .arvo-indicator {
+      display: none;
+    }
+  }
+
+  // ── Loading — indicator hidden, shadow remains ─────────────────────────────
+
+  &.loading {
+    > .arvo-indicator {
+      display: none;
+    }
+  }
+}

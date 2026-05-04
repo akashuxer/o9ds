@@ -183,9 +183,12 @@ export const COMPONENT_DOC_ROUTES = new Set([
   '/components/hybrid-popover',
   '/components/action-menu',
   '/components/tooltip',
+  '/components/alert-dialog',
   // Feedback
   '/components/badge',
   '/components/toast',
+  // Inputs (additional)
+  '/components/chip',
   // Data display
   '/components/cards',
 ])

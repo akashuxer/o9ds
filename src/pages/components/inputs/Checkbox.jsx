@@ -1,26 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Checkbox } from '@o9ds/react'
+import { ArvoCheckbox } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string | ReactNode', desc: 'Inline label rendered next to the checkbox.' },
-  { prop: 'isChecked', type: 'boolean', desc: 'Controlled checked state.' },
-  { prop: 'defaultChecked', type: 'boolean', desc: 'Uncontrolled initial checked state.' },
-  { prop: 'isIndeterminate', type: 'boolean', default: 'false', desc: 'Tri-state indicator (mixed).' },
-  { prop: 'description', type: 'string', desc: 'Help text rendered under the label.' },
-  { prop: 'error', type: 'string', desc: 'Error message; sets aria-invalid.' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the field as required.' },
-  { prop: 'isReadonly', type: 'boolean', default: 'false', desc: 'Disable toggling but keep tabbable.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'onChange', type: '(checked: boolean, event) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('checkbox')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Checkbox() {
   const [tab, setTab] = useState('Overview')
@@ -49,10 +41,10 @@ export default function Checkbox() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Checkbox label="Default" />
-                <O9Checkbox label="Checked" defaultChecked />
-                <O9Checkbox label="Indeterminate" isIndeterminate />
-                <O9Checkbox label="Disabled" isDisabled />
+                <ArvoCheckbox label="Default" />
+                <ArvoCheckbox label="Checked" defaultChecked />
+                <ArvoCheckbox label="Indeterminate" isIndeterminate />
+                <ArvoCheckbox label="Disabled" isDisabled />
               </LiveReference>
             </DocSection>
           </div>
@@ -79,21 +71,21 @@ export default function Checkbox() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Checkbox } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoCheckbox } from '@arvo/react';
 
-<O9Checkbox label="Subscribe" defaultChecked />
+<ArvoCheckbox label="Subscribe" defaultChecked />
 
 // Controlled
 const [c, setC] = useState(false);
-<O9Checkbox label="Agree" isChecked={c} onChange={setC} />
+<ArvoCheckbox label="Agree" isChecked={c} onChange={setC} />
 
 // Indeterminate (parent of nested checkboxes)
-<O9Checkbox label="All items" isIndeterminate onChange={toggleAll} />`} />
+<ArvoCheckbox label="All items" isIndeterminate onChange={toggleAll} />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Checkbox } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoCheckbox } from '@arvo/js';
 
-const cb = O9Checkbox.initialize(el, {
+const cb = ArvoCheckbox.initialize(el, {
   label: 'Agree',
   defaultChecked: false,
   onChange: (checked) => console.log(checked),
@@ -108,7 +100,7 @@ cb.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Checkbox.initialize(el, options)', returns: 'O9Checkbox', desc: 'Factory.' },
+                { method: 'ArvoCheckbox.initialize(el, options)', returns: 'ArvoCheckbox', desc: 'Factory.' },
                 { method: 'toggle(state?)', desc: 'Flip or set checked state.' },
                 { method: 'checked(state?)', returns: 'boolean | void', desc: 'Get/set checked state.' },
                 { method: 'indeterminate(state?)', returns: 'boolean | void', desc: 'Get/set indeterminate state.' },

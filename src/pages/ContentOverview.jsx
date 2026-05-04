@@ -4,7 +4,7 @@ import { getSectionOverviewIllustrationSrc } from '../data/sectionOverviewIllust
 import { hasReadyDocumentation } from '../data/pathsWithContent'
 
 const contentIcon = (
-  <svg className="h-6 w-6 text-o9ds-light-secondary dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+  <svg className="h-6 w-6 text-arvo-light-secondary dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
   </svg>
 )

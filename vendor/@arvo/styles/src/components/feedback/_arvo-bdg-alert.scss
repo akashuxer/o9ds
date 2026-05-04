@@ -1,0 +1,142 @@
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../../src/mixins/typography' as *;
+
+// Badge Alert component styles
+// BEM Block: .arvo-bdg-alert
+// Abbreviation: bdg-alert
+// Category: Feedback
+// Static display-only component — no interactive states, no loading pattern.
+// Three independent modifier axes: variant (primary/outline), type (6 types), size (sm/lg).
+
+.arvo-bdg-alert {
+  // ── Layout / size tokens ────────────────────────────────────────────────
+  --arvo-bdg-alert-height: $arvo-badge-large;
+  --arvo-bdg-alert-font-size: $arvo-font-size-14;
+  --arvo-bdg-alert-icon-size: $arvo-icon-16;
+
+  // ── Color tokens (default: primary variant, positive type) ──────────────
+  --arvo-bdg-alert-text-color: var(--arvo-color-t-positive);
+  --arvo-bdg-alert-icon-color: var(--arvo-color-i-positive);
+  --arvo-bdg-alert-bg: var(--arvo-color-s-layer-04);
+  --arvo-bdg-alert-border-color: transparent;
+  --arvo-bdg-alert-border-width: 0px;
+
+  // ── Base layout ─────────────────────────────────────────────────────────
+  display: inline-flex;
+  align-items: center;
+  gap: $arvo-space-4;
+  height: var(--arvo-bdg-alert-height);
+  padding-block: $arvo-space-4;
+  padding-inline-start: $arvo-space-4;
+  padding-inline-end: $arvo-space-6;
+  box-sizing: border-box;
+
+  // ── Typography ──────────────────────────────────────────────────────────
+  @include arvo-font-l14-r;
+  white-space: nowrap;
+  text-align: center;
+
+  // ── Background / border (set by variant modifiers) ──────────────────────
+  background: var(--arvo-bdg-alert-bg);
+  border: var(--arvo-bdg-alert-border-width) solid var(--arvo-bdg-alert-border-color);
+
+  // ── Elements ─────────────────────────────────────────────────────────────
+
+  &__ico {
+    flex: 0 0 auto;
+    font-family: $o9con;
+    font-size: var(--arvo-bdg-alert-icon-size);
+    color: var(--arvo-bdg-alert-icon-color);
+    line-height: normal;
+  }
+
+  &__msg {
+    color: var(--arvo-bdg-alert-text-color);
+    font-size: var(--arvo-bdg-alert-font-size);
+    line-height: normal;
+  }
+
+  // ── Variant modifiers ───────────────────────────────────────────────────
+
+  &--primary {
+    --arvo-bdg-alert-bg: var(--arvo-color-s-layer-04);
+    --arvo-bdg-alert-border-width: 0px;
+    --arvo-bdg-alert-border-color: transparent;
+  }
+
+  &--outline {
+    --arvo-bdg-alert-bg: var(--arvo-color-s-layer-01);
+    --arvo-bdg-alert-border-width: 1px;
+    --arvo-bdg-alert-border-color: var(--arvo-color-b-divider);
+  }
+
+  // ── Type modifiers ──────────────────────────────────────────────────────
+
+  &--positive {
+    --arvo-bdg-alert-text-color: var(--arvo-color-t-positive);
+    --arvo-bdg-alert-icon-color: var(--arvo-color-i-positive);
+
+    .arvo-bdg-alert__ico::before {
+      content: '\ec1b'; // o9con-check-circle
+    }
+  }
+
+  &--info {
+    --arvo-bdg-alert-text-color: var(--arvo-color-t-info-dark);
+    --arvo-bdg-alert-icon-color: var(--arvo-color-i-info-dark);
+
+    .arvo-bdg-alert__ico::before {
+      content: '\ed71'; // o9con-info-circle-filled
+    }
+  }
+
+  &--neutral {
+    --arvo-bdg-alert-text-color: var(--arvo-color-t-neutral);
+    --arvo-bdg-alert-icon-color: var(--arvo-color-i-neutral);
+
+    .arvo-bdg-alert__ico::before {
+      content: '\ebe2'; // o9con-speaker
+    }
+  }
+
+  &--warning {
+    --arvo-bdg-alert-text-color: var(--arvo-color-t-warning);
+    --arvo-bdg-alert-icon-color: var(--arvo-color-i-warning);
+
+    .arvo-bdg-alert__ico::before {
+      content: '\ed72'; // o9con-exclamation-triangle-filled
+    }
+  }
+
+  &--negative {
+    --arvo-bdg-alert-text-color: var(--arvo-color-t-negative);
+    --arvo-bdg-alert-icon-color: var(--arvo-color-i-negative);
+
+    .arvo-bdg-alert__ico::before {
+      content: '\edd9'; // o9con-blocker-action-filled-alt
+    }
+  }
+
+  &--block {
+    --arvo-bdg-alert-text-color: var(--arvo-color-t-negative);
+    --arvo-bdg-alert-icon-color: var(--arvo-color-i-negative);
+
+    .arvo-bdg-alert__ico::before {
+      content: '\edd9'; // o9con-blocker-action-filled-alt
+    }
+  }
+
+  // ── Size modifiers ──────────────────────────────────────────────────────
+
+  &--sm {
+    --arvo-bdg-alert-height: 20px;
+    --arvo-bdg-alert-font-size: $arvo-font-size-12;
+    --arvo-bdg-alert-icon-size: $arvo-icon-14;
+  }
+
+  &--lg {
+    --arvo-bdg-alert-height: $arvo-badge-large;
+    --arvo-bdg-alert-font-size: $arvo-font-size-14;
+    --arvo-bdg-alert-icon-size: $arvo-icon-16;
+  }
+}

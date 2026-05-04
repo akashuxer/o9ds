@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
-const STORAGE_KEY = 'o9ds-entered-docs'
+const STORAGE_KEY = 'arvo-entered-docs'
 
 const DocsShellContext = createContext(null)
 

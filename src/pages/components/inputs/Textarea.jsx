@@ -1,31 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Textarea } from '@o9ds/react'
+import { ArvoTextarea } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', desc: 'Field label rendered above the textarea.' },
-  { prop: 'value', type: 'string', desc: 'Controlled value.' },
-  { prop: 'defaultValue', type: 'string', desc: 'Uncontrolled initial value.' },
-  { prop: 'placeholder', type: 'string', desc: 'Placeholder text.' },
-  { prop: 'description', type: 'string', desc: 'Help text below the textarea.' },
-  { prop: 'error', type: 'string', desc: 'Error message. Sets aria-invalid + aria-describedby.' },
-  { prop: 'rows', type: 'number', default: '4', desc: 'Visible rows (height baseline).' },
-  { prop: 'autoResize', type: 'boolean', default: 'false', desc: 'Grow vertically with content up to maxRows.' },
-  { prop: 'maxRows', type: 'number', desc: 'Maximum rows when autoResize is enabled.' },
-  { prop: 'maxLength', type: 'number', desc: 'Character limit (renders a counter).' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the field as required.' },
-  { prop: 'isReadonly', type: 'boolean', default: 'false', desc: 'Disable editing while keeping the value tabbable.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'isFullWidth', type: 'boolean', default: 'false', desc: 'Expand to fill container width.' },
-  { prop: 'onChange', type: '(value, event) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('textarea')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Textarea() {
   const [tab, setTab] = useState('Overview')
@@ -54,9 +41,9 @@ export default function Textarea() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 280 }}><O9Textarea label="Notes" placeholder="Type a few words..." rows={3} /></div>
-                <div style={{ minWidth: 280 }}><O9Textarea label="With counter" maxLength={120} rows={3} /></div>
-                <div style={{ minWidth: 280 }}><O9Textarea label="Disabled" isDisabled rows={3} /></div>
+                <div style={{ minWidth: 280 }}><ArvoTextarea label="Notes" placeholder="Type a few words..." rows={3} /></div>
+                <div style={{ minWidth: 280 }}><ArvoTextarea label="With counter" maxLength={120} rows={3} /></div>
+                <div style={{ minWidth: 280 }}><ArvoTextarea label="Disabled" isDisabled rows={3} /></div>
               </LiveReference>
             </DocSection>
           </div>
@@ -83,17 +70,17 @@ export default function Textarea() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Textarea } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoTextarea } from '@arvo/react';
 
-<O9Textarea label="Notes" placeholder="Type here..." rows={4} />
-<O9Textarea label="Bio" maxLength={200} autoResize maxRows={8} />
-<O9Textarea label="Description" defaultValue="" isRequired />
-<O9Textarea label="Read-only" defaultValue="Locked content" isReadonly />`} />
+<ArvoTextarea label="Notes" placeholder="Type here..." rows={4} />
+<ArvoTextarea label="Bio" maxLength={200} autoResize maxRows={8} />
+<ArvoTextarea label="Description" defaultValue="" isRequired />
+<ArvoTextarea label="Read-only" defaultValue="Locked content" isReadonly />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Textarea } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoTextarea } from '@arvo/js';
 
-const ta = O9Textarea.initialize(el, {
+const ta = ArvoTextarea.initialize(el, {
   label: 'Notes',
   rows: 4,
   onChange: (value) => console.log(value),
@@ -108,7 +95,7 @@ ta.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Textarea.initialize(el, options)', returns: 'O9Textarea', desc: 'Factory.' },
+                { method: 'ArvoTextarea.initialize(el, options)', returns: 'ArvoTextarea', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string | void', desc: 'Get/set the current value.' },
                 { method: 'setError(message | false)', desc: 'Set/clear error message.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },

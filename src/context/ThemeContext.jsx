@@ -5,7 +5,7 @@ const ThemeContext = createContext()
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('o9ds-theme') || 'dark'
+      return localStorage.getItem('arvo-theme') || 'dark'
     }
     return 'dark'
   })
@@ -16,7 +16,7 @@ export function ThemeProvider({ children }) {
     root.classList.toggle('dark', theme === 'dark')
     root.setAttribute('data-theme', theme)
     if (document.body) document.body.setAttribute('data-theme', theme)
-    localStorage.setItem('o9ds-theme', theme)
+    localStorage.setItem('arvo-theme', theme)
   }, [theme])
 
   const toggleTheme = () => {
@@ -26,7 +26,7 @@ export function ThemeProvider({ children }) {
       root.classList.toggle('dark', next === 'dark')
       root.setAttribute('data-theme', next)
       if (document.body) document.body.setAttribute('data-theme', next)
-      localStorage.setItem('o9ds-theme', next)
+      localStorage.setItem('arvo-theme', next)
       return next
     })
   }

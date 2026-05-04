@@ -1,27 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Search } from '@o9ds/react'
+import { ArvoSearch } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', desc: 'Field label rendered above (or visually hidden via aria-label).' },
-  { prop: 'value', type: 'string', desc: 'Controlled value.' },
-  { prop: 'defaultValue', type: 'string', desc: 'Uncontrolled initial value.' },
-  { prop: 'placeholder', type: "'string'", default: "'Search...'", desc: 'Placeholder text.' },
-  { prop: 'shortcut', type: 'string', desc: 'Optional keyboard shortcut hint shown inside the input (e.g. Ctrl+K).' },
-  { prop: 'clearable', type: 'boolean', default: 'true', desc: 'Show a clear (×) button when value is non-empty.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'isReadonly', type: 'boolean', default: 'false', desc: 'Disable editing.' },
-  { prop: 'isFullWidth', type: 'boolean', default: 'false', desc: 'Expand to fill container width.' },
-  { prop: 'onChange', type: '(value, event) => void', desc: 'Change callback.' },
-  { prop: 'onSubmit', type: '(value) => void', desc: 'Submit callback (Enter).' },
-]
+const DESCRIPTOR = getDescriptor('search')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Search() {
   const [tab, setTab] = useState('Overview')
@@ -50,9 +41,9 @@ export default function Search() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 280 }}><O9Search aria-label="Search" /></div>
-                <div style={{ minWidth: 280 }}><O9Search aria-label="With shortcut" shortcut="Ctrl+K" /></div>
-                <div style={{ minWidth: 280 }}><O9Search aria-label="Disabled" isDisabled /></div>
+                <div style={{ minWidth: 280 }}><ArvoSearch aria-label="Search" /></div>
+                <div style={{ minWidth: 280 }}><ArvoSearch aria-label="With shortcut" shortcut="Ctrl+K" /></div>
+                <div style={{ minWidth: 280 }}><ArvoSearch aria-label="Disabled" isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>
@@ -79,16 +70,16 @@ export default function Search() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Search } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoSearch } from '@arvo/react';
 
-<O9Search label="Search items" onChange={(v) => filter(v)} />
-<O9Search label="Search" shortcut="Ctrl+K" onSubmit={(v) => runSearch(v)} />
-<O9Search label="Filter" defaultValue="" clearable />`} />
+<ArvoSearch label="Search items" onChange={(v) => filter(v)} />
+<ArvoSearch label="Search" shortcut="Ctrl+K" onSubmit={(v) => runSearch(v)} />
+<ArvoSearch label="Filter" defaultValue="" clearable />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Search } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoSearch } from '@arvo/js';
 
-const search = O9Search.initialize(el, {
+const search = ArvoSearch.initialize(el, {
   label: 'Search',
   shortcut: 'Ctrl+K',
   onChange: (value) => filter(value),
@@ -103,7 +94,7 @@ search.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Search.initialize(el, options)', returns: 'O9Search', desc: 'Factory.' },
+                { method: 'ArvoSearch.initialize(el, options)', returns: 'ArvoSearch', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string | void', desc: 'Get/set the current value.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },
                 { method: 'focus()', desc: 'Focus the input.' },

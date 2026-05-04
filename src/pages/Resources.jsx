@@ -16,21 +16,21 @@ const tocSections = [
 
 /** Match DocTable secondary column — no accent color on links */
 const RESOURCE_LINK_CLASS =
-  'text-o9ds-light-secondary underline decoration-neutral-400/90 underline-offset-[3px] transition hover:text-o9ds-light-primary hover:decoration-o9ds-light-primary dark:text-neutral-400 dark:decoration-neutral-600 dark:hover:text-neutral-200 dark:hover:decoration-neutral-300'
+  'text-arvo-light-secondary underline decoration-neutral-400/90 underline-offset-[3px] transition hover:text-arvo-light-primary hover:decoration-arvo-light-primary dark:text-neutral-400 dark:decoration-neutral-600 dark:hover:text-neutral-200 dark:hover:decoration-neutral-300'
 
 function resourceLabelColumn(label, hint) {
   if (!hint) return label
   return (
     <>
       {label}{' '}
-      <span className="font-normal text-o9ds-light-secondary dark:text-neutral-500">({hint})</span>
+      <span className="font-normal text-arvo-light-secondary dark:text-neutral-500">({hint})</span>
     </>
   )
 }
 
 function LinksCell({ items }) {
   return (
-    <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-o9ds-light-secondary dark:text-neutral-400">
+    <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-arvo-light-secondary dark:text-neutral-400">
       {items.map((item, i) => (
         <Fragment key={`${item.text}-${i}`}>
           {i > 0 && (
@@ -43,7 +43,7 @@ function LinksCell({ items }) {
               {item.text}
             </a>
           ) : (
-            <span className="text-o9ds-light-secondary dark:text-neutral-500">{item.text}</span>
+            <span className="text-arvo-light-secondary dark:text-neutral-500">{item.text}</span>
           )}
         </Fragment>
       ))}
@@ -61,8 +61,8 @@ function resourceRowsFromSpec(spec) {
 function SectionIntro({ kicker, title, id }) {
   return (
     <div id={id} className="scroll-mt-24 space-y-2">
-      <p className="m-0 text-sm italic text-o9ds-light-secondary dark:text-neutral-500">{kicker}</p>
-      <h2 className="m-0 text-xl font-bold tracking-tight text-o9ds-light-primary dark:text-white sm:text-2xl">{title}</h2>
+      <p className="m-0 text-sm italic text-arvo-light-secondary dark:text-neutral-500">{kicker}</p>
+      <h2 className="m-0 text-xl font-bold tracking-tight text-arvo-light-primary dark:text-white sm:text-2xl">{title}</h2>
     </div>
   )
 }
@@ -117,39 +117,39 @@ export default function Resources() {
         <section id="team" className="scroll-mt-24 space-y-6 border-t border-neutral-200 pt-12 dark:border-neutral-800">
           <div className="space-y-2">
             <SectionIntro kicker="People" title="Design system contacts" />
-            <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-              For anything related to the design system (o9ds), reach out to these members.
+            <p className="m-0 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+              For anything related to the design system (Arvo), reach out to these members.
             </p>
           </div>
           <div className="grid gap-8 lg:grid-cols-2">
             {RESOURCES_TEAM_GROUPS.map((group) => (
-              <div key={group.title} className="border p-6 dark:border-neutral-700" data-o9ds-card="light">
-                <h3 className="m-0 text-base font-semibold uppercase tracking-wider text-o9ds-light-secondary dark:text-neutral-500">
+              <div key={group.title} className="border p-6 dark:border-neutral-700" data-arvo-card="light">
+                <h3 className="m-0 text-base font-semibold uppercase tracking-wider text-arvo-light-secondary dark:text-neutral-500">
                   {group.title}
                 </h3>
                 <ul className="mt-5 list-none space-y-4 p-0 m-0">
                   {group.members.map(({ name, description }) => (
                     <li key={name} className="m-0">
                       <p className="m-0">
-                        <span className="font-semibold text-o9ds-light-primary dark:text-white">{name}</span>
-                        <span className="text-o9ds-light-secondary dark:text-neutral-400"> — {description}</span>
+                        <span className="font-semibold text-arvo-light-primary dark:text-white">{name}</span>
+                        <span className="text-arvo-light-secondary dark:text-neutral-400"> — {description}</span>
                       </p>
                     </li>
                   ))}
-                  <li className="m-0 pt-1 text-sm italic text-o9ds-light-secondary dark:text-neutral-500">{group.moreLabel}</li>
+                  <li className="m-0 pt-1 text-sm italic text-arvo-light-secondary dark:text-neutral-500">{group.moreLabel}</li>
                 </ul>
               </div>
             ))}
           </div>
-          <p className="m-0 mt-8 max-w-3xl text-sm leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-            Thank you to everyone who has supported o9ds—in every role, every review, and every small win along the way.
+          <p className="m-0 mt-8 max-w-3xl text-sm leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+            Thank you to everyone who has supported Arvo—in every role, every review, and every small win along the way.
             Your help is what keeps this system moving forward. ❤️
           </p>
         </section>
 
         <section id="on-this-site" className="scroll-mt-24 border-t border-neutral-200 pt-12 dark:border-neutral-800">
-          <h2 className="text-lg font-semibold text-o9ds-light-primary dark:text-white">Also on this site</h2>
-          <p className="mt-2 max-w-2xl text-sm text-o9ds-light-secondary dark:text-neutral-400">
+          <h2 className="text-lg font-semibold text-arvo-light-primary dark:text-white">Also on this site</h2>
+          <p className="mt-2 max-w-2xl text-sm text-arvo-light-secondary dark:text-neutral-400">
             Deeper narrative guides—these complement the external links above.
           </p>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -164,11 +164,11 @@ export default function Resources() {
               <li key={to} className="m-0">
                 <Link
                   to={to}
-                  className="flex items-center justify-between gap-3 border p-4 text-sm font-medium text-o9ds-light-primary transition hover:border-neutral-400 dark:border-neutral-700 dark:text-white dark:hover:border-neutral-500"
-                  data-o9ds-card="light"
+                  className="flex items-center justify-between gap-3 border p-4 text-sm font-medium text-arvo-light-primary transition hover:border-neutral-400 dark:border-neutral-700 dark:text-white dark:hover:border-neutral-500"
+                  data-arvo-card="light"
                 >
                   {label}
-                  <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+                  <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
                     →
                   </span>
                 </Link>

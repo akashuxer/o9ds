@@ -1,0 +1,275 @@
+/* USAGE
+    - *DO NOT* use shorthand 'font' property when styling elements. It is bad practice and leads to
+      unintended consequences. Always use individual font properties (font-size, font-weight, etc).
+    - Mixins are available for use and are aligned with Design System guidelines. 
+    - Mixin usage is optional, but encouraged to ensure consistency.
+
+    Font-Family
+    - Inner DOM inherits font-family appropriately from body.
+    - *DO NOT* set font-family manually as future enhancements for dynamic fonts will rely on consistent token usage for runtime update.
+*/
+
+// FONT FAMILY TOKENS
+$default-font: $o9-reg;
+$mono-font: $o9-mono; // to be set with proper font
+
+// FONT WEIGHT TOKENS
+$arvo-regular: 400;
+$arvo-medium: 500;
+$arvo-bold: 700;
+
+// FONT SIZE TOKENS
+$arvo-font-size-64: 4rem; // 64px
+$arvo-font-size-40: 2.5rem; // 40px
+$arvo-font-size-32: 2rem; // 32px
+$arvo-font-size-24: 1.5rem; // 24px
+$arvo-font-size-20: 1.25rem; // 20px
+$arvo-font-size-18: 1.125rem; // 18px
+$arvo-font-size-16: 1rem; // 16px
+$arvo-font-size-14: 0.875rem; // 14px
+$arvo-font-size-12: 0.75rem; // 12px
+$arvo-font-size-10: 0.625rem; // 10px
+
+/* o9con icon base font */
+$o9con-reg-em-1: normal normal normal 1em/1 $o9con;
+
+// TYPOGRAPHY TOKENS  (arvo-font-variantsize-property)
+/*
+    Variants
+    h - heading
+    p - paragraph
+    l - label
+
+    Properties
+    r - regular
+    ri - regular italic
+    rc - regular caps
+    m - medium
+    mi - medium italic
+    mc - medium caps
+    b - bold
+    bi - bold italic
+    bc - bold caps
+*/
+
+// HEADING
+@mixin arvo-font-h64-r {
+    font-size: $arvo-font-size-64;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h40-r {
+    font-size: $arvo-font-size-40;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h32-r {
+    font-size: $arvo-font-size-32;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h20-r {
+    font-size: $arvo-font-size-20;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h18-r {
+    font-size: $arvo-font-size-18;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h16-m {
+    font-size: $arvo-font-size-16;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-h14-r {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h14-rc {
+    font-size: $arvo-font-size-14;
+    text-transform: uppercase;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h14-m {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-h12-rc {
+    font-size: $arvo-font-size-12;
+    text-transform: uppercase;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h12-m {
+    font-size: $arvo-font-size-12;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-h12-r {
+    font-size: $arvo-font-size-12;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-h12-mc {
+    font-size: $arvo-font-size-12;
+    text-transform: uppercase;
+    font-weight: $arvo-medium;
+}
+
+
+// PARAGRAPH
+
+@mixin arvo-font-p16-r {
+    font-size: $arvo-font-size-16;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-p16-m {
+    font-size: $arvo-font-size-16;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-p14-r {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-p14-m {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-p14-b {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-bold;
+}
+
+@mixin arvo-font-p12-r {
+    font-size: $arvo-font-size-12;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-p12-m {
+    font-size: $arvo-font-size-12;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-p12-ru {
+    font-size: $arvo-font-size-12;
+    text-decoration: underline;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-p10-r {
+    font-size: $arvo-font-size-10;
+    font-weight: $arvo-regular;
+}
+
+
+// LABELS
+
+@mixin arvo-font-l40-r {
+    font-size: $arvo-font-size-40;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l32-r {
+    font-size: $arvo-font-size-32;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l24-r {
+    font-size: $arvo-font-size-24;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l16-r {
+    font-size: $arvo-font-size-16;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l14-r {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l14-m {
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-l14-ru {
+    font-size: $arvo-font-size-14;
+    text-decoration: underline;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l12-r {
+    font-size: $arvo-font-size-12;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l12-m {
+    font-size: $arvo-font-size-12;
+    font-weight: $arvo-medium;
+}
+
+@mixin arvo-font-l12-ru {
+    font-size: $arvo-font-size-12;
+    text-decoration: underline;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-l10-r {
+    font-size: $arvo-font-size-10;
+    font-weight: $arvo-regular;
+}
+
+
+/*  ---------------------------------------------- IMPORTANT ----------------------------------------------
+    - DO NOT use any of the below tokens or mixins. This is strictly to support migration to new ds.
+    - These are to be removed over time and updated to use only above tokens to follow UX guidelines.
+*/ 
+
+@mixin o9-font-reg-12 {
+    font-size: 12px;
+    font-weight: $arvo-regular;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-12-important {
+    font-size: 12px !important;
+    font-weight: $arvo-regular !important;
+    line-height: normal !important;
+}
+
+@mixin o9-font-reg-13 {
+    font-size: 13px;
+    font-weight: $arvo-regular;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-13-important {
+    font-size: 13px !important;
+    font-weight: $arvo-regular !important;
+    line-height: normal !important;
+}
+
+@mixin o9-font-reg-14 {
+    font-size: 14px;
+    line-height: normal;
+}
+
+@mixin o9-font-reg-15 {
+    font-size: 15px;
+    line-height: normal;
+}
+
+$o9-font-reg-16: normal 16px $default-font;
+$o9-font-reg-17: normal 17px $default-font;
+$o9-font-reg-18: normal 18px $default-font;

@@ -1,6 +1,6 @@
 ---
 name: Docs automation strategy
-overview: Full integration options (including Docusaurus-sourced MDX), efficiency notes, and the recommended hybrid for the o9ds Vite site—plus CI and realistic AI boundaries.
+overview: Full integration options (including Docusaurus-sourced MDX), efficiency notes, and the recommended hybrid for the Arvo Vite site—plus CI and realistic AI boundaries.
 todos:
   - id: choose-format
     content: "Confirm hybrid: JSON/YAML or token-derived data for tables; MDX or markdown fields for prose"
@@ -14,7 +14,7 @@ todos:
 isProject: false
 ---
 
-# Docs automation (full guide + o9ds recommendation)
+# Docs automation (full guide + Arvo recommendation)
 
 Stack: **[Vite](vite.config.js) + React + [react-router-dom](src/App.jsx)** + layout components ([`PageWithToc`](src/LayoutComponents/), [`DocTable`](src/LayoutComponents/DocTable.jsx), [`CodeBlock`](src/LayoutComponents/CodeBlock.jsx)). Tokens: [`src/tokens/`](src/tokens/). Existing codegen: [`scripts/generate-component-stubs.mjs`](scripts/generate-component-stubs.mjs).
 
@@ -59,7 +59,7 @@ Stack: **[Vite](vite.config.js) + React + [react-router-dom](src/App.jsx)** + la
 
 ## Path C — Shared “docs package” + this app (monorepo or npm package)
 
-1. Package **`@o9ds/docs-content`** (or a monorepo folder) holds **MDX + assets**.
+1. Package **`@arvo/docs-content`** (or a monorepo folder) holds **MDX + assets**.
 2. This website **depends** on that package version.
 3. Path B generator runs in **website** `postinstall`/`build` or in the **package** `prepare` script.
 
@@ -118,7 +118,7 @@ For **API tables, props, tokens** (like semantic colors), **MDX is optional**. *
 
 ---
 
-## Which approach fits **this** site (o9ds) best?
+## Which approach fits **this** site (Arvo) best?
 
 **Recommended: hybrid (structured data + optional MDX prose).**
 
@@ -148,7 +148,7 @@ For **API tables, props, tokens** (like semantic colors), **MDX is optional**. *
 
 | Question | Answer |
 |----------|--------|
-| **Best for o9ds?** | **Hybrid** + **dynamic doc route** + **data for tables**. |
+| **Best for Arvo?** | **Hybrid** + **dynamic doc route** + **data for tables**. |
 | **MDX?** | **Yes** (Vite plugin); Docusaurus MDX usable after **component path** alignment. |
 | **Docusaurus?** | **Source or preview**, not embedded runtime; integrate via **shared files** + **scripts**. |
 | **Automation?** | **CI + optional scripts**; not self-configuring AI. |

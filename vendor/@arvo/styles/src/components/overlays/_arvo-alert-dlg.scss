@@ -1,0 +1,360 @@
+@use '../../mixins/typography' as *;
+@use '../../mixins/loading' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .arvo-alert-dlg ──────────────────────────────────────────────────────────
+
+.arvo-alert-dlg {
+  --arvo-alert-dlg-width: 500px;
+  --arvo-alert-dlg-icon-color: var(--arvo-color-i-warning);
+
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+
+  // ── State: open ──────────────────────────────────────────────────────────
+  &.open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // ── __backdrop ───────────────────────────────────────────────────────────
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--arvo-color-s-overlay-static, rgba(1, 1, 1, 0.6));
+    backdrop-filter: blur(4px);
+    z-index: -1;
+  }
+
+  &:not(&--with-backdrop) &__backdrop {
+    display: none;
+  }
+
+  // Backdrop fade transitions
+  &__backdrop.arvo-enter-from {
+    opacity: 0;
+  }
+
+  &__backdrop.arvo-enter-active {
+    transition: opacity 100ms ease;
+  }
+
+  &__backdrop.arvo-enter-to {
+    opacity: 1;
+  }
+
+  &__backdrop.arvo-exit-from {
+    opacity: 1;
+  }
+
+  &__backdrop.arvo-exit-active {
+    transition: opacity 100ms ease;
+  }
+
+  &__backdrop.arvo-exit-to {
+    opacity: 0;
+  }
+
+  // ── __panel ──────────────────────────────────────────────────────────────
+  &__panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    width: var(--arvo-alert-dlg-width);
+    min-height: 144px;
+    max-height: 500px;
+    background-color: var(--arvo-color-s-layer-03, #fff);
+    box-shadow: 0px 0px 8px 0px rgba(16, 16, 16, 0.2),
+      0px 32px 64px 0px rgba(16, 16, 16, 0.24);
+    box-sizing: border-box;
+    z-index: 1;
+  }
+
+  // Panel scale transitions
+  &__panel.arvo-enter-from {
+    opacity: 0;
+    transform: scale(0.96) translate(-50%, -50%);
+  }
+
+  &__panel.arvo-enter-active {
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  &__panel.arvo-enter-to {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+
+  &__panel.arvo-exit-from {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+
+  &__panel.arvo-exit-active {
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  &__panel.arvo-exit-to {
+    opacity: 0;
+    transform: scale(0.96) translate(-50%, -50%);
+  }
+
+  // ── __header ─────────────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $arvo-space-2;
+    height: 40px;
+    padding: $arvo-space-10 $arvo-space-12 $arvo-space-10 $arvo-space-16;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  // ── __ico ────────────────────────────────────────────────────────────────
+  &__ico {
+    flex: 0 0 auto;
+    font-family: $o9con;
+    font-size: $arvo-icon-20;
+    width: $arvo-icon-20;
+    height: $arvo-icon-20;
+    color: var(--arvo-alert-dlg-icon-color);
+    line-height: 1;
+  }
+
+  // ── __title ──────────────────────────────────────────────────────────────
+  &__title {
+    @include arvo-font-h16-m;
+    font-family: var(--o9-font-family);
+    color: var(--arvo-color-t-primary);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  // ── __close-btn ──────────────────────────────────────────────────────────
+  &__close-btn {
+    flex-shrink: 0;
+    display: none;
+  }
+
+  &--closable &__close-btn {
+    display: flex;
+  }
+
+  // ── __body ───────────────────────────────────────────────────────────────
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $arvo-space-16;
+    padding: $arvo-space-16;
+    overflow-y: auto;
+    min-height: 0;
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--arvo-color-s-layer-07, #ccc) transparent;
+  }
+
+  // ── __msg ────────────────────────────────────────────────────────────────
+  &__msg {
+    @include arvo-font-l14-r;
+    font-family: var(--o9-font-family);
+    color: var(--arvo-color-t-secondary);
+    margin: 0;
+  }
+
+  // ── __confirm-input ──────────────────────────────────────────────────────
+  &__confirm-input {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── __footer ─────────────────────────────────────────────────────────────
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $arvo-space-8;
+    padding: $arvo-space-8 $arvo-space-16 $arvo-space-16;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  // ── __dont-show ──────────────────────────────────────────────────────────
+  &__dont-show {
+    flex-shrink: 0;
+  }
+
+  // ── __actions ────────────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    gap: $arvo-space-6;
+
+    .arvo-btn {
+      min-width: var(--arvo-container-btn-min, 112px);
+    }
+  }
+
+  // ── Variant: --warning (default) ─────────────────────────────────────────
+  &--warning {
+    --arvo-alert-dlg-icon-color: var(--arvo-color-i-warning);
+
+    .arvo-alert-dlg__ico::before {
+      content: '\ed72'; // o9con-exclamation-triangle-filled
+    }
+  }
+
+  // ── Variant: --info ──────────────────────────────────────────────────────
+  &--info {
+    --arvo-alert-dlg-icon-color: var(--arvo-color-i-info-dark);
+
+    .arvo-alert-dlg__ico::before {
+      content: '\ed71'; // o9con-info-circle-filled
+    }
+  }
+
+  // ── Variant: --success ───────────────────────────────────────────────────
+  &--success {
+    --arvo-alert-dlg-icon-color: var(--arvo-color-i-positive);
+
+    .arvo-alert-dlg__ico::before {
+      content: '\ec1b'; // o9con-check-circle
+    }
+  }
+
+  // ── Variant: --error ─────────────────────────────────────────────────────
+  &--error {
+    --arvo-alert-dlg-icon-color: var(--arvo-color-i-negative);
+
+    .arvo-alert-dlg__ico::before {
+      content: '\edd9'; // o9con-blocker-action-filled-alt
+    }
+  }
+
+  // ── Variant: --block ─────────────────────────────────────────────────────
+  &--block {
+    --arvo-alert-dlg-icon-color: var(--arvo-color-i-negative);
+
+    .arvo-alert-dlg__ico::before {
+      content: '\ed75'; // o9con-blocker-action-filled
+    }
+  }
+
+  // ── Size: --sm ───────────────────────────────────────────────────────────
+  &--sm {
+    --arvo-alert-dlg-width: 400px;
+  }
+
+  // ── Size: --lg ───────────────────────────────────────────────────────────
+  &--lg {
+    --arvo-alert-dlg-width: 640px;
+  }
+
+  // ── Loading skeleton (Pattern B) ─────────────────────────────────────────
+  @mixin _alert-dlg-loading-skeleton {
+    pointer-events: none;
+
+    .arvo-alert-dlg__title {
+      position: relative;
+      color: transparent;
+      overflow: hidden;
+      border-radius: var(--arvo-radius-sm, 3px);
+      width: 60%;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: var(--arvo-color-s-disabled, #f0f0f0);
+        border-radius: var(--arvo-radius-sm, 3px);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          var(--arvo-loading-shimmer-color, rgba(255, 255, 255, 0.4)) 50%,
+          transparent 100%
+        );
+        animation: arvo-shimmer var(--arvo-loading-shimmer-speed, 1.5s) infinite linear;
+        border-radius: var(--arvo-radius-sm, 3px);
+      }
+    }
+
+    .arvo-alert-dlg__body {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: $arvo-space-12;
+
+      > * {
+        display: none;
+      }
+
+      &::before,
+      &::after {
+        content: '';
+        display: block;
+        height: 16px;
+        border-radius: var(--arvo-radius-sm, 3px);
+        background-color: var(--arvo-color-s-disabled, #f0f0f0);
+        position: relative;
+        overflow: hidden;
+      }
+
+      &::before {
+        width: 80%;
+      }
+
+      &::after {
+        width: 60%;
+      }
+    }
+
+    .arvo-alert-dlg__dont-show {
+      display: none;
+    }
+
+    .arvo-alert-dlg__actions {
+      pointer-events: none;
+      opacity: $arvo-opacity-low;
+    }
+  }
+
+  &.loading {
+    @include _alert-dlg-loading-skeleton;
+  }
+
+  [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
+    @include _alert-dlg-loading-skeleton;
+  }
+}
+
+// ── Reduced motion ──────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .arvo-alert-dlg__panel,
+  .arvo-alert-dlg__backdrop {
+    &.arvo-enter-active,
+    &.arvo-exit-active {
+      transition: none;
+    }
+  }
+}

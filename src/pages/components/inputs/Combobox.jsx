@@ -1,29 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Combobox } from '@o9ds/react'
+import { ArvoCombobox } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', desc: 'Field label rendered above the trigger.' },
-  { prop: 'options', type: 'ComboboxOption[]', required: 'Yes', desc: 'Options: { value, label, disabled?, description?, group? }.' },
-  { prop: 'value', type: 'string | null', desc: 'Controlled selected value.' },
-  { prop: 'defaultValue', type: 'string | null', desc: 'Uncontrolled initial value.' },
-  { prop: 'placeholder', type: 'string', desc: 'Placeholder shown when the input is empty.' },
-  { prop: 'description', type: 'string', desc: 'Help text below the trigger.' },
-  { prop: 'error', type: 'string', desc: 'Error message; sets aria-invalid.' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the field as required.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'creatable', type: 'boolean', default: 'false', desc: 'Allow creating new options from the typed value.' },
-  { prop: 'clearable', type: 'boolean', default: 'true', desc: 'Show a clear (×) button when a value is selected.' },
-  { prop: 'onChange', type: '(value: string | null, option) => void', desc: 'Change callback.' },
-  { prop: 'onInputChange', type: '(text: string) => void', desc: 'Fires as the user types in the search input.' },
-]
+const DESCRIPTOR = getDescriptor('combobox')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Combobox() {
   const [tab, setTab] = useState('Overview')
@@ -58,9 +47,9 @@ export default function Combobox() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 240 }}><O9Combobox label="Fruit" items={options} placeholder="Type to filter" /></div>
-                <div style={{ minWidth: 240 }}><O9Combobox label="With default" items={options} defaultValue="banana" /></div>
-                <div style={{ minWidth: 240 }}><O9Combobox label="Disabled" items={options} isDisabled /></div>
+                <div style={{ minWidth: 240 }}><ArvoCombobox label="Fruit" items={options} placeholder="Type to filter" /></div>
+                <div style={{ minWidth: 240 }}><ArvoCombobox label="With default" items={options} defaultValue="banana" /></div>
+                <div style={{ minWidth: 240 }}><ArvoCombobox label="Disabled" items={options} isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>
@@ -88,7 +77,7 @@ export default function Combobox() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Combobox } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoCombobox } from '@arvo/react';
 
 const options = [
   { value: 'apple', label: 'Apple' },
@@ -96,11 +85,11 @@ const options = [
   { value: 'cherry', label: 'Cherry' },
 ];
 
-<O9Combobox label="Fruit" options={options} placeholder="Type to filter" />
+<ArvoCombobox label="Fruit" options={options} placeholder="Type to filter" />
 
 // Controlled
 const [v, setV] = useState(null);
-<O9Combobox
+<ArvoCombobox
   label="Fruit"
   options={options}
   value={v}
@@ -109,12 +98,12 @@ const [v, setV] = useState(null);
 />
 
 // Creatable
-<O9Combobox label="Tag" options={options} creatable />`} />
+<ArvoCombobox label="Tag" options={options} creatable />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Combobox } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoCombobox } from '@arvo/js';
 
-const cb = O9Combobox.initialize(el, {
+const cb = ArvoCombobox.initialize(el, {
   label: 'Fruit',
   options,
   onChange: (value, option) => console.log(value),
@@ -131,7 +120,7 @@ cb.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Combobox.initialize(el, options)', returns: 'O9Combobox', desc: 'Factory.' },
+                { method: 'ArvoCombobox.initialize(el, options)', returns: 'ArvoCombobox', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'string | null | void', desc: 'Get/set selected value.' },
                 { method: 'open() / close() / toggle()', desc: 'Control the dropdown.' },
                 { method: 'isOpen()', returns: 'boolean', desc: 'Whether the dropdown is open.' },

@@ -1,31 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9NumberInput } from '@o9ds/react'
+import { ArvoNumberInput } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string', desc: 'Field label rendered above the input.' },
-  { prop: 'value', type: 'number | null', desc: 'Controlled value.' },
-  { prop: 'defaultValue', type: 'number | null', desc: 'Uncontrolled initial value.' },
-  { prop: 'min', type: 'number', desc: 'Minimum allowed value.' },
-  { prop: 'max', type: 'number', desc: 'Maximum allowed value.' },
-  { prop: 'step', type: 'number', default: '1', desc: 'Stepper increment.' },
-  { prop: 'precision', type: 'number', desc: 'Decimal precision when displaying the value.' },
-  { prop: 'placeholder', type: 'string', desc: 'Placeholder text.' },
-  { prop: 'description', type: 'string', desc: 'Help text below the input.' },
-  { prop: 'error', type: 'string', desc: 'Error message. Sets aria-invalid.' },
-  { prop: 'isRequired', type: 'boolean', default: 'false', desc: 'Marks the field as required.' },
-  { prop: 'isReadonly', type: 'boolean', default: 'false', desc: 'Disable editing.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'showSteppers', type: 'boolean', default: 'true', desc: 'Show + / − stepper buttons.' },
-  { prop: 'onChange', type: '(value: number | null) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('number-input')
+const PROPS = DESCRIPTOR.props
+
 
 export default function NumberInput() {
   const [tab, setTab] = useState('Overview')
@@ -54,9 +41,9 @@ export default function NumberInput() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <div style={{ minWidth: 220 }}><O9NumberInput label="Quantity" defaultValue={1} min={0} max={100} /></div>
-                <div style={{ minWidth: 220 }}><O9NumberInput label="Price" defaultValue={9.99} step={0.01} /></div>
-                <div style={{ minWidth: 220 }}><O9NumberInput label="Disabled" defaultValue={5} isDisabled /></div>
+                <div style={{ minWidth: 220 }}><ArvoNumberInput label="Quantity" defaultValue={1} min={0} max={100} /></div>
+                <div style={{ minWidth: 220 }}><ArvoNumberInput label="Price" defaultValue={9.99} step={0.01} /></div>
+                <div style={{ minWidth: 220 }}><ArvoNumberInput label="Disabled" defaultValue={5} isDisabled /></div>
               </LiveReference>
             </DocSection>
           </div>
@@ -83,16 +70,16 @@ export default function NumberInput() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9NumberInput } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoNumberInput } from '@arvo/react';
 
-<O9NumberInput label="Quantity" defaultValue={1} min={0} max={100} />
-<O9NumberInput label="Price" defaultValue={9.99} step={0.01} precision={2} />
-<O9NumberInput label="Read-only" defaultValue={42} isReadonly />`} />
+<ArvoNumberInput label="Quantity" defaultValue={1} min={0} max={100} />
+<ArvoNumberInput label="Price" defaultValue={9.99} step={0.01} precision={2} />
+<ArvoNumberInput label="Read-only" defaultValue={42} isReadonly />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9NumberInput } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoNumberInput } from '@arvo/js';
 
-const num = O9NumberInput.initialize(el, {
+const num = ArvoNumberInput.initialize(el, {
   label: 'Quantity',
   min: 0,
   max: 100,
@@ -109,7 +96,7 @@ num.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9NumberInput.initialize(el, options)', returns: 'O9NumberInput', desc: 'Factory.' },
+                { method: 'ArvoNumberInput.initialize(el, options)', returns: 'ArvoNumberInput', desc: 'Factory.' },
                 { method: 'value(v?)', returns: 'number | null | void', desc: 'Get/set the current value.' },
                 { method: 'setError(message | false)', desc: 'Set/clear error message.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },

@@ -1,32 +1,18 @@
 import { useState, useMemo, useRef } from 'react'
-import { O9Popover, O9Button } from '@o9ds/react'
+import { ArvoPopover, ArvoButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'triggerRef', type: 'React.RefObject<HTMLElement | null>', desc: 'Ref to the trigger element. The popover attaches event listeners to it.' },
-  { prop: 'renderTrigger', type: '(props) => ReactNode', desc: 'Render-prop alternative — receives ARIA props for the trigger.' },
-  { prop: 'isOpen', type: 'boolean', desc: 'Controlled open state.' },
-  { prop: 'defaultOpen', type: 'boolean', default: 'false', desc: 'Uncontrolled initial open state.' },
-  { prop: 'onOpenChange', type: '(open: boolean) => void', desc: 'Open state callback.' },
-  { prop: 'title', type: 'string', desc: 'Header title.' },
-  { prop: 'children', type: 'ReactNode', desc: 'Body content.' },
-  { prop: 'actions', type: 'PopoverAction[]', desc: 'Footer actions: { id, label, variant, action }.' },
-  { prop: 'placement', type: 'PopoverPlacement', default: "'auto'", desc: 'Preferred placement (13 positions + auto).' },
-  { prop: 'trigger', type: "'click' | 'hover' | 'focus'", default: "'click'", desc: 'Open trigger mode.' },
-  { prop: 'variant', type: "'space' | 'edge'", default: "'space'", desc: 'Body padding variant. edge removes horizontal padding.' },
-  { prop: 'modal', type: 'boolean', default: 'false', desc: 'Modal mode (page below is inert; focus trapped).' },
-  { prop: 'closable', type: 'boolean', default: 'true', desc: 'Show the header close button.' },
-  { prop: 'backButton', type: 'boolean', default: 'false', desc: 'Show a back arrow in the header.' },
-  { prop: 'onBack', type: '() => void', desc: 'Callback fired when the back button is pressed.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Pattern B skeleton loading.' },
-]
+const DESCRIPTOR = getDescriptor('popover')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Popover() {
   const [tab, setTab] = useState('Overview')
@@ -60,9 +46,9 @@ export default function Popover() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Button label="Open popover" ref={triggerRef} onClick={() => setOpen((o) => !o)} />
+                <ArvoButton label="Open popover" ref={triggerRef} onClick={() => setOpen((o) => !o)} />
               </LiveReference>
-              <O9Popover
+              <ArvoPopover
                 triggerRef={triggerRef}
                 isOpen={open}
                 onOpenChange={setOpen}
@@ -73,7 +59,7 @@ export default function Popover() {
                 ]}
               >
                 <p style={{ margin: 0 }}>Use the controlled isOpen + onOpenChange API to drive the open state from your component.</p>
-              </O9Popover>
+              </ArvoPopover>
             </DocSection>
             <DocSection id="placements" title="Placements">
               <DocParagraph>13 placement options: top / top-start / top-end, bottom / bottom-start / bottom-end, left / left-start / left-end, right / right-start / right-end, and auto. The position engine flips and shifts to stay inside the viewport.</DocParagraph>
@@ -106,17 +92,17 @@ export default function Popover() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Popover } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoPopover } from '@arvo/react';
 import { useRef, useState } from 'react';
 
 const triggerRef = useRef(null);
 <button ref={triggerRef}>Open</button>
-<O9Popover triggerRef={triggerRef} title="Settings">
+<ArvoPopover triggerRef={triggerRef} title="Settings">
   <p>Popover content</p>
-</O9Popover>
+</ArvoPopover>
 
 // With footer actions
-<O9Popover
+<ArvoPopover
   triggerRef={triggerRef}
   title="Confirm"
   actions={[
@@ -125,30 +111,30 @@ const triggerRef = useRef(null);
   ]}
 >
   <p>Are you sure?</p>
-</O9Popover>
+</ArvoPopover>
 
 // Controlled
 const [isOpen, setIsOpen] = useState(false);
-<O9Popover isOpen={isOpen} onOpenChange={setIsOpen} triggerRef={triggerRef} title="Controlled">
+<ArvoPopover isOpen={isOpen} onOpenChange={setIsOpen} triggerRef={triggerRef} title="Controlled">
   <p>Controlled content</p>
-</O9Popover>
+</ArvoPopover>
 
 // Hover trigger
-<O9Popover triggerRef={triggerRef} trigger="hover" title="Hover Info">
+<ArvoPopover triggerRef={triggerRef} trigger="hover" title="Hover Info">
   <p>Opens on pointer enter, closes on pointer leave.</p>
-</O9Popover>
+</ArvoPopover>
 
 // Edge variant (full-bleed body)
-<O9Popover triggerRef={triggerRef} variant="edge" title="Edge">
+<ArvoPopover triggerRef={triggerRef} variant="edge" title="Edge">
   <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
     <li style={{ padding: '8px 12px' }}>List item</li>
   </ul>
-</O9Popover>`} />
+</ArvoPopover>`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Popover } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoPopover } from '@arvo/js';
 
-const popover = O9Popover.initialize(trigger, {
+const popover = ArvoPopover.initialize(trigger, {
   title: 'Settings',
   content: '<p>Popover content</p>',
   closable: true,
@@ -175,7 +161,7 @@ popover.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Popover.initialize(trigger, options)', returns: 'O9Popover', desc: 'Factory.' },
+                { method: 'ArvoPopover.initialize(trigger, options)', returns: 'ArvoPopover', desc: 'Factory.' },
                 { method: 'open() / close() / toggle()', desc: 'Control the open state.' },
                 { method: 'isOpen()', returns: 'boolean', desc: 'Whether the popover is open.' },
                 { method: 'renderBody(html | fn)', desc: 'Update body content.' },

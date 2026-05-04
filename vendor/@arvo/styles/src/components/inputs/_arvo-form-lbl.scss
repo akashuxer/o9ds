@@ -1,0 +1,23 @@
+// Shared form label block
+// BEM Block: .arvo-form-lbl
+// Used by all form controls that render a label via createFormLabel() / <FormLabel>.
+// Component-scoped __lbl classes (e.g. arvo-textbox__lbl) layer on top of this.
+
+@use '../../mixins/form-label' as *;
+
+.arvo-form-lbl {
+  @include form-label-base;
+  @include form-label-lg;
+
+  &--sm {
+    @include form-label-sm;
+  }
+
+  &__req {
+    @include form-label-required-indicator;
+  }
+
+  &.is-disabled {
+    @include form-label-disabled;
+  }
+}

@@ -19,8 +19,8 @@ export default function ComponentOverviewCard({ title, description, illustration
 
   return (
     <div
-      data-o9ds-component-overview-card
-      data-o9ds-component-overview-card-footer={hideFooter ? 'hidden' : undefined}
+      data-arvo-component-overview-card
+      data-arvo-component-overview-card-footer={hideFooter ? 'hidden' : undefined}
       className="flex h-full flex-col overflow-hidden rounded-none border border-[#E5E5E5] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-shadow duration-200 hover:shadow-md dark:border-neutral-700"
     >
       {/* Fixed height in catalog mode; flexible height when hideFooter (e.g. Typography typeface) */}

@@ -1,0 +1,42 @@
+---
+description: Canonical patterns for o9con icons, tokens, doc chrome, and code presentation — point here instead of re-explaining
+globs: src/pages/**/*.jsx, src/LayoutComponents/**/*.jsx
+alwaysApply: false
+---
+
+# Arvo authoring patterns (single reference)
+
+Use these **instead of inventing** new markup for the same jobs. Extend this rule when a new pattern becomes standard.
+
+## Layout & doc chrome
+
+Follow **`.cursor/rules/arvo-layout-components.mdc`** — reuse `PageWithToc`, `PageHeader`, `WhiteBgCard`, `GrayBgCard`, `DocTable`, `DocTabs`, `CodeBlock`, `ExpandableDocImage`, `ComponentOverviewCard`, `SectionOverviewPage`, etc.
+
+## o9con icons (React)
+
+- **Pattern:** `<span className="o9con {icon.class} arvo-icon-{size}" aria-hidden />` (add `dark:text-white` or inline `color` when the page needs theme contrast).
+- **Icon list / class names:** `src/tokens/o9conIcons.js` (regenerate from CSS via `npm run generate:o9con-icons` after font updates).
+- **Reference UI:** `src/pages/foundation/Icons.jsx` (gallery + snippets).
+- **Example in content:** `src/pages/Overview.jsx` (`o9con-speaker`).
+
+## Semantic colors & tokens
+
+- **JS token tables / semantics:** `src/tokens/semanticColorTokens.js`, `globalColorTokens.js`, `brandColors.js`.
+- **How we document color on the site:** `src/pages/foundation/Colors.jsx` (swatches, tables, copy patterns).
+- **Global CSS variables / theme:** `src/index.css` (prefer existing `text-arvo-*` / semantic CSS vars already used on doc pages).
+
+## Inline code vs blocks
+
+- **Multi-line or copyable snippets:** `CodeBlock` from `src/LayoutComponents/CodeBlock.jsx`.
+- **Usage/API docs with structured sections:** `DocSection` helpers from `src/LayoutComponents/DocSection.jsx` — use **`DocCode`** for inline identifiers (`prop` names, `aria-*`, class names), **`DocStrong`**, **`DocParagraph`**, etc. Reference: `src/pages/usage/Accessibility.jsx`, component pages using `DocSection`.
+- **Plain inline code in prose:** existing pages use `<code className="..." data-arvo-inline-code>` where needed — match neighboring paragraphs on the same file.
+
+## Component doc pages (`/components/...`)
+
+Follow **`.cursor/rules/arvo-component-docs.mdc`** — four tabs only; **reference implementation:** `src/pages/components/buttons-actions/Button.jsx`.
+
+## When you add a new standard pattern
+
+1. Implement it once in a **canonical file** (prefer an existing reference page).
+2. Add **one bullet** to this rule pointing to that file.
+3. Optionally add a line under **Folder structure** in `README.md` if it is a new top-level doc type.

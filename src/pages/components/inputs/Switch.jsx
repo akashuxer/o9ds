@@ -1,23 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9Switch } from '@o9ds/react'
+import { ArvoSwitch } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'label', type: 'string | ReactNode', desc: 'Inline label rendered next to the switch.' },
-  { prop: 'isChecked', type: 'boolean', desc: 'Controlled on/off state.' },
-  { prop: 'defaultChecked', type: 'boolean', default: 'false', desc: 'Uncontrolled initial on/off state.' },
-  { prop: 'description', type: 'string', desc: 'Help text rendered under the label.' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Disable interaction.' },
-  { prop: 'isReadonly', type: 'boolean', default: 'false', desc: 'Disable toggling but keep tabbable.' },
-  { prop: 'onChange', type: '(checked: boolean, event) => void', desc: 'Change callback.' },
-]
+const DESCRIPTOR = getDescriptor('switch')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Switch() {
   const [tab, setTab] = useState('Overview')
@@ -46,9 +41,9 @@ export default function Switch() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9Switch label="Wi-Fi" defaultChecked />
-                <O9Switch label="Notifications" />
-                <O9Switch label="Disabled" isDisabled />
+                <ArvoSwitch label="Wi-Fi" defaultChecked />
+                <ArvoSwitch label="Notifications" />
+                <ArvoSwitch label="Disabled" isDisabled />
               </LiveReference>
             </DocSection>
           </div>
@@ -74,18 +69,18 @@ export default function Switch() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9Switch } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoSwitch } from '@arvo/react';
 
-<O9Switch label="Wi-Fi" defaultChecked />
+<ArvoSwitch label="Wi-Fi" defaultChecked />
 
 // Controlled
 const [on, setOn] = useState(true);
-<O9Switch label="Dark mode" isChecked={on} onChange={setOn} />`} />
+<ArvoSwitch label="Dark mode" isChecked={on} onChange={setOn} />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9Switch } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoSwitch } from '@arvo/js';
 
-const sw = O9Switch.initialize(el, {
+const sw = ArvoSwitch.initialize(el, {
   label: 'Wi-Fi',
   defaultChecked: true,
   onChange: (checked) => console.log(checked),
@@ -100,7 +95,7 @@ sw.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9Switch.initialize(el, options)', returns: 'O9Switch', desc: 'Factory.' },
+                { method: 'ArvoSwitch.initialize(el, options)', returns: 'ArvoSwitch', desc: 'Factory.' },
                 { method: 'toggle(state?)', desc: 'Flip or set on/off state.' },
                 { method: 'checked(state?)', returns: 'boolean | void', desc: 'Get/set checked state.' },
                 { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },

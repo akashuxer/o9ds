@@ -1,0 +1,261 @@
+@use '../../../../tokens/src/scss/all' as *;
+
+// ---------------------------------------------------------------------------
+// Toast — Feedback
+// ---------------------------------------------------------------------------
+
+// ── Container ─────────────────────────────────────────────────────────────
+
+.arvo-toast-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: $arvo-space-8;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  pointer-events: none;
+
+  // Default: top-right
+  &--top-right,
+  &:not([class*='--']) {
+    top: 16px;
+    right: 16px;
+  }
+
+  &--top-left {
+    top: 16px;
+    left: 16px;
+  }
+
+  &--bottom-right {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  &--bottom-left {
+    bottom: 16px;
+    left: 16px;
+  }
+}
+
+// ── Toast card ────────────────────────────────────────────────────────────
+
+.arvo-toast {
+  // Only dynamic values that change per type modifier
+  --arvo-toast-border-color: var(--arvo-color-b-info, #0037ff);
+  --arvo-toast-title-color: var(--arvo-color-t-info-dark, #002ed2);
+  --arvo-toast-icon-color: var(--arvo-color-i-info-dark);
+
+  width: 300px;
+  padding: $arvo-space-12;
+  display: flex;
+  align-items: center;
+  gap: $arvo-space-4;
+  background: var(--arvo-color-s-layer-04);
+  border-left: $arvo-border-2 solid var(--arvo-toast-border-color);
+  box-shadow: $arvo-shadow-left;
+  pointer-events: auto;
+  opacity: 1;
+  animation: arvo-toast-enter $arvo-motion-transition-expand;
+
+  // ── Fade state ──────────────────────────────────────────────────────
+  &.is-fading {
+    opacity: 0;
+    transition: opacity 1000ms ease-in-out;
+  }
+
+  // ── Paused (hover) ──────────────────────────────────────────────────
+  &.is-paused {
+    opacity: 1;
+    transition: none;
+  }
+
+  // ── Type modifiers ──────────────────────────────────────────────────
+
+  &--negative {
+    --arvo-toast-border-color: var(--arvo-color-b-negative);
+    --arvo-toast-title-color: var(--arvo-color-t-negative);
+    --arvo-toast-icon-color: var(--arvo-color-i-negative);
+  }
+
+  &--warning {
+    --arvo-toast-border-color: var(--arvo-color-b-warning);
+    --arvo-toast-title-color: var(--arvo-color-t-warning);
+    --arvo-toast-icon-color: var(--arvo-color-i-warning);
+  }
+
+  &--info {
+    --arvo-toast-border-color: var(--arvo-color-b-info);
+    --arvo-toast-title-color: var(--arvo-color-t-info-dark);
+    --arvo-toast-icon-color: var(--arvo-color-i-info-dark);
+  }
+
+  &--positive {
+    --arvo-toast-border-color: var(--arvo-color-b-positive);
+    --arvo-toast-title-color: var(--arvo-color-t-positive);
+    --arvo-toast-icon-color: var(--arvo-color-i-positive);
+  }
+
+  &--block {
+    --arvo-toast-border-color: var(--arvo-color-b-negative);
+    --arvo-toast-title-color: var(--arvo-color-t-negative);
+    --arvo-toast-icon-color: var(--arvo-color-i-negative);
+  }
+
+  &--neutral {
+    --arvo-toast-border-color: var(--arvo-color-b-neutral);
+    --arvo-toast-title-color: var(--arvo-color-t-neutral);
+    --arvo-toast-icon-color: var(--arvo-color-i-neutral);
+  }
+}
+
+// ── Icon ──────────────────────────────────────────────────────────────────
+
+.arvo-toast__ico {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  align-self: baseline;
+  color: var(--arvo-toast-icon-color);
+
+  &::before {
+    font-family: 'o9con', sans-serif;
+  }
+
+  .arvo-toast--negative &::before { content: '\edd9'; }
+  .arvo-toast--warning &::before  { content: '\ed72'; }
+  .arvo-toast--info &::before     { content: '\ed71'; }
+  .arvo-toast--positive &::before { content: '\ec1b'; }
+  .arvo-toast--block &::before    { content: '\edd9'; }
+  .arvo-toast--neutral &::before  { content: '\ebe2'; }
+}
+
+// ── Content ───────────────────────────────────────────────────────────────
+
+.arvo-toast__content {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: $arvo-space-8;
+  min-width: 0;
+}
+
+// ── Title ─────────────────────────────────────────────────────────────────
+
+.arvo-toast__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: var(--arvo-medium, 500);
+  color: var(--arvo-toast-title-color);
+
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ── Message ───────────────────────────────────────────────────────────────
+
+.arvo-toast__msg {
+  margin: 0;
+  font-size: var(--arvo-size-12, 12px);
+  font-weight: var(--arvo-regular, 400);
+  color: var(--arvo-color-t-secondary, #303030);
+}
+
+// Title + message wrapper gap
+.arvo-toast__title + .arvo-toast__msg {
+  margin-top: $arvo-space-4;
+}
+
+// ── Link ──────────────────────────────────────────────────────────────────
+
+.arvo-toast__link {
+  display: block;
+}
+
+// ── Close button ──────────────────────────────────────────────────────────
+
+.arvo-toast__close {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  align-self: baseline;
+  justify-content: center;
+  color: var(--arvo-color-i-secondary);
+
+  .no-touch &:hover {
+    color: var(--arvo-color-t-primary);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--arvo-color-b-theme-focus);
+    outline-offset: $arvo-space-2;
+  }
+}
+
+// ── Animations ────────────────────────────────────────────────────────────
+
+@keyframes arvo-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes arvo-toast-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+// Left-side positions animate from left
+.arvo-toast-container--top-left,
+.arvo-toast-container--bottom-left {
+  .arvo-toast {
+    animation-name: arvo-toast-enter-left;
+  }
+}
+
+@keyframes arvo-toast-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// ── Reduced motion ────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .arvo-toast {
+    animation: none;
+
+    &.is-fading {
+      transition: none;
+      opacity: 0;
+    }
+  }
+}

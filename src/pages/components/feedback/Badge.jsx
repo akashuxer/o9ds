@@ -1,25 +1,18 @@
 import { useState, useMemo } from 'react'
-import { O9BadgeAlert } from '@o9ds/react'
+import { ArvoBadgeAlert } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'type', type: "'info' | 'success' | 'warning' | 'danger'", default: "'info'", desc: 'Tone semantic — drives the role between alert and status.' },
-  { prop: 'variant', type: "'subtle' | 'solid'", default: "'subtle'", desc: 'Visual weight.' },
-  { prop: 'size', type: "'sm' | 'md'", default: "'md'", desc: 'Size.' },
-  { prop: 'title', type: 'string', desc: 'Heading content (optional).' },
-  { prop: 'description', type: 'string | ReactNode', required: 'Yes', desc: 'Body content describing the alert.' },
-  { prop: 'icon', type: 'string', desc: 'Override the default icon for this type.' },
-  { prop: 'actions', type: 'BadgeAlertAction[]', desc: 'Inline actions: { id, label, onClick }.' },
-  { prop: 'dismissible', type: 'boolean', default: 'false', desc: 'Show a close button.' },
-  { prop: 'onDismiss', type: '() => void', desc: 'Fires when the user dismisses the alert.' },
-]
+const DESCRIPTOR = getDescriptor('badge')
+const PROPS = DESCRIPTOR.props
+
 
 export default function Badge() {
   const [tab, setTab] = useState('Overview')
@@ -48,10 +41,10 @@ export default function Badge() {
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
-                <O9BadgeAlert type="info" message="Heads up — the system will be down on Sunday." />
-                <O9BadgeAlert type="positive" message="Changes saved successfully." />
-                <O9BadgeAlert type="warning" message="Your session expires in 5 minutes." />
-                <O9BadgeAlert type="negative" message="Failed to save changes." />
+                <ArvoBadgeAlert type="info" message="Heads up — the system will be down on Sunday." />
+                <ArvoBadgeAlert type="positive" message="Changes saved successfully." />
+                <ArvoBadgeAlert type="warning" message="Your session expires in 5 minutes." />
+                <ArvoBadgeAlert type="negative" message="Failed to save changes." />
               </LiveReference>
             </DocSection>
           </div>
@@ -79,17 +72,17 @@ export default function Badge() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9BadgeAlert } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoBadgeAlert } from '@arvo/react';
 
-<O9BadgeAlert type="info" description="The system will be down on Sunday." />
+<ArvoBadgeAlert type="info" description="The system will be down on Sunday." />
 
-<O9BadgeAlert
+<ArvoBadgeAlert
   type="success"
   title="Saved"
   description="Your changes have been published."
 />
 
-<O9BadgeAlert
+<ArvoBadgeAlert
   type="danger"
   title="Failed to save"
   description="Try again or contact support."
@@ -99,9 +92,9 @@ export default function Badge() {
 />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9BadgeAlert } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoBadgeAlert } from '@arvo/js';
 
-const alert = O9BadgeAlert.initialize(el, {
+const alert = ArvoBadgeAlert.initialize(el, {
   type: 'success',
   title: 'Saved',
   description: 'Your changes have been published.',
@@ -116,7 +109,7 @@ alert.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9BadgeAlert.initialize(el, options)', returns: 'O9BadgeAlert', desc: 'Factory.' },
+                { method: 'ArvoBadgeAlert.initialize(el, options)', returns: 'ArvoBadgeAlert', desc: 'Factory.' },
                 { method: 'update(partial)', desc: 'Update type, title, description, actions, etc.' },
                 { method: 'dismiss()', desc: 'Programmatically dismiss the alert.' },
                 { method: 'destroy()', desc: 'Tear down.' },

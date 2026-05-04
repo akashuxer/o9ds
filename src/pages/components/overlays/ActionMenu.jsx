@@ -5,19 +5,13 @@ import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'triggerRef', type: 'React.RefObject<HTMLElement | null>', desc: 'Ref to the trigger element.' },
-  { prop: 'isOpen / defaultOpen / onOpenChange', type: 'open-state API', desc: 'Same controlled/uncontrolled API as O9Popover.' },
-  { prop: 'items', type: 'ActionMenuItem[]', required: 'Yes', desc: 'Item configs: { id, label, icon?, tone?, disabled?, shortcut?, divider? }.' },
-  { prop: 'trailingActions', type: 'ActionMenuItem[]', desc: 'Items rendered in a trailing slot, e.g. inline action.' },
-  { prop: 'inlinePopover', type: 'PopoverConfig', desc: 'Optional inline Popover that opens from a sub-item.' },
-  { prop: 'inlineHybridPopover', type: 'HybridPopoverConfig', desc: 'Optional inline Hybrid Popover that opens from a sub-item.' },
-  { prop: 'placement', type: 'PopoverPlacement', default: "'bottom-start'", desc: 'Menu placement relative to the trigger.' },
-  { prop: 'onSelect', type: '(item) => void', desc: 'Fires when an item is activated.' },
-]
+const DESCRIPTOR = getDescriptor('action-menu')
+const PROPS = DESCRIPTOR.props
+
 
 export default function ActionMenu() {
   const [tab, setTab] = useState('Overview')
@@ -81,7 +75,7 @@ export default function ActionMenu() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9ActionMenu } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoActionMenu } from '@arvo/react';
 import { useRef } from 'react';
 
 const triggerRef = useRef(null);
@@ -94,12 +88,12 @@ const items = [
 ];
 
 <button ref={triggerRef}>Open menu</button>
-<O9ActionMenu triggerRef={triggerRef} items={items} onSelect={(item) => handle(item)} />`} />
+<ArvoActionMenu triggerRef={triggerRef} items={items} onSelect={(item) => handle(item)} />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9ActionMenu } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoActionMenu } from '@arvo/js';
 
-const menu = O9ActionMenu.initialize(trigger, {
+const menu = ArvoActionMenu.initialize(trigger, {
   items,
   onSelect: (item) => handle(item),
 });
@@ -113,7 +107,7 @@ menu.destroy();`} />
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9ActionMenu.initialize(trigger, options)', returns: 'O9ActionMenu', desc: 'Factory.' },
+                { method: 'ArvoActionMenu.initialize(trigger, options)', returns: 'ArvoActionMenu', desc: 'Factory.' },
                 { method: 'open() / close() / toggle()', desc: 'Open state control.' },
                 { method: 'isOpen()', returns: 'boolean', desc: 'Whether the menu is open.' },
                 { method: 'setItems(items)', desc: 'Replace menu items.' },

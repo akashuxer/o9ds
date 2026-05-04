@@ -115,7 +115,7 @@ function DivGrid({
             key={idx}
             className={cn(
               'cell relative border-[0.5px] opacity-40 transition-opacity duration-150 will-change-transform hover:opacity-80 dark:opacity-[0.32] dark:shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.04)] dark:hover:opacity-[0.48]',
-              clickedCell && 'o9ds-cell-ripple',
+              clickedCell && 'arvo-cell-ripple',
               !interactive && 'pointer-events-none',
             )}
             style={cellStyle}

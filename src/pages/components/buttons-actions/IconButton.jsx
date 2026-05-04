@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { O9IconButton } from '@o9ds/react'
+import { ArvoIconButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
@@ -8,27 +8,15 @@ import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
 import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, CssVarsGrid, KeyboardTable, AriaTable, MethodsTable, EventsTable, SimpleTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'icon', type: 'string', required: 'Yes', desc: 'Icon name without o9con- prefix' },
-  { prop: 'tooltip', type: 'string', required: 'Yes', desc: 'Accessible label and native tooltip. Maps to aria-label and title.' },
-  { prop: 'variant', type: "'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger'", default: "'primary'", desc: 'Visual style variant' },
-  { prop: 'size', type: "'xs' | 'sm' | 'md' | 'lg'", default: "'md'", desc: 'Button size. xs (16px) is exclusive to IconButton.' },
-  { prop: 'type', type: "'button' | 'submit' | 'reset'", default: "'button'", desc: 'Native HTML button type' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Prevents all interaction' },
-  { prop: 'isSelected', type: 'boolean', default: 'undefined', desc: 'Toggle/active state. Sets aria-pressed.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Skeleton shimmer overlay; prevents interaction' },
-  { prop: 'onClick', type: '(event) => void', default: 'undefined', desc: 'Click handler. Suppressed when disabled or loading.' },
-]
+const DESCRIPTOR = getDescriptor('icon-button')
+const PROPS = DESCRIPTOR.props
+const CSS_VARS = DESCRIPTOR.cssVarGroups
 
-const CSS_VARS = [
-  { category: 'Layout', vars: ['--o9ds-btn-height', '--o9ds-btn-padding-block', '--o9ds-btn-padding-inline'] },
-  { category: 'Icon', vars: ['--o9ds-btn-icon-size'] },
-  { category: 'Color', vars: ['--o9ds-btn-bg-color', '--o9ds-btn-icon-color', '--o9ds-btn-border-color'] },
-  { category: 'Border', vars: ['--o9ds-btn-border-width'] },
-]
+
 
 export default function IconButton() {
   const [tab, setTab] = useState('Overview')
@@ -59,28 +47,28 @@ export default function IconButton() {
             </DocSection>
             <DocSection id="variants" title="Variants">
               <LiveReference>
-                <O9IconButton icon="plus" tooltip="Add" variant="primary" />
-                <O9IconButton icon="edit" tooltip="Edit" variant="secondary" />
-                <O9IconButton icon="close" tooltip="Close" variant="tertiary" />
-                <O9IconButton icon="cog" tooltip="Settings" variant="outline" />
-                <O9IconButton icon="bin" tooltip="Delete" variant="danger" />
+                <ArvoIconButton icon="plus" tooltip="Add" variant="primary" />
+                <ArvoIconButton icon="edit" tooltip="Edit" variant="secondary" />
+                <ArvoIconButton icon="close" tooltip="Close" variant="tertiary" />
+                <ArvoIconButton icon="cog" tooltip="Settings" variant="outline" />
+                <ArvoIconButton icon="bin" tooltip="Delete" variant="danger" />
               </LiveReference>
             </DocSection>
             <DocSection id="sizes" title="Sizes">
               <DocParagraph><DocStrong>xs</DocStrong> (16x16) is unique to Icon Button — use it for dense inline controls only.</DocParagraph>
               <LiveReference>
-                <O9IconButton icon="plus" tooltip="xs" variant="primary" size="xs" />
-                <O9IconButton icon="plus" tooltip="sm" variant="primary" size="sm" />
-                <O9IconButton icon="plus" tooltip="md" variant="primary" size="md" />
-                <O9IconButton icon="plus" tooltip="lg" variant="primary" size="lg" />
+                <ArvoIconButton icon="plus" tooltip="xs" variant="primary" size="xs" />
+                <ArvoIconButton icon="plus" tooltip="sm" variant="primary" size="sm" />
+                <ArvoIconButton icon="plus" tooltip="md" variant="primary" size="md" />
+                <ArvoIconButton icon="plus" tooltip="lg" variant="primary" size="lg" />
               </LiveReference>
             </DocSection>
             <DocSection id="states" title="States">
               <LiveReference>
-                <O9IconButton icon="star" tooltip="Default" variant="secondary" />
-                <O9IconButton icon="star" tooltip="Selected" variant="secondary" isSelected />
-                <O9IconButton icon="plus" tooltip="Disabled" variant="primary" isDisabled />
-                <O9IconButton icon="plus" tooltip="Loading" variant="primary" isLoading />
+                <ArvoIconButton icon="star" tooltip="Default" variant="secondary" />
+                <ArvoIconButton icon="star" tooltip="Selected" variant="secondary" isSelected />
+                <ArvoIconButton icon="plus" tooltip="Disabled" variant="primary" isDisabled />
+                <ArvoIconButton icon="plus" tooltip="Loading" variant="primary" isLoading />
               </LiveReference>
             </DocSection>
             <DocSection id="dos-donts" title="Dos & Don'ts">
@@ -115,18 +103,18 @@ export default function IconButton() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9IconButton } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoIconButton } from '@arvo/react';
 
-<O9IconButton icon="plus" tooltip="Add" variant="primary" />
-<O9IconButton icon="star" tooltip="Favorite" variant="secondary" isSelected />
-<O9IconButton icon="close" tooltip="Close" variant="tertiary" size="xs" />
-<O9IconButton icon="bin" tooltip="Delete" variant="danger" isDisabled />
-<O9IconButton icon="plus" tooltip="Loading" isLoading />`} />
+<ArvoIconButton icon="plus" tooltip="Add" variant="primary" />
+<ArvoIconButton icon="star" tooltip="Favorite" variant="secondary" isSelected />
+<ArvoIconButton icon="close" tooltip="Close" variant="tertiary" size="xs" />
+<ArvoIconButton icon="bin" tooltip="Delete" variant="danger" isDisabled />
+<ArvoIconButton icon="plus" tooltip="Loading" isLoading />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9IconButton } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoIconButton } from '@arvo/js';
 
-const btn = O9IconButton.initialize(el, {
+const btn = ArvoIconButton.initialize(el, {
   variant: 'secondary',
   icon: 'add',
   tooltip: 'Add item',
@@ -142,7 +130,7 @@ btn.destroy();`} />
             </DocSection>
             <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
             <DocSection id="css-vars" title="CSS variables">
-              <DocParagraph>Icon Button shares color and border variables with <DocCode>o9ds-btn</DocCode> via shared modifier classes.</DocParagraph>
+              <DocParagraph>Icon Button shares color and border variables with <DocCode>arvo-btn</DocCode> via shared modifier classes.</DocParagraph>
               <CssVarsGrid groups={CSS_VARS} />
             </DocSection>
             <DocSection id="sizes-table" title="Size reference">
@@ -155,7 +143,7 @@ btn.destroy();`} />
             </DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9IconButton.initialize(el, options)', returns: 'O9IconButton', desc: 'Factory.' },
+                { method: 'ArvoIconButton.initialize(el, options)', returns: 'ArvoIconButton', desc: 'Factory.' },
                 { method: 'setIcon(name)', desc: 'Swap the displayed icon.' },
                 { method: 'setTooltip(text)', desc: 'Update tooltip, aria-label, and title.' },
                 { method: 'setVariant(v)', desc: 'Change visual variant.' },

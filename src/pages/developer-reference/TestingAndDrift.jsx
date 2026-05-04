@@ -19,15 +19,15 @@ const STACK = [
   ['@testing-library/react', 'React component testing utilities'],
   ['@testing-library/jest-dom', 'DOM assertion matchers (.toBeDisabled(), etc.)'],
   ['axe-core', 'Automated accessibility testing'],
-  ['@o9ds/test-utils', 'Project-specific test helpers'],
+  ['@arvo/test-utils', 'Project-specific test helpers'],
 ]
 
 const COMMANDS = [
   ['pnpm test', 'All packages (builds first via Turborepo)'],
   ['pnpm test:watch', 'Watch mode across all packages'],
-  ['pnpm --filter @o9ds/react test', 'React package only'],
-  ['pnpm --filter @o9ds/js test', 'JS package only'],
-  ['pnpm --filter @o9ds/core test', 'Core package only'],
+  ['pnpm --filter @arvo/react test', 'React package only'],
+  ['pnpm --filter @arvo/js test', 'JS package only'],
+  ['pnpm --filter @arvo/core test', 'Core package only'],
 ]
 
 export default function TestingAndDrift() {
@@ -36,7 +36,7 @@ export default function TestingAndDrift() {
       <div className="space-y-12">
         <PageHeader
           title="Testing & Drift"
-          description="Internal test strategy for the @o9ds/* monorepo and how the Drift Checker enforces React/JS parity. For consumer-side test guidance, see Usage › Testing."
+          description="Internal test strategy for the @arvo/* monorepo and how the Drift Checker enforces React/JS parity. For consumer-side test guidance, see Usage › Testing."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>}
         />
 
@@ -45,15 +45,15 @@ export default function TestingAndDrift() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Tool</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Purpose</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Tool</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Purpose</th>
                 </tr>
               </thead>
               <tbody>
                 {STACK.map(([tool, purpose]) => (
                   <tr key={tool} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{tool}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{purpose}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{purpose}</td>
                   </tr>
                 ))}
               </tbody>
@@ -86,15 +86,15 @@ packages/core/src/overlay/
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Command</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Scope</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Command</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Scope</th>
                 </tr>
               </thead>
               <tbody>
                 {COMMANDS.map(([cmd, scope]) => (
                   <tr key={cmd} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 font-mono text-sm ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{cmd}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{scope}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{scope}</td>
                   </tr>
                 ))}
               </tbody>
@@ -150,9 +150,9 @@ import { render } from '@testing-library/react';
 it('has no a11y violations across variants', async () => {
   const { container } = render(
     <>
-      <O9Button label="Default" />
-      <O9Button label="Disabled" isDisabled />
-      <O9Button label="Loading" isLoading />
+      <ArvoButton label="Default" />
+      <ArvoButton label="Disabled" isDisabled />
+      <ArvoButton label="Loading" isLoading />
     </>
   );
   expect(await axe(container)).toHaveNoViolations();

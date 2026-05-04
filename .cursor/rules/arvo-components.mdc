@@ -1,0 +1,35 @@
+---
+description: Arvo component development — no third-party libraries, no Tailwind, build from scratch
+globs: src/LayoutComponents/**/*, src/pages/**/*
+alwaysApply: false
+---
+
+# Arvo Component Development
+
+## Constraint
+
+**No third-party UI libraries. No Tailwind. Everything built from scratch.**
+
+- No Ant Design, MUI, Chakra, Radix UI, Headless UI, or any UI component library
+- No Tailwind CSS — use plain CSS or custom styles
+- No 3rd party styling or component libraries
+- Build all components and styles from scratch
+
+## Allowed
+
+- Native HTML elements
+- Plain CSS (inline styles, CSS modules, or linked stylesheets)
+- Internal design tokens from `index.css` (CSS variables) — no Tailwind
+- Internal utility functions / hooks
+- Minimal utility libraries (e.g. classnames, date-fns) if approved — **no UI or styling libraries**
+
+## Goal
+
+- Ensure consistency with Arvo Design System
+- Maintain full control over styling, behavior, and accessibility
+- Zero dependency on external UI frameworks or CSS frameworks
+
+## Development Order
+
+1. **Foundations first**: Set design tokens, spacing scale, typography, colors (plain CSS).
+2. **Components second**: Build components using native HTML + plain CSS — no libraries.

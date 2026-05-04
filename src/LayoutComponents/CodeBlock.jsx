@@ -30,7 +30,7 @@ export default function CodeBlock({ code, label, language = 'auto' }) {
   const preBg = isLight ? { backgroundColor: '#F2F2F2', color: '#010101' } : { backgroundColor: 'rgba(38, 38, 38, 0.5)' }
 
   return (
-    <div className="border dark:border-neutral-700 overflow-hidden" style={border} data-o9ds-code-block>
+    <div className="border dark:border-neutral-700 overflow-hidden" style={border} data-arvo-code-block>
       <div
         className={`flex items-center gap-3 min-h-[2.25rem] px-3 py-2 border-b dark:border-neutral-700 ${label ? 'justify-between' : 'justify-end'}`}
         style={headerBg}
@@ -43,7 +43,7 @@ export default function CodeBlock({ code, label, language = 'auto' }) {
         <button
           type="button"
           onClick={copy}
-          className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium border px-2.5 py-1.5 transition-colors dark:border-neutral-600 dark:text-neutral-300 hover:text-o9ds-light-primary dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/80"
+          className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium border px-2.5 py-1.5 transition-colors dark:border-neutral-600 dark:text-neutral-300 hover:text-arvo-light-primary dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/80"
           style={isLight ? { borderColor: '#E5E5E5', color: '#303030' } : undefined}
           aria-label={label ? 'Copy code' : 'Copy code sample'}
           title="Copy to clipboard"
@@ -55,9 +55,9 @@ export default function CodeBlock({ code, label, language = 'auto' }) {
       <pre
         className="p-4 text-sm font-mono overflow-x-auto leading-relaxed m-0 dark:text-neutral-200"
         style={preBg}
-        data-o9ds-code
+        data-arvo-code
       >
-        <code data-o9ds-syntax-block>{highlightCode(code, language)}</code>
+        <code data-arvo-syntax-block>{highlightCode(code, language)}</code>
       </pre>
     </div>
   )

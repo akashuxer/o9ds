@@ -1,32 +1,20 @@
 import { useState, useMemo } from 'react'
-import { O9FabButton } from '@o9ds/react'
+import { ArvoFabButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, CssVarsGrid, KeyboardTable, AriaTable, MethodsTable, SimpleTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
-const PROPS = [
-  { prop: 'icon', type: 'string', default: "'plus'", required: 'Yes', desc: 'Icon name without o9con- prefix.' },
-  { prop: 'variant', type: "'primary' | 'secondary'", default: "'primary'", desc: 'Visual variant. Only primary and secondary are supported.' },
-  { prop: 'label', type: 'string', default: 'undefined', desc: 'Label text. When provided, renders extended FAB (icon + label).' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Prevents all interaction. Shadow remains at reduced opacity.' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Shows shimmer on inner button. Prevents interaction.' },
-  { prop: 'indicator', type: "'unsaved' | 'new' | 'unread' | false", default: 'false', desc: 'Indicator badge variant. Hidden during disabled/loading.' },
-  { prop: 'indicatorSize', type: "'sm' | 'lg'", default: "'lg'", desc: 'Indicator dot size (6px or 10px).' },
-  { prop: 'zIndex', type: 'number', default: 'undefined', desc: 'Explicit z-index override. Falls back to CSS variable, then 1050 default.' },
-  { prop: 'tooltip', type: 'string', default: 'undefined', desc: 'Tooltip text. Used as aria-label in icon-only mode.' },
-  { prop: 'onClick', type: '(event) => void', default: 'undefined', desc: 'Click handler.' },
-]
+const DESCRIPTOR = getDescriptor('fab-button')
+const PROPS = DESCRIPTOR.props
+const CSS_VARS = DESCRIPTOR.cssVarGroups
 
-const CSS_VARS = [
-  { category: 'Elevation', vars: ['--o9ds-fab-btn-shadow', '--o9ds-fab-btn-shadow-disabled'] },
-  { category: 'Positioning', vars: ['--o9ds-fab-btn-z-index'] },
-  { category: 'Indicator offsets', vars: ['--o9ds-fab-btn-indicator-top', '--o9ds-fab-btn-indicator-right'] },
-]
+
 
 export default function FabButton() {
   const [tab, setTab] = useState('Overview')
@@ -43,7 +31,7 @@ export default function FabButton() {
       <div className="space-y-8">
         <PageHeader
           title="FAB Button"
-          description="Floating Action Button — a persistent, elevated button that floats above page content for a primary or secondary contextual action. Composes O9Button (with-label) or O9IconButton (icon-only)."
+          description="Floating Action Button — a persistent, elevated button that floats above page content for a primary or secondary contextual action. Composes ArvoButton (with-label) or ArvoIconButton (icon-only)."
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />
@@ -57,14 +45,14 @@ export default function FabButton() {
             </DocSection>
             <DocSection id="modes" title="Modes">
               <LiveReference>
-                <O9FabButton icon="plus" tooltip="Add" />
-                <O9FabButton icon="plus" label="Create" />
-                <O9FabButton icon="edit" tooltip="Edit" variant="secondary" />
-                <O9FabButton icon="bell-o" tooltip="Notifications" indicator="new" />
+                <ArvoFabButton icon="plus" tooltip="Add" />
+                <ArvoFabButton icon="plus" label="Create" />
+                <ArvoFabButton icon="edit" tooltip="Edit" variant="secondary" />
+                <ArvoFabButton icon="bell-o" tooltip="Notifications" indicator="new" />
               </LiveReference>
             </DocSection>
             <DocSection id="indicator" title="Indicator badge">
-              <DocParagraph>The indicator uses the shared <DocCode>o9ds-indicator</DocCode> pattern.</DocParagraph>
+              <DocParagraph>The indicator uses the shared <DocCode>arvo-indicator</DocCode> pattern.</DocParagraph>
               <SimpleTable columns={['Variant', 'Color', 'Shape', 'Semantic']} rows={[
                 ['unsaved', 'warning', 'Circle', 'Unsaved changes'],
                 ['new', 'negative', 'Square', 'New notification'],
@@ -98,19 +86,19 @@ export default function FabButton() {
         {tab === 'Code/APIs' && (
           <div className="space-y-12">
             <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@o9ds/react" code={`import { O9FabButton } from '@o9ds/react';
+              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoFabButton } from '@arvo/react';
 
-<O9FabButton icon="plus" tooltip="Add item" />
-<O9FabButton icon="plus" label="Create" />
-<O9FabButton icon="edit" tooltip="Edit" variant="secondary" />
-<O9FabButton icon="plus" tooltip="Add" indicator="new" />
-<O9FabButton icon="plus" tooltip="Add" isLoading />
-<O9FabButton icon="plus" tooltip="Add" zIndex={2000} />`} />
+<ArvoFabButton icon="plus" tooltip="Add item" />
+<ArvoFabButton icon="plus" label="Create" />
+<ArvoFabButton icon="edit" tooltip="Edit" variant="secondary" />
+<ArvoFabButton icon="plus" tooltip="Add" indicator="new" />
+<ArvoFabButton icon="plus" tooltip="Add" isLoading />
+<ArvoFabButton icon="plus" tooltip="Add" zIndex={2000} />`} />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@o9ds/js" code={`import { O9FabButton } from '@o9ds/js';
+              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoFabButton } from '@arvo/js';
 
-const fab = O9FabButton.initialize(el, {
+const fab = ArvoFabButton.initialize(el, {
   variant: 'primary',
   icon: 'plus',
   tooltip: 'Add item',
@@ -131,21 +119,21 @@ fab.destroy();`} />
             <DocSection id="arch" title="Architecture">
               <DocParagraph>FAB is a <DocStrong>composition wrapper</DocStrong> — it does not duplicate button logic or styling.</DocParagraph>
               <SimpleTable columns={['Mode', 'Inner component', 'Button size', 'Dimensions']} rows={[
-                ['Icon-only (default)', 'O9IconButton', 'lg', '40 × 40px'],
-                ['With label', 'O9Button', 'md', '32px height'],
+                ['Icon-only (default)', 'ArvoIconButton', 'lg', '40 × 40px'],
+                ['With label', 'ArvoButton', 'md', '32px height'],
               ]} />
               <DocParagraph>The wrapper provides box-shadow, z-index, position-relative for indicator placement, and the indicator element. Variant colors, sizes, hover/focus/active states, loading shimmer, and typography are all inherited from the inner button.</DocParagraph>
             </DocSection>
             <DocSection id="zindex" title="Z-index cascade">
-              <ol className="list-decimal pl-5 space-y-1.5 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+              <ol className="list-decimal pl-5 space-y-1.5 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
                 <li><DocStrong>Explicit zIndex prop</DocStrong> — sets inline z-index style.</li>
-                <li><DocStrong>CSS variable <DocCode>--o9ds-fab-btn-z-index</DocCode></DocStrong> — set by the consumer on the element or a parent.</li>
+                <li><DocStrong>CSS variable <DocCode>--arvo-fab-btn-z-index</DocCode></DocStrong> — set by the consumer on the element or a parent.</li>
                 <li><DocStrong>Design system default</DocStrong> — <DocCode>1050</DocCode> (above page content, below modals at 1300).</li>
               </ol>
             </DocSection>
             <DocSection id="methods" title="Methods (JS)">
               <MethodsTable rows={[
-                { method: 'O9FabButton.initialize(el, options)', returns: 'O9FabButton', desc: 'Factory.' },
+                { method: 'ArvoFabButton.initialize(el, options)', returns: 'ArvoFabButton', desc: 'Factory.' },
                 { method: 'setVariant(v)', desc: 'Change variant (primary | secondary).' },
                 { method: 'setIcon(name)', desc: 'Update displayed icon.' },
                 { method: 'setLabel(label | null)', desc: 'Set label or switch to icon-only. Recreates inner button on mode change.' },

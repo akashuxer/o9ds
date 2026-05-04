@@ -1,0 +1,109 @@
+@use '../../mixins/typography' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .arvo-tip ──────────────────────────────────────────────────────────────
+
+.arvo-tip {
+  // ── Root layout ──────────────────────────────────────────────────────────
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $arvo-space-4;
+  max-width: $arvo-tooltip-wmax;
+  padding: $arvo-space-4 $arvo-space-6;
+  background-color: var(--arvo-color-s-inverse);
+  color: var(--arvo-color-t-inverse);
+  box-shadow: $arvo-shadow-center;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  pointer-events: auto;
+
+  // Transition classes applied by @arvo/core enter()/exit()
+  &.arvo-enter-from {
+    opacity: 0;
+  }
+
+  &.arvo-enter-active {
+    transition: opacity 120ms ease;
+  }
+
+  &.arvo-enter-to {
+    opacity: 1;
+  }
+
+  &.arvo-exit-from {
+    opacity: 1;
+  }
+
+  &.arvo-exit-active {
+    transition: opacity 120ms ease;
+  }
+
+  &.arvo-exit-to {
+    opacity: 0;
+  }
+
+  // ── __txt ────────────────────────────────────────────────────────────────
+  &__txt {
+    flex: 1 0 0;
+    min-width: 1px;
+    @include arvo-font-l12-r;
+    line-height: normal;
+    color: var(--arvo-color-t-inverse);
+  }
+
+  // ── __shortcut ───────────────────────────────────────────────────────────
+  &__shortcut {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: $arvo-space-4;
+    background-color: var(--arvo-color-s-on-inverse);
+    @include arvo-font-l12-r;
+    line-height: normal;
+    color: var(--arvo-color-t-inverse);
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  // ── Future: __hdr (rich tooltip header) ──────────────────────────────────
+  &__hdr {
+    width: 100%;
+    @include arvo-font-l12-r;
+    line-height: normal;
+    color: var(--arvo-color-t-inverse);
+  }
+
+  // ── Future: __bdy (rich tooltip body) ────────────────────────────────────
+  &__bdy {
+    width: 100%;
+    @include arvo-font-l12-r;
+    line-height: normal;
+    color: var(--arvo-color-t-inverse);
+  }
+
+  // ── Future: __ftr (rich tooltip footer) ──────────────────────────────────
+  &__ftr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $arvo-space-4;
+    width: 100%;
+  }
+
+  // ── Future: --rich modifier ──────────────────────────────────────────────
+  &--rich {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: $arvo-tooltip-wmax;
+    padding: $arvo-space-10 $arvo-space-12 $arvo-space-12;
+  }
+}

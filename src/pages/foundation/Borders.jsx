@@ -81,37 +81,37 @@ export default function Borders() {
       <div className="space-y-12">
         <PageHeader
           title="Borders & radius"
-          description="Border width and radius tokens for o9ds. Product UI defaults to sharp (0) corners; tokens cover exceptions and legacy surfaces."
+          description="Border width and radius tokens for arvo. Product UI defaults to sharp (0) corners; tokens cover exceptions and legacy surfaces."
           icon={bordersIcon}
           descClassName="mt-4"
         />
 
         <section id="sharp-corners" className="scroll-mt-24 space-y-6">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Sharp corners
           </h2>
 
           <WhiteBgCard className="max-w-3xl" unified>
-            <p className="m-0 text-lg font-semibold text-o9ds-light-primary dark:text-white">
+            <p className="m-0 text-lg font-semibold text-arvo-light-primary dark:text-white">
               o9 Branding is Moving to Sharp Borders Instead of Rounded Corners
             </p>
-            <p className="mt-4 mb-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            <p className="mt-4 mb-0 text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
               o9 is modernizing its design language to align with a more sleek, professional, and data-driven aesthetic.
             </p>
-            <p className="mt-4 mb-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            <p className="mt-4 mb-0 text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
               Sharp corners convey a structured and precise look, reinforcing the professional and analytical nature of o9&apos;s UI platform.
             </p>
-            <p className="mt-4 mb-0 text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+            <p className="mt-4 mb-0 text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
               From o9con icons to UI components, we are shifting to a 0-radius approach, ensuring a modern, cohesive, and forward-thinking design
               system.
             </p>
           </WhiteBgCard>
 
           <div
-            data-o9ds-doc-figure
+            data-arvo-doc-figure
             className="rounded-xl border border-[#e5e5e5] bg-[#fafafa] px-6 py-6 [background-image:radial-gradient(circle,rgba(148,163,184,0.35)_1px,transparent_1px)] [background-size:14px_14px] dark:!border-[#e5e5e5] dark:!bg-[#fafafa]"
           >
             <p className="mb-4 text-sm font-medium text-[#303030]">Border radius: before and after</p>
@@ -137,14 +137,14 @@ export default function Borders() {
         </section>
 
         <section id="policy" className="scroll-mt-24 space-y-4">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Policy
           </h2>
-          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-            Border radius defaults to <strong className="font-semibold text-o9ds-light-primary dark:text-neutral-200">0</strong> across the design
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+            Border radius defaults to <strong className="font-semibold text-arvo-light-primary dark:text-neutral-200">0</strong> across the design
             system. Buttons, inputs, cards, badges, and components use sharp (90°) corners unless a tokenized exception applies.
           </p>
           <CodeBlock
@@ -157,14 +157,14 @@ export default function Borders() {
         </section>
 
         <section id="border-radius-tokens" className="scroll-mt-24 space-y-6">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Border radius tokens
           </h2>
-          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
-            Prefer <code className="font-mono text-sm px-1" data-o9ds-inline-code>0</code> for new UI. The token below makes a full circle—use it for small indicators (for example an unsaved orange dot), not for large rounded cards.
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+            Prefer <code className="font-mono text-sm px-1" data-arvo-inline-code>0</code> for new UI. The token below makes a full circle—use it for small indicators (for example an unsaved orange dot), not for large rounded cards.
           </p>
           <DocTable
             columns={RADIUS_COLUMNS}
@@ -174,25 +174,25 @@ export default function Borders() {
           />
 
           <div id="applying-border-radius" className="scroll-mt-8 space-y-4 max-w-3xl">
-            <h3 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying border-radius</h3>
+            <h3 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Applying border-radius</h3>
             <CodeBlock
               label="SCSS"
               language="scss"
               code={`.unsaved-indicator {
-  border-radius: $o9ds-radius-circle;
+  border-radius: $arvo-radius-circle;
 }`}
             />
           </div>
         </section>
 
         <section id="border-width-tokens" className="scroll-mt-24 space-y-6">
-          <h2 className="flex items-center gap-2 text-2xl font-bold text-o9ds-light-primary dark:text-white">
-            <span className="text-o9ds-light-secondary dark:text-neutral-500" aria-hidden>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-arvo-light-primary dark:text-white">
+            <span className="text-arvo-light-secondary dark:text-neutral-500" aria-hidden>
               ✦
             </span>
             Border width tokens
           </h2>
-          <p className="m-0 max-w-3xl text-base leading-relaxed text-o9ds-light-secondary dark:text-neutral-400">
+          <p className="m-0 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
             Standard hairline and emphasis widths for outlines, dividers, and focus rings.
           </p>
           <DocTable
@@ -204,12 +204,12 @@ export default function Borders() {
         </section>
 
         <section id="applying-border-width" className="scroll-mt-24 space-y-4 max-w-3xl">
-          <h2 className="text-xl font-semibold text-o9ds-light-primary dark:text-white">Applying border-width</h2>
+          <h2 className="text-xl font-semibold text-arvo-light-primary dark:text-white">Applying border-width</h2>
           <CodeBlock
             label="SCSS"
             language="scss"
             code={`.input-outline {
-  border-width: $o9ds-border-1;
+  border-width: $arvo-border-1;
   border-style: solid;
 }`}
           />

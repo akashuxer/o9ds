@@ -1,0 +1,404 @@
+@use '../../mixins/list-item' as *;
+@use '../../mixins/list-group' as *;
+@use '../../mixins/loading' as *;
+@use '../../mixins/typography' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .arvo-hpop ────────────────────────────────────────────────────────────────
+// Composes ArvoPopover — panel chrome (header, footer, body, shadow, arrow,
+// positioning, transitions) lives in _arvo-popover.scss. This file only styles
+// HybridPopover-specific elements rendered inside the Popover slots.
+
+.arvo-hpop {
+  --arvo-hpop-width: 320px;
+  --arvo-hpop-min-width: 280px;
+  --arvo-hpop-max-width: 500px;
+  --arvo-hpop-min-height: 272px;
+
+  // Width is sourced from --arvo-popover-width which ArvoPopover sets from its
+  // `width` prop (clamped here so the JS twin's inline style stays in band).
+  width: clamp(
+    var(--arvo-hpop-min-width),
+    var(--arvo-popover-width, var(--arvo-hpop-width)),
+    var(--arvo-hpop-max-width)
+  );
+  min-width: var(--arvo-hpop-min-width);
+  max-width: var(--arvo-hpop-max-width);
+  min-height: var(--arvo-hpop-min-height);
+  max-height: 90vh;
+
+  // ── __sticky ──────────────────────────────────────────────────────────────
+  // Vertical flex column inside Popover's stickyHeader slot.
+  // Owns its own padding/gap (matches Figma 33808-23128 top-body:
+  // padding 16px 12px 8px, gap 16px). The outer Popover sticky-header
+  // padding is nulled below so we have a single source of truth and no
+  // stacked padding ring against the search input. Background is
+  // intentionally transparent — the Popover panel already paints layer-03.
+  &__sticky {
+    display: flex;
+    flex-direction: column;
+    gap: $arvo-space-16;
+    padding: $arvo-space-16 $arvo-space-12 $arvo-space-8;
+    box-sizing: border-box;
+  }
+
+  // Null out the outer Popover sticky-header padding when nested inside hpop
+  // so the only padding source is __sticky above. Other Popover consumers are
+  // unaffected.
+  .arvo-popover__sticky-header {
+    padding: 0;
+  }
+
+  // ── __search ──────────────────────────────────────────────────────────────
+  &__search {
+    display: flex;
+
+    .arvo-search {
+      width: 100%;
+    }
+  }
+
+  // ── __cond ────────────────────────────────────────────────────────────────
+  &__cond {
+    display: flex;
+  }
+
+  // ── __banner ──────────────────────────────────────────────────────────────
+  &__banner {
+    flex-shrink: 0;
+    padding: 0 $arvo-space-16;
+  }
+
+  // ── __list ────────────────────────────────────────────────────────────────
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── __sa (select-all) ─────────────────────────────────────────────────────
+  // Mirrors __opt layout: leading checkbox slot + external label span.
+  // External span keeps label typography parity with __opt__lbl (14px)
+  // instead of the 12px label baked into <ArvoCheckbox label="…">.
+  &__sa {
+    @include list-item-base;
+    @include list-item-single-line;
+    @include list-item-states;
+
+    &--group {
+      padding-inline-start: $arvo-space-16;
+    }
+  }
+
+  // Select-all label — typography parity with __opt__lbl.
+  &__sa__lbl {
+    @include arvo-font-l14-r;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--arvo-color-t-form-label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    font-family: var(--o9-font-family);
+  }
+
+  // ── __grp ─────────────────────────────────────────────────────────────────
+  &__grp {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── __grp-hdr ─────────────────────────────────────────────────────────────
+  &__grp-hdr {
+    @include list-group-header;
+  }
+
+  // ── __divider ─────────────────────────────────────────────────────────────
+  &__divider {
+    @include list-group-divider;
+  }
+
+  // ── __opt (filter option row) ─────────────────────────────────────────────
+  &__opt {
+    @include list-item-base;
+    @include list-item-single-line;
+    @include list-item-states;
+    @include list-item-leading;
+    @include list-item-text;
+  }
+
+  // ── __opt sub-elements ────────────────────────────────────────────────────
+  &__opt__drag {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $arvo-icon-16;
+    color: var(--arvo-color-i-secondary);
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__opt__spacer {
+    flex: 0 0 $arvo-icon-16;
+  }
+
+  &__opt__check {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  &__opt__lbl {
+    @include arvo-font-l14-r;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--arvo-color-t-form-label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--o9-font-family);
+  }
+
+  &__opt__secondary {
+    @include arvo-font-p12-r;
+    color: var(--arvo-color-t-placeholder);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__opt__exclude {
+    flex: 0 0 auto;
+    font-family: $o9con;
+    font-size: $arvo-icon-16;
+    color: var(--arvo-color-i-negative);
+  }
+
+  &__opt__chev {
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+  }
+
+  // No row-level selected highlight — the checkbox/radio is the sole
+  // selection indicator for hpop options. The shared `.active` class from
+  // list-item-states is intentionally not applied to __opt.
+
+  // ── __empty ───────────────────────────────────────────────────────────────
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $arvo-space-32 $arvo-space-16;
+    gap: $arvo-space-12;
+    text-align: center;
+    font-family: var(--o9-font-family);
+  }
+
+  &__empty-illus {
+    width: $o9illus-96;
+    height: $o9illus-96;
+    flex-shrink: 0;
+  }
+
+  &__empty-title {
+    @include arvo-font-h14-m;
+    color: var(--arvo-color-t-form-label);
+  }
+
+  &__empty-msg {
+    @include arvo-font-p12-r;
+    color: var(--arvo-color-t-tertiary);
+  }
+
+  &__empty-action {
+    margin-top: $arvo-space-8;
+  }
+
+  // ── __skeleton / __skeleton-hdr (Pattern B) ───────────────────────────────
+  &__skeleton {
+    width: 100%;
+    height: 32px;
+    margin-block: $arvo-space-4;
+    background-color: var(--arvo-color-s-pulse-light, var(--arvo-color-s-disabled));
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--arvo-loading-shimmer-color, rgba(255, 255, 255, 0.3)) 50%,
+        transparent 100%
+      );
+      animation: arvo-shimmer var(--arvo-loading-shimmer-speed, 1.5s) infinite linear;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+  }
+
+  &__skeleton-hdr {
+    height: 12px;
+    width: 80px;
+    margin-block: $arvo-space-4;
+    background-color: var(--arvo-color-s-pulse-light, var(--arvo-color-s-disabled));
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--arvo-loading-shimmer-color, rgba(255, 255, 255, 0.3)) 50%,
+        transparent 100%
+      );
+      animation: arvo-shimmer var(--arvo-loading-shimmer-speed, 1.5s) infinite linear;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+  }
+
+  // ── __resize ──────────────────────────────────────────────────────────────
+  &__resize {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  // ── __handle ──────────────────────────────────────────────────────────────
+  &__handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    pointer-events: auto;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity $arvo-motion-form-input;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-color: var(--arvo-color-i-secondary);
+      border-style: solid;
+    }
+
+    &--bl {
+      bottom: -2px;
+      left: -2px;
+      cursor: nesw-resize;
+
+      &::after {
+        bottom: 2px;
+        left: 2px;
+        border-width: 0 0 1px 1px;
+      }
+    }
+
+    &--br {
+      bottom: -2px;
+      right: -2px;
+      cursor: nwse-resize;
+
+      &::after {
+        bottom: 2px;
+        right: 2px;
+        border-width: 0 1px 1px 0;
+      }
+    }
+
+    // Visibility (auto-hide near viewport edge) is controlled by
+    // createResizeHandle setting inline `style.display = 'none'`.
+  }
+
+  .no-touch &:hover &__handle {
+    opacity: 1;
+  }
+
+  // Keyboard discoverability: when the panel is keyboard-focused (or
+  // explicitly opted into resize via --with-resize) reveal handles so they
+  // are not hover-only. Mirrors :hover behavior above.
+  &--with-resize:focus-within &__handle {
+    opacity: 1;
+  }
+
+  // ── State: is-resizing ────────────────────────────────────────────────────
+  &.is-resizing {
+    user-select: none;
+
+    .arvo-hpop__handle {
+      opacity: 1;
+    }
+
+    .arvo-hpop__handle--bl {
+      cursor: nesw-resize;
+    }
+
+    .arvo-hpop__handle--br {
+      cursor: nwse-resize;
+    }
+  }
+
+  // ── State: is-dragging ────────────────────────────────────────────────────
+  &.is-dragging {
+    .arvo-hpop__opt__drag {
+      cursor: grabbing;
+    }
+  }
+
+  // ── Loading (Pattern B) ───────────────────────────────────────────────────
+  // Hides sticky header and Popover footer, shows skeleton rows, blocks interaction.
+  @mixin _hpop-loading {
+    pointer-events: none;
+
+    .arvo-hpop__sticky {
+      display: none;
+    }
+
+    .arvo-pop__ftr,
+    .arvo-popover__footer {
+      display: none;
+    }
+  }
+
+  &.loading {
+    @include _hpop-loading;
+  }
+
+  [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
+    @include _hpop-loading;
+  }
+}
+
+// ─── Sortable / DnD related blocks ──────────────────────────────────────────
+
+.arvo-hpop__opt.arvo-sortable--ghost {
+  opacity: $arvo-opacity-low;
+}
+
+.arvo-hpop__opt.arvo-sortable--dragging {
+  box-shadow: $arvo-shadow-down;
+  z-index: 10;
+  background-color: var(--arvo-color-s-layer-03);
+}
+
+.arvo-hpop__opt.arvo-sortable--drop-above {
+  border-top: 2px solid var(--arvo-color-b-theme-active);
+}
+
+.arvo-hpop__opt.arvo-sortable--drop-below {
+  border-bottom: 2px solid var(--arvo-color-b-theme-active);
+}

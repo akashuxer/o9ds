@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { O9Button } from '@o9ds/react'
+import { ArvoButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
@@ -17,9 +17,21 @@ import {
   SimpleTable,
   LiveReference,
 } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 
+const DESCRIPTOR = getDescriptor('button')
+const PROPS = DESCRIPTOR.props
+const CSS_VARS = DESCRIPTOR.cssVarGroups
+const METHODS = DESCRIPTOR.methods
+const EVENTS = DESCRIPTOR.events
+const KEYBOARD = DESCRIPTOR.keyboard
+const ARIA = DESCRIPTOR.aria
+
+// UX-level summaries for the Overview tab — kept hand-curated because they
+// describe how designers should think about each variant / state, not the
+// raw CSS class produced by the BEM modifier.
 const VARIANTS = [
   { name: 'Primary', desc: 'Main call-to-action; use sparingly (one per viewport region).' },
   { name: 'Secondary', desc: 'Supporting actions that are important but not primary.' },
@@ -37,49 +49,10 @@ const STATES = [
   { name: 'Loading', desc: 'Action in progress; blocks repeat activation.' },
 ]
 
-const PROPS = [
-  { prop: 'label', type: 'string', default: '—', required: 'Yes', desc: 'Button text content' },
-  { prop: 'variant', type: "'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger'", default: "'primary'", desc: 'Visual style variant' },
-  { prop: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", desc: 'Button size (height, padding, font, icon)' },
-  { prop: 'type', type: "'button' | 'submit' | 'reset'", default: "'button'", desc: 'Native HTML button type' },
-  { prop: 'icon', type: 'string', default: 'undefined', desc: 'Leading icon name without o9con- prefix' },
-  { prop: 'isDisabled', type: 'boolean', default: 'false', desc: 'Prevents all interaction' },
-  { prop: 'isSelected', type: 'boolean', default: 'undefined', desc: 'Persistent active/selected state for toggle buttons' },
-  { prop: 'isFullWidth', type: 'boolean', default: 'false', desc: 'Expands button to fill container width' },
-  { prop: 'isLoading', type: 'boolean', default: 'false', desc: 'Shows skeleton shimmer overlay; prevents interaction' },
-  { prop: 'tooltip', type: 'string', default: 'undefined', desc: 'Supplementary text via title attribute' },
-  { prop: 'onClick', type: '(event) => void', default: 'undefined', desc: 'Click handler; suppressed when disabled or loading' },
-]
-
-const CSS_VARS = [
-  { category: 'Layout', vars: ['--o9ds-btn-height', '--o9ds-btn-padding-block', '--o9ds-btn-padding-inline', '--o9ds-btn-gap'] },
-  { category: 'Typography', vars: ['--o9ds-btn-font-size', '--o9ds-btn-font-weight', '--o9ds-btn-line-height'] },
-  { category: 'Icon', vars: ['--o9ds-btn-icon-size'] },
-  { category: 'Color', vars: ['--o9ds-btn-bg-color', '--o9ds-btn-text-color', '--o9ds-btn-icon-color', '--o9ds-btn-border-color'] },
-  { category: 'Border', vars: ['--o9ds-btn-border-width'] },
-]
-
-const SIZES = [
+const SIZE_TABLE_ROWS = [
   ['sm', '24px', '12px', '16px', '4px 8px'],
   ['md', '32px', '14px', '20px', '6px 12px'],
   ['lg', '40px', '16px', '24px', '10px 12px'],
-]
-
-const KEYBOARD = [
-  { key: 'Enter', action: 'Activate the button' },
-  { key: 'Space', action: 'Activate the button' },
-  { key: 'Tab', action: 'Move focus to next focusable element' },
-  { key: 'Shift+Tab', action: 'Move focus to previous focusable element' },
-]
-
-const ARIA = [
-  { attr: 'aria-label', when: 'Icon-only buttons; optional when a visible label is sufficient' },
-  { attr: 'aria-disabled', when: 'Only when the button must stay focusable while logically disabled' },
-  { attr: 'aria-pressed', when: 'Toggle buttons (isSelected prop)' },
-  { attr: 'aria-expanded', when: 'Button opens/closes content (menus, disclosures)' },
-  { attr: 'aria-haspopup', when: 'Opens menu, listbox, or dialog' },
-  { attr: 'aria-busy', when: 'Loading state (set automatically when isLoading)' },
-  { attr: 'aria-describedby', when: 'Links to helper text, shortcut hint, or disabled reason' },
 ]
 
 export default function Button() {
@@ -141,47 +114,47 @@ export default function Button() {
                 A text button combines a <DocStrong>surface</DocStrong> (the clickable container), an optional <DocStrong>leading icon</DocStrong>, and a <DocStrong>label</DocStrong>.
               </DocParagraph>
               <LiveReference>
-                <O9Button label="Save Changes" variant="primary" />
-                <O9Button label="Add Item" variant="primary" icon="plus" />
+                <ArvoButton label="Save Changes" variant="primary" />
+                <ArvoButton label="Add Item" variant="primary" icon="plus" />
               </LiveReference>
             </DocSection>
 
             <DocSection id="variants" title="Variants">
               <DocParagraph>Five variants communicate importance and risk. Use one primary action per region; secondary and tertiary support the task without competing.</DocParagraph>
-              <ul className="space-y-2 text-o9ds-light-secondary dark:text-neutral-400">
+              <ul className="space-y-2 text-arvo-light-secondary dark:text-neutral-400">
                 {VARIANTS.map(({ name, desc }) => (
                   <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
                 ))}
               </ul>
               <LiveReference>
-                <O9Button label="Primary" variant="primary" />
-                <O9Button label="Secondary" variant="secondary" />
-                <O9Button label="Tertiary" variant="tertiary" />
-                <O9Button label="Outline" variant="outline" />
-                <O9Button label="Danger" variant="danger" />
+                <ArvoButton label="Primary" variant="primary" />
+                <ArvoButton label="Secondary" variant="secondary" />
+                <ArvoButton label="Tertiary" variant="tertiary" />
+                <ArvoButton label="Outline" variant="outline" />
+                <ArvoButton label="Danger" variant="danger" />
               </LiveReference>
             </DocSection>
 
             <DocSection id="sizes" title="Sizes">
               <DocParagraph>Three sizes scale height, padding, font, and icon together.</DocParagraph>
               <LiveReference>
-                <O9Button label="Small" variant="primary" size="sm" />
-                <O9Button label="Medium" variant="primary" size="md" />
-                <O9Button label="Large" variant="primary" size="lg" />
+                <ArvoButton label="Small" variant="primary" size="sm" />
+                <ArvoButton label="Medium" variant="primary" size="md" />
+                <ArvoButton label="Large" variant="primary" size="lg" />
               </LiveReference>
             </DocSection>
 
             <DocSection id="states" title="States">
-              <ul className="list-disc pl-5 space-y-2 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+              <ul className="list-disc pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
                 {STATES.map(({ name, desc }) => (
                   <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
                 ))}
               </ul>
               <LiveReference>
-                <O9Button label="Default" variant="primary" />
-                <O9Button label="Disabled" variant="primary" isDisabled />
-                <O9Button label="Loading" variant="primary" isLoading />
-                <O9Button label="Selected" variant="secondary" isSelected />
+                <ArvoButton label="Default" variant="primary" />
+                <ArvoButton label="Disabled" variant="primary" isDisabled />
+                <ArvoButton label="Loading" variant="primary" isLoading />
+                <ArvoButton label="Selected" variant="secondary" isSelected />
               </LiveReference>
             </DocSection>
 
@@ -214,7 +187,7 @@ export default function Button() {
               ]} />
             </DocSection>
             <DocSection id="scenarios" title="Scenarios">
-              <ul className="space-y-3 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+              <ul className="space-y-3 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
                 <li><DocStrong>Form footer.</DocStrong> Place secondary (Cancel) to the left, primary (Save) on the right in LTR locales. One primary action per footer.</li>
                 <li><DocStrong>Toolbar.</DocStrong> Use tertiary or outline for frequent actions; keep primary for the single most important workflow step in the view.</li>
                 <li><DocStrong>Destructive.</DocStrong> Use the danger variant; never rely on color alone — add confirmation copy or a confirmation dialog.</li>
@@ -236,24 +209,24 @@ export default function Button() {
             <DocSection id="react" title="React">
               <CodeBlock
                 language="tsx"
-                label="@o9ds/react"
-                code={`import { O9Button } from '@o9ds/react';
+                label="@arvo/react"
+                code={`import { ArvoButton } from '@arvo/react';
 
-<O9Button label="Save Changes" variant="primary" />
-<O9Button label="Add Item" variant="primary" icon="plus" />
-<O9Button label="Submit" variant="primary" isDisabled />
-<O9Button label="Saving..." variant="primary" isLoading />
-<O9Button label="Bold" variant="secondary" isSelected />
-<O9Button label="Continue" variant="primary" isFullWidth />`}
+<ArvoButton label="Save Changes" variant="primary" />
+<ArvoButton label="Add Item" variant="primary" icon="plus" />
+<ArvoButton label="Submit" variant="primary" isDisabled />
+<ArvoButton label="Saving..." variant="primary" isLoading />
+<ArvoButton label="Bold" variant="secondary" isSelected />
+<ArvoButton label="Continue" variant="primary" isFullWidth />`}
               />
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
               <CodeBlock
                 language="js"
-                label="@o9ds/js"
-                code={`import { O9Button } from '@o9ds/js';
+                label="@arvo/js"
+                code={`import { ArvoButton } from '@arvo/js';
 
-const btn = O9Button.initialize(el, {
+const btn = ArvoButton.initialize(el, {
   variant: 'primary',
   label: 'Save Changes',
   onClick: (event) => console.log('clicked', event),
@@ -268,35 +241,21 @@ btn.destroy();`}
               />
             </DocSection>
             <DocSection id="props" title="Props">
-              <DocParagraph><DocCode>O9Button</DocCode> also accepts standard <DocCode>HTMLButtonElement</DocCode> attributes via spread.</DocParagraph>
+              <DocParagraph><DocCode>ArvoButton</DocCode> also accepts standard <DocCode>HTMLButtonElement</DocCode> attributes via spread.</DocParagraph>
               <PropsTable rows={PROPS} />
             </DocSection>
             <DocSection id="css-vars" title="CSS variables">
-              <DocParagraph>Override on <DocCode>.o9ds-btn</DocCode> or a parent to theme the button.</DocParagraph>
+              <DocParagraph>Override on <DocCode>.arvo-btn</DocCode> or a parent to theme the button.</DocParagraph>
               <CssVarsGrid groups={CSS_VARS} />
             </DocSection>
             <DocSection id="sizes-table" title="Size reference">
-              <SimpleTable columns={['Size', 'Height', 'Font', 'Icon', 'Padding']} rows={SIZES} />
+              <SimpleTable columns={['Size', 'Height', 'Font', 'Icon', 'Padding']} rows={SIZE_TABLE_ROWS} />
             </DocSection>
             <DocSection id="methods" title="Methods (JS)">
-              <MethodsTable rows={[
-                { method: 'O9Button.initialize(el, options)', returns: 'O9Button', desc: 'Factory — initializes component on a DOM element.' },
-                { method: 'setLabel(text)', desc: 'Update button label text.' },
-                { method: 'setIcon(name | null)', desc: 'Set or remove the leading icon.' },
-                { method: 'setVariant(variant)', desc: 'Change visual variant.' },
-                { method: 'setSize(size)', desc: 'Change button size.' },
-                { method: 'setLoading(loading)', desc: 'Toggle loading state.' },
-                { method: 'selected(state?)', returns: 'boolean | void', desc: 'Get or set selected/active state.' },
-                { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get or set disabled state.' },
-                { method: 'focus()', desc: 'Programmatically focus the button.' },
-                { method: 'destroy()', desc: 'Remove listeners and restore original state.' },
-              ]} />
+              <MethodsTable rows={METHODS} />
             </DocSection>
             <DocSection id="events" title="Custom events (JS)">
-              <EventsTable rows={[
-                { event: 'btn:loading', payload: '{ loading: boolean }', desc: 'Fires when loading state changes.' },
-                { event: 'btn:disabled', payload: '{ disabled: boolean }', desc: 'Fires when disabled state changes programmatically.' },
-              ]} />
+              <EventsTable rows={EVENTS} />
             </DocSection>
           </div>
         )}

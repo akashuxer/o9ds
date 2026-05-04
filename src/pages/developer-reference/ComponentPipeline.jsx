@@ -13,7 +13,7 @@ const sections = [
 ]
 
 const STEPS = [
-  ['1', 'Shared Pattern Pre-Flight', 'Skip if descriptor sharedPatterns is empty or all referenced patterns are ready in SHARED-PATTERNS-REGISTRY.json. Otherwise the Shared Pattern agent implements the SCSS mixin and (if needed) the @o9ds/utils DOM helper, then flips the registry status to "ready".'],
+  ['1', 'Shared Pattern Pre-Flight', 'Skip if descriptor sharedPatterns is empty or all referenced patterns are ready in SHARED-PATTERNS-REGISTRY.json. Otherwise the Shared Pattern agent implements the SCSS mixin and (if needed) the @arvo/utils DOM helper, then flips the registry status to "ready".'],
   ['2', 'Scaffolding', 'Generates the SCSS file, React component (forwardRef stub), JS class stub, barrel exports, and Storybook story placeholder. Adds the SCSS @forward, the React export, the JS plugin entry.'],
   ['3', 'SCSS Implementation', 'Writes the full SCSS using tokens. Implements all variants, sizes, states, loading pattern (A/B/C), parent overrides. No hardcoded values.'],
   ['4', 'React Implementation', 'Implements the React component: forwardRef, props (is*/has* boolean naming), refs, hooks (useOverlay, useFocusTrap, etc.), ARIA attributes per descriptor.'],
@@ -29,9 +29,9 @@ const IMPACT_RULES = [
   ['A React component', 'Run drift check against JS (or update JS too)'],
   ['A JS component', 'Run drift check against React (or update React too)'],
   ['A shared SCSS mixin', 'Every component in the mixin\'s usedBy list — check SHARED-PATTERNS-REGISTRY.json'],
-  ['A @o9ds/utils utility', 'All components importing that utility'],
-  ['A @o9ds/core module', 'All React hooks and JS code using that module'],
-  ['@o9ds/tokens', 'Full rebuild: pnpm turbo run build then full test suite'],
+  ['A @arvo/utils utility', 'All components importing that utility'],
+  ['A @arvo/core module', 'All React hooks and JS code using that module'],
+  ['@arvo/tokens', 'Full rebuild: pnpm turbo run build then full test suite'],
 ]
 
 export default function ComponentPipeline() {
@@ -71,12 +71,12 @@ PR with build/lint/test/typecheck all green`}
         <DocSection id="steps" title="Step-by-step">
           <div className="space-y-4">
             {STEPS.map(([num, name, body]) => (
-              <div key={num} className="border p-4 dark:border-neutral-700" data-o9ds-card="light">
+              <div key={num} className="border p-4 dark:border-neutral-700" data-arvo-card="light">
                 <div className="flex items-baseline gap-3 mb-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-o9ds-light-secondary dark:text-neutral-500">Step {num}</span>
-                  <h3 className="text-base font-semibold text-o9ds-light-primary dark:text-white m-0">{name}</h3>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-arvo-light-secondary dark:text-neutral-500">Step {num}</span>
+                  <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white m-0">{name}</h3>
                 </div>
-                <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed m-0">{body}</p>
+                <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed m-0">{body}</p>
               </div>
             ))}
           </div>
@@ -87,18 +87,18 @@ PR with build/lint/test/typecheck all green`}
           <CodeBlock
             language="text"
             label="Package dependency graph"
-            code={`@o9ds/tokens
-  └─> @o9ds/styles (compiles tokens into CSS variables)
-        ├─> @o9ds/react (consumes CSS classes)
-        └─> @o9ds/js (consumes CSS classes)
+            code={`@arvo/tokens
+  └─> @arvo/styles (compiles tokens into CSS variables)
+        ├─> @arvo/react (consumes CSS classes)
+        └─> @arvo/js (consumes CSS classes)
 
-@o9ds/core (overlay, focus, keyboard, position, animation)
-  ├─> @o9ds/react (via hooks: useOverlay, useFocusTrap, etc.)
-  └─> @o9ds/js (direct imports)
+@arvo/core (overlay, focus, keyboard, position, animation)
+  ├─> @arvo/react (via hooks: useOverlay, useFocusTrap, etc.)
+  └─> @arvo/js (direct imports)
 
-@o9ds/utils (form-label, inline-alert, char-counter, indicator)
-  ├─> @o9ds/react (internal React components use pure helpers)
-  └─> @o9ds/js (imperative factories)
+@arvo/utils (form-label, inline-alert, char-counter, indicator)
+  ├─> @arvo/react (internal React components use pure helpers)
+  └─> @arvo/js (imperative factories)
 
 Shared SCSS Mixins (form-input-base, loading-overlay, list-item, ...)
   └─> Every component SCSS file that @includes them`}
@@ -107,15 +107,15 @@ Shared SCSS Mixins (form-input-base, loading-overlay, list-item, ...)
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">If you change…</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Then verify…</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">If you change…</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Then verify…</th>
                 </tr>
               </thead>
               <tbody>
                 {IMPACT_RULES.map(([change, verify]) => (
                   <tr key={change} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{change}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{verify}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{verify}</td>
                   </tr>
                 ))}
               </tbody>
@@ -135,10 +135,10 @@ pnpm turbo run test    # Full test suite`}
           <DocList items={[
             'No hardcoded colors, spacing, or typography — all from tokens',
             'BEM classes match descriptor abbreviation',
-            <span key="3">CSS variables follow <DocCode>--o9ds-{`{abbr}`}-{`{property}`}</DocCode></span>,
-            <span key="4">Exports use <DocCode>O9</DocCode> prefix (<DocCode>O9Button</DocCode>, not <DocCode>Button</DocCode>)</span>,
-            <span key="5">Loading: individual + parent-controlled (<DocCode>[data-o9ds-loading]</DocCode>) + opt-out (<DocCode>[data-o9ds-loading-ignore]</DocCode>)</span>,
-            'Inner interactive elements use o9ds components, not raw HTML',
+            <span key="3">CSS variables follow <DocCode>--arvo-{`{abbr}`}-{`{property}`}</DocCode></span>,
+            <span key="4">Exports use <DocCode>O9</DocCode> prefix (<DocCode>ArvoButton</DocCode>, not <DocCode>Button</DocCode>)</span>,
+            <span key="5">Loading: individual + parent-controlled (<DocCode>[data-arvo-loading]</DocCode>) + opt-out (<DocCode>[data-arvo-loading-ignore]</DocCode>)</span>,
+            'Inner interactive elements use Arvo components, not raw HTML',
             <span key="7">React: <DocCode>forwardRef</DocCode>, accepts <DocCode>className</DocCode>, exports <DocCode>{`O9{Name}Props`}</DocCode></span>,
             <span key="8">JS: <DocCode>initialize</DocCode>/<DocCode>destroy</DocCode>, private methods prefixed <DocCode>_</DocCode>, consolidated getter/setters</span>,
             'ARIA attributes and keyboard interactions per descriptor',
@@ -149,7 +149,7 @@ pnpm turbo run test    # Full test suite`}
           <CodeBlock
             language="text"
             label="A new component produces these files"
-            code={`packages/styles/src/components/{category}/_o9ds-{abbr}.scss
+            code={`packages/styles/src/components/{category}/_arvo-{abbr}.scss
 packages/styles/src/components/{category}/_index.scss          (updated: @forward)
 packages/react/src/components/{Name}/{Name}.tsx
 packages/react/src/components/{Name}/{Name}.test.tsx

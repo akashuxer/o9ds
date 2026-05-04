@@ -32,17 +32,17 @@ function WorkflowCard({ id, title, when, steps, body }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-o9ds-light-surface dark:hover:bg-neutral-800/40"
+        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-arvo-light-surface dark:hover:bg-neutral-800/40"
       >
         <div>
-          <h2 className="text-base font-semibold text-o9ds-light-primary dark:text-white m-0">{title}</h2>
-          <p className="text-sm text-o9ds-light-secondary dark:text-neutral-400 m-0 mt-1">{when}</p>
+          <h2 className="text-base font-semibold text-arvo-light-primary dark:text-white m-0">{title}</h2>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 m-0 mt-1">{when}</p>
         </div>
-        <span className="text-xs font-mono text-o9ds-light-secondary dark:text-neutral-400 shrink-0">{open ? '−' : '+'}</span>
+        <span className="text-xs font-mono text-arvo-light-secondary dark:text-neutral-400 shrink-0">{open ? '−' : '+'}</span>
       </button>
       {open && (
-        <div className="border-t dark:border-neutral-700 p-4 space-y-3 text-sm text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
-          <p className="m-0"><strong className="text-o9ds-light-primary dark:text-white font-medium">Steps:</strong> {steps}</p>
+        <div className="border-t dark:border-neutral-700 p-4 space-y-3 text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+          <p className="m-0"><strong className="text-arvo-light-primary dark:text-white font-medium">Steps:</strong> {steps}</p>
           {body}
         </div>
       )}
@@ -69,15 +69,15 @@ export default function Workflows() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="dark:bg-neutral-800/50">
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">Workflow</th>
-                  <th className="py-2 px-3 text-left font-medium text-o9ds-light-primary dark:text-white">When to use</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">Workflow</th>
+                  <th className="py-2 px-3 text-left font-medium text-arvo-light-primary dark:text-white">When to use</th>
                 </tr>
               </thead>
               <tbody>
                 {WORKFLOWS.map(([wf, when]) => (
                   <tr key={wf} className="border-t dark:border-neutral-700">
                     <td className={`py-2 px-3 ${DOC_TABLE_FIRST_COLUMN_CLASS}`}>{wf}</td>
-                    <td className="py-2 px-3 text-o9ds-light-secondary dark:text-neutral-400">{when}</td>
+                    <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400">{when}</td>
                   </tr>
                 ))}
               </tbody>
@@ -210,7 +210,7 @@ export default function Workflows() {
             For developers using Claude in VS Code, Visual Studio, or direct chat: agents are portable Markdown prompts. Outside Cursor, you run each pipeline step as a <DocStrong>separate agent conversation</DocStrong>, providing context manually between steps.
           </DocParagraph>
           <DocParagraph>For each step:</DocParagraph>
-          <ol className="list-decimal pl-5 space-y-1.5 text-o9ds-light-secondary dark:text-neutral-400 leading-relaxed">
+          <ol className="list-decimal pl-5 space-y-1.5 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
             <li>Start a fresh agent conversation.</li>
             <li>Paste the <DocStrong>role instructions</DocStrong> — from <DocCode>{`.cursor/agents/{agent}.md`}</DocCode>.</li>
             <li>Paste the <DocStrong>project conventions</DocStrong> — <DocCode>.cursor/rules/project-conventions.mdc</DocCode>.</li>

@@ -1,0 +1,269 @@
+@use '../../mixins/list-item' as *;
+@use '../../mixins/list-group' as *;
+@use '../../mixins/loading' as *;
+@use '../../../../tokens/src/scss/all' as *;
+
+// ─── .arvo-action-menu ────────────────────────────────────────────────────────
+
+.arvo-action-menu {
+  // ── Root layout ────────────────────────────────────────────────────────────
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  min-width: $arvo-filter-menu-wmin;
+  max-width: $arvo-filter-menu-wmax;
+  background-color: var(--arvo-color-s-layer-03);
+  box-shadow: $arvo-shadow-down;
+  border-radius: 0;
+  z-index: var(--arvo-z-popover, 1000);
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Transition classes applied by @arvo/core enter()/exit().
+  // Only transition opacity — transform is used for positioning and must not animate.
+  &.arvo-enter-from {
+    opacity: 0;
+  }
+
+  &.arvo-enter-active {
+    transition: opacity 150ms ease;
+  }
+
+  &.arvo-enter-to {
+    opacity: 1;
+  }
+
+  &.arvo-exit-from {
+    opacity: 1;
+  }
+
+  &.arvo-exit-active {
+    transition: opacity 150ms ease;
+  }
+
+  &.arvo-exit-to {
+    opacity: 0;
+  }
+
+  // ── State: open ────────────────────────────────────────────────────────────
+  &.open {
+    display: flex;
+  }
+
+  // ── __scroll ───────────────────────────────────────────────────────────────
+  &__scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+    padding-block: $arvo-space-4;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--arvo-color-s-layer-07, #ccc) transparent;
+  }
+
+  // ── __search ───────────────────────────────────────────────────────────────
+  &__search {
+    padding: $arvo-space-12 $arvo-space-16;
+    flex-shrink: 0;
+    display: flex;
+  }
+
+  .arvo-search {
+    flex-grow: 1;
+  }
+
+  // ── __hdr ──────────────────────────────────────────────────────────────────
+  &__hdr {
+    @include list-group-header;
+  }
+
+  // ── __divider ──────────────────────────────────────────────────────────────
+  &__divider {
+    @include list-group-divider;
+  }
+
+  // ── __empty ────────────────────────────────────────────────────────────────
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $arvo-space-16;
+    color: var(--arvo-color-t-placeholder);
+    font-size: $arvo-font-size-14;
+    font-family: var(--o9-font-family);
+  }
+
+  // ── __inline-panel ─────────────────────────────────────────────────────────
+  &__inline-panel {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    background-color: var(--arvo-color-s-layer-03);
+    z-index: 1;
+
+    &.open {
+      display: flex;
+    }
+
+    &-hdr {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: $arvo-space-8;
+      padding: $arvo-space-8 $arvo-space-12;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    &-bdy {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+      padding: $arvo-space-8 $arvo-space-12;
+    }
+
+    &-ftr {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: $arvo-space-6;
+      padding: $arvo-space-8 $arvo-space-12 $arvo-space-16;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+  }
+
+  // ── Loading skeleton (Pattern B) ───────────────────────────────────────────
+  @mixin _action-menu-loading-skeleton {
+    pointer-events: none;
+
+    .arvo-action-menu__search {
+      display: none;
+    }
+
+    .arvo-action-menu__scroll {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: $arvo-space-4;
+      padding: $arvo-space-8;
+
+      > * {
+        display: none;
+      }
+
+      &::before,
+      &::after {
+        content: '';
+        display: block;
+        height: 16px;
+        border-radius: var(--arvo-radius-sm, 3px);
+        background-color: var(--arvo-color-s-disabled, #f0f0f0);
+        position: relative;
+        overflow: hidden;
+      }
+
+      &::before {
+        width: 75%;
+      }
+
+      &::after {
+        width: 55%;
+      }
+    }
+  }
+
+  &.loading {
+    @include _action-menu-loading-skeleton;
+  }
+
+  [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
+    @include _action-menu-loading-skeleton;
+  }
+}
+
+// ─── .arvo-menu-item ──────────────────────────────────────────────────────────
+
+.arvo-menu-item {
+  @include list-item-base;
+  @include list-item-single-line;
+  @include list-item-states;
+  @include list-item-leading;
+  @include list-item-text;
+
+  // ── Modifier: --multi-line ─────────────────────────────────────────────────
+  &--multi-line {
+    @include list-item-multi-line;
+  }
+
+  // ── Modifier: --destructive ────────────────────────────────────────────────
+  &--destructive {
+    --arvo-list-item-text-color: var(--arvo-color-t-negative);
+
+    .arvo-menu-item__ico {
+      color: var(--arvo-color-i-negative);
+    }
+
+    .no-touch &:not(.is-disabled):hover {
+      --arvo-list-item-text-color: var(--arvo-color-t-negative);
+    }
+  }
+
+  // ── Modifier: --actions-on-hover ───────────────────────────────────────────
+  &--actions-on-hover &__actions {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity $arvo-motion-transition-expand,
+                visibility $arvo-motion-transition-expand
+  }
+
+  .no-touch &--actions-on-hover:hover &__actions,
+  &--actions-on-hover:focus-visible &__actions,
+  &--actions-on-hover.focused &__actions,
+  &--actions-on-hover.active &__actions,
+  &--actions-on-hover &__actions:focus-within {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // ── __trailing ────────────────────────────────────────────────────────────
+  &__trailing {
+    display: flex;
+    align-items: center;
+    gap: $arvo-space-4;
+    flex-shrink: 0;
+    margin-inline-start: auto;
+  }
+
+  // ── __shortcut ────────────────────────────────────────────────────────────
+  &__shortcut {
+    color: var(--arvo-menu-item-shortcut-color, var(--arvo-color-t-placeholder));
+    font-size: var(--arvo-menu-item-shortcut-font-size, #{$arvo-font-size-12});
+    white-space: nowrap;
+    font-family: var(--o9-font-family);
+  }
+
+  // ── __submenu ─────────────────────────────────────────────────────────────
+  &__submenu {
+    color: var(--arvo-menu-item-submenu-color, var(--arvo-color-i-secondary));
+    font-family: $o9con;
+    font-size: 12px;
+  }
+
+  // ── __actions ─────────────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $arvo-space-2;
+  }
+
+  // ── Inner component overrides ──────────────────────────────────────────────
+  // Icon buttons inside menu items are forced to sm size via CSS variable override.
+  .arvo-icon-btn {
+    --arvo-btn-height: 24px;
+    --arvo-btn-icon-size: 14px;
+  }
+}
