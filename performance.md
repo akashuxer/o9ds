@@ -21,7 +21,7 @@ Living document. **Update this file** when you change bundling, images, fonts, c
 | **Wiring** | `ExpandableDocImage`, `ComponentOverviewCard`, `Home` card art use `PublicRasterPicture`. |
 | **Rebrand to Arvo** | Re-vendored `vendor/@arvo/*` from the monorepo, renamed package scope (`@arvo/`), CSS tokens (`--arvo-*`), Tailwind (`arvo-light`), localStorage key (`arvo-theme`), and bundle chunk id (`arvo-vendor`). Component doc tables now read from descriptor JSON via `scripts/sync-from-descriptors.mjs`. |
 | **Duplicate CSS removed** | `index.html` no longer links `/o9SansFont/o9Sans.css` or `/o9ConIconFont/o9con.css`; fonts/icons load once via Vite bundle from `src/main.jsx`. |
-| **Deps trimmed** | Removed unused `@mdx-js/*`, `rehype-slug`, `remark-gfm` (re-add if MDX is wired later). |
+| **Figma Make tabbed page** | `/figma-make` is a single lazy route with tab subpages (`OverviewTab`, Make Templates (`ArvoTemplatesTab.jsx`), `ReferenceLibraryTab`, `PromptsLibraryTab`, `MakeDemosTab`) lazy-imported inside `FigmaMake.jsx`. No markdown deps — content is hand-authored React. |
 | **Guardrails** | `scripts/audit-public-images.mjs`; runs at end of `npm run build` via `images:audit`. |
 
 ---
@@ -139,6 +139,7 @@ Values below are from **Vite build output** and **local Lighthouse 11** against 
 ## MDX & content
 
 - MDX packages were **removed** while unused. To adopt MDX-in-Vite later: add `@mdx-js/rollup`, configure `vite.config.js`, and document routes in this file.
+- **Figma Make docs** are hand-authored React inside `src/pages/figma-make/*` — six tab modules behind one lazy route, each with its own `OnThisPage` sections and `DocTabs`-driven hash deep links.
 
 ---
 
@@ -163,6 +164,10 @@ Values below are from **Vite build output** and **local Lighthouse 11** against 
 | Date | Change |
 |------|--------|
 | 2026-05-04 | Rebranded doc site from `o9ds` to `Arvo`: re-vendored packages from monorepo (`vendor/@arvo/*`), CSS tokens (`--arvo-*`), bundle chunk (`arvo-vendor`), and descriptor-driven component doc tables. |
+| 2026-05-10 | **For Figma Make** (`/figma-make`): tabbed React page covering all 12 docs, deduplicated and curated. Removed Markdown deps (`react-markdown`, `remark-gfm`, `rehype-slug`, `github-slugger`); content is hand-authored React in six lazy tab modules. |
+| 2026-05-12 | **Figma Make:** `MakeDemosTab` (`#make-demos`) tab order before Prompts Library. Demos: Demo 1–5 GIFs under `public/figmamakeGraphic/` (`Demo 05 example.gif` → lyric-amount workflows site) + figma.site links. `PromptsLibraryTab`: User Management + Enterprise + supply-chain prompts with `View` links; legacy strings may remain under `figma-make/data/`. |
+| 2026-05-12 | **Figma Make Overview:** embedded intro video (`youtube-nocookie.com/embed`, lazy iframe, `aspect-video`) — loads third-party player after request. |
+| 2026-05-12 | **Home:** Storybook card → `https://o9arvo-storybook.vercel.app/` + `public/home/storybook.png`; Figma Make card → `public/home/make.png` (both + WebP via build pipeline). |
 | _YYYY-MM-DD_ | _e.g. Added lazy routes, WebP pipeline, vercel header order fix_ |
 
 _Add a row whenever you merge performance-related PRs._

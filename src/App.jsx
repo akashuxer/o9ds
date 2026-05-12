@@ -40,6 +40,7 @@ const DevRefTokenPipeline = lazy(() => import('./pages/developer-reference/Token
 const DevRefSharedPatterns = lazy(() => import('./pages/developer-reference/SharedPatterns'))
 const DevRefTestingAndDrift = lazy(() => import('./pages/developer-reference/TestingAndDrift'))
 const DevRefWorkflows = lazy(() => import('./pages/developer-reference/Workflows'))
+const FigmaMake = lazy(() => import('./pages/FigmaMake'))
 const AccessibilityOverviewArticle = lazy(() => import('./pages/accessibility/OverviewArticle'))
 const AccessibilityStandardsAndPrinciples = lazy(() => import('./pages/accessibility/StandardsAndPrinciples'))
 const AccessibilityAssistiveTechnology = lazy(() => import('./pages/accessibility/AssistiveTechnology'))
@@ -83,7 +84,9 @@ export default function App() {
           <Route path="/designers" element={<Placeholder title="For Designers" />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/arvo-mcp-other-mcps" element={<Placeholder title="Arvo MCP/Other MCPs" />} />
-          <Route path="/vibe-coders" element={<Placeholder title="For Vibe Coders" />} />
+          <Route path="/figma-make" element={<FigmaMake />} />
+          <Route path="/figma-make/:slug" element={<Navigate to="/figma-make" replace />} />
+          <Route path="/vibe-coders" element={<Navigate to="/figma-make" replace />} />
           <Route path="/accessibility" element={<AccessibilityOverview />} />
           <Route path="/accessibility/overview" element={<AccessibilityOverviewArticle />} />
           <Route path="/accessibility/standards-and-principles" element={<AccessibilityStandardsAndPrinciples />} />

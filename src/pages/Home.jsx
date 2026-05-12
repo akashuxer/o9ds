@@ -12,12 +12,17 @@ const FLIP_WORDS = ['Consistent', 'Flexible', 'Accessible', 'Effortless', 'Delig
 const HOME_CARD_ILLUSTRATIONS = {
   getStarted: '/home/getStarted.png',
   foundations: '/home/foundations.png',
+  storybook: '/home/storybook.png',
+  figmaMake: '/home/make.png',
   assets: '/home/assets.png',
   components: '/home/components.png',
   accessibility: '/home/accessibility.png',
   content: '/home/contentguide.png',
   patterns: '/home/patterns.png',
 }
+
+/** Hosted Arvo Storybook (Vercel). */
+const STORYBOOK_PLAYGROUND_URL = 'https://o9arvo-storybook.vercel.app/'
 
 const cards = [
   {
@@ -33,16 +38,28 @@ const cards = [
     icon: 'foundations',
   },
   {
-    title: 'Assets',
-    desc: 'Iconography and illustration language.',
-    path: '/icons',
-    icon: 'assets',
+    title: 'Storybook',
+    desc: 'Interactive sandbox playground for Arvo components.',
+    externalHref: STORYBOOK_PLAYGROUND_URL,
+    icon: 'storybook',
+  },
+  {
+    title: 'Figma Make',
+    desc: 'Rapid prototyping tool using the Arvo design language.',
+    path: '/figma-make',
+    icon: 'figmaMake',
   },
   {
     title: 'Components',
     desc: 'Inputs, actions, navigation, and data display.',
     path: '/components',
     icon: 'components',
+  },
+  {
+    title: 'Assets',
+    desc: 'Iconography and illustration language.',
+    path: '/icons',
+    icon: 'assets',
   },
   {
     title: 'Accessibility',
@@ -83,14 +100,16 @@ function HomeBlockCardIllustration({ illustrationSrc, isLight, loading = 'lazy',
         }}
       />
       <div className="relative z-10 h-full min-h-0 w-full">
-        <PublicRasterPicture
-          src={illustrationSrc}
-          alt=""
-          className="absolute inset-3 z-[1] h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] max-h-none object-contain object-center sm:inset-4 sm:h-[calc(100%-2rem)] sm:w-[calc(100%-2rem)] motion-safe:transition-[transform,filter] motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:scale-[1.04] motion-safe:group-hover:brightness-[1.02] dark:brightness-[0.98] dark:group-hover:brightness-100"
-          loading={loading}
-          decoding="async"
-          fetchPriority={fetchPriority}
-        />
+        {illustrationSrc ? (
+          <PublicRasterPicture
+            src={illustrationSrc}
+            alt=""
+            className="absolute inset-3 z-[1] h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] max-h-none object-contain object-center sm:inset-4 sm:h-[calc(100%-2rem)] sm:w-[calc(100%-2rem)] motion-safe:transition-[transform,filter] motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:scale-[1.04] motion-safe:group-hover:brightness-[1.02] dark:brightness-[0.98] dark:group-hover:brightness-100"
+            loading={loading}
+            decoding="async"
+            fetchPriority={fetchPriority}
+          />
+        ) : null}
       </div>
     </div>
   )
@@ -470,12 +489,55 @@ export default function Home() {
             Building Blocks of Arvo
           </h2>
           <div className="grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-9">
-            {cards.map(({ title, desc, path, icon }, i) => {
-              const illustrationSrc = HOME_CARD_ILLUSTRATIONS[icon] ?? null
+            {cards.map(({ title, desc, path, externalHref, icon }, i) => {
+              const illustrationSrc = icon ? (HOME_CARD_ILLUSTRATIONS[icon] ?? null) : null
               const isAboveFoldCard = i < 4
+              const cardKey = path ?? externalHref
+              const linkClassName =
+                'group block min-w-0 flex-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-o9-shock dark:focus-visible:ring-[#7ca8ff]'
+              const body = (
+                <>
+                  <HomeBlockCardIllustration
+                    illustrationSrc={illustrationSrc}
+                    isLight={isLight}
+                    loading={isAboveFoldCard ? 'eager' : 'lazy'}
+                    fetchPriority={isAboveFoldCard ? 'low' : 'auto'}
+                  />
+                  <div className="bg-[#FAFAFA] px-5 pb-6 pt-5 dark:bg-neutral-900/80 sm:px-6">
+                    <h3 className="mb-2 text-lg font-semibold tracking-tight text-arvo-light-primary dark:text-white sm:text-xl">
+                      {title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-arvo-light-secondary dark:text-neutral-400 sm:text-[0.9375rem] sm:leading-relaxed">
+                      {desc}
+                    </p>
+                    <span className="mt-5 inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.12em] text-arvo-light-primary dark:text-white sm:text-xs sm:tracking-[0.14em]">
+                      <span>{externalHref ? 'Open' : 'Learn more'}</span>
+                      <svg
+                        className={`h-3 w-3 shrink-0 stroke-current motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-reduce:transition-none ${
+                          externalHref ? 'motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5' : 'motion-safe:group-hover:translate-x-1'
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        aria-hidden
+                      >
+                        {externalHref ? (
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                          />
+                        ) : (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        )}
+                      </svg>
+                    </span>
+                  </div>
+                </>
+              )
               return (
                 <div
-                  key={path}
+                  key={cardKey}
                   className="flex flex-col overflow-hidden border shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-[box-shadow,transform,border-color] duration-300 hover:border-arvo-light-primary/25 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] motion-safe:hover:-translate-y-1 motion-safe:animate-fade-in-up dark:border-neutral-700 dark:shadow-[0_2px_12px_rgba(0,0,0,0.35)] dark:hover:border-neutral-500 dark:hover:shadow-[0_16px_48px_rgba(0,0,0,0.45)]"
                   style={{
                     animationDelay: `${i * 45}ms`,
@@ -484,33 +546,21 @@ export default function Home() {
                   }}
                   data-arvo-card={isLight ? 'light-white' : 'dark'}
                 >
-                  <Link to={path} onClick={() => enterDocs()} className="group block min-w-0 flex-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-o9-shock dark:focus-visible:ring-[#7ca8ff]">
-                    <HomeBlockCardIllustration
-                      illustrationSrc={illustrationSrc}
-                      isLight={isLight}
-                      loading={isAboveFoldCard ? 'eager' : 'lazy'}
-                      fetchPriority={isAboveFoldCard ? 'low' : 'auto'}
-                    />
-                    <div className="bg-[#FAFAFA] px-5 pb-6 pt-5 dark:bg-neutral-900/80 sm:px-6">
-                      <h3 className="mb-2 text-lg font-semibold tracking-tight text-arvo-light-primary dark:text-white sm:text-xl">
-                        {title}
-                      </h3>
-                      <p className="text-sm leading-relaxed text-arvo-light-secondary dark:text-neutral-400 sm:text-[0.9375rem] sm:leading-relaxed">
-                        {desc}
-                      </p>
-                      <span className="mt-5 inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.12em] text-arvo-light-primary dark:text-white sm:text-xs sm:tracking-[0.14em]">
-                        <span>Learn more</span>
-                        <svg
-                          className="h-3 w-3 shrink-0 stroke-current motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-x-1 motion-reduce:transition-none"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          aria-hidden
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </span>
-                    </div>
-                  </Link>
+                  {externalHref ? (
+                    <a
+                      href={externalHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClassName}
+                      aria-label={`${title}: ${desc} (opens in new tab)`}
+                    >
+                      {body}
+                    </a>
+                  ) : (
+                    <Link to={path} onClick={() => enterDocs()} className={linkClassName}>
+                      {body}
+                    </Link>
+                  )}
                 </div>
               )
             })}

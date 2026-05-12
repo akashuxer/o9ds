@@ -17,6 +17,7 @@ export const PATHS_WITH_CONTENT = new Set([
   '/symbol',
   '/components',
   '/developers',
+  '/figma-make',
   '/patterns',
   '/accessibility',
   '/accessibility/overview',

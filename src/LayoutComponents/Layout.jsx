@@ -43,7 +43,7 @@ const PAGE_TITLES = {
   '/designers': 'For Designers',
   '/developers': 'For Developers',
   '/arvo-mcp-other-mcps': 'Arvo MCP/Other MCPs',
-  '/vibe-coders': 'For Vibe Coders',
+  '/figma-make': 'For Figma Make Users',
   '/accessibility': 'Accessibility',
   '/accessibility/overview': 'Accessibility — Introduction',
   '/accessibility/standards-and-principles': 'Standards and principles',
@@ -107,6 +107,7 @@ const sidebarSections = [
     items: [
       { path: '/overview', label: 'Overview' },
       { path: '/resources', label: 'Resources' },
+      { path: '/figma-make', label: 'For Figma Make Users' },
       { path: '/designers', label: 'For Designers' },
       { path: '/developers', label: 'For Developers' },
       {
@@ -140,7 +141,6 @@ const sidebarSections = [
         ],
       },
       { path: '/arvo-mcp-other-mcps', label: 'Arvo MCP/Other MCPs' },
-      { path: '/vibe-coders', label: 'For Vibe Coders' },
       { path: '/contribute', label: 'How to Contribute' },
       { path: '/faqs', label: 'FAQs' },
     ],
@@ -254,10 +254,10 @@ export default function Layout({ children }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  /** Accordion: Usage + Developer Reference under GETTING STARTED (default expanded). */
+  /** Accordion: Usage + Developer Reference under GETTING STARTED (default collapsed; expand on toggle or while search has text). */
   const [subsectionOpen, setSubsectionOpen] = useState({
-    '_nav-group-usage': true,
-    '_nav-group-developer-reference': true,
+    '_nav-group-usage': false,
+    '_nav-group-developer-reference': false,
   })
   const searchRef = useRef(null)
   const navRef = useRef(null)
@@ -265,15 +265,6 @@ export default function Layout({ children }) {
   useEffect(() => {
     const pageName = getPageTitle(pathname)
     document.title = `Arvo Design System - ${pageName}`
-  }, [pathname])
-
-  useEffect(() => {
-    if (pathname.startsWith('/usage')) {
-      setSubsectionOpen((o) => ({ ...o, '_nav-group-usage': true }))
-    }
-    if (pathname.startsWith('/developer-reference')) {
-      setSubsectionOpen((o) => ({ ...o, '_nav-group-developer-reference': true }))
-    }
   }, [pathname])
 
   const filteredSections = useMemo(() => {
@@ -628,14 +619,14 @@ export default function Layout({ children }) {
                     if (item.children) {
                       if (item.subsectionGroup && !item.hideGroupLabel) {
                         const expanded =
-                          Boolean(searchQuery.trim()) || subsectionOpen[item.path] !== false
+                          Boolean(searchQuery.trim()) || subsectionOpen[item.path] === true
                         return (
                           <li key={item.path}>
                             <button
                               type="button"
                               onClick={() => {
                                 setSubsectionOpen((o) => {
-                                  const isOpen = o[item.path] !== false
+                                  const isOpen = o[item.path] === true
                                   return { ...o, [item.path]: !isOpen }
                                 })
                               }}
@@ -801,7 +792,8 @@ export default function Layout({ children }) {
                       pathname.startsWith('/developers') ||
                       pathname.startsWith('/usage') ||
                       pathname.startsWith('/developer-reference') ||
-                      pathname.startsWith('/arvo-mcp')
+                      pathname.startsWith('/arvo-mcp') ||
+                      pathname.startsWith('/figma-make')
                     ? 'max-w-6xl'
                     : 'max-w-4xl'
             }`}
