@@ -5,9 +5,9 @@ const ThemeContext = createContext()
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('arvo-theme') || 'dark'
+      return localStorage.getItem('arvo-theme') || 'light'
     }
-    return 'dark'
+    return 'light'
   })
 
   // Sync DOM and React state on every theme change
