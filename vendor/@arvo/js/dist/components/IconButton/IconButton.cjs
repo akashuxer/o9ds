@@ -14,9 +14,11 @@ const _ArvoIconButton = class _ArvoIconButton {
       variant,
       size,
       icon: (options == null ? void 0 : options.icon) ?? _ArvoIconButton.DEFAULTS.icon,
+      selectedIcon: (options == null ? void 0 : options.selectedIcon) ?? null,
       tooltip: (options == null ? void 0 : options.tooltip) ?? _ArvoIconButton.DEFAULTS.tooltip,
       onClick: (options == null ? void 0 : options.onClick) ?? null,
-      onKeyDown: (options == null ? void 0 : options.onKeyDown) ?? null
+      onKeyDown: (options == null ? void 0 : options.onKeyDown) ?? null,
+      onSelectionChange: (options == null ? void 0 : options.onSelectionChange) ?? null
     };
     this._boundHandleClick = this._handleClick.bind(this);
     this._boundHandleKeydown = this._handleKeydown.bind(this);
@@ -46,8 +48,9 @@ const _ArvoIconButton = class _ArvoIconButton {
     el.classList.add(`arvo-btn--${this._options.variant}`);
     el.classList.add(`arvo-btn--${this._options.size}`);
     el.setAttribute("type", this._options.type);
-    if (this._options.icon) {
-      this._iconEl = this._createIconEl(this._options.icon);
+    const renderedIcon = this._options.isSelected === true && this._options.selectedIcon ? this._options.selectedIcon : this._options.icon;
+    if (renderedIcon) {
+      this._iconEl = this._createIconEl(renderedIcon);
       el.appendChild(this._iconEl);
     }
     if (this._options.tooltip) {
@@ -57,11 +60,11 @@ const _ArvoIconButton = class _ArvoIconButton {
     if (this._options.isDisabled) {
       el.disabled = true;
     }
-    if (this._options.isSelected !== void 0) {
-      el.setAttribute("aria-pressed", String(this._options.isSelected));
-      if (this._options.isSelected) {
-        el.classList.add("active");
-      }
+    const showAriaPressed = this._options.isToggle || this._options.isSelected !== void 0;
+    if (showAriaPressed) {
+      const isOn = this._options.isSelected === true;
+      el.setAttribute("aria-pressed", String(isOn));
+      if (isOn) el.classList.add("active");
     }
     if (this._options.isLoading) {
       el.classList.add("loading");
@@ -80,10 +83,16 @@ const _ArvoIconButton = class _ArvoIconButton {
     (_b = this._element) == null ? void 0 : _b.addEventListener("keydown", this._boundHandleKeydown);
   }
   _handleClick(event) {
+    var _a, _b;
     if (this._options.isDisabled || this._options.isLoading) {
       event.preventDefault();
       event.stopPropagation();
       return;
+    }
+    if (this._options.isToggle) {
+      const next = !(this._options.isSelected === true);
+      this.selected(next);
+      (_b = (_a = this._options).onSelectionChange) == null ? void 0 : _b.call(_a, next);
     }
     if (this._options.onClick) {
       this._options.onClick(event);
@@ -160,6 +169,7 @@ const _ArvoIconButton = class _ArvoIconButton {
     if (state === void 0) {
       return this._options.isSelected === true;
     }
+    const previous = this._options.isSelected === true;
     this._options.isSelected = state;
     if (state) {
       (_a = this._element) == null ? void 0 : _a.classList.add("active");
@@ -167,6 +177,26 @@ const _ArvoIconButton = class _ArvoIconButton {
       (_b = this._element) == null ? void 0 : _b.classList.remove("active");
     }
     (_c = this._element) == null ? void 0 : _c.setAttribute("aria-pressed", String(state));
+    if (this._iconEl && this._options.selectedIcon && state !== previous) {
+      const next = state ? this._options.selectedIcon : this._options.icon;
+      const removeName = state ? this._options.icon : this._options.selectedIcon;
+      if (removeName) this._iconEl.classList.remove(`o9con-${removeName}`);
+      if (next) this._iconEl.classList.add(`o9con-${next}`);
+    }
+  }
+  /**
+   * Toggle the selected state. Forwards through `selected()` and fires
+   * `onSelectionChange`. Useful when `isToggle` is set so consumers can
+   * programmatically trigger the same flip the user does on click.
+   */
+  toggle(force) {
+    var _a, _b;
+    const current = this._options.isSelected === true;
+    const next = typeof force === "boolean" ? force : !current;
+    if (next === current) return current;
+    this.selected(next);
+    (_b = (_a = this._options).onSelectionChange) == null ? void 0 : _b.call(_a, next);
+    return next;
   }
   disabled(state) {
     if (state === void 0) {
@@ -211,12 +241,15 @@ _ArvoIconButton.DEFAULTS = {
   size: "md",
   type: "button",
   icon: "",
+  selectedIcon: null,
   tooltip: "",
   isDisabled: false,
   isSelected: void 0,
+  isToggle: false,
   isLoading: false,
   onClick: null,
-  onKeyDown: null
+  onKeyDown: null,
+  onSelectionChange: null
 };
 let ArvoIconButton = _ArvoIconButton;
 exports.ArvoIconButton = ArvoIconButton;

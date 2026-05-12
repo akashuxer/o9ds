@@ -154,7 +154,7 @@ export default function Button() {
                 <ArvoButton label="Default" variant="primary" />
                 <ArvoButton label="Disabled" variant="primary" isDisabled />
                 <ArvoButton label="Loading" variant="primary" isLoading />
-                <ArvoButton label="Selected" variant="secondary" isSelected />
+                <ArvoButton label="Toggle" variant="secondary" isToggle defaultSelected />
               </LiveReference>
             </DocSection>
 
@@ -216,7 +216,19 @@ export default function Button() {
 <ArvoButton label="Add Item" variant="primary" icon="plus" />
 <ArvoButton label="Submit" variant="primary" isDisabled />
 <ArvoButton label="Saving..." variant="primary" isLoading />
-<ArvoButton label="Bold" variant="secondary" isSelected />
+
+// Toggle button — emits aria-pressed and fires onSelectionChange
+<ArvoButton
+  label="Bold"
+  variant="secondary"
+  isToggle
+  defaultSelected
+  onSelectionChange={(isSelected) => console.log(isSelected)}
+/>
+
+// Controlled active indicator (e.g. an open menu trigger)
+<ArvoButton label="Filter" variant="secondary" isSelected={menuOpen} />
+
 <ArvoButton label="Continue" variant="primary" isFullWidth />`}
               />
             </DocSection>
@@ -241,8 +253,11 @@ btn.destroy();`}
               />
             </DocSection>
             <DocSection id="props" title="Props">
-              <DocParagraph><DocCode>ArvoButton</DocCode> also accepts standard <DocCode>HTMLButtonElement</DocCode> attributes via spread.</DocParagraph>
+              <DocParagraph><DocCode>ArvoButton</DocCode> also accepts standard <DocCode>HTMLButtonElement</DocCode> attributes via spread (including <DocCode>onFocus</DocCode>, <DocCode>onBlur</DocCode>, <DocCode>onKeyDown</DocCode>).</DocParagraph>
               <PropsTable rows={PROPS} />
+              <DocCallout>
+                <DocCode>ArvoButton</DocCode> does not expose a <DocCode>tooltip</DocCode> prop — wrap with <DocCode>ArvoTooltip</DocCode> when a tooltip is needed.
+              </DocCallout>
             </DocSection>
             <DocSection id="css-vars" title="CSS variables">
               <DocParagraph>Override on <DocCode>.arvo-btn</DocCode> or a parent to theme the button.</DocParagraph>
@@ -276,7 +291,7 @@ btn.destroy();`}
               <DocList items={[
                 <span key="1">Focus ring uses <DocCode>outline: 1px solid</DocCode> with <DocCode>outline-offset: 2px</DocCode>.</span>,
                 <span key="2">When the <DocCode>.focus-border</DocCode> utility class is applied, <DocCode>outline-offset</DocCode> becomes <DocCode>-1px</DocCode> — use this in dense layouts (button groups, toolbars, table cells).</span>,
-                <span key="3">Hover styles are scoped to <DocCode>.no-touch</DocCode> to prevent sticky hover states on touch devices.</span>,
+                <span key="3">Hover styles are wrapped in <DocCode>@media (hover: hover) and (pointer: fine)</DocCode> to prevent sticky hover states on touch devices.</span>,
               ]} />
             </DocSection>
           </div>

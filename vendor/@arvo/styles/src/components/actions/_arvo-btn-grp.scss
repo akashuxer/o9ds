@@ -1,17 +1,18 @@
 @use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
 
 // ButtonGroup component styles
 // BEM Block: .arvo-btn-grp
 // Abbreviation: btn-grp
 // Loading Pattern: C (group disables pointer-events + aria-busy; children show Pattern A shimmer)
 
-// ─── .arvo-btn-grp ──────────────────────────────────────────────────────────
+// --- .arvo-btn-grp ----------------------------------------------------------
 
 .arvo-btn-grp {
-  // ── CSS custom properties ──────────────────────────────────────────────
+  // -- CSS custom properties ----------------------------------------------
   --arvo-btn-grp-height: 32px;
 
-  // Active colors (primary variant default — dynamic, overridden by --secondary)
+  // Active colors (primary variant default -- dynamic, overridden by --secondary)
   --arvo-btn-grp-active-bg: var(--arvo-color-s-theme-active-1);
   --arvo-btn-grp-active-text: var(--arvo-color-t-inverse);
   --arvo-btn-grp-active-icon: var(--arvo-color-i-inverse);
@@ -19,7 +20,7 @@
   // Active hover (dynamic, overridden by --secondary)
   --arvo-btn-grp-active-bg-hover: var(--arvo-color-s-theme-active-1);
 
-  // ── Base layout ──────────────────────────────────────────────────────
+  // -- Base layout ------------------------------------------------------
   display: inline-flex;
   align-items: center;
   gap: 0;
@@ -27,7 +28,7 @@
   position: relative;
   box-sizing: border-box;
 
-  // ── Child button overrides ───────────────────────────────────────────
+  // -- Child button overrides -------------------------------------------
   // Override child ArvoButton / ArvoIconButton CSS variables within group scope
   .arvo-btn,
   .arvo-icon-btn {
@@ -55,14 +56,16 @@
       --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
     }
     
-    // Hover: non-active items
-    .no-touch &:not(:disabled):not(.active):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
-    }
+    @include hover {
+      // Hover: non-active items
+      &:not(:disabled):not(.active):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+      }
 
-    // Hover: active items
-    .no-touch &:not(:disabled).active:hover {
-      --arvo-btn-bg-color: var(--arvo-btn-grp-active-bg-hover);
+      // Hover: active items
+      &:not(:disabled).active:hover {
+        --arvo-btn-bg-color: var(--arvo-btn-grp-active-bg-hover);
+      }
     }
 
     // Disabled items within non-disabled group
@@ -75,17 +78,17 @@
     }
   }
 
-  // ── Size: Small (24px) ──────────────────────────────────────────────
+  // -- Size: Small (24px) ----------------------------------------------
   &--sm {
     --arvo-btn-grp-height: 24px;
   }
 
-  // ── Size: Large / default (32px) ────────────────────────────────────
+  // -- Size: Large / default (32px) ------------------------------------
   &--lg {
     --arvo-btn-grp-height: 32px;
   }
 
-  // ── Variant: Secondary ──────────────────────────────────────────────
+  // -- Variant: Secondary ----------------------------------------------
   &--secondary {
     --arvo-btn-grp-active-bg: var(--arvo-color-s-theme-active-2);
     --arvo-btn-grp-active-text: var(--arvo-color-t-theme-active);
@@ -99,11 +102,13 @@
       --arvo-btn-icon-color: var(--arvo-color-i-theme-active);
     }
 
-    .no-touch .arvo-btn.active:hover,
-    .no-touch .arvo-icon-btn.active:hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-3);
-      --arvo-btn-text-color: var(--arvo-color-t-theme-active);
-      --arvo-btn-icon-color: var(--arvo-color-i-theme-active);
+    @include hover {
+      .arvo-btn.active:hover,
+      .arvo-icon-btn.active:hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-3);
+        --arvo-btn-text-color: var(--arvo-color-t-theme-active);
+        --arvo-btn-icon-color: var(--arvo-color-i-theme-active);
+      }
     }
     
     .arvo-btn:focus-visible,
@@ -115,17 +120,17 @@
     }
   }
 
-  // ── Modifier: icon-only ─────────────────────────────────────────────
+  // -- Modifier: icon-only ---------------------------------------------
   &--icon-only {
     .arvo-btn {
       --arvo-btn-padding-inline: #{$arvo-space-6};
     }
   }
 
-  // ── Modifier: multi-select ──────────────────────────────────────────
+  // -- Modifier: multi-select ------------------------------------------
   // No visual changes, but present for JS/React to scope behavior.
 
-  // ── Modifier: overflow ──────────────────────────────────────────────
+  // -- Modifier: overflow ----------------------------------------------
   &--overflow {
     overflow: hidden;
     flex-wrap: nowrap;
@@ -137,13 +142,13 @@
     }
   }
 
-  // ── Overflow trigger ────────────────────────────────────────────────
+  // -- Overflow trigger ------------------------------------------------
   &__overflow {
     flex-shrink: 0;
     margin-inline-start: auto;
   }
 
-  // ── Modifier: expand-label-on-select ────────────────────────────────
+  // -- Modifier: expand-label-on-select --------------------------------
   &--expand-lbl {
     .arvo-btn__lbl {
       max-width: 0;
@@ -168,7 +173,7 @@
     }
   }
 
-  // ── State: disabled ─────────────────────────────────────────────────
+  // -- State: disabled -------------------------------------------------
   &.is-disabled {
     pointer-events: none;
 
@@ -181,13 +186,13 @@
     }
   }
 
-  // ── Loading state (Pattern C) ───────────────────────────────────────
+  // -- Loading state (Pattern C) ---------------------------------------
   &.loading {
     pointer-events: none;
     user-select: none;
   }
 
-  // ── Overflow menu ──────────────────────────────────────────────────
+  // -- Overflow menu --------------------------------------------------
   &__overflow-menu {
     position: absolute;
     top: 100%;

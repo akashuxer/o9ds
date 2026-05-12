@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const core = require("@arvo/core");
 const _ArvoButton = class _ArvoButton {
   constructor(element, options) {
     var _a;
     this._iconEl = null;
     this._labelEl = null;
-    this._tooltipConnector = null;
     this._element = element;
     this._originalContent = ((_a = element.textContent) == null ? void 0 : _a.trim()) ?? "";
     const variant = (options == null ? void 0 : options.variant) && _ArvoButton.VARIANTS.includes(options.variant) ? options.variant : _ArvoButton.DEFAULTS.variant;
@@ -18,28 +16,16 @@ const _ArvoButton = class _ArvoButton {
       size,
       label: (options == null ? void 0 : options.label) ?? this._originalContent,
       icon: (options == null ? void 0 : options.icon) ?? null,
-      tooltip: (options == null ? void 0 : options.tooltip) ?? null,
-      onClick: (options == null ? void 0 : options.onClick) ?? null
+      onClick: (options == null ? void 0 : options.onClick) ?? null,
+      onSelectionChange: (options == null ? void 0 : options.onSelectionChange) ?? null
     };
     this._boundHandleClick = this._handleClick.bind(this);
     this._boundHandleKeydown = this._handleKeydown.bind(this);
     this._render();
     this._bindEvents();
-    this._connectTooltip();
   }
   static initialize(element, options) {
     return new _ArvoButton(element, options);
-  }
-  _connectTooltip() {
-    if (!this._element || !this._options.tooltip) return;
-    const tip = this._options.tooltip;
-    const config = typeof tip === "string" ? { content: tip } : tip;
-    this._tooltipConnector = core.connectTooltip(core.tooltipManager, {
-      anchor: this._element,
-      content: config.content,
-      placement: config.placement,
-      shortcut: config.shortcut
-    });
   }
   _render() {
     const el = this._element;
@@ -63,11 +49,11 @@ const _ArvoButton = class _ArvoButton {
     if (this._options.isDisabled) {
       el.disabled = true;
     }
-    if (this._options.isSelected !== void 0) {
-      el.setAttribute("aria-pressed", String(this._options.isSelected));
-      if (this._options.isSelected) {
-        el.classList.add("active");
-      }
+    const showAriaPressed = this._options.isToggle || this._options.isSelected !== void 0;
+    if (showAriaPressed) {
+      const isOn = this._options.isSelected === true;
+      el.setAttribute("aria-pressed", String(isOn));
+      if (isOn) el.classList.add("active");
     }
     if (this._options.isLoading) {
       el.classList.add("loading");
@@ -86,10 +72,16 @@ const _ArvoButton = class _ArvoButton {
     (_b = this._element) == null ? void 0 : _b.addEventListener("keydown", this._boundHandleKeydown);
   }
   _handleClick(event) {
+    var _a, _b;
     if (this._options.isDisabled || this._options.isLoading) {
       event.preventDefault();
       event.stopPropagation();
       return;
+    }
+    if (this._options.isToggle) {
+      const next = !(this._options.isSelected === true);
+      this.selected(next);
+      (_b = (_a = this._options).onSelectionChange) == null ? void 0 : _b.call(_a, next);
     }
     if (this._options.onClick) {
       this._options.onClick(event);
@@ -182,6 +174,20 @@ const _ArvoButton = class _ArvoButton {
     }
     (_c = this._element) == null ? void 0 : _c.setAttribute("aria-pressed", String(state));
   }
+  /**
+   * Toggle the selected state. Forwards through `selected()` and fires
+   * `onSelectionChange`. Useful when `isToggle` is set so consumers can
+   * programmatically trigger the same flip the user does on click.
+   */
+  toggle(force) {
+    var _a, _b;
+    const current = this._options.isSelected === true;
+    const next = typeof force === "boolean" ? force : !current;
+    if (next === current) return current;
+    this.selected(next);
+    (_b = (_a = this._options).onSelectionChange) == null ? void 0 : _b.call(_a, next);
+    return next;
+  }
   disabled(state) {
     if (state === void 0) {
       return this._options.isDisabled;
@@ -198,7 +204,7 @@ const _ArvoButton = class _ArvoButton {
     }
   }
   destroy() {
-    var _a, _b, _c;
+    var _a, _b;
     const el = this._element;
     if (!el) return;
     el.removeEventListener("click", this._boundHandleClick);
@@ -214,8 +220,6 @@ const _ArvoButton = class _ArvoButton {
     (_a = this._iconEl) == null ? void 0 : _a.remove();
     (_b = this._labelEl) == null ? void 0 : _b.remove();
     el.textContent = this._originalContent;
-    (_c = this._tooltipConnector) == null ? void 0 : _c.destroy();
-    this._tooltipConnector = null;
     this._element = null;
     this._iconEl = null;
     this._labelEl = null;
@@ -231,10 +235,11 @@ _ArvoButton.DEFAULTS = {
   icon: null,
   isDisabled: false,
   isSelected: void 0,
+  isToggle: false,
   isFullWidth: false,
   isLoading: false,
-  tooltip: null,
-  onClick: null
+  onClick: null,
+  onSelectionChange: null
 };
 let ArvoButton = _ArvoButton;
 exports.ArvoButton = ArvoButton;

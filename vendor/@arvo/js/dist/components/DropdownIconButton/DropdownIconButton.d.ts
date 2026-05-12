@@ -17,7 +17,6 @@ export interface ArvoDropdownIconButtonOptions {
     maxHeight?: string;
     hasGroupDividers?: boolean;
     closeOnSelect?: boolean;
-    menuSize?: 'sm' | 'md';
     onSelect?: (item: MenuItemData, index: number) => boolean | void;
     onOpen?: () => boolean | void;
     onClose?: () => boolean | void;

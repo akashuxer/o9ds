@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const core = require("@arvo/core");
 const _ArvoButtonLink = class _ArvoButtonLink {
   constructor(element, options) {
     var _a;
     this._iconEl = null;
     this._labelEl = null;
-    this._tooltipConnector = null;
     this._element = element;
     this._originalHref = element.getAttribute("href") ?? "";
     this._originalContent = ((_a = element.textContent) == null ? void 0 : _a.trim()) ?? "";
@@ -21,27 +19,14 @@ const _ArvoButtonLink = class _ArvoButtonLink {
       href: (options == null ? void 0 : options.href) ?? this._originalHref,
       target: (options == null ? void 0 : options.target) ?? null,
       icon: (options == null ? void 0 : options.icon) ?? null,
-      tooltip: (options == null ? void 0 : options.tooltip) ?? null,
       onClick: (options == null ? void 0 : options.onClick) ?? null
     };
     this._boundHandleClick = this._handleClick.bind(this);
     this._render();
     this._bindEvents();
-    this._connectTooltip();
   }
   static initialize(element, options) {
     return new _ArvoButtonLink(element, options);
-  }
-  _connectTooltip() {
-    if (!this._element || !this._options.tooltip) return;
-    const tip = this._options.tooltip;
-    const config = typeof tip === "string" ? { content: tip } : tip;
-    this._tooltipConnector = core.connectTooltip(core.tooltipManager, {
-      anchor: this._element,
-      content: config.content,
-      placement: config.placement,
-      shortcut: config.shortcut
-    });
   }
   _render() {
     const el = this._element;
@@ -213,7 +198,7 @@ const _ArvoButtonLink = class _ArvoButtonLink {
     }
   }
   destroy() {
-    var _a, _b, _c;
+    var _a, _b;
     const el = this._element;
     if (!el) return;
     el.removeEventListener("click", this._boundHandleClick);
@@ -231,8 +216,6 @@ const _ArvoButtonLink = class _ArvoButtonLink {
     (_a = this._iconEl) == null ? void 0 : _a.remove();
     (_b = this._labelEl) == null ? void 0 : _b.remove();
     el.textContent = this._originalContent;
-    (_c = this._tooltipConnector) == null ? void 0 : _c.destroy();
-    this._tooltipConnector = null;
     this._element = null;
     this._iconEl = null;
     this._labelEl = null;
@@ -250,7 +233,6 @@ _ArvoButtonLink.DEFAULTS = {
   isDisabled: false,
   isFullWidth: false,
   isLoading: false,
-  tooltip: null,
   onClick: null
 };
 let ArvoButtonLink = _ArvoButtonLink;

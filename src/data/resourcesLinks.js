@@ -56,7 +56,7 @@ export const RESOURCES_DOCS = [
 /** Development — repo, registry, tracking */
 export const RESOURCES_DEVELOPMENT = [
   {
-    label: 'Repository',
+    label: 'o9Design System Repository',
     links: [{ text: 'o9git — o9.DesignSystem', href: 'https://o9git.visualstudio.com/CoreDev/_git/o9.DesignSystem' }],
   },
   {
@@ -74,15 +74,6 @@ export const RESOURCES_DEVELOPMENT = [
     ],
   },
   {
-    label: 'Component Review Notes/Tasks',
-    links: [
-      {
-        text: 'Arvo Component Review',
-        href: 'https://docs.google.com/document/d/19-_NTyQS4y3ImONsvUXH4XT-s8zaH2NSoGXT-tRn7bg/edit?usp=sharing',
-      },
-    ],
-  },
-  {
     label: 'Kibo Migration',
     links: [
       {
@@ -90,17 +81,7 @@ export const RESOURCES_DEVELOPMENT = [
         href: 'https://o9git.visualstudio.com/CoreDev/_git/o9.Kibo/pullrequest/666696',
       },
     ],
-  },
-  {
-    label: 'NovaAI Migration',
-    hint: 'sample',
-    links: [
-      {
-        text: 'Arvo NovaAI Migration — Sample',
-        href: 'https://o9git.visualstudio.com/CoreDev/_git/o9.nova.ui/pullrequest/668492?path=/apps/nova.ui/src/features/reports/component/ViewReportDetails.tsx',
-      },
-    ],
-  },
+  }
 ]
 
 /** Figma — libraries and assets */

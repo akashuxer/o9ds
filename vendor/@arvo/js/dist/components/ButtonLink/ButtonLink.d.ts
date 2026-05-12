@@ -1,9 +1,3 @@
-import { TooltipPlacement } from '../../../../core/src';
-export type ButtonLinkTooltipOption = string | {
-    content: string;
-    placement?: TooltipPlacement;
-    shortcut?: string;
-};
 export interface ArvoButtonLinkOptions {
     variant?: 'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger';
     size?: 'sm' | 'md' | 'lg';
@@ -14,13 +8,11 @@ export interface ArvoButtonLinkOptions {
     isDisabled?: boolean;
     isFullWidth?: boolean;
     isLoading?: boolean;
-    tooltip?: ButtonLinkTooltipOption;
     onClick?: (event: Event) => void;
 }
-type RequiredButtonLinkOptions = Required<Omit<ArvoButtonLinkOptions, 'onClick' | 'icon' | 'target' | 'tooltip'>> & {
+type RequiredButtonLinkOptions = Required<Omit<ArvoButtonLinkOptions, 'onClick' | 'icon' | 'target'>> & {
     icon: string | null;
     target: string | null;
-    tooltip: ButtonLinkTooltipOption | null;
     onClick: ((event: Event) => void) | null;
 };
 export declare class ArvoButtonLink {
@@ -30,14 +22,12 @@ export declare class ArvoButtonLink {
     private _labelEl;
     private _originalHref;
     private _originalContent;
-    private _tooltipConnector;
     private _boundHandleClick;
     static readonly VARIANTS: readonly ["primary", "secondary", "tertiary", "outline", "danger"];
     static readonly SIZES: readonly ["sm", "md", "lg"];
     static readonly DEFAULTS: RequiredButtonLinkOptions;
     static initialize(element: HTMLAnchorElement, options?: ArvoButtonLinkOptions): ArvoButtonLink;
     constructor(element: HTMLAnchorElement, options?: ArvoButtonLinkOptions);
-    private _connectTooltip;
     private _render;
     private _createIconEl;
     private _applyHref;

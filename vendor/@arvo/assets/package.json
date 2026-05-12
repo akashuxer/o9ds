@@ -1,7 +1,7 @@
 {
   "name": "@arvo/assets",
-  "version": "1.0.0-dev.2",
-  "description": "Arvo Design System static assets: icon font, web fonts, and illustrations. Pre-built CSS with zero token dependencies.",
+  "version": "1.1.0",
+  "description": "Arvo Design System static assets: icon font, web fonts, illustrations, and file-type symbols. Pre-built CSS with zero token dependencies.",
   "license": "UNLICENSED",
   "private": false,
   "sideEffects": true,
@@ -12,11 +12,14 @@
     "./o9con/files/*": "./o9con/fonts/*",
     "./o9illus/css": "./o9illus/o9illus.css",
     "./o9illus/files/*": "./o9illus/*",
-    "./dist/*": "./dist/*"
+    "./o9symbol/files/*": "./o9symbol/light/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   },
   "files": [
     "o9con/",
     "o9illus/",
+    "o9symbol/",
     "fonts/",
     "dist/",
     "scripts/"

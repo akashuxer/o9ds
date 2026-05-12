@@ -1,72 +1,42 @@
-const BLOCK = "arvo-overlay__mask";
-function resolveContainer(container) {
-  if (!container) return null;
-  if (typeof container === "string") {
-    return document.querySelector(container);
+function lockPageScroll() {
+  if (typeof document === "undefined") {
+    return () => {
+    };
   }
-  return container;
-}
-function createMask(options = {}) {
-  const {
-    blur = false,
-    container: containerOpt,
-    closeOnClick = false,
-    zIndex,
-    onOutside
-  } = options;
-  const el = document.createElement("div");
-  el.className = BLOCK;
-  if (blur) {
-    el.classList.add(`${BLOCK}--blur`);
+  _lockCount += 1;
+  if (_lockCount === 1) {
+    const html = document.documentElement;
+    const body = document.body;
+    _saved.htmlOverflow = html.style.overflow;
+    _saved.bodyOverflow = body.style.overflow;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
   }
-  const containerEl = resolveContainer(containerOpt);
-  if (containerEl) {
-    el.classList.add(`${BLOCK}--scoped`);
-  }
-  if (zIndex != null) {
-    el.style.zIndex = String(zIndex);
-  }
-  let pointerHandler = null;
-  if (closeOnClick && onOutside) {
-    pointerHandler = (e) => onOutside(e);
-    el.addEventListener("pointerdown", pointerHandler);
-  }
-  let hideTimer = null;
-  const mask = {
-    element: el,
-    show() {
-      if (hideTimer != null) {
-        clearTimeout(hideTimer);
-        hideTimer = null;
-      }
-      const target = containerEl ?? document.body;
-      target.appendChild(el);
-      setTimeout(() => {
-        el.classList.add(`${BLOCK}--visible`);
-      }, 10);
-    },
-    hide() {
-      el.classList.remove(`${BLOCK}--visible`);
-      hideTimer = setTimeout(() => {
-        el.remove();
-        hideTimer = null;
-      }, 300);
-    },
-    destroy() {
-      if (hideTimer != null) {
-        clearTimeout(hideTimer);
-        hideTimer = null;
-      }
-      if (pointerHandler) {
-        el.removeEventListener("pointerdown", pointerHandler);
-        pointerHandler = null;
-      }
-      el.remove();
+  let released = false;
+  return function unlock() {
+    if (released) return;
+    released = true;
+    _lockCount = Math.max(0, _lockCount - 1);
+    if (_lockCount === 0) {
+      const html = document.documentElement;
+      const body = document.body;
+      html.style.overflow = _saved.htmlOverflow;
+      body.style.overflow = _saved.bodyOverflow;
+      _saved.htmlOverflow = "";
+      _saved.bodyOverflow = "";
     }
   };
-  return mask;
 }
+function isPageScrollLocked() {
+  return _lockCount > 0;
+}
+let _lockCount = 0;
+const _saved = {
+  htmlOverflow: "",
+  bodyOverflow: ""
+};
 export {
-  createMask
+  isPageScrollLocked,
+  lockPageScroll
 };
 //# sourceMappingURL=index15.js.map

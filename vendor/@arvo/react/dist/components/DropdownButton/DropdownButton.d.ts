@@ -1,6 +1,5 @@
 import { ListGroup } from '../../../../core/src';
 import { MenuItemData } from '../ActionMenu/ActionMenu';
-import { TooltipProp } from '../../hooks/useTooltip';
 import { MenuSearchProp } from '../../types/menu-search';
 export interface ArvoDropdownButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'type' | 'onSelect' | 'defaultValue' | 'value'> {
     label: string;
@@ -20,8 +19,6 @@ export interface ArvoDropdownButtonProps extends Omit<React.ButtonHTMLAttributes
     maxHeight?: string;
     hasGroupDividers?: boolean;
     closeOnSelect?: boolean;
-    menuSize?: 'sm' | 'md';
-    tooltip?: TooltipProp;
     onSelect?: (item: MenuItemData, index: number) => boolean | void;
     onOpen?: () => boolean | void;
     onClose?: () => boolean | void;

@@ -70,7 +70,7 @@ const _ArvoTabstrip = class _ArvoTabstrip {
   static initialize(element, options) {
     return new _ArvoTabstrip(element, options);
   }
-  // ── Display ordering ─────────────────────────────────────────────────
+  // -- Display ordering -------------------------------------------------
   _computeDisplayOrder() {
     const sorted = sortTabs(this._options.tabs);
     if (this._promotedTabId) {
@@ -87,7 +87,7 @@ const _ArvoTabstrip = class _ArvoTabstrip {
     }
     return sorted;
   }
-  // ── Rendering ───────────────────────────────────────────────────────────
+  // -- Rendering -----------------------------------------------------------
   _render() {
     const el = this._element;
     if (!el) return;
@@ -283,7 +283,7 @@ const _ArvoTabstrip = class _ArvoTabstrip {
     this._lockTabWidths();
     this._checkOverflow();
   }
-  // ── Overflow detection ─────────────────────────────────────────────────
+  // -- Overflow detection -------------------------------------------------
   _setupOverflowDetection() {
     if (!this._listEl) return;
     this._resizeObserver = new ResizeObserver(() => this._checkOverflow());
@@ -398,7 +398,7 @@ const _ArvoTabstrip = class _ArvoTabstrip {
     });
     this._overflowMenuInstance.updateItems(items);
   }
-  // ── Events ──────────────────────────────────────────────────────────────
+  // -- Events --------------------------------------------------------------
   _bindEvents() {
     var _a, _b;
     (_a = this._listEl) == null ? void 0 : _a.addEventListener("keydown", this._boundHandleKeyDown);
@@ -499,7 +499,7 @@ const _ArvoTabstrip = class _ArvoTabstrip {
       new CustomEvent(name, { bubbles: true, cancelable: true, detail })
     );
   }
-  // ── Public API ─────────────────────────────────────────────────────────
+  // -- Public API ---------------------------------------------------------
   select(id) {
     var _a, _b;
     const entry = this._tabs.find((t) => t.item.id === id);

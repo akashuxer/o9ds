@@ -26,7 +26,7 @@ export default function ButtonGroup() {
   const [tab, setTab] = useState('Overview')
   const [single, setSingle] = useState('bold')
   const sections = useMemo(() => {
-    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'modes', label: 'Modes' }, { id: 'icon-only', label: 'Icon-only' }]
+    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'modes', label: 'Modes' }, { id: 'vs-seg-ctrl', label: 'vs Segmented Control' }, { id: 'icon-only', label: 'Icon-only' }]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]
     if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'css-vars', label: 'CSS variables' }, { id: 'methods', label: 'Methods (JS)' }, { id: 'events', label: 'Events (JS)' }]
     if (tab === 'Accessibility') return [{ id: 'keyboard', label: 'Keyboard' }, { id: 'aria', label: 'ARIA' }]
@@ -52,14 +52,23 @@ export default function ButtonGroup() {
             </DocSection>
             <DocSection id="modes" title="Modes">
               <DocList items={[
-                <span key="1"><DocStrong>Toggle</DocStrong> — two options in single-select mode (e.g. On/Off, List/Grid).</span>,
-                <span key="2"><DocStrong>Single-select toolbar</DocStrong> — mutually exclusive options like text alignment.</span>,
-                <span key="3"><DocStrong>Multi-select toolbar</DocStrong> — independent toggles like text formatting (bold, italic, underline).</span>,
-                <span key="4"><DocStrong>Compact action bar</DocStrong> — icon-only group with overflow support.</span>,
+                <span key="1"><DocStrong>Toolbar of commands</DocStrong> — grouped action buttons that are not selectable (Save / Export / Share). No selection mode needed.</span>,
+                <span key="2"><DocStrong>Single-select toolbar</DocStrong> — command-style mutually exclusive options like text alignment (left / center / right / justify) or canvas tools (Select / Pan / Draw / Erase).</span>,
+                <span key="3"><DocStrong>Multi-select toolbar</DocStrong> — independent toggles like text formatting (Bold / Italic / Strikethrough). Each button has its own on/off state.</span>,
+                <span key="4"><DocStrong>Compact action bar</DocStrong> — icon-only group with overflow support for responsive layouts.</span>,
               ]} />
               <LiveReference>
                 <ArvoButtonGroup items={ITEMS} value={single} ariaLabel="Text formatting" onChange={({ value }) => setSingle(value)} />
               </LiveReference>
+            </DocSection>
+            <DocSection id="vs-seg-ctrl" title="ButtonGroup vs Segmented Control">
+              <DocParagraph>
+                The visual treatment is similar; the semantics are not. If the control behaves like a toolbar command, use <DocStrong>ButtonGroup</DocStrong>. If it behaves like choosing a setting, value, view, filter, or operator (List / Grid, Day / Week / Month, AND / OR), use <DocStrong>Segmented Control</DocStrong>.
+              </DocParagraph>
+              <ul className="list-disc pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+                <li><DocStrong>ArvoButtonGroup</DocStrong> — toolbar of commands or toggle-button states (button / toggle-button semantics with <DocCode>aria-pressed</DocCode>).</li>
+                <li><DocStrong>ArvoSegmentedControl</DocStrong> — choosing a setting, value, view, filter, preference, or boolean / operator (radio-group semantics with <DocCode>aria-checked</DocCode>).</li>
+              </ul>
             </DocSection>
             <DocSection id="icon-only" title="Icon-only">
               <LiveReference>

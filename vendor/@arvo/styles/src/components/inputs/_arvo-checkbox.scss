@@ -4,38 +4,38 @@
 // Loading Pattern: A (overlay shimmer)
 
 @use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
 @use '../../mixins/loading' as *;
-@use '../../mixins/inline-alert' as *;
 
-// ─── .arvo-checkbox ──────────────────────────────────────────────────────────
+// --- .arvo-checkbox ----------------------------------------------------------
 
 .arvo-checkbox {
-  // ── CSS custom properties (only dynamic values that change per size) ─────
+  // -- CSS custom properties (only dynamic values that change per size) -----
   --arvo-checkbox-box-size: 18px;
   --arvo-checkbox-icon-size: 16px;
   --arvo-checkbox-label-font-size: #{$arvo-font-size-14};
 
-  // ── Root layout ──────────────────────────────────────────────────────────
+  // -- Root layout ----------------------------------------------------------
   display: inline-flex;
   flex-direction: column;
   position: relative;
   user-select: none;
 
-  // ── Size: lg (default) ─────────────────────────────────────────────────
+  // -- Size: lg (default) -------------------------------------------------
   &--lg {
     --arvo-checkbox-box-size: 18px;
     --arvo-checkbox-icon-size: 18px;
     --arvo-checkbox-label-font-size: #{$arvo-font-size-14};
   }
 
-  // ── Size: sm ───────────────────────────────────────────────────────────
+  // -- Size: sm -----------------------------------------------------------
   &--sm {
     --arvo-checkbox-box-size: 16px;
     --arvo-checkbox-icon-size: 16px;
     --arvo-checkbox-label-font-size: #{$arvo-font-size-12};
   }
 
-  // ── __field (click/hover area wrapping input + label) ──────────────────
+  // -- __field (click/hover area wrapping input + label) ------------------
   &__field {
     display: inline-flex;
     align-items: center;
@@ -43,7 +43,7 @@
     cursor: pointer;
   }
 
-  // ── __input (native checkbox styled as custom box) ─────────────────────
+  // -- __input (native checkbox styled as custom box) ---------------------
   &__input {
     appearance: none;
     -webkit-appearance: none;
@@ -59,7 +59,7 @@
     margin: 0;
     padding: 0;
 
-    // Checkmark icon — shown when :checked
+    // Checkmark icon -- shown when :checked
     &::before {
       content: '\ea82';
       font-family: $o9con;
@@ -73,7 +73,7 @@
       transform: translate(-50%, -50%);
     }
 
-    // Indeterminate dash — shown when [data-indeterminate]
+    // Indeterminate dash -- shown when [data-indeterminate]
     &::after {
       content: '';
       position: absolute;
@@ -87,7 +87,7 @@
       transition: opacity 0.15s ease;
     }
 
-    // ── Checked state ──────────────────────────────────────────────────
+    // -- Checked state --------------------------------------------------
     &:checked {
       background-color: var(--arvo-color-s-theme);
       border-color: transparent;
@@ -97,7 +97,7 @@
       }
     }
 
-    // ── Indeterminate state ────────────────────────────────────────────
+    // -- Indeterminate state --------------------------------------------
     &[data-indeterminate] {
       background-color: var(--arvo-color-s-theme);
       border-color: transparent;
@@ -111,13 +111,13 @@
       }
     }
 
-    // ── Focus ──────────────────────────────────────────────────────────
+    // -- Focus ----------------------------------------------------------
     &:focus-visible {
       outline: 2px solid var(--arvo-color-b-theme-focus);
       outline-offset: 1px;
     }
 
-    // ── Disabled ───────────────────────────────────────────────────────
+    // -- Disabled -------------------------------------------------------
     &:disabled {
       cursor: not-allowed;
       background-color: transparent;
@@ -141,13 +141,13 @@
     }
   }
 
-  // ── __lbl (visible label text) ──────────────────────────────────────────
+  // -- __lbl (visible label text) ------------------------------------------
   &__lbl {
     font-size: var(--arvo-checkbox-label-font-size);
     color: var(--arvo-color-t-primary);
   }
 
-  // ── State: disabled ────────────────────────────────────────────────────
+  // -- State: disabled ----------------------------------------------------
   &.is-disabled {
     pointer-events: none;
 
@@ -160,7 +160,7 @@
     }
   }
 
-  // ── State: readonly ────────────────────────────────────────────────────
+  // -- State: readonly ----------------------------------------------------
   &.is-readonly {
     .arvo-checkbox__field {
       cursor: default;
@@ -197,7 +197,7 @@
     }
   }
 
-  // ── State: error ───────────────────────────────────────────────────────
+  // -- State: error -------------------------------------------------------
   &.has-error:not([data-excluded]) {
     .arvo-checkbox__input {
       border-color: var(--arvo-color-b-negative);
@@ -218,7 +218,7 @@
     }
   }
 
-  // ── State: excluded ────────────────────────────────────────────────────
+  // -- State: excluded ----------------------------------------------------
   &[data-excluded] {
     .arvo-checkbox__input {
       border-color: var(--arvo-color-b-negative);
@@ -240,25 +240,14 @@
     }
   }
 
-  // ── Inline alert ───────────────────────────────────────────────────────
-  .arvo-inline-alert {
-    @include inline-alert-base;
+  // -- Below-field error message --------------------------------------------
+  // Rendered by the consumer as a child <ArvoMessageAlert />; the alert's own
+  // SCSS provides icon/text styles. We only attach the spacing offset here.
+  .arvo-msg-alert {
     margin-top: $arvo-space-8;
-
-    &__ico {
-      @include inline-alert-icon;
-    }
-
-    &__msg {
-      @include inline-alert-msg;
-    }
-
-    &--error {
-      @include inline-alert-error;
-    }
   }
 
-  // ── Loading state (per-element shimmer on __input + __lbl) ──────────────
+  // -- Loading state (per-element shimmer on __input + __lbl) --------------
   &.loading,
   [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
     pointer-events: none;
@@ -273,16 +262,18 @@
   }
 }
 
-// Hover state (no-touch only, not disabled, not readonly)
-.no-touch .arvo-checkbox:not(.is-disabled):not(.is-readonly):hover {
-  .arvo-checkbox__input:not(:disabled) {
-    border-color: var(--arvo-color-b-theme-hover);
+// Hover state (hover-capable devices only, not disabled, not readonly)
+@include hover {
+  .arvo-checkbox:not(.is-disabled):not(.is-readonly):hover {
+    .arvo-checkbox__input:not(:disabled) {
+      border-color: var(--arvo-color-b-theme-hover);
+    }
   }
-}
 
-// Hover: excluded variant
-.no-touch .arvo-checkbox[data-excluded]:not(.is-disabled):not(.is-readonly):hover {
-  .arvo-checkbox__input:not(:disabled) {
-    background-color: var(--arvo-color-s-negative-hover, var(--arvo-color-s-negative));
+  // Hover: excluded variant
+  .arvo-checkbox[data-excluded]:not(.is-disabled):not(.is-readonly):hover {
+    .arvo-checkbox__input:not(:disabled) {
+      background-color: var(--arvo-color-s-negative-hover, var(--arvo-color-s-negative));
+    }
   }
 }

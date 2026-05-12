@@ -39,6 +39,7 @@ export declare class ArvoRadioGroup {
     private _labelEl;
     private _bdyEl;
     private _itemsEl;
+    private _inlineAlert;
     private _inlineAlertEl;
     private _childInstances;
     private _childItemEls;

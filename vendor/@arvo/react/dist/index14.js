@@ -1,167 +1,97 @@
-import { jsxs, jsx } from "react/jsx-runtime";
-import { forwardRef, useId, useRef, useState, useCallback, useEffect } from "react";
-import { getDefaultErrorMsg, formatCharCount } from "@arvo/utils";
+import { jsx } from "react/jsx-runtime";
+import { forwardRef, useRef } from "react";
 import { useTooltip } from "./index10.js";
-import { FormLabel } from "./index43.js";
-const ArvoTextarea = forwardRef(
-  function ArvoTextarea2({
-    value,
-    placeholder,
-    isDisabled = false,
-    isReadOnly = false,
-    label,
-    isRequired = false,
-    isInvalid = false,
-    size = "sm",
+import { useControllableState } from "./index49.js";
+const ArvoIconButton = forwardRef(
+  function ArvoIconButton2({
+    variant = "primary",
+    size = "md",
+    type = "button",
     icon,
-    rows = 3,
-    maxLength,
-    hasCounter = false,
-    autoResize = false,
-    resizable = "none",
-    errorMsg,
-    errorDisplay = "inline",
+    selectedIcon,
+    tooltip,
+    isDisabled = false,
+    isSelected: selectedProp,
+    defaultSelected = false,
+    isToggle = false,
+    onSelectionChange,
     isLoading = false,
-    isFullWidth = false,
-    onInput,
-    onChange,
-    onFocus,
-    onBlur,
     className,
+    onClick,
+    onKeyDown,
     ...rest
   }, ref) {
-    const uid = useId();
-    const inputId = `arvo-textarea-${uid}`;
-    const errorId = `arvo-textarea-err-${uid}`;
-    const counterId = `arvo-textarea-counter-${uid}`;
-    const textareaRef = useRef(null);
-    const rootRef = useRef(null);
-    const errIcoRef = useRef(null);
-    const previousValueRef = useRef("");
-    const isControlled = value !== void 0;
-    const [internalValue, setInternalValue] = useState("");
-    const currentValue = isControlled ? value : internalValue;
-    const errorMessage = errorMsg ?? getDefaultErrorMsg();
-    const showTooltipIcon = isInvalid && errorDisplay === "tooltip";
-    const showInlineAlert = isInvalid && errorDisplay === "inline";
-    useTooltip({
-      triggerRef: errIcoRef,
-      tooltip: showTooltipIcon ? errorMessage : void 0
-    });
+    const internalRef = useRef(null);
+    const tooltipContent = typeof tooltip === "string" ? tooltip : tooltip.content;
+    const [isSelected, setSelected] = useControllableState(
+      selectedProp,
+      defaultSelected
+    );
+    useTooltip({ triggerRef: internalRef, tooltip });
     const classes = [
-      "arvo-textarea",
-      `arvo-textarea--${size}`,
-      isFullWidth && "arvo-textarea--full-width",
-      autoResize && "arvo-textarea--auto-resize",
-      isLoading && "loading",
-      isDisabled && "is-disabled",
-      isReadOnly && "is-readonly",
-      isInvalid && "has-error",
-      showTooltipIcon && "error-tooltip",
-      className
+      "arvo-icon-btn",
+      `arvo-btn--${variant}`,
+      `arvo-btn--${size}`,
+      isLoading ? "loading" : "",
+      isSelected ? "active" : "",
+      className ?? ""
     ].filter(Boolean).join(" ");
-    const recalcAutoResizeHeight = useCallback(() => {
-      const el = textareaRef.current;
-      if (!el || !autoResize) return;
-      el.style.height = "auto";
-      el.style.height = `${el.scrollHeight}px`;
-      el.style.overflow = el.scrollHeight > el.clientHeight ? "auto" : "hidden";
-    }, [autoResize]);
-    useEffect(() => {
-      previousValueRef.current = currentValue;
-    }, [currentValue]);
-    useEffect(() => {
-      if (autoResize) {
-        recalcAutoResizeHeight();
-      }
-    }, [currentValue, autoResize, recalcAutoResizeHeight]);
-    function handleInput(e) {
-      if (isDisabled || isLoading) {
+    const blocked = isDisabled || isLoading;
+    const handleClick = (e) => {
+      if (blocked) {
         e.preventDefault();
+        e.stopPropagation();
         return;
       }
-      if (!isControlled) {
-        setInternalValue(e.currentTarget.value);
+      if (isToggle) {
+        const next = !isSelected;
+        setSelected(next);
+        onSelectionChange == null ? void 0 : onSelectionChange(next);
       }
-      onInput == null ? void 0 : onInput(e);
-    }
-    function handleChange(e) {
-      var _a;
-      if (isDisabled || isLoading) {
+      onClick == null ? void 0 : onClick(e);
+    };
+    const handleKeyDown = (e) => {
+      if (blocked && (e.key === "Enter" || e.key === " ")) {
         e.preventDefault();
+        e.stopPropagation();
         return;
       }
-      const newValue = e.target.value;
-      const prev = previousValueRef.current;
-      previousValueRef.current = newValue;
-      if (!isControlled) {
-        setInternalValue(newValue);
-      }
-      (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-        new CustomEvent("textarea:change", {
-          bubbles: true,
-          cancelable: true,
-          detail: { value: newValue, previousValue: prev }
-        })
-      );
-      onChange == null ? void 0 : onChange(e);
-    }
-    function handleFocus(e) {
-      onFocus == null ? void 0 : onFocus(e);
-    }
-    function handleBlur(e) {
-      onBlur == null ? void 0 : onBlur(e);
-    }
-    const resizeStyle = autoResize ? "none" : resizable;
-    function setRefs(node) {
-      rootRef.current = node;
+      onKeyDown == null ? void 0 : onKeyDown(e);
+    };
+    const showAriaPressed = isToggle || selectedProp !== void 0;
+    const ariaPressedProp = showAriaPressed ? { "aria-pressed": isSelected } : {};
+    const mergeRefs = (node) => {
+      internalRef.current = node;
       if (typeof ref === "function") ref(node);
       else if (ref) ref.current = node;
-    }
-    const describedByParts = [];
-    if (showInlineAlert) describedByParts.push(errorId);
-    if (hasCounter && !showInlineAlert) describedByParts.push(counterId);
-    const describedBy = describedByParts.length > 0 ? describedByParts.join(" ") : void 0;
-    return /* @__PURE__ */ jsxs("div", { ref: setRefs, className: classes, role: "group", "aria-busy": isLoading || void 0, children: [
-      label && /* @__PURE__ */ jsx(FormLabel, { htmlFor: inputId, size: "sm", isRequired, isDisabled, className: "arvo-textarea__lbl", children: label }),
-      /* @__PURE__ */ jsxs("div", { className: "arvo-textarea__field", children: [
-        icon && /* @__PURE__ */ jsx("span", { className: `arvo-textarea__ico o9con o9con-${icon}`, "aria-hidden": "true" }),
-        /* @__PURE__ */ jsx(
-          "textarea",
+    };
+    const renderedIcon = isSelected && selectedIcon ? selectedIcon : icon;
+    return /* @__PURE__ */ jsx(
+      "button",
+      {
+        ref: mergeRefs,
+        type,
+        disabled: isDisabled,
+        ...rest,
+        className: classes,
+        "aria-label": tooltipContent,
+        "aria-busy": isLoading ? true : void 0,
+        onClick: handleClick,
+        onKeyDown: handleKeyDown,
+        ...ariaPressedProp,
+        children: /* @__PURE__ */ jsx(
+          "span",
           {
-            ref: textareaRef,
-            id: inputId,
-            className: "arvo-textarea__input",
-            value: currentValue,
-            placeholder,
-            disabled: isDisabled,
-            readOnly: isReadOnly,
-            required: isRequired,
-            rows,
-            maxLength,
-            style: { resize: resizeStyle },
-            "aria-invalid": isInvalid || void 0,
-            "aria-required": isRequired || void 0,
-            "aria-describedby": describedBy,
-            onInput: handleInput,
-            onChange: handleChange,
-            onFocus: handleFocus,
-            onBlur: handleBlur,
-            ...rest
+            className: `arvo-btn__ico o9con o9con-${renderedIcon}`,
+            "aria-hidden": "true"
           }
-        ),
-        showTooltipIcon && /* @__PURE__ */ jsx("span", { ref: errIcoRef, className: "arvo-textarea__err-ico", "aria-hidden": "true" }),
-        /* @__PURE__ */ jsx("div", { className: "arvo-textarea__border" })
-      ] }),
-      hasCounter && !showInlineAlert && /* @__PURE__ */ jsx("span", { id: counterId, className: "arvo-textarea__counter", children: formatCharCount(currentValue.length, maxLength ?? null) }),
-      showInlineAlert && /* @__PURE__ */ jsxs("div", { className: "arvo-inline-alert arvo-inline-alert--error", id: errorId, role: "alert", children: [
-        /* @__PURE__ */ jsx("span", { className: "arvo-inline-alert__ico", "aria-hidden": "true" }),
-        /* @__PURE__ */ jsx("span", { className: "arvo-inline-alert__msg", children: errorMessage })
-      ] })
-    ] });
+        )
+      }
+    );
   }
 );
 export {
-  ArvoTextarea as default
+  ArvoIconButton,
+  ArvoIconButton as default
 };
 //# sourceMappingURL=index14.js.map

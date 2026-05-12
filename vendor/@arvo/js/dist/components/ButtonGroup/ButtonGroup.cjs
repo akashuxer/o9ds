@@ -39,7 +39,7 @@ const _ArvoButtonGroup = class _ArvoButtonGroup {
   static initialize(element, options) {
     return new _ArvoButtonGroup(element, options);
   }
-  // ── Render ─────────────────────────────────────────────────────────────
+  // -- Render -------------------------------------------------------------
   _render() {
     const el = this._element;
     if (!el) return;
@@ -133,7 +133,7 @@ const _ArvoButtonGroup = class _ArvoButtonGroup {
       isLoading && "loading"
     ].filter(Boolean).join(" ");
   }
-  // ── Events ─────────────────────────────────────────────────────────────
+  // -- Events -------------------------------------------------------------
   _bindEvents() {
     var _a, _b;
     (_a = this._element) == null ? void 0 : _a.addEventListener("keydown", this._boundHandleKeydown);
@@ -196,7 +196,7 @@ const _ArvoButtonGroup = class _ArvoButtonGroup {
     this._dispatchEvent("btn-grp:change", detail);
     (_b = (_a = this._options).onChange) == null ? void 0 : _b.call(_a, detail);
   }
-  // ── State sync ─────────────────────────────────────────────────────────
+  // -- State sync ---------------------------------------------------------
   _isItemActive(itemValue) {
     const { value, isMultiSelect } = this._options;
     if (isMultiSelect) {
@@ -276,7 +276,7 @@ const _ArvoButtonGroup = class _ArvoButtonGroup {
       this._childElements[i].tabIndex = i === activeIdx ? 0 : -1;
     }
   }
-  // ── Arrow Nav ──────────────────────────────────────────────────────────
+  // -- Arrow Nav ----------------------------------------------------------
   _setupArrowNav() {
     var _a;
     (_a = this._arrowNav) == null ? void 0 : _a.destroy();
@@ -315,7 +315,7 @@ const _ArvoButtonGroup = class _ArvoButtonGroup {
       }
     });
   }
-  // ── Overflow ───────────────────────────────────────────────────────────
+  // -- Overflow -----------------------------------------------------------
   _setupResizeObserver() {
     if (!this._element || !this._options.hasOverflow) return;
     this._resizeObserver = new ResizeObserver(() => {

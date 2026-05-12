@@ -1,594 +1,705 @@
-import { jsx, jsxs } from "react/jsx-runtime";
-import { forwardRef, useId, useRef, useImperativeHandle, useState, useCallback, useEffect, useMemo, useLayoutEffect } from "react";
+import { jsxs, jsx, Fragment } from "react/jsx-runtime";
+import { forwardRef, useId, useMemo, useRef, useImperativeHandle, useState, useCallback, useEffect, isValidElement, cloneElement } from "react";
 import { createPortal } from "react-dom";
-import { computePosition, createPositionWatcher, filterGroups, filterItems } from "@arvo/core";
+import { filterGroups, filterItems } from "@arvo/core";
+import { ArvoPopover } from "./index23.js";
+import { ArvoIconButton } from "./index14.js";
+import ArvoSearch from "./index36.js";
 import { useOverlay } from "./index6.js";
-import { useTooltip } from "./index10.js";
-import { FormLabel } from "./index43.js";
-import ArvoIconButton from "./index12.js";
+import { useFocusTrap } from "./index7.js";
+import { usePositioning } from "./index9.js";
+import { useListNavigation } from "./index50.js";
+import { normalizeSearch } from "./index51.js";
 function isGrouped(items) {
   return items.length > 0 && "items" in items[0];
 }
 function flattenItems(items) {
-  if (isGrouped(items)) return items.flatMap((g) => g.items);
+  if (isGrouped(items)) {
+    return items.flatMap((g) => g.items);
+  }
   return items;
 }
-function applyFilter(items, query, filterFn) {
-  if (!query) return items;
-  if (filterFn) {
-    if (isGrouped(items)) {
-      const result = [];
-      for (const group of items) {
-        const filtered = group.items.filter((item) => filterFn(item, query));
-        if (filtered.length > 0) {
-          result.push({ ...group, items: filtered });
+function MenuSkeleton({ count = 5 }) {
+  return /* @__PURE__ */ jsx(Fragment, { children: Array.from({ length: count }, (_, i) => /* @__PURE__ */ jsxs("div", { className: "arvo-action-menu__skeleton", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx("div", { className: "arvo-action-menu__skeleton-icon" }),
+    /* @__PURE__ */ jsx("div", { className: "arvo-action-menu__skeleton-text" })
+  ] }, i)) });
+}
+function SubmenuPanel({
+  items,
+  closeOnSelect,
+  onClose,
+  onCloseAll,
+  onSelect,
+  anchorRef
+}) {
+  const panelRef = useRef(null);
+  const enabledItems = useMemo(
+    () => items.map((item, i) => ({ item, index: i })).filter(({ item }) => !item.isDisabled),
+    [items]
+  );
+  const [activeIdx, setActiveIdx] = useState(() => {
+    return enabledItems.length > 0 ? enabledItems[0].index : -1;
+  });
+  const { position } = usePositioning({
+    anchorRef,
+    floatRef: panelRef,
+    placement: "right-start",
+    gap: 0,
+    enabled: true
+  });
+  const handleItemClick = useCallback(
+    (item, index) => {
+      if (item.isDisabled) return;
+      const result = onSelect(item, index);
+      if (result !== false && closeOnSelect) onCloseAll();
+    },
+    [onSelect, closeOnSelect, onCloseAll]
+  );
+  const focusItem = useCallback(
+    (index) => {
+      var _a;
+      setActiveIdx(index);
+      const el = (_a = panelRef.current) == null ? void 0 : _a.querySelector(
+        `[data-submenu-index="${index}"]`
+      );
+      el == null ? void 0 : el.focus({ preventScroll: true });
+    },
+    []
+  );
+  const focusFirstEnabled = useCallback(() => {
+    if (enabledItems.length > 0) focusItem(enabledItems[0].index);
+  }, [enabledItems, focusItem]);
+  const focusLastEnabled = useCallback(() => {
+    if (enabledItems.length > 0) focusItem(enabledItems[enabledItems.length - 1].index);
+  }, [enabledItems, focusItem]);
+  useEffect(() => {
+    if (position) {
+      requestAnimationFrame(() => focusFirstEnabled());
+    }
+  }, [position, focusFirstEnabled]);
+  const handleKeyDown = useCallback(
+    (e) => {
+      const currentEnabledIdx = enabledItems.findIndex(({ index }) => index === activeIdx);
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          e.stopPropagation();
+          const next = currentEnabledIdx < enabledItems.length - 1 ? currentEnabledIdx + 1 : 0;
+          focusItem(enabledItems[next].index);
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          e.stopPropagation();
+          const prev = currentEnabledIdx > 0 ? currentEnabledIdx - 1 : enabledItems.length - 1;
+          focusItem(enabledItems[prev].index);
+          break;
+        }
+        case "Home": {
+          e.preventDefault();
+          e.stopPropagation();
+          focusFirstEnabled();
+          break;
+        }
+        case "End": {
+          e.preventDefault();
+          e.stopPropagation();
+          focusLastEnabled();
+          break;
+        }
+        case "ArrowLeft":
+        case "Escape": {
+          e.preventDefault();
+          e.stopPropagation();
+          onClose();
+          break;
+        }
+        case "Tab": {
+          e.preventDefault();
+          e.stopPropagation();
+          onCloseAll();
+          break;
+        }
+        case "Enter":
+        case " ": {
+          e.preventDefault();
+          e.stopPropagation();
+          if (activeIdx >= 0) handleItemClick(items[activeIdx], activeIdx);
+          break;
         }
       }
-      return result;
-    }
-    return items.filter((item) => filterFn(item, query));
-  }
-  if (isGrouped(items)) {
-    return filterGroups(items, { query });
-  }
-  return filterItems(items, { query });
+    },
+    [activeIdx, enabledItems, items, focusItem, focusFirstEnabled, focusLastEnabled, onClose, onCloseAll, handleItemClick]
+  );
+  const panelClasses = "arvo-action-menu arvo-action-menu--submenu open";
+  const panelStyle = position ? { transform: `translate(${position.x}px, ${position.y}px)` } : { opacity: 0, visibility: "hidden", pointerEvents: "none" };
+  return createPortal(
+    /* @__PURE__ */ jsx(
+      "div",
+      {
+        ref: panelRef,
+        className: panelClasses,
+        role: "menu",
+        tabIndex: -1,
+        style: panelStyle,
+        onKeyDown: handleKeyDown,
+        children: /* @__PURE__ */ jsx("div", { className: "arvo-action-menu__scroll", children: items.map((item, i) => /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: [
+              "arvo-menu-item",
+              item.isDisabled && "is-disabled",
+              item.destructive && "arvo-menu-item--destructive",
+              i === activeIdx && "focused"
+            ].filter(Boolean).join(" "),
+            role: "menuitem",
+            "aria-disabled": item.isDisabled || void 0,
+            tabIndex: i === activeIdx ? 0 : -1,
+            "data-submenu-index": i,
+            onClick: () => handleItemClick(item, i),
+            children: [
+              item.icon && /* @__PURE__ */ jsx("span", { className: `arvo-menu-item__ico o9con o9con-${item.icon}`, "aria-hidden": "true" }),
+              /* @__PURE__ */ jsx("div", { className: "arvo-menu-item__txt", children: /* @__PURE__ */ jsx("span", { className: "arvo-menu-item__lbl", children: item.label }) })
+            ]
+          },
+          item.id
+        )) })
+      }
+    ),
+    document.body
+  );
 }
-const ArvoCombobox = forwardRef(
-  function ArvoCombobox2({
+const ArvoActionMenu = forwardRef(
+  function ArvoActionMenu2({
     items,
-    value,
-    defaultValue,
-    inputValue: inputValueProp,
-    placeholder,
-    label,
-    isDisabled = false,
-    isRequired = false,
-    isInvalid = false,
-    errorMsg,
-    errorDisplay = "inline",
-    size = "lg",
-    isClearable = true,
     isLoading = false,
-    isReadOnly = false,
-    isFullWidth = false,
-    width,
+    search,
     placement = "bottom-start",
     maxHeight,
     hasGroupDividers = true,
-    filterFn,
+    trailingActionsVisibility = "always",
+    submenuTrigger = "hover",
+    closeOnSelect = true,
     isOpen: openProp,
     defaultOpen = false,
-    onChange,
-    onInputChange,
+    isDisabled = false,
+    trigger,
     onOpen,
     onClose,
-    onClear,
+    onSelect,
     onOpenChange,
     className
   }, ref) {
     const uid = useId();
-    const comboId = `arvo-combobox-${uid}`;
-    const panelId = `${comboId}-panel`;
-    const labelId = `${comboId}-lbl`;
-    const inputId = `${comboId}-input`;
-    const errorId = `${comboId}-err`;
-    const rootRef = useRef(null);
-    const fieldRef = useRef(null);
-    const inputRef = useRef(null);
-    const actionsRef = useRef(null);
+    const menuId = `arvo-action-menu-${uid}`;
+    const searchCfg = useMemo(
+      () => normalizeSearch(search),
+      [search]
+    );
     const panelRef = useRef(null);
-    const errIcoRef = useRef(null);
-    useImperativeHandle(ref, () => rootRef.current, []);
-    const showTooltipIcon = isInvalid && errorDisplay === "tooltip";
-    const showInlineAlert = isInvalid && errorDisplay === "inline";
-    useTooltip({
-      triggerRef: errIcoRef,
-      tooltip: showTooltipIcon && errorMsg ? errorMsg : void 0
-    });
-    const isOpenControlled = openProp !== void 0;
+    const triggerRef = useRef(null);
+    const scrollRef = useRef(null);
+    const searchWrapperRef = useRef(null);
+    const inlinePanelRef = useRef(null);
+    useImperativeHandle(ref, () => panelRef.current, []);
+    const isControlled = openProp !== void 0;
     const [internalOpen, setInternalOpen] = useState(defaultOpen);
-    const isOpen = isOpenControlled ? openProp : internalOpen;
+    const isOpen = isControlled ? openProp : internalOpen;
     const setOpen = useCallback(
       (next) => {
-        if (!isOpenControlled) setInternalOpen(next);
+        if (!isControlled) setInternalOpen(next);
         onOpenChange == null ? void 0 : onOpenChange(next);
       },
-      [isOpenControlled, onOpenChange]
+      [isControlled, onOpenChange]
     );
-    const isValueControlled = value !== void 0;
-    const [internalValue, setInternalValue] = useState(
-      defaultValue ?? null
-    );
-    const currentValue = isValueControlled ? value : internalValue;
-    const isInputControlled = inputValueProp !== void 0;
-    const [internalInputValue, setInternalInputValue] = useState(() => {
-      if (inputValueProp !== void 0) return inputValueProp;
-      const initValue = value ?? defaultValue ?? null;
-      if (initValue != null) {
-        const allFlat = flattenItems(items);
-        const found = allFlat.find((item) => item.value === initValue);
-        return (found == null ? void 0 : found.label) ?? "";
+    const [filterQuery, setFilterQuery] = useState("");
+    const filteredItems = useMemo(() => {
+      if (!searchCfg || !filterQuery) return items;
+      if (isGrouped(items)) {
+        return filterGroups(items, { query: filterQuery });
       }
-      return "";
-    });
-    const currentInputValue = isInputControlled ? inputValueProp : internalInputValue;
+      return filterItems(items, { query: filterQuery });
+    }, [items, searchCfg, filterQuery]);
+    const flatItems = useMemo(() => flattenItems(filteredItems), [filteredItems]);
+    const totalItemCount = useMemo(() => flattenItems(items).length, [items]);
     useEffect(() => {
-      if (isInputControlled || !isValueControlled) return;
-      const allFlat = flattenItems(items);
-      const found = allFlat.find((item) => item.value === value);
-      setInternalInputValue((found == null ? void 0 : found.label) ?? "");
-    }, [value, items, isValueControlled, isInputControlled]);
-    const [activeIndex, setActiveIndex] = useState(-1);
-    const keyboardActiveRef = useRef(false);
-    const overlay = useOverlay();
-    const preventCloseRef = useRef(false);
-    const closingRef = useRef(false);
-    const isUserTypingRef = useRef(false);
-    const filteredItems = useMemo(
-      () => isUserTypingRef.current ? applyFilter(items, currentInputValue, filterFn) : items,
-      [items, currentInputValue, filterFn]
-    );
-    const flatItems = useMemo(
-      () => flattenItems(filteredItems),
-      [filteredItems]
-    );
-    const selectedItem = useMemo(() => {
-      if (currentValue == null) return null;
-      const allFlat = flattenItems(items);
-      return allFlat.find((item) => item.value === currentValue) ?? null;
-    }, [currentValue, items]);
-    const handleClose = useCallback(
-      (revertInput = true) => {
+      var _a;
+      if (searchCfg && filterQuery) {
+        (_a = searchCfg.onFilter) == null ? void 0 : _a.call(searchCfg, filterQuery, flatItems.length);
+      }
+    }, [searchCfg, filterQuery, flatItems.length]);
+    const [openSubmenuId, setOpenSubmenuId] = useState(null);
+    const submenuTimerRef = useRef(null);
+    const itemRefsMap = useRef(/* @__PURE__ */ new Map());
+    const [inlinePanel, setInlinePanel] = useState(null);
+    const closeInlinePanel = useCallback(() => {
+      var _a, _b;
+      if (!inlinePanel) return;
+      if (((_b = (_a = inlinePanel.config).onClose) == null ? void 0 : _b.call(_a)) === false) return;
+      setInlinePanel(null);
+    }, [inlinePanel]);
+    const openInlinePanel = useCallback(
+      (config, sourceItem) => {
         var _a;
-        if (!isOpen) return;
-        if (closingRef.current) return;
-        closingRef.current = true;
-        if ((onClose == null ? void 0 : onClose()) === false) {
-          closingRef.current = false;
-          return;
-        }
-        isUserTypingRef.current = false;
-        setOpen(false);
-        overlay.close(comboId);
-        if (revertInput && !isInputControlled) {
-          setInternalInputValue((selectedItem == null ? void 0 : selectedItem.label) ?? "");
-        }
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:close", { bubbles: true, cancelable: true })
-        );
-        closingRef.current = false;
+        if (((_a = config.onOpen) == null ? void 0 : _a.call(config)) === false) return;
+        setInlinePanel({ config, sourceItem });
       },
-      [isOpen, onClose, setOpen, overlay, comboId, isInputControlled, selectedItem]
+      []
     );
+    const overlay = useOverlay();
     const handleOpen = useCallback(() => {
       var _a;
-      if (isOpen || isDisabled || isLoading || isReadOnly) return;
+      if (isOpen || isDisabled) return;
       if ((onOpen == null ? void 0 : onOpen()) === false) return;
       setOpen(true);
-      (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-        new CustomEvent("combobox:open", { bubbles: true, cancelable: true })
-      );
-    }, [isOpen, isDisabled, isLoading, isReadOnly, onOpen, setOpen]);
-    const handleSelect = useCallback(
-      (item, index) => {
-        var _a;
-        if (item.isDisabled) return;
-        const result = onChange == null ? void 0 : onChange(item, index);
-        isUserTypingRef.current = false;
-        if (!isValueControlled) {
-          setInternalValue(item.value);
-        }
-        if (!isInputControlled) {
-          setInternalInputValue(item.label);
-        }
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:change", {
-            bubbles: true,
-            cancelable: true,
-            detail: { item, index }
-          })
-        );
-        if (result !== false) {
-          handleClose(false);
-        }
-      },
-      [onChange, isValueControlled, isInputControlled, handleClose]
-    );
-    useEffect(() => {
-      if (isOpen && flatItems.length > 0) {
-        keyboardActiveRef.current = false;
-        const firstEnabled = flatItems.findIndex((item) => !item.isDisabled);
-        setActiveIndex(firstEnabled >= 0 ? firstEnabled : 0);
-      } else if (isOpen && flatItems.length === 0) {
-        setActiveIndex(-1);
+      if (panelRef.current) {
+        overlay.open({
+          id: menuId,
+          type: "action-menu",
+          element: panelRef.current,
+          triggerElement: triggerRef.current ?? void 0,
+          priority: 20,
+          config: { autoCloseOnOutsideClick: true }
+        });
       }
-    }, [isOpen, flatItems]);
-    const handleItemClick = useCallback(
-      (item, flatIndex) => {
-        if (item.isDisabled || isLoading) return;
-        preventCloseRef.current = true;
-        setActiveIndex(flatIndex);
-        handleSelect(item, flatIndex);
-      },
-      [isLoading, handleSelect]
-    );
-    const handleClear = useCallback(
-      (e) => {
-        var _a, _b;
-        e.stopPropagation();
-        isUserTypingRef.current = false;
-        const previousValue = currentValue;
-        if (!isValueControlled) {
-          setInternalValue(null);
-        }
-        if (!isInputControlled) {
-          setInternalInputValue("");
-        }
-        onClear == null ? void 0 : onClear({ previousValue });
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:clear", {
-            bubbles: true,
-            detail: { previousValue }
-          })
-        );
-        (_b = inputRef.current) == null ? void 0 : _b.focus({ preventScroll: true });
-      },
-      [currentValue, isValueControlled, isInputControlled, onClear]
-    );
-    const handleChevronClick = useCallback(
-      (e) => {
-        e.stopPropagation();
-        if (isDisabled || isLoading || isReadOnly) return;
-        if (isOpen) {
-          handleClose();
-        } else {
-          handleOpen();
-          requestAnimationFrame(() => {
-            var _a;
-            (_a = inputRef.current) == null ? void 0 : _a.focus({ preventScroll: true });
-          });
-        }
-      },
-      [isDisabled, isLoading, isReadOnly, isOpen, handleOpen, handleClose]
-    );
-    const handleInputChange = useCallback(
-      (e) => {
-        var _a;
-        const text = e.target.value;
-        isUserTypingRef.current = true;
-        if (!isInputControlled) {
-          setInternalInputValue(text);
-        }
-        onInputChange == null ? void 0 : onInputChange(text);
-        if (currentValue != null) {
-          const matchesSelection = (selectedItem == null ? void 0 : selectedItem.label) === text;
-          if (!matchesSelection && !isValueControlled) {
-            setInternalValue(null);
-          }
-        }
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:input", {
-            bubbles: true,
-            detail: { value: text }
-          })
-        );
-        if (!isOpen && text.length > 0) {
-          handleOpen();
-        }
-      },
-      [
-        isInputControlled,
-        onInputChange,
-        currentValue,
-        selectedItem,
-        isValueControlled,
-        isOpen,
-        handleOpen
-      ]
-    );
+      (_a = triggerRef.current) == null ? void 0 : _a.dispatchEvent(
+        new CustomEvent("action-menu:open", { bubbles: true, cancelable: true })
+      );
+    }, [isOpen, isDisabled, onOpen, setOpen, overlay, menuId]);
+    const handleClose = useCallback(() => {
+      var _a, _b;
+      if (!isOpen) return;
+      if ((onClose == null ? void 0 : onClose()) === false) return;
+      setOpen(false);
+      setFilterQuery("");
+      setInlinePanel(null);
+      setOpenSubmenuId(null);
+      overlay.close(menuId);
+      (_a = triggerRef.current) == null ? void 0 : _a.focus({ preventScroll: true });
+      (_b = triggerRef.current) == null ? void 0 : _b.dispatchEvent(
+        new CustomEvent("action-menu:close", { bubbles: true, cancelable: true })
+      );
+    }, [isOpen, onClose, setOpen, overlay, menuId]);
+    const toggleOpen = useCallback(() => {
+      if (isOpen) handleClose();
+      else handleOpen();
+    }, [isOpen, handleOpen, handleClose]);
     useEffect(() => {
       if (!isOpen || !panelRef.current) return;
       overlay.open({
-        id: comboId,
-        type: "dropdown",
+        id: menuId,
+        type: "action-menu",
         element: panelRef.current,
-        triggerElement: inputRef.current ?? void 0,
+        triggerElement: triggerRef.current ?? void 0,
         priority: 20,
         config: { autoCloseOnOutsideClick: true },
         onClose: handleClose
       });
       return () => {
-        overlay.close(comboId);
+        overlay.close(menuId);
       };
     }, [isOpen]);
-    const posRef = useRef(null);
-    const posWatcherRef = useRef(null);
-    useLayoutEffect(() => {
-      var _a;
-      if (!isOpen) {
-        posRef.current = null;
-        (_a = posWatcherRef.current) == null ? void 0 : _a.destroy();
-        posWatcherRef.current = null;
-        return;
+    const { position } = usePositioning({
+      anchorRef: triggerRef,
+      floatRef: panelRef,
+      placement,
+      gap: 2,
+      enabled: isOpen
+    });
+    const positioned = !!position;
+    useFocusTrap(inlinePanel ? inlinePanelRef : panelRef, {
+      active: isOpen && positioned && !isLoading,
+      escapeDeactivates: false,
+      returnFocusOnDeactivate: true,
+      allowOutsideClick: true
+    });
+    const searchFocused = useRef(false);
+    const keyboardActiveRef = useRef(false);
+    const handleItemSelect = useCallback(
+      (item, index) => {
+        var _a;
+        const menuItem = item;
+        if (menuItem.isDisabled) return;
+        if (menuItem.submenu) {
+          setOpenSubmenuId(menuItem.id);
+          return;
+        }
+        if (menuItem.inlinePopover) {
+          openInlinePanel(menuItem.inlinePopover, menuItem);
+          return;
+        }
+        const result = onSelect == null ? void 0 : onSelect(menuItem, index);
+        (_a = triggerRef.current) == null ? void 0 : _a.dispatchEvent(
+          new CustomEvent("action-menu:select", {
+            bubbles: true,
+            cancelable: true,
+            detail: { item: menuItem, index }
+          })
+        );
+        if (result !== false && closeOnSelect) {
+          handleClose();
+        }
+      },
+      [onSelect, closeOnSelect, handleClose, openInlinePanel]
+    );
+    const scrollToIndex = useCallback(
+      (index) => {
+        var _a;
+        keyboardActiveRef.current = true;
+        const el = (_a = scrollRef.current) == null ? void 0 : _a.querySelector(
+          `[data-index="${index}"]`
+        );
+        if (el) {
+          el.scrollIntoView({ block: "nearest" });
+          el.focus({ preventScroll: true });
+        }
+      },
+      []
+    );
+    const { activeIndex, setActiveIndex, handleKeyDown: navKeyDown } = useListNavigation({
+      items: flatItems,
+      onSelect: handleItemSelect,
+      onEscape: () => {
+        if (inlinePanel) {
+          closeInlinePanel();
+        } else {
+          handleClose();
+        }
+      },
+      wrap: true,
+      enabled: isOpen && positioned && !isLoading && !searchFocused.current && !inlinePanel,
+      scrollToIndex
+    });
+    useEffect(() => {
+      if (isOpen) {
+        keyboardActiveRef.current = false;
+        setActiveIndex(0);
       }
-      const anchor = fieldRef.current;
-      const float = panelRef.current;
-      if (!anchor || !float) return;
-      const opts = { placement, gap: 2, width: "anchor" };
-      const applyPosition = (pos3) => {
-        float.style.transform = `translate(${pos3.x}px, ${pos3.y}px)`;
-        if (pos3.width) {
-          float.style.width = pos3.width;
-          float.style.minWidth = pos3.width;
+    }, [isOpen, flatItems, setActiveIndex]);
+    useEffect(() => {
+      if (submenuTrigger === "click" && openSubmenuId) {
+        const activeItem = flatItems[activeIndex];
+        if ((activeItem == null ? void 0 : activeItem.id) !== openSubmenuId) {
+          setOpenSubmenuId(null);
         }
-        if (pos3.maxHeight != null) {
-          float.style.maxHeight = `${pos3.maxHeight}px`;
+      }
+    }, [activeIndex, flatItems, openSubmenuId, submenuTrigger]);
+    useEffect(() => {
+      if (!isOpen || !positioned) return;
+      requestAnimationFrame(() => {
+        if (searchCfg && searchWrapperRef.current) {
+          const input = searchWrapperRef.current.querySelector("input");
+          input == null ? void 0 : input.focus();
         }
-      };
-      const anchorWidth = `${anchor.getBoundingClientRect().width}px`;
-      float.style.width = anchorWidth;
-      float.style.minWidth = anchorWidth;
-      const pos2 = computePosition(anchor, float, opts);
-      posRef.current = pos2;
-      applyPosition(pos2);
-      float.style.visibility = "";
-      const watcher = createPositionWatcher(anchor, float, opts, (result) => {
-        posRef.current = result;
-        applyPosition(result);
       });
-      posWatcherRef.current = watcher;
-      return () => {
-        watcher.destroy();
-        posWatcherRef.current = null;
+    }, [isOpen, positioned, searchCfg]);
+    useEffect(() => {
+      if (!isOpen) return;
+      const onKeyDown = (e) => {
+        if (e.key === "Escape") {
+          if (openSubmenuId) return;
+          e.stopPropagation();
+          if (inlinePanel) {
+            closeInlinePanel();
+          } else {
+            handleClose();
+          }
+        }
       };
-    }, [isOpen, placement]);
+      document.addEventListener("keydown", onKeyDown, true);
+      return () => document.removeEventListener("keydown", onKeyDown, true);
+    }, [isOpen, handleClose, inlinePanel, closeInlinePanel, openSubmenuId]);
     useEffect(() => {
       if (!isOpen) return;
       const onPointerDown = (e) => {
         var _a, _b;
         const target = e.target;
         if ((_a = panelRef.current) == null ? void 0 : _a.contains(target)) return;
-        if ((_b = rootRef.current) == null ? void 0 : _b.contains(target)) return;
+        if ((_b = triggerRef.current) == null ? void 0 : _b.contains(target)) return;
         handleClose();
       };
       document.addEventListener("pointerdown", onPointerDown, true);
       return () => document.removeEventListener("pointerdown", onPointerDown, true);
     }, [isOpen, handleClose]);
-    useEffect(() => {
-      if (!isOpen) return;
-      const onFocusIn = (e) => {
-        var _a, _b;
-        const target = e.target;
-        if ((_a = rootRef.current) == null ? void 0 : _a.contains(target)) return;
-        if ((_b = panelRef.current) == null ? void 0 : _b.contains(target)) return;
-        handleClose();
-      };
-      document.addEventListener("focusin", onFocusIn);
-      return () => document.removeEventListener("focusin", onFocusIn);
-    }, [isOpen, handleClose]);
-    const blurTimeoutRef = useRef(null);
-    const handleInputBlur = useCallback(() => {
-      if (preventCloseRef.current) {
-        preventCloseRef.current = false;
-        return;
-      }
-      blurTimeoutRef.current = setTimeout(() => {
-        if (isOpen) handleClose();
-      }, 100);
-    }, [isOpen, handleClose]);
-    const handleInputFocus = useCallback(() => {
-      if (blurTimeoutRef.current) {
-        clearTimeout(blurTimeoutRef.current);
-        blurTimeoutRef.current = null;
-      }
-    }, []);
-    useEffect(() => {
-      return () => {
-        if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current);
-      };
-    }, []);
-    const updatePadding = useCallback(() => {
-      if (!actionsRef.current || !fieldRef.current) return;
-      const w = actionsRef.current.offsetWidth;
-      const pad = w > 0 ? w + 4 : 0;
-      fieldRef.current.style.setProperty("--arvo-combobox-pad-r", `${pad}px`);
-    }, []);
-    useEffect(() => {
-      updatePadding();
-    });
-    useEffect(() => {
-      const el = actionsRef.current;
-      if (!el) return;
-      const obs = new ResizeObserver(updatePadding);
-      obs.observe(el);
-      return () => obs.disconnect();
-    }, [updatePadding]);
-    const findNextEnabled = useCallback(
-      (from, direction) => {
-        const len = flatItems.length;
-        if (len === 0) return -1;
-        let idx = from + direction;
-        const isVisited = /* @__PURE__ */ new Set();
-        while (idx >= 0 && idx < len && !isVisited.has(idx)) {
-          isVisited.add(idx);
-          if (!flatItems[idx].isDisabled) return idx;
-          idx += direction;
-        }
-        return -1;
-      },
-      [flatItems]
-    );
-    const handleKeyDown = useCallback(
+    const handleTriggerClick = useCallback(
       (e) => {
-        if (isDisabled || isLoading) return;
-        switch (e.key) {
-          case "ArrowDown":
-            e.preventDefault();
-            if (!isOpen) {
-              handleOpen();
-            } else {
-              keyboardActiveRef.current = true;
-              const next = findNextEnabled(activeIndex, 1);
-              if (next >= 0) setActiveIndex(next);
-            }
-            break;
-          case "ArrowUp":
-            e.preventDefault();
-            if (!isOpen) {
-              handleOpen();
-            } else {
-              keyboardActiveRef.current = true;
-              const prev = findNextEnabled(activeIndex, -1);
-              if (prev >= 0) setActiveIndex(prev);
-            }
-            break;
-          case "Enter":
-            if (isOpen && activeIndex >= 0 && activeIndex < flatItems.length) {
-              e.preventDefault();
-              const item = flatItems[activeIndex];
-              if (!item.isDisabled) {
-                handleSelect(item, activeIndex);
-              }
-            }
-            break;
-          case "Escape":
-            e.preventDefault();
-            if (isOpen) {
-              handleClose();
-            } else {
-              if (!isInputControlled) {
-                setInternalInputValue("");
-              }
-              if (!isValueControlled) {
-                setInternalValue(null);
-              }
-            }
-            break;
-          case "Tab":
-            if (isOpen) {
-              e.preventDefault();
-              if (activeIndex >= 0 && activeIndex < flatItems.length) {
-                const item = flatItems[activeIndex];
-                if (!item.isDisabled) {
-                  handleSelect(item, activeIndex);
-                  return;
-                }
-              }
-              handleClose();
-            }
-            break;
+        e.preventDefault();
+        toggleOpen();
+      },
+      [toggleOpen]
+    );
+    const handleItemClick = useCallback(
+      (item, flatIndex) => {
+        if (item.isDisabled || isLoading) return;
+        setActiveIndex(flatIndex);
+        handleItemSelect(item, flatIndex);
+      },
+      [isLoading, setActiveIndex, handleItemSelect]
+    );
+    const handleTrailingActionClick = useCallback(
+      (action, item, e) => {
+        var _a;
+        e.stopPropagation();
+        if (action.inlinePopover) {
+          openInlinePanel(action.inlinePopover, item);
+          return;
+        }
+        const result = (_a = action.onClick) == null ? void 0 : _a.call(action, item, e);
+        if (result !== false && closeOnSelect) {
+          handleClose();
         }
       },
-      [
-        isDisabled,
-        isLoading,
-        isOpen,
-        activeIndex,
-        flatItems,
-        handleOpen,
-        handleClose,
-        handleSelect,
-        findNextEnabled,
-        isInputControlled,
-        isValueControlled
-      ]
+      [closeOnSelect, handleClose, openInlinePanel]
     );
-    useEffect(() => {
+    const handlePanelKeyDown = useCallback(
+      (e) => {
+        var _a;
+        if (isLoading) return;
+        if (!searchFocused.current && !inlinePanel) {
+          navKeyDown(e);
+        }
+        if (e.key === "ArrowRight" && !inlinePanel) {
+          const activeItem = flatItems[activeIndex];
+          if (activeItem == null ? void 0 : activeItem.submenu) {
+            e.preventDefault();
+            setOpenSubmenuId(activeItem.id);
+            return;
+          }
+          const activeEl = (_a = scrollRef.current) == null ? void 0 : _a.querySelector(
+            `[data-index="${activeIndex}"] .arvo-menu-item__actions button`
+          );
+          if (activeEl) {
+            e.preventDefault();
+            activeEl.focus();
+          }
+        }
+      },
+      [isLoading, navKeyDown, inlinePanel, flatItems, activeIndex]
+    );
+    const handleFilterSearch = useCallback(
+      (value) => {
+        setFilterQuery(value);
+        setActiveIndex(0);
+      },
+      [setActiveIndex]
+    );
+    const handleFilterClear = useCallback(() => {
       var _a;
-      if (!isOpen || activeIndex < 0) return;
-      const optEl = (_a = panelRef.current) == null ? void 0 : _a.querySelector(
-        `[data-index="${activeIndex}"]`
-      );
-      if (optEl && typeof optEl.scrollIntoView === "function") {
-        optEl.scrollIntoView({ block: "nearest" });
-      }
-    }, [isOpen, activeIndex]);
-    const hasValue = currentValue != null || currentInputValue.length > 0;
-    const classes = [
-      "arvo-combobox",
-      `arvo-combobox--${size}`,
-      isFullWidth && "arvo-combobox--full-width",
-      isClearable && "arvo-combobox--clearable",
-      isLoading && "loading",
-      isDisabled && "is-disabled",
-      isReadOnly && "is-readonly",
-      isInvalid && "has-error",
-      showTooltipIcon && "error-tooltip",
+      setFilterQuery("");
+      setActiveIndex(0);
+      (_a = searchCfg == null ? void 0 : searchCfg.onClear) == null ? void 0 : _a.call(searchCfg);
+    }, [setActiveIndex, searchCfg]);
+    const handleSearchFocus = useCallback(() => {
+      searchFocused.current = true;
+    }, []);
+    const handleSearchBlur = useCallback(() => {
+      searchFocused.current = false;
+    }, []);
+    const handleSearchWrapperKeyDown = useCallback(
+      (e) => {
+        var _a;
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          searchFocused.current = false;
+          const firstItem = (_a = scrollRef.current) == null ? void 0 : _a.querySelector(
+            '[role="menuitem"]'
+          );
+          firstItem == null ? void 0 : firstItem.focus();
+          setActiveIndex(0);
+        } else if (e.key === "Escape" && !filterQuery) {
+          e.stopPropagation();
+          handleClose();
+        }
+      },
+      [setActiveIndex, handleClose, filterQuery]
+    );
+    const panelClasses = [
+      "arvo-action-menu",
       isOpen && "open",
-      hasValue && "has-value",
+      isLoading && "loading",
       className
     ].filter(Boolean).join(" ");
-    const rootStyle = (() => {
-      const effectiveWidth = isFullWidth ? "100%" : width;
-      if (!effectiveWidth) return void 0;
-      return { "--arvo-form-input-width": effectiveWidth };
-    })();
-    const pos = posRef.current;
     const panelStyle = {
-      ...pos ? {
-        transform: `translate(${pos.x}px, ${pos.y}px)`,
-        ...pos.width ? { width: pos.width, minWidth: pos.width } : {},
-        ...pos.maxHeight ? { maxHeight: `${pos.maxHeight}px` } : {}
-      } : { visibility: "hidden" },
-      ...maxHeight ? {
-        "--arvo-combobox-panel-max-height": maxHeight
-      } : {},
-      ...isLoading ? { pointerEvents: "none" } : {}
+      ...position ? { transform: `translate(${position.x}px, ${position.y}px)` } : {},
+      ...maxHeight ? { "--arvo-action-menu-max-height": maxHeight } : {},
+      ...!positioned ? { opacity: 0, pointerEvents: "none" } : {}
     };
-    const renderOption = (item, flatIndex) => {
-      const isSelected = item.value === currentValue;
-      const isHighlighted = flatIndex === activeIndex;
-      const optClasses = [
-        "arvo-combobox__opt",
+    const renderTrailing = (item) => {
+      var _a;
+      const parts = [];
+      if (item.shortcut) {
+        parts.push(
+          /* @__PURE__ */ jsx("span", { className: "arvo-menu-item__shortcut", children: item.shortcut }, "shortcut")
+        );
+      }
+      if (item.submenu) {
+        parts.push(
+          /* @__PURE__ */ jsx(
+            "span",
+            {
+              className: "arvo-menu-item__submenu o9con o9con-angle-right",
+              "aria-hidden": "true"
+            },
+            "submenu"
+          )
+        );
+      }
+      if ((_a = item.trailingActions) == null ? void 0 : _a.length) {
+        parts.push(
+          /* @__PURE__ */ jsx("div", { className: "arvo-menu-item__actions", children: item.trailingActions.map((action) => /* @__PURE__ */ jsx(
+            ArvoIconButton,
+            {
+              icon: action.icon,
+              variant: "tertiary",
+              size: "sm",
+              tooltip: action.ariaLabel ?? action.id,
+              "aria-label": action.ariaLabel,
+              isDisabled: item.isDisabled || isLoading || action.isDisabled,
+              onClick: (e) => handleTrailingActionClick(action, item, e)
+            },
+            action.id
+          )) }, "actions")
+        );
+      }
+      if (parts.length === 0) return null;
+      return /* @__PURE__ */ jsx("div", { className: "arvo-menu-item__trailing", children: parts });
+    };
+    const handleItemMouseEnter = useCallback(
+      (item, flatIndex) => {
+        keyboardActiveRef.current = false;
+        setActiveIndex(flatIndex);
+        if (submenuTrigger === "hover") {
+          if (submenuTimerRef.current) {
+            clearTimeout(submenuTimerRef.current);
+            submenuTimerRef.current = null;
+          }
+          if (item.submenu && !item.isDisabled) {
+            submenuTimerRef.current = setTimeout(() => {
+              setOpenSubmenuId(item.id);
+            }, 200);
+          } else {
+            setOpenSubmenuId(null);
+          }
+        }
+      },
+      [setActiveIndex, submenuTrigger]
+    );
+    const handleItemMouseLeave = useCallback(
+      (item) => {
+        if (submenuTrigger === "hover" && item.submenu) {
+          if (submenuTimerRef.current) {
+            clearTimeout(submenuTimerRef.current);
+            submenuTimerRef.current = null;
+          }
+        }
+      },
+      [submenuTrigger]
+    );
+    useEffect(() => {
+      return () => {
+        if (submenuTimerRef.current) {
+          clearTimeout(submenuTimerRef.current);
+        }
+      };
+    }, []);
+    const setItemRef = useCallback(
+      (id, node) => {
+        if (node) {
+          itemRefsMap.current.set(id, node);
+        } else {
+          itemRefsMap.current.delete(id);
+        }
+      },
+      []
+    );
+    const renderItem = (item, flatIndex) => {
+      var _a;
+      const itemClasses = [
+        "arvo-menu-item",
+        item.secondaryLabel && "arvo-menu-item--multi-line",
+        item.destructive && "arvo-menu-item--destructive",
+        trailingActionsVisibility === "hover" && ((_a = item.trailingActions) == null ? void 0 : _a.length) && "arvo-menu-item--actions-on-hover",
         item.isDisabled && "is-disabled",
-        isHighlighted && keyboardActiveRef.current && "focused",
-        isSelected && "active"
+        flatIndex === activeIndex && keyboardActiveRef.current && "focused",
+        item.active && "active"
       ].filter(Boolean).join(" ");
-      return /* @__PURE__ */ jsxs(
-        "div",
-        {
-          id: `${comboId}-opt-${flatIndex}`,
-          className: optClasses,
-          role: "option",
-          "aria-selected": isSelected,
-          "aria-disabled": item.isDisabled || void 0,
-          "data-index": flatIndex,
-          onClick: () => handleItemClick(item, flatIndex),
-          onMouseEnter: () => {
-            if (!item.isDisabled) {
-              keyboardActiveRef.current = false;
-              setActiveIndex(flatIndex);
-            }
-          },
-          onMouseDown: (e) => {
-            e.preventDefault();
-          },
-          children: [
-            item.icon && /* @__PURE__ */ jsx(
-              "span",
-              {
-                className: `arvo-combobox__opt__ico o9con o9con-${item.icon}`,
-                "aria-hidden": "true"
-              }
-            ),
-            /* @__PURE__ */ jsx("div", { className: "arvo-combobox__opt__txt", children: /* @__PURE__ */ jsx("span", { className: "arvo-combobox__opt__lbl", children: item.label }) })
-          ]
-        },
-        item.id
-      );
+      const submenuOpen = item.submenu && openSubmenuId === item.id;
+      return /* @__PURE__ */ jsxs("div", { style: { position: "relative" }, children: [
+        /* @__PURE__ */ jsxs(
+          "div",
+          {
+            ref: (node) => setItemRef(item.id, node),
+            className: itemClasses,
+            role: "menuitem",
+            "aria-disabled": item.isDisabled || void 0,
+            "aria-haspopup": item.submenu ? "menu" : void 0,
+            "aria-expanded": item.submenu ? !!submenuOpen : void 0,
+            tabIndex: flatIndex === activeIndex ? 0 : -1,
+            "data-index": flatIndex,
+            onClick: () => handleItemClick(item, flatIndex),
+            onMouseEnter: () => handleItemMouseEnter(item, flatIndex),
+            onMouseLeave: () => handleItemMouseLeave(item),
+            children: [
+              item.icon && /* @__PURE__ */ jsx("span", { className: `arvo-menu-item__ico o9con o9con-${item.icon}`, "aria-hidden": "true" }),
+              item.avatar && /* @__PURE__ */ jsx(
+                "img",
+                {
+                  className: "arvo-menu-item__avatar",
+                  src: item.avatar,
+                  alt: ""
+                }
+              ),
+              /* @__PURE__ */ jsxs("div", { className: "arvo-menu-item__txt", children: [
+                /* @__PURE__ */ jsx("span", { className: "arvo-menu-item__lbl", children: item.label }),
+                item.secondaryLabel && /* @__PURE__ */ jsx("span", { className: "arvo-menu-item__secondary", children: item.secondaryLabel })
+              ] }),
+              renderTrailing(item)
+            ]
+          }
+        ),
+        submenuOpen && /* @__PURE__ */ jsx(
+          SubmenuPanel,
+          {
+            items: item.submenu,
+            closeOnSelect,
+            onClose: () => {
+              setOpenSubmenuId(null);
+              const parentEl = itemRefsMap.current.get(item.id);
+              parentEl == null ? void 0 : parentEl.focus({ preventScroll: true });
+            },
+            onCloseAll: handleClose,
+            onSelect: (subItem, subIndex) => {
+              const result = onSelect == null ? void 0 : onSelect(subItem, subIndex);
+              if (result !== false && closeOnSelect) handleClose();
+              return false;
+            },
+            anchorRef: { current: itemRefsMap.current.get(item.id) ?? null }
+          }
+        )
+      ] }, item.id);
     };
     const renderContent = () => {
+      if (isLoading) {
+        return /* @__PURE__ */ jsx(MenuSkeleton, {});
+      }
       if (flatItems.length === 0) {
-        return /* @__PURE__ */ jsx("div", { className: "arvo-combobox__empty", role: "status", children: "No results" });
+        return /* @__PURE__ */ jsx("div", { className: "arvo-action-menu__empty", role: "status", children: "No results" });
       }
       if (isGrouped(filteredItems)) {
         let flatIndex = 0;
         return filteredItems.map(
           (group, groupIdx) => /* @__PURE__ */ jsxs("div", { role: "group", "aria-label": group.label, children: [
-            groupIdx > 0 && hasGroupDividers && /* @__PURE__ */ jsx("hr", { className: "arvo-combobox__divider", role: "separator" }),
-            group.label && /* @__PURE__ */ jsx("div", { className: "arvo-combobox__hdr", children: group.label }),
+            groupIdx > 0 && hasGroupDividers && /* @__PURE__ */ jsx(
+              "div",
+              {
+                className: "arvo-action-menu__divider",
+                role: "separator"
+              }
+            ),
+            group.label && /* @__PURE__ */ jsx("div", { className: "arvo-action-menu__hdr", children: group.label }),
             group.items.map((item) => {
-              const node = renderOption(item, flatIndex);
+              const node = renderItem(item, flatIndex);
               flatIndex++;
               return node;
             })
@@ -596,129 +707,129 @@ const ArvoCombobox = forwardRef(
         );
       }
       return filteredItems.map(
-        (item, i) => renderOption(item, i)
+        (item, i) => renderItem(item, i)
       );
     };
-    const panelClasses = [
-      "arvo-combobox__panel",
-      isOpen && "open"
-    ].filter(Boolean).join(" ");
-    const panel = isOpen ? createPortal(
-      /* @__PURE__ */ jsx(
+    const renderInlinePanel = () => {
+      if (!inlinePanel) return null;
+      const { config } = inlinePanel;
+      return /* @__PURE__ */ jsx(
         "div",
         {
-          className: `arvo-combobox arvo-combobox--${size}`,
-          style: { display: "contents" },
+          ref: inlinePanelRef,
+          className: "arvo-action-menu__inline-panel open",
           children: /* @__PURE__ */ jsx(
-            "div",
+            ArvoPopover,
             {
-              ref: panelRef,
-              id: panelId,
-              className: panelClasses,
-              role: "listbox",
-              "aria-busy": isLoading || void 0,
-              style: Object.keys(panelStyle).length > 0 ? panelStyle : void 0,
-              children: /* @__PURE__ */ jsx("div", { className: "arvo-combobox__scroll", children: renderContent() })
+              isInline: true,
+              variant: "edge",
+              title: config.title,
+              hasHeader: !!(config.title || config.hasBackButton !== false || config.isClosable !== false),
+              isClosable: config.isClosable !== false,
+              hasBackButton: config.hasBackButton !== false,
+              onBack: () => {
+                var _a;
+                (_a = config.onBack) == null ? void 0 : _a.call(config);
+                closeInlinePanel();
+              },
+              onClose: () => {
+                closeInlinePanel();
+              },
+              actions: config.actions,
+              isOpen: true,
+              isInteractive: true,
+              children: config.content
             }
           )
+        }
+      );
+    };
+    const clonedTrigger = isValidElement(trigger) ? (() => {
+      const triggerEl = trigger;
+      const triggerProps = triggerEl.props;
+      const isHostElement = typeof triggerEl.type === "string";
+      const overrides = {
+        ref: (node) => {
+          triggerRef.current = node;
+          const originalRef = triggerEl.ref;
+          if (typeof originalRef === "function") {
+            originalRef(node);
+          } else if (originalRef && typeof originalRef === "object") {
+            originalRef.current = node;
+          }
+        },
+        "aria-expanded": isOpen,
+        "aria-haspopup": "menu",
+        "aria-controls": menuId,
+        onClick: handleTriggerClick
+      };
+      if (isHostElement) {
+        overrides.disabled = isDisabled || triggerProps.disabled || triggerProps.isDisabled;
+      } else {
+        overrides.isDisabled = isDisabled || triggerProps.isDisabled;
+      }
+      return cloneElement(triggerEl, overrides);
+    })() : trigger;
+    const panel = isOpen ? createPortal(
+      /* @__PURE__ */ jsxs(
+        "div",
+        {
+          ref: panelRef,
+          id: menuId,
+          className: panelClasses,
+          role: "menu",
+          "aria-busy": isLoading || void 0,
+          tabIndex: -1,
+          style: Object.keys(panelStyle).length > 0 ? panelStyle : void 0,
+          onKeyDown: handlePanelKeyDown,
+          children: [
+            searchCfg && !isLoading && /* @__PURE__ */ jsx(
+              "div",
+              {
+                ref: searchWrapperRef,
+                className: [
+                  "arvo-action-menu__search",
+                  searchCfg.className
+                ].filter(Boolean).join(" "),
+                onKeyDown: handleSearchWrapperKeyDown,
+                children: /* @__PURE__ */ jsx(
+                  ArvoSearch,
+                  {
+                    variant: "filter",
+                    value: filterQuery,
+                    placeholder: searchCfg.placeholder,
+                    searchMode: searchCfg.searchMode,
+                    minChars: searchCfg.minChars,
+                    isClearable: searchCfg.isClearable,
+                    shortcut: searchCfg.shortcut,
+                    errorMsg: searchCfg.errorMsg,
+                    errorDisplay: "tooltip",
+                    counter: searchCfg.counter && filterQuery ? { current: flatItems.length, total: totalItemCount } : null,
+                    onSearch: handleFilterSearch,
+                    onClear: handleFilterClear,
+                    onFocus: handleSearchFocus,
+                    onBlur: handleSearchBlur,
+                    isDisabled,
+                    "aria-label": "Filter menu items"
+                  }
+                )
+              }
+            ),
+            /* @__PURE__ */ jsx("div", { ref: scrollRef, className: "arvo-action-menu__scroll", children: renderContent() }),
+            renderInlinePanel()
+          ]
         }
       ),
       document.body
     ) : null;
-    return /* @__PURE__ */ jsxs("div", { ref: rootRef, className: classes, style: rootStyle, children: [
-      label && /* @__PURE__ */ jsx(
-        FormLabel,
-        {
-          htmlFor: inputId,
-          id: labelId,
-          size: size === "sm" ? "sm" : "lg",
-          isRequired,
-          isDisabled,
-          className: "arvo-combobox__lbl",
-          children: label
-        }
-      ),
-      /* @__PURE__ */ jsxs("div", { ref: fieldRef, className: "arvo-combobox__field", children: [
-        /* @__PURE__ */ jsx(
-          "input",
-          {
-            ref: inputRef,
-            id: inputId,
-            type: "text",
-            className: "arvo-combobox__input",
-            role: "combobox",
-            value: currentInputValue,
-            placeholder,
-            disabled: isDisabled,
-            readOnly: isReadOnly,
-            autoComplete: "off",
-            "aria-haspopup": "listbox",
-            "aria-expanded": isOpen,
-            "aria-controls": panelId,
-            "aria-activedescendant": isOpen && activeIndex >= 0 ? `${comboId}-opt-${activeIndex}` : void 0,
-            "aria-autocomplete": "list",
-            "aria-required": isRequired || void 0,
-            "aria-invalid": isInvalid || void 0,
-            "aria-busy": isLoading || void 0,
-            "aria-labelledby": label ? labelId : void 0,
-            "aria-describedby": showInlineAlert && errorMsg ? errorId : void 0,
-            onChange: handleInputChange,
-            onKeyDown: handleKeyDown,
-            onBlur: handleInputBlur,
-            onFocus: handleInputFocus
-          }
-        ),
-        /* @__PURE__ */ jsxs("div", { ref: actionsRef, className: "arvo-combobox__actions", children: [
-          isClearable && hasValue && !isDisabled && !isReadOnly && !isLoading && /* @__PURE__ */ jsx(
-            ArvoIconButton,
-            {
-              size: "sm",
-              variant: "tertiary",
-              icon: "close",
-              tooltip: "Clear",
-              "aria-label": "Clear",
-              tabIndex: -1,
-              onClick: handleClear,
-              className: "arvo-combobox__clear"
-            }
-          ),
-          isClearable && hasValue && !isDisabled && !isReadOnly && !isLoading && /* @__PURE__ */ jsx("span", { className: "arvo-combobox__sep" }),
-          showTooltipIcon && /* @__PURE__ */ jsx("span", { ref: errIcoRef, className: "arvo-combobox__err-ico", "aria-hidden": "true" })
-        ] }),
-        /* @__PURE__ */ jsx(
-          ArvoIconButton,
-          {
-            size: "sm",
-            variant: "tertiary",
-            icon: "angle-down",
-            tooltip: "Toggle menu",
-            "aria-label": "Toggle menu",
-            tabIndex: -1,
-            onClick: handleChevronClick,
-            isDisabled,
-            className: "arvo-combobox__ico"
-          }
-        ),
-        /* @__PURE__ */ jsx("div", { className: "arvo-combobox__border" })
-      ] }),
-      showInlineAlert && errorMsg && /* @__PURE__ */ jsxs(
-        "div",
-        {
-          className: "arvo-inline-alert arvo-inline-alert--error",
-          id: errorId,
-          role: "alert",
-          children: [
-            /* @__PURE__ */ jsx("span", { className: "arvo-inline-alert__ico", "aria-hidden": "true" }),
-            /* @__PURE__ */ jsx("span", { className: "arvo-inline-alert__msg", children: errorMsg })
-          ]
-        }
-      ),
+    return /* @__PURE__ */ jsxs(Fragment, { children: [
+      clonedTrigger,
       panel
     ] });
   }
 );
 export {
-  ArvoCombobox,
-  ArvoCombobox as default
+  ArvoActionMenu,
+  ArvoActionMenu as default
 };
 //# sourceMappingURL=index35.js.map

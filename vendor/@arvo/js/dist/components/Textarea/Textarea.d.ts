@@ -43,6 +43,8 @@ export declare class ArvoTextarea {
     private _icoEl;
     private _errIcoEl;
     private _errIcoConnector;
+    private _errMsgAlert;
+    private _inlineAlert;
     private _inlineAlertEl;
     private _previousValue;
     private _inputId;

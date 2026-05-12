@@ -37,7 +37,7 @@ class ArvoToast {
   static initialize(container, options) {
     return new ArvoToast(container, options);
   }
-  // ── show ─────────────────────────────────────────────────────────────
+  // -- show -------------------------------------------------------------
   show(options) {
     if (this._destroyed || !this._container) return "";
     const type = options.type ?? "info";
@@ -132,18 +132,18 @@ class ArvoToast {
     }
     return id;
   }
-  // ── close ────────────────────────────────────────────────────────────
+  // -- close ------------------------------------------------------------
   close(id) {
     this._remove(id, "programmatic");
   }
-  // ── closeAll ─────────────────────────────────────────────────────────
+  // -- closeAll ---------------------------------------------------------
   closeAll() {
     const ids = [...this._toasts.keys()];
     for (const id of ids) {
       this._remove(id, "programmatic");
     }
   }
-  // ── destroy ──────────────────────────────────────────────────────────
+  // -- destroy ----------------------------------------------------------
   destroy() {
     var _a;
     if (this._destroyed) return;
@@ -153,7 +153,7 @@ class ArvoToast {
     (_a = this._container) == null ? void 0 : _a.remove();
     this._container = null;
   }
-  // ── internal helpers ─────────────────────────────────────────────────
+  // -- internal helpers -------------------------------------------------
   _startFadeTimer(state, timeout) {
     state.timer = setTimeout(() => {
       const el = state.element;

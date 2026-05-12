@@ -1,8 +1,8 @@
 // Global scrollbar styling
 // Supports three scroll-visibility preferences via body[data-scroll-pref]:
-//   "always"   – thumb and track always visible
-//   "onScroll"  – thumb appears only while actively scrolling
-//   "onHover"   – thumb appears on hover over the scrollable area
+//   "always"   - thumb and track always visible
+//   "onScroll"  - thumb appears only while actively scrolling
+//   "onHover"   - thumb appears on hover over the scrollable area
 
 @use '../../../tokens/src/scss/all' as *;
 

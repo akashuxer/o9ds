@@ -1,6 +1,6 @@
 @use '../../../tokens/src/scss/borders' as *;
 
-// Shared indicator pattern — small status badge (dot) at the top-right of its parent.
+// Shared indicator pattern -- small status badge (dot) at the top-right of its parent.
 // Three semantic variants: unsaved (warning amber circle), new (negative red square),
 // unread (theme color square). Two sizes: sm (6px), lg (10px).
 // The parent element must have position: relative for absolute positioning to work.

@@ -21,7 +21,7 @@ function minifyCss(css) {
   return css
     .replace(/\/\*[\s\S]*?\*\//g, '')   // strip block comments
     .replace(/\s+/g, ' ')               // collapse whitespace
-    .replace(/\s*([{}:;,>~+])\s*/g, '$1') // remove space around syntax chars
+    .replace(/\s*([{}:;,>~])\s*/g, '$1') // remove space around syntax chars
     .replace(/;}/g, '}')                // drop trailing semicolons
     .trim();
 }
@@ -36,7 +36,7 @@ for (const { src, out } of sources) {
   writeFileSync(outPath, minified, 'utf8');
 
   const ratio = ((1 - minified.length / css.length) * 100).toFixed(1);
-  console.log(`  ${src} → dist/${out}  (${ratio}% smaller)`);
+  console.log(`  ${src} -> dist/${out}  (${ratio}% smaller)`);
 }
 
 console.log('Done.');

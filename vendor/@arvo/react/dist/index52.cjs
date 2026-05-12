@@ -1,0 +1,736 @@
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const jsxRuntime = require("react/jsx-runtime");
+const react = require("react");
+const useControllableState = require("./index49.cjs");
+const core = require("@arvo/core");
+const utils = require("@arvo/utils");
+const IconButton = require("./index14.cjs");
+const DropdownIconButton = require("./index43.cjs");
+const SplitIconButton = require("./index42.cjs");
+const Switch = require("./index22.cjs");
+const Checkbox = require("./index19.cjs");
+const Tabstrip = require("./index31.cjs");
+const Search = require("./index36.cjs");
+const Button = require("./index13.cjs");
+const BannerAlert = require("./index34.cjs");
+const MessageAlert = require("./index12.cjs");
+function HeaderAction({ action, block, isDisabled }) {
+  if (!utils.validateHeaderAction(action)) return null;
+  const baseClass = `${block}__action`;
+  switch (action.type) {
+    case "btn": {
+      const tooltip = action.tooltip ?? action.label ?? action.id;
+      return /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          className: baseClass,
+          "data-action-id": action.id,
+          "data-action-type": action.type,
+          children: /* @__PURE__ */ jsxRuntime.jsx(
+            IconButton.ArvoIconButton,
+            {
+              size: "sm",
+              variant: "tertiary",
+              icon: action.icon,
+              tooltip,
+              isDisabled: isDisabled || action.isDisabled,
+              isLoading: action.isLoading,
+              isSelected: action.isSelected,
+              onClick: () => {
+                var _a;
+                if (isDisabled || action.isDisabled) return;
+                (_a = action.onClick) == null ? void 0 : _a.call(action);
+              }
+            }
+          )
+        }
+      );
+    }
+    case "dropdown": {
+      const dd = action;
+      const tooltip = dd.tooltip ?? dd.label ?? dd.id;
+      return /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          className: baseClass,
+          "data-action-id": dd.id,
+          "data-action-type": dd.type,
+          children: /* @__PURE__ */ jsxRuntime.jsx(
+            DropdownIconButton.default,
+            {
+              size: "sm",
+              variant: "tertiary",
+              icon: dd.icon,
+              tooltip,
+              items: dd.items,
+              placement: dd.placement ?? "bottom-end",
+              isDisabled: isDisabled || dd.isDisabled,
+              isLoading: dd.isLoading,
+              onSelect: (item) => {
+                var _a;
+                if (isDisabled || dd.isDisabled) return;
+                (_a = dd.onSelect) == null ? void 0 : _a.call(dd, item.id);
+              }
+            }
+          )
+        }
+      );
+    }
+    case "split": {
+      const sp = action;
+      const tooltip = sp.tooltip ?? sp.label ?? sp.id;
+      return /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          className: baseClass,
+          "data-action-id": sp.id,
+          "data-action-type": sp.type,
+          children: /* @__PURE__ */ jsxRuntime.jsx(
+            SplitIconButton.default,
+            {
+              size: "sm",
+              variant: "tertiary",
+              icon: sp.icon,
+              tooltip,
+              triggerLabel: sp.triggerLabel,
+              items: sp.items,
+              placement: sp.placement ?? "bottom-end",
+              isDisabled: isDisabled || sp.isDisabled,
+              isActionDisabled: sp.isActionDisabled,
+              isTriggerDisabled: sp.isTriggerDisabled,
+              isLoading: sp.isLoading,
+              onAction: () => {
+                var _a;
+                if (isDisabled || sp.isDisabled) return;
+                (_a = sp.onClick) == null ? void 0 : _a.call(sp);
+              },
+              onSelect: (item) => {
+                var _a;
+                if (isDisabled || sp.isDisabled) return;
+                (_a = sp.onSelect) == null ? void 0 : _a.call(sp, item.id);
+              }
+            }
+          )
+        }
+      );
+    }
+    case "switch":
+      return /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          className: baseClass,
+          "data-action-id": action.id,
+          "data-action-type": action.type,
+          "aria-label": action.label,
+          children: /* @__PURE__ */ jsxRuntime.jsx(
+            Switch.default,
+            {
+              isChecked: action.isChecked,
+              defaultChecked: action.defaultChecked,
+              isDisabled: isDisabled || action.isDisabled,
+              isReadOnly: action.isReadOnly,
+              isLoading: action.isLoading,
+              "aria-label": action.label,
+              onChange: ({ isChecked }) => {
+                var _a;
+                if (isDisabled || action.isDisabled) return;
+                (_a = action.onChange) == null ? void 0 : _a.call(action, isChecked);
+              }
+            }
+          )
+        }
+      );
+    case "checkbox":
+      return /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          className: baseClass,
+          "data-action-id": action.id,
+          "data-action-type": action.type,
+          "aria-label": action.label,
+          children: /* @__PURE__ */ jsxRuntime.jsx(
+            Checkbox.default,
+            {
+              size: "sm",
+              isChecked: action.isChecked,
+              defaultChecked: action.defaultChecked,
+              isIndeterminate: action.isIndeterminate,
+              isDisabled: isDisabled || action.isDisabled,
+              isReadOnly: action.isReadOnly,
+              isLoading: action.isLoading,
+              "aria-label": action.label,
+              onChange: ({ isChecked }) => {
+                var _a;
+                if (isDisabled || action.isDisabled) return;
+                (_a = action.onChange) == null ? void 0 : _a.call(action, isChecked);
+              }
+            }
+          )
+        }
+      );
+  }
+}
+function resolvePanelInfoRole(type) {
+  return type === "error" || type === "warning" || type === "block" ? "alert" : "status";
+}
+function PanelInfo({ config, message, block }) {
+  const type = config.type ?? "info";
+  const role = resolvePanelInfoRole(type);
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__info`, children: /* @__PURE__ */ jsxRuntime.jsx(MessageAlert.ArvoMessageAlert, { type, role, message }) });
+}
+function SkeletonRows({ block }) {
+  const widths = ["wide", "medium", "narrow", "wide", "medium"];
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__skeleton`, children: widths.map((w, i) => /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__skeleton__row ${block}__skeleton__row--${w}` }, i)) });
+}
+function EmptyState({ block, variant, onClearSearch }) {
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `${block}__empty`, children: [
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__empty-illus`, "aria-hidden": "true" }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__empty-title`, children: variant === "no-data" ? "No data" : "No results found" }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__empty-msg`, children: variant === "no-data" ? "There are no items to display." : "Try adjusting your search terms." }),
+    variant === "no-results" && onClearSearch && /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__empty-action`, children: /* @__PURE__ */ jsxRuntime.jsx(
+      Button.ArvoButton,
+      {
+        variant: "outline",
+        size: "sm",
+        label: "Clear search",
+        onClick: onClearSearch
+      }
+    ) })
+  ] });
+}
+function renderDefaultItem(item, block) {
+  const secondary = item.secondaryLabel ?? item.description;
+  const hasAvatar = !!item.avatarUrl;
+  const hasIcon = !hasAvatar && !!item.icon;
+  return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+    hasAvatar && /* @__PURE__ */ jsxRuntime.jsx(
+      "img",
+      {
+        className: `${block}__item__avatar`,
+        src: item.avatarUrl,
+        alt: ""
+      }
+    ),
+    hasIcon && /* @__PURE__ */ jsxRuntime.jsx(
+      "i",
+      {
+        className: `o9con-${item.icon} ${block}__item__ico`,
+        "aria-hidden": "true"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `${block}__item__txt`, children: [
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: `${block}__item__lbl`, children: item.label }),
+      secondary && /* @__PURE__ */ jsxRuntime.jsx("span", { className: `${block}__item__secondary`, children: secondary })
+    ] })
+  ] });
+}
+function PanelShellInner(props, ref) {
+  const {
+    parentBlock: block,
+    pinSlot,
+    title: titleProp,
+    hasHeader = true,
+    hasBackButton = false,
+    onBack,
+    headerActions: headerActionsProp,
+    stickyHeader: stickyHeaderProp = false,
+    items: itemsProp,
+    getItemId = (item) => item.id,
+    filterKeys,
+    getItemSearchText,
+    renderItem,
+    itemsRole = "list",
+    actions: actionsProp = false,
+    isClosable = false,
+    onClose,
+    isLoading: isLoadingProp = false,
+    isDisabled: isDisabledProp = false,
+    isPinnableCount = 0,
+    isClosableCount,
+    children,
+    className,
+    searchQuery: searchQueryProp,
+    defaultSearchQuery = "",
+    onSearchChange,
+    onItemActivate,
+    onTabSelect
+  } = props;
+  const [titleState, setTitleState] = react.useState(titleProp ?? null);
+  const [headerActionsState, setHeaderActionsState] = react.useState(headerActionsProp ?? []);
+  const [stickyState, setStickyState] = react.useState(stickyHeaderProp);
+  const [actionsState, setActionsState] = react.useState(actionsProp);
+  const [itemsState, setItemsState] = react.useState(itemsProp);
+  const [loadingState, setLoadingState] = react.useState(isLoadingProp);
+  const [disabledState, setDisabledState] = react.useState(isDisabledProp);
+  react.useEffect(() => {
+    setTitleState(titleProp ?? null);
+  }, [titleProp]);
+  react.useEffect(() => {
+    setHeaderActionsState(headerActionsProp ?? []);
+  }, [headerActionsProp]);
+  react.useEffect(() => {
+    setStickyState(stickyHeaderProp);
+  }, [stickyHeaderProp]);
+  react.useEffect(() => {
+    setActionsState(actionsProp);
+  }, [actionsProp]);
+  react.useEffect(() => {
+    setItemsState(itemsProp);
+  }, [itemsProp]);
+  react.useEffect(() => {
+    setLoadingState(isLoadingProp);
+  }, [isLoadingProp]);
+  react.useEffect(() => {
+    setDisabledState(isDisabledProp);
+  }, [isDisabledProp]);
+  const [searchQuery, setSearchQuery] = useControllableState.useControllableState(
+    searchQueryProp,
+    defaultSearchQuery
+  );
+  const [selectedTabId, setSelectedTabId] = useControllableState.useControllableState(
+    void 0,
+    null
+  );
+  const listRef = react.useRef(null);
+  const searchRef = react.useRef(null);
+  const titleRef = react.useRef(null);
+  const tabRovingRef = react.useRef(null);
+  const titleId = react.useMemo(
+    () => `${block}-title-${Math.random().toString(36).slice(2, 9)}`,
+    [block]
+  );
+  react.useEffect(() => {
+    if (itemsState !== void 0 && children && typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+      console.warn(
+        `[PanelShell] Both "items" and "children" were provided. When "items" is set, "children" is ignored.`
+      );
+    }
+  }, [itemsState, children]);
+  const closableCount = isClosableCount ?? (isClosable ? 1 : 0);
+  const validActionCount = react.useMemo(
+    () => headerActionsState.filter((a) => utils.validateHeaderAction(a)).length,
+    [headerActionsState]
+  );
+  react.useEffect(() => {
+    const total = validActionCount + isPinnableCount + closableCount;
+    if (total > 4 && typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+      console.warn(
+        `[PanelShell] Total header actions (${total}) exceeds cap of 4. Computed across headerActions (${validActionCount}) + isPinnable (${isPinnableCount}) + isClosable (${closableCount}).`
+      );
+    }
+  }, [validActionCount, isPinnableCount, closableCount]);
+  const hasItems = itemsState !== void 0;
+  const filteredItems = react.useMemo(() => {
+    if (itemsState === void 0) return [];
+    if (!searchQuery) return itemsState;
+    return utils.runItemFilter(itemsState, searchQuery, {
+      keys: filterKeys,
+      getItemSearchText
+    });
+  }, [itemsState, searchQuery, filterKeys, getItemSearchText]);
+  const emptyState = react.useMemo(() => {
+    if (!hasItems) return null;
+    if (itemsState.length === 0) return "no-data";
+    if (filteredItems.length === 0 && searchQuery) return "no-results";
+    return null;
+  }, [hasItems, itemsState, filteredItems, searchQuery]);
+  react.useEffect(() => {
+    if (!listRef.current || !hasItems || loadingState) return;
+    const itemEls = Array.from(
+      listRef.current.querySelectorAll(`.${block}__item`)
+    );
+    if (itemEls.length === 0) return;
+    const roving = core.createTabRoving();
+    roving.activate({
+      container: listRef.current,
+      items: itemEls,
+      orientation: "vertical",
+      wrap: true
+    });
+    tabRovingRef.current = roving;
+    return () => {
+      roving.deactivate();
+      tabRovingRef.current = null;
+    };
+  }, [block, hasItems, filteredItems, loadingState]);
+  const handleSearchChange = react.useCallback(
+    (value) => {
+      setSearchQuery(value);
+      if (hasItems) {
+        const matched = utils.runItemFilter(itemsState, value, {
+          keys: filterKeys,
+          getItemSearchText
+        });
+        onSearchChange == null ? void 0 : onSearchChange(value, matched.length);
+      } else {
+        onSearchChange == null ? void 0 : onSearchChange(value, null);
+      }
+    },
+    [setSearchQuery, hasItems, itemsState, filterKeys, getItemSearchText, onSearchChange]
+  );
+  const handleClearSearch = react.useCallback(() => {
+    var _a;
+    setSearchQuery("");
+    onSearchChange == null ? void 0 : onSearchChange("", (itemsState == null ? void 0 : itemsState.length) ?? 0);
+    const inputEl = (_a = searchRef.current) == null ? void 0 : _a.querySelector(
+      "input, textarea"
+    );
+    inputEl == null ? void 0 : inputEl.focus();
+  }, [setSearchQuery, onSearchChange, itemsState]);
+  const stickyConfig = stickyState ? stickyState : null;
+  const infoMessage = react.useMemo(() => {
+    if (!(stickyConfig == null ? void 0 : stickyConfig.info)) return null;
+    const infoCfg = stickyConfig.info;
+    if (infoCfg.showMatchCount && hasItems) {
+      return utils.formatMatchCountMessage(filteredItems.length, infoCfg.matchCountTemplate);
+    }
+    return infoCfg.message ?? null;
+  }, [stickyConfig, hasItems, filteredItems]);
+  const tabsForTabstrip = react.useMemo(() => {
+    if (!(stickyConfig == null ? void 0 : stickyConfig.tabs)) return [];
+    return stickyConfig.tabs.map((t) => ({
+      id: t.id,
+      label: t.label,
+      icon: t.icon,
+      isDisabled: t.isDisabled
+    }));
+  }, [stickyConfig]);
+  react.useEffect(() => {
+    var _a;
+    if (!((_a = stickyConfig == null ? void 0 : stickyConfig.tabs) == null ? void 0 : _a.length)) return;
+    if (selectedTabId !== null) return;
+    const first = stickyConfig.tabs.find((t) => !t.isDisabled);
+    if (first) setSelectedTabId(first.id);
+  }, [stickyConfig, selectedTabId, setSelectedTabId]);
+  const searchCounter = react.useMemo(() => {
+    if (!(stickyConfig == null ? void 0 : stickyConfig.search)) return null;
+    if (typeof stickyConfig.search !== "object") return null;
+    if (!stickyConfig.search.showCounter) return null;
+    if (!hasItems) return null;
+    return { current: filteredItems.length, total: itemsState.length };
+  }, [stickyConfig, hasItems, filteredItems, itemsState]);
+  const searchPlaceholder = react.useMemo(() => {
+    if (!(stickyConfig == null ? void 0 : stickyConfig.search) || typeof stickyConfig.search !== "object") return "Search";
+    return stickyConfig.search.placeholder ?? "Search";
+  }, [stickyConfig]);
+  const searchShortcut = react.useMemo(() => {
+    if (!(stickyConfig == null ? void 0 : stickyConfig.search) || typeof stickyConfig.search !== "object") return void 0;
+    return stickyConfig.search.shortcut;
+  }, [stickyConfig]);
+  const hostClasses = react.useMemo(() => {
+    const cls = [];
+    if (loadingState) cls.push("loading");
+    if (disabledState) cls.push("is-disabled");
+    if (emptyState === "no-data") cls.push("no-data");
+    if (emptyState === "no-results") cls.push("no-results");
+    if (stickyConfig == null ? void 0 : stickyConfig.banner) cls.push(`${block}--with-banner`);
+    if ((stickyConfig == null ? void 0 : stickyConfig.tabs) && stickyConfig.tabs.length > 0) cls.push(`${block}--with-tabs`);
+    if (stickyConfig == null ? void 0 : stickyConfig.search) cls.push(`${block}--with-search`);
+    if (stickyConfig == null ? void 0 : stickyConfig.info) cls.push(`${block}--with-info`);
+    if (actionsState && actionsState.length > 0) cls.push(`${block}--with-footer`);
+    if (className) cls.push(className);
+    return cls.join(" ");
+  }, [block, loadingState, disabledState, emptyState, stickyConfig, actionsState, className]);
+  react.useImperativeHandle(ref, () => ({
+    setItems(next) {
+      setItemsState(next);
+    },
+    setStickyHeader(config) {
+      setStickyState(config);
+    },
+    setHeaderActions(next) {
+      setHeaderActionsState(next);
+    },
+    setActions(next) {
+      setActionsState(next);
+    },
+    updateAction(id, patch) {
+      setHeaderActionsState((prev) => {
+        const idx = prev.findIndex((a) => a.id === id);
+        if (idx >= 0) {
+          const next = [...prev];
+          next[idx] = { ...next[idx], ...patch };
+          return next;
+        }
+        return prev;
+      });
+      setActionsState((prev) => {
+        if (!prev) return prev;
+        const idx = prev.findIndex((a) => a.id === id);
+        if (idx >= 0) {
+          const next = [...prev];
+          next[idx] = { ...next[idx], ...patch };
+          return next;
+        }
+        return prev;
+      });
+    },
+    search(query) {
+      if (query === void 0) return searchQuery;
+      setSearchQuery(query);
+    },
+    selectedTab(id) {
+      if (id === void 0) return selectedTabId;
+      setSelectedTabId(id);
+    },
+    setTitle(next) {
+      setTitleState(next);
+    },
+    loading(state) {
+      if (state === void 0) return loadingState;
+      setLoadingState(state);
+    },
+    disabled(state) {
+      if (state === void 0) return disabledState;
+      setDisabledState(state);
+    },
+    focus(target) {
+      var _a;
+      const t = target ?? "first";
+      if (t === "search" && searchRef.current) {
+        const input = searchRef.current.querySelector("input, textarea");
+        input == null ? void 0 : input.focus();
+        return;
+      }
+      if (t === "title" && titleRef.current) {
+        titleRef.current.setAttribute("tabindex", "-1");
+        titleRef.current.focus();
+        return;
+      }
+      if (t === "list" && listRef.current) {
+        const first = listRef.current.querySelector(`.${block}__item`);
+        if (first) {
+          first.focus();
+          (_a = tabRovingRef.current) == null ? void 0 : _a.setActiveItem(0);
+        }
+        return;
+      }
+      if (searchRef.current) {
+        const input = searchRef.current.querySelector("input, textarea");
+        if (input) {
+          input.focus();
+          return;
+        }
+      }
+      if (titleRef.current) {
+        titleRef.current.setAttribute("tabindex", "-1");
+        titleRef.current.focus();
+      }
+    }
+  }), [block, searchQuery, selectedTabId, loadingState, disabledState, setSearchQuery, setSelectedTabId]);
+  const wrapperClasses = ["arvo-panel-shell", hostClasses].filter(Boolean).join(" ");
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: wrapperClasses, "aria-busy": loadingState || void 0, children: [
+    hasHeader && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `${block}__hdr`, children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `${block}__hdr-lft`, children: [
+        hasBackButton && /* @__PURE__ */ jsxRuntime.jsx(
+          IconButton.ArvoIconButton,
+          {
+            className: `${block}__back`,
+            size: "sm",
+            variant: "tertiary",
+            icon: "arrow-left",
+            tooltip: "Back",
+            isDisabled: disabledState,
+            onClick: () => {
+              if (!disabledState) onBack == null ? void 0 : onBack();
+            }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          "span",
+          {
+            ref: titleRef,
+            id: titleId,
+            className: `${block}__title`,
+            children: titleState
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `${block}__hdr-actions`, children: [
+        headerActionsState.filter((a) => utils.validateHeaderAction(a)).map((action) => /* @__PURE__ */ jsxRuntime.jsx(
+          HeaderAction,
+          {
+            action,
+            block,
+            isDisabled: disabledState
+          },
+          action.id
+        )),
+        pinSlot,
+        isClosable && /* @__PURE__ */ jsxRuntime.jsx(
+          IconButton.ArvoIconButton,
+          {
+            className: `${block}__close`,
+            size: "sm",
+            variant: "tertiary",
+            icon: "close",
+            tooltip: "Close",
+            isDisabled: disabledState,
+            onClick: () => {
+              if (!disabledState) onClose == null ? void 0 : onClose();
+            }
+          }
+        )
+      ] })
+    ] }),
+    stickyConfig && !loadingState && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `${block}__sticky`, children: [
+      stickyConfig.banner && /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__banner`, children: /* @__PURE__ */ jsxRuntime.jsx(
+        BannerAlert.ArvoBannerAlert,
+        {
+          type: stickyConfig.banner.type,
+          title: stickyConfig.banner.title ?? void 0,
+          message: stickyConfig.banner.message,
+          isCompact: stickyConfig.banner.isCompact,
+          isDismissible: stickyConfig.banner.isDismissible ?? false,
+          onDismiss: stickyConfig.banner.onDismiss
+        }
+      ) }),
+      stickyConfig.tabs && stickyConfig.tabs.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__tabs`, children: /* @__PURE__ */ jsxRuntime.jsx(
+        Tabstrip.default,
+        {
+          variant: "primary",
+          size: "sm",
+          tabs: tabsForTabstrip,
+          selectedId: selectedTabId,
+          isDisabled: disabledState,
+          onSelect: (detail) => {
+            setSelectedTabId(detail.id);
+            onTabSelect == null ? void 0 : onTabSelect(detail.id);
+          }
+        }
+      ) }),
+      stickyConfig.search && /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          ref: searchRef,
+          className: `${block}__search`,
+          onKeyDown: (e) => {
+            var _a, _b;
+            if (e.key !== "ArrowDown") return;
+            const firstItem = (_a = listRef.current) == null ? void 0 : _a.querySelector(
+              `.${block}__item`
+            );
+            if (firstItem) {
+              e.preventDefault();
+              firstItem.focus();
+              (_b = tabRovingRef.current) == null ? void 0 : _b.setActiveItem(0);
+            }
+          },
+          children: /* @__PURE__ */ jsxRuntime.jsx(
+            Search.default,
+            {
+              variant: "filter",
+              value: searchQuery,
+              placeholder: searchPlaceholder,
+              shortcut: searchShortcut,
+              isFullWidth: true,
+              isDisabled: disabledState,
+              counter: searchCounter,
+              onSearch: handleSearchChange,
+              onChange: handleSearchChange,
+              onClear: handleClearSearch,
+              "aria-label": searchPlaceholder
+            }
+          )
+        }
+      ),
+      stickyConfig.info && infoMessage && /* @__PURE__ */ jsxRuntime.jsx(
+        PanelInfo,
+        {
+          config: stickyConfig.info,
+          message: infoMessage,
+          block
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__body`, children: loadingState ? /* @__PURE__ */ jsxRuntime.jsx(SkeletonRows, { block }) : hasItems ? emptyState ? /* @__PURE__ */ jsxRuntime.jsx(
+      EmptyState,
+      {
+        block,
+        variant: emptyState,
+        onClearSearch: emptyState === "no-results" ? handleClearSearch : void 0
+      }
+    ) : /* @__PURE__ */ jsxRuntime.jsx(
+      "div",
+      {
+        ref: listRef,
+        className: `${block}__list`,
+        role: itemsRole,
+        tabIndex: -1,
+        children: filteredItems.map((item) => {
+          const defaultItem = item;
+          const itemClasses = [
+            `${block}__item`,
+            defaultItem.isActive ? "active" : "",
+            defaultItem.isDisabled ? "is-disabled" : ""
+          ].filter(Boolean).join(" ");
+          const itemDisabled = !!defaultItem.isDisabled;
+          return /* @__PURE__ */ jsxRuntime.jsx(
+            "div",
+            {
+              className: itemClasses,
+              "data-item-id": getItemId(item),
+              tabIndex: -1,
+              role: "option",
+              "aria-disabled": itemDisabled || void 0,
+              onClick: () => {
+                if (disabledState || itemDisabled) return;
+                onItemActivate == null ? void 0 : onItemActivate(getItemId(item), item);
+              },
+              onKeyDown: (e) => {
+                var _a;
+                if (e.key === "Enter" && !disabledState && !itemDisabled) {
+                  e.preventDefault();
+                  onItemActivate == null ? void 0 : onItemActivate(getItemId(item), item);
+                }
+                if (e.key === "ArrowUp") {
+                  const itemEls = (_a = listRef.current) == null ? void 0 : _a.querySelectorAll(`.${block}__item`);
+                  if (itemEls) {
+                    const idx = Array.from(itemEls).indexOf(e.currentTarget);
+                    if (idx === 0 && searchRef.current) {
+                      e.preventDefault();
+                      const input = searchRef.current.querySelector("input, textarea");
+                      input == null ? void 0 : input.focus();
+                    }
+                  }
+                }
+              },
+              children: renderItem ? renderItem(item) : renderDefaultItem(defaultItem, block)
+            },
+            getItemId(item)
+          );
+        })
+      }
+    ) : children }),
+    !loadingState && actionsState && actionsState.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__footer`, children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${block}__footer-actions`, children: actionsState.map((action) => (
+      // ArvoButton no longer accepts a tooltip prop (per the design
+      // system tooltip standard). action.tooltip is preserved on the
+      // ArvoPanelAction type for backward compat but ignored here --
+      // consumers wrap the action with ArvoTooltip if needed.
+      /* @__PURE__ */ jsxRuntime.jsx(
+        Button.ArvoButton,
+        {
+          "data-action-id": action.id,
+          "data-icon-only": action.isIconOnly ? "true" : void 0,
+          size: action.size ?? "md",
+          variant: action.variant ?? "secondary",
+          label: action.label,
+          icon: action.icon,
+          isDisabled: disabledState || action.isDisabled || void 0,
+          isLoading: action.isLoading,
+          onClick: () => {
+            var _a;
+            if (disabledState || action.isDisabled) return;
+            (_a = action.onClick) == null ? void 0 : _a.call(action);
+          }
+        },
+        action.id
+      )
+    )) }) })
+  ] });
+}
+const PanelShell = react.forwardRef(PanelShellInner);
+exports.HeaderAction = HeaderAction;
+exports.PanelShell = PanelShell;
+//# sourceMappingURL=index52.cjs.map

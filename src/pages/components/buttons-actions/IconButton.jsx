@@ -183,7 +183,7 @@ btn.destroy();`} />
               <DocList items={[
                 <span key="1">Focus ring uses <DocCode>outline: 1px solid</DocCode> with <DocCode>outline-offset: 2px</DocCode>.</span>,
                 <span key="2"><DocCode>.focus-border</DocCode> tightens offset to <DocCode>-1px</DocCode> in dense layouts (button groups, toolbars, table cells).</span>,
-                <span key="3">Hover styles are scoped to <DocCode>.no-touch</DocCode>.</span>,
+                <span key="3">Hover styles are wrapped in <DocCode>@media (hover: hover) and (pointer: fine)</DocCode> to prevent sticky hover states on touch devices.</span>,
               ]} />
             </DocSection>
           </div>

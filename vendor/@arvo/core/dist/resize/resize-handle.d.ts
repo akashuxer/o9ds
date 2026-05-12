@@ -7,7 +7,7 @@ export interface ResizeHandleOptions {
     /** Which corners to enable resize handles on. */
     corners: ResizeCorner[];
     /**
-     * Minimum width and height. Enforced via clamp during pointer drag — the
+     * Minimum width and height. Enforced via clamp during pointer drag -- the
      * dragged dimension cannot fall below this value even if the user drags
      * past it.
      */

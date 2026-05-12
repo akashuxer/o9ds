@@ -1,11 +1,12 @@
+@use '../../mixins/hover' as *;
 @use '../../mixins/list-item' as *;
 @use '../../mixins/list-group' as *;
 @use '../../mixins/loading' as *;
 @use '../../mixins/typography' as *;
 @use '../../../../tokens/src/scss/all' as *;
 
-// ─── .arvo-hpop ────────────────────────────────────────────────────────────────
-// Composes ArvoPopover — panel chrome (header, footer, body, shadow, arrow,
+// --- .arvo-hpop ----------------------------------------------------------------
+// Composes ArvoPopover -- panel chrome (header, footer, body, shadow, arrow,
 // positioning, transitions) lives in _arvo-popover.scss. This file only styles
 // HybridPopover-specific elements rendered inside the Popover slots.
 
@@ -27,13 +28,13 @@
   min-height: var(--arvo-hpop-min-height);
   max-height: 90vh;
 
-  // ── __sticky ──────────────────────────────────────────────────────────────
+  // -- __sticky --------------------------------------------------------------
   // Vertical flex column inside Popover's stickyHeader slot.
   // Owns its own padding/gap (matches Figma 33808-23128 top-body:
   // padding 16px 12px 8px, gap 16px). The outer Popover sticky-header
   // padding is nulled below so we have a single source of truth and no
   // stacked padding ring against the search input. Background is
-  // intentionally transparent — the Popover panel already paints layer-03.
+  // intentionally transparent -- the Popover panel already paints layer-03.
   &__sticky {
     display: flex;
     flex-direction: column;
@@ -49,7 +50,7 @@
     padding: 0;
   }
 
-  // ── __search ──────────────────────────────────────────────────────────────
+  // -- __search --------------------------------------------------------------
   &__search {
     display: flex;
 
@@ -58,27 +59,27 @@
     }
   }
 
-  // ── __cond ────────────────────────────────────────────────────────────────
+  // -- __cond ----------------------------------------------------------------
   &__cond {
     display: flex;
   }
 
-  // ── __banner ──────────────────────────────────────────────────────────────
+  // -- __banner --------------------------------------------------------------
   &__banner {
     flex-shrink: 0;
     padding: 0 $arvo-space-16;
   }
 
-  // ── __list ────────────────────────────────────────────────────────────────
+  // -- __list ----------------------------------------------------------------
   &__list {
     display: flex;
     flex-direction: column;
   }
 
-  // ── __sa (select-all) ─────────────────────────────────────────────────────
+  // -- __sa (select-all) -----------------------------------------------------
   // Mirrors __opt layout: leading checkbox slot + external label span.
   // External span keeps label typography parity with __opt__lbl (14px)
-  // instead of the 12px label baked into <ArvoCheckbox label="…">.
+  // instead of the 12px label baked into <ArvoCheckbox label="...">.
   &__sa {
     @include list-item-base;
     @include list-item-single-line;
@@ -89,7 +90,7 @@
     }
   }
 
-  // Select-all label — typography parity with __opt__lbl.
+  // Select-all label -- typography parity with __opt__lbl.
   &__sa__lbl {
     @include arvo-font-l14-r;
     flex: 1 1 auto;
@@ -102,23 +103,23 @@
     font-family: var(--o9-font-family);
   }
 
-  // ── __grp ─────────────────────────────────────────────────────────────────
+  // -- __grp -----------------------------------------------------------------
   &__grp {
     display: flex;
     flex-direction: column;
   }
 
-  // ── __grp-hdr ─────────────────────────────────────────────────────────────
+  // -- __grp-hdr -------------------------------------------------------------
   &__grp-hdr {
     @include list-group-header;
   }
 
-  // ── __divider ─────────────────────────────────────────────────────────────
+  // -- __divider -------------------------------------------------------------
   &__divider {
     @include list-group-divider;
   }
 
-  // ── __opt (filter option row) ─────────────────────────────────────────────
+  // -- __opt (filter option row) ---------------------------------------------
   &__opt {
     @include list-item-base;
     @include list-item-single-line;
@@ -127,7 +128,7 @@
     @include list-item-text;
   }
 
-  // ── __opt sub-elements ────────────────────────────────────────────────────
+  // -- __opt sub-elements ----------------------------------------------------
   &__opt__drag {
     flex: 0 0 auto;
     display: flex;
@@ -183,11 +184,11 @@
     margin-inline-start: auto;
   }
 
-  // No row-level selected highlight — the checkbox/radio is the sole
+  // No row-level selected highlight -- the checkbox/radio is the sole
   // selection indicator for hpop options. The shared `.active` class from
   // list-item-states is intentionally not applied to __opt.
 
-  // ── __empty ───────────────────────────────────────────────────────────────
+  // -- __empty ---------------------------------------------------------------
   &__empty {
     display: flex;
     flex-direction: column;
@@ -219,7 +220,7 @@
     margin-top: $arvo-space-8;
   }
 
-  // ── __skeleton / __skeleton-hdr (Pattern B) ───────────────────────────────
+  // -- __skeleton / __skeleton-hdr (Pattern B) -------------------------------
   &__skeleton {
     width: 100%;
     height: 32px;
@@ -270,14 +271,14 @@
     }
   }
 
-  // ── __resize ──────────────────────────────────────────────────────────────
+  // -- __resize --------------------------------------------------------------
   &__resize {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
 
-  // ── __handle ──────────────────────────────────────────────────────────────
+  // -- __handle --------------------------------------------------------------
   &__handle {
     position: absolute;
     width: 12px;
@@ -324,8 +325,10 @@
     // createResizeHandle setting inline `style.display = 'none'`.
   }
 
-  .no-touch &:hover &__handle {
-    opacity: 1;
+  @include hover {
+    &:hover &__handle {
+      opacity: 1;
+    }
   }
 
   // Keyboard discoverability: when the panel is keyboard-focused (or
@@ -335,7 +338,7 @@
     opacity: 1;
   }
 
-  // ── State: is-resizing ────────────────────────────────────────────────────
+  // -- State: is-resizing ----------------------------------------------------
   &.is-resizing {
     user-select: none;
 
@@ -352,14 +355,14 @@
     }
   }
 
-  // ── State: is-dragging ────────────────────────────────────────────────────
+  // -- State: is-dragging ----------------------------------------------------
   &.is-dragging {
     .arvo-hpop__opt__drag {
       cursor: grabbing;
     }
   }
 
-  // ── Loading (Pattern B) ───────────────────────────────────────────────────
+  // -- Loading (Pattern B) ---------------------------------------------------
   // Hides sticky header and Popover footer, shows skeleton rows, blocks interaction.
   @mixin _hpop-loading {
     pointer-events: none;
@@ -383,7 +386,7 @@
   }
 }
 
-// ─── Sortable / DnD related blocks ──────────────────────────────────────────
+// --- Sortable / DnD related blocks ------------------------------------------
 
 .arvo-hpop__opt.arvo-sortable--ghost {
   opacity: $arvo-opacity-low;

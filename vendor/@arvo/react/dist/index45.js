@@ -1,16 +1,33 @@
-const MENU_SEARCH_DEFAULTS = {
-  placeholder: "Search",
-  isClearable: true,
-  searchMode: "input",
-  minChars: 0
-};
-function normalizeSearch(prop, defaults = {}) {
-  if (!prop) return null;
-  const base = { ...MENU_SEARCH_DEFAULTS, ...defaults };
-  if (prop === true) return base;
-  return { ...base, ...prop };
-}
+import { forwardRef, useRef, isValidElement, cloneElement } from "react";
+import { useTooltip } from "./index10.js";
+const ArvoTooltip = forwardRef(
+  function ArvoTooltip2({ content, placement, shortcut, children }, forwardedRef) {
+    const internalRef = useRef(null);
+    const config = { content, placement, shortcut };
+    useTooltip({
+      triggerRef: internalRef,
+      tooltip: config
+    });
+    if (!isValidElement(children)) return children;
+    return cloneElement(children, {
+      ref: (node) => {
+        internalRef.current = node;
+        if (typeof forwardedRef === "function") {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          forwardedRef.current = node;
+        }
+        const originalRef = children.ref;
+        if (typeof originalRef === "function") {
+          originalRef(node);
+        } else if (originalRef && typeof originalRef === "object" && "current" in originalRef) {
+          originalRef.current = node;
+        }
+      }
+    });
+  }
+);
 export {
-  normalizeSearch
+  ArvoTooltip
 };
 //# sourceMappingURL=index45.js.map

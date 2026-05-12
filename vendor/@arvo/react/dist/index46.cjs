@@ -1,196 +1,327 @@
 "use strict";
-Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const jsxRuntime = require("react/jsx-runtime");
 const react = require("react");
-const Checkbox = require("./index17.cjs");
-const FilterOption = require("./index48.cjs");
-function computeSelectAllState(items, draft) {
-  const enabled = items.filter((i) => !i.isDisabled);
-  if (enabled.length === 0) {
-    return { isChecked: false, isIndeterminate: false, isDisabled: true };
-  }
-  const draftSet = new Set(draft);
-  const selectedCount = enabled.filter((i) => draftSet.has(i.id)).length;
-  return {
-    isChecked: selectedCount === enabled.length,
-    isIndeterminate: selectedCount > 0 && selectedCount < enabled.length,
-    isDisabled: false
-  };
+const reactDom = require("react-dom");
+const Button = require("./index13.cjs");
+const IconButton = require("./index14.cjs");
+const Checkbox = require("./index19.cjs");
+const Textbox = require("./index15.cjs");
+const useControllableState = require("./index49.cjs");
+const useOverlay = require("./index6.cjs");
+const useFocusTrap = require("./index7.cjs");
+const DEFAULT_PRIMARY = { label: "OK" };
+const DEFAULT_SECONDARY = { label: "Cancel" };
+function normalizeDontShow(value) {
+  if (value === null || value === void 0 || value === false) return null;
+  if (value === true) return {};
+  return value;
 }
-const FilterList = react.forwardRef(
-  function FilterList2({
-    items,
-    isGrouped,
-    selection,
-    draftValue,
-    enableReorder,
-    hasGlobalSelectAll,
-    hasAnyDragHandle,
-    radioName,
-    ariaLabel,
-    onToggleItem,
-    onToggleGroupSelectAll,
-    onToggleGlobalSelectAll,
-    onInline
+const ArvoAlertDialog = react.forwardRef(
+  function ArvoAlertDialog2({
+    variant = "warning",
+    size = "md",
+    title,
+    message,
+    content,
+    isOpen: openProp,
+    defaultOpen = false,
+    hasDangerAction = false,
+    primaryAction = DEFAULT_PRIMARY,
+    secondaryAction,
+    hasSecondaryBtn = true,
+    isClosable = false,
+    hasBackdrop = true,
+    closeOnBackdrop = false,
+    closeOnEscape = true,
+    confirmInput = null,
+    dontShowAgain = null,
+    isLoading = false,
+    isDisabled = false,
+    container = null,
+    className,
+    onOpenChange,
+    onOpen,
+    onClose,
+    onConfirmInputChange,
+    onDontShowAgainChange
   }, ref) {
-    const isMulti = selection === "multi";
-    const localListRef = react.useRef(null);
-    const setListRef = (node) => {
-      localListRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    };
+    const uid = react.useId();
+    const panelId = `arvo-alert-dlg-${uid}`;
+    const titleId = `arvo-alert-dlg-title-${uid}`;
+    const bodyId = `arvo-alert-dlg-body-${uid}`;
+    const rootRef = react.useRef(null);
+    const panelRef = react.useRef(null);
+    const inputElRef = react.useRef(null);
+    react.useImperativeHandle(ref, () => rootRef.current, []);
+    const [isOpen, setOpen] = useControllableState.useControllableState(openProp, defaultOpen);
+    const [confirmValue, setConfirmValue] = react.useState("");
+    const isPrimaryDisabledByConfirm = (confirmInput == null ? void 0 : confirmInput.expectedValue) ? confirmValue !== confirmInput.expectedValue : false;
     react.useEffect(() => {
-      const list = localListRef.current;
-      if (!list) return;
-      list.querySelectorAll(
-        ".arvo-hpop__sa .arvo-checkbox__input"
-      ).forEach((input) => {
-        input.tabIndex = -1;
-      });
-    });
-    const draftArray = react.useMemo(
-      () => isMulti ? Array.isArray(draftValue) ? draftValue : [] : [],
-      [isMulti, draftValue]
+      if (!isOpen) setConfirmValue("");
+    }, [isOpen]);
+    const dontShowConfig = normalizeDontShow(dontShowAgain);
+    const [dontShowChecked, setDontShowChecked] = react.useState(
+      (dontShowConfig == null ? void 0 : dontShowConfig.defaultChecked) ?? false
     );
-    const draftSingle = !isMulti && typeof draftValue === "string" ? draftValue : null;
-    const isItemChecked = (item) => {
-      if (selection === "none") return false;
-      if (isMulti) return draftArray.includes(item.id);
-      return draftSingle === item.id;
-    };
-    const renderRow = (item, groupId, draggable) => /* @__PURE__ */ jsxRuntime.jsx(
-      FilterOption.FilterOption,
-      {
-        item,
-        selection,
-        isChecked: isItemChecked(item),
-        hasAnyDragHandle,
-        isDraggable: draggable,
-        groupId,
-        radioName,
-        onToggle: onToggleItem,
-        onInline
+    const overlay = useOverlay.useOverlay();
+    const handleClose = react.useCallback(
+      (reason) => {
+        if (!isOpen) return;
+        if ((onClose == null ? void 0 : onClose({ reason })) === false) return;
+        setOpen(false);
       },
-      item.id
+      [isOpen, onClose, setOpen]
     );
-    const flatItems = react.useMemo(
-      () => isGrouped ? items.flatMap((g) => g.items) : items,
-      [items, isGrouped]
+    const wasOpenRef = react.useRef(isOpen);
+    react.useEffect(() => {
+      if (!wasOpenRef.current && isOpen) {
+        if ((onOpen == null ? void 0 : onOpen()) === false) {
+          setOpen(false);
+          return;
+        }
+      }
+      wasOpenRef.current = isOpen;
+    }, [isOpen]);
+    const isFirstRenderRef = react.useRef(true);
+    react.useEffect(() => {
+      if (isFirstRenderRef.current) {
+        isFirstRenderRef.current = false;
+        return;
+      }
+      onOpenChange == null ? void 0 : onOpenChange(isOpen);
+    }, [isOpen]);
+    react.useEffect(() => {
+      if (!isOpen || !panelRef.current) return;
+      overlay.open({
+        id: panelId,
+        type: "modal",
+        element: panelRef.current,
+        priority: 10,
+        config: { autoCloseOnOutsideClick: false },
+        onClose: () => handleClose("programmatic")
+      });
+      return () => {
+        overlay.close(panelId);
+      };
+    }, [isOpen]);
+    useFocusTrap.useFocusTrap(panelRef, {
+      active: isOpen,
+      // When a confirm input exists, suppress trap's auto-focus and focus
+      // the input ourselves below for guaranteed targeting.
+      initialFocus: confirmInput ? "none" : "first",
+      escapeDeactivates: false,
+      returnFocusOnDeactivate: true,
+      allowOutsideClick: false
+    });
+    react.useEffect(() => {
+      if (!isOpen || !confirmInput) return;
+      const id = window.setTimeout(() => {
+        var _a;
+        const input = (_a = panelRef.current) == null ? void 0 : _a.querySelector(
+          ".arvo-alert-dlg__confirm-input input"
+        );
+        if (input) {
+          inputElRef.current = input;
+          input.focus({ preventScroll: true });
+        }
+      }, 0);
+      return () => window.clearTimeout(id);
+    }, [isOpen, confirmInput]);
+    react.useEffect(() => {
+      if (!isOpen) return;
+      const onKeyDown = (e) => {
+        if (e.key === "Escape") {
+          e.stopPropagation();
+          if (closeOnEscape) handleClose("escape");
+        }
+      };
+      document.addEventListener("keydown", onKeyDown, true);
+      return () => document.removeEventListener("keydown", onKeyDown, true);
+    }, [isOpen, closeOnEscape, handleClose]);
+    const runAction = react.useCallback(
+      (action, reason, e) => {
+        var _a;
+        const result = (_a = action.onClick) == null ? void 0 : _a.call(action, e);
+        if (result === false) return;
+        if (action.closeOnClick !== false) {
+          handleClose(reason);
+        }
+      },
+      [handleClose]
     );
-    const globalSelectAll = isMulti && hasGlobalSelectAll ? computeSelectAllState(flatItems, draftArray) : null;
-    const listRole = selection === "none" ? "group" : "listbox";
-    return /* @__PURE__ */ jsxRuntime.jsxs(
-      "div",
-      {
-        ref: setListRef,
-        className: "arvo-hpop__list",
-        role: listRole,
-        "aria-label": ariaLabel ?? "Filter options",
-        "aria-multiselectable": isMulti ? true : void 0,
-        children: [
-          globalSelectAll && /* @__PURE__ */ jsxRuntime.jsxs(
-            "div",
-            {
-              className: "arvo-hpop__sa",
-              role: "option",
-              tabIndex: -1,
-              "aria-selected": globalSelectAll.isChecked,
-              "aria-disabled": globalSelectAll.isDisabled || void 0,
-              "data-sa": "global",
-              onKeyDown: (event) => {
-                if (event.key !== " " && event.key !== "Enter") return;
-                if (globalSelectAll.isDisabled) return;
-                event.preventDefault();
-                onToggleGlobalSelectAll == null ? void 0 : onToggleGlobalSelectAll();
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntime.jsx(
+    const primaryConfig = primaryAction ?? DEFAULT_PRIMARY;
+    const secondaryConfig = secondaryAction === null ? null : secondaryAction ?? DEFAULT_SECONDARY;
+    const showSecondary = hasSecondaryBtn && secondaryConfig !== null;
+    const handlePrimaryClick = react.useCallback(
+      (e) => {
+        if (isLoading || isDisabled || primaryConfig.isDisabled || isPrimaryDisabledByConfirm) return;
+        runAction(primaryConfig, "primary", e);
+      },
+      [isLoading, isDisabled, isPrimaryDisabledByConfirm, primaryConfig, runAction]
+    );
+    const handleSecondaryClick = react.useCallback(
+      (e) => {
+        if (!secondaryConfig) return;
+        runAction(secondaryConfig, "secondary", e);
+      },
+      [secondaryConfig, runAction]
+    );
+    const handleConfirmInputChange = react.useCallback(
+      (e) => {
+        var _a;
+        const next = e.target.value;
+        setConfirmValue(next);
+        (_a = confirmInput == null ? void 0 : confirmInput.onChange) == null ? void 0 : _a.call(confirmInput, next);
+        onConfirmInputChange == null ? void 0 : onConfirmInputChange(next);
+      },
+      [confirmInput, onConfirmInputChange]
+    );
+    const handleConfirmInputKeyDown = react.useCallback(
+      (e) => {
+        if (e.key === "Enter" && !isPrimaryDisabledByConfirm) {
+          e.preventDefault();
+          runAction(
+            primaryConfig,
+            "primary",
+            e
+          );
+        }
+      },
+      [isPrimaryDisabledByConfirm, primaryConfig, runAction]
+    );
+    const handleDontShowChange = react.useCallback(
+      (detail) => {
+        var _a;
+        const next = detail.isChecked;
+        setDontShowChecked(next);
+        (_a = dontShowConfig == null ? void 0 : dontShowConfig.onChange) == null ? void 0 : _a.call(dontShowConfig, next);
+        onDontShowAgainChange == null ? void 0 : onDontShowAgainChange(next);
+      },
+      [dontShowConfig, onDontShowAgainChange]
+    );
+    const portalTarget = react.useMemo(() => {
+      if (typeof document === "undefined") return null;
+      if (!container) return document.body;
+      if (typeof container === "string") {
+        return document.querySelector(container) ?? document.body;
+      }
+      return container;
+    }, [container]);
+    if (!isOpen || !portalTarget) return null;
+    const rootClasses = [
+      "arvo-alert-dlg",
+      `arvo-alert-dlg--${variant}`,
+      size !== "md" && `arvo-alert-dlg--${size}`,
+      hasBackdrop && "arvo-alert-dlg--with-backdrop",
+      hasDangerAction && "arvo-alert-dlg--danger",
+      isClosable && "arvo-alert-dlg--closable",
+      "open",
+      isLoading && "loading",
+      className
+    ].filter(Boolean).join(" ");
+    const dontShowLabel = (dontShowConfig == null ? void 0 : dontShowConfig.label) ?? "Don't show this again";
+    return reactDom.createPortal(
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { ref: rootRef, className: rootClasses, children: [
+        /* @__PURE__ */ jsxRuntime.jsx(
+          "div",
+          {
+            className: "arvo-alert-dlg__backdrop",
+            "aria-hidden": "true",
+            onClick: closeOnBackdrop ? () => handleClose("backdrop") : void 0
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "div",
+          {
+            ref: panelRef,
+            id: panelId,
+            className: "arvo-alert-dlg__panel",
+            role: "alertdialog",
+            "aria-modal": "true",
+            "aria-labelledby": titleId,
+            "aria-describedby": bodyId,
+            "aria-busy": isLoading || void 0,
+            tabIndex: -1,
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-alert-dlg__header", children: [
+                /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-alert-dlg__ico o9con", "aria-hidden": "true" }),
+                /* @__PURE__ */ jsxRuntime.jsx("p", { id: titleId, className: "arvo-alert-dlg__title", children: title }),
+                isClosable && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-alert-dlg__close-btn", children: /* @__PURE__ */ jsxRuntime.jsx(
+                  IconButton.ArvoIconButton,
+                  {
+                    icon: "close",
+                    variant: "tertiary",
+                    size: "sm",
+                    tooltip: "Close",
+                    "aria-label": "Close dialog",
+                    isDisabled: isLoading || isDisabled,
+                    onClick: () => handleClose("close-button")
+                  }
+                ) })
+              ] }),
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { id: bodyId, className: "arvo-alert-dlg__body", children: [
+                content !== void 0 && content !== null ? content : message && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "arvo-alert-dlg__msg", children: message }),
+                confirmInput && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-alert-dlg__confirm-input", children: /* @__PURE__ */ jsxRuntime.jsx(
+                  Textbox.default,
+                  {
+                    size: "sm",
+                    isFullWidth: true,
+                    label: confirmInput.label,
+                    placeholder: confirmInput.placeholder,
+                    maxLength: confirmInput.maxLength,
+                    value: confirmValue,
+                    isDisabled: isLoading || isDisabled,
+                    onChange: handleConfirmInputChange,
+                    onKeyDown: handleConfirmInputKeyDown
+                  }
+                ) })
+              ] }),
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-alert-dlg__footer", children: [
+                dontShowConfig && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-alert-dlg__dont-show", children: /* @__PURE__ */ jsxRuntime.jsx(
                   Checkbox.default,
                   {
                     size: "sm",
-                    isChecked: globalSelectAll.isChecked,
-                    isIndeterminate: globalSelectAll.isIndeterminate,
-                    isDisabled: globalSelectAll.isDisabled,
-                    onChange: () => onToggleGlobalSelectAll == null ? void 0 : onToggleGlobalSelectAll(),
-                    "aria-label": "Select all"
+                    label: dontShowLabel,
+                    isChecked: dontShowChecked,
+                    isDisabled: isLoading || isDisabled,
+                    onChange: handleDontShowChange
                   }
-                ),
-                /* @__PURE__ */ jsxRuntime.jsx(
-                  "span",
-                  {
-                    className: "arvo-hpop__sa__lbl",
-                    onClick: () => {
-                      if (globalSelectAll.isDisabled) return;
-                      onToggleGlobalSelectAll == null ? void 0 : onToggleGlobalSelectAll();
-                    },
-                    children: "Select all"
-                  }
-                )
-              ]
-            }
-          ),
-          isGrouped ? items.map((group, gi) => {
-            const groupDraggable = enableReorder && group.isDraggable !== false;
-            const groupSA = isMulti && group.hasSelectAll ? computeSelectAllState(group.items, draftArray) : null;
-            return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-hpop__grp", "data-group": group.id, children: [
-              gi > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-hpop__divider", role: "separator" }),
-              group.label && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-hpop__grp-hdr", children: group.label }),
-              groupSA && /* @__PURE__ */ jsxRuntime.jsxs(
-                "div",
-                {
-                  className: "arvo-hpop__sa arvo-hpop__sa--group",
-                  role: "option",
-                  tabIndex: -1,
-                  "aria-selected": groupSA.isChecked,
-                  "aria-disabled": groupSA.isDisabled || void 0,
-                  "data-sa": `group:${group.id}`,
-                  onKeyDown: (event) => {
-                    if (event.key !== " " && event.key !== "Enter") return;
-                    if (groupSA.isDisabled) return;
-                    event.preventDefault();
-                    onToggleGroupSelectAll == null ? void 0 : onToggleGroupSelectAll(group);
-                  },
-                  children: [
-                    /* @__PURE__ */ jsxRuntime.jsx(
-                      Checkbox.default,
-                      {
-                        size: "sm",
-                        isChecked: groupSA.isChecked,
-                        isIndeterminate: groupSA.isIndeterminate,
-                        isDisabled: groupSA.isDisabled,
-                        onChange: () => onToggleGroupSelectAll == null ? void 0 : onToggleGroupSelectAll(group),
-                        "aria-label": `Select all ${group.label ?? group.id}`
-                      }
-                    ),
-                    /* @__PURE__ */ jsxRuntime.jsx(
-                      "span",
-                      {
-                        className: "arvo-hpop__sa__lbl",
-                        onClick: () => {
-                          if (groupSA.isDisabled) return;
-                          onToggleGroupSelectAll == null ? void 0 : onToggleGroupSelectAll(group);
-                        },
-                        children: `Select all ${group.label ?? ""}`.trim()
-                      }
-                    )
-                  ]
-                }
-              ),
-              group.items.map((item) => {
-                const itemDraggable = groupDraggable && item.isDraggable !== false;
-                return renderRow(item, group.id, itemDraggable);
-              })
-            ] }, group.id);
-          }) : items.map((item) => {
-            const itemDraggable = enableReorder && item.isDraggable !== false;
-            return renderRow(item, null, itemDraggable);
-          })
-        ]
-      }
+                ) }),
+                /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-alert-dlg__actions", children: [
+                  showSecondary && secondaryConfig && /* @__PURE__ */ jsxRuntime.jsx(
+                    Button.ArvoButton,
+                    {
+                      label: secondaryConfig.label,
+                      icon: secondaryConfig.icon,
+                      variant: "secondary",
+                      size: "md",
+                      isDisabled: isLoading || isDisabled || secondaryConfig.isDisabled,
+                      isLoading: secondaryConfig.isLoading,
+                      onClick: handleSecondaryClick
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntime.jsx(
+                    Button.ArvoButton,
+                    {
+                      label: primaryConfig.label,
+                      icon: primaryConfig.icon,
+                      variant: hasDangerAction ? "danger" : "primary",
+                      size: "md",
+                      isDisabled: isLoading || isDisabled || primaryConfig.isDisabled || isPrimaryDisabledByConfirm,
+                      isLoading: primaryConfig.isLoading,
+                      onClick: handlePrimaryClick
+                    }
+                  )
+                ] })
+              ] })
+            ]
+          }
+        )
+      ] }),
+      portalTarget
     );
   }
 );
-FilterList.displayName = "ArvoHybridPopoverFilterList";
-exports.default = FilterList;
+exports.ArvoAlertDialog = ArvoAlertDialog;
 //# sourceMappingURL=index46.cjs.map

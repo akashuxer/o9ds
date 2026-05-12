@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const utils = require("@arvo/utils");
+const MessageAlert = require("../MessageAlert/MessageAlert.cjs");
 let _idCounter = 0;
 const _ArvoCheckbox = class _ArvoCheckbox {
   constructor(element, options) {
     this._inputEl = null;
     this._fieldEl = null;
     this._labelEl = null;
+    this._inlineAlert = null;
     this._inlineAlertEl = null;
     this._inputId = "";
     this._errorId = "";
@@ -85,19 +87,24 @@ const _ArvoCheckbox = class _ArvoCheckbox {
     }
     this._fieldEl.appendChild(this._inputEl);
     if (label) {
-      this._labelEl = document.createElement("span");
-      this._labelEl.className = "arvo-checkbox__lbl";
-      this._labelEl.textContent = label;
+      this._labelEl = utils.createFormLabel({
+        text: label,
+        as: "span",
+        isDisabled,
+        isInvalid
+      });
+      this._labelEl.classList.add("arvo-checkbox__lbl");
       this._fieldEl.appendChild(this._labelEl);
     }
     el.appendChild(this._fieldEl);
     if (useInlineAlert) {
       const message = errorMsg || "Error";
-      this._inlineAlertEl = utils.createInlineAlert({
+      this._inlineAlert = MessageAlert.ArvoMessageAlert.initialize(document.createElement("div"), {
         type: "error",
         message,
         id: this._errorId
       });
+      this._inlineAlertEl = this._inlineAlert.el;
       if (!isInvalid) {
         this._inlineAlertEl.style.display = "none";
       }
@@ -208,11 +215,15 @@ const _ArvoCheckbox = class _ArvoCheckbox {
     this._options.label = label;
     if (label) {
       if (this._labelEl) {
-        this._labelEl.textContent = label;
+        this._labelEl.firstChild.textContent = label;
       } else {
-        this._labelEl = document.createElement("span");
-        this._labelEl.className = "arvo-checkbox__lbl";
-        this._labelEl.textContent = label;
+        this._labelEl = utils.createFormLabel({
+          text: label,
+          as: "span",
+          isDisabled: this._options.isDisabled,
+          isInvalid: this._options.isInvalid
+        });
+        this._labelEl.classList.add("arvo-checkbox__lbl");
         (_a = this._fieldEl) == null ? void 0 : _a.appendChild(this._labelEl);
       }
     } else {
@@ -238,7 +249,7 @@ const _ArvoCheckbox = class _ArvoCheckbox {
     (_a = this._element) == null ? void 0 : _a.classList.toggle("is-readonly", state);
   }
   setError(messageOrFalse) {
-    var _a, _b;
+    var _a, _b, _c;
     const hasError = messageOrFalse !== false;
     this._options.isInvalid = hasError;
     if (hasError) {
@@ -250,7 +261,7 @@ const _ArvoCheckbox = class _ArvoCheckbox {
       }
       if (this._options.errorDisplay === "inline") {
         if (this._inlineAlertEl) {
-          utils.updateInlineAlert(this._inlineAlertEl, { message: msg });
+          (_b = this._inlineAlert) == null ? void 0 : _b.message(msg);
           this._inlineAlertEl.style.display = "";
         }
         if (this._inputEl) {
@@ -259,7 +270,7 @@ const _ArvoCheckbox = class _ArvoCheckbox {
       }
     } else {
       this._options.errorMsg = null;
-      (_b = this._element) == null ? void 0 : _b.classList.remove("has-error");
+      (_c = this._element) == null ? void 0 : _c.classList.remove("has-error");
       if (this._inputEl) {
         this._inputEl.removeAttribute("aria-invalid");
         this._inputEl.removeAttribute("aria-describedby");
@@ -287,9 +298,11 @@ const _ArvoCheckbox = class _ArvoCheckbox {
     return this._options.value;
   }
   destroy() {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     const el = this._element;
     if (!el) return;
+    (_a = this._inlineAlert) == null ? void 0 : _a.destroy();
+    this._inlineAlert = null;
     if (this._inputEl) {
       this._inputEl.removeEventListener("change", this._boundHandleChange);
       this._inputEl.removeEventListener("focus", this._boundHandleFocus);
@@ -306,10 +319,10 @@ const _ArvoCheckbox = class _ArvoCheckbox {
     el.removeAttribute("aria-busy");
     el.removeAttribute("data-excluded");
     el.removeAttribute("data-indeterminate");
-    (_a = this._inputEl) == null ? void 0 : _a.remove();
-    (_b = this._fieldEl) == null ? void 0 : _b.remove();
-    (_c = this._labelEl) == null ? void 0 : _c.remove();
-    (_d = this._inlineAlertEl) == null ? void 0 : _d.remove();
+    (_b = this._inputEl) == null ? void 0 : _b.remove();
+    (_c = this._fieldEl) == null ? void 0 : _c.remove();
+    (_d = this._labelEl) == null ? void 0 : _d.remove();
+    (_e = this._inlineAlertEl) == null ? void 0 : _e.remove();
     this._element = null;
     this._inputEl = null;
     this._fieldEl = null;

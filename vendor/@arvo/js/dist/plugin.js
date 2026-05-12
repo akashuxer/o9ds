@@ -1,12 +1,18 @@
 import { setupOverlayPlugin } from "./setup/overlay-setup.js";
+import { ArvoDrawer } from "./components/Drawer/Drawer.js";
+import { ArvoSidePanel } from "./components/SidePanel/SidePanel.js";
 import { ArvoAlertDialog } from "./components/AlertDialog/AlertDialog.js";
 import { ArvoListbox } from "./components/Listbox/Listbox.js";
 import { ArvoDropdownIconButton } from "./components/DropdownIconButton/DropdownIconButton.js";
+import { ArvoSplitIconButton } from "./components/SplitIconButton/SplitIconButton.js";
+import { ArvoSplitButton } from "./components/SplitButton/SplitButton.js";
 import { ArvoDropdownButton } from "./components/DropdownButton/DropdownButton.js";
 import { ArvoCombobox } from "./components/Combobox/Combobox.js";
 import { ArvoSelect } from "./components/Select/Select.js";
 import { ArvoSearch } from "./components/Search/Search.js";
 import { ArvoActionMenu } from "./components/ActionMenu/ActionMenu.js";
+import { ArvoMessageAlert } from "./components/MessageAlert/MessageAlert.js";
+import { ArvoBannerAlert } from "./components/BannerAlert/BannerAlert.js";
 import { ArvoBadgeAlert } from "./components/BadgeAlert/BadgeAlert.js";
 import { ArvoBreadcrumb } from "./components/Breadcrumb/Breadcrumb.js";
 import { ArvoTabstrip } from "./components/Tabstrip/Tabstrip.js";
@@ -14,6 +20,7 @@ import { ArvoIconButtonLink } from "./components/IconButtonLink/IconButtonLink.j
 import { ArvoButtonLink } from "./components/ButtonLink/ButtonLink.js";
 import { ArvoLink } from "./components/Link/Link.js";
 import { ArvoFabButton } from "./components/FabButton/FabButton.js";
+import { ArvoSegmentedControl } from "./components/SegmentedControl/SegmentedControl.js";
 import { ArvoButtonGroup } from "./components/ButtonGroup/ButtonGroup.js";
 import { ArvoHybridPopover } from "./components/HybridPopover/HybridPopover.js";
 import { ArvoPopover } from "./components/Popover/Popover.js";
@@ -41,6 +48,7 @@ const ALL_COMPONENTS = {
   arvoPopover: { Class: ArvoPopover, dataKey: "arvoPopover" },
   arvoHybridPopover: { Class: ArvoHybridPopover, dataKey: "arvoHybridPopover" },
   arvoButtonGroup: { Class: ArvoButtonGroup, dataKey: "arvoButtonGroup" },
+  arvoSegmentedControl: { Class: ArvoSegmentedControl, dataKey: "arvoSegmentedControl" },
   arvoFabButton: { Class: ArvoFabButton, dataKey: "arvoFabButton" },
   arvoLink: { Class: ArvoLink, dataKey: "arvoLink" },
   arvoButtonLink: { Class: ArvoButtonLink, dataKey: "arvoButtonLink" },
@@ -48,14 +56,20 @@ const ALL_COMPONENTS = {
   arvoTabstrip: { Class: ArvoTabstrip, dataKey: "arvoTabstrip" },
   arvoBreadcrumb: { Class: ArvoBreadcrumb, dataKey: "arvoBreadcrumb" },
   arvoBadgeAlert: { Class: ArvoBadgeAlert, dataKey: "arvoBadgeAlert" },
+  arvoBannerAlert: { Class: ArvoBannerAlert, dataKey: "arvoBannerAlert" },
+  arvoMessageAlert: { Class: ArvoMessageAlert, dataKey: "arvoMessageAlert" },
   arvoActionMenu: { Class: ArvoActionMenu, dataKey: "arvoActionMenu" },
   arvoSearch: { Class: ArvoSearch, dataKey: "arvoSearch" },
   arvoSelect: { Class: ArvoSelect, dataKey: "arvoSelect" },
   arvoCombobox: { Class: ArvoCombobox, dataKey: "arvoCombobox" },
   arvoDropdownButton: { Class: ArvoDropdownButton, dataKey: "arvoDropdownButton" },
+  arvoSplitButton: { Class: ArvoSplitButton, dataKey: "arvoSplitButton" },
+  arvoSplitIconButton: { Class: ArvoSplitIconButton, dataKey: "arvoSplitIconButton" },
   arvoDropdownIconButton: { Class: ArvoDropdownIconButton, dataKey: "arvoDropdownIconButton" },
   arvoListbox: { Class: ArvoListbox, dataKey: "arvoListbox" },
-  arvoAlertDialog: { Class: ArvoAlertDialog, dataKey: "arvoAlertDialog" }
+  arvoAlertDialog: { Class: ArvoAlertDialog, dataKey: "arvoAlertDialog" },
+  arvoSidePanel: { Class: ArvoSidePanel, dataKey: "arvoSidePanel" },
+  arvoDrawer: { Class: ArvoDrawer, dataKey: "arvoDrawer" }
 };
 function registerArvoPlugins($, components) {
   const entries = components ? components.map((name) => [name, ALL_COMPONENTS[name]]).filter(([, e]) => e) : Object.entries(ALL_COMPONENTS);

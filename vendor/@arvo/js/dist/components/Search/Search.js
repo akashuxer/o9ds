@@ -1,6 +1,6 @@
-import { getDefaultErrorMsg, createErrorTooltipIcon, createInlineAlert, updateErrorTooltipIcon, updateInlineAlert } from "@arvo/utils";
 import { connectTooltip, tooltipManager } from "@arvo/core";
 import { ArvoIconButton } from "../IconButton/IconButton.js";
+import { ArvoMessageAlert, ARVO_MSG_ALERT_DEFAULT_ERROR } from "../MessageAlert/MessageAlert.js";
 let _idCounter = 0;
 function parseShortcut(shortcut) {
   const parts = shortcut.split("+").map((p) => p.trim().toLowerCase());
@@ -34,6 +34,8 @@ const _ArvoSearch = class _ArvoSearch {
     this._nextBtn = null;
     this._errIcoEl = null;
     this._errIcoConnector = null;
+    this._errMsgAlert = null;
+    this._inlineAlert = null;
     this._inlineAlertEl = null;
     this._previousValue = "";
     this._errorId = "";
@@ -198,8 +200,13 @@ const _ArvoSearch = class _ArvoSearch {
       this._actionsEl.appendChild(this._nextEl);
     }
     if (useTooltipError) {
-      const tooltip = errorMsg ?? getDefaultErrorMsg();
-      this._errIcoEl = createErrorTooltipIcon({ tooltip });
+      const tooltip = errorMsg ?? ARVO_MSG_ALERT_DEFAULT_ERROR;
+      this._errMsgAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
+        type: "error",
+        isInline: true,
+        message: tooltip
+      });
+      this._errIcoEl = this._errMsgAlert.el;
       this._errIcoEl.classList.add("arvo-search__err-ico");
       this._errIcoConnector = connectTooltip(tooltipManager, {
         anchor: this._errIcoEl,
@@ -213,12 +220,13 @@ const _ArvoSearch = class _ArvoSearch {
     this._fieldEl.appendChild(this._borderEl);
     el.appendChild(this._fieldEl);
     if (useInlineAlert) {
-      const message = errorMsg ?? getDefaultErrorMsg();
-      this._inlineAlertEl = createInlineAlert({
+      const message = errorMsg ?? ARVO_MSG_ALERT_DEFAULT_ERROR;
+      this._inlineAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
         type: "error",
         message,
         id: this._errorId
       });
+      this._inlineAlertEl = this._inlineAlert.el;
       this._inlineAlertEl.style.display = "none";
       el.appendChild(this._inlineAlertEl);
     }
@@ -626,7 +634,7 @@ const _ArvoSearch = class _ArvoSearch {
     this._applyWidthStyle();
   }
   setError(message) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e;
     const useTooltipError = this._options.errorDisplay === "tooltip";
     const useInlineAlert = this._options.errorDisplay === "inline";
     if (message === false) {
@@ -642,7 +650,7 @@ const _ArvoSearch = class _ArvoSearch {
       }
       return;
     }
-    const msg = message || getDefaultErrorMsg();
+    const msg = message || ARVO_MSG_ALERT_DEFAULT_ERROR;
     this._options.isInvalid = true;
     this._options.errorMsg = msg;
     (_b = this._element) == null ? void 0 : _b.classList.add("has-error");
@@ -653,14 +661,14 @@ const _ArvoSearch = class _ArvoSearch {
       }
     }
     if (useTooltipError && this._errIcoEl) {
-      updateErrorTooltipIcon(this._errIcoEl, msg);
+      (_c = this._errMsgAlert) == null ? void 0 : _c.message(msg);
       if (this._errIcoConnector) {
         this._errIcoConnector.update({ content: msg });
       }
-      (_c = this._element) == null ? void 0 : _c.classList.add("error-tooltip");
+      (_d = this._element) == null ? void 0 : _d.classList.add("error-tooltip");
     }
     if (useInlineAlert && this._inlineAlertEl) {
-      updateInlineAlert(this._inlineAlertEl, { message: msg });
+      (_e = this._inlineAlert) == null ? void 0 : _e.message(msg);
       this._inlineAlertEl.style.display = "";
     }
     this._updateSeparators();
@@ -695,7 +703,7 @@ const _ArvoSearch = class _ArvoSearch {
     this._updatePadding();
   }
   destroy() {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     const el = this._element;
     if (!el) return;
     if (this._inputEl) {
@@ -722,9 +730,13 @@ const _ArvoSearch = class _ArvoSearch {
       this._resizeObserver.disconnect();
       this._resizeObserver = null;
     }
-    (_a = this._clearBtn) == null ? void 0 : _a.destroy();
-    (_b = this._prevBtn) == null ? void 0 : _b.destroy();
-    (_c = this._nextBtn) == null ? void 0 : _c.destroy();
+    (_a = this._inlineAlert) == null ? void 0 : _a.destroy();
+    this._inlineAlert = null;
+    (_b = this._errMsgAlert) == null ? void 0 : _b.destroy();
+    this._errMsgAlert = null;
+    (_c = this._clearBtn) == null ? void 0 : _c.destroy();
+    (_d = this._prevBtn) == null ? void 0 : _d.destroy();
+    (_e = this._nextBtn) == null ? void 0 : _e.destroy();
     el.classList.remove(
       "arvo-search",
       "arvo-search--filter",
@@ -741,8 +753,8 @@ const _ArvoSearch = class _ArvoSearch {
     el.removeAttribute("aria-busy");
     el.removeAttribute("aria-disabled");
     el.style.removeProperty("--arvo-form-input-width");
-    (_d = this._inlineAlertEl) == null ? void 0 : _d.remove();
-    (_e = this._fieldEl) == null ? void 0 : _e.remove();
+    (_f = this._inlineAlertEl) == null ? void 0 : _f.remove();
+    (_g = this._fieldEl) == null ? void 0 : _g.remove();
     this._element = null;
     this._inputEl = null;
     this._fieldEl = null;
@@ -759,7 +771,7 @@ const _ArvoSearch = class _ArvoSearch {
     this._prevBtn = null;
     this._nextEl = null;
     this._nextBtn = null;
-    (_f = this._errIcoConnector) == null ? void 0 : _f.destroy();
+    (_h = this._errIcoConnector) == null ? void 0 : _h.destroy();
     this._errIcoConnector = null;
     this._errIcoEl = null;
     this._inlineAlertEl = null;

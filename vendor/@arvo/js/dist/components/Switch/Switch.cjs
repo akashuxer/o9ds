@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const utils = require("@arvo/utils");
 let _idCounter = 0;
 const _ArvoSwitch = class _ArvoSwitch {
   constructor(element, options) {
@@ -82,17 +83,15 @@ const _ArvoSwitch = class _ArvoSwitch {
     el.appendChild(this._fieldEl);
   }
   _createLabelEl(text, isRequired) {
-    const lbl = document.createElement("span");
-    lbl.className = "arvo-sw__lbl";
+    const { isDisabled } = this._options;
+    const lbl = utils.createFormLabel({
+      text,
+      as: "span",
+      isRequired,
+      isDisabled
+    });
+    lbl.classList.add("arvo-sw__lbl");
     lbl.id = this._labelId;
-    lbl.textContent = text;
-    if (isRequired) {
-      const asterisk = document.createElement("span");
-      asterisk.className = "arvo-sw__required";
-      asterisk.setAttribute("aria-hidden", "true");
-      asterisk.textContent = "*";
-      lbl.appendChild(asterisk);
-    }
     return lbl;
   }
   _bindEvents() {

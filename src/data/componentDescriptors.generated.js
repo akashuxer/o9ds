@@ -117,7 +117,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "'always' | 'hover'",
         "default": "always",
         "required": "No",
-        "desc": "Controls visibility of trailing action buttons (__actions) in menu items. 'always': actions are always visible. 'hover': actions are hidden by default and revealed on item hover (.no-touch) or when any action within the item has focus (:focus-within)."
+        "desc": "Controls visibility of trailing action buttons (__actions) in menu items. 'always': actions are always visible. 'hover': actions are hidden by default and revealed on item hover (wrapped in @media (hover: hover) and (pointer: fine)) or when any action within the item has focus (:focus-within)."
       },
       {
         "prop": "submenuTrigger",
@@ -841,7 +841,7 @@ export const COMPONENT_DESCRIPTORS = {
     "abbreviation": "bdg-alert",
     "category": "Feedback",
     "status": "stable",
-    "description": "Compact status badge for displaying short alert messages with semantic color coding. Renders as a static inline-flex container with an optional status icon and a text message. Two visual variants: primary (filled background) and outline (bordered). Six semantic types map to the design system's standard feedback colors: positive, info, neutral, warning, negative, and block. Two sizes: sm (12px text, 14px icon) and lg (14px text, 16px icon). Unlike the inline-alert shared pattern which is positioned below form inputs, BadgeAlert is a self-contained badge with its own background/border for use in any layout context.",
+    "description": "Compact status badge for displaying short alert messages with semantic color coding. Renders as a static inline-flex container with an optional status icon and a text message. Two visual variants: primary (filled background) and outline (bordered). Six semantic types map to the design system's standard feedback colors: positive, info, neutral, warning, negative, and block. Two sizes: sm (12px text, 14px icon) and lg (14px text, 16px icon). Unlike the msg-alert shared pattern which is positioned below form inputs, BadgeAlert is a self-contained badge with its own background/border for use in any layout context.",
     "bem": {
       "block": "arvo-bdg-alert",
       "elements": [
@@ -1025,6 +1025,229 @@ export const COMPONENT_DESCRIPTORS = {
       }
     ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=19956-19933&m=dev"
+  },
+  "banner-alert": {
+    "slug": "banner-alert",
+    "name": "BannerAlert",
+    "abbreviation": "bnr-alert",
+    "category": "Feedback",
+    "status": "new",
+    "description": "Full-width inline alert banner for persistent contextual feedback. Renders as a horizontal bar with a 2px left border colored by semantic type, a type-specific subtle background, a leading status icon, and a content area containing an optional title, a required message, and an optional link. Two layout modes: default (title + multi-line message + optional link, 16px vertical padding) and compact (message only, tighter 8-10px padding). Optionally dismissible via a 16px close button on the right side. Six semantic types (positive, info, neutral, warning, negative, block) controlling border color, background tint, title/icon color, and icon glyph — using the same type vocabulary and icon set as BadgeAlert and Toast. Unlike Toast (ephemeral overlay notification with auto-dismiss) and BadgeAlert (compact inline status badge), BannerAlert is a persistent page-level notification that occupies the full width of its container and remains visible until explicitly dismissed or programmatically removed. Also used inside the panel-shell __banner slot (SidePanel, Drawer) as a contextual status strip.",
+    "bem": {
+      "block": "arvo-bnr-alert",
+      "elements": [
+        {
+          "name": "ico",
+          "optional": "No",
+          "desc": "Leading status icon from o9con icon font. Glyph set per type via CSS ::before content. Aligned to the top of the content. 16px for all types except block (14px). aria-hidden='true'."
+        },
+        {
+          "name": "content",
+          "optional": "No",
+          "desc": "Flex column wrapper for copy + link. In default mode: gap 16px between __copy and __link, py 16px. In compact mode: contains only __msg, py 8px, no gap."
+        },
+        {
+          "name": "copy",
+          "optional": "Yes",
+          "desc": "Wrapper for title + message in default mode. Flex column with 4px gap. Not rendered in compact mode."
+        },
+        {
+          "name": "title",
+          "optional": "Yes",
+          "desc": "Optional title text. Medium weight (arvo-font-h14-m), type-colored. Single-line truncated with ellipsis (16px fixed height, overflow hidden, white-space nowrap). Only rendered in default (non-compact) mode."
+        },
+        {
+          "name": "msg",
+          "optional": "No",
+          "desc": "Message body text. Regular weight (arvo-font-p12-r), secondary text color (--arvo-color-t-secondary). Multi-line in default mode, single-line in compact mode (truncates with ellipsis in compact when constrained)."
+        },
+        {
+          "name": "link",
+          "optional": "Yes",
+          "desc": "Optional link area below the copy block in default mode. Accepts a configured ArvoLink instance (React: ReactNode, JS: HTMLElement). Uses arvo-font-l12-ru styling. Only rendered in default (non-compact) mode."
+        },
+        {
+          "name": "close",
+          "optional": "Yes",
+          "desc": "Dismiss button. Bespoke internal <button type='button'> element (NOT an ArvoIconButton instance to avoid size-system coupling). 16x16 with o9con-close icon. Always visible when isDismissible is true. Clicking fires bnr-alert:dismiss event and calls onDismiss callback. Styled to match the visual appearance of a tertiary icon button."
+        }
+      ],
+      "variants": [],
+      "sizes": [],
+      "layouts": [
+        {
+          "name": "compact",
+          "desc": "Compact layout mode — renders only the message (no title, no link), tighter vertical padding (icon area pt 10px / pb 8px, content py 8px, close area pt 10px / pb 12px). Used when vertical space is constrained (e.g., panel-shell __banner slot, narrow notification areas)."
+        }
+      ],
+      "states": [
+        {
+          "name": "loading",
+          "desc": "Pattern A shimmer overlay covering the entire banner. Suppresses pointer-events and sets aria-busy='true'."
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "type",
+        "type": "'positive' | 'info' | 'neutral' | 'warning' | 'negative' | 'block'",
+        "default": "info",
+        "required": "No",
+        "desc": "Semantic alert type controlling left border color, background tint, title/icon color, and icon glyph. Negative and block types default to role='alert' for immediate screen-reader announcement; all other types default to role='status' for polite announcement."
+      },
+      {
+        "prop": "title",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional title text displayed above the message. Uses medium font weight (arvo-font-h14-m) and type-specific color. Single-line truncated with ellipsis. Ignored in compact mode."
+      },
+      {
+        "prop": "message",
+        "type": "string",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Body message text. Uses regular font weight (arvo-font-p12-r) and secondary text color. Multi-line wrapping in default mode. In compact mode, this is the only content displayed."
+      },
+      {
+        "prop": "isCompact",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Layout mode toggle. When true, renders only the message (no title, no link) with tighter vertical padding. Used when vertical space is constrained."
+      },
+      {
+        "prop": "isDismissible",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Whether to render the close button on the right side. When true, clicking the close button fires the bnr-alert:dismiss event and calls onDismiss. The component does NOT auto-remove itself — the consumer controls removal via state (React) or destroy() (JS). React: changing the prop across re-renders works as expected. JS: read-once at construction; rebuild the instance via destroy() + initialize() to change."
+      },
+      {
+        "prop": "link",
+        "type": "ReactNode (React) | HTMLElement (JS)",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional link element rendered below the message in default mode. In React, pass a configured <ArvoLink> component. In JS, pass a DOM element (e.g., a configured ArvoLink instance). Ignored in compact mode."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Pattern A shimmer loading state. When true, a shimmer overlay covers the entire banner surface and pointer-events are suppressed."
+      },
+      {
+        "prop": "role",
+        "type": "'status' | 'alert'",
+        "default": "auto",
+        "required": "No",
+        "desc": "ARIA role applied to the root element. Defaults to 'auto' which resolves to role='alert' for negative and block types (implicit aria-live='assertive') and role='status' for all other types (implicit aria-live='polite'). Explicitly setting 'status' or 'alert' overrides the type-based default. React: changing the prop across re-renders works as expected. JS: read-once at construction (the type() setter re-resolves role from type only when role was NOT explicitly provided in options)."
+      },
+      {
+        "prop": "onDismiss",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback fired when the close button is clicked. Receives no arguments. The consumer is responsible for removing the component from the DOM in response."
+      },
+      {
+        "prop": "className",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Additional CSS classes to apply to the root element (React only)."
+      }
+    ],
+    "events": [
+      {
+        "event": "bnr-alert:dismiss",
+        "payload": "{  }",
+        "desc": "Fires when the close button is clicked or dismiss() is called programmatically. The consumer is responsible for removing the component from the DOM in response."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoBannerAlertOptions)",
+        "returns": "ArvoBannerAlert",
+        "desc": "Static factory. Creates a BannerAlert instance, builds DOM structure (__ico + __content + optional __close), applies initial modifier classes."
+      },
+      {
+        "method": "type(newType: string | undefined)",
+        "returns": "string | void",
+        "desc": "Dual-purpose getter/setter for the semantic alert type. Changes border color, background, title/icon color, icon glyph, and resolved ARIA role."
+      },
+      {
+        "method": "message(text: string | undefined)",
+        "returns": "string | void",
+        "desc": "Dual-purpose getter/setter for the message text."
+      },
+      {
+        "method": "title(text: string | null | undefined)",
+        "returns": "string | null | void",
+        "desc": "Dual-purpose getter/setter for the title text. Pass null to hide the title. No-op in compact mode."
+      },
+      {
+        "method": "setLink(element: HTMLElement | null)",
+        "returns": "void",
+        "desc": "Set or remove the link element. No-op in compact mode."
+      },
+      {
+        "method": "loading(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Dual-purpose getter/setter for Pattern A loading state."
+      },
+      {
+        "method": "dismiss()",
+        "returns": "void",
+        "desc": "Programmatically dismiss the alert. Fires bnr-alert:dismiss event. Does NOT auto-destroy — the consumer is responsible for removing the element."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Clean up DOM references, remove event listeners, and restore original element state."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-label",
+        "when": "Optional. When the visible content is insufficient context, consumers provide aria-label."
+      },
+      {
+        "attr": "aria-live",
+        "when": "Implicitly derived from role. 'polite' for status, 'assertive' for alert."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "Set to 'true' during isLoading."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Tab",
+        "action": "Moves focus to the link (if present) and then to the close button (if isDismissible)."
+      },
+      {
+        "key": "Enter",
+        "action": "Activates the focused link or close button."
+      },
+      {
+        "key": "Space",
+        "action": "Activates the focused close button."
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Colors",
+        "vars": [
+          "--arvo-bnr-alert-bg",
+          "--arvo-bnr-alert-border-color",
+          "--arvo-bnr-alert-title-color",
+          "--arvo-bnr-alert-icon-color"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/sjRT1G7HNXxv3vIxdzs64a/o9-Arvo-Design-System-%7C-Design-Library--NEW-?node-id=19956-19852&m=dev"
   },
   "breadcrumb": {
     "slug": "breadcrumb",
@@ -1628,13 +1851,6 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Shows Pattern A skeleton loading overlay. Prevents interaction and hides content."
       },
       {
-        "prop": "tooltip",
-        "type": "string | TooltipConfig",
-        "default": "—",
-        "required": "No",
-        "desc": "Supplementary information shown via the arvo tooltip system on hover/focus. Accepts a string or a config object with content, placement, and shortcut."
-      },
-      {
         "prop": "onClick",
         "type": "function",
         "default": "—",
@@ -2096,7 +2312,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "bdy",
           "optional": "No",
-          "desc": "Body wrapper containing __items and the optional inline-alert. Enables correct layout when labelPosition is 'start' (label and body sit side-by-side in a row)."
+          "desc": "Body wrapper containing __items and the optional message-alert. Enables correct layout when labelPosition is 'start' (label and body sit side-by-side in a row)."
         },
         {
           "name": "items",
@@ -2189,14 +2405,14 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Shows group-level validation error state. When true and errorMsg is set, the shared inline-alert is displayed below __items. Does NOT cascade error styling to individual children."
+        "desc": "Shows group-level validation error state. When true and errorMsg is set, the ArvoMessageAlert is displayed below __items. Does NOT cascade error styling to individual children."
       },
       {
         "prop": "errorMsg",
         "type": "string",
         "default": "—",
         "required": "No",
-        "desc": "Error message text displayed in the shared inline-alert below __items when invalid is true. When null and invalid is true, no inline alert is shown."
+        "desc": "Error message text displayed in the ArvoMessageAlert below __items when invalid is true. When null and invalid is true, no message alert is shown."
       },
       {
         "prop": "isLoading",
@@ -2342,7 +2558,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "err-msg",
           "optional": "Yes",
-          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-inline-alert block."
+          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-msg-alert block."
         }
       ],
       "variants": [],
@@ -2626,7 +2842,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "error-ico",
           "optional": "Yes",
-          "desc": "Trailing error tooltip icon (o9con-blocker-action-filled-alt) rendered when is-error is true. Sits outside the content wrapper, to the right of the label/avatar group. Provided by the inline-alert shared pattern (error-tooltip-icon mixin)."
+          "desc": "Trailing error tooltip icon (o9con-blocker-action-filled-alt) rendered when is-error is true. Sits outside the content wrapper, to the right of the label/avatar group. Provided by the msg-alert shared pattern (MessageAlert isInline mode mixin)."
         },
         {
           "name": "clear",
@@ -2745,7 +2961,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Error state. Adds 1px solid b-negative border (overrides variant border) and renders the __error-ico (error-tooltip-icon shared pattern, 16px, t-negative) to the right of the content. Focus-visible thickens the negative border to 1.5px."
+        "desc": "Error state. Adds 1px solid b-negative border (overrides variant border) and renders the __error-ico (MessageAlert isInline mode shared pattern, 16px, t-negative) to the right of the content. Focus-visible thickens the negative border to 1.5px."
       },
       {
         "prop": "hasExclude",
@@ -3123,7 +3339,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "err-ico",
           "optional": "Yes",
-          "desc": "Error tooltip icon inside field. Visible when invalid && errorDisplay === 'tooltip'. Uses the error-tooltip-icon mixin."
+          "desc": "Error tooltip icon inside field. Visible when invalid && errorDisplay === 'tooltip'. Uses the MessageAlert isInline mode mixin."
         },
         {
           "name": "ico",
@@ -3217,7 +3433,7 @@ export const COMPONENT_DESCRIPTORS = {
         },
         {
           "name": "error-tooltip",
-          "desc": "Tooltip error mode (invalid && errorDisplay === 'tooltip'). Shows __err-ico, hides inline-alert."
+          "desc": "Tooltip error mode (invalid && errorDisplay === 'tooltip'). Shows ArvoMessageAlert isInline, hides message-alert below."
         },
         {
           "name": "is-disabled",
@@ -3302,7 +3518,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "string",
         "default": "—",
         "required": "No",
-        "desc": "Error message shown via inline-alert pattern when invalid is true."
+        "desc": "Error message shown via msg-alert pattern when invalid is true."
       },
       {
         "prop": "errorDisplay",
@@ -3624,6 +3840,444 @@ export const COMPONENT_DESCRIPTORS = {
     ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=26482-62668&m=dev"
   },
+  "drawer": {
+    "slug": "drawer",
+    "name": "Drawer",
+    "abbreviation": "drw",
+    "category": "Overlays",
+    "status": "stable",
+    "description": "Viewport-anchored slide-in overlay panel. Always portaled (default document.body, configurable container) and always overlay -- there is no layout/pinned mode (use ArvoSidePanel when pinning into the layout is meaningful). Composes the same content shell as ArvoSidePanel (header, sticky pre-body region, scrollable body, footer, optional items+filter pipeline) via the shared panel-shell pattern, and adds Drawer-only positional concerns: portal mounting, optional backdrop/mask, scroll lock, focus trap, slide-in animation, and Escape/mask-click dismissal. Used for app-shell drawers (settings, notifications, comments), modal-ish task drawers, and any side panel that should overlay the entire viewport rather than a single page section.",
+    "bem": {
+      "block": "arvo-drw",
+      "elements": [
+        {
+          "name": "backdrop",
+          "optional": "Yes",
+          "desc": "Optional fixed-position backdrop sibling rendered BEFORE __pane in DOM order so the pane sits above it. Only present when hasMask resolves truthy. Click target for closeOnMaskClick. Created via @arvo/core/overlay/backdrop.createBackdropManager(). Carries arvo-drw__backdrop AND arvo-backdrop classes for portability."
+        },
+        {
+          "name": "pane",
+          "optional": "No",
+          "desc": "The drawer pane wrapper. Fixed-position, anchored to one edge of the viewport (or the configured container), flex column. Sets pane width via --arvo-drw-width and applies a side-aware drop shadow (--arvo-shadow-left for side='right', --arvo-shadow-right for side='left'). Hosts the panel-shell rendered tree (header, sticky, body, footer) as children -- the shell's BEM elements use parentBlock='arvo-drw'."
+        }
+      ],
+      "variants": [],
+      "sizes": [],
+      "layouts": [
+        {
+          "name": "side-left",
+          "desc": "Side='left' -- pane anchors to the left edge of the container. Slides in from the left (translateX(-100%) -> 0). Drop shadow points right (--arvo-shadow-right)."
+        },
+        {
+          "name": "side-right",
+          "desc": "Side='right' (default) -- pane anchors to the right edge. Slides in from the right (translateX(100%) -> 0). Drop shadow points left (--arvo-shadow-left)."
+        },
+        {
+          "name": "side-top",
+          "desc": "Side='top' -- reserved for future top-sheet variant. v1 implementation must accept the value but warn in dev that it falls back to 'right' until the top-sheet layout ships."
+        },
+        {
+          "name": "side-bottom",
+          "desc": "Side='bottom' -- reserved for future bottom-sheet variant. v1 falls back to 'right' with a dev warning."
+        }
+      ],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Drawer is currently visible. transform: translateX(0); opacity: 1. Mutually exclusive with the absence of .open which keeps the pane hidden via display:none or transform offset. Always reflects the controlled or internal isOpen state."
+        },
+        {
+          "name": "loading",
+          "desc": "Pattern B skeleton loading. Inherited via panel-shell -- hides __sticky and __footer, shows skeleton rows in __body. Sets aria-busy='true' on __pane."
+        },
+        {
+          "name": "is-disabled",
+          "desc": "Whole-drawer disabled state. Pointer-events disabled inside the pane; child instances inherit disabled. Mask click and Escape are still honored (a disabled drawer must still be dismissible)."
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "side",
+        "type": "'left' | 'right' | 'top' | 'bottom'",
+        "default": "right",
+        "required": "No",
+        "desc": "Edge the pane anchors to. v1 implements 'left' and 'right' fully. 'top' and 'bottom' are reserved values that fall back to 'right' with a dev console.warn until the top/bottom-sheet layout ships."
+      },
+      {
+        "prop": "isOpen",
+        "type": "boolean",
+        "default": "—",
+        "required": "No",
+        "desc": "Controlled open state (React only). Pass null/undefined for uncontrolled. JS API exposes open()/close()/toggle() instead."
+      },
+      {
+        "prop": "defaultOpen",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Initial open state for uncontrolled usage (React only). Defaults to false (drawer hidden on mount)."
+      },
+      {
+        "prop": "onOpenChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback fired when the open state changes (React only). Receives the new boolean."
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback fired before the drawer opens. Return false (or a Promise resolving to false) to cancel the open."
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback fired before the drawer closes (Escape, mask click, X button, or programmatic close). Return false (or a Promise resolving to false) to cancel the close."
+      },
+      {
+        "prop": "hasMask",
+        "type": "boolean | ArvoDrawerMaskConfig",
+        "default": "false",
+        "required": "No",
+        "desc": "Whether to render a backdrop. true (default) renders a light backdrop with default opacity. Pass an ArvoDrawerMaskConfig for fine control. false hides the backdrop entirely (useful for non-modal app-shell drawers that overlay the viewport without dimming it)."
+      },
+      {
+        "prop": "closeOnEscape",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Whether pressing Escape closes the drawer. Defaults to true (matches modal-style dismissal expectations)."
+      },
+      {
+        "prop": "closeOnMaskClick",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Whether clicking the backdrop closes the drawer. Only meaningful when hasMask is truthy. Defaults to true. Per-mask override available via ArvoDrawerMaskConfig.closeOnClick."
+      },
+      {
+        "prop": "lockScroll",
+        "type": "boolean",
+        "default": "auto",
+        "required": "No",
+        "desc": "Whether to lock document.documentElement scroll while the drawer is open. 'auto' (default behavior of the implementation) locks when hasMask is truthy and does not lock when hasMask is false. Pass true/false to force. Lock/restore is handled via @arvo/core/overlay (page-scroll-lock helper)."
+      },
+      {
+        "prop": "container",
+        "type": "HTMLElement | (() => HTMLElement) | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Portal target for both __backdrop and __pane. null/undefined defaults to document.body. Passing an app-shell anchor lets the drawer overlay just that scope (e.g., a single workspace shell rather than the whole viewport). The container must be position:relative or position:fixed for the fixed-position pane to anchor correctly."
+      },
+      {
+        "prop": "width",
+        "type": "string | number",
+        "default": "320",
+        "required": "No",
+        "desc": "Pane width (left/right sides). Number is treated as px; string is a CSS value (e.g. '400px', '24vw'). Sets --arvo-drw-width on __pane. Clamped between --arvo-drw-min-width and --arvo-drw-max-width."
+      },
+      {
+        "prop": "minWidth",
+        "type": "string | number",
+        "default": "280",
+        "required": "No",
+        "desc": "Minimum pane width. Sets --arvo-drw-min-width."
+      },
+      {
+        "prop": "maxWidth",
+        "type": "string | number",
+        "default": "80vw",
+        "required": "No",
+        "desc": "Maximum pane width. Sets --arvo-drw-max-width. Defaults to 80vw to prevent the drawer from covering the full viewport."
+      },
+      {
+        "prop": "height",
+        "type": "string | number",
+        "default": "—",
+        "required": "No",
+        "desc": "Pane height. Reserved for top/bottom variants (future). Ignored for left/right sides in v1."
+      },
+      {
+        "prop": "animationDuration",
+        "type": "number",
+        "default": "200",
+        "required": "No",
+        "desc": "Slide-in/out duration in ms. Sets --arvo-drw-slide-duration. Backdrop fade duration matches."
+      },
+      {
+        "prop": "ariaLabel",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Explicit accessible name for __pane when no title is provided. Maps to aria-label."
+      },
+      {
+        "prop": "ariaLabelledBy",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional id reference for aria-labelledby. When omitted and a title is provided via the panel-shell title prop, aria-labelledby is auto-set to the panel-shell __title id."
+      },
+      {
+        "prop": "isClosable",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Passthrough to panel-shell. Whether to render the __close icon button at the end of __hdr-actions. Defaults to true (Drawer is dismissible by design)."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Passthrough to panel-shell. Whole-drawer disabled state."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Passthrough to panel-shell. Pattern B skeleton loading state."
+      },
+      {
+        "prop": "className",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Additional CSS classes on the host .arvo-drw element (React only)."
+      },
+      {
+        "prop": "_passthroughToPanelShell",
+        "type": "_documentation",
+        "default": "—",
+        "required": "No",
+        "desc": "The following props are forwarded verbatim to the embedded panel-shell. Their semantics, defaults, and validation are defined by the panel-shell shared pattern (see packages/utils/src/panel-shell.ts and the panel-shell entry in SHARED-PATTERNS-REGISTRY.json). Listed here so consumers reading the descriptor see the full Drawer surface area: title, hasHeader, hasBackButton, onBack, headerActions, stickyHeader, items, getItemId, filterKeys, getItemSearchText, renderItem, itemsRole, actions, hasFooter."
+      }
+    ],
+    "events": [
+      {
+        "event": "drw:open",
+        "payload": "{  }",
+        "desc": "Fires when the drawer opens (after the slide-in animation completes). Dispatched on __pane."
+      },
+      {
+        "event": "drw:close",
+        "payload": "{ reason: 'escape' | 'mask-click' | 'close-button' | 'programmatic' }",
+        "desc": "Fires when the drawer closes. Reason indicates how the close was initiated. Dispatched on __pane."
+      },
+      {
+        "event": "drw:mask-click",
+        "payload": "{  }",
+        "desc": "Fires when the backdrop is clicked. Dispatched on __pane BEFORE the close (if closeOnMaskClick is true). Consumers can listen to track mask interactions independently of the close event."
+      },
+      {
+        "event": "drw:back",
+        "payload": "{  }",
+        "desc": "Re-emitted from panel-shell on __pane when the back button is clicked."
+      },
+      {
+        "event": "drw:action",
+        "payload": "{ id: string, type: string }",
+        "desc": "Re-emitted from panel-shell on __pane when a header-action is activated."
+      },
+      {
+        "event": "drw:tab-select",
+        "payload": "{ id: string, index: number }",
+        "desc": "Re-emitted from panel-shell on __pane when a sticky-header tab is selected."
+      },
+      {
+        "event": "drw:search",
+        "payload": "{ value: string, matchedCount: number | null }",
+        "desc": "Re-emitted from panel-shell on __pane when the search query changes. matchedCount is the filtered items count when items is provided, otherwise null."
+      },
+      {
+        "event": "drw:item-activate",
+        "payload": "{ id: string, item: T }",
+        "desc": "Re-emitted from panel-shell on __pane when a list item row is activated via Enter or click."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoDrawerOptions)",
+        "returns": "ArvoDrawer",
+        "desc": "Static factory. Creates a Drawer instance, builds .arvo-drw and __pane structure, instantiates the panel-shell into __pane via createPanelShell({ parentBlock: 'arvo-drw', parent: __pane, options }), and registers the overlay with overlayHub. Does NOT open the drawer; call open() to slide it in."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": "Opens the drawer (slide-in + optional backdrop fade-in + scroll lock + focus trap). Calls onOpen -- if it returns false, open is cancelled. Stores the previously-focused element so close() can restore focus. Activates focus trap AFTER the slide-in animation completes (matches SidePanel overlay variant timing)."
+      },
+      {
+        "method": "close(reason: 'escape' | 'mask-click' | 'close-button' | 'programmatic' | undefined)",
+        "returns": "void",
+        "desc": "Closes the drawer (slide-out + backdrop fade-out + scroll restore + focus trap deactivation + return focus to previously-focused element). Calls onClose -- if it returns false, close is cancelled."
+      },
+      {
+        "method": "toggle()",
+        "returns": "void",
+        "desc": "Toggle open/closed."
+      },
+      {
+        "method": "isOpen()",
+        "returns": "boolean",
+        "desc": "Returns whether the drawer is currently open."
+      },
+      {
+        "method": "setItems(items: T[])",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell. Replace the items data and re-render __list."
+      },
+      {
+        "method": "setStickyHeader(config: ArvoPanelStickyHeaderConfig | false)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "setHeaderActions(actions: ArvoPanelHeaderAction[])",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell. Validates each entry's type field; unknown types are warned and skipped."
+      },
+      {
+        "method": "setActions(actions: ArvoPanelAction[] | false)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "updateAction(id: string, patch: Partial<ArvoPanelHeaderAction | ArvoPanelAction>)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "search(query: string | undefined)",
+        "returns": "string | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for the current search query."
+      },
+      {
+        "method": "selectedTab(id: string | undefined)",
+        "returns": "string | null | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for the active tab id."
+      },
+      {
+        "method": "setTitle(title: string | null)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "loading(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for Pattern B loading state."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for whole-drawer disabled state."
+      },
+      {
+        "method": "focus(target: 'first' | 'title' | 'search' | 'list' | undefined)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell. Move focus into the drawer."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Teardown. Closes the drawer if open, deactivates focus trap, restores scroll, hides backdrop, destroys the panel-shell instance, removes portaled DOM from container, removes event listeners, nulls references."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-label",
+        "when": "Set on __pane when ariaLabel prop is provided and no title exists."
+      },
+      {
+        "attr": "aria-labelledby",
+        "when": "Set on __pane referencing the panel-shell __title id when the title prop is provided. Override via the ariaLabelledBy prop."
+      },
+      {
+        "attr": "aria-modal",
+        "when": "Set to 'true' on __pane when hasMask is truthy; 'false' otherwise."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "Set to 'true' on __pane during isLoading."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "Set to 'true' on __pane when isDisabled."
+      },
+      {
+        "attr": "aria-hidden",
+        "when": "Set to 'true' on __pane when closed (the pane is also display:none / transform-offset, but aria-hidden ensures assistive tech ignores it). Removed when open."
+      },
+      {
+        "attr": "aria-roledescription",
+        "when": "Optional; consumer can set 'drawer' on __pane via ariaLabel for additional context."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Escape",
+        "action": "Closes the drawer when closeOnEscape is true. Returns focus to the previously-focused element."
+      },
+      {
+        "key": "Tab",
+        "action": "Cycles focus within the drawer (focus trap is always active when open)."
+      },
+      {
+        "key": "Shift+Tab",
+        "action": "Cycles focus backwards within the trap."
+      },
+      {
+        "key": "ArrowDown",
+        "action": "Inherited from panel-shell. When focus is on the search input, moves focus into __list (when items is provided)."
+      },
+      {
+        "key": "ArrowUp",
+        "action": "Inherited from panel-shell. When focus is on the first __item row, returns focus to the search input."
+      },
+      {
+        "key": "Home",
+        "action": "Inherited from panel-shell. When focus is in __list, moves to the first item."
+      },
+      {
+        "key": "End",
+        "action": "Inherited from panel-shell. When focus is in __list, moves to the last item."
+      },
+      {
+        "key": "Enter",
+        "action": "Inherited from panel-shell. On an item row: fires drw:item-activate. On back/close: activates them."
+      },
+      {
+        "key": "Space",
+        "action": "Inherited from panel-shell. On switch/checkbox header-actions: toggles them."
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Dimensions",
+        "vars": [
+          "--arvo-drw-width",
+          "--arvo-drw-min-width",
+          "--arvo-drw-max-width",
+          "--arvo-drw-z-index",
+          "--arvo-drw-backdrop-z-index"
+        ]
+      },
+      {
+        "category": "Animation",
+        "vars": [
+          "--arvo-drw-slide-duration",
+          "--arvo-drw-backdrop-opacity-light",
+          "--arvo-drw-backdrop-opacity-dark"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/sjRT1G7HNXxv3vIxdzs64a/o9-Arvo-Design-System-%7C-Design-Library--NEW-?node-id=38012-19219&m=dev"
+  },
   "dropdown-button": {
     "slug": "dropdown-button",
     "name": "DropdownButton",
@@ -3808,20 +4462,6 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Whether the menu closes after an item is selected. Passed through to ArvoActionMenu."
       },
       {
-        "prop": "menuSize",
-        "type": "'sm' | 'md'",
-        "default": "md",
-        "required": "No",
-        "desc": "Size of the ActionMenu items. Independent of the trigger button size. Passed through to ArvoActionMenu as its size prop."
-      },
-      {
-        "prop": "tooltip",
-        "type": "string | TooltipConfig",
-        "default": "—",
-        "required": "No",
-        "desc": "Supplementary tooltip shown via the arvo tooltip system on hover/focus. Accepts a string or a config object with content, placement, and shortcut."
-      },
-      {
         "prop": "onSelect",
         "type": "function",
         "default": "—",
@@ -4004,6 +4644,10 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "key": "ArrowDown",
         "action": "Open the menu and focus the first item"
+      },
+      {
+        "key": "Alt+ArrowDown",
+        "action": "Open the menu (matches WAI-ARIA combobox guidance for dropdown triggers)"
       },
       {
         "key": "ArrowUp",
@@ -4192,13 +4836,6 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Whether the menu closes after an item is selected."
       },
       {
-        "prop": "menuSize",
-        "type": "'sm' | 'md'",
-        "default": "md",
-        "required": "No",
-        "desc": "Size of the ActionMenu items. Independent of the trigger button size."
-      },
-      {
         "prop": "onSelect",
         "type": "function",
         "default": "—",
@@ -4376,6 +5013,10 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "key": "ArrowDown",
         "action": "Open the menu and focus the first item"
+      },
+      {
+        "key": "Alt+ArrowDown",
+        "action": "Open the menu (matches WAI-ARIA combobox guidance for dropdown triggers)"
       },
       {
         "key": "ArrowUp",
@@ -4657,6 +5298,104 @@ export const COMPONENT_DESCRIPTORS = {
       }
     ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=33642-51830&m=dev"
+  },
+  "form-label": {
+    "slug": "form-label",
+    "name": "FormLabel",
+    "abbreviation": "form-lbl",
+    "category": "Inputs",
+    "status": "stable",
+    "description": "Public atomic form label primitive shared by every labelled form control in the design system. Exposes two variants -- ArvoFormLabel renders a `<label htmlFor>` for sibling-association fields (text inputs, select, combobox, listbox), and ArvoFormLabelText renders a `<span>` for the inner caption used by selection controls (radio, switch, checkbox) where the visible caption is nested inside an outer wrapping `<label>`. Both variants share the same typography, required indicator, disabled, and invalid styling.",
+    "bem": {
+      "block": "arvo-form-lbl",
+      "elements": [
+        {
+          "name": "req",
+          "optional": "Yes",
+          "desc": "Required indicator span (default `*`) appended after the children when isRequired is true. aria-hidden so screen readers rely on aria-required on the input."
+        }
+      ],
+      "variants": [],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small size, 12px font"
+        }
+      ],
+      "layouts": [],
+      "states": [
+        {
+          "name": "is-disabled",
+          "desc": "Disabled state -- muted color, not-allowed cursor"
+        },
+        {
+          "name": "is-invalid",
+          "desc": "Invalid state -- error color"
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "children",
+        "type": "ReactNode",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Label text or composed nodes."
+      },
+      {
+        "prop": "htmlFor",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "id of the associated form control. Only honored by the `<label>` variant (ArvoFormLabel)."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'lg'",
+        "default": "lg",
+        "required": "No",
+        "desc": "Typography size. `lg` is 14px (default). `sm` is 12px and is the size used by form-input components above their fields."
+      },
+      {
+        "prop": "isRequired",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Renders the required indicator after the children. Adds the `arvo-form-lbl--required` modifier."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disabled visual state."
+      },
+      {
+        "prop": "isInvalid",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Invalid visual state."
+      },
+      {
+        "prop": "requiredIndicator",
+        "type": "ReactNode",
+        "default": "—",
+        "required": "No",
+        "desc": "Custom node rendered in place of the default `*`. Only rendered when isRequired is true."
+      }
+    ],
+    "events": [],
+    "methods": [],
+    "aria": [
+      {
+        "attr": "aria-hidden",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [],
+    "cssVarGroups": [],
+    "figma": null
   },
   "hybrid-popover": {
     "slug": "hybrid-popover",
@@ -6481,6 +7220,182 @@ export const COMPONENT_DESCRIPTORS = {
     ],
     "figma": null
   },
+  "message-alert": {
+    "slug": "message-alert",
+    "name": "MessageAlert",
+    "abbreviation": "msg-alert",
+    "category": "Feedback",
+    "status": "stable",
+    "description": "Public atomic message-alert primitive used everywhere a compact icon + (optional) message status row needs to render. Two display modes controlled by `isInline`: full mode (`isInline=false`, default) renders icon + message text + optional dismiss button (the layout used below form inputs for validation messages, inside selection-control errors, and inside the panel-shell `__info` slot); inline mode (`isInline=true`) renders the icon ONLY (the in-field tooltip-error icon used inside Textbox / Textarea / NumberInput / Search / Select / Combobox / date-time pickers when `errorDisplay === 'tooltip'`). Same icons, same colors, same spacing, same accessibility model across both modes. Six semantic types (error, success, warning, info, neutral, block) drive the icon glyph and color. The previous `@arvo/utils` `inline-alert` factory pair (`createInlineAlert` + `createErrorTooltipIcon`) and the previous `arvo-inline-alert` BEM are fully removed and replaced by this single public component in both `@arvo/react` and `@arvo/js`. Sourced from Figma node `12029:3921` in the `TEST-ARVO` library (file `sjRT1G7HNXxv3vIxdzs64a`).",
+    "bem": {
+      "block": "arvo-msg-alert",
+      "elements": [
+        {
+          "name": "ico",
+          "optional": "No",
+          "desc": "Leading status icon span. Glyph is supplied by the SCSS pattern via the type modifier (`::before` content). `aria-hidden=\"true\"` because the message conveys the semantic. Always rendered in both modes. Sized 16x16."
+        },
+        {
+          "name": "msg",
+          "optional": "Yes",
+          "desc": "Trailing message span. Renders the alert text. NOT rendered when `isInline=true` (only the icon is shown). Wraps naturally on long text; in full mode the parent gets `flex: 1 0 0`."
+        },
+        {
+          "name": "body",
+          "optional": "Yes",
+          "desc": "Flex-row wrapper around `__ico` + `__msg` in full mode. Has `flex: 1 0 0` so the body stretches to fill space alongside the optional close button. Not emitted in inline mode -- the icon is the only child of the root."
+        },
+        {
+          "name": "close",
+          "optional": "Yes",
+          "desc": "Dismiss button. Internal `ArvoButton` instance (variant=secondary, size=sm, label=`Close`) per Figma. Only rendered when `isDismissable=true` AND `isInline=false`. Clicking it fires the `msg-alert:dismiss` custom event and calls the `onDismiss` callback. Component does NOT auto-remove itself from the DOM; consumer controls visibility."
+        }
+      ],
+      "variants": [],
+      "sizes": [],
+      "layouts": [
+        {
+          "name": "inline",
+          "desc": "Inline mode. Applied when `isInline=true`. Hides the `__msg` and `__close` elements; only the `__ico` renders. Sizes the root to a 16x16 box with no padding and `gap: 0`. This mode is the public replacement for the previous `arvo-err-ico` element used inside form-input fields."
+        }
+      ],
+      "states": [
+        {
+          "name": "has-icon-override",
+          "desc": "Applied when consumer passes a custom `icon` name that differs from the type-default. The CSS pattern's default `::before` content is suppressed and the consumer's icon is rendered via an `<i class=\"o9con-{name}\">` child element of `__ico`."
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "type",
+        "type": "'error' | 'success' | 'warning' | 'info' | 'neutral' | 'block'",
+        "default": "error",
+        "required": "No",
+        "desc": "Semantic type. Drives icon glyph, icon color, and text color via the SCSS pattern. Default `error` preserves the behavior of the previous `inline-alert` util that all form-input consumers rely on (validation failure is the most common in-place use case). Note: the alert-family components `ArvoBannerAlert` / `ArvoBadgeAlert` / `ArvoToast` use `negative` instead of `error`; MessageAlert deliberately uses `error` to match the form-validation vocabulary and the existing consumer call sites. The new `block` type is NEW in this rework and was not part of the previous `inline-alert` API."
+      },
+      {
+        "prop": "isInline",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Layout toggle. When `false` (default), renders the full alert: icon + message text + optional dismiss button. When `true`, renders ONLY the 16x16 icon -- no message text, no dismiss button, regardless of what was passed to `message` or `isDismissable`. This is the in-field tooltip-error icon used by form inputs when `errorDisplay === 'tooltip'`. Both modes share the same icon glyph, color tokens, and accessibility role for the type."
+      },
+      {
+        "prop": "message",
+        "type": "ReactNode",
+        "default": "—",
+        "required": "No",
+        "desc": "Alert text. Required for non-inline rendering of useful content. When `isInline=true` this prop is ignored at render time, BUT it is still mirrored into `aria-label` on the root element so screen readers retain semantic context for the standalone icon. Accepts string or composed nodes (e.g. `<strong>` titles, line breaks, embedded `<ArvoLink>`)."
+      },
+      {
+        "prop": "icon",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional o9con icon name override. When omitted, the type-default glyph is rendered via the SCSS pattern's `::before` content. When provided (e.g. `'bell'`, `'star'` for a neutral-type generic announcement), the type default is suppressed and the consumer's icon is rendered as a child `<i class=\"o9con-{name}\">` of `__ico`. The icon color still follows the `type` modifier so a custom icon stays color-coordinated with its semantic context. Validate the name against `.cursor/rules/o9con-icons.mdc`."
+      },
+      {
+        "prop": "isDismissable",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "When `true` AND `isInline=false`, renders an internal `ArvoButton` (variant=secondary, size=sm, label=`Close`) at the trailing edge. Clicking it fires `msg-alert:dismiss` and invokes `onDismiss`. The component does NOT auto-remove itself; the consumer owns visibility. When `isInline=true`, this prop is ignored (the inline mode is icon-only)."
+      },
+      {
+        "prop": "onDismiss",
+        "type": "() => void",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback fired when the close button is clicked (only relevant when `isDismissable=true`). Fires alongside the `msg-alert:dismiss` custom event."
+      },
+      {
+        "prop": "id",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "DOM id for `aria-describedby` wiring on the associated form control. Form-input consumers (Textbox, Textarea, NumberInput, Search, Select, Combobox, Checkbox, CheckboxGroup, Radio, RadioGroup, date/time pickers) generate a stable error id and pass it here so the input's `aria-describedby` resolves to the alert."
+      },
+      {
+        "prop": "role",
+        "type": "'alert' | 'status'",
+        "default": "auto",
+        "required": "No",
+        "desc": "ARIA live-region role. When omitted (the default), resolves automatically from `type`: `error`, `warning`, `block` -> `alert` (assertive); `info`, `success`, `neutral` -> `status` (polite). Pass explicitly to override (e.g. panel-shell `__info` forces `status` for non-assertive types). The role is applied in BOTH `isInline=false` AND `isInline=true` modes so the accessibility contract stays consistent regardless of layout."
+      },
+      {
+        "prop": "className",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Additional class names merged with the base `arvo-msg-alert arvo-msg-alert--{type} [arvo-msg-alert--inline] [arvo-msg-alert--dismissable]` classes. Used by form-input consumers to attach per-component positioning (e.g. `arvo-textbox__err-ico`) on the root element."
+      }
+    ],
+    "events": [
+      {
+        "event": "msg-alert:dismiss",
+        "payload": "—",
+        "desc": "Fired on the root element when the user clicks the close button (only when `isDismissable=true` AND `isInline=false`). Bubbles. The event detail is empty -- the consumer reads the alert's state from its own React state or DOM attributes."
+      }
+    ],
+    "methods": [
+      {
+        "method": "type()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the alert's semantic type. Swaps the modifier class and (when `role` was auto-resolved) re-resolves the live-region role. JS layer only."
+      },
+      {
+        "method": "message()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the alert's message text. Pass `null` to clear. Updates the rendered text in full mode and the `aria-label` mirror in inline mode. JS layer only."
+      },
+      {
+        "method": "inline()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the `isInline` layout toggle. Adds/removes the `--inline` modifier class and shows/hides the `__msg` / `__close` slots. JS layer only."
+      },
+      {
+        "method": "dismissable()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for `isDismissable`. Adds/removes the close button on flip. No-op when `isInline=true`. JS layer only."
+      },
+      {
+        "method": "dismiss()",
+        "returns": "void",
+        "desc": "Programmatically fires the `msg-alert:dismiss` event and invokes `onDismiss`. Does NOT remove the element. JS layer only."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Tears down event listeners, destroys the internal close button (if any), and clears the inner DOM. The host element remains in place so the parent component can reuse it. JS layer only."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-hidden",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-describedby",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-label",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-live (implicit via role)",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Enter / Space"
+      }
+    ],
+    "cssVarGroups": [],
+    "figma": null
+  },
   "number-input": {
     "slug": "number-input",
     "name": "NumberInput",
@@ -6534,7 +7449,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "err-msg",
           "optional": "Yes",
-          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-inline-alert block."
+          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-msg-alert block."
         }
       ],
       "variants": [],
@@ -7234,7 +8149,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "bdy",
           "optional": "No",
-          "desc": "Body wrapper containing __items and the optional inline-alert. Enables correct layout when labelPosition is 'start' (label and body sit side-by-side in a row)."
+          "desc": "Body wrapper containing __items and the optional message-alert. Enables correct layout when labelPosition is 'start' (label and body sit side-by-side in a row)."
         },
         {
           "name": "items",
@@ -7320,14 +8235,14 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Shows group-level validation error state. When true and errorMsg is set, the shared inline-alert is displayed below __items. Does NOT cascade error styling to individual children."
+        "desc": "Shows group-level validation error state. When true and errorMsg is set, the ArvoMessageAlert is displayed below __items. Does NOT cascade error styling to individual children."
       },
       {
         "prop": "errorMsg",
         "type": "string",
         "default": "—",
         "required": "No",
-        "desc": "Error message text displayed in the shared inline-alert below __items when invalid is true. When null and invalid is true, no inline alert is shown."
+        "desc": "Error message text displayed in the ArvoMessageAlert below __items when invalid is true. When null and invalid is true, no message alert is shown."
       },
       {
         "prop": "isLoading",
@@ -8133,6 +9048,212 @@ export const COMPONENT_DESCRIPTORS = {
     "cssVarGroups": [],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=13979-597&m=dev"
   },
+  "segmented-control": {
+    "slug": "segmented-control",
+    "name": "SegmentedControl",
+    "abbreviation": "seg-ctrl",
+    "category": "Actions",
+    "status": "stable",
+    "description": "Compact single-select control for choosing between peer values that set a setting, view, filter, preference, or boolean/operator (List/Grid, Day/Week/Month, Compact/Comfortable/Spacious, AND/OR). Renders radio-group semantics (role=radiogroup with role=radio + aria-checked on each option) and arrow-key navigation that moves and selects in one step. ButtonGroup covers command-style toolbars; SegmentedControl covers peer-value selection.",
+    "bem": {
+      "block": "arvo-seg-ctrl",
+      "elements": [
+        {
+          "name": "opt",
+          "optional": "No",
+          "desc": "Single option button. Renders <button role=\"radio\" aria-checked> with active state on the currently selected value."
+        }
+      ],
+      "variants": [
+        {
+          "name": "primary",
+          "desc": "Primary variant -- matches ButtonGroup primary tone."
+        },
+        {
+          "name": "secondary",
+          "desc": "Secondary variant -- subdued active background."
+        }
+      ],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small, 24px height"
+        },
+        {
+          "name": "lg",
+          "desc": "Large, 32px height (default)"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "icon-only",
+          "desc": "Render options as icon-only buttons (label still drives the tooltip + aria-label)."
+        }
+      ],
+      "states": [
+        {
+          "name": "is-disabled",
+          "desc": "Whole control disabled."
+        },
+        {
+          "name": "loading",
+          "desc": "Loading state -- options become non-interactive."
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "items",
+        "type": "SegmentedControlItem[]",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Options to render. Each item has `value` (required), optional `label`, optional `icon`, optional `isDisabled`."
+      },
+      {
+        "prop": "value",
+        "type": "string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Currently selected value (controlled)."
+      },
+      {
+        "prop": "defaultValue",
+        "type": "string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Initial value when uncontrolled."
+      },
+      {
+        "prop": "variant",
+        "type": "'primary' | 'secondary'",
+        "default": "primary",
+        "required": "No",
+        "desc": "Visual variant."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'lg'",
+        "default": "lg",
+        "required": "No",
+        "desc": "Control height."
+      },
+      {
+        "prop": "isIconOnly",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Render options as icon-only buttons. `label` still drives `aria-label` and the tooltip."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disable the entire control."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Loading state."
+      },
+      {
+        "prop": "ariaLabel",
+        "type": "string",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Accessible label for the radiogroup. Required."
+      },
+      {
+        "prop": "onChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called with `{ value, previousValue }` when the selected option changes."
+      }
+    ],
+    "events": [
+      {
+        "event": "seg-ctrl:change",
+        "payload": "{ value: string, previousValue: string | null }",
+        "desc": "Selection changed (JS only -- React uses onChange)."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoSegmentedControlOptions)",
+        "returns": "ArvoSegmentedControl",
+        "desc": "Factory."
+      },
+      {
+        "method": "value(newValue: string | undefined)",
+        "returns": "string | null | void",
+        "desc": "Get or set the selected value."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set disabled state."
+      },
+      {
+        "method": "setLoading(loading: boolean)",
+        "returns": "void",
+        "desc": "Toggle loading state."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Remove listeners and DOM."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-label",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-checked",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Tab",
+        "action": "Move focus to/from the radiogroup. Focus lands on the selected option."
+      },
+      {
+        "key": "ArrowLeft / ArrowUp",
+        "action": "Move focus to the previous enabled option and select it."
+      },
+      {
+        "key": "ArrowRight / ArrowDown",
+        "action": "Move focus to the next enabled option and select it."
+      },
+      {
+        "key": "Home",
+        "action": "Move focus to the first enabled option and select it."
+      },
+      {
+        "key": "End",
+        "action": "Move focus to the last enabled option and select it."
+      },
+      {
+        "key": "Space / Enter",
+        "action": "Activate the focused option (no-op if already selected)."
+      }
+    ],
+    "cssVarGroups": [],
+    "figma": null
+  },
   "select": {
     "slug": "select",
     "name": "Select",
@@ -8216,7 +9337,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "err-ico",
           "optional": "Yes",
-          "desc": "Error tooltip icon inside the field (visible when has-error + error-tooltip). Uses the error-tooltip-icon mixin."
+          "desc": "Error tooltip icon inside the field (visible when has-error + error-tooltip). Uses the MessageAlert isInline mode mixin."
         },
         {
           "name": "empty",
@@ -8265,7 +9386,7 @@ export const COMPONENT_DESCRIPTORS = {
         },
         {
           "name": "error-tooltip",
-          "desc": "Error displayed as a compact icon inside the field with the message in a tooltip on hover (instead of an inline-alert below)"
+          "desc": "Error displayed as a compact icon inside the field with the message in a tooltip on hover (instead of a message-alert below)"
         },
         {
           "name": "is-disabled",
@@ -8343,7 +9464,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "string",
         "default": "—",
         "required": "No",
-        "desc": "Error message shown via inline-alert pattern when invalid is true."
+        "desc": "Error message shown via msg-alert pattern when invalid is true."
       },
       {
         "prop": "errorDisplay",
@@ -8649,6 +9770,1351 @@ export const COMPONENT_DESCRIPTORS = {
     ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=26482-51664&m=dev"
   },
+  "side-panel": {
+    "slug": "side-panel",
+    "name": "SidePanel",
+    "abbreviation": "sp",
+    "category": "Overlays",
+    "status": "stable",
+    "description": "Content-area-scoped pane that docks at the layout level (default) or overlays sibling content via slide-in animation. Pin/unpin flips between layout and overlay variants WITHOUT remounting the DOM, preserving panel state, scroll position, and child instances. Composes the panel-shell shared pattern for its inner anatomy (header, sticky pre-body region, body, footer, items+filter pipeline, empty/skeleton states) and adds SidePanel-only positional concerns: layout vs in-content overlay mounting, the pin button (__pin), the side-aware splitter slot, and the layout/overlay variant flip. Used for filter panes, workflow panes, Gen AI panes, page navigation (pinned and unpinned), and similar layout-anchored side rails.",
+    "bem": {
+      "block": "arvo-sp",
+      "elements": [
+        {
+          "name": "splitter",
+          "optional": "Yes",
+          "desc": "Optional splitter rail rendered as an external sibling to __pane on the left or right edge. Internally instantiates an ArvoSplitter; the SCSS file does NOT style this element directly."
+        },
+        {
+          "name": "pane",
+          "optional": "No",
+          "desc": "The pane wrapper itself -- flex column. Hosts the panel-shell rendered tree (header, sticky, body, footer) as children. Sets the panel width via --arvo-sp-width and the bg via --arvo-color-s-layer-01."
+        },
+        {
+          "name": "pin",
+          "optional": "Yes",
+          "desc": "SidePanel-specific pin/unpin icon button. Uses ArvoIconButton (size sm, variant tertiary). Icon is `o9con-push-pin` (default) and reflects .is-pinned state via the icon-button's selected state. aria-label='Pin panel' / 'Unpin panel'. aria-pressed reflects pinned state. Rendered by SidePanel itself (NOT by panel-shell) and inserted into __hdr-actions AFTER the panel-shell's user headerActions and BEFORE __close."
+        }
+      ],
+      "variants": [
+        {
+          "name": "layout",
+          "desc": "Layout variant (default) -- pane takes static space in the parent layout. No portal, no focus trap, no slide animation. Splitters render as inline siblings."
+        },
+        {
+          "name": "overlay",
+          "desc": "Overlay variant -- pane uses position:absolute to overlay sibling content from its current DOM position. Slides in via @arvo/core/animation enter/exit. NOT portaled (this is the deliberate distinction from ArvoDrawer). Adds focus trap and Escape-to-close."
+        }
+      ],
+      "sizes": [],
+      "layouts": [
+        {
+          "name": "side-left",
+          "desc": "Side='left' -- pane docks to the left edge. Splitter (when hasSplitter is true) renders on the right side of the pane. Overlay variant slides in from the left."
+        },
+        {
+          "name": "side-right",
+          "desc": "Side='right' (default) -- pane docks to the right edge. Splitter renders on the left side of the pane. Overlay variant slides in from the right."
+        }
+      ],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Overlay variant only -- pane is visible (display: flex; transform: translateX(0))."
+        },
+        {
+          "name": "is-pinned",
+          "desc": "Pinnable panel is currently in pinned (layout) mode. Mutually exclusive with .is-unpinned at runtime."
+        },
+        {
+          "name": "is-unpinned",
+          "desc": "Pinnable panel is currently in unpinned (overlay) mode."
+        },
+        {
+          "name": "loading",
+          "desc": "Pattern B skeleton loading. Inherited via panel-shell -- hides __sticky and __footer, shows skeleton rows in __body. Sets aria-busy='true' on __pane."
+        },
+        {
+          "name": "is-disabled",
+          "desc": "Whole-panel disabled state. Pointer-events disabled inside the pane; child instances inherit disabled."
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "variant",
+        "type": "'layout' | 'overlay'",
+        "default": "layout",
+        "required": "No",
+        "desc": "Position model. 'layout' docks the pane in the parent layout (static). 'overlay' overlays sibling content from the same DOM position (position: absolute) with a slide-in animation. When isPinnable is true, this prop is internally controlled by the pin state and SHOULD NOT be set by the consumer (use isPinned/defaultPinned instead)."
+      },
+      {
+        "prop": "side",
+        "type": "'left' | 'right'",
+        "default": "right",
+        "required": "No",
+        "desc": "Edge the pane docks to. Drives slide direction for the overlay variant and splitter placement for the layout variant."
+      },
+      {
+        "prop": "isPinnable",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "When true, renders the __pin icon button in the header and enables the pinned/unpinned variant-flip. Toggling pin via the button or the pinned() method flips the panel between layout and overlay variants WITHOUT remounting the DOM."
+      },
+      {
+        "prop": "isPinned",
+        "type": "boolean",
+        "default": "—",
+        "required": "No",
+        "desc": "Controlled pinned state. true = layout variant; false = overlay variant. Only meaningful when isPinnable is true. Pass null/undefined for uncontrolled."
+      },
+      {
+        "prop": "defaultPinned",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Initial pinned state for uncontrolled usage. Defaults to true (layout). Only meaningful when isPinnable is true."
+      },
+      {
+        "prop": "onPinChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback when the pinned state changes via the pin button or pinned() method. Receives the new boolean value."
+      },
+      {
+        "prop": "hasSplitter",
+        "type": "boolean | 'auto'",
+        "default": "false",
+        "required": "No",
+        "desc": "Whether to render an external ArvoSplitter on the appropriate edge (opposite of side). Defaults to false until ArvoSplitter ships -- the v1 placeholder is an inert 4px rail and emits a development console.warn when truthy, so the default is opt-out. Pass 'auto' to render the splitter only when variant is 'layout' (overlay variant suppresses it since the pane floats). true forces the splitter; false suppresses it. Splitter behavior (drag, resize) is owned by ArvoSplitter; SidePanel only declares the slot."
+      },
+      {
+        "prop": "width",
+        "type": "string | number",
+        "default": "290",
+        "required": "No",
+        "desc": "Pane width. Number is treated as px; string is a CSS value (e.g., '320px', '20vw'). Sets --arvo-sp-width on __pane. Clamped between --arvo-sp-min-width and --arvo-sp-max-width."
+      },
+      {
+        "prop": "minWidth",
+        "type": "string | number",
+        "default": "280",
+        "required": "No",
+        "desc": "Minimum pane width. Sets --arvo-sp-min-width."
+      },
+      {
+        "prop": "maxWidth",
+        "type": "string | number | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Maximum pane width. Sets --arvo-sp-max-width. Defaults to none for layout variant; the overlay variant caps at 80vw to prevent full-viewport coverage."
+      },
+      {
+        "prop": "isOpen",
+        "type": "boolean",
+        "default": "—",
+        "required": "No",
+        "desc": "Controlled open state for overlay variant only (React only). Layout variant is always 'open' (mounted in flow). Pass null for uncontrolled."
+      },
+      {
+        "prop": "defaultOpen",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Initial open state for uncontrolled overlay variant (React only). Defaults to true (visible on mount)."
+      },
+      {
+        "prop": "onOpenChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback when overlay-variant open state changes (React only). Receives the new boolean."
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback before overlay opens. Return false to cancel."
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback before overlay closes (or before close button is honored in either variant). Return false to cancel."
+      },
+      {
+        "prop": "closeOnEscape",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Overlay variant only. Whether Escape closes the panel. Layout variant ignores Escape."
+      },
+      {
+        "prop": "closeOnOutside",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Overlay variant only. Whether clicking outside the pane closes it. Defaults to false (consumer-owned dismissal in most layout-side-panel UX)."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Whole-panel disabled state. Disables all interactive descendants and prevents pin/close. Forwarded to panel-shell."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Pattern B skeleton loading state. Forwarded to panel-shell, which hides __sticky and __footer and shows skeleton rows in __body."
+      },
+      {
+        "prop": "ariaLabel",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Explicit accessible name for __pane when no title is provided. Maps to aria-label."
+      },
+      {
+        "prop": "className",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Additional CSS classes on __pane (React only)."
+      },
+      {
+        "prop": "_passthroughToPanelShell",
+        "type": "_documentation",
+        "default": "—",
+        "required": "No",
+        "desc": "The following props are forwarded verbatim to the embedded panel-shell. Their semantics, defaults, and validation are defined by the panel-shell shared pattern (see packages/utils/src/panel-shell.ts and the panel-shell entry in SHARED-PATTERNS-REGISTRY.json). Listed here so consumers reading the descriptor see the full SidePanel surface area: title, hasHeader, hasBackButton, onBack, headerActions, stickyHeader, items, getItemId, filterKeys, getItemSearchText, renderItem, itemsRole, actions, hasFooter, isClosable."
+      }
+    ],
+    "events": [
+      {
+        "event": "sp:open",
+        "payload": "{  }",
+        "desc": "Overlay variant only. Fires when the panel opens. Dispatched on __pane."
+      },
+      {
+        "event": "sp:close",
+        "payload": "{  }",
+        "desc": "Fires when the panel closes (overlay variant) or when the close button is clicked (either variant). Dispatched on __pane."
+      },
+      {
+        "event": "sp:pin",
+        "payload": "{ pinned: boolean }",
+        "desc": "Fires when the pinned state changes via the pin button or the pinned() method. Dispatched on __pane."
+      },
+      {
+        "event": "sp:back",
+        "payload": "{  }",
+        "desc": "Re-emitted from panel-shell on __pane when the back button is clicked."
+      },
+      {
+        "event": "sp:action",
+        "payload": "{ id: string, type: string }",
+        "desc": "Re-emitted from panel-shell on __pane when a header-action is activated."
+      },
+      {
+        "event": "sp:tab-select",
+        "payload": "{ id: string, index: number }",
+        "desc": "Re-emitted from panel-shell on __pane when a sticky-header tab is selected."
+      },
+      {
+        "event": "sp:search",
+        "payload": "{ value: string, matchedCount: number | null }",
+        "desc": "Re-emitted from panel-shell on __pane when the search query changes."
+      },
+      {
+        "event": "sp:item-activate",
+        "payload": "{ id: string, item: T }",
+        "desc": "Re-emitted from panel-shell on __pane when an item row is activated."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoSidePanelOptions)",
+        "returns": "ArvoSidePanel",
+        "desc": "Static factory. Creates a SidePanel instance, builds .arvo-sp host + __pane, instantiates the panel-shell into __pane via createPanelShell({ parentBlock: 'arvo-sp', parent: __pane, options: contentProps }), creates the SidePanel-specific __pin button (when isPinnable) and inserts it into the shell's __hdr-actions before __close, and attaches event listeners."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": "Overlay variant only. Opens the panel (slide-in animation). Calls onOpen -- if it returns false, open is cancelled. No-ops if already open or in layout variant."
+      },
+      {
+        "method": "close()",
+        "returns": "void",
+        "desc": "Overlay variant only. Closes the panel (slide-out animation). Calls onClose -- if it returns false, close is cancelled. No-ops if already closed."
+      },
+      {
+        "method": "isOpen()",
+        "returns": "boolean",
+        "desc": "Returns whether the overlay is currently open. Returns true unconditionally for layout variant."
+      },
+      {
+        "method": "toggle()",
+        "returns": "void",
+        "desc": "Overlay variant only. Toggle open/closed."
+      },
+      {
+        "method": "pinned(newValue: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Dual-purpose getter/setter for the pinned state. Setting flips the variant WITHOUT remounting the DOM. Fires sp:pin and onPinChange. No-ops when isPinnable is false."
+      },
+      {
+        "method": "setVariant(variant: 'layout' | 'overlay')",
+        "returns": "void",
+        "desc": "Imperative variant switch. Equivalent to pinned(variant === 'layout') but does not require isPinnable. Useful when consumers manage pinning externally."
+      },
+      {
+        "method": "setItems(items: T[])",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "setStickyHeader(config: ArvoPanelStickyHeaderConfig | false)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "setHeaderActions(actions: ArvoPanelHeaderAction[])",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "setActions(actions: ArvoPanelAction[] | false)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "updateAction(id: string, patch: Partial<ArvoPanelHeaderAction | ArvoPanelAction>)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "search(query: string | undefined)",
+        "returns": "string | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for the current search query."
+      },
+      {
+        "method": "selectedTab(id: string | undefined)",
+        "returns": "string | null | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for the active tab id."
+      },
+      {
+        "method": "setTitle(title: string | null)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell."
+      },
+      {
+        "method": "loading(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for Pattern B loading state."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Passthrough to panel-shell. Dual-purpose getter/setter for whole-panel disabled state."
+      },
+      {
+        "method": "focus(target: 'first' | 'title' | 'search' | 'list' | undefined)",
+        "returns": "void",
+        "desc": "Passthrough to panel-shell. Move focus into the panel."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Teardown. Closes overlay if open, deactivates focus trap, destroys the panel-shell instance, destroys the __pin and splitter (when present), removes event listeners, removes DOM, nulls references."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-label",
+        "when": "Set on __pane when ariaLabel prop is provided and no title exists."
+      },
+      {
+        "attr": "aria-labelledby",
+        "when": "Set on __pane referencing the panel-shell __title id when the title prop is provided."
+      },
+      {
+        "attr": "aria-modal",
+        "when": "Set to 'false' on __pane when role='dialog' (overlay variant). SidePanel never blocks the rest of the page."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "Set to 'true' on __pane during isLoading."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "Set to 'true' on __pane when isDisabled."
+      },
+      {
+        "attr": "aria-hidden",
+        "when": "Overlay variant only. Set to 'true' on __pane when closed; removed when open."
+      },
+      {
+        "attr": "aria-pressed",
+        "when": "Set on __pin reflecting current pinned state ('true' = pinned/layout, 'false' = unpinned/overlay)."
+      },
+      {
+        "attr": "aria-expanded",
+        "when": "Set on dropdown / split header-action triggers reflecting their menu open state (handled by inner ArvoDropdownIconButton / ArvoSplitIconButton via panel-shell)."
+      },
+      {
+        "attr": "aria-controls",
+        "when": "Set on dropdown / split triggers referencing their menu panel id (via panel-shell)."
+      },
+      {
+        "attr": "aria-roledescription",
+        "when": "Optional; consumer can set 'side panel' on __pane via ariaLabel for additional context."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Escape",
+        "action": "Overlay variant only. Closes the panel and returns focus to the previously-focused element. Layout variant ignores Escape."
+      },
+      {
+        "key": "Tab",
+        "action": "Cycles focus within the panel (overlay variant traps; layout variant flows naturally to the next page element after the footer)."
+      },
+      {
+        "key": "Shift+Tab",
+        "action": "Cycles focus backwards."
+      },
+      {
+        "key": "ArrowDown",
+        "action": "Inherited from panel-shell. When focus is on the search input, moves focus into __list."
+      },
+      {
+        "key": "ArrowUp",
+        "action": "Inherited from panel-shell. When focus is on the first __item row, returns focus to the search input."
+      },
+      {
+        "key": "Home",
+        "action": "Inherited from panel-shell. When focus is in __list, moves to the first item."
+      },
+      {
+        "key": "End",
+        "action": "Inherited from panel-shell. When focus is in __list, moves to the last item."
+      },
+      {
+        "key": "Enter",
+        "action": "Inherited from panel-shell. On an item row: fires sp:item-activate. On back/pin/close buttons: activates them."
+      },
+      {
+        "key": "Space",
+        "action": "Inherited from panel-shell. On switch/checkbox header-actions: toggles them."
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Dimensions",
+        "vars": [
+          "--arvo-sp-width",
+          "--arvo-sp-min-width",
+          "--arvo-sp-max-width",
+          "--arvo-sp-overlay-max-width"
+        ]
+      },
+      {
+        "category": "Overlay",
+        "vars": [
+          "--arvo-sp-z-index",
+          "--arvo-sp-slide-duration"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/sjRT1G7HNXxv3vIxdzs64a/o9-Arvo-Design-System-%7C-Design-Library--NEW-?node-id=11299-463&m=dev"
+  },
+  "split-button": {
+    "slug": "split-button",
+    "name": "SplitButton",
+    "abbreviation": "split-btn",
+    "category": "Actions",
+    "status": "new",
+    "description": "Two-segment action control composed of an executable action button and a separate dropdown trigger button that opens an ArvoActionMenu overlay. Unlike DropdownButton (single trigger that opens the menu), SplitButton exposes the most common/default action directly on the left segment so users can activate it in one click, while the right caret segment opens a related list of alternative actions or selectable options. Each segment is independently focusable, hoverable, and reports its own click. Composes ArvoActionMenu on the trigger segment exactly like DropdownButton. Supports action mode (fixed action label, menu items fire onSelect) and selection mode (last-selected menu item becomes the new default action — e.g. Save / Save As / Save All).",
+    "bem": {
+      "block": "arvo-split-btn",
+      "elements": [
+        {
+          "name": "action",
+          "optional": "No",
+          "desc": "Left segment — the primary executable button. Renders as a real <button type='button'> element with .arvo-btn .arvo-btn--{variant} .arvo-btn--{size} so it inherits all base button styling (height, padding, radius=0, hover, focus, active, disabled, loading) from arvo-btn. Hosts the optional leading icon and the label."
+        },
+        {
+          "name": "trigger",
+          "optional": "No",
+          "desc": "Right segment — the dropdown caret button that opens the ActionMenu. Renders as a real <button type='button'> element with .arvo-btn .arvo-btn--{variant} .arvo-btn--{size} for shared base styling. Carries aria-haspopup='menu' and aria-expanded. Visually narrow: the action segment's horizontal padding becomes minimal here, with width driven by --arvo-split-btn-trigger-width per size."
+        },
+        {
+          "name": "icon",
+          "optional": "Yes",
+          "desc": "Optional leading o9con icon inside the action segment. Same role as arvo-btn's leading icon. Hidden when no icon prop is provided."
+        },
+        {
+          "name": "lbl",
+          "optional": "No",
+          "desc": "Text label inside the action segment. In selection mode, displays the selected item's label or value (per displaySelected). Truncates with ellipsis when constrained."
+        },
+        {
+          "name": "caret",
+          "optional": "No",
+          "desc": "Trailing angle-down icon inside the trigger segment (o9con-angle-down). Always present. Rotates 180deg when the menu is open via the .open state class on the wrapper."
+        }
+      ],
+      "variants": [
+        {
+          "name": "primary",
+          "desc": "Primary action — both segments use filled theme-color background (s-theme) with inverse text/icon. The 1px gap between segments lets the page background show through, creating the visual split. Reuses arvo-btn--primary on each segment for color tokens."
+        },
+        {
+          "name": "secondary",
+          "desc": "Secondary action — both segments use subtle layer background (s-layer-05) with secondary text/icon. Reuses arvo-btn--secondary."
+        },
+        {
+          "name": "tertiary",
+          "desc": "Tertiary/ghost — both segments transparent with secondary text/icon. The action segment's right inline padding is reduced (space-4 instead of space-12) to visually tighten the gap to the caret since there is no surface contrast. Reuses arvo-btn--tertiary."
+        }
+      ],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small: 24px segment height, 12px font, 16px leading icon, 16px caret. Action padding 8px inline / 4px block. Trigger width ~16-20px."
+        },
+        {
+          "name": "md",
+          "desc": "Medium (default): 32px segment height, 14px font, 20px leading icon, 16px caret. Action padding 12px inline / 6px block. Trigger width 20px."
+        },
+        {
+          "name": "lg",
+          "desc": "Large: 40px segment height, 16px font, 24px leading icon, 16px caret. Action padding 16px inline / 8px block. Trigger width 24px. Extrapolated from the existing arvo-btn lg dimensions for design-system parity (Figma source only ships sm + md)."
+        }
+      ],
+      "layouts": [],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Menu is currently visible. Applied to the wrapper. Drives caret rotation (180deg) and trigger active surface."
+        },
+        {
+          "name": "loading",
+          "desc": "Pattern A skeleton shimmer overlay covering the entire wrapper (both segments). Suppresses pointer-events and sets aria-busy."
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "label",
+        "type": "string",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Text content of the action segment. In selection mode, overridden by the selected item's display text when an item is selected (controlled by displaySelected)."
+      },
+      {
+        "prop": "variant",
+        "type": "'primary' | 'secondary' | 'tertiary'",
+        "default": "primary",
+        "required": "No",
+        "desc": "Visual style variant. Reuses arvo-btn--{value} modifier classes on each segment. Note: SplitButton intentionally does NOT support 'outline' (DropdownButton does); the Figma source only ships primary/secondary/tertiary."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "default": "md",
+        "required": "No",
+        "desc": "Segment size controlling height, padding, font size, and icon sizes. Both segments always share the same size."
+      },
+      {
+        "prop": "icon",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional leading o9con icon name (without o9con- prefix) shown inside the action segment, before the label."
+      },
+      {
+        "prop": "mode",
+        "type": "'action' | 'selection'",
+        "default": "action",
+        "required": "No",
+        "desc": "Operating mode. 'action': the action segment fires onAction with a fixed label; menu items fire onSelect for alternative/related actions. 'selection': the last-selected menu item becomes the new default — its label becomes the action segment's label, its icon (if any) becomes the leading icon, and clicking the action segment fires onSelect for that item rather than onAction. Classic Save / Save As / Save All UX."
+      },
+      {
+        "prop": "displaySelected",
+        "type": "'label' | 'value'",
+        "default": "label",
+        "required": "No",
+        "desc": "When mode='selection', determines whether the action segment shows the selected item's label or its value. Ignored in action mode."
+      },
+      {
+        "prop": "value",
+        "type": "string | number",
+        "default": "—",
+        "required": "No",
+        "desc": "Controlled selected item ID (selection mode only). When provided, the component does not manage its own selection state. Use with onSelect."
+      },
+      {
+        "prop": "defaultValue",
+        "type": "string | number",
+        "default": "—",
+        "required": "No",
+        "desc": "Initial selected item ID for uncontrolled selection mode. Ignored when value is provided or mode='action'."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disables BOTH segments and prevents the menu from opening. Adds disabled attribute to both <button> elements and aria-disabled on the wrapper."
+      },
+      {
+        "prop": "isActionDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disables ONLY the action segment (the trigger remains enabled and the menu can still be opened). Useful when the default action is contextually unavailable but alternatives in the menu still apply. Ignored when isDisabled is true."
+      },
+      {
+        "prop": "isTriggerDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disables ONLY the trigger segment (the action remains clickable but the menu cannot open). Useful when there is only a single action and the alternatives have temporarily collapsed. Ignored when isDisabled is true."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Pattern A skeleton shimmer overlay covering both segments. Prevents both action and menu open. Sets aria-busy on the wrapper."
+      },
+      {
+        "prop": "items",
+        "type": "array",
+        "default": "",
+        "required": "Yes",
+        "desc": "Menu items passed through to the internal ArvoActionMenu. Flat MenuItemData[] or grouped ListGroup<MenuItemData>[]. Items may have submenus but NOT inlinePopover or inlineHybridPopover (same constraint as DropdownButton)."
+      },
+      {
+        "prop": "search",
+        "type": "boolean | MenuSearchConfig",
+        "default": "false",
+        "required": "No",
+        "desc": "Enables the ArvoSearch input inside the ActionMenu. Pass through to ArvoActionMenu."
+      },
+      {
+        "prop": "placement",
+        "type": "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'",
+        "default": "bottom-end",
+        "required": "No",
+        "desc": "Preferred placement of the ActionMenu relative to the trigger segment. The menu always anchors to the __trigger element (not the action). Pass through to ArvoActionMenu."
+      },
+      {
+        "prop": "maxHeight",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Maximum height of the ActionMenu panel."
+      },
+      {
+        "prop": "hasGroupDividers",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "When true and items are grouped, renders dividers between groups."
+      },
+      {
+        "prop": "closeOnSelect",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Whether the menu closes after an item is selected. Pass through."
+      },
+      {
+        "prop": "triggerLabel",
+        "type": "string",
+        "default": "Show options",
+        "required": "No",
+        "desc": "Accessible label for the trigger (caret) segment, exposed via aria-label. Default 'Show options' is generic; consumers should pass something contextual like '{label} options' (e.g. 'Save options')."
+      },
+      {
+        "prop": "onAction",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Click handler on the action segment. In action mode, fires with the native MouseEvent. In selection mode, also receives the currently selected item: (event, selectedItem | null). Suppressed when disabled or loading."
+      },
+      {
+        "prop": "onSelect",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called when a menu item is activated. Receives (item: MenuItemData, index: number). In selection mode, also updates the action segment's label/icon and the active item unless controlled. Return false to prevent close-on-select."
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called before the menu opens. Return false to cancel."
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called before the menu closes. Return false to cancel."
+      },
+      {
+        "prop": "onOpenChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called after the open state changes. Receives (open: boolean)."
+      },
+      {
+        "prop": "onFocus",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Native focus passthrough forwarded from the action segment. The caret segment is internal and does not expose a separate focus contract."
+      },
+      {
+        "prop": "onBlur",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Native blur passthrough forwarded from the action segment."
+      }
+    ],
+    "events": [
+      {
+        "event": "split-btn:action",
+        "payload": "{ selectedItem: MenuItemData | null }",
+        "desc": "Fires when the action segment is activated. selectedItem is null in action mode and the currently selected item in selection mode. Cancelable."
+      },
+      {
+        "event": "split-btn:select",
+        "payload": "{ item: MenuItemData, index: number }",
+        "desc": "Menu item selected. Cancelable — preventing default stops close-on-select."
+      },
+      {
+        "event": "split-btn:open",
+        "payload": "{  }",
+        "desc": "Menu opened. Cancelable."
+      },
+      {
+        "event": "split-btn:close",
+        "payload": "{  }",
+        "desc": "Menu closed. Cancelable."
+      },
+      {
+        "event": "split-btn:change",
+        "payload": "{ item: MenuItemData | null, previousItem: MenuItemData | null }",
+        "desc": "Selection changed (selection mode only). Fires after the selected item changes."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoSplitButtonOptions)",
+        "returns": "instance",
+        "desc": "Initialize split button. Builds the two-segment structure, attaches ArvoActionMenu to the trigger segment, wires per-segment click/keyboard handlers."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": "Open the menu. Delegates to internal ActionMenu.open()."
+      },
+      {
+        "method": "close()",
+        "returns": "void",
+        "desc": "Close the menu. Delegates to internal ActionMenu.close()."
+      },
+      {
+        "method": "toggle(force: boolean | undefined)",
+        "returns": "void",
+        "desc": "Toggle menu open state."
+      },
+      {
+        "method": "value(itemId: string | number | null | undefined)",
+        "returns": "MenuItemData | null | void",
+        "desc": "Get or set selected item (selection mode). In action mode, getter returns null. Setter updates the action segment's label/icon and active item."
+      },
+      {
+        "method": "updateItems(items: MenuItemData[] | ListGroup<MenuItemData>[])",
+        "returns": "void",
+        "desc": "Replace menu items."
+      },
+      {
+        "method": "setLabel(text: string)",
+        "returns": "void",
+        "desc": "Update action segment label text. In selection mode, calling this does NOT affect the internal selection state."
+      },
+      {
+        "method": "setIcon(iconName: string | null)",
+        "returns": "void",
+        "desc": "Set or remove the leading icon on the action segment."
+      },
+      {
+        "method": "setVariant(variant: string)",
+        "returns": "void",
+        "desc": "Change visual variant. Removes previous variant class on wrapper + segments, adds new one."
+      },
+      {
+        "method": "setSize(size: string)",
+        "returns": "void",
+        "desc": "Change segment size. Removes previous size class on wrapper + segments, adds new one."
+      },
+      {
+        "method": "setLoading(loading: boolean)",
+        "returns": "void",
+        "desc": "Toggle loading state (Pattern A overlay) on the wrapper."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set whole-component disabled state. Disables both segments."
+      },
+      {
+        "method": "actionDisabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set the action-segment-only disabled state."
+      },
+      {
+        "method": "triggerDisabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set the trigger-segment-only disabled state."
+      },
+      {
+        "method": "isOpen()",
+        "returns": "boolean",
+        "desc": "Returns whether the menu is currently open."
+      },
+      {
+        "method": "focus(target: 'action' | 'trigger' | undefined)",
+        "returns": "void",
+        "desc": "Programmatically focus a segment. Defaults to the action segment."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Remove event listeners, destroy internal ActionMenu, clean up both segment elements."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-haspopup",
+        "when": "Set to 'menu' on the __trigger element only (not on __action)."
+      },
+      {
+        "attr": "aria-expanded",
+        "when": "Set on __trigger and toggled when the ActionMenu opens/closes."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "Mirrors disabled attribute on each segment. Wrapper also receives aria-disabled when isDisabled is true so AT can announce the group as disabled."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "Set to 'true' on the wrapper during loading state."
+      },
+      {
+        "attr": "aria-label",
+        "when": "On __trigger: required, sourced from triggerLabel prop (default 'Show options'). On __action: optional, defaults to the visible label."
+      },
+      {
+        "attr": "aria-describedby",
+        "when": "Optional — consumers can wire to provide additional context (e.g. 'Save the current document; click the caret for variants')."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Tab",
+        "action": "Move focus into __action, then __trigger, then out. Two stops total."
+      },
+      {
+        "key": "Shift+Tab",
+        "action": "Reverse order."
+      },
+      {
+        "key": "Enter (on __action)",
+        "action": "Activate the action segment. Fires onAction (or onSelect for the active item in selection mode)."
+      },
+      {
+        "key": "Space (on __action)",
+        "action": "Same as Enter."
+      },
+      {
+        "key": "ArrowDown (on __action)",
+        "action": "Open the menu and move focus to the first non-disabled menu item. Mirrors common SplitButton patterns where ArrowDown from the action shortcuts to the menu."
+      },
+      {
+        "key": "Enter (on __trigger)",
+        "action": "Toggle the menu open/closed."
+      },
+      {
+        "key": "Space (on __trigger)",
+        "action": "Same as Enter."
+      },
+      {
+        "key": "ArrowDown (on __trigger)",
+        "action": "Open the menu and focus the first item."
+      },
+      {
+        "key": "ArrowUp (on __trigger)",
+        "action": "Open the menu and focus the last item."
+      },
+      {
+        "key": "Escape (when menu open)",
+        "action": "Close the menu and return focus to __trigger."
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-split-btn-gap",
+          "--arvo-split-btn-trigger-width",
+          "--arvo-split-btn-trigger-pad-block",
+          "--arvo-split-btn-caret-size",
+          "--arvo-split-btn-action-pad-inline-tertiary-end"
+        ]
+      },
+      {
+        "category": "Per Size",
+        "vars": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--o9ds-Component-Library--in-progress-?node-id=23215-1960&m=dev"
+  },
+  "split-icon-button": {
+    "slug": "split-icon-button",
+    "name": "SplitIconButton",
+    "abbreviation": "split-icon-btn",
+    "category": "Actions",
+    "status": "new",
+    "description": "Icon-only two-segment action control composed of a square icon-only action button and a separate dropdown trigger button (caret) that opens an ArvoActionMenu overlay. Same composition pattern as SplitButton but with no label — the action segment is a fixed-square icon button (matching ArvoIconButton dimensions) and the trigger segment is the caret-only sliver. Each segment is independently focusable, hoverable, and reports its own click. Used in toolbars and dense surfaces where a primary icon action and its alternatives must both be one click away.",
+    "bem": {
+      "block": "arvo-split-icon-btn",
+      "elements": [
+        {
+          "name": "action",
+          "optional": "No",
+          "desc": "Left segment — the primary executable icon button. Renders as <button type='button'> with .arvo-icon-btn .arvo-btn--{variant} .arvo-btn--{size} so it inherits all icon-button base styling (square dimensions, padding, hover, focus, active, disabled, loading). Hosts the configured icon."
+        },
+        {
+          "name": "trigger",
+          "optional": "No",
+          "desc": "Right segment — the dropdown caret button. Renders as <button type='button'> with .arvo-btn .arvo-btn--{variant} .arvo-btn--{size} for shared color tokens, but uses split-icon-btn's own narrow rectangular layout (block padding only, fixed width). Carries aria-haspopup='menu' and aria-expanded."
+        },
+        {
+          "name": "icon",
+          "optional": "No",
+          "desc": "The primary o9con icon inside the action segment. Always present — this is the only visual indicator on the action segment."
+        },
+        {
+          "name": "caret",
+          "optional": "No",
+          "desc": "The trailing angle-down icon inside the trigger segment (o9con-angle-down). Always present. Rotates 180deg when the menu is open via the .open state class on the wrapper."
+        }
+      ],
+      "variants": [
+        {
+          "name": "primary",
+          "desc": "Primary — both segments use filled theme-color background (s-theme) with inverse icon. The 2px gap between segments lets the page background show through. Reuses arvo-btn--primary on each segment."
+        },
+        {
+          "name": "secondary",
+          "desc": "Secondary — both segments use s-layer-05 background with secondary icon. Reuses arvo-btn--secondary."
+        },
+        {
+          "name": "tertiary",
+          "desc": "Tertiary/ghost — both segments transparent with secondary icon. Reuses arvo-btn--tertiary."
+        }
+      ],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small: 24x24 action square, 16px icon, 24px-tall trigger sliver, 16px caret."
+        },
+        {
+          "name": "md",
+          "desc": "Medium (default): 32x32 action square, 20px icon, 32px-tall trigger sliver, 16px caret."
+        },
+        {
+          "name": "lg",
+          "desc": "Large: 40x40 action square, 24px icon, 40px-tall trigger sliver, 16px caret. Extrapolated from the existing arvo-icon-btn lg dimensions for design-system parity (Figma source only ships sm + md)."
+        }
+      ],
+      "layouts": [],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Menu is currently visible. Drives caret rotation (180deg) and trigger active surface."
+        },
+        {
+          "name": "loading",
+          "desc": "Pattern A skeleton shimmer overlay covering the entire wrapper. Suppresses pointer-events and sets aria-busy."
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "icon",
+        "type": "string",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Icon name without o9con- prefix. Always present — primary visual indicator on the action segment."
+      },
+      {
+        "prop": "tooltip",
+        "type": "string | TooltipConfig",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Accessible label and design-system tooltip for the action segment. Sets aria-label on the __action <button> and wires up the arvo tooltip system. REQUIRED because there is no visible text label."
+      },
+      {
+        "prop": "variant",
+        "type": "'primary' | 'secondary' | 'tertiary'",
+        "default": "primary",
+        "required": "No",
+        "desc": "Visual style variant. Reuses arvo-btn--{value} on each segment."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "default": "md",
+        "required": "No",
+        "desc": "Segment size. Both segments always share the same size."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disables BOTH segments and prevents the menu from opening."
+      },
+      {
+        "prop": "isActionDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disables ONLY the action segment. Trigger remains enabled. Ignored when isDisabled is true."
+      },
+      {
+        "prop": "isTriggerDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disables ONLY the trigger segment. Action remains clickable. Ignored when isDisabled is true."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Pattern A skeleton shimmer overlay covering both segments."
+      },
+      {
+        "prop": "items",
+        "type": "array",
+        "default": "",
+        "required": "Yes",
+        "desc": "Menu items passed through to the internal ArvoActionMenu. Items may have submenus but NOT inlinePopover or inlineHybridPopover."
+      },
+      {
+        "prop": "search",
+        "type": "boolean | MenuSearchConfig",
+        "default": "false",
+        "required": "No",
+        "desc": "Enables ArvoSearch in the ActionMenu."
+      },
+      {
+        "prop": "placement",
+        "type": "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'",
+        "default": "bottom-end",
+        "required": "No",
+        "desc": "Preferred placement of the ActionMenu relative to the trigger segment."
+      },
+      {
+        "prop": "maxHeight",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Maximum height of the ActionMenu panel."
+      },
+      {
+        "prop": "hasGroupDividers",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "When true and items are grouped, renders dividers between groups."
+      },
+      {
+        "prop": "closeOnSelect",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Whether the menu closes after an item is selected."
+      },
+      {
+        "prop": "triggerLabel",
+        "type": "string",
+        "default": "Show options",
+        "required": "No",
+        "desc": "Accessible label for the trigger (caret) segment via aria-label. Default 'Show options' is generic; consumers should pass something contextual like 'More filter options'."
+      },
+      {
+        "prop": "onAction",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Click handler on the action segment. Receives the native MouseEvent. Suppressed when disabled or loading."
+      },
+      {
+        "prop": "onSelect",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called when a menu item is activated. Receives (item: MenuItemData, index: number). Return false to prevent close-on-select."
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called before the menu opens. Return false to cancel."
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called before the menu closes. Return false to cancel."
+      },
+      {
+        "prop": "onOpenChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Called after the open state changes. Receives (open: boolean)."
+      },
+      {
+        "prop": "onFocus",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Native focus passthrough forwarded from the action segment. The caret segment is internal and does not expose a separate focus contract."
+      },
+      {
+        "prop": "onBlur",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Native blur passthrough forwarded from the action segment."
+      }
+    ],
+    "events": [
+      {
+        "event": "split-icon-btn:action",
+        "payload": "{  }",
+        "desc": "Fires when the action segment is activated. Cancelable."
+      },
+      {
+        "event": "split-icon-btn:select",
+        "payload": "{ item: MenuItemData, index: number }",
+        "desc": "Menu item selected. Cancelable."
+      },
+      {
+        "event": "split-icon-btn:open",
+        "payload": "{  }",
+        "desc": "Menu opened. Cancelable."
+      },
+      {
+        "event": "split-icon-btn:close",
+        "payload": "{  }",
+        "desc": "Menu closed. Cancelable."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoSplitIconButtonOptions)",
+        "returns": "instance",
+        "desc": "Initialize. Builds two-segment structure, attaches ArvoActionMenu to the trigger segment."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": "Open the menu."
+      },
+      {
+        "method": "close()",
+        "returns": "void",
+        "desc": "Close the menu."
+      },
+      {
+        "method": "toggle(force: boolean | undefined)",
+        "returns": "void",
+        "desc": "Toggle menu open state."
+      },
+      {
+        "method": "updateItems(items: MenuItemData[] | ListGroup<MenuItemData>[])",
+        "returns": "void",
+        "desc": "Replace menu items."
+      },
+      {
+        "method": "setIcon(iconName: string)",
+        "returns": "void",
+        "desc": "Update the action segment's icon."
+      },
+      {
+        "method": "setTooltip(text: string | null)",
+        "returns": "void",
+        "desc": "Update or remove the action segment's tooltip and aria-label."
+      },
+      {
+        "method": "setVariant(variant: string)",
+        "returns": "void",
+        "desc": "Change visual variant on wrapper + segments."
+      },
+      {
+        "method": "setSize(size: string)",
+        "returns": "void",
+        "desc": "Change segment size on wrapper + segments."
+      },
+      {
+        "method": "setLoading(loading: boolean)",
+        "returns": "void",
+        "desc": "Toggle loading state (Pattern A overlay)."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set whole-component disabled state."
+      },
+      {
+        "method": "actionDisabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set the action-segment-only disabled state."
+      },
+      {
+        "method": "triggerDisabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set the trigger-segment-only disabled state."
+      },
+      {
+        "method": "isOpen()",
+        "returns": "boolean",
+        "desc": "Returns whether the menu is currently open."
+      },
+      {
+        "method": "focus(target: 'action' | 'trigger' | undefined)",
+        "returns": "void",
+        "desc": "Programmatically focus a segment."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Remove event listeners, destroy internal ActionMenu, clean up both segments."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-haspopup",
+        "when": "Set to 'menu' on __trigger only."
+      },
+      {
+        "attr": "aria-expanded",
+        "when": "Set on __trigger and toggled when ActionMenu opens/closes."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "Mirrors disabled attribute on each segment. Wrapper also receives aria-disabled when isDisabled is true."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "Set to 'true' on the wrapper during loading state."
+      },
+      {
+        "attr": "aria-label",
+        "when": "Required on BOTH segments. __action: from tooltip prop. __trigger: from triggerLabel prop."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Tab",
+        "action": "Move focus into __action, then __trigger, then out."
+      },
+      {
+        "key": "Shift+Tab",
+        "action": "Reverse order."
+      },
+      {
+        "key": "Enter (on __action)",
+        "action": "Activate the action segment. Fires onAction."
+      },
+      {
+        "key": "Space (on __action)",
+        "action": "Same as Enter."
+      },
+      {
+        "key": "ArrowDown (on __action)",
+        "action": "Open the menu and focus the first item."
+      },
+      {
+        "key": "Enter (on __trigger)",
+        "action": "Toggle the menu open/closed."
+      },
+      {
+        "key": "Space (on __trigger)",
+        "action": "Same as Enter."
+      },
+      {
+        "key": "ArrowDown (on __trigger)",
+        "action": "Open the menu and focus the first item."
+      },
+      {
+        "key": "ArrowUp (on __trigger)",
+        "action": "Open the menu and focus the last item."
+      },
+      {
+        "key": "Escape (when menu open)",
+        "action": "Close the menu and return focus to __trigger."
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-split-icon-btn-gap",
+          "--arvo-split-icon-btn-trigger-width",
+          "--arvo-split-icon-btn-trigger-pad-block",
+          "--arvo-split-icon-btn-caret-size"
+        ]
+      },
+      {
+        "category": "Per Size",
+        "vars": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--o9ds-Component-Library--in-progress-?node-id=23215-2225&m=dev"
+  },
   "switch": {
     "slug": "switch",
     "name": "Switch",
@@ -8735,7 +11201,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Field is required for form submission. Shows required indicator (asterisk via arvo-sw__required span) on the label when label is set."
+        "desc": "Field is required for form submission. Shows the shared required indicator (the `arvo-form-lbl__req` asterisk span rendered via ArvoFormLabelText / createFormLabel) inside the visible label when one is set."
       },
       {
         "prop": "label",
@@ -9312,7 +11778,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "err-msg",
           "optional": "Yes",
-          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-inline-alert block."
+          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-msg-alert block."
         }
       ],
       "variants": [],
@@ -9641,7 +12107,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "err-msg",
           "optional": "Yes",
-          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-inline-alert block."
+          "desc": "Inline alert rendered below the field showing validation error message. Uses shared arvo-msg-alert block."
         }
       ],
       "variants": [],
@@ -10277,7 +12743,7 @@ export const COMPONENT_DESCRIPTORS = {
     "abbreviation": "bdg-alert",
     "category": "Feedback",
     "status": "stable",
-    "description": "Compact status badge for displaying short alert messages with semantic color coding. Renders as a static inline-flex container with an optional status icon and a text message. Two visual variants: primary (filled background) and outline (bordered). Six semantic types map to the design system's standard feedback colors: positive, info, neutral, warning, negative, and block. Two sizes: sm (12px text, 14px icon) and lg (14px text, 16px icon). Unlike the inline-alert shared pattern which is positioned below form inputs, BadgeAlert is a self-contained badge with its own background/border for use in any layout context.",
+    "description": "Compact status badge for displaying short alert messages with semantic color coding. Renders as a static inline-flex container with an optional status icon and a text message. Two visual variants: primary (filled background) and outline (bordered). Six semantic types map to the design system's standard feedback colors: positive, info, neutral, warning, negative, and block. Two sizes: sm (12px text, 14px icon) and lg (14px text, 16px icon). Unlike the msg-alert shared pattern which is positioned below form inputs, BadgeAlert is a self-contained badge with its own background/border for use in any layout context.",
     "bem": {
       "block": "arvo-bdg-alert",
       "elements": [
@@ -10545,7 +13011,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "err-ico",
           "optional": "Yes",
-          "desc": "Error tooltip icon inside the field (visible when has-error + error-tooltip). Uses the error-tooltip-icon mixin."
+          "desc": "Error tooltip icon inside the field (visible when has-error + error-tooltip). Uses the MessageAlert isInline mode mixin."
         },
         {
           "name": "empty",
@@ -10594,7 +13060,7 @@ export const COMPONENT_DESCRIPTORS = {
         },
         {
           "name": "error-tooltip",
-          "desc": "Error displayed as a compact icon inside the field with the message in a tooltip on hover (instead of an inline-alert below)"
+          "desc": "Error displayed as a compact icon inside the field with the message in a tooltip on hover (instead of a message-alert below)"
         },
         {
           "name": "is-disabled",
@@ -10672,7 +13138,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "string",
         "default": "—",
         "required": "No",
-        "desc": "Error message shown via inline-alert pattern when invalid is true."
+        "desc": "Error message shown via msg-alert pattern when invalid is true."
       },
       {
         "prop": "errorDisplay",

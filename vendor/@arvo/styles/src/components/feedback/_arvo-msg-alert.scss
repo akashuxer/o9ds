@@ -1,0 +1,58 @@
+// Message Alert component styles
+// BEM Block: .arvo-msg-alert
+// Abbreviation: msg-alert
+// Category: Feedback
+//
+// Public atomic message-alert primitive. Two display modes:
+//   * Full   (default)         -- icon + message + optional dismiss button
+//   * Inline (--inline)        -- icon-only 16x16 (in-field tooltip-error use case)
+//
+// Six semantic types (error, success, warning, info, neutral, block) drive
+// icon glyph + color via the shared `mixins/_msg-alert` pattern.
+//
+// See descriptors/message-alert.json for the full spec.
+
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/msg-alert' as *;
+
+.arvo-msg-alert {
+  @include msg-alert-base;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--arvo-msg-alert-body-gap, #{$arvo-space-8});
+  min-width: 0;
+
+  // -- __body (wrapper for __ico + __msg in full mode) ----------------------
+  &__body {
+    display: inline-flex;
+    flex: 1 0 0;
+    align-items: flex-start;
+    gap: #{$arvo-space-4};
+    min-width: 0;
+  }
+
+  // -- __ico (leading status icon) ------------------------------------------
+  &__ico { @include msg-alert-icon; }
+
+  // -- __msg (trailing message text) ----------------------------------------
+  &__msg { @include msg-alert-msg; }
+
+  // -- Type modifiers -------------------------------------------------------
+  &--error    { @include msg-alert-error; }
+  &--success  { @include msg-alert-success; }
+  &--warning  { @include msg-alert-warning; }
+  &--info     { @include msg-alert-info; }
+  &--neutral  { @include msg-alert-neutral; }
+  &--block    { @include msg-alert-block; }
+
+  // -- Layout / state modifiers --------------------------------------------
+  &--inline       { @include msg-alert-inline; }
+  &--dismissable  { @include msg-alert-dismissable; }
+
+  // Custom-icon override: when an explicit `icon` prop is passed, the SCSS
+  // pattern's `::before` glyph is suppressed and a child <i class="o9con-*">
+  // renders inside __ico instead. The color still follows the `type` modifier.
+  &.has-icon-override .arvo-msg-alert__ico::before {
+    content: none;
+  }
+}

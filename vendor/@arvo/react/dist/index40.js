@@ -1,327 +1,197 @@
 import { jsxs, jsx } from "react/jsx-runtime";
-import { forwardRef, useId, useRef, useImperativeHandle, useState, useEffect, useCallback, useMemo } from "react";
-import { createPortal } from "react-dom";
-import ArvoButton from "./index11.js";
-import ArvoIconButton from "./index12.js";
-import ArvoCheckbox from "./index17.js";
-import ArvoTextbox from "./index13.js";
-import { useControllableState } from "./index41.js";
-import { useOverlay } from "./index6.js";
-import { useFocusTrap } from "./index7.js";
-const DEFAULT_PRIMARY = { label: "OK" };
-const DEFAULT_SECONDARY = { label: "Cancel" };
-function normalizeDontShow(value) {
-  if (value === null || value === void 0 || value === false) return null;
-  if (value === true) return {};
-  return value;
+import { forwardRef, useRef, useState, useMemo, useCallback } from "react";
+import { ArvoActionMenu } from "./index35.js";
+function isGrouped(items) {
+  return items.length > 0 && "items" in items[0];
 }
-const ArvoAlertDialog = forwardRef(
-  function ArvoAlertDialog2({
-    variant = "warning",
+function flattenItems(items) {
+  if (isGrouped(items)) return items.flatMap((g) => g.items);
+  return items;
+}
+const ArvoDropdownButton = forwardRef(
+  function ArvoDropdownButton2({
+    label,
+    variant = "primary",
     size = "md",
-    title,
-    message,
-    content,
-    isOpen: openProp,
-    defaultOpen = false,
-    hasDangerAction = false,
-    primaryAction = DEFAULT_PRIMARY,
-    secondaryAction,
-    hasSecondaryBtn = true,
-    isClosable = false,
-    hasBackdrop = true,
-    closeOnBackdrop = false,
-    closeOnEscape = true,
-    confirmInput = null,
-    dontShowAgain = null,
-    isLoading = false,
+    icon,
+    mode = "action",
+    displaySelected = "label",
+    value,
+    defaultValue = null,
     isDisabled = false,
-    container = null,
+    isLoading = false,
+    items,
+    search,
+    placement = "bottom-end",
+    maxHeight,
+    hasGroupDividers = true,
+    closeOnSelect = true,
     className,
-    onOpenChange,
+    onSelect,
     onOpen,
     onClose,
-    onConfirmInputChange,
-    onDontShowAgainChange
+    onOpenChange,
+    onClick,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    ...rest
   }, ref) {
-    const uid = useId();
-    const panelId = `arvo-alert-dlg-${uid}`;
-    const titleId = `arvo-alert-dlg-title-${uid}`;
-    const bodyId = `arvo-alert-dlg-body-${uid}`;
-    const rootRef = useRef(null);
-    const panelRef = useRef(null);
-    const inputElRef = useRef(null);
-    useImperativeHandle(ref, () => rootRef.current, []);
-    const [isOpen, setOpen] = useControllableState(openProp, defaultOpen);
-    const [confirmValue, setConfirmValue] = useState("");
-    const isPrimaryDisabledByConfirm = (confirmInput == null ? void 0 : confirmInput.expectedValue) ? confirmValue !== confirmInput.expectedValue : false;
-    useEffect(() => {
-      if (!isOpen) setConfirmValue("");
-    }, [isOpen]);
-    const dontShowConfig = normalizeDontShow(dontShowAgain);
-    const [dontShowChecked, setDontShowChecked] = useState(
-      (dontShowConfig == null ? void 0 : dontShowConfig.defaultChecked) ?? false
-    );
-    const overlay = useOverlay();
-    const handleClose = useCallback(
-      (reason) => {
-        if (!isOpen) return;
-        if ((onClose == null ? void 0 : onClose({ reason })) === false) return;
-        setOpen(false);
+    const triggerRef = useRef(null);
+    const menuSize = size === "sm" ? "sm" : "md";
+    const [isOpen, setIsOpen] = useState(false);
+    const isControlled = value !== void 0;
+    const [internalSelected, setInternalSelected] = useState(defaultValue);
+    const effectiveSelectedId = isControlled ? value : internalSelected;
+    const flat = useMemo(() => flattenItems(items), [items]);
+    const selectedItemData = useMemo(() => {
+      if (effectiveSelectedId == null) return null;
+      const id = String(effectiveSelectedId);
+      return flat.find((item) => item.id === id) ?? null;
+    }, [flat, effectiveSelectedId]);
+    const displayLabel = useMemo(() => {
+      if (mode === "action" || !selectedItemData) return label;
+      if (displaySelected === "value") {
+        const val = selectedItemData.value;
+        return val != null ? String(val) : selectedItemData.id;
+      }
+      return selectedItemData.label;
+    }, [mode, selectedItemData, label, displaySelected]);
+    const handleOpenChange = useCallback(
+      (isOpen2) => {
+        setIsOpen(isOpen2);
+        onOpenChange == null ? void 0 : onOpenChange(isOpen2);
       },
-      [isOpen, onClose, setOpen]
+      [onOpenChange]
     );
-    const wasOpenRef = useRef(isOpen);
-    useEffect(() => {
-      if (!wasOpenRef.current && isOpen) {
-        if ((onOpen == null ? void 0 : onOpen()) === false) {
-          setOpen(false);
-          return;
-        }
-      }
-      wasOpenRef.current = isOpen;
-    }, [isOpen]);
-    const isFirstRenderRef = useRef(true);
-    useEffect(() => {
-      if (isFirstRenderRef.current) {
-        isFirstRenderRef.current = false;
-        return;
-      }
-      onOpenChange == null ? void 0 : onOpenChange(isOpen);
-    }, [isOpen]);
-    useEffect(() => {
-      if (!isOpen || !panelRef.current) return;
-      overlay.open({
-        id: panelId,
-        type: "modal",
-        element: panelRef.current,
-        priority: 10,
-        config: { autoCloseOnOutsideClick: false },
-        onClose: () => handleClose("programmatic")
+    const processedItems = useMemo(() => {
+      if (mode !== "selection" || effectiveSelectedId == null) return items;
+      const selId = String(effectiveSelectedId);
+      const mark = (item) => ({
+        ...item,
+        active: item.id === selId
       });
-      return () => {
-        overlay.close(panelId);
-      };
-    }, [isOpen]);
-    useFocusTrap(panelRef, {
-      active: isOpen,
-      // When a confirm input exists, suppress trap's auto-focus and focus
-      // the input ourselves below for guaranteed targeting.
-      initialFocus: confirmInput ? "none" : "first",
-      escapeDeactivates: false,
-      returnFocusOnDeactivate: true,
-      allowOutsideClick: false
-    });
-    useEffect(() => {
-      if (!isOpen || !confirmInput) return;
-      const id = window.setTimeout(() => {
-        var _a;
-        const input = (_a = panelRef.current) == null ? void 0 : _a.querySelector(
-          ".arvo-alert-dlg__confirm-input input"
-        );
-        if (input) {
-          inputElRef.current = input;
-          input.focus({ preventScroll: true });
-        }
-      }, 0);
-      return () => window.clearTimeout(id);
-    }, [isOpen, confirmInput]);
-    useEffect(() => {
-      if (!isOpen) return;
-      const onKeyDown = (e) => {
-        if (e.key === "Escape") {
-          e.stopPropagation();
-          if (closeOnEscape) handleClose("escape");
-        }
-      };
-      document.addEventListener("keydown", onKeyDown, true);
-      return () => document.removeEventListener("keydown", onKeyDown, true);
-    }, [isOpen, closeOnEscape, handleClose]);
-    const runAction = useCallback(
-      (action, reason, e) => {
-        var _a;
-        const result = (_a = action.onClick) == null ? void 0 : _a.call(action, e);
-        if (result === false) return;
-        if (action.closeOnClick !== false) {
-          handleClose(reason);
-        }
-      },
-      [handleClose]
-    );
-    const primaryConfig = primaryAction ?? DEFAULT_PRIMARY;
-    const secondaryConfig = secondaryAction === null ? null : secondaryAction ?? DEFAULT_SECONDARY;
-    const showSecondary = hasSecondaryBtn && secondaryConfig !== null;
-    const handlePrimaryClick = useCallback(
-      (e) => {
-        if (isLoading || isDisabled || primaryConfig.isDisabled || isPrimaryDisabledByConfirm) return;
-        runAction(primaryConfig, "primary", e);
-      },
-      [isLoading, isDisabled, isPrimaryDisabledByConfirm, primaryConfig, runAction]
-    );
-    const handleSecondaryClick = useCallback(
-      (e) => {
-        if (!secondaryConfig) return;
-        runAction(secondaryConfig, "secondary", e);
-      },
-      [secondaryConfig, runAction]
-    );
-    const handleConfirmInputChange = useCallback(
-      (e) => {
-        var _a;
-        const next = e.target.value;
-        setConfirmValue(next);
-        (_a = confirmInput == null ? void 0 : confirmInput.onChange) == null ? void 0 : _a.call(confirmInput, next);
-        onConfirmInputChange == null ? void 0 : onConfirmInputChange(next);
-      },
-      [confirmInput, onConfirmInputChange]
-    );
-    const handleConfirmInputKeyDown = useCallback(
-      (e) => {
-        if (e.key === "Enter" && !isPrimaryDisabledByConfirm) {
-          e.preventDefault();
-          runAction(
-            primaryConfig,
-            "primary",
-            e
+      if (isGrouped(items)) {
+        return items.map((group) => ({
+          ...group,
+          items: group.items.map(mark)
+        }));
+      }
+      return items.map(mark);
+    }, [items, mode, effectiveSelectedId]);
+    const handleSelect = useCallback(
+      (item, index) => {
+        var _a, _b;
+        if (mode === "selection") {
+          const prevId = isControlled ? value : internalSelected;
+          const previousItem = prevId != null ? flat.find((i) => i.id === String(prevId)) ?? null : null;
+          if (!isControlled) setInternalSelected(item.id);
+          (_a = triggerRef.current) == null ? void 0 : _a.dispatchEvent(
+            new CustomEvent("dd-btn:change", {
+              bubbles: true,
+              cancelable: true,
+              detail: { item, index, previousItem }
+            })
+          );
+        } else {
+          (_b = triggerRef.current) == null ? void 0 : _b.dispatchEvent(
+            new CustomEvent("dd-btn:select", {
+              bubbles: true,
+              cancelable: true,
+              detail: { item, index }
+            })
           );
         }
+        return onSelect == null ? void 0 : onSelect(item, index);
       },
-      [isPrimaryDisabledByConfirm, primaryConfig, runAction]
+      [mode, isControlled, value, internalSelected, flat, onSelect]
     );
-    const handleDontShowChange = useCallback(
-      (detail) => {
-        var _a;
-        const next = detail.isChecked;
-        setDontShowChecked(next);
-        (_a = dontShowConfig == null ? void 0 : dontShowConfig.onChange) == null ? void 0 : _a.call(dontShowConfig, next);
-        onDontShowAgainChange == null ? void 0 : onDontShowAgainChange(next);
+    const mergeRef = useCallback(
+      (node) => {
+        triggerRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
       },
-      [dontShowConfig, onDontShowAgainChange]
+      [ref]
     );
-    const portalTarget = useMemo(() => {
-      if (typeof document === "undefined") return null;
-      if (!container) return document.body;
-      if (typeof container === "string") {
-        return document.querySelector(container) ?? document.body;
-      }
-      return container;
-    }, [container]);
-    if (!isOpen || !portalTarget) return null;
-    const rootClasses = [
-      "arvo-alert-dlg",
-      `arvo-alert-dlg--${variant}`,
-      size !== "md" && `arvo-alert-dlg--${size}`,
-      hasBackdrop && "arvo-alert-dlg--with-backdrop",
-      hasDangerAction && "arvo-alert-dlg--danger",
-      isClosable && "arvo-alert-dlg--closable",
-      "open",
+    const triggerClasses = [
+      "arvo-dd-btn",
+      "arvo-btn",
+      `arvo-btn--${variant}`,
+      `arvo-btn--${size}`,
+      isOpen && "open",
       isLoading && "loading",
       className
     ].filter(Boolean).join(" ");
-    const dontShowLabel = (dontShowConfig == null ? void 0 : dontShowConfig.label) ?? "Don't show this again";
-    return createPortal(
-      /* @__PURE__ */ jsxs("div", { ref: rootRef, className: rootClasses, children: [
-        /* @__PURE__ */ jsx(
-          "div",
-          {
-            className: "arvo-alert-dlg__backdrop",
-            "aria-hidden": "true",
-            onClick: closeOnBackdrop ? () => handleClose("backdrop") : void 0
-          }
-        ),
-        /* @__PURE__ */ jsxs(
-          "div",
-          {
-            ref: panelRef,
-            id: panelId,
-            className: "arvo-alert-dlg__panel",
-            role: "alertdialog",
-            "aria-modal": "true",
-            "aria-labelledby": titleId,
-            "aria-describedby": bodyId,
-            "aria-busy": isLoading || void 0,
-            tabIndex: -1,
-            children: [
-              /* @__PURE__ */ jsxs("div", { className: "arvo-alert-dlg__header", children: [
-                /* @__PURE__ */ jsx("span", { className: "arvo-alert-dlg__ico o9con", "aria-hidden": "true" }),
-                /* @__PURE__ */ jsx("p", { id: titleId, className: "arvo-alert-dlg__title", children: title }),
-                isClosable && /* @__PURE__ */ jsx("span", { className: "arvo-alert-dlg__close-btn", children: /* @__PURE__ */ jsx(
-                  ArvoIconButton,
-                  {
-                    icon: "close",
-                    variant: "tertiary",
-                    size: "sm",
-                    tooltip: "Close",
-                    "aria-label": "Close dialog",
-                    isDisabled: isLoading || isDisabled,
-                    onClick: () => handleClose("close-button")
-                  }
-                ) })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { id: bodyId, className: "arvo-alert-dlg__body", children: [
-                content !== void 0 && content !== null ? content : message && /* @__PURE__ */ jsx("p", { className: "arvo-alert-dlg__msg", children: message }),
-                confirmInput && /* @__PURE__ */ jsx("div", { className: "arvo-alert-dlg__confirm-input", children: /* @__PURE__ */ jsx(
-                  ArvoTextbox,
-                  {
-                    size: "sm",
-                    isFullWidth: true,
-                    label: confirmInput.label,
-                    placeholder: confirmInput.placeholder,
-                    maxLength: confirmInput.maxLength,
-                    value: confirmValue,
-                    isDisabled: isLoading || isDisabled,
-                    onChange: handleConfirmInputChange,
-                    onKeyDown: handleConfirmInputKeyDown
-                  }
-                ) })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: "arvo-alert-dlg__footer", children: [
-                dontShowConfig && /* @__PURE__ */ jsx("div", { className: "arvo-alert-dlg__dont-show", children: /* @__PURE__ */ jsx(
-                  ArvoCheckbox,
-                  {
-                    size: "sm",
-                    label: dontShowLabel,
-                    isChecked: dontShowChecked,
-                    isDisabled: isLoading || isDisabled,
-                    onChange: handleDontShowChange
-                  }
-                ) }),
-                /* @__PURE__ */ jsxs("div", { className: "arvo-alert-dlg__actions", children: [
-                  showSecondary && secondaryConfig && /* @__PURE__ */ jsx(
-                    ArvoButton,
-                    {
-                      label: secondaryConfig.label,
-                      icon: secondaryConfig.icon,
-                      variant: "secondary",
-                      size: "md",
-                      isDisabled: isLoading || isDisabled || secondaryConfig.isDisabled,
-                      isLoading: secondaryConfig.isLoading,
-                      onClick: handleSecondaryClick
-                    }
-                  ),
-                  /* @__PURE__ */ jsx(
-                    ArvoButton,
-                    {
-                      label: primaryConfig.label,
-                      icon: primaryConfig.icon,
-                      variant: hasDangerAction ? "danger" : "primary",
-                      size: "md",
-                      isDisabled: isLoading || isDisabled || primaryConfig.isDisabled || isPrimaryDisabledByConfirm,
-                      isLoading: primaryConfig.isLoading,
-                      onClick: handlePrimaryClick
-                    }
-                  )
-                ] })
-              ] })
-            ]
-          }
-        )
-      ] }),
-      portalTarget
+    const handleTriggerKeyDown = useCallback(
+      (e) => {
+        var _a;
+        onKeyDown == null ? void 0 : onKeyDown(e);
+        if (e.defaultPrevented) return;
+        if (e.altKey && e.key === "ArrowDown" && !isDisabled && !isLoading) {
+          e.preventDefault();
+          (_a = triggerRef.current) == null ? void 0 : _a.click();
+        }
+      },
+      [onKeyDown, isDisabled, isLoading]
+    );
+    const triggerElement = /* @__PURE__ */ jsxs(
+      "button",
+      {
+        ref: mergeRef,
+        type: "button",
+        ...rest,
+        className: triggerClasses,
+        disabled: isDisabled,
+        "aria-busy": isLoading || void 0,
+        onClick,
+        onFocus,
+        onBlur,
+        onKeyDown: handleTriggerKeyDown,
+        children: [
+          icon && /* @__PURE__ */ jsx(
+            "span",
+            {
+              className: `arvo-dd-btn__icon o9con o9con-${icon}`,
+              "aria-hidden": "true"
+            }
+          ),
+          /* @__PURE__ */ jsx("span", { className: "arvo-dd-btn__lbl", children: displayLabel }),
+          /* @__PURE__ */ jsx(
+            "span",
+            {
+              className: "arvo-dd-btn__caret o9con o9con-angle-down",
+              "aria-hidden": "true"
+            }
+          )
+        ]
+      }
+    );
+    return /* @__PURE__ */ jsx(
+      ArvoActionMenu,
+      {
+        trigger: triggerElement,
+        items: processedItems,
+        size: menuSize,
+        placement,
+        search,
+        maxHeight,
+        hasGroupDividers,
+        closeOnSelect,
+        isDisabled: isDisabled || isLoading,
+        isLoading: false,
+        onOpen,
+        onClose,
+        onSelect: handleSelect,
+        onOpenChange: handleOpenChange
+      }
     );
   }
 );
 export {
-  ArvoAlertDialog
+  ArvoDropdownButton as default
 };
 //# sourceMappingURL=index40.js.map

@@ -1,0 +1,125 @@
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
+
+// SegmentedControl component styles
+// BEM Block: .arvo-seg-ctrl
+// Abbreviation: seg-ctrl
+// Loading Pattern: C (group disables pointer-events + aria-busy)
+//
+// SegmentedControl is single-select radio-group semantics. Visually it shares
+// the compact style of ButtonGroup; the active segment uses theme tokens.
+
+.arvo-seg-ctrl {
+  --arvo-seg-ctrl-height: 32px;
+  --arvo-seg-ctrl-active-bg: var(--arvo-color-s-theme-active-1);
+  --arvo-seg-ctrl-active-text: var(--arvo-color-t-inverse);
+  --arvo-seg-ctrl-active-icon: var(--arvo-color-i-inverse);
+  --arvo-seg-ctrl-active-bg-hover: var(--arvo-color-s-theme-active-1);
+
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  height: var(--arvo-seg-ctrl-height);
+  position: relative;
+  box-sizing: border-box;
+  background-color: var(--arvo-color-s-layer-04);
+  border-radius: $arvo-space-2;
+  padding: $arvo-space-2;
+
+  &__opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $arvo-space-4;
+    height: 100%;
+    padding-inline: $arvo-space-12;
+    border: none;
+    background: transparent;
+    color: var(--arvo-color-t-secondary);
+    font-family: var(--o9-font-family);
+    font-size: $arvo-font-size-14;
+    font-weight: $arvo-regular;
+    line-height: 1;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: $arvo-space-2;
+    flex-shrink: 0;
+    user-select: none;
+    transition: background-color 120ms ease, color 120ms ease;
+
+    &[aria-checked='true'] {
+      background-color: var(--arvo-seg-ctrl-active-bg);
+      color: var(--arvo-seg-ctrl-active-text);
+      font-weight: $arvo-medium;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--arvo-color-b-theme-focus);
+      outline-offset: -2px;
+    }
+
+    @include hover {
+      &:not(:disabled):not([aria-checked='true']):hover {
+        background-color: var(--arvo-color-s-theme-hover-2);
+        color: var(--arvo-color-t-primary);
+      }
+
+      &:not(:disabled)[aria-checked='true']:hover {
+        background-color: var(--arvo-seg-ctrl-active-bg-hover);
+      }
+    }
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      color: var(--arvo-color-t-disabled);
+      cursor: not-allowed;
+    }
+
+    .arvo-seg-ctrl__ico {
+      font-size: $arvo-icon-16;
+      color: currentColor;
+      flex-shrink: 0;
+    }
+  }
+
+  &--sm {
+    --arvo-seg-ctrl-height: 24px;
+
+    .arvo-seg-ctrl__opt {
+      padding-inline: $arvo-space-8;
+      font-size: $arvo-font-size-12;
+      gap: $arvo-space-2;
+
+      .arvo-seg-ctrl__ico {
+        font-size: $arvo-icon-12;
+      }
+    }
+  }
+
+  &--lg {
+    --arvo-seg-ctrl-height: 32px;
+  }
+
+  &--secondary {
+    --arvo-seg-ctrl-active-bg: var(--arvo-color-s-theme-active-2);
+    --arvo-seg-ctrl-active-text: var(--arvo-color-t-theme-active);
+    --arvo-seg-ctrl-active-icon: var(--arvo-color-i-theme-active);
+    --arvo-seg-ctrl-active-bg-hover: var(--arvo-color-s-theme-hover-3);
+  }
+
+  &--icon-only {
+    .arvo-seg-ctrl__opt {
+      padding-inline: $arvo-space-6;
+    }
+  }
+
+  &.is-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  &.loading {
+    pointer-events: none;
+    user-select: none;
+  }
+}

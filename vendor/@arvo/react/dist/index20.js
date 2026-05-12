@@ -1,96 +1,165 @@
 import { jsx, jsxs } from "react/jsx-runtime";
-import { forwardRef, useId, useRef, useCallback } from "react";
-import { useControllableState } from "./index41.js";
-const ArvoSwitch = forwardRef(
-  function ArvoSwitch2({
+import { createContext, forwardRef, useId, useRef, useState, useCallback } from "react";
+import ArvoCheckbox from "./index19.js";
+import { ArvoFormLabelText } from "./index11.js";
+import { ArvoMessageAlert } from "./index12.js";
+const CheckboxGroupContext = createContext(null);
+const ArvoCheckboxGroup = forwardRef(
+  function ArvoCheckboxGroup2({
     label = null,
-    isChecked: checkedProp,
-    defaultChecked = false,
+    hasSelectAll = false,
+    orientation = "vertical",
+    labelPosition = "top",
+    size = "lg",
     isDisabled = false,
     isReadOnly = false,
     isRequired = false,
-    value = "on",
-    name,
-    labelPosition = "end",
+    isInvalid = false,
+    errorMsg = null,
     isLoading = false,
+    name,
     onChange,
-    onFocus,
-    onBlur,
     className,
+    children,
     ...rest
   }, ref) {
     const uid = useId();
-    const inputId = `arvo-sw-${uid}`;
-    const labelId = label ? `arvo-sw-lbl-${uid}` : void 0;
-    const inputRef = useRef(null);
-    const [isChecked, setChecked] = useControllableState(checkedProp, defaultChecked);
+    const labelId = `arvo-cb-grp-lbl-${uid}`;
+    const errorId = `arvo-cb-grp-err-${uid}`;
+    const childStateRef = useRef(/* @__PURE__ */ new Map());
+    const [selectAllChecked, setSelectAllChecked] = useState(false);
+    const [selectAllIndeterminate, setSelectAllIndeterminate] = useState(false);
+    const recomputeSelectAll = useCallback(() => {
+      const states = Array.from(childStateRef.current.values());
+      if (states.length === 0) {
+        setSelectAllChecked(false);
+        setSelectAllIndeterminate(false);
+        return;
+      }
+      const checkedCount = states.filter(Boolean).length;
+      setSelectAllChecked(checkedCount === states.length);
+      setSelectAllIndeterminate(checkedCount > 0 && checkedCount < states.length);
+    }, []);
+    const registerCheckbox = useCallback(
+      (value, isChecked) => {
+        childStateRef.current.set(value, isChecked);
+        recomputeSelectAll();
+      },
+      [recomputeSelectAll]
+    );
+    const unregisterCheckbox = useCallback(
+      (value) => {
+        childStateRef.current.delete(value);
+        recomputeSelectAll();
+      },
+      [recomputeSelectAll]
+    );
+    const fireOnChange = useCallback(() => {
+      if (!onChange) return;
+      const entries = Array.from(childStateRef.current.entries());
+      const values = entries.filter(([, isChecked]) => isChecked).map(([v]) => v);
+      const allChecked = entries.length > 0 && entries.every(([, isChecked]) => isChecked);
+      onChange({ values, allChecked });
+    }, [onChange]);
+    const onChildChange = useCallback(
+      (value, isChecked) => {
+        childStateRef.current.set(value, isChecked);
+        recomputeSelectAll();
+        fireOnChange();
+      },
+      [recomputeSelectAll, fireOnChange]
+    );
+    function handleSelectAllChange({ isChecked }) {
+      childStateRef.current.forEach((_, key) => {
+        childStateRef.current.set(key, isChecked);
+      });
+      recomputeSelectAll();
+      if (onChange) {
+        const entries = Array.from(childStateRef.current.entries());
+        const values = entries.filter(([, c]) => c).map(([v]) => v);
+        onChange({ values, allChecked: isChecked });
+      }
+    }
+    const contextValue = {
+      size,
+      isDisabled,
+      isReadOnly,
+      isLoading,
+      name,
+      registerCheckbox,
+      unregisterCheckbox,
+      onChildChange
+    };
+    const showAlert = isInvalid && !!errorMsg;
     const classes = [
-      "arvo-sw",
-      labelPosition === "start" && "arvo-sw--label-start",
+      "arvo-cb-grp",
+      `arvo-cb-grp--${size}`,
+      orientation === "horizontal" && "arvo-cb-grp--horizontal",
+      labelPosition === "start" && "arvo-cb-grp--label-start",
       isLoading && "loading",
       isDisabled && "is-disabled",
       isReadOnly && "is-readonly",
+      isInvalid && "has-error",
       className
     ].filter(Boolean).join(" ");
-    const handleChange = useCallback(() => {
-      if (isDisabled || isLoading || isReadOnly) return;
-      const next = !isChecked;
-      setChecked(next);
-      onChange == null ? void 0 : onChange({ isChecked: next, value });
-    }, [isDisabled, isLoading, isReadOnly, onChange, isChecked, value, setChecked]);
-    const handleKeyDown = useCallback(
-      (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          if (isDisabled || isLoading || isReadOnly) return;
-          const next = !isChecked;
-          setChecked(next);
-          onChange == null ? void 0 : onChange({ isChecked: next, value });
-        }
-      },
-      [isDisabled, isLoading, isReadOnly, onChange, isChecked, value, setChecked]
-    );
-    return /* @__PURE__ */ jsx(
+    return /* @__PURE__ */ jsx(CheckboxGroupContext.Provider, { value: contextValue, children: /* @__PURE__ */ jsxs(
       "div",
       {
         ref,
         className: classes,
+        role: "group",
+        "aria-labelledby": label ? labelId : void 0,
+        "aria-required": isRequired || void 0,
+        "aria-invalid": isInvalid || void 0,
+        "aria-describedby": showAlert ? errorId : void 0,
         "aria-busy": isLoading || void 0,
         ...rest,
-        children: /* @__PURE__ */ jsxs("label", { className: "arvo-sw__field", children: [
-          /* @__PURE__ */ jsx(
-            "input",
+        children: [
+          label && /* @__PURE__ */ jsx(
+            ArvoFormLabelText,
             {
-              ref: inputRef,
-              id: inputId,
-              className: "arvo-sw__input",
-              type: "checkbox",
-              role: "switch",
-              name,
-              value,
-              checked: isChecked,
-              disabled: isDisabled,
-              required: isRequired,
-              "aria-checked": isChecked,
-              "aria-required": isRequired || void 0,
-              "aria-labelledby": labelId,
-              onChange: handleChange,
-              onKeyDown: handleKeyDown,
-              onFocus,
-              onBlur
+              id: labelId,
+              className: "arvo-cb-grp__lbl",
+              size,
+              isRequired,
+              isDisabled,
+              isInvalid,
+              children: label
             }
           ),
-          /* @__PURE__ */ jsx("span", { className: "arvo-sw__track", "aria-hidden": "true", children: /* @__PURE__ */ jsx("span", { className: "arvo-sw__thumb" }) }),
-          label && /* @__PURE__ */ jsxs("span", { id: labelId, className: "arvo-sw__lbl", children: [
-            label,
-            isRequired && /* @__PURE__ */ jsx("span", { className: "arvo-sw__required", "aria-hidden": "true", children: "*" })
+          /* @__PURE__ */ jsxs("div", { className: "arvo-cb-grp__bdy", children: [
+            /* @__PURE__ */ jsxs(
+              "div",
+              {
+                className: "arvo-cb-grp__items",
+                "data-arvo-loading": isLoading ? "true" : void 0,
+                children: [
+                  hasSelectAll && /* @__PURE__ */ jsx(
+                    ArvoCheckbox,
+                    {
+                      label: "Select All",
+                      isChecked: selectAllChecked,
+                      isIndeterminate: selectAllIndeterminate,
+                      size,
+                      isDisabled,
+                      isReadOnly,
+                      isLoading,
+                      onChange: handleSelectAllChange
+                    }
+                  ),
+                  children
+                ]
+              }
+            ),
+            showAlert && /* @__PURE__ */ jsx(ArvoMessageAlert, { type: "error", id: errorId, message: errorMsg })
           ] })
-        ] })
+        ]
       }
-    );
+    ) });
   }
 );
 export {
-  ArvoSwitch as default
+  CheckboxGroupContext,
+  ArvoCheckboxGroup as default
 };
 //# sourceMappingURL=index20.js.map

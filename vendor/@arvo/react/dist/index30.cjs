@@ -2,34 +2,73 @@
 Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
 const jsxRuntime = require("react/jsx-runtime");
 const react = require("react");
-const ArvoBadgeAlert = react.forwardRef(
-  function ArvoBadgeAlert2({
-    message,
-    type = "positive",
+const useTooltip = require("./index10.cjs");
+const ArvoIconButtonLink = react.forwardRef(
+  function ArvoIconButtonLink2({
     variant = "primary",
-    size = "lg",
-    hasIcon = true,
-    customIcon,
+    size = "md",
+    icon,
+    href,
+    tooltip,
+    isDisabled = false,
+    isLoading = false,
+    target,
+    rel,
     className,
-    role = "status"
+    onClick,
+    ...rest
   }, ref) {
+    const internalRef = react.useRef(null);
+    const tooltipContent = typeof tooltip === "string" ? tooltip : tooltip.content;
+    useTooltip.useTooltip({ triggerRef: internalRef, tooltip });
+    const needsRel = target === "_blank";
+    const effectiveRel = needsRel ? rel ?? "noopener noreferrer" : rel;
     const classes = [
-      "arvo-bdg-alert",
-      `arvo-bdg-alert--${variant}`,
-      `arvo-bdg-alert--${type}`,
-      `arvo-bdg-alert--${size}`,
+      "arvo-icon-btn",
+      `arvo-btn--${variant}`,
+      `arvo-btn--${size}`,
+      isDisabled ? "is-disabled" : "",
+      isLoading ? "loading" : "",
       className ?? ""
     ].filter(Boolean).join(" ");
-    const iconClasses = [
-      "arvo-bdg-alert__ico",
-      "o9con",
-      customIcon ? `o9con-${customIcon}` : ""
-    ].filter(Boolean).join(" ");
-    return /* @__PURE__ */ jsxRuntime.jsxs("div", { ref, role, className: classes, children: [
-      hasIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: iconClasses, "aria-hidden": "true" }),
-      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-bdg-alert__msg", children: message })
-    ] });
+    const blocked = isDisabled || isLoading;
+    const handleClick = (e) => {
+      if (blocked) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      onClick == null ? void 0 : onClick(e);
+    };
+    const mergeRefs = (node) => {
+      internalRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    };
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      "a",
+      {
+        ref: mergeRefs,
+        href: isDisabled ? void 0 : href,
+        target: isDisabled ? void 0 : target,
+        rel: isDisabled ? void 0 : effectiveRel,
+        className: classes,
+        "aria-label": tooltipContent,
+        "aria-disabled": isDisabled ? true : void 0,
+        "aria-busy": isLoading ? true : void 0,
+        tabIndex: isDisabled ? 0 : void 0,
+        onClick: handleClick,
+        ...rest,
+        children: /* @__PURE__ */ jsxRuntime.jsx(
+          "span",
+          {
+            className: `arvo-btn__ico o9con o9con-${icon}`,
+            "aria-hidden": "true"
+          }
+        )
+      }
+    );
   }
 );
-exports.default = ArvoBadgeAlert;
+exports.default = ArvoIconButtonLink;
 //# sourceMappingURL=index30.cjs.map

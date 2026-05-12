@@ -1,4 +1,5 @@
 @use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
 
 .arvo-tabs {
   --arvo-tabs-height: 32px;
@@ -14,26 +15,26 @@
   position: relative;
   box-sizing: border-box;
 
-  // ── Size: Small ──────────────────────────────────────────────────────────
+  // -- Size: Small ----------------------------------------------------------
   &--sm {
     --arvo-tabs-height: #{$arvo-space-24};
     --arvo-tab-font-size: #{$arvo-font-size-12};
   }
 
-  // ── Size: Large (default) ────────────────────────────────────────────────
+  // -- Size: Large (default) ------------------------------------------------
   &--lg {
     --arvo-tabs-height: 32px;
     --arvo-tab-font-size: #{$arvo-font-size-14};
   }
 
-  // ── Variant: Secondary ───────────────────────────────────────────────────
+  // -- Variant: Secondary ---------------------------------------------------
   &--secondary {
     .arvo-tabs__tab.active {
       --arvo-tab-bg: var(--arvo-color-s-theme-active-3);
     }
   }
 
-  // ── Variant: Tertiary ────────────────────────────────────────────────────
+  // -- Variant: Tertiary ----------------------------------------------------
   &--tertiary {
     --arvo-tab-padding-inline: #{$arvo-space-4};
     --arvo-tab-gap: 0;
@@ -57,7 +58,7 @@
     }
   }
 
-  // ── List container ───────────────────────────────────────────────────────
+  // -- List container -------------------------------------------------------
 
   &__list {
     display: flex;
@@ -67,7 +68,7 @@
     min-width: 0;
   }
 
-  // ── Tab button ───────────────────────────────────────────────────────────
+  // -- Tab button -----------------------------------------------------------
 
   &__tab {
     display: inline-flex;
@@ -107,7 +108,7 @@
       color: var(--arvo-tab-icon-color);
     }
 
-    // ── Selected ─────────────────────────────────────────────────────────
+    // -- Selected ---------------------------------------------------------
     &.active {
       --arvo-tab-text-color: var(--arvo-color-t-primary);
       --arvo-tab-icon-color: var(--arvo-color-i-primary);
@@ -117,30 +118,32 @@
       }
     }
 
-    // ── Hover ────────────────────────────────────────────────────────────
-    .no-touch &:not(.is-disabled):hover {
-      --arvo-tab-text-color: var(--arvo-color-t-primary);
-      --arvo-tab-icon-color: var(--arvo-color-i-primary);
+    // -- Hover (hover-capable devices only) -------------------------------
+    @include hover {
+      &:not(.is-disabled):hover {
+        --arvo-tab-text-color: var(--arvo-color-t-primary);
+        --arvo-tab-icon-color: var(--arvo-color-i-primary);
 
-      &::after {
-        height: $arvo-border-3;
+        &::after {
+          height: $arvo-border-3;
+        }
+
+        .arvo-tabs__tab-actions {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
       }
 
-      .arvo-tabs__tab-actions {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
+      // -- Active tab hover (thicken border) ------------------------------
+      &.active:not(.is-disabled):hover {
+        &::after {
+          height: $arvo-border-3;
+        }
       }
     }
 
-    // ── Active tab hover (thicken border) ────────────────────────────────
-    .no-touch &.active:not(.is-disabled):hover {
-      &::after {
-        height: $arvo-border-3;
-      }
-    }
-
-    // ── Focus ────────────────────────────────────────────────────────────
+    // -- Focus ------------------------------------------------------------
     &:focus-visible {
       --arvo-tab-text-color: var(--arvo-color-t-primary);
       --arvo-tab-icon-color: var(--arvo-color-i-primary);
@@ -155,7 +158,7 @@
       }
     }
 
-    // ── Focus-within (when inner button focused) ─────────────────────────
+    // -- Focus-within (when inner button focused) -------------------------
     &:focus-within {
       .arvo-tabs__tab-actions {
         opacity: 1;
@@ -164,7 +167,7 @@
       }
     }
 
-    // ── Disabled ─────────────────────────────────────────────────────────
+    // -- Disabled ---------------------------------------------------------
     &.is-disabled {
       --arvo-tab-text-color: var(--arvo-color-t-disabled);
       --arvo-tab-icon-color: var(--arvo-color-i-disabled);
@@ -182,7 +185,7 @@
       }
     }
 
-    // ── Pinned: actions always visible ────────────────────────────────────
+    // -- Pinned: actions always visible ------------------------------------
     &.is-pinned {
       .arvo-tabs__tab-actions {
         opacity: 1;
@@ -191,7 +194,7 @@
       }
     }
 
-    // ── Show-actions override ────────────────────────────────────────────
+    // -- Show-actions override --------------------------------------------
     &.show-actions {
       .arvo-tabs__tab-actions {
         opacity: 1;
@@ -201,7 +204,7 @@
     }
   }
 
-  // ── Tab-left ──────────────────────────────────────────────────────────────
+  // -- Tab-left --------------------------------------------------------------
 
   &__tab-lft {
     display: inline-flex;
@@ -212,14 +215,14 @@
     transition: padding-right 0.15s ease;
   }
 
-  // ── Tab icon ──────────────────────────────────────────────────────────────
+  // -- Tab icon --------------------------------------------------------------
 
   &__tab-ico {
     font-size: $arvo-icon-16;
     flex-shrink: 0;
   }
 
-  // ── Tab label ─────────────────────────────────────────────────────────────
+  // -- Tab label -------------------------------------------------------------
 
   &__tab-lbl {
     max-width: $arvo-tab-text-wmax;
@@ -228,7 +231,7 @@
     white-space: nowrap;
   }
 
-  // ── Tab actions ───────────────────────────────────────────────────────────
+  // -- Tab actions -----------------------------------------------------------
 
   &__tab-actions {
     display: inline-flex;
@@ -245,7 +248,7 @@
     }
   }
 
-  // ── Overflow button ───────────────────────────────────────────────────────
+  // -- Overflow button -------------------------------------------------------
 
   &__overflow-btn {
     flex-shrink: 0;
@@ -257,7 +260,7 @@
     align-items: center;
   }
 
-  // ── actionsVisibility='always' ────────────────────────────────────────────
+  // -- actionsVisibility='always' --------------------------------------------
   &--actions-always {
     .arvo-tabs__tab-actions {
       opacity: 1;
@@ -266,14 +269,14 @@
     }
   }
 
-  // ── Disabled strip ────────────────────────────────────────────────────────
+  // -- Disabled strip --------------------------------------------------------
 
   &.is-disabled {
     pointer-events: none;
     opacity: 0.5;
   }
 
-  // ── Loading (Pattern C) ───────────────────────────────────────────────────
+  // -- Loading (Pattern C) ---------------------------------------------------
 
   &.loading {
     pointer-events: none;
@@ -324,7 +327,7 @@
   }
 }
 
-// ── Hover mode: absolute action positioning ──────────────────────────────────
+// -- Hover mode: absolute action positioning ----------------------------------
 // When actionsVisibility='hover' (default, no --actions-always modifier),
 // actions are positioned absolutely within the tab so the tab width never
 // shifts when actions appear. The __tab-lft padding-right adjusts on
@@ -346,8 +349,10 @@
   }
 }
 
-.no-touch .arvo-tabs:not(.arvo-tabs--actions-always) {
-  .arvo-tabs__tab:not(.is-disabled):hover .arvo-tabs__tab-lft {
-    padding-right: var(--arvo-tabs-actions-w, 0px);
+@include hover {
+  .arvo-tabs:not(.arvo-tabs--actions-always) {
+    .arvo-tabs__tab:not(.is-disabled):hover .arvo-tabs__tab-lft {
+      padding-right: var(--arvo-tabs-actions-w, 0px);
+    }
   }
 }

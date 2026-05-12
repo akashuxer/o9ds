@@ -1,36 +1,72 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const ACCENT_RE = /[\u0300-\u036f]/g;
-function normalizeQuery(query, options) {
-  let result = query;
-  if (!(options == null ? void 0 : options.caseSensitive)) result = result.toLowerCase();
-  if (!(options == null ? void 0 : options.accentSensitive)) result = result.normalize("NFD").replace(ACCENT_RE, "");
-  return result;
-}
-function filterItems(items, options) {
-  const { query, keys = ["label"], caseSensitive, accentSensitive } = options;
-  if (!query) return items;
-  const normalizedQuery = normalizeQuery(query, { caseSensitive, accentSensitive });
-  return items.filter(
-    (item) => keys.some((key) => {
-      const value = item[key];
-      if (value == null) return false;
-      return normalizeQuery(value, { caseSensitive, accentSensitive }).includes(normalizedQuery);
-    })
-  );
-}
-function filterGroups(groups, options) {
-  if (!options.query) return groups;
-  const result = [];
-  for (const group of groups) {
-    const filtered = filterItems(group.items, options);
-    if (filtered.length > 0) {
-      result.push({ ...group, items: filtered });
-    }
+const BLOCK = "arvo-overlay__mask";
+function resolveContainer(container) {
+  if (!container) return null;
+  if (typeof container === "string") {
+    return document.querySelector(container);
   }
-  return result;
+  return container;
 }
-exports.filterGroups = filterGroups;
-exports.filterItems = filterItems;
-exports.normalizeQuery = normalizeQuery;
+function createMask(options = {}) {
+  const {
+    blur = false,
+    container: containerOpt,
+    closeOnClick = false,
+    zIndex,
+    onOutside
+  } = options;
+  const el = document.createElement("div");
+  el.className = BLOCK;
+  if (blur) {
+    el.classList.add(`${BLOCK}--blur`);
+  }
+  const containerEl = resolveContainer(containerOpt);
+  if (containerEl) {
+    el.classList.add(`${BLOCK}--scoped`);
+  }
+  if (zIndex != null) {
+    el.style.zIndex = String(zIndex);
+  }
+  let pointerHandler = null;
+  if (closeOnClick && onOutside) {
+    pointerHandler = (e) => onOutside(e);
+    el.addEventListener("pointerdown", pointerHandler);
+  }
+  let hideTimer = null;
+  const mask = {
+    element: el,
+    show() {
+      if (hideTimer != null) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      const target = containerEl ?? document.body;
+      target.appendChild(el);
+      setTimeout(() => {
+        el.classList.add(`${BLOCK}--visible`);
+      }, 10);
+    },
+    hide() {
+      el.classList.remove(`${BLOCK}--visible`);
+      hideTimer = setTimeout(() => {
+        el.remove();
+        hideTimer = null;
+      }, 300);
+    },
+    destroy() {
+      if (hideTimer != null) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      if (pointerHandler) {
+        el.removeEventListener("pointerdown", pointerHandler);
+        pointerHandler = null;
+      }
+      el.remove();
+    }
+  };
+  return mask;
+}
+exports.createMask = createMask;
 //# sourceMappingURL=index16.cjs.map

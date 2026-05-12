@@ -4,21 +4,21 @@
 @use '../../mixins/loading' as *;
 @use '../../../../tokens/src/scss/all' as *;
 
-// ─── .arvo-listbox ───────────────────────────────────────────────────────────
+// --- .arvo-listbox -----------------------------------------------------------
 
 .arvo-listbox {
-  // ── CSS custom properties (only dynamic values that change per size) ─────
+  // -- CSS custom properties (only dynamic values that change per size) -----
   --arvo-listbox-option-height: 32px;
   --arvo-list-item-height-single: var(--arvo-listbox-option-height);
 
-  // ── Root layout ────────────────────────────────────────────────────────────
+  // -- Root layout ------------------------------------------------------------
   display: flex;
   flex-direction: column;
   gap: $arvo-space-4;
   font-family: var(--o9-font-family);
   box-sizing: border-box;
 
-  // ── Size: --sm ─────────────────────────────────────────────────────────────
+  // -- Size: --sm -------------------------------------------------------------
   &--sm {
     --arvo-listbox-option-height: 24px;
 
@@ -27,21 +27,21 @@
     }
   }
 
-  // ── Size: --md (default) ───────────────────────────────────────────────────
+  // -- Size: --md (default) ---------------------------------------------------
   &--md {
     .arvo-listbox__lbl {
       @include form-label-lg;
     }
   }
 
-  // ── Size: --lg ─────────────────────────────────────────────────────────────
+  // -- Size: --lg -------------------------------------------------------------
   &--lg {
     .arvo-listbox__lbl {
       @include form-label-lg;
     }
   }
 
-  // ── __lbl ──────────────────────────────────────────────────────────────────
+  // -- __lbl ------------------------------------------------------------------
   &__lbl {
     @include form-label-base;
     @include form-label-lg;
@@ -55,7 +55,7 @@
     @include form-label-disabled;
   }
 
-  // ── __search ───────────────────────────────────────────────────────────────
+  // -- __search ---------------------------------------------------------------
   &__search {
     padding: $arvo-space-12 $arvo-space-16;
     flex-shrink: 0;
@@ -66,7 +66,7 @@
     flex-grow: 1;
   }
 
-  // ── __list ─────────────────────────────────────────────────────────────────
+  // -- __list -----------------------------------------------------------------
   &__list {
     max-height: 300px;
     overflow-y: auto;
@@ -80,7 +80,7 @@
     scrollbar-color: var(--arvo-color-s-layer-07, #ccc) transparent;
   }
 
-  // ── __opt ──────────────────────────────────────────────────────────────────
+  // -- __opt ------------------------------------------------------------------
   &__opt {
     @include list-item-base;
     @include list-item-single-line;
@@ -101,12 +101,12 @@
     }
   }
 
-  // ── __grp ──────────────────────────────────────────────────────────────────
+  // -- __grp ------------------------------------------------------------------
   &__grp {
     // role="group" container; no extra styles needed
   }
 
-  // ── __grp-hdr ──────────────────────────────────────────────────────────────
+  // -- __grp-hdr --------------------------------------------------------------
   &__grp-hdr {
     @include list-group-header;
 
@@ -114,12 +114,12 @@
     letter-spacing: 0.5px;
   }
 
-  // ── __divider ──────────────────────────────────────────────────────────────
+  // -- __divider --------------------------------------------------------------
   &__divider {
     @include list-group-divider;
   }
 
-  // ── __empty ────────────────────────────────────────────────────────────────
+  // -- __empty ----------------------------------------------------------------
   &__empty {
     display: flex;
     align-items: center;
@@ -131,7 +131,7 @@
     text-align: center;
   }
 
-  // ── __skeleton ─────────────────────────────────────────────────────────────
+  // -- __skeleton -------------------------------------------------------------
   &__skeleton {
     display: none;
   }
@@ -161,13 +161,13 @@
     animation: arvo-shimmer 1.5s ease-in-out infinite;
   }
 
-  // ── State: disabled ────────────────────────────────────────────────────────
+  // -- State: disabled --------------------------------------------------------
   &.is-disabled {
     opacity: var(--arvo-opacity-low, 0.4);
     pointer-events: none;
   }
 
-  // ── Loading state (Pattern B: skeleton rows) ───────────────────────────────
+  // -- Loading state (Pattern B: skeleton rows) -------------------------------
   @mixin _listbox-loading {
     .arvo-listbox__list {
       pointer-events: none;
@@ -191,7 +191,7 @@
   }
 }
 
-// ─── Shimmer keyframe ─────────────────────────────────────────────────────────
+// --- Shimmer keyframe ---------------------------------------------------------
 @keyframes arvo-shimmer {
   0%, 100% { opacity: 0.5; }
   50%       { opacity: 1; }

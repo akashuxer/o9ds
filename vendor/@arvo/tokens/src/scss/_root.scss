@@ -1,4 +1,8 @@
 @use './colors' as *;
+@use './spacing' as *;
+@use './typography' as *;
+@use './borders' as *;
+@use './animation' as *;
 
 // ROOT CSS VARIABLES
 //   CSS variables to be set/overwritten via o9.style.util.js as per user configurations.
@@ -21,6 +25,78 @@
 
 :root {
     --o9-font-family: o9Sans, NotoSans, Arial, sans-serif;
+
+    // Spacing
+    --arvo-space-1: #{$arvo-space-1};
+    --arvo-space-2: #{$arvo-space-2};
+    --arvo-space-4: #{$arvo-space-4};
+    --arvo-space-6: #{$arvo-space-6};
+    --arvo-space-8: #{$arvo-space-8};
+    --arvo-space-10: #{$arvo-space-10};
+    --arvo-space-12: #{$arvo-space-12};
+    --arvo-space-16: #{$arvo-space-16};
+    --arvo-space-20: #{$arvo-space-20};
+    --arvo-space-24: #{$arvo-space-24};
+    --arvo-space-32: #{$arvo-space-32};
+    --arvo-space-40: #{$arvo-space-40};
+    --arvo-space-48: #{$arvo-space-48};
+    --arvo-space-64: #{$arvo-space-64};
+    --arvo-space-80: #{$arvo-space-80};
+
+    // Font sizes
+    --arvo-font-size-10: #{$arvo-font-size-10};
+    --arvo-font-size-12: #{$arvo-font-size-12};
+    --arvo-font-size-14: #{$arvo-font-size-14};
+    --arvo-font-size-16: #{$arvo-font-size-16};
+    --arvo-font-size-18: #{$arvo-font-size-18};
+    --arvo-font-size-20: #{$arvo-font-size-20};
+    --arvo-font-size-32: #{$arvo-font-size-32};
+
+    // Font weights
+    --arvo-font-weight-light: #{$arvo-light};
+    --arvo-font-weight-regular: #{$arvo-regular};
+    --arvo-font-weight-medium: #{$arvo-medium};
+    --arvo-font-weight-bold: #{$arvo-bold};
+
+    // Border radius
+    --arvo-radius-none: #{$arvo-radius-none};
+    --arvo-radius-16: #{$arvo-radius-16};
+    --arvo-radius-circle: #{$arvo-radius-circle};
+
+    // Border width
+    --arvo-border-1: #{$arvo-border-1};
+    --arvo-border-2: #{$arvo-border-2};
+    --arvo-border-3: #{$arvo-border-3};
+
+    // Shadows (color portion uses existing mode-aware CSS variables)
+    --arvo-shadow-center: #{$arvo-shadow-center};
+    --arvo-shadow-down: #{$arvo-shadow-down};
+    --arvo-shadow-up: #{$arvo-shadow-up};
+    --arvo-shadow-right: #{$arvo-shadow-right};
+    --arvo-shadow-left: #{$arvo-shadow-left};
+    --arvo-shadow-fab: #{$arvo-shadow-fab};
+
+    // Opacity
+    --arvo-opacity-high: #{$arvo-opacity-high};
+    --arvo-opacity-medium: #{$arvo-opacity-medium};
+    --arvo-opacity-low: #{$arvo-opacity-low};
+
+    // Motion
+    --arvo-motion-form-input: #{$arvo-motion-form-input};
+    --arvo-motion-tab: #{$arvo-motion-tab};
+    --arvo-motion-pane: #{$arvo-motion-pane};
+    --arvo-motion-expand: #{$arvo-motion-transition-expand};
+    --arvo-motion-scrollspy: #{$arvo-motion-scrollspy};
+    --arvo-motion-toggle: #{$arvo-transition-toggle-slide};
+    --arvo-motion-popup: #{$arvo-transition-popup};
+
+    // Icon sizes
+    --arvo-icon-12: #{$arvo-icon-12};
+    --arvo-icon-14: #{$arvo-icon-14};
+    --arvo-icon-16: #{$arvo-icon-16};
+    --arvo-icon-20: #{$arvo-icon-20};
+    --arvo-icon-24: #{$arvo-icon-24};
+    --arvo-icon-32: #{$arvo-icon-32};
 }
 
 // =====================================
@@ -245,7 +321,7 @@ html[data-theme="o9theme"] {
 // 4. MODE MAPPINGS
 // =====================================
 
-// Light mode is the default — :root provides fallback values when no data-mode is set.
+// Light mode is the default -- :root provides fallback values when no data-mode is set.
 :root,
 html[data-mode="light"] {
     // Surface Tokens

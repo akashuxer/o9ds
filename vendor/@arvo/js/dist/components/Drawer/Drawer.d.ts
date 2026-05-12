@@ -1,0 +1,112 @@
+import { ListItemBase } from '../../../../core/src';
+import { PanelShellInstance, ArvoPanelHeaderAction, ArvoPanelStickyHeaderConfig, ArvoPanelBannerConfig, ArvoPanelInfoConfig, ArvoPanelAction } from '../../../../utils/src';
+export type ArvoDrawerSide = 'left' | 'right' | 'top' | 'bottom';
+export type ArvoDrawerCloseReason = 'escape' | 'mask-click' | 'close-button' | 'programmatic';
+export type ArvoDrawerMaskVariant = 'light' | 'dark';
+export interface ArvoDrawerMaskConfig {
+    variant?: ArvoDrawerMaskVariant;
+    opacity?: number;
+    blur?: number;
+    closeOnClick?: boolean;
+}
+export interface ArvoDrawerOptions<T extends ListItemBase = ListItemBase> {
+    side?: ArvoDrawerSide;
+    container?: HTMLElement | (() => HTMLElement) | null;
+    isOpen?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    onOpen?: () => boolean | void;
+    onClose?: (reason: ArvoDrawerCloseReason) => boolean | void;
+    hasMask?: boolean | ArvoDrawerMaskConfig;
+    closeOnEscape?: boolean;
+    closeOnMaskClick?: boolean;
+    lockScroll?: boolean | 'auto';
+    width?: string | number;
+    minWidth?: string | number;
+    maxWidth?: string | number;
+    height?: string | number | null;
+    animationDuration?: number;
+    ariaLabel?: string;
+    ariaLabelledBy?: string;
+    className?: string;
+    isClosable?: boolean;
+    isDisabled?: boolean;
+    isLoading?: boolean;
+    title?: string | null;
+    hasHeader?: boolean;
+    hasBackButton?: boolean;
+    onBack?: () => void;
+    headerActions?: ArvoPanelHeaderAction[];
+    stickyHeader?: ArvoPanelStickyHeaderConfig | false;
+    items?: T[];
+    getItemId?: (item: T) => string;
+    filterKeys?: Array<keyof T & string>;
+    getItemSearchText?: (item: T) => string;
+    renderItem?: (item: T, el: HTMLElement) => void;
+    itemsRole?: 'listbox' | 'list' | 'menu';
+    actions?: ArvoPanelAction[] | false;
+    hasFooter?: boolean;
+}
+export type { ArvoPanelHeaderAction, ArvoPanelStickyHeaderConfig, ArvoPanelBannerConfig, ArvoPanelInfoConfig, ArvoPanelAction, };
+export declare class ArvoDrawer<T extends ListItemBase = ListItemBase> {
+    private _options;
+    /** Consumer-provided marker element. NOT used as the visual root. */
+    private _markerEl;
+    /** The portaled `.arvo-drw` host (built by this class, appended to container). */
+    private _host;
+    private _paneEl;
+    private _container;
+    private _side;
+    private _mask;
+    private _closeOnEscape;
+    private _lockScrollResolved;
+    private _isOpenState;
+    private _isDisabled;
+    private _isLoading;
+    /** Public for parity with React's PanelShellHandle delegate access. */
+    shell: PanelShellInstance<T>;
+    private _backdropManager;
+    private _backdropEl;
+    private _backdropMouseDown;
+    private _focusTrap;
+    private _prevFocusEl;
+    private _scrollUnlock;
+    private _escapeListener;
+    private _shellEventBindings;
+    private _destroyed;
+    private _isMounted;
+    static initialize<T extends ListItemBase = ListItemBase>(element: HTMLElement, options?: ArvoDrawerOptions<T>): ArvoDrawer<T>;
+    constructor(element: HTMLElement, options?: ArvoDrawerOptions<T>);
+    open(): Promise<void>;
+    close(reason?: ArvoDrawerCloseReason): Promise<void>;
+    toggle(): void;
+    isOpen(): boolean;
+    setItems(items: T[]): void;
+    setStickyHeader(config: ArvoPanelStickyHeaderConfig | false): void;
+    setHeaderActions(actions: ArvoPanelHeaderAction[]): void;
+    setActions(actions: ArvoPanelAction[] | false): void;
+    updateAction(id: string, patch: Partial<ArvoPanelHeaderAction | ArvoPanelAction>): void;
+    search(): string;
+    search(query: string): void;
+    selectedTab(): string | null;
+    selectedTab(id: string): void;
+    setTitle(title: string | null): void;
+    loading(): boolean;
+    loading(state: boolean): void;
+    disabled(): boolean;
+    disabled(state: boolean): void;
+    focus(target?: 'first' | 'title' | 'search' | 'list'): void;
+    destroy(): void;
+    private _mountToContainer;
+    private _applyClasses;
+    private _applyStyleVars;
+    private _applyAria;
+    private _showBackdrop;
+    private _hideBackdrop;
+    private _setupEscapeListener;
+    private _teardownEscapeListener;
+    private _wireShellEventReemit;
+    private _teardownShellEventReemit;
+}
+export default ArvoDrawer;
+//# sourceMappingURL=Drawer.d.ts.map

@@ -1,11 +1,12 @@
 @use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
 
 // Button component styles
 // BEM Block: .arvo-btn (text button), .arvo-icon-btn (icon-only button)
 // Abbreviation: btn
 // Loading Pattern: A (simple overlay shimmer)
 
-// ─── Shared button base mixin ────────────────────────────────────────────────
+// --- Shared button base mixin ------------------------------------------------
 
 @mixin btn-base {
   // Layout
@@ -60,7 +61,7 @@
     text-overflow: ellipsis;
   }
 
-  // ── Focus ────────────────────────────────────────────────────────────────
+  // -- Focus ----------------------------------------------------------------
   &:focus-visible {
     outline: 1px solid var(--arvo-color-b-theme-focus);
     outline-offset: $arvo-space-2;
@@ -70,7 +71,7 @@
     outline-offset: -1px;
   }
 
-  // ── Disabled ─────────────────────────────────────────────────────────────
+  // -- Disabled -------------------------------------------------------------
   &:disabled {
     --arvo-btn-bg-color: var(--arvo-color-s-disabled);
     --arvo-btn-text-color: var(--arvo-color-t-disabled);
@@ -91,7 +92,7 @@
   }
 }
 
-// ─── Loading Pattern A mixin ─────────────────────────────────────────────────
+// --- Loading Pattern A mixin -------------------------------------------------
 
 @mixin btn-loading {
   pointer-events: none;
@@ -141,10 +142,10 @@
   }
 }
 
-// ─── .arvo-btn ───────────────────────────────────────────────────────────────
+// --- .arvo-btn ---------------------------------------------------------------
 
 .arvo-btn {
-  // ── CSS custom properties (secondary/md defaults) ─────────────────────────
+  // -- CSS custom properties (secondary/md defaults) -------------------------
   --arvo-btn-height: 32px;
   --arvo-btn-padding-block: #{$arvo-space-6};
   --arvo-btn-padding-inline: #{$arvo-space-12};
@@ -158,7 +159,7 @@
 
   @include btn-base;
 
-  // ── Size: Small ───────────────────────────────────────────────────────────
+  // -- Size: Small -----------------------------------------------------------
   &--sm {
     --arvo-btn-height: 24px;
     --arvo-btn-padding-block: #{$arvo-space-4};
@@ -168,7 +169,7 @@
     --arvo-btn-font-size: #{$arvo-font-size-12};
   }
 
-  // ── Size: Medium (default) ────────────────────────────────────────────────
+  // -- Size: Medium (default) ------------------------------------------------
   &--md {
     --arvo-btn-height: 32px;
     --arvo-btn-padding-block: #{$arvo-space-6};
@@ -178,7 +179,7 @@
     --arvo-btn-font-size: #{$arvo-font-size-14};
   }
 
-  // ── Size: Large ───────────────────────────────────────────────────────────
+  // -- Size: Large -----------------------------------------------------------
   &--lg {
     --arvo-btn-height: 40px;
     --arvo-btn-padding-block: #{$arvo-space-10};
@@ -188,13 +189,13 @@
     --arvo-btn-font-size: #{$arvo-font-size-16};
   }
 
-  // ── Layout: Full Width ────────────────────────────────────────────────────
+  // -- Layout: Full Width ----------------------------------------------------
   &--full-width {
     width: 100%;
     min-width: 0;
   }
 
-  // ── Layout: Icon Only ─────────────────────────────────────────────────────
+  // -- Layout: Icon Only -----------------------------------------------------
   &--icon-only {
     --arvo-btn-padding-inline: #{$arvo-space-6};
     min-width: var(--arvo-btn-height);
@@ -205,7 +206,7 @@
     }
   }
 
-  // ── Loading State ─────────────────────────────────────────────────────────
+  // -- Loading State ---------------------------------------------------------
   &.loading,
   [data-arvo-loading="true"] & {
     @include btn-loading;
@@ -230,10 +231,10 @@
   }
 }
 
-// ─── .arvo-icon-btn ──────────────────────────────────────────────────────────
+// --- .arvo-icon-btn ----------------------------------------------------------
 
 .arvo-icon-btn {
-  // ── CSS custom properties (secondary/md defaults) ─────────────────────────
+  // -- CSS custom properties (secondary/md defaults) -------------------------
   --arvo-btn-height: 32px;
   --arvo-btn-padding-block: #{$arvo-space-6};
   --arvo-btn-padding-inline: #{$arvo-space-6};
@@ -247,11 +248,11 @@
 
   @include btn-base;
 
-  // Square dimensions — width = height for all sizes
+  // Square dimensions -- width = height for all sizes
   width: var(--arvo-btn-height);
   min-width: var(--arvo-btn-height);
 
-  // ── Size: Extra Small (xs) — Icon Button only ──────────────────────────────
+  // -- Size: Extra Small (xs) -- Icon Button only ------------------------------
   &.arvo-btn--xs {
     --arvo-btn-height: 16px;
     --arvo-btn-padding-block: 0;
@@ -259,7 +260,7 @@
     --arvo-btn-icon-size: #{$arvo-icon-16};
   }
 
-  // ── Size: Small ───────────────────────────────────────────────────────────
+  // -- Size: Small -----------------------------------------------------------
   &.arvo-btn--sm {
     --arvo-btn-height: 24px;
     --arvo-btn-padding-block: #{$arvo-space-4};
@@ -267,7 +268,7 @@
     --arvo-btn-icon-size: #{$arvo-icon-16};
   }
 
-  // ── Size: Medium (default) ────────────────────────────────────────────────
+  // -- Size: Medium (default) ------------------------------------------------
   &.arvo-btn--md {
     --arvo-btn-height: 32px;
     --arvo-btn-padding-block: #{$arvo-space-6};
@@ -275,7 +276,7 @@
     --arvo-btn-icon-size: #{$arvo-icon-20};
   }
 
-  // ── Size: Large ───────────────────────────────────────────────────────────
+  // -- Size: Large -----------------------------------------------------------
   &.arvo-btn--lg {
     --arvo-btn-height: 40px;
     --arvo-btn-padding-block: #{$arvo-space-10};
@@ -283,7 +284,7 @@
     --arvo-btn-icon-size: #{$arvo-icon-24};
   }
 
-  // ── Contextual modifiers ──────────────────────────────────────────────────
+  // -- Contextual modifiers --------------------------------------------------
 
   &--in-chip {
     --arvo-btn-bg-color: transparent;
@@ -297,16 +298,20 @@
   &--in-search {
     --arvo-btn-bg-color: transparent;
 
-    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+    @include hover {
+      &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+      }
     }
   }
 
   &--in-menu {
     --arvo-btn-bg-color: transparent;
 
-    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+    @include hover {
+      &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+      }
     }
   }
 
@@ -320,7 +325,7 @@
     pointer-events: auto;
   }
 
-  // ── Loading State ─────────────────────────────────────────────────────────
+  // -- Loading State ---------------------------------------------------------
   &.loading,
   [data-arvo-loading="true"] & {
     @include btn-loading;
@@ -344,7 +349,7 @@
   }
 }
 
-// ─── Shared variant modifiers (.arvo-btn + .arvo-icon-btn) ───────────────────
+// --- Shared variant modifiers (.arvo-btn + .arvo-icon-btn) -------------------
 // Defined once here at specificity 0-2-0 (.arvo-btn.arvo-btn--primary,
 // .arvo-icon-btn.arvo-btn--primary) so they always beat the single-class
 // block defaults above regardless of source order.
@@ -352,17 +357,19 @@
 .arvo-btn,
 .arvo-icon-btn {
 
-  // ── Variant: Primary ────────────────────────────────────────────────────
+  // -- Variant: Primary ----------------------------------------------------
   &.arvo-btn--primary {
     --arvo-btn-bg-color: var(--arvo-color-s-theme);
     --arvo-btn-text-color: var(--arvo-color-t-inverse);
     --arvo-btn-icon-color: var(--arvo-color-i-inverse);
     --arvo-btn-border-color: transparent;
 
-    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-1);
-      --arvo-btn-text-color: var(--arvo-color-t-inverse);
-      --arvo-btn-icon-color: var(--arvo-color-i-inverse);
+    @include hover {
+      &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-1);
+        --arvo-btn-text-color: var(--arvo-color-t-inverse);
+        --arvo-btn-icon-color: var(--arvo-color-i-inverse);
+      }
     }
 
     &:where(:not(:disabled):not(.is-disabled)):active,
@@ -382,17 +389,19 @@
     }
   }
 
-  // ── Variant: Secondary ──────────────────────────────────────────────────
+  // -- Variant: Secondary --------------------------------------------------
   &.arvo-btn--secondary {
     --arvo-btn-bg-color: var(--arvo-color-s-layer-05);
     --arvo-btn-text-color: var(--arvo-color-t-secondary);
     --arvo-btn-icon-color: var(--arvo-color-i-secondary);
     --arvo-btn-border-color: transparent;
 
-    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
-      --arvo-btn-text-color: var(--arvo-color-t-theme-hover);
-      --arvo-btn-icon-color: var(--arvo-color-i-theme);
+    @include hover {
+      &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+        --arvo-btn-text-color: var(--arvo-color-t-theme-hover);
+        --arvo-btn-icon-color: var(--arvo-color-i-theme);
+      }
     }
 
     &:where(:not(:disabled):not(.is-disabled)):active,
@@ -412,17 +421,19 @@
     }
   }
 
-  // ── Variant: Tertiary ───────────────────────────────────────────────────
+  // -- Variant: Tertiary ---------------------------------------------------
   &.arvo-btn--tertiary {
     --arvo-btn-bg-color: transparent;
     --arvo-btn-text-color: var(--arvo-color-t-secondary);
     --arvo-btn-icon-color: var(--arvo-color-i-secondary);
     --arvo-btn-border-color: transparent;
 
-    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
-      --arvo-btn-text-color: var(--arvo-color-t-theme-hover);
-      --arvo-btn-icon-color: var(--arvo-color-i-theme);
+    @include hover {
+      &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+        --arvo-btn-text-color: var(--arvo-color-t-theme-hover);
+        --arvo-btn-icon-color: var(--arvo-color-i-theme);
+      }
     }
 
     &:where(:not(:disabled):not(.is-disabled)):active,
@@ -442,18 +453,20 @@
     }
   }
 
-  // ── Variant: Outline ────────────────────────────────────────────────────
+  // -- Variant: Outline ----------------------------------------------------
   &.arvo-btn--outline {
     --arvo-btn-bg-color: transparent;
     --arvo-btn-text-color: var(--arvo-color-t-theme);
     --arvo-btn-icon-color: var(--arvo-color-i-theme);
     --arvo-btn-border-color: var(--arvo-color-b-theme);
 
-    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
-      --arvo-btn-text-color: var(--arvo-color-t-theme-hover);
-      --arvo-btn-icon-color: var(--arvo-color-i-theme);
-      --arvo-btn-border-color: transparent;
+    @include hover {
+      &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-theme-hover-2);
+        --arvo-btn-text-color: var(--arvo-color-t-theme-hover);
+        --arvo-btn-icon-color: var(--arvo-color-i-theme);
+        --arvo-btn-border-color: transparent;
+      }
     }
 
     &:where(:not(:disabled):not(.is-disabled)):active,
@@ -474,17 +487,19 @@
     }
   }
 
-  // ── Variant: Danger ─────────────────────────────────────────────────────
+  // -- Variant: Danger -----------------------------------------------------
   &.arvo-btn--danger {
     --arvo-btn-bg-color: var(--arvo-color-s-negative);
     --arvo-btn-text-color: var(--arvo-color-t-white-static);
     --arvo-btn-icon-color: var(--arvo-color-i-white-static);
     --arvo-btn-border-color: transparent;
 
-    .no-touch &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
-      --arvo-btn-bg-color: var(--arvo-color-s-negative-hover);
-      --arvo-btn-text-color: var(--arvo-color-t-white-static);
-      --arvo-btn-icon-color: var(--arvo-color-i-white-static);
+    @include hover {
+      &:where(:not(:disabled):not(.is-disabled):not(:active):not(.active)):hover {
+        --arvo-btn-bg-color: var(--arvo-color-s-negative-hover);
+        --arvo-btn-text-color: var(--arvo-color-t-white-static);
+        --arvo-btn-icon-color: var(--arvo-color-i-white-static);
+      }
     }
 
     &:where(:not(:disabled):not(.is-disabled)):active,

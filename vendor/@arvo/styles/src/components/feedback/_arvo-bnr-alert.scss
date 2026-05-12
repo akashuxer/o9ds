@@ -1,0 +1,207 @@
+@use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
+@use '../../mixins/typography' as *;
+@use '../../mixins/loading' as *;
+
+// Banner Alert component styles
+// BEM Block: .arvo-bnr-alert
+// Abbreviation: bnr-alert
+// Category: Feedback
+//
+// Persistent inline alert banner. Six semantic types (positive, info, neutral,
+// warning, negative, block) controlling left-border color, background tint,
+// title/icon color, and icon glyph. Two layout modes: default (title + multi-
+// line message + optional link) and --compact (message only, tighter padding).
+// Optionally dismissible via a 16px bespoke close button on the right.
+//
+// See descriptors/banner-alert.json for the full spec.
+//
+// Loading Pattern: A (single shimmer overlay across the entire banner).
+
+.arvo-bnr-alert {
+  // -- Dynamic CSS variables (per-type only) ---------------------------------
+  // Defaults match the `info` type. Each type modifier overrides all four.
+  --arvo-bnr-alert-bg: var(--arvo-color-s-layer-04);
+  --arvo-bnr-alert-border-color: var(--arvo-color-b-info);
+  --arvo-bnr-alert-title-color: var(--arvo-color-t-info-dark);
+  --arvo-bnr-alert-icon-color: var(--arvo-color-i-info-dark);
+
+  // -- Base layout -----------------------------------------------------------
+  position: relative; // anchor for loading overlay
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--arvo-bnr-alert-bg);
+  border-left: $arvo-border-2 solid var(--arvo-bnr-alert-border-color);
+
+  // -- Loading state (Pattern A) ---------------------------------------------
+  // Mixin self-wraps in `&.loading` and applies the shimmer overlay,
+  // pointer-events: none, position: relative, and overflow: hidden.
+  @include loading-overlay-a;
+
+  // -- Elements --------------------------------------------------------------
+
+  &__ico {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    padding-block-start: $arvo-space-16;
+    padding-block-end: 0;
+    padding-inline-start: $arvo-space-16;
+    padding-inline-end: $arvo-space-4;
+
+    &::before {
+      font-family: $o9con;
+      font-size: 16px;
+      line-height: 1;
+      color: var(--arvo-bnr-alert-icon-color);
+    }
+  }
+
+  &__content {
+    flex: 1 1 auto;
+    min-width: 0; // allow children to truncate inside flex row
+    display: flex;
+    flex-direction: column;
+    gap: $arvo-space-16;
+    padding-block: $arvo-space-16;
+  }
+
+  &__copy {
+    display: flex;
+    flex-direction: column;
+    gap: $arvo-space-4;
+    min-width: 0;
+  }
+
+  &__title {
+    @include arvo-font-h14-m;
+    color: var(--arvo-bnr-alert-title-color);
+    height: 16px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__msg {
+    @include arvo-font-p12-r;
+    color: var(--arvo-color-t-secondary);
+    margin: 0;
+  }
+
+  &__link {
+    @include arvo-font-l12-ru;
+    color: var(--arvo-color-t-info-dark);
+  }
+
+  &__close {
+    flex: 0 0 auto;
+    align-self: flex-start;
+    margin-block-start: $arvo-space-16;
+    margin-inline-start: $arvo-space-8;
+    margin-inline-end: $arvo-space-12;
+
+    @include hover {
+      &:hover:where(:not(:disabled):not(.is-disabled)) {
+        --arvo-btn-bg-color: transparent;
+        --arvo-btn-icon-color: var(--arvo-color-i-primary);
+      }
+    }
+  }
+
+  // -- Type modifiers --------------------------------------------------------
+  // TODO(tokens): swap to --arvo-color-s-{type}-subtle when tokens land for
+  // per-type tints. All six types currently use --arvo-color-s-layer-04 as
+  // the background per the user's token decision (subtle tokens not in
+  // @arvo/tokens yet -- see descriptor implementationNotes.tokenAuditTODO).
+
+  &--positive {
+    --arvo-bnr-alert-bg: var(--arvo-color-s-layer-04);
+    --arvo-bnr-alert-border-color: var(--arvo-color-b-positive);
+    --arvo-bnr-alert-title-color: var(--arvo-color-t-positive);
+    --arvo-bnr-alert-icon-color: var(--arvo-color-i-positive);
+
+    .arvo-bnr-alert__ico::before {
+      content: '\ec1b'; // o9con-check-circle
+    }
+  }
+
+  &--info {
+    --arvo-bnr-alert-bg: var(--arvo-color-s-layer-04);
+    --arvo-bnr-alert-border-color: var(--arvo-color-b-info);
+    --arvo-bnr-alert-title-color: var(--arvo-color-t-info-dark);
+    --arvo-bnr-alert-icon-color: var(--arvo-color-i-info-dark);
+
+    .arvo-bnr-alert__ico::before {
+      content: '\ed71'; // o9con-info-circle-filled
+    }
+  }
+
+  &--neutral {
+    --arvo-bnr-alert-bg: var(--arvo-color-s-layer-04);
+    --arvo-bnr-alert-border-color: var(--arvo-color-b-neutral);
+    --arvo-bnr-alert-title-color: var(--arvo-color-t-neutral);
+    --arvo-bnr-alert-icon-color: var(--arvo-color-i-neutral);
+
+    .arvo-bnr-alert__ico::before {
+      content: '\ebe2'; // o9con-speaker (matches BadgeAlert + Toast)
+    }
+  }
+
+  &--warning {
+    --arvo-bnr-alert-bg: var(--arvo-color-s-layer-04);
+    --arvo-bnr-alert-border-color: var(--arvo-color-b-warning);
+    --arvo-bnr-alert-title-color: var(--arvo-color-t-warning);
+    --arvo-bnr-alert-icon-color: var(--arvo-color-i-warning);
+
+    .arvo-bnr-alert__ico::before {
+      content: '\ed72'; // o9con-exclamation-triangle-filled
+    }
+  }
+
+  &--negative {
+    --arvo-bnr-alert-bg: var(--arvo-color-s-layer-04);
+    --arvo-bnr-alert-border-color: var(--arvo-color-b-negative);
+    --arvo-bnr-alert-title-color: var(--arvo-color-t-negative);
+    --arvo-bnr-alert-icon-color: var(--arvo-color-i-negative);
+
+    .arvo-bnr-alert__ico::before {
+      content: '\edd9'; // o9con-blocker-action-filled-alt
+    }
+  }
+
+  &--block {
+    // Shares negative's color tokens, distinct icon glyph + smaller size.
+    --arvo-bnr-alert-bg: var(--arvo-color-s-layer-04);
+    --arvo-bnr-alert-border-color: var(--arvo-color-b-negative);
+    --arvo-bnr-alert-title-color: var(--arvo-color-t-negative);
+    --arvo-bnr-alert-icon-color: var(--arvo-color-i-negative);
+
+    .arvo-bnr-alert__ico::before {
+      content: '\ed75'; // o9con-blocker-action-filled
+      font-size: 14px; // smaller than the standard 16px
+    }
+  }
+
+  // -- Compact layout modifier -----------------------------------------------
+  // Structural padding overrides only -- colors and type behavior are
+  // unaffected. In compact mode the consumer renders __msg directly inside
+  // __content (no __copy, __title, or __link).
+
+  &--compact {
+    .arvo-bnr-alert__ico {
+      padding-block-start: $arvo-space-10;
+      padding-block-end: $arvo-space-8;
+    }
+
+    .arvo-bnr-alert__content {
+      gap: 0;
+      padding-block: $arvo-space-8;
+    }
+
+    .arvo-bnr-alert__close {
+      margin-block-start: $arvo-space-10;
+    }
+  }
+}

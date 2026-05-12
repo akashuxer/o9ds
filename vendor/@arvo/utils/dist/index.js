@@ -1,20 +1,17 @@
-import { createFormLabel, updateFormLabel } from "./index2.js";
+import { createFormLabel } from "./index2.js";
 import { createCharCounter, formatCharCount, updateCharCounter } from "./index3.js";
-import { createErrorTooltipIcon, createInlineAlert, getDefaultErrorMsg, updateErrorTooltipIcon, updateInlineAlert } from "./index4.js";
-import { createIndicator, removeIndicator, updateIndicator } from "./index5.js";
+import { createIndicator, removeIndicator, updateIndicator } from "./index4.js";
+import { formatMatchCountMessage, runItemFilter, validateHeaderAction } from "./index5.js";
 export {
   createCharCounter,
-  createErrorTooltipIcon,
   createFormLabel,
   createIndicator,
-  createInlineAlert,
   formatCharCount,
-  getDefaultErrorMsg,
+  formatMatchCountMessage,
   removeIndicator,
+  runItemFilter,
   updateCharCounter,
-  updateErrorTooltipIcon,
-  updateFormLabel,
   updateIndicator,
-  updateInlineAlert
+  validateHeaderAction
 };
 //# sourceMappingURL=index.js.map

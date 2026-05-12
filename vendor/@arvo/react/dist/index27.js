@@ -1,74 +1,87 @@
-import { jsx } from "react/jsx-runtime";
-import { forwardRef, useRef } from "react";
-import { useTooltip } from "./index10.js";
-const ArvoIconButtonLink = forwardRef(
-  function ArvoIconButtonLink2({
+import { jsxs, jsx } from "react/jsx-runtime";
+import { forwardRef, useRef, useImperativeHandle } from "react";
+import { ArvoButton } from "./index13.js";
+import { ArvoIconButton } from "./index14.js";
+import ArvoIndicator from "./index55.js";
+const VALID_VARIANTS = ["primary", "secondary"];
+const ArvoFabButton = forwardRef(
+  function ArvoFabButton2({
     variant = "primary",
-    size = "md",
     icon,
-    href,
-    tooltip,
+    label,
     isDisabled = false,
     isLoading = false,
-    target,
-    rel,
-    className,
+    indicator = false,
+    indicatorSize = "lg",
+    zIndex,
+    tooltip,
     onClick,
-    ...rest
+    onFocus,
+    onBlur
   }, ref) {
-    const internalRef = useRef(null);
-    const tooltipContent = typeof tooltip === "string" ? tooltip : tooltip.content;
-    useTooltip({ triggerRef: internalRef, tooltip });
-    const needsRel = target === "_blank";
-    const effectiveRel = needsRel ? rel ?? "noopener noreferrer" : rel;
-    const classes = [
-      "arvo-icon-btn",
-      `arvo-btn--${variant}`,
-      `arvo-btn--${size}`,
-      isDisabled ? "is-disabled" : "",
-      isLoading ? "loading" : "",
-      className ?? ""
-    ].filter(Boolean).join(" ");
+    const btnRef = useRef(null);
+    useImperativeHandle(ref, () => ({
+      focus: () => {
+        var _a;
+        return (_a = btnRef.current) == null ? void 0 : _a.focus();
+      },
+      buttonElement: btnRef.current
+    }));
+    const safeVariant = VALID_VARIANTS.includes(variant) ? variant : "primary";
+    const isWithLabel = !!label;
     const blocked = isDisabled || isLoading;
-    const handleClick = (e) => {
-      if (blocked) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      onClick == null ? void 0 : onClick(e);
-    };
-    const mergeRefs = (node) => {
-      internalRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    };
-    return /* @__PURE__ */ jsx(
-      "a",
+    const showIndicator = indicator !== false && !blocked;
+    const wrapperClasses = [
+      "arvo-fab-btn",
+      `arvo-fab-btn--${safeVariant}`,
+      isWithLabel ? "arvo-fab-btn--with-label" : "arvo-fab-btn--icon-only",
+      isDisabled ? "is-disabled" : "",
+      isLoading ? "loading" : ""
+    ].filter(Boolean).join(" ");
+    const wrapperStyle = zIndex !== void 0 ? { zIndex } : void 0;
+    return /* @__PURE__ */ jsxs(
+      "div",
       {
-        ref: mergeRefs,
-        href: isDisabled ? void 0 : href,
-        target: isDisabled ? void 0 : target,
-        rel: isDisabled ? void 0 : effectiveRel,
-        className: classes,
-        "aria-label": tooltipContent,
-        "aria-disabled": isDisabled ? true : void 0,
+        className: wrapperClasses,
+        style: wrapperStyle,
         "aria-busy": isLoading ? true : void 0,
-        tabIndex: isDisabled ? 0 : void 0,
-        onClick: handleClick,
-        ...rest,
-        children: /* @__PURE__ */ jsx(
-          "span",
-          {
-            className: `arvo-btn__ico o9con o9con-${icon}`,
-            "aria-hidden": "true"
-          }
-        )
+        children: [
+          isWithLabel ? /* @__PURE__ */ jsx(
+            ArvoButton,
+            {
+              ref: btnRef,
+              variant: safeVariant,
+              size: "md",
+              icon,
+              label,
+              isDisabled,
+              isLoading,
+              onClick,
+              onFocus,
+              onBlur
+            }
+          ) : /* @__PURE__ */ jsx(
+            ArvoIconButton,
+            {
+              ref: btnRef,
+              variant: safeVariant,
+              size: "lg",
+              icon,
+              tooltip: tooltip ?? "",
+              isDisabled,
+              isLoading,
+              onClick,
+              onFocus,
+              onBlur
+            }
+          ),
+          showIndicator && /* @__PURE__ */ jsx(ArvoIndicator, { variant: indicator, size: indicatorSize })
+        ]
       }
     );
   }
 );
 export {
-  ArvoIconButtonLink as default
+  ArvoFabButton as default
 };
 //# sourceMappingURL=index27.js.map

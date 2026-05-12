@@ -1,80 +1,109 @@
 "use strict";
-Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const jsxRuntime = require("react/jsx-runtime");
 const react = require("react");
-const useTooltip = require("./index10.cjs");
-const ArvoIconButton = react.forwardRef(
-  function ArvoIconButton2({
-    variant = "primary",
-    size = "md",
-    type = "button",
+const Button = require("./index13.cjs");
+const ARVO_MSG_ALERT_DEFAULT_ERROR = "Form field value is invalid";
+const TYPE_DEFAULT_LABEL = {
+  error: "Error",
+  success: "Success",
+  warning: "Warning",
+  info: "Information",
+  neutral: "Notice",
+  block: "Blocked"
+};
+function resolveRole(type) {
+  return type === "error" || type === "warning" || type === "block" ? "alert" : "status";
+}
+const ArvoMessageAlertBase = react.forwardRef(
+  function ArvoMessageAlert2({
+    type = "error",
+    isInline = false,
+    message,
     icon,
-    tooltip,
-    isDisabled = false,
-    isSelected,
-    isLoading = false,
+    isDismissable = false,
+    onDismiss,
+    id,
+    role,
     className,
-    onClick,
-    onKeyDown,
     ...rest
-  }, ref) {
+  }, forwardedRef) {
     const internalRef = react.useRef(null);
-    const tooltipContent = typeof tooltip === "string" ? tooltip : tooltip.content;
-    useTooltip.useTooltip({ triggerRef: internalRef, tooltip });
+    const setRef = react.useCallback(
+      (node) => {
+        internalRef.current = node;
+        if (typeof forwardedRef === "function") {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          forwardedRef.current = node;
+        }
+      },
+      [forwardedRef]
+    );
+    const handleDismiss = react.useCallback(() => {
+      const node = internalRef.current;
+      if (node) {
+        node.dispatchEvent(new CustomEvent("msg-alert:dismiss", { bubbles: true }));
+      }
+      onDismiss == null ? void 0 : onDismiss();
+    }, [onDismiss]);
+    const resolvedRole = role ?? resolveRole(type);
+    const hasIconOverride = !!icon;
+    const showCloseButton = isDismissable && !isInline;
     const classes = [
-      "arvo-icon-btn",
-      `arvo-btn--${variant}`,
-      `arvo-btn--${size}`,
-      isLoading ? "loading" : "",
-      isSelected === true ? "active" : "",
-      className ?? ""
+      "arvo-msg-alert",
+      `arvo-msg-alert--${type}`,
+      isInline && "arvo-msg-alert--inline",
+      showCloseButton && "arvo-msg-alert--dismissable",
+      hasIconOverride && "has-icon-override",
+      className
     ].filter(Boolean).join(" ");
-    const blocked = isDisabled || isLoading;
-    const handleClick = (e) => {
-      if (blocked) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      onClick == null ? void 0 : onClick(e);
-    };
-    const handleKeyDown = (e) => {
-      if (blocked && (e.key === "Enter" || e.key === " ")) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      onKeyDown == null ? void 0 : onKeyDown(e);
-    };
-    const ariaPressedProp = isSelected !== void 0 ? { "aria-pressed": isSelected } : {};
-    const mergeRefs = (node) => {
-      internalRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    };
-    return /* @__PURE__ */ jsxRuntime.jsx(
-      "button",
+    if (isInline) {
+      const ariaLabel = typeof message === "string" && message.length > 0 ? message : TYPE_DEFAULT_LABEL[type];
+      return /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          ref: setRef,
+          className: classes,
+          role: resolvedRole,
+          id,
+          "aria-label": ariaLabel,
+          ...rest,
+          children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-msg-alert__ico", "aria-hidden": "true", children: icon ? /* @__PURE__ */ jsxRuntime.jsx("i", { className: `o9con o9con-${icon}` }) : null })
+        }
+      );
+    }
+    return /* @__PURE__ */ jsxRuntime.jsxs(
+      "div",
       {
-        ref: mergeRefs,
-        type,
-        disabled: isDisabled,
-        ...rest,
+        ref: setRef,
         className: classes,
-        "aria-label": tooltipContent,
-        "aria-busy": isLoading ? true : void 0,
-        onClick: handleClick,
-        onKeyDown: handleKeyDown,
-        ...ariaPressedProp,
-        children: /* @__PURE__ */ jsxRuntime.jsx(
-          "span",
-          {
-            className: `arvo-btn__ico o9con o9con-${icon}`,
-            "aria-hidden": "true"
-          }
-        )
+        role: resolvedRole,
+        id,
+        ...rest,
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-msg-alert__body", children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-msg-alert__ico", "aria-hidden": "true", children: icon ? /* @__PURE__ */ jsxRuntime.jsx("i", { className: `o9con o9con-${icon}` }) : null }),
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-msg-alert__msg", children: message })
+          ] }),
+          showCloseButton ? /* @__PURE__ */ jsxRuntime.jsx(
+            Button.ArvoButton,
+            {
+              className: "arvo-msg-alert__close",
+              variant: "secondary",
+              size: "sm",
+              label: "Close",
+              onClick: handleDismiss
+            }
+          ) : null
+        ]
       }
     );
   }
 );
-exports.default = ArvoIconButton;
+ArvoMessageAlertBase.displayName = "ArvoMessageAlert";
+const ArvoMessageAlert = ArvoMessageAlertBase;
+ArvoMessageAlert.defaultErrorMessage = ARVO_MSG_ALERT_DEFAULT_ERROR;
+exports.ARVO_MSG_ALERT_DEFAULT_ERROR = ARVO_MSG_ALERT_DEFAULT_ERROR;
+exports.ArvoMessageAlert = ArvoMessageAlert;
 //# sourceMappingURL=index12.cjs.map

@@ -26,6 +26,7 @@ export const COMPONENTS_NAV_TREE = [
       { path: '/components/dropdown-icon-button', label: 'Dropdown Icon Button' },
       { path: '/components/fab-button', label: 'FAB' },
       { path: '/components/icon-button', label: 'Icon Button' },
+      { path: '/components/segmented-control', label: 'Segmented Control' },
       { path: '/components/split-button', label: 'Split Button' },
       { path: '/components/split-icon-button', label: 'Split Icon Button' },
       { path: '/components/toolbar', label: 'Toolbar' },
@@ -55,7 +56,7 @@ export const COMPONENTS_NAV_TREE = [
       { path: '/components/counter', label: 'Counter' },
       { path: '/components/email-notification', label: 'Email Notification' },
       { path: '/components/empty-state', label: 'Empty State' },
-      { path: '/components/inline-alert', label: 'MessageAlert' },
+      { path: '/components/inline-alert', label: 'Message Alert' },
       { path: '/components/notifications', label: 'Notifications' },
       { path: '/components/skeleton-loader', label: 'Skeleton Loader' },
       { path: '/components/spinner', label: 'Spinner' },
@@ -159,6 +160,9 @@ export const COMPONENT_DOC_ROUTES = new Set([
   '/components/dropdown-button',
   '/components/dropdown-icon-button',
   '/components/fab-button',
+  '/components/segmented-control',
+  '/components/split-button',
+  '/components/split-icon-button',
   // Navigation
   '/components/link',
   '/components/button-link',
@@ -184,11 +188,16 @@ export const COMPONENT_DOC_ROUTES = new Set([
   '/components/action-menu',
   '/components/tooltip',
   '/components/alert-dialog',
+  '/components/drawer',
+  '/components/side-panel',
   // Feedback
   '/components/badge',
+  '/components/banner-alerts',
+  '/components/inline-alert',
   '/components/toast',
   // Inputs (additional)
   '/components/chip',
+  '/components/label',
   // Data display
   '/components/cards',
 ])

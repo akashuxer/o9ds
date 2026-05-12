@@ -11,6 +11,7 @@ import { ArvoSwitchOptions } from './components/Switch';
 import { ArvoPopoverOptions } from './components/Popover';
 import { ArvoHybridPopoverOptions } from './components/HybridPopover';
 import { ArvoButtonGroupOptions } from './components/ButtonGroup';
+import { ArvoSegmentedControlOptions } from './components/SegmentedControl';
 import { ArvoFabButtonOptions } from './components/FabButton';
 import { ArvoLinkOptions } from './components/Link';
 import { ArvoButtonLinkOptions } from './components/ButtonLink';
@@ -18,14 +19,20 @@ import { ArvoIconButtonLinkOptions } from './components/IconButtonLink';
 import { ArvoTabstripOptions } from './components/Tabstrip';
 import { ArvoBreadcrumbOptions } from './components/Breadcrumb';
 import { ArvoBadgeAlertOptions } from './components/BadgeAlert';
+import { ArvoBannerAlertOptions } from './components/BannerAlert';
+import { ArvoMessageAlertOptions } from './components/MessageAlert';
 import { ArvoActionMenuOptions } from './components/ActionMenu';
 import { ArvoSearchOptions } from './components/Search';
 import { ArvoSelectOptions } from './components/Select';
 import { ArvoComboboxOptions } from './components/Combobox';
 import { ArvoDropdownButtonOptions } from './components/DropdownButton';
+import { ArvoSplitButtonOptions } from './components/SplitButton';
+import { ArvoSplitIconButtonOptions } from './components/SplitIconButton';
 import { ArvoDropdownIconButtonOptions } from './components/DropdownIconButton';
 import { ArvoListboxOptions } from './components/Listbox';
 import { ArvoAlertDialogOptions } from './components/AlertDialog';
+import { ArvoSidePanelOptions } from './components/SidePanel';
+import { ArvoDrawerOptions } from './components/Drawer';
 declare global {
     interface JQuery {
         arvoButton(options?: ArvoButtonOptions): JQuery;
@@ -41,6 +48,7 @@ declare global {
         arvoPopover(options?: ArvoPopoverOptions): JQuery;
         arvoHybridPopover(options?: ArvoHybridPopoverOptions): JQuery;
         arvoButtonGroup(options?: ArvoButtonGroupOptions): JQuery;
+        arvoSegmentedControl(options?: ArvoSegmentedControlOptions): JQuery;
         arvoFabButton(options?: ArvoFabButtonOptions): JQuery;
         arvoLink(options?: ArvoLinkOptions): JQuery;
         arvoButtonLink(options?: ArvoButtonLinkOptions): JQuery;
@@ -48,14 +56,20 @@ declare global {
         arvoTabstrip(options?: ArvoTabstripOptions): JQuery;
         arvoBreadcrumb(options?: ArvoBreadcrumbOptions): JQuery;
         arvoBadgeAlert(options?: ArvoBadgeAlertOptions): JQuery;
+        arvoBannerAlert(options?: ArvoBannerAlertOptions): JQuery;
+        arvoMessageAlert(options?: ArvoMessageAlertOptions): JQuery;
         arvoActionMenu(options?: ArvoActionMenuOptions): JQuery;
         arvoSearch(options?: ArvoSearchOptions): JQuery;
         arvoSelect(options?: ArvoSelectOptions): JQuery;
         arvoCombobox(options?: ArvoComboboxOptions): JQuery;
         arvoDropdownButton(options?: ArvoDropdownButtonOptions): JQuery;
+        arvoSplitButton(options?: ArvoSplitButtonOptions): JQuery;
+        arvoSplitIconButton(options?: ArvoSplitIconButtonOptions): JQuery;
         arvoDropdownIconButton(options?: ArvoDropdownIconButtonOptions): JQuery;
         arvoListbox(options?: ArvoListboxOptions): JQuery;
         arvoAlertDialog(options?: ArvoAlertDialogOptions): JQuery;
+        arvoSidePanel(options?: ArvoSidePanelOptions): JQuery;
+        arvoDrawer(options?: ArvoDrawerOptions): JQuery;
     }
 }
 interface ComponentEntry {

@@ -1,32 +1,33 @@
-const VALID_VARIANTS = ["unsaved", "new", "unread"];
-const VALID_SIZES = ["sm", "lg"];
-function createIndicator(options) {
-  const variant = VALID_VARIANTS.includes(options.variant) ? options.variant : "unsaved";
-  const size = options.size && VALID_SIZES.includes(options.size) ? options.size : "lg";
-  const el = document.createElement("span");
-  el.className = `arvo-indicator arvo-indicator--${variant} arvo-indicator--${size}`;
-  el.setAttribute("aria-hidden", "true");
-  return el;
-}
-function updateIndicator(el, options) {
-  if (options.variant !== void 0) {
-    const variant = VALID_VARIANTS.includes(options.variant) ? options.variant : "unsaved";
-    VALID_VARIANTS.forEach((v) => el.classList.remove(`arvo-indicator--${v}`));
-    el.classList.add(`arvo-indicator--${variant}`);
+import { filterItems } from "@arvo/core";
+const VALID_ACTION_TYPES = /* @__PURE__ */ new Set(["btn", "dropdown", "split", "switch", "checkbox"]);
+function validateHeaderAction(action) {
+  if (VALID_ACTION_TYPES.has(action.type)) return true;
+  if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+    console.warn(
+      `[panel-shell] Unknown header-action type "${action.type}"${action.id ? ` (id: "${action.id}")` : ""}. Allowed types: ${[...VALID_ACTION_TYPES].join(", ")}. This entry will be skipped.`
+    );
   }
-  if (options.size !== void 0) {
-    const size = VALID_SIZES.includes(options.size) ? options.size : "lg";
-    VALID_SIZES.forEach((s) => el.classList.remove(`arvo-indicator--${s}`));
-    el.classList.add(`arvo-indicator--${size}`);
-  }
+  return false;
 }
-function removeIndicator(el) {
-  el == null ? void 0 : el.remove();
-  return null;
+function runItemFilter(items, query, opts) {
+  if (!query) return items;
+  if (opts == null ? void 0 : opts.getItemSearchText) {
+    const q = query.toLowerCase();
+    return items.filter((item) => opts.getItemSearchText(item).toLowerCase().includes(q));
+  }
+  const filterOpts = {
+    query,
+    keys: (opts == null ? void 0 : opts.keys) ?? ["label"]
+  };
+  return filterItems(items, filterOpts);
+}
+function formatMatchCountMessage(count, template) {
+  const tmpl = template ?? "{count} matching results";
+  return tmpl.replace("{count}", String(count));
 }
 export {
-  createIndicator,
-  removeIndicator,
-  updateIndicator
+  formatMatchCountMessage,
+  runItemFilter,
+  validateHeaderAction
 };
 //# sourceMappingURL=index5.js.map

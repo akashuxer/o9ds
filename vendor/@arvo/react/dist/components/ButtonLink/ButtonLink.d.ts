@@ -1,4 +1,3 @@
-import { TooltipProp } from '../../hooks/useTooltip';
 export interface ArvoButtonLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
     variant?: 'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger';
     size?: 'sm' | 'md' | 'lg';
@@ -8,7 +7,6 @@ export interface ArvoButtonLinkProps extends Omit<React.AnchorHTMLAttributes<HTM
     isDisabled?: boolean;
     isFullWidth?: boolean;
     isLoading?: boolean;
-    tooltip?: TooltipProp;
 }
 declare const ArvoButtonLink: import('react').ForwardRefExoticComponent<ArvoButtonLinkProps & import('react').RefAttributes<HTMLAnchorElement>>;
 export default ArvoButtonLink;

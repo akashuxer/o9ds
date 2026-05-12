@@ -71,7 +71,6 @@ const _ArvoFabButton = class _ArvoFabButton {
         label: this._options.label,
         isDisabled: this._options.isDisabled,
         isLoading: this._options.isLoading,
-        tooltip: this._options.tooltip ?? void 0,
         onClick: this._options.onClick ?? void 0
       });
     } else {

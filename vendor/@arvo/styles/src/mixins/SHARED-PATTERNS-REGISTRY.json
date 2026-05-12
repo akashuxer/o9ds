@@ -63,23 +63,23 @@
     },
 
     "form-label": {
-      "status": "ready",
-      "description": "Form field label with two sizes (sm/lg), disabled state, and required asterisk indicator",
+      "status": "planned",
+      "description": "Form field label primitive. Renders as <label> by default or <span> for the inner caption used by selection controls (Radio, Switch, Checkbox) where wrapping <label> elements cannot nest. Two sizes (sm/lg), disabled / required / invalid states, and an optional custom requiredIndicator slot.",
       "scss": {
         "file": "mixins/_form-label.scss",
-        "mixins": ["form-label-base", "form-label-sm", "form-label-lg", "form-label-disabled", "form-label-required-indicator"]
+        "mixins": ["form-label-base", "form-label-sm", "form-label-lg", "form-label-disabled", "form-label-invalid", "form-label-required-indicator"]
       },
       "util": {
         "file": "utils/src/form-label.ts",
-        "exports": ["createFormLabel", "updateFormLabel"]
+        "exports": ["createFormLabel"]
       },
       "react": {
         "file": "react/src/components/FormLabel/FormLabel.tsx",
-        "exports": ["FormLabel"],
-        "note": "Internal component — not re-exported from @arvo/react public index"
+        "exports": ["ArvoFormLabel", "ArvoFormLabelProps", "ArvoFormLabelText"],
+        "note": "Public atomic component. ArvoFormLabel renders <label htmlFor>; ArvoFormLabelText renders <span> for inner-caption use (selection controls)."
       },
-      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "checkbox", "checkbox-group", "radio", "radio-group", "switch", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
-      "tokens": ["--arvo-lbl-color", "--arvo-lbl-color-disabled", "--arvo-lbl-required-color", "--arvo-lbl-gap"]
+      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "listbox", "checkbox", "checkbox-group", "radio", "radio-group", "switch", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
+      "tokens": ["--arvo-lbl-color", "--arvo-lbl-color-disabled", "--arvo-lbl-color-invalid", "--arvo-lbl-required-color", "--arvo-lbl-gap"]
     },
 
     "form-char-counter": {
@@ -98,20 +98,70 @@
       "tokens": ["--arvo-counter-color", "--arvo-counter-color-disabled", "--arvo-counter-font-size"]
     },
 
-    "inline-alert": {
+    "msg-alert": {
       "status": "ready",
-      "description": "Compact icon + message inline alert used for validation errors, warnings, success, and info feedback. Also provides an error tooltip icon variant for form inputs.",
+      "description": "Public `ArvoMessageAlert` component primitive (full + icon-only inline modes). Six semantic types (error, success, warning, info, neutral, block). Optional dismiss button. Replaces the previous `inline-alert` util-only pattern.",
       "scss": {
-        "file": "mixins/_inline-alert.scss",
-        "mixins": ["inline-alert-base", "inline-alert-icon", "inline-alert-msg", "inline-alert-error", "inline-alert-success", "inline-alert-warning", "inline-alert-info", "inline-alert-neutral", "error-tooltip-icon"]
+        "file": "mixins/_msg-alert.scss",
+        "mixins": [
+          "msg-alert-base",
+          "msg-alert-icon",
+          "msg-alert-msg",
+          "msg-alert-error",
+          "msg-alert-success",
+          "msg-alert-warning",
+          "msg-alert-info",
+          "msg-alert-neutral",
+          "msg-alert-block",
+          "msg-alert-inline",
+          "msg-alert-dismissable"
+        ]
       },
-      "util": {
-        "file": "utils/src/inline-alert.ts",
-        "exports": ["createInlineAlert", "updateInlineAlert", "getDefaultErrorMsg", "createErrorTooltipIcon", "updateErrorTooltipIcon"]
+      "util": null,
+      "react": {
+        "file": "react/src/components/MessageAlert/MessageAlert.tsx",
+        "exports": ["ArvoMessageAlert", "ArvoMessageAlertProps", "ArvoMessageAlertType", "ARVO_MSG_ALERT_DEFAULT_ERROR"],
+        "note": "Public atomic component. forwardRef<HTMLDivElement, ArvoMessageAlertProps>. Static defaultErrorMessage field plus the named ARVO_MSG_ALERT_DEFAULT_ERROR export."
       },
-      "react": null,
-      "usedBy": ["textbox", "textarea", "number-input", "search", "select", "combobox", "date-picker", "time-picker", "datetime-picker", "daterange-picker"],
-      "tokens": ["--arvo-inline-alert-gap", "--arvo-inline-alert-font-size", "--arvo-inline-alert-icon-size", "--arvo-color-t-negative", "--arvo-color-i-negative"]
+      "js": {
+        "file": "js/src/components/MessageAlert/MessageAlert.ts",
+        "exports": ["ArvoMessageAlert", "ArvoMessageAlertOptions", "ArvoMessageAlertType", "ARVO_MSG_ALERT_DEFAULT_ERROR"],
+        "note": "Public vanilla-JS class. static initialize(element, options) factory. Dual-purpose getter/setter methods: type(), message(), inline(), dismissable(), icon(). Imperative dismiss() + destroy()."
+      },
+      "usedBy": [
+        "textbox",
+        "textarea",
+        "number-input",
+        "search",
+        "select",
+        "combobox",
+        "date-picker",
+        "time-picker",
+        "datetime-picker",
+        "daterange-picker",
+        "checkbox",
+        "checkbox-group",
+        "radio",
+        "radio-group",
+        "panel-shell",
+        "side-panel",
+        "drawer"
+      ],
+      "tokens": [
+        "--arvo-msg-alert-body-gap",
+        "--arvo-msg-alert-font-size",
+        "--arvo-msg-alert-icon-size",
+        "--arvo-color-t-negative",
+        "--arvo-color-i-negative",
+        "--arvo-color-t-positive",
+        "--arvo-color-i-positive",
+        "--arvo-color-t-warning",
+        "--arvo-color-i-warning",
+        "--arvo-color-t-info-dark",
+        "--arvo-color-i-info-dark",
+        "--arvo-color-t-neutral",
+        "--arvo-color-i-neutral"
+      ]
     },
 
     "loading-overlay-a": {
@@ -127,15 +177,58 @@
     },
 
     "loading-skeleton-b": {
-      "status": "planned",
+      "status": "ready",
       "description": "Structured skeleton that mimics content layout (Pattern B for complex components)",
       "scss": {
         "file": "mixins/_loading.scss",
         "mixins": ["loading-skeleton-b"]
       },
       "util": null,
-      "usedBy": ["card", "table", "modal"],
+      "usedBy": ["card", "table", "modal", "panel-shell"],
       "tokens": ["--arvo-loading-shimmer-color", "--arvo-loading-shimmer-speed"]
+    },
+
+    "panel-shell": {
+      "status": "ready",
+      "description": "Header, sticky pre-body region, scrollable body, items+filter pipeline, empty/skeleton states, and footer actions used by overlay-content components (side-panel, drawer). Parametrized on parentBlock so consumers render their own BEM block (arvo-sp, arvo-drw). Owns the closed-whitelist header-action types ('btn' | 'dropdown' | 'split' | 'switch' | 'checkbox'), the items+filter pipeline (delegating to filterItems from @arvo/core), an `ArvoBannerAlert` instance rendered inside the `__banner` slot, the no-data / no-results empty states, and Pattern B skeleton rendering when .loading is on the host block.",
+      "scss": {
+        "file": "mixins/_panel-shell.scss",
+        "mixins": [
+          "panel-shell-hdr",
+          "panel-shell-sticky",
+          "panel-shell-body",
+          "panel-shell-list",
+          "panel-shell-empty",
+          "panel-shell-skeleton",
+          "panel-shell-footer",
+          "panel-shell-header-action"
+        ]
+      },
+      "util": {
+        "file": "utils/src/panel-shell.ts",
+        "exports": [
+          "createPanelShell",
+          "updatePanelShell",
+          "runItemFilter",
+          "formatMatchCountMessage",
+          "validateHeaderAction"
+        ]
+      },
+      "react": {
+        "file": "react/src/components/PanelShell/PanelShell.tsx",
+        "exports": ["PanelShell", "HeaderAction"],
+        "note": "Internal component -- not re-exported from @arvo/react public index. Mirrors FormLabel / Indicator convention."
+      },
+      "usedBy": ["side-panel", "drawer"],
+      "tokens": [
+        "--arvo-color-s-layer-01",
+        "--arvo-color-t-primary",
+        "--arvo-color-t-secondary",
+        "--arvo-color-t-tertiary",
+        "--arvo-color-t-info-dark",
+        "--arvo-color-s-layer-05",
+        "--arvo-color-s-scroll"
+      ]
     },
 
     "indicator": {
@@ -257,6 +350,19 @@
       "util": null,
       "usedBy": ["textbox", "textarea", "number-input", "search", "combobox"],
       "tokens": ["--arvo-form-input-pad-r"]
+    },
+
+    "overlay-footer-actions": {
+      "status": "ready",
+      "description": "Flex layout for action rows in overlay-style component footers (popover, hybrid popover, side-panel, drawer). Text/labeled buttons grow with `flex: 1 1 0` to share leftover space; icon-only controls (`.arvo-icon-btn`, `.arvo-fab-btn`, `.arvo-dd-icon-btn`, `.arvo-split-icon-btn`, `.arvo-btn--icon-only`, `[data-icon-only=\"true\"]`) stay at their natural width with `flex: 0 0 auto`. A variant-driven order rule keeps primary/danger rightmost regardless of source order. Consumers retain ownership of `padding` and `gap` since spacing differs across overlay surfaces.",
+      "scss": {
+        "file": "mixins/_overlay-footer.scss",
+        "mixins": ["overlay-footer-actions-layout"]
+      },
+      "util": null,
+      "react": null,
+      "usedBy": ["popover", "hybrid-popover", "side-panel", "drawer"],
+      "tokens": []
     }
   }
 }

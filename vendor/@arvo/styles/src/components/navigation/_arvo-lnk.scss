@@ -1,4 +1,5 @@
 @use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
 
 // Link component styles
 // BEM Block: .arvo-lnk
@@ -6,15 +7,17 @@
 // Loading Pattern: A (simple overlay shimmer)
 
 .arvo-lnk {
-  // ── CSS custom properties ─────────────────────────────────────────────────
+  // -- CSS custom properties -------------------------------------------------
   --arvo-lnk-font-size: #{$arvo-font-size-14};
   --arvo-lnk-font-weight: #{$arvo-regular};
   --arvo-lnk-text-color: var(--arvo-color-t-info-dark);
   --arvo-lnk-icon-color: var(--arvo-color-t-info-dark);
 
-  // ── Layout ────────────────────────────────────────────────────────────────
+  // -- Layout ----------------------------------------------------------------
   display: inline-flex;
   align-items: center;
+  // 2px gap between leading icon and label; the trailing external-link icon
+  // sits 6px from the label (see &__ext rule below) per the design spec.
   gap: $arvo-space-2;
   position: relative;
   cursor: pointer;
@@ -29,7 +32,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  // ── Typography ────────────────────────────────────────────────────────────
+  // -- Typography ------------------------------------------------------------
   font-family: var(--o9-font-family);
   font-size: var(--arvo-lnk-font-size);
   font-weight: var(--arvo-lnk-font-weight);
@@ -37,7 +40,7 @@
   color: var(--arvo-lnk-text-color);
   text-decoration: none;
 
-  // ── Icon elements ─────────────────────────────────────────────────────────
+  // -- Icon elements ---------------------------------------------------------
   &__ico,
   &__ext {
     font-size: $arvo-icon-16;
@@ -47,50 +50,59 @@
     text-decoration: none;
   }
 
-  // ── Label element ─────────────────────────────────────────────────────────
+  // External-link icon sits 6px from the label (4px more than the base 2px
+  // flex gap shared with the leading icon).
+  &__ext {
+    margin-inline-start: calc(#{$arvo-space-6} - #{$arvo-space-2});
+  }
+
+  // -- Label element ---------------------------------------------------------
   &__lbl {
     text-decoration: underline;
     color: var(--arvo-lnk-text-color);
   }
 
-  // ── Size: Small ───────────────────────────────────────────────────────────
+  // -- Size: Small -----------------------------------------------------------
   &--sm {
     --arvo-lnk-font-size: #{$arvo-font-size-12};
   }
 
-  // ── Size: Large (default) ─────────────────────────────────────────────────
+  // -- Size: Large (default) -------------------------------------------------
   &--lg {
     --arvo-lnk-font-size: #{$arvo-font-size-14};
   }
 
-  // ── Variant: Primary (default) ────────────────────────────────────────────
+  // -- Variant: Primary (default) --------------------------------------------
   &--primary {
     --arvo-lnk-text-color: var(--arvo-color-t-info-dark);
     --arvo-lnk-icon-color: var(--arvo-color-t-info-dark);
   }
 
-  // ── Variant: Secondary ────────────────────────────────────────────────────
+  // -- Variant: Secondary ----------------------------------------------------
   &--secondary {
     --arvo-lnk-text-color: var(--arvo-color-t-secondary);
     --arvo-lnk-icon-color: var(--arvo-color-t-secondary);
   }
 
-  // ── Hover ─────────────────────────────────────────────────────────────────
-  .no-touch &:not(.is-disabled):hover {
-    --arvo-lnk-text-color: var(--arvo-color-t-info-light);
-    --arvo-lnk-icon-color: var(--arvo-color-t-info-light);
-    text-decoration: none;
-
-    .arvo-lnk__lbl {
+  // -- Hover (hover-capable devices only) ------------------------------------
+  @include hover {
+    &:not(.is-disabled):hover {
+      --arvo-lnk-text-color: var(--arvo-color-t-info-light);
+      --arvo-lnk-icon-color: var(--arvo-color-t-info-light);
       text-decoration: none;
+
+      .arvo-lnk__lbl {
+        text-decoration: none;
+      }
     }
   }
 
-  // ── Focus ─────────────────────────────────────────────────────────────────
+  // -- Focus -----------------------------------------------------------------
   &:focus-visible {
     --arvo-lnk-text-color: var(--arvo-color-t-info-light);
     --arvo-lnk-icon-color: var(--arvo-color-t-info-light);
     outline: 1px solid var(--arvo-color-b-theme-focus);
+    outline-offset: $arvo-space-2;
     text-decoration: none;
 
     .arvo-lnk__lbl {
@@ -98,7 +110,7 @@
     }
   }
 
-  // ── Active ────────────────────────────────────────────────────────────────
+  // -- Active ----------------------------------------------------------------
   &:not(.is-disabled):active,
   &:not(.is-disabled).active {
     --arvo-lnk-text-color: var(--arvo-color-t-info-light);
@@ -111,13 +123,13 @@
     }
   }
 
-  // ── Visited ───────────────────────────────────────────────────────────────
+  // -- Visited ---------------------------------------------------------------
   &.visited {
     --arvo-lnk-text-color: var(--arvo-color-t-utility-purple);
     --arvo-lnk-icon-color: var(--arvo-color-t-utility-purple);
   }
 
-  // ── Disabled ──────────────────────────────────────────────────────────────
+  // -- Disabled --------------------------------------------------------------
   &.is-disabled {
     --arvo-lnk-text-color: var(--arvo-color-t-disabled);
     --arvo-lnk-icon-color: var(--arvo-color-i-disabled);
@@ -125,7 +137,7 @@
     pointer-events: auto;
   }
 
-  // ── Loading State (Pattern A) ─────────────────────────────────────────────
+  // -- Loading State (Pattern A) ---------------------------------------------
   &.loading {
     pointer-events: none;
     cursor: default;

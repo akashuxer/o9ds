@@ -1,6 +1,7 @@
 @use '../../../tokens/src/scss/all' as *;
+@use 'hover' as *;
 
-// Shared list/menu item mixins — consumed by action-menu, select, combobox,
+// Shared list/menu item mixins -- consumed by action-menu, select, combobox,
 // multi-select, dropdown-button, list, listbox.
 // Each consumer applies these to its own BEM element class.
 //
@@ -51,9 +52,11 @@
 // Interactive states: hover (background), keyboard focus (outline),
 // active/selected (background + inline-start border), and disabled.
 @mixin list-item-states {
-  .no-touch &:not(.is-disabled):hover {
-    background-color: var(--arvo-list-item-bg-hover, var(--arvo-color-s-theme-hover-4));
-    color: var(--arvo-list-item-text-hover-color, var(--arvo-color-t-primary));
+  @include hover {
+    &:not(.is-disabled):hover {
+      background-color: var(--arvo-list-item-bg-hover, var(--arvo-color-s-theme-hover-4));
+      color: var(--arvo-list-item-text-hover-color, var(--arvo-color-t-primary));
+    }
   }
 
   // Keyboard navigation indicator (items that are the keyboard target but may
@@ -64,7 +67,7 @@
     outline-offset: -1px;
   }
 
-  // Selected / toggled — includes the inline-start border indicator.
+  // Selected / toggled -- includes the inline-start border indicator.
   &.active {
     background-color: var(--arvo-color-s-theme-active-4);
     border-inline-start-color: var(--arvo-color-b-theme-active);

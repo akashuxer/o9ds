@@ -70,6 +70,8 @@ export declare class ArvoSearch {
     private _nextBtn;
     private _errIcoEl;
     private _errIcoConnector;
+    private _errMsgAlert;
+    private _inlineAlert;
     private _inlineAlertEl;
     private _previousValue;
     private _errorId;

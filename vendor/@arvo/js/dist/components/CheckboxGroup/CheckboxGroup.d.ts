@@ -40,6 +40,7 @@ export declare class ArvoCheckboxGroup {
     private _labelEl;
     private _bdyEl;
     private _itemsEl;
+    private _inlineAlert;
     private _inlineAlertEl;
     private _selectAllInstance;
     private _selectAllEl;

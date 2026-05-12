@@ -1,340 +1,230 @@
 import { jsxs, jsx } from "react/jsx-runtime";
-import { forwardRef, useId, useMemo, useRef, useState, useCallback, useEffect } from "react";
-import { filterGroups, filterItems } from "@arvo/core";
-import { useListNavigation } from "./index42.js";
-import { FormLabel } from "./index43.js";
-import ArvoSearch from "./index32.js";
-import { normalizeSearch } from "./index45.js";
-function isGrouped(items) {
-  return items.length > 0 && "items" in items[0];
-}
-function flattenItems(items) {
-  if (isGrouped(items)) return items.flatMap((g) => g.items);
-  return items;
-}
-const ArvoListbox = forwardRef(
-  function ArvoListbox2({
-    items,
-    value,
-    defaultValue,
-    label,
-    isMultiple = false,
-    search,
-    isLoading = false,
-    isDisabled = false,
-    isRequired = false,
-    emptyMessage = "No options",
-    hasGroupDividers = true,
-    size = "md",
-    onChange,
-    onHighlight,
-    onFilter,
-    className
-  }, ref) {
-    const uid = useId();
-    const listId = `arvo-listbox-${uid}`;
-    const labelId = `${listId}-lbl`;
-    const getOptionId = (index) => `${listId}-opt-${index}`;
-    const searchCfg = useMemo(
-      () => normalizeSearch(search, { shortcut: "/" }),
-      [search]
-    );
-    const listRef = useRef(null);
-    const searchWrapperRef = useRef(null);
-    const isValueControlled = value !== void 0;
-    const [internalValue, setInternalValue] = useState(
-      () => defaultValue ?? (isMultiple ? [] : void 0)
-    );
-    const currentValue = isValueControlled ? value : internalValue;
-    const isSelected = useCallback(
-      (optionValue) => {
-        if (isMultiple) {
-          const arr = Array.isArray(currentValue) ? currentValue : [];
-          return arr.includes(optionValue);
-        }
-        return currentValue === optionValue;
-      },
-      [currentValue, isMultiple]
-    );
-    const [query, setQuery] = useState("");
-    const filteredItems = useMemo(() => {
-      if (!searchCfg || !query) return items;
-      if (isGrouped(items)) {
-        return filterGroups(items, { query });
-      }
-      return filterItems(items, { query });
-    }, [items, searchCfg, query]);
-    const flatOptions = useMemo(
-      () => flattenItems(filteredItems),
-      [filteredItems]
-    );
-    const totalOptionCount = useMemo(() => flattenItems(items).length, [items]);
-    useEffect(() => {
-      var _a;
-      if (searchCfg && query) {
-        (_a = searchCfg.onFilter) == null ? void 0 : _a.call(searchCfg, query, flatOptions.length);
-        onFilter == null ? void 0 : onFilter(query, flatOptions.length);
-      }
-    }, [searchCfg, query, flatOptions.length, onFilter]);
-    const handleSelect = useCallback(
-      (option) => {
-        if (option.isDisabled) return;
-        if (isMultiple) {
-          const arr = Array.isArray(currentValue) ? [...currentValue] : [];
-          const idx = arr.indexOf(option.value);
-          if (idx >= 0) {
-            arr.splice(idx, 1);
-          } else {
-            arr.push(option.value);
-          }
-          if (!isValueControlled) setInternalValue(arr);
-          onChange == null ? void 0 : onChange(arr, option);
-        } else {
-          if (!isValueControlled) setInternalValue(option.value);
-          onChange == null ? void 0 : onChange(option.value, option);
-        }
-      },
-      [currentValue, isMultiple, isValueControlled, onChange]
-    );
-    const scrollToIndex = useCallback(
-      (index) => {
-        var _a;
-        const optionEl = (_a = listRef.current) == null ? void 0 : _a.querySelector(
-          `[id="${getOptionId(index)}"]`
-        );
-        optionEl == null ? void 0 : optionEl.scrollIntoView({ block: "nearest" });
-      },
-      [getOptionId]
-    );
-    const handleItemSelect = useCallback(
-      (item, _index) => {
-        handleSelect(item);
-      },
-      [handleSelect]
-    );
-    const { activeIndex, setActiveIndex, handleKeyDown: navKeyDown } = useListNavigation({
-      items: flatOptions,
-      onSelect: handleItemSelect,
-      wrap: true,
-      enabled: !isDisabled && !isLoading,
-      scrollToIndex
-    });
-    useEffect(() => {
-      if (activeIndex >= 0 && activeIndex < flatOptions.length) {
-        const option = flatOptions[activeIndex];
-        onHighlight == null ? void 0 : onHighlight(option.value, option);
-      }
-    }, [activeIndex, flatOptions, onHighlight]);
-    useEffect(() => {
-      const firstEnabled = flatOptions.findIndex((item) => !item.isDisabled);
-      setActiveIndex(firstEnabled >= 0 ? firstEnabled : 0);
-    }, [flatOptions, setActiveIndex]);
-    const handleKeyDown = useCallback(
-      (e) => {
-        if (isDisabled || isLoading) return;
-        navKeyDown(e);
-      },
-      [isDisabled, isLoading, navKeyDown]
-    );
-    const handleFilterSearch = useCallback(
-      (value2) => {
-        setQuery(value2);
-        setActiveIndex(0);
-      },
-      [setActiveIndex]
-    );
-    const handleFilterClear = useCallback(() => {
-      var _a;
-      setQuery("");
-      setActiveIndex(0);
-      (_a = searchCfg == null ? void 0 : searchCfg.onClear) == null ? void 0 : _a.call(searchCfg);
-    }, [setActiveIndex, searchCfg]);
-    const handleSearchWrapperKeyDown = useCallback(
-      (e) => {
-        switch (e.key) {
-          case "ArrowDown":
-          case "ArrowUp":
-          case "Home":
-          case "End":
-            e.preventDefault();
-            navKeyDown(e);
-            break;
-          case "Enter":
-            e.preventDefault();
-            if (activeIndex >= 0 && activeIndex < flatOptions.length) {
-              const item = flatOptions[activeIndex];
-              if (!item.isDisabled) handleSelect(item);
-            }
-            break;
-        }
-      },
-      [navKeyDown, activeIndex, flatOptions, handleSelect]
-    );
-    const handleItemClick = useCallback(
-      (option, flatIndex) => {
-        if (option.isDisabled || isLoading) return;
-        setActiveIndex(flatIndex);
-        handleSelect(option);
-      },
-      [isLoading, setActiveIndex, handleSelect]
-    );
-    const classes = [
-      "arvo-listbox",
-      `arvo-listbox--${size}`,
-      isMultiple && "arvo-listbox--multiple",
-      searchCfg && "arvo-listbox--searchable",
-      isLoading && "loading",
-      isDisabled && "is-disabled",
-      className
-    ].filter(Boolean).join(" ");
-    const renderOption = (item, flatIndex) => {
-      const isItemSelected = isSelected(item.value);
-      const isHighlighted = flatIndex === activeIndex;
-      const optClasses = [
-        "arvo-listbox__opt",
-        item.isDisabled && "is-disabled",
-        isHighlighted && "highlighted",
-        isItemSelected && "active"
-      ].filter(Boolean).join(" ");
-      return /* @__PURE__ */ jsxs(
-        "div",
-        {
-          id: getOptionId(flatIndex),
-          className: optClasses,
-          role: "option",
-          "aria-selected": isItemSelected,
-          "aria-disabled": item.isDisabled || void 0,
-          onClick: () => handleItemClick(item, flatIndex),
-          onMouseEnter: () => {
-            if (!item.isDisabled) setActiveIndex(flatIndex);
-          },
-          children: [
-            item.icon && /* @__PURE__ */ jsx(
-              "span",
-              {
-                className: `arvo-listbox__opt__ico o9con o9con-${item.icon}`,
-                "aria-hidden": "true"
-              }
-            ),
-            /* @__PURE__ */ jsx("span", { className: "arvo-listbox__opt__lbl", children: item.label })
-          ]
-        },
-        item.id
-      );
-    };
-    const renderContent = () => {
-      if (isLoading) {
-        return /* @__PURE__ */ jsx("div", { className: "arvo-listbox__skeleton", children: [0, 1, 2, 3, 4].map((i) => /* @__PURE__ */ jsxs("div", { className: "arvo-listbox__skeleton-row", children: [
-          /* @__PURE__ */ jsx("div", { className: "arvo-listbox__skeleton-icon" }),
-          /* @__PURE__ */ jsx(
-            "div",
-            {
-              className: "arvo-listbox__skeleton-text",
-              style: { width: `${60 + i * 7 % 30}%` }
-            }
-          )
-        ] }, i)) });
-      }
-      if (flatOptions.length === 0) {
-        return /* @__PURE__ */ jsx("div", { className: "arvo-listbox__empty", role: "status", children: emptyMessage });
-      }
-      if (isGrouped(filteredItems)) {
-        let flatIndex = 0;
-        return filteredItems.map(
-          (group, groupIdx) => {
-            const groupHdrId = `${listId}-grp-${groupIdx}`;
-            return /* @__PURE__ */ jsxs("div", { children: [
-              groupIdx > 0 && hasGroupDividers && /* @__PURE__ */ jsx("hr", { className: "arvo-listbox__divider", role: "separator" }),
-              /* @__PURE__ */ jsxs(
-                "div",
-                {
-                  role: "group",
-                  "aria-labelledby": group.label ? groupHdrId : void 0,
-                  className: "arvo-listbox__grp",
-                  children: [
-                    group.label && /* @__PURE__ */ jsx("div", { id: groupHdrId, className: "arvo-listbox__grp-hdr", children: group.label }),
-                    group.items.map((item) => {
-                      const node = renderOption(item, flatIndex);
-                      flatIndex++;
-                      return node;
-                    })
-                  ]
-                }
-              )
-            ] }, group.id);
-          }
-        );
-      }
-      return filteredItems.map(
-        (item, i) => renderOption(item, i)
-      );
-    };
-    const highlightedOptionId = activeIndex >= 0 && activeIndex < flatOptions.length ? getOptionId(activeIndex) : void 0;
-    return /* @__PURE__ */ jsxs("div", { ref, className: classes, children: [
-      label && /* @__PURE__ */ jsx(
-        FormLabel,
-        {
-          htmlFor: listId,
-          id: labelId,
-          size: size === "sm" ? "sm" : "lg",
-          isRequired,
-          isDisabled,
-          className: "arvo-listbox__lbl",
-          children: label
-        }
-      ),
-      searchCfg && /* @__PURE__ */ jsx(
-        "div",
-        {
-          ref: searchWrapperRef,
-          className: [
-            "arvo-listbox__search",
-            searchCfg.className
-          ].filter(Boolean).join(" "),
-          onKeyDown: handleSearchWrapperKeyDown,
-          children: /* @__PURE__ */ jsx(
-            ArvoSearch,
-            {
-              variant: "filter",
-              value: query,
-              placeholder: searchCfg.placeholder,
-              searchMode: searchCfg.searchMode,
-              minChars: searchCfg.minChars,
-              isClearable: searchCfg.isClearable,
-              shortcut: searchCfg.shortcut,
-              errorMsg: searchCfg.errorMsg,
-              errorDisplay: "tooltip",
-              counter: searchCfg.counter && query ? { current: flatOptions.length, total: totalOptionCount } : null,
-              onSearch: handleFilterSearch,
-              onClear: handleFilterClear,
-              isDisabled,
-              "aria-label": "Filter options"
-            }
-          )
-        }
-      ),
-      /* @__PURE__ */ jsx(
-        "div",
-        {
-          ref: listRef,
-          id: listId,
-          className: "arvo-listbox__list",
-          role: "listbox",
-          tabIndex: isDisabled ? -1 : 0,
-          "aria-multiselectable": isMultiple || void 0,
-          "aria-activedescendant": highlightedOptionId,
-          "aria-busy": isLoading || void 0,
-          "aria-labelledby": label ? labelId : void 0,
-          "aria-disabled": isDisabled || void 0,
-          "aria-required": isRequired || void 0,
-          onKeyDown: handleKeyDown,
-          children: renderContent()
-        }
-      )
-    ] });
+import { createContext, useState, useRef, useContext, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { overlayHub } from "@arvo/core";
+import { OverlayContext } from "./index3.js";
+const ToastContext = createContext(null);
+function useToast() {
+  const ctx = useContext(ToastContext);
+  if (!ctx) {
+    throw new Error("useToast must be used within an ArvoToastProvider");
   }
-);
+  return ctx;
+}
+const NO_AUTO_DISMISS = /* @__PURE__ */ new Set(["negative", "block"]);
+const ALERT_ROLES = /* @__PURE__ */ new Set(["negative", "block"]);
+let toastCounter = 0;
+function ToastItem({ entry, onRemove }) {
+  const {
+    id,
+    type = "info",
+    title,
+    message,
+    fadeAway: fadeAwayProp = true,
+    timeout = 5e3,
+    pauseOnHover = true,
+    icon,
+    link,
+    className,
+    onClose,
+    onMouseEnter: onMouseEnterCb,
+    onMouseLeave: onMouseLeaveCb
+  } = entry;
+  const shouldFade = NO_AUTO_DISMISS.has(type) ? false : fadeAwayProp;
+  const role = ALERT_ROLES.has(type) ? "alert" : "status";
+  const elRef = useRef(null);
+  const timerRef = useRef(null);
+  const removedRef = useRef(false);
+  const remove = useCallback((reason) => {
+    if (removedRef.current) return;
+    removedRef.current = true;
+    onClose == null ? void 0 : onClose();
+    onRemove(id, reason);
+  }, [id, onClose, onRemove]);
+  useEffect(() => {
+    if (!shouldFade) return;
+    timerRef.current = setTimeout(() => {
+      const el = elRef.current;
+      if (!el) {
+        remove("fade");
+        return;
+      }
+      el.classList.add("is-fading");
+      el.classList.remove("is-paused");
+      const onEnd = () => {
+        el.removeEventListener("transitionend", onEnd);
+        remove("fade");
+      };
+      el.addEventListener("transitionend", onEnd);
+    }, timeout);
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+  const handleMouseEnter = useCallback(() => {
+    onMouseEnterCb == null ? void 0 : onMouseEnterCb();
+    if (!shouldFade || !pauseOnHover) return;
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    const el = elRef.current;
+    if (el) {
+      el.classList.add("is-paused");
+      el.classList.remove("is-fading");
+    }
+  }, [shouldFade, pauseOnHover, onMouseEnterCb]);
+  const handleMouseLeave = useCallback(() => {
+    onMouseLeaveCb == null ? void 0 : onMouseLeaveCb();
+    if (!shouldFade || !pauseOnHover) return;
+    const el = elRef.current;
+    if (el) {
+      el.classList.remove("is-paused");
+    }
+    timerRef.current = setTimeout(() => {
+      if (!elRef.current) {
+        remove("fade");
+        return;
+      }
+      elRef.current.classList.add("is-fading");
+      const onEnd = () => {
+        var _a;
+        (_a = elRef.current) == null ? void 0 : _a.removeEventListener("transitionend", onEnd);
+        remove("fade");
+      };
+      elRef.current.addEventListener("transitionend", onEnd);
+    }, timeout);
+  }, [shouldFade, pauseOnHover, timeout, remove, onMouseLeaveCb]);
+  const handleCloseClick = useCallback(() => {
+    remove("click");
+  }, [remove]);
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === "Escape") {
+      e.stopPropagation();
+      remove("escape");
+    }
+  }, [remove]);
+  const rootClasses = [
+    "arvo-toast",
+    `arvo-toast--${type}`,
+    className
+  ].filter(Boolean).join(" ");
+  const iconClasses = [
+    "arvo-toast__ico",
+    "o9con",
+    icon ? `o9con-${icon}` : ""
+  ].filter(Boolean).join(" ");
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      ref: elRef,
+      className: rootClasses,
+      role,
+      "aria-atomic": "true",
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: handleMouseLeave,
+      onKeyDown: handleKeyDown,
+      children: [
+        /* @__PURE__ */ jsx("span", { className: iconClasses, "aria-hidden": "true" }),
+        /* @__PURE__ */ jsxs("div", { className: "arvo-toast__content", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            title && /* @__PURE__ */ jsx("p", { className: "arvo-toast__title", children: title }),
+            /* @__PURE__ */ jsx("p", { className: "arvo-toast__msg", children: message })
+          ] }),
+          link && /* @__PURE__ */ jsx("div", { className: "arvo-toast__link", children: link })
+        ] }),
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            className: "arvo-toast__close",
+            "aria-label": "Close notification",
+            onClick: handleCloseClick,
+            type: "button",
+            children: /* @__PURE__ */ jsx("span", { className: "o9con o9con-close" })
+          }
+        )
+      ]
+    }
+  );
+}
+const OVERLAY_ID = "arvo-toast-container";
+function ArvoToastProvider({ position = "top-right", children }) {
+  const [toasts, setToasts] = useState([]);
+  const containerRef = useRef(null);
+  const registeredRef = useRef(false);
+  const hub = useContext(OverlayContext) ?? overlayHub;
+  if (!containerRef.current && typeof document !== "undefined") {
+    const el = document.createElement("div");
+    el.className = `arvo-toast-container arvo-toast-container--${position}`;
+    el.setAttribute("role", "region");
+    el.setAttribute("aria-label", "Notifications");
+    containerRef.current = el;
+  }
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    document.body.appendChild(container);
+    hub.open({
+      id: OVERLAY_ID,
+      type: "toast",
+      element: container,
+      priority: 0,
+      config: { autoCloseOnOutsideClick: false }
+    });
+    registeredRef.current = true;
+    return () => {
+      if (registeredRef.current) {
+        hub.close(OVERLAY_ID);
+        registeredRef.current = false;
+      }
+      container.remove();
+    };
+  }, [hub]);
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    container.className = `arvo-toast-container arvo-toast-container--${position}`;
+  }, [position]);
+  const show = useCallback((options) => {
+    const id = `arvo-toast-${++toastCounter}`;
+    setToasts((prev) => [{ ...options, id }, ...prev]);
+    return id;
+  }, []);
+  const close = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+  const closeAll = useCallback(() => {
+    setToasts([]);
+  }, []);
+  const handleRemove = useCallback((id, reason) => {
+    const container = containerRef.current;
+    if (container) {
+      container.dispatchEvent(new CustomEvent("toast:close", {
+        bubbles: true,
+        cancelable: false,
+        detail: { id, reason }
+      }));
+    }
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+  const contextValue = { show, close, closeAll };
+  return /* @__PURE__ */ jsxs(ToastContext.Provider, { value: contextValue, children: [
+    children,
+    containerRef.current && createPortal(
+      toasts.map((entry) => /* @__PURE__ */ jsx(
+        ToastItem,
+        {
+          entry,
+          onRemove: handleRemove
+        },
+        entry.id
+      )),
+      containerRef.current
+    )
+  ] });
+}
 export {
-  ArvoListbox
+  ArvoToastProvider,
+  useToast
 };
 //# sourceMappingURL=index38.js.map

@@ -1,5 +1,4 @@
 import { ArvoActionMenu } from "../ActionMenu/ActionMenu.js";
-import { connectTooltip, tooltipManager } from "@arvo/core";
 function isGrouped(items) {
   return items.length > 0 && "items" in items[0];
 }
@@ -21,7 +20,6 @@ const _ArvoDropdownButton = class _ArvoDropdownButton {
     this._labelEl = null;
     this._caretEl = null;
     this._selectedItemId = null;
-    this._tooltipConnector = null;
     this._isOpen = false;
     this._element = element;
     const variant = (options == null ? void 0 : options.variant) && _ArvoDropdownButton.VARIANTS.includes(options.variant) ? options.variant : _ArvoDropdownButton.DEFAULTS.variant;
@@ -33,7 +31,6 @@ const _ArvoDropdownButton = class _ArvoDropdownButton {
       size,
       label: (options == null ? void 0 : options.label) ?? ((_a = element.textContent) == null ? void 0 : _a.trim()) ?? "",
       icon: (options == null ? void 0 : options.icon) ?? null,
-      tooltip: (options == null ? void 0 : options.tooltip) ?? null,
       maxHeight: (options == null ? void 0 : options.maxHeight) ?? null,
       items: (options == null ? void 0 : options.items) ?? [],
       onSelect: (options == null ? void 0 : options.onSelect) ?? null,
@@ -53,20 +50,12 @@ const _ArvoDropdownButton = class _ArvoDropdownButton {
     this._render();
     this._bindEvents();
     this._initActionMenu();
-    this._connectTooltip();
     if (this._selectedItemId != null && this._options.mode === "selection") {
       this._applySelection(this._selectedItemId);
     }
   }
   static initialize(element, options) {
     return new _ArvoDropdownButton(element, options);
-  }
-  _connectTooltip() {
-    if (!this._element || !this._options.tooltip) return;
-    this._tooltipConnector = connectTooltip(tooltipManager, {
-      anchor: this._element,
-      content: this._options.tooltip
-    });
   }
   // ---------------------------------------------------------------------------
   // Render
@@ -135,9 +124,15 @@ const _ArvoDropdownButton = class _ArvoDropdownButton {
     (_b = (_a = this._options).onBlur) == null ? void 0 : _b.call(_a, event);
   }
   _handleKeydown(event) {
+    var _a;
     if ((event.key === "Enter" || event.key === " ") && (this._options.isDisabled || this._options.isLoading)) {
       event.preventDefault();
       event.stopPropagation();
+      return;
+    }
+    if (event.altKey && event.key === "ArrowDown" && !this._options.isDisabled && !this._options.isLoading) {
+      event.preventDefault();
+      (_a = this._actionMenu) == null ? void 0 : _a.open();
     }
   }
   // ---------------------------------------------------------------------------
@@ -145,9 +140,10 @@ const _ArvoDropdownButton = class _ArvoDropdownButton {
   // ---------------------------------------------------------------------------
   _initActionMenu() {
     if (!this._element) return;
+    const menuSize = this._options.size === "sm" ? "sm" : "md";
     const menuOptions = {
       items: this._getProcessedItems(),
-      size: this._options.menuSize,
+      size: menuSize,
       search: this._options.search,
       placement: this._options.placement,
       maxHeight: this._options.maxHeight ?? void 0,
@@ -376,7 +372,7 @@ const _ArvoDropdownButton = class _ArvoDropdownButton {
     (_a = this._element) == null ? void 0 : _a.focus();
   }
   destroy() {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     (_a = this._actionMenu) == null ? void 0 : _a.destroy();
     this._actionMenu = null;
     const el = this._element;
@@ -409,8 +405,6 @@ const _ArvoDropdownButton = class _ArvoDropdownButton {
       (_c = this._labelEl) == null ? void 0 : _c.remove();
       (_d = this._caretEl) == null ? void 0 : _d.remove();
     }
-    (_e = this._tooltipConnector) == null ? void 0 : _e.destroy();
-    this._tooltipConnector = null;
     this._element = null;
     this._iconEl = null;
     this._labelEl = null;
@@ -435,8 +429,6 @@ _ArvoDropdownButton.DEFAULTS = {
   maxHeight: null,
   hasGroupDividers: true,
   closeOnSelect: true,
-  menuSize: "md",
-  tooltip: null,
   onSelect: null,
   onOpen: null,
   onClose: null,

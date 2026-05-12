@@ -67,6 +67,8 @@ export declare class ArvoCombobox {
     private _borderEl;
     private _labelEl;
     private _alertEl;
+    private _inlineAlert;
+    private _errMsgAlert;
     private _resizeObserver;
     private _isOpen;
     private _isDisabled;

@@ -1,6 +1,7 @@
-import { createFormLabel, getDefaultErrorMsg, createErrorTooltipIcon, createCharCounter, updateCharCounter, createInlineAlert, updateErrorTooltipIcon, updateInlineAlert } from "@arvo/utils";
+import { createFormLabel, createCharCounter, updateCharCounter } from "@arvo/utils";
 import { connectTooltip, tooltipManager } from "@arvo/core";
 import { ArvoIconButton } from "../IconButton/IconButton.js";
+import { ArvoMessageAlert, ARVO_MSG_ALERT_DEFAULT_ERROR } from "../MessageAlert/MessageAlert.js";
 let _idCounter = 0;
 const _ArvoTextbox = class _ArvoTextbox {
   constructor(element, options) {
@@ -14,6 +15,8 @@ const _ArvoTextbox = class _ArvoTextbox {
     this._clearBtn = null;
     this._errIcoEl = null;
     this._errIcoConnector = null;
+    this._errMsgAlert = null;
+    this._inlineAlert = null;
     this._inlineAlertEl = null;
     this._leadingIconEl = null;
     this._resizeObserver = null;
@@ -125,13 +128,17 @@ const _ArvoTextbox = class _ArvoTextbox {
         isDisabled: isDisabled || isLoading
       });
       this._clearEl.setAttribute("aria-label", "Clear");
-      this._clearEl.tabIndex = -1;
       this._clearEl.classList.add("arvo-textbox__clear");
       this._actionsEl.appendChild(this._clearEl);
     }
     if (useTooltipError) {
-      const tooltip = errorMsg ?? getDefaultErrorMsg();
-      this._errIcoEl = createErrorTooltipIcon({ tooltip });
+      const tooltip = errorMsg ?? ARVO_MSG_ALERT_DEFAULT_ERROR;
+      this._errMsgAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
+        type: "error",
+        isInline: true,
+        message: tooltip
+      });
+      this._errIcoEl = this._errMsgAlert.el;
       this._errIcoEl.classList.add("arvo-textbox__err-ico");
       this._errIcoConnector = connectTooltip(tooltipManager, {
         anchor: this._errIcoEl,
@@ -156,12 +163,13 @@ const _ArvoTextbox = class _ArvoTextbox {
       el.appendChild(this._counterEl);
     }
     if (useInlineAlert) {
-      const message = errorMsg ?? getDefaultErrorMsg();
-      this._inlineAlertEl = createInlineAlert({
+      const message = errorMsg ?? ARVO_MSG_ALERT_DEFAULT_ERROR;
+      this._inlineAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
         type: "error",
         message,
         id: this._errorId
       });
+      this._inlineAlertEl = this._inlineAlert.el;
       this._inlineAlertEl.style.display = "none";
       el.appendChild(this._inlineAlertEl);
     }
@@ -304,7 +312,7 @@ const _ArvoTextbox = class _ArvoTextbox {
     return { valid: errors.length === 0, errors };
   }
   setError(message) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e;
     const useTooltipError = this._options.errorDisplay === "tooltip";
     const useInlineAlert = this._options.errorDisplay === "inline";
     if (message === false) {
@@ -323,7 +331,7 @@ const _ArvoTextbox = class _ArvoTextbox {
       }
       return;
     }
-    const msg = message || getDefaultErrorMsg();
+    const msg = message || ARVO_MSG_ALERT_DEFAULT_ERROR;
     this._options.isInvalid = true;
     this._options.errorMsg = msg;
     (_b = this._element) == null ? void 0 : _b.classList.add("has-error");
@@ -334,14 +342,14 @@ const _ArvoTextbox = class _ArvoTextbox {
       }
     }
     if (useTooltipError && this._errIcoEl) {
-      updateErrorTooltipIcon(this._errIcoEl, msg);
+      (_c = this._errMsgAlert) == null ? void 0 : _c.message(msg);
       if (this._errIcoConnector) {
         this._errIcoConnector.update({ content: msg });
       }
-      (_c = this._element) == null ? void 0 : _c.classList.add("error-tooltip");
+      (_d = this._element) == null ? void 0 : _d.classList.add("error-tooltip");
     }
     if (useInlineAlert && this._inlineAlertEl) {
-      updateInlineAlert(this._inlineAlertEl, { message: msg });
+      (_e = this._inlineAlert) == null ? void 0 : _e.message(msg);
       this._inlineAlertEl.style.display = "";
       if (this._counterEl) this._counterEl.style.display = "none";
     }
@@ -396,7 +404,7 @@ const _ArvoTextbox = class _ArvoTextbox {
     }
   }
   destroy() {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j;
     const el = this._element;
     if (!el) return;
     (_a = this._resizeObserver) == null ? void 0 : _a.disconnect();
@@ -408,7 +416,11 @@ const _ArvoTextbox = class _ArvoTextbox {
       this._inputEl.removeEventListener("blur", this._boundHandleBlur);
       this._inputEl.removeEventListener("keydown", this._boundHandleKeydown);
     }
-    (_b = this._clearBtn) == null ? void 0 : _b.destroy();
+    (_b = this._inlineAlert) == null ? void 0 : _b.destroy();
+    this._inlineAlert = null;
+    (_c = this._errMsgAlert) == null ? void 0 : _c.destroy();
+    this._errMsgAlert = null;
+    (_d = this._clearBtn) == null ? void 0 : _d.destroy();
     if (this._clearEl) {
       this._clearEl.removeEventListener("click", this._boundHandleClearClick);
     }
@@ -429,11 +441,11 @@ const _ArvoTextbox = class _ArvoTextbox {
     el.removeAttribute("aria-busy");
     el.removeAttribute("role");
     el.style.removeProperty("--arvo-form-input-width");
-    (_c = this._labelEl) == null ? void 0 : _c.remove();
-    (_d = this._counterEl) == null ? void 0 : _d.remove();
-    (_e = this._inlineAlertEl) == null ? void 0 : _e.remove();
-    (_f = this._actionsEl) == null ? void 0 : _f.remove();
-    (_g = this._fieldEl) == null ? void 0 : _g.remove();
+    (_e = this._labelEl) == null ? void 0 : _e.remove();
+    (_f = this._counterEl) == null ? void 0 : _f.remove();
+    (_g = this._inlineAlertEl) == null ? void 0 : _g.remove();
+    (_h = this._actionsEl) == null ? void 0 : _h.remove();
+    (_i = this._fieldEl) == null ? void 0 : _i.remove();
     this._element = null;
     this._inputEl = null;
     this._fieldEl = null;
@@ -443,7 +455,7 @@ const _ArvoTextbox = class _ArvoTextbox {
     this._counterEl = null;
     this._clearEl = null;
     this._clearBtn = null;
-    (_h = this._errIcoConnector) == null ? void 0 : _h.destroy();
+    (_j = this._errIcoConnector) == null ? void 0 : _j.destroy();
     this._errIcoConnector = null;
     this._errIcoEl = null;
     this._inlineAlertEl = null;

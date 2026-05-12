@@ -2,7 +2,7 @@ export { getFocusableElements, getFirstFocusable, getLastFocusable, isFocusable,
 export { createArrowNav, createEscapeHandler, createActivationHandler, type ArrowNav, type ArrowNavOptions, type EscapeHandler, type ActivationHandler, } from './keyboard';
 export { enter, exit, prefersReducedMotion, onReducedMotionChange, type TransitionType, type TransitionOptions, } from './animation';
 export { computePosition, createPositionWatcher, type Placement, type ResolvedPlacement, type PositionOptions, type PositionResult, type PositionWatcherOptions, type PositionWatcher, } from './position';
-export { createOverlayHub, overlayHub, createBackdropManager, type OverlayConfig, type OverlayType, type OverlayEntry, type OverlayHub, type BackdropOptions, type BackdropManager, } from './overlay';
+export { createOverlayHub, overlayHub, createBackdropManager, lockPageScroll, isPageScrollLocked, type OverlayConfig, type OverlayType, type OverlayEntry, type OverlayHub, type BackdropOptions, type BackdropManager, } from './overlay';
 export { createMask, type MaskOptions, type MaskInstance, } from './mask';
 export { normalizeQuery, filterItems, filterGroups, type ListItemBase, type ListGroup, type ListFilterOptions, } from './list';
 export { isTruncated } from './dom';

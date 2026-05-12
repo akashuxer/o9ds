@@ -1,6 +1,7 @@
-import { createFormLabel, getDefaultErrorMsg, createErrorTooltipIcon, createInlineAlert, updateErrorTooltipIcon, updateInlineAlert } from "@arvo/utils";
+import { createFormLabel } from "@arvo/utils";
 import { connectTooltip, tooltipManager } from "@arvo/core";
 import { ArvoIconButton } from "../IconButton/IconButton.js";
+import { ArvoMessageAlert, ARVO_MSG_ALERT_DEFAULT_ERROR } from "../MessageAlert/MessageAlert.js";
 let _idCounter = 0;
 function getStepPrecision(step) {
   const str = String(step);
@@ -21,6 +22,8 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     this._actionsEl = null;
     this._errIcoEl = null;
     this._errIcoConnector = null;
+    this._errMsgAlert = null;
+    this._inlineAlert = null;
     this._inlineAlertEl = null;
     this._resizeObserver = null;
     this._previousValue = null;
@@ -139,8 +142,13 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     this._actionsEl = document.createElement("div");
     this._actionsEl.className = "arvo-number-input__actions";
     if (useTooltipError && isInvalid) {
-      const tooltip = errorMsg ?? getDefaultErrorMsg();
-      this._errIcoEl = createErrorTooltipIcon({ tooltip });
+      const tooltip = errorMsg ?? ARVO_MSG_ALERT_DEFAULT_ERROR;
+      this._errMsgAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
+        type: "error",
+        isInline: true,
+        message: tooltip
+      });
+      this._errIcoEl = this._errMsgAlert.el;
       this._errIcoEl.classList.add("arvo-number-input__err-ico");
       this._errIcoConnector = connectTooltip(tooltipManager, {
         anchor: this._errIcoEl,
@@ -186,12 +194,13 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     this._resizeObserver.observe(this._actionsEl);
     this._updatePadding();
     if (useInlineAlert) {
-      const message = errorMsg ?? getDefaultErrorMsg();
-      this._inlineAlertEl = createInlineAlert({
+      const message = errorMsg ?? ARVO_MSG_ALERT_DEFAULT_ERROR;
+      this._inlineAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
         type: "error",
         message,
         id: this._errorId
       });
+      this._inlineAlertEl = this._inlineAlert.el;
       this._inlineAlertEl.style.display = "none";
       el.appendChild(this._inlineAlertEl);
     }
@@ -539,7 +548,7 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     return { valid: errors.length === 0, errors };
   }
   setError(message) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f, _g;
     const useTooltipError = this._options.errorDisplay === "tooltip";
     const useInlineAlert = this._options.errorDisplay === "inline";
     if (message === false) {
@@ -554,6 +563,8 @@ const _ArvoNumberInput = class _ArvoNumberInput {
         this._errIcoEl.remove();
         (_b = this._errIcoConnector) == null ? void 0 : _b.destroy();
         this._errIcoConnector = null;
+        (_c = this._errMsgAlert) == null ? void 0 : _c.destroy();
+        this._errMsgAlert = null;
         this._errIcoEl = null;
         this._updatePadding();
       }
@@ -562,10 +573,10 @@ const _ArvoNumberInput = class _ArvoNumberInput {
       }
       return;
     }
-    const msg = message || getDefaultErrorMsg();
+    const msg = message || ARVO_MSG_ALERT_DEFAULT_ERROR;
     this._options.isInvalid = true;
     this._options.errorMsg = msg;
-    (_c = this._element) == null ? void 0 : _c.classList.add("has-error");
+    (_d = this._element) == null ? void 0 : _d.classList.add("has-error");
     if (this._inputEl) {
       this._inputEl.setAttribute("aria-invalid", "true");
       if (useInlineAlert) {
@@ -574,7 +585,12 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     }
     if (useTooltipError) {
       if (!this._errIcoEl && this._actionsEl) {
-        this._errIcoEl = createErrorTooltipIcon({ tooltip: msg });
+        this._errMsgAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
+          type: "error",
+          isInline: true,
+          message: msg
+        });
+        this._errIcoEl = this._errMsgAlert.el;
         this._errIcoEl.classList.add("arvo-number-input__err-ico");
         this._errIcoConnector = connectTooltip(tooltipManager, {
           anchor: this._errIcoEl,
@@ -583,15 +599,15 @@ const _ArvoNumberInput = class _ArvoNumberInput {
         this._actionsEl.appendChild(this._errIcoEl);
         this._updatePadding();
       } else if (this._errIcoEl) {
-        updateErrorTooltipIcon(this._errIcoEl, msg);
+        (_e = this._errMsgAlert) == null ? void 0 : _e.message(msg);
         if (this._errIcoConnector) {
           this._errIcoConnector.update({ content: msg });
         }
       }
-      (_d = this._element) == null ? void 0 : _d.classList.add("error-tooltip");
+      (_f = this._element) == null ? void 0 : _f.classList.add("error-tooltip");
     }
     if (useInlineAlert && this._inlineAlertEl) {
-      updateInlineAlert(this._inlineAlertEl, { message: msg });
+      (_g = this._inlineAlert) == null ? void 0 : _g.message(msg);
       this._inlineAlertEl.style.display = "";
     }
   }
@@ -649,14 +665,18 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     }
   }
   destroy() {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
     const el = this._element;
     if (!el) return;
     this._clearRepeat();
     (_a = this._resizeObserver) == null ? void 0 : _a.disconnect();
     this._resizeObserver = null;
-    (_b = this._incrementBtnInstance) == null ? void 0 : _b.destroy();
-    (_c = this._decrementBtnInstance) == null ? void 0 : _c.destroy();
+    (_b = this._inlineAlert) == null ? void 0 : _b.destroy();
+    this._inlineAlert = null;
+    (_c = this._errMsgAlert) == null ? void 0 : _c.destroy();
+    this._errMsgAlert = null;
+    (_d = this._incrementBtnInstance) == null ? void 0 : _d.destroy();
+    (_e = this._decrementBtnInstance) == null ? void 0 : _e.destroy();
     if (this._inputEl) {
       this._inputEl.removeEventListener("input", this._boundHandleInput);
       this._inputEl.removeEventListener("change", this._boundHandleChange);
@@ -694,12 +714,12 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     el.removeAttribute("aria-busy");
     el.removeAttribute("role");
     el.style.removeProperty("--arvo-form-input-width");
-    (_d = this._labelEl) == null ? void 0 : _d.remove();
-    (_e = this._inlineAlertEl) == null ? void 0 : _e.remove();
-    (_f = this._actionsEl) == null ? void 0 : _f.remove();
-    (_g = this._errIcoEl) == null ? void 0 : _g.remove();
-    (_h = this._fieldEl) == null ? void 0 : _h.remove();
-    (_i = this._borderEl) == null ? void 0 : _i.remove();
+    (_f = this._labelEl) == null ? void 0 : _f.remove();
+    (_g = this._inlineAlertEl) == null ? void 0 : _g.remove();
+    (_h = this._actionsEl) == null ? void 0 : _h.remove();
+    (_i = this._errIcoEl) == null ? void 0 : _i.remove();
+    (_j = this._fieldEl) == null ? void 0 : _j.remove();
+    (_k = this._borderEl) == null ? void 0 : _k.remove();
     this._element = null;
     this._inputEl = null;
     this._fieldEl = null;
@@ -711,7 +731,7 @@ const _ArvoNumberInput = class _ArvoNumberInput {
     this._decrementBtn = null;
     this._incrementBtnInstance = null;
     this._decrementBtnInstance = null;
-    (_j = this._errIcoConnector) == null ? void 0 : _j.destroy();
+    (_l = this._errIcoConnector) == null ? void 0 : _l.destroy();
     this._errIcoConnector = null;
     this._errIcoEl = null;
     this._inlineAlertEl = null;

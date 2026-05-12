@@ -1,6 +1,6 @@
 {
   "name": "@arvo/js",
-  "version": "1.0.0-dev.2",
+  "version": "1.1.0",
   "description": "Arvo Design System vanilla JS component library",
   "license": "UNLICENSED",
   "private": false,
@@ -23,7 +23,8 @@
       "types": "./dist/auto.d.ts",
       "import": "./dist/auto.js",
       "require": "./dist/auto.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": [
     "./dist/auto.js",

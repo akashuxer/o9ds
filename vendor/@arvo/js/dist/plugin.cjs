@@ -1,14 +1,20 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const overlaySetup = require("./setup/overlay-setup.cjs");
+const Drawer = require("./components/Drawer/Drawer.cjs");
+const SidePanel = require("./components/SidePanel/SidePanel.cjs");
 const AlertDialog = require("./components/AlertDialog/AlertDialog.cjs");
 const Listbox = require("./components/Listbox/Listbox.cjs");
 const DropdownIconButton = require("./components/DropdownIconButton/DropdownIconButton.cjs");
+const SplitIconButton = require("./components/SplitIconButton/SplitIconButton.cjs");
+const SplitButton = require("./components/SplitButton/SplitButton.cjs");
 const DropdownButton = require("./components/DropdownButton/DropdownButton.cjs");
 const Combobox = require("./components/Combobox/Combobox.cjs");
 const Select = require("./components/Select/Select.cjs");
 const Search = require("./components/Search/Search.cjs");
 const ActionMenu = require("./components/ActionMenu/ActionMenu.cjs");
+const MessageAlert = require("./components/MessageAlert/MessageAlert.cjs");
+const BannerAlert = require("./components/BannerAlert/BannerAlert.cjs");
 const BadgeAlert = require("./components/BadgeAlert/BadgeAlert.cjs");
 const Breadcrumb = require("./components/Breadcrumb/Breadcrumb.cjs");
 const Tabstrip = require("./components/Tabstrip/Tabstrip.cjs");
@@ -16,6 +22,7 @@ const IconButtonLink = require("./components/IconButtonLink/IconButtonLink.cjs")
 const ButtonLink = require("./components/ButtonLink/ButtonLink.cjs");
 const Link = require("./components/Link/Link.cjs");
 const FabButton = require("./components/FabButton/FabButton.cjs");
+const SegmentedControl = require("./components/SegmentedControl/SegmentedControl.cjs");
 const ButtonGroup = require("./components/ButtonGroup/ButtonGroup.cjs");
 const HybridPopover = require("./components/HybridPopover/HybridPopover.cjs");
 const Popover = require("./components/Popover/Popover.cjs");
@@ -43,6 +50,7 @@ const ALL_COMPONENTS = {
   arvoPopover: { Class: Popover.ArvoPopover, dataKey: "arvoPopover" },
   arvoHybridPopover: { Class: HybridPopover.ArvoHybridPopover, dataKey: "arvoHybridPopover" },
   arvoButtonGroup: { Class: ButtonGroup.ArvoButtonGroup, dataKey: "arvoButtonGroup" },
+  arvoSegmentedControl: { Class: SegmentedControl.ArvoSegmentedControl, dataKey: "arvoSegmentedControl" },
   arvoFabButton: { Class: FabButton.ArvoFabButton, dataKey: "arvoFabButton" },
   arvoLink: { Class: Link.ArvoLink, dataKey: "arvoLink" },
   arvoButtonLink: { Class: ButtonLink.ArvoButtonLink, dataKey: "arvoButtonLink" },
@@ -50,14 +58,20 @@ const ALL_COMPONENTS = {
   arvoTabstrip: { Class: Tabstrip.ArvoTabstrip, dataKey: "arvoTabstrip" },
   arvoBreadcrumb: { Class: Breadcrumb.ArvoBreadcrumb, dataKey: "arvoBreadcrumb" },
   arvoBadgeAlert: { Class: BadgeAlert.ArvoBadgeAlert, dataKey: "arvoBadgeAlert" },
+  arvoBannerAlert: { Class: BannerAlert.ArvoBannerAlert, dataKey: "arvoBannerAlert" },
+  arvoMessageAlert: { Class: MessageAlert.ArvoMessageAlert, dataKey: "arvoMessageAlert" },
   arvoActionMenu: { Class: ActionMenu.ArvoActionMenu, dataKey: "arvoActionMenu" },
   arvoSearch: { Class: Search.ArvoSearch, dataKey: "arvoSearch" },
   arvoSelect: { Class: Select.ArvoSelect, dataKey: "arvoSelect" },
   arvoCombobox: { Class: Combobox.ArvoCombobox, dataKey: "arvoCombobox" },
   arvoDropdownButton: { Class: DropdownButton.ArvoDropdownButton, dataKey: "arvoDropdownButton" },
+  arvoSplitButton: { Class: SplitButton.ArvoSplitButton, dataKey: "arvoSplitButton" },
+  arvoSplitIconButton: { Class: SplitIconButton.ArvoSplitIconButton, dataKey: "arvoSplitIconButton" },
   arvoDropdownIconButton: { Class: DropdownIconButton.ArvoDropdownIconButton, dataKey: "arvoDropdownIconButton" },
   arvoListbox: { Class: Listbox.ArvoListbox, dataKey: "arvoListbox" },
-  arvoAlertDialog: { Class: AlertDialog.ArvoAlertDialog, dataKey: "arvoAlertDialog" }
+  arvoAlertDialog: { Class: AlertDialog.ArvoAlertDialog, dataKey: "arvoAlertDialog" },
+  arvoSidePanel: { Class: SidePanel.ArvoSidePanel, dataKey: "arvoSidePanel" },
+  arvoDrawer: { Class: Drawer.ArvoDrawer, dataKey: "arvoDrawer" }
 };
 function registerArvoPlugins($, components) {
   const entries = components ? components.map((name) => [name, ALL_COMPONENTS[name]]).filter(([, e]) => e) : Object.entries(ALL_COMPONENTS);

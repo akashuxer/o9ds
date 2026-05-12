@@ -8,17 +8,17 @@
 @use '../../mixins/form-input' as *;
 @use '../../mixins/form-label' as *;
 @use '../../mixins/form-char-counter' as *;
-@use '../../mixins/inline-alert' as *;
+@use '../../mixins/hover' as *;
 @use '../../mixins/loading' as *;
 
-// ─── .arvo-textbox ───────────────────────────────────────────────────────────
+// --- .arvo-textbox -----------------------------------------------------------
 
 .arvo-textbox {
   // Only dynamic values that change per size modifier
   --arvo-form-input-height: 32px;
   --arvo-form-input-font-size: #{$arvo-font-size-14};
 
-  // ── Root layout ───────────────────────────────────────────────────────────
+  // -- Root layout -----------------------------------------------------------
   @include form-input-default-width;
   display: inline-flex;
   flex-direction: column;
@@ -33,7 +33,7 @@
     --arvo-form-input-width: 100%;
   }
 
-  // ── __lbl (form label) ────────────────────────────────────────────────────
+  // -- __lbl (form label) ----------------------------------------------------
   &__lbl {
     @include form-label-base;
     @include form-label-sm;
@@ -43,7 +43,7 @@
     }
   }
 
-  // ── __field (flex container for input + icons + border) ──────────────
+  // -- __field (flex container for input + icons + border) --------------
   &__field {
     @include form-input-base;
     @include form-input-hover-bg;
@@ -54,7 +54,7 @@
     width: 100%;
   }
 
-  // ── __input (native <input>) ──────────────────────────────────────────────
+  // -- __input (native <input>) ----------------------------------------------
   &__input {
     @include form-input-text-colors;
 
@@ -79,7 +79,7 @@
     }
   }
 
-  // ── __actions (right-side absolute container for clear + error icon) ────
+  // -- __actions (right-side absolute container for clear + error icon) ----
   &__actions {
     position: absolute;
     right: var(--arvo-form-input-padding-inline, #{$arvo-space-8});
@@ -91,7 +91,7 @@
     pointer-events: auto;
   }
 
-  // ── __leading-icon ────────────────────────────────────────────────────────
+  // -- __leading-icon --------------------------------------------------------
   &__leading-icon {
     flex-shrink: 0;
     font-size: $arvo-icon-16;
@@ -102,17 +102,20 @@
     }
   }
 
-  // ── __border (animated bottom border, inside __field) ────────────────
+  // -- __border (animated bottom border, inside __field) ----------------
   &__border {
     @include form-input-animated-border-base;
   }
 
-  // ── __err-ico (inline error icon inside field, trailing) ──────────────────
+  // -- __err-ico (slot for in-field <ArvoMessageAlert isInline /> child) -----
+  // Icon glyph + color come from the child .arvo-msg-alert; this slot only
+  // controls visibility based on the parent's .has-error.error-tooltip state.
   &__err-ico {
-    @include error-tooltip-icon;
+    display: none;
+    flex: 0 0 auto;
   }
 
-  // ── __counter (character counter, below field) ────────────────────────────
+  // -- __counter (character counter, below field) ----------------------------
   &__counter {
     @include form-char-counter-base;
 
@@ -120,41 +123,27 @@
       @include form-char-counter-disabled;
     }
 
-    // Hide when inline error alert is visible
+    // Hide when below-field error message is visible
     .has-error:not(.error-tooltip) & {
       display: none;
     }
   }
 
-  // ── Inline alert (below field) ────────────────────────────────────────────
-  .arvo-inline-alert {
-    @include inline-alert-base;
-    display: none;
-
-    &__ico {
-      @include inline-alert-icon;
-    }
-
-    &__msg {
-      @include inline-alert-msg;
-    }
-  }
-
-  // ── Size: sm ──────────────────────────────────────────────────────────────
+  // -- Size: sm --------------------------------------------------------------
   &--sm {
     --arvo-form-input-height: 24px;
     --arvo-form-input-font-size: #{$arvo-font-size-12};
   }
 
-  // ── Size: lg (default) ────────────────────────────────────────────────────
+  // -- Size: lg (default) ----------------------------------------------------
   &--lg {
     --arvo-form-input-height: 32px;
     --arvo-form-input-font-size: #{$arvo-font-size-14};
   }
 
-  // ── Border state: hover ──────────────────────────────────────────────────
+  // -- Border state: hover --------------------------------------------------
 
-  // ── Border state: focus ─────────────────────────────────────────────────
+  // -- Border state: focus -------------------------------------------------
   &:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) {
     .arvo-textbox__border::after {
       background-color: var(--arvo-color-b-theme-focus);
@@ -163,7 +152,7 @@
     }
   }
 
-  // ── State: disabled ───────────────────────────────────────────────────────
+  // -- State: disabled -------------------------------------------------------
   &.is-disabled {
     cursor: not-allowed;
 
@@ -183,7 +172,7 @@
     }
   }
 
-  // ── State: readonly ───────────────────────────────────────────────────────
+  // -- State: readonly -------------------------------------------------------
   &.is-readonly {
     .arvo-textbox__field {
       cursor: default;
@@ -202,7 +191,7 @@
     }
   }
 
-  // ── State: error ──────────────────────────────────────────────────────────
+  // -- State: error ----------------------------------------------------------
   &.has-error {
     .arvo-textbox__border {
       background: var(--arvo-color-b-negative);
@@ -216,26 +205,15 @@
     }
   }
 
-  // Inline icon variant: error icon inside field, no alert below
+  // Inline icon variant: error icon (rendered as <ArvoMessageAlert isInline />)
+  // inside the field, below-field message hidden by consumer.
   &.has-error.error-tooltip {
     .arvo-textbox__err-ico {
-      display: block;
-    }
-
-    .arvo-inline-alert {
-      display: none;
-    }
-  }
-
-  // Standard error variant: inline alert below field, counter hidden
-  &.has-error:not(.error-tooltip) {
-    .arvo-inline-alert {
       display: inline-flex;
-      @include inline-alert-error;
     }
   }
 
-  // ── State: has-value (show clear button) ──────────────────────────────────
+  // -- State: has-value (show clear button) ----------------------------------
   &.has-value {
     .arvo-textbox__clear {
       display: inline-flex;
@@ -247,7 +225,7 @@
     display: none;
   }
 
-  // ── Loading state (per-element shimmer on field + label) ──────────────────
+  // -- Loading state (per-element shimmer on field + label) ------------------
   &.loading,
   [data-arvo-loading="true"] &:not([data-arvo-loading-ignore="true"]) {
     pointer-events: none;
@@ -262,9 +240,11 @@
   }
 }
 
-// Hover border animation (no-touch only, not disabled/readonly/error)
-.no-touch .arvo-textbox:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
-  .arvo-textbox__border::after {
-    transform: scaleX(1);
+// Hover border animation (hover-capable devices only, not disabled/readonly/error)
+@include hover {
+  .arvo-textbox:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
+    .arvo-textbox__border::after {
+      transform: scaleX(1);
+    }
   }
 }

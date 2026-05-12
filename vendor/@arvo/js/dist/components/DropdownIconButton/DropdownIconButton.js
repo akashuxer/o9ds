@@ -115,9 +115,15 @@ const _ArvoDropdownIconButton = class _ArvoDropdownIconButton {
     (_b = (_a = this._options).onBlur) == null ? void 0 : _b.call(_a, event);
   }
   _handleKeydown(event) {
+    var _a;
     if ((event.key === "Enter" || event.key === " ") && (this._options.isDisabled || this._options.isLoading)) {
       event.preventDefault();
       event.stopPropagation();
+      return;
+    }
+    if (event.altKey && event.key === "ArrowDown" && !this._options.isDisabled && !this._options.isLoading) {
+      event.preventDefault();
+      (_a = this._actionMenu) == null ? void 0 : _a.open();
     }
   }
   // ---------------------------------------------------------------------------
@@ -125,9 +131,10 @@ const _ArvoDropdownIconButton = class _ArvoDropdownIconButton {
   // ---------------------------------------------------------------------------
   _initActionMenu() {
     if (!this._element) return;
+    const menuSize = this._options.size === "sm" ? "sm" : "md";
     const menuOptions = {
       items: this._options.items,
-      size: this._options.menuSize,
+      size: menuSize,
       search: this._options.search,
       placement: this._options.placement,
       maxHeight: this._options.maxHeight ?? void 0,
@@ -343,7 +350,6 @@ _ArvoDropdownIconButton.DEFAULTS = {
   maxHeight: null,
   hasGroupDividers: true,
   closeOnSelect: true,
-  menuSize: "md",
   onSelect: null,
   onOpen: null,
   onClose: null,

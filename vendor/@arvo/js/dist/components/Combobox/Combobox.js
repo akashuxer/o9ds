@@ -1,6 +1,7 @@
 import { connectTooltip, tooltipManager, filterGroups, filterItems, createArrowNav, overlayHub, computePosition, createPositionWatcher, enter, exit } from "@arvo/core";
-import { createFormLabel, updateInlineAlert, createInlineAlert } from "@arvo/utils";
+import { createFormLabel } from "@arvo/utils";
 import { ArvoIconButton } from "../IconButton/IconButton.js";
+import { ArvoMessageAlert } from "../MessageAlert/MessageAlert.js";
 let _idCounter = 0;
 function isGrouped(items) {
   return items.length > 0 && "items" in items[0];
@@ -33,6 +34,8 @@ const _ArvoCombobox = class _ArvoCombobox {
     this._borderEl = null;
     this._labelEl = null;
     this._alertEl = null;
+    this._inlineAlert = null;
+    this._errMsgAlert = null;
     this._resizeObserver = null;
     this._isOpen = false;
     this._isDisabled = false;
@@ -174,11 +177,14 @@ const _ArvoCombobox = class _ArvoCombobox {
       this._actionsEl.appendChild(this._sepEl);
     }
     if (this._options.errorDisplay === "tooltip") {
-      this._errIcoEl = document.createElement("span");
-      this._errIcoEl.className = "arvo-combobox__err-ico";
-      this._errIcoEl.setAttribute("aria-hidden", "true");
+      this._errMsgAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
+        type: "error",
+        isInline: true,
+        message: this._options.errorMsg ?? null
+      });
+      this._errIcoEl = this._errMsgAlert.el;
+      this._errIcoEl.classList.add("arvo-combobox__err-ico");
       if (this._options.errorMsg) {
-        this._errIcoEl.setAttribute("aria-label", this._options.errorMsg);
         this._errIcoConnector = connectTooltip(tooltipManager, {
           anchor: this._errIcoEl,
           content: this._options.errorMsg
@@ -792,7 +798,7 @@ const _ArvoCombobox = class _ArvoCombobox {
     this._applyRootClasses();
   }
   setError(message) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _i;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m;
     const useTooltipError = this._options.errorDisplay === "tooltip";
     const useInlineAlert = this._options.errorDisplay === "inline";
     if (message === false) {
@@ -802,23 +808,24 @@ const _ArvoCombobox = class _ArvoCombobox {
       (_b = this._inputEl) == null ? void 0 : _b.removeAttribute("aria-invalid");
       (_c = this._inputEl) == null ? void 0 : _c.removeAttribute("aria-describedby");
       if (this._alertEl) {
-        this._alertEl.remove();
+        (_d = this._inlineAlert) == null ? void 0 : _d.destroy();
+        this._inlineAlert = null;
         this._alertEl = null;
       }
       if (this._errIcoEl) {
-        this._errIcoEl.removeAttribute("aria-label");
-        (_d = this._errIcoConnector) == null ? void 0 : _d.destroy();
+        (_e = this._errMsgAlert) == null ? void 0 : _e.message(null);
+        (_f = this._errIcoConnector) == null ? void 0 : _f.destroy();
         this._errIcoConnector = null;
       }
     } else {
       this._options.isInvalid = true;
       this._options.errorMsg = message;
-      (_e = this._element) == null ? void 0 : _e.classList.add("has-error");
-      (_f = this._element) == null ? void 0 : _f.classList.toggle("error-tooltip", useTooltipError);
-      (_g = this._inputEl) == null ? void 0 : _g.setAttribute("aria-invalid", "true");
+      (_g = this._element) == null ? void 0 : _g.classList.add("has-error");
+      (_h = this._element) == null ? void 0 : _h.classList.toggle("error-tooltip", useTooltipError);
+      (_i = this._inputEl) == null ? void 0 : _i.setAttribute("aria-invalid", "true");
       if (useTooltipError) {
         if (this._errIcoEl) {
-          this._errIcoEl.setAttribute("aria-label", message);
+          (_j = this._errMsgAlert) == null ? void 0 : _j.message(message);
           if (this._errIcoConnector) {
             this._errIcoConnector.update({ content: message });
           } else {
@@ -830,14 +837,14 @@ const _ArvoCombobox = class _ArvoCombobox {
         }
       } else if (useInlineAlert) {
         if (this._alertEl) {
-          updateInlineAlert(this._alertEl, { message });
+          (_k = this._inlineAlert) == null ? void 0 : _k.message(message);
         } else {
           this._alertEl = this._buildInlineAlert(message);
           if (this._alertEl) {
-            (_h = this._element) == null ? void 0 : _h.appendChild(this._alertEl);
+            (_l = this._element) == null ? void 0 : _l.appendChild(this._alertEl);
           }
         }
-        (_i = this._inputEl) == null ? void 0 : _i.setAttribute(
+        (_m = this._inputEl) == null ? void 0 : _m.setAttribute(
           "aria-describedby",
           `${this._panelId}-err`
         );
@@ -851,12 +858,13 @@ const _ArvoCombobox = class _ArvoCombobox {
     this._fieldEl.style.setProperty("--arvo-combobox-pad-r", `${pad}px`);
   }
   _buildInlineAlert(message) {
-    const alert = createInlineAlert({
+    this._inlineAlert = ArvoMessageAlert.initialize(document.createElement("div"), {
       type: "error",
       message,
       id: `${this._panelId}-err`
     });
-    return alert ?? null;
+    this._alertEl = this._inlineAlert.el;
+    return this._alertEl;
   }
   setLoading(isLoading) {
     var _a, _b, _c;
@@ -883,7 +891,7 @@ const _ArvoCombobox = class _ArvoCombobox {
     (_a = this._element) == null ? void 0 : _a.style.setProperty("--arvo-form-input-width", value);
   }
   destroy() {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
     if (this._blurTimeout) {
       clearTimeout(this._blurTimeout);
       this._blurTimeout = null;
@@ -906,9 +914,13 @@ const _ArvoCombobox = class _ArvoCombobox {
     );
     (_f = this._inputEl) == null ? void 0 : _f.removeEventListener("blur", this._boundHandleInputBlur);
     (_g = this._inputEl) == null ? void 0 : _g.removeEventListener("focus", this._boundHandleInputFocus);
-    (_h = this._clearBtnInstance) == null ? void 0 : _h.destroy();
+    (_h = this._inlineAlert) == null ? void 0 : _h.destroy();
+    this._inlineAlert = null;
+    (_i = this._errMsgAlert) == null ? void 0 : _i.destroy();
+    this._errMsgAlert = null;
+    (_j = this._clearBtnInstance) == null ? void 0 : _j.destroy();
     this._clearBtnInstance = null;
-    (_i = this._chevronBtnInstance) == null ? void 0 : _i.destroy();
+    (_k = this._chevronBtnInstance) == null ? void 0 : _k.destroy();
     this._chevronBtnInstance = null;
     if (this._panelWrapperEl) {
       this._panelWrapperEl.remove();
@@ -925,7 +937,7 @@ const _ArvoCombobox = class _ArvoCombobox {
     this._panelEl = null;
     this._scrollEl = null;
     this._clearBtnEl = null;
-    (_j = this._errIcoConnector) == null ? void 0 : _j.destroy();
+    (_l = this._errIcoConnector) == null ? void 0 : _l.destroy();
     this._errIcoConnector = null;
     this._errIcoEl = null;
     this._sepEl = null;

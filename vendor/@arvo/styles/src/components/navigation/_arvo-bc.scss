@@ -1,4 +1,5 @@
 @use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
 
 // Breadcrumb component styles
 // BEM Block: .arvo-bc
@@ -7,7 +8,7 @@
 
 .arvo-bc {
 
-  // ── Layout ────────────────────────────────────────────────────────────────
+  // -- Layout ----------------------------------------------------------------
   display: flex;
   align-items: center;
   height: 32px;
@@ -15,11 +16,11 @@
   position: relative;
   box-sizing: border-box;
 
-  // ── Typography ────────────────────────────────────────────────────────────
+  // -- Typography ------------------------------------------------------------
   font-family: var(--o9-font-family);
   font-size: $arvo-font-size-14;
 
-  // ── List container ────────────────────────────────────────────────────────
+  // -- List container --------------------------------------------------------
   &__list {
     display: flex;
     align-items: center;
@@ -29,7 +30,7 @@
     padding: 0;
   }
 
-  // ── Item ──────────────────────────────────────────────────────────────────
+  // -- Item ------------------------------------------------------------------
   &__item {
     display: flex;
     align-items: center;
@@ -44,7 +45,7 @@
     }
   }
 
-  // ── Link ──────────────────────────────────────────────────────────────────
+  // -- Link ------------------------------------------------------------------
   &__lnk {
     display: inline-flex;
     align-items: center;
@@ -62,7 +63,7 @@
     margin: 0;
   }
 
-  // ── Icon (home) ───────────────────────────────────────────────────────────
+  // -- Icon (home) -----------------------------------------------------------
   &__ico {
     font-size: $arvo-icon-16;
     color: var(--arvo-color-t-placeholder);
@@ -71,7 +72,7 @@
     text-decoration: none;
   }
 
-  // ── Current page label ────────────────────────────────────────────────────
+  // -- Current page label ----------------------------------------------------
   &__lbl {
     color: var(--arvo-color-t-secondary);
     font-family: var(--o9-font-family);
@@ -80,17 +81,19 @@
     line-height: normal;
   }
 
-  // ── Hover ─────────────────────────────────────────────────────────────────
-  .no-touch &__lnk:hover {
-    color: var(--arvo-color-t-info-light);
-    text-decoration: underline;
-
-    .arvo-bc__ico {
+  // -- Hover (hover-capable devices only) ------------------------------------
+  @include hover {
+    &__lnk:hover {
       color: var(--arvo-color-t-info-light);
+      text-decoration: underline;
+
+      .arvo-bc__ico {
+        color: var(--arvo-color-t-info-light);
+      }
     }
   }
 
-  // ── Focus ─────────────────────────────────────────────────────────────────
+  // -- Focus -----------------------------------------------------------------
   &__lnk:focus-visible {
     color: var(--arvo-color-t-info-light);
     text-decoration: underline;
@@ -101,7 +104,7 @@
     }
   }
 
-  // ── Disabled ──────────────────────────────────────────────────────────────
+  // -- Disabled --------------------------------------------------------------
   &.is-disabled &__lnk {
     color: var(--arvo-color-t-disabled);
     cursor: not-allowed;
@@ -113,7 +116,7 @@
     }
   }
 
-  // ── Loading State (Pattern A) ─────────────────────────────────────────────
+  // -- Loading State (Pattern A) ---------------------------------------------
   &.loading {
     pointer-events: none;
     cursor: default;

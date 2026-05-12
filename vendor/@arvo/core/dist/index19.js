@@ -1,202 +1,248 @@
-function resolveMax(max, rect) {
-  return typeof max === "function" ? max(rect) : max;
+function getItemIndex(items, el) {
+  return items.indexOf(el);
 }
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
+function findClosestItem(items, y) {
+  for (let i = 0; i < items.length; i++) {
+    const rect = items[i].getBoundingClientRect();
+    const mid = rect.top + rect.height / 2;
+    if (y < mid) return { index: i, position: "above" };
+  }
+  if (items.length > 0) {
+    return { index: items.length - 1, position: "below" };
+  }
+  return null;
 }
-function createResizeHandle(target, options) {
-  const {
-    corners,
-    min,
-    max,
-    onResize,
-    onCommit,
-    viewportPadding = 16
-  } = options;
-  let dragState = null;
-  let destroyed = false;
-  const handleElements = [];
-  function createHandleElement(corner) {
-    const el = document.createElement("div");
-    el.className = `arvo-hpop__handle arvo-hpop__handle--${cornerToModifier(corner)}`;
-    el.dataset.corner = corner;
-    el.setAttribute("aria-hidden", "true");
-    Object.assign(el.style, {
+function getOrCreateLiveRegion() {
+  let region = document.getElementById("arvo-sortable-live");
+  if (!region) {
+    region = document.createElement("div");
+    region.id = "arvo-sortable-live";
+    region.setAttribute("role", "status");
+    region.setAttribute("aria-live", "polite");
+    region.setAttribute("aria-atomic", "true");
+    Object.assign(region.style, {
       position: "absolute",
-      width: "12px",
-      height: "12px",
-      zIndex: "1"
+      width: "1px",
+      height: "1px",
+      overflow: "hidden",
+      clip: "rect(0 0 0 0)",
+      whiteSpace: "nowrap"
     });
-    switch (corner) {
-      case "bottom-left":
-        el.style.bottom = "0";
-        el.style.left = "0";
-        el.style.cursor = "nesw-resize";
-        break;
-      case "bottom-right":
-        el.style.bottom = "0";
-        el.style.right = "0";
-        el.style.cursor = "nwse-resize";
-        break;
-      case "top-left":
-        el.style.top = "0";
-        el.style.left = "0";
-        el.style.cursor = "nwse-resize";
-        break;
-      case "top-right":
-        el.style.top = "0";
-        el.style.right = "0";
-        el.style.cursor = "nesw-resize";
-        break;
+    document.body.appendChild(region);
+  }
+  return region;
+}
+function announce(region, message) {
+  region.textContent = "";
+  requestAnimationFrame(() => {
+    region.textContent = message;
+  });
+}
+function createSortableList(container, options) {
+  const {
+    itemSelector,
+    handleSelector,
+    getGroupOf,
+    allowCrossGroup = false,
+    onPreview,
+    onCommit,
+    onCancel,
+    ghostClass = "arvo-sortable--ghost",
+    draggingClass = "arvo-sortable--dragging",
+    dropAboveClass = "arvo-sortable--drop-above",
+    dropBelowClass = "arvo-sortable--drop-below"
+  } = options;
+  let state = null;
+  let destroyed = false;
+  function getItems() {
+    return Array.from(container.querySelectorAll(itemSelector));
+  }
+  function getGroupItems(items, group) {
+    if (!getGroupOf || group === null) return items;
+    return items.filter((item) => getGroupOf(item) === group);
+  }
+  function clearDropIndicators() {
+    const items = getItems();
+    for (const item of items) {
+      item.classList.remove(dropAboveClass, dropBelowClass);
     }
-    el.addEventListener("pointerdown", onPointerDown);
-    return el;
   }
-  function cornerToModifier(corner) {
-    const map = {
-      "bottom-left": "bl",
-      "bottom-right": "br",
-      "top-left": "tl",
-      "top-right": "tr"
+  function startDrag(item, clientY) {
+    if (state) return;
+    const items = getItems();
+    const index = getItemIndex(items, item);
+    if (index === -1) return;
+    const group = (getGroupOf == null ? void 0 : getGroupOf(item)) ?? null;
+    const rect = item.getBoundingClientRect();
+    const clone = item.cloneNode(true);
+    clone.classList.add(draggingClass);
+    clone.removeAttribute("id");
+    Object.assign(clone.style, {
+      position: "fixed",
+      zIndex: "10000",
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+      left: `${rect.left}px`,
+      top: `${rect.top}px`,
+      pointerEvents: "none",
+      margin: "0",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+      opacity: "0.95"
+    });
+    document.body.appendChild(clone);
+    item.classList.add(ghostClass);
+    const liveRegion = getOrCreateLiveRegion();
+    state = {
+      sourceItem: item,
+      sourceIndex: index,
+      sourceGroup: group,
+      clone,
+      currentIndex: index,
+      currentGroup: group,
+      startY: clientY,
+      offsetY: clientY - rect.top,
+      liveRegion,
+      items
     };
-    return map[corner];
-  }
-  function onPointerDown(e) {
-    if (destroyed || dragState) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const handleEl = e.currentTarget;
-    const corner = handleEl.dataset.corner;
-    const rect = target.getBoundingClientRect();
-    dragState = {
-      corner,
-      startX: e.clientX,
-      startY: e.clientY,
-      startWidth: rect.width,
-      startHeight: rect.height
-    };
-    target.classList.add("is-resizing");
+    container.classList.add("is-dragging");
     document.addEventListener("pointermove", onPointerMove);
     document.addEventListener("pointerup", onPointerUp);
-    document.addEventListener("pointercancel", onPointerUp);
+    document.addEventListener("pointercancel", onPointerCancel);
+    document.addEventListener("keydown", onKeydownDuringDrag);
   }
-  function computeNewRect(e) {
-    if (!dragState) return { width: 0, height: 0 };
-    const dx = e.clientX - dragState.startX;
-    const dy = e.clientY - dragState.startY;
-    const maxRect = resolveMax(max, target.getBoundingClientRect());
-    let newWidth = dragState.startWidth;
-    let newHeight = dragState.startHeight;
-    switch (dragState.corner) {
-      case "bottom-right":
-        newWidth = dragState.startWidth + dx;
-        newHeight = dragState.startHeight + dy;
-        break;
-      case "bottom-left":
-        newWidth = dragState.startWidth - dx;
-        newHeight = dragState.startHeight + dy;
-        break;
-      case "top-right":
-        newWidth = dragState.startWidth + dx;
-        newHeight = dragState.startHeight - dy;
-        break;
-      case "top-left":
-        newWidth = dragState.startWidth - dx;
-        newHeight = dragState.startHeight - dy;
-        break;
+  function moveDrag(clientY) {
+    if (!state) return;
+    state.clone.style.top = `${clientY - state.offsetY}px`;
+    clearDropIndicators();
+    const target = findClosestItem(state.items, clientY);
+    if (!target) return;
+    const targetItem = state.items[target.index];
+    const targetGroup = (getGroupOf == null ? void 0 : getGroupOf(targetItem)) ?? null;
+    if (!allowCrossGroup && getGroupOf && state.sourceGroup !== null) {
+      if (targetGroup !== state.sourceGroup) return;
     }
-    return {
-      width: clamp(newWidth, min.width, maxRect.width),
-      height: clamp(newHeight, min.height, maxRect.height)
-    };
+    if (target.position === "above") {
+      targetItem.classList.add(dropAboveClass);
+    } else {
+      targetItem.classList.add(dropBelowClass);
+    }
+    const newIndex = target.position === "above" ? target.index : target.index + 1;
+    if (newIndex !== state.currentIndex || targetGroup !== state.currentGroup) {
+      state.currentIndex = newIndex;
+      state.currentGroup = targetGroup;
+      onPreview == null ? void 0 : onPreview(state.sourceIndex, newIndex);
+    }
   }
-  function onPointerMove(e) {
-    if (!dragState) return;
-    const rect = computeNewRect(e);
-    target.style.width = `${rect.width}px`;
-    target.style.height = `${rect.height}px`;
-    onResize == null ? void 0 : onResize(rect);
+  function commitDrag() {
+    if (!state) return;
+    const { sourceIndex, currentIndex, sourceGroup, currentGroup } = state;
+    cleanupDrag();
+    if (sourceIndex !== currentIndex || sourceGroup !== currentGroup) {
+      const groupItems = getGroupItems(
+        getItems(),
+        currentGroup
+      );
+      const totalInGroup = groupItems.length;
+      const posInGroup = currentIndex > sourceIndex ? currentIndex : currentIndex + 1;
+      announce(
+        getOrCreateLiveRegion(),
+        `Moved item to position ${posInGroup} of ${totalInGroup}`
+      );
+      onCommit == null ? void 0 : onCommit(sourceIndex, currentIndex, sourceGroup, currentGroup);
+    }
   }
-  function onPointerUp(e) {
-    if (!dragState) return;
-    const rect = computeNewRect(e);
-    target.classList.remove("is-resizing");
+  function cancelDrag() {
+    if (!state) return;
+    cleanupDrag();
+    onCancel == null ? void 0 : onCancel();
+  }
+  function cleanupDrag() {
+    if (!state) return;
+    state.sourceItem.classList.remove(ghostClass);
+    state.clone.remove();
+    clearDropIndicators();
+    container.classList.remove("is-dragging");
     document.removeEventListener("pointermove", onPointerMove);
     document.removeEventListener("pointerup", onPointerUp);
-    document.removeEventListener("pointercancel", onPointerUp);
-    dragState = null;
-    onCommit == null ? void 0 : onCommit(rect);
+    document.removeEventListener("pointercancel", onPointerCancel);
+    document.removeEventListener("keydown", onKeydownDuringDrag);
+    state = null;
   }
-  function updateVisibility() {
+  function onPointerDown(e) {
+    var _a, _b;
     if (destroyed) return;
-    const rect = target.getBoundingClientRect();
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    for (const el of handleElements) {
-      const corner = el.dataset.corner;
-      let visible = true;
-      switch (corner) {
-        case "bottom-right":
-        case "top-right":
-          if (vw - rect.right < viewportPadding) visible = false;
-          break;
-        case "bottom-left":
-        case "top-left":
-          if (rect.left < viewportPadding) visible = false;
-          break;
-      }
-      switch (corner) {
-        case "bottom-left":
-        case "bottom-right":
-          if (vh - rect.bottom < viewportPadding) visible = false;
-          break;
-        case "top-left":
-        case "top-right":
-          if (rect.top < viewportPadding) visible = false;
-          break;
-      }
-      el.style.display = visible ? "" : "none";
+    const target = e.target;
+    let handleEl = null;
+    if (handleSelector) {
+      handleEl = target.closest(handleSelector);
+      if (!handleEl) return;
+    }
+    const item = target.closest(itemSelector);
+    if (!item || !container.contains(item)) return;
+    e.preventDefault();
+    (_b = (_a = e.target).setPointerCapture) == null ? void 0 : _b.call(_a, e.pointerId);
+    startDrag(item, e.clientY);
+  }
+  function onPointerMove(e) {
+    moveDrag(e.clientY);
+  }
+  function onPointerUp(_e) {
+    commitDrag();
+  }
+  function onPointerCancel(_e) {
+    cancelDrag();
+  }
+  function onKeydownDuringDrag(e) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      cancelDrag();
     }
   }
-  function onViewportChange() {
-    updateVisibility();
+  function onKeydownForReorder(e) {
+    if (destroyed || state) return;
+    if (!e.ctrlKey && !e.metaKey) return;
+    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+    const target = e.target;
+    const handle = handleSelector ? target.closest(handleSelector) : null;
+    if (handleSelector && !handle) return;
+    const item = target.closest(itemSelector);
+    if (!item || !container.contains(item)) return;
+    e.preventDefault();
+    const items = getItems();
+    const index = getItemIndex(items, item);
+    if (index === -1) return;
+    const group = (getGroupOf == null ? void 0 : getGroupOf(item)) ?? null;
+    const direction = e.key === "ArrowUp" ? -1 : 1;
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= items.length) return;
+    const targetItem = items[newIndex];
+    const targetGroup = (getGroupOf == null ? void 0 : getGroupOf(targetItem)) ?? null;
+    if (!allowCrossGroup && getGroupOf && group !== null) {
+      if (targetGroup !== group) return;
+    }
+    const groupItems = getGroupItems(items, targetGroup ?? group);
+    const posInGroup = groupItems.indexOf(targetItem) + 1;
+    announce(
+      getOrCreateLiveRegion(),
+      `Moved item ${direction === -1 ? "up" : "down"} to position ${posInGroup} of ${groupItems.length}`
+    );
+    onCommit == null ? void 0 : onCommit(index, newIndex, group, targetGroup);
   }
+  container.addEventListener("pointerdown", onPointerDown);
+  container.addEventListener("keydown", onKeydownForReorder);
   return {
-    mount() {
-      for (const corner of corners) {
-        const el = createHandleElement(corner);
-        handleElements.push(el);
-        target.appendChild(el);
-      }
-      updateVisibility();
-      window.addEventListener("resize", onViewportChange);
-      window.addEventListener("scroll", onViewportChange, true);
-      return [...handleElements];
-    },
     destroy() {
       destroyed = true;
-      window.removeEventListener("resize", onViewportChange);
-      window.removeEventListener("scroll", onViewportChange, true);
-      if (dragState) {
-        target.classList.remove("is-resizing");
-        document.removeEventListener("pointermove", onPointerMove);
-        document.removeEventListener("pointerup", onPointerUp);
-        document.removeEventListener("pointercancel", onPointerUp);
-        dragState = null;
-      }
-      for (const el of handleElements) {
-        el.removeEventListener("pointerdown", onPointerDown);
-        el.remove();
-      }
-      handleElements.length = 0;
+      if (state) cancelDrag();
+      container.removeEventListener("pointerdown", onPointerDown);
+      container.removeEventListener("keydown", onKeydownForReorder);
     },
-    updateVisibility,
-    isResizing() {
-      return dragState !== null;
+    isDragging() {
+      return state !== null;
     }
   };
 }
 export {
-  createResizeHandle
+  createSortableList
 };
 //# sourceMappingURL=index19.js.map

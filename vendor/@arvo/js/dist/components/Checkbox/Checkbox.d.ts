@@ -37,6 +37,7 @@ export declare class ArvoCheckbox {
     private _inputEl;
     private _fieldEl;
     private _labelEl;
+    private _inlineAlert;
     private _inlineAlertEl;
     private _inputId;
     private _errorId;

@@ -32,6 +32,7 @@ export declare class ArvoRadio {
     private _fieldEl;
     private _controlEl;
     private _textEl;
+    private _inlineAlert;
     private _inlineAlertEl;
     private _inputId;
     private _errorId;

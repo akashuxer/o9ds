@@ -1,16 +1,17 @@
 @use '../../../../tokens/src/scss/all' as *;
+@use '../../mixins/hover' as *;
 @use '../../mixins/loading' as *;
 
-// ─── .arvo-sw ─────────────────────────────────────────────────────────────────
+// --- .arvo-sw -----------------------------------------------------------------
 
 .arvo-sw {
 
-  // ── Root layout ────────────────────────────────────────────────────────────
+  // -- Root layout ------------------------------------------------------------
   display: inline-flex;
   position: relative;
   user-select: none;
 
-  // ── __field ────────────────────────────────────────────────────────────────
+  // -- __field ----------------------------------------------------------------
   &__field {
     display: inline-flex;
     align-items: center;
@@ -18,7 +19,7 @@
     cursor: pointer;
   }
 
-  // ── __input (hidden native checkbox with role="switch") ────────────────────
+  // -- __input (hidden native checkbox with role="switch") --------------------
   &__input {
     position: absolute;
     opacity: 0;
@@ -28,7 +29,7 @@
     padding: 0;
   }
 
-  // ── __track ────────────────────────────────────────────────────────────────
+  // -- __track ----------------------------------------------------------------
   &__track {
     width: 28px;
     height: 16px;
@@ -39,7 +40,7 @@
     box-sizing: border-box;
   }
 
-  // ── __thumb ────────────────────────────────────────────────────────────────
+  // -- __thumb ----------------------------------------------------------------
   &__thumb {
     position: absolute;
     top: 2px;
@@ -64,7 +65,7 @@
     }
   }
 
-  // ── __lbl (form label) ─────────────────────────────────────────────────────
+  // -- __lbl (form label) -----------------------------------------------------
   &__lbl {
     font-family: var(--o9-font-family);
     font-size: $arvo-font-size-12;
@@ -74,12 +75,12 @@
     cursor: default;
   }
 
-  // ── Modifier: --label-start ────────────────────────────────────────────────
+  // -- Modifier: --label-start ------------------------------------------------
   &--label-start .arvo-sw__field {
     flex-direction: row-reverse;
   }
 
-  // ── Checked state (input:checked + __track) ────────────────────────────────
+  // -- Checked state (input:checked + __track) --------------------------------
   &__input:checked + &__track {
     background-color: var(--arvo-color-s-theme-active-1);
 
@@ -93,7 +94,7 @@
     }
   }
 
-  // ── Focus ring via input:focus-visible sibling ─────────────────────────────
+  // -- Focus ring via input:focus-visible sibling -----------------------------
   &__input:focus-visible + &__track {
     outline: 1px solid var(--arvo-color-b-theme-focus);
     outline-offset: 1px;
@@ -107,7 +108,7 @@
     background-color: var(--arvo-color-s-theme-hover-1);
   }
 
-  // ── State: disabled ────────────────────────────────────────────────────────
+  // -- State: disabled --------------------------------------------------------
   &.is-disabled {
     pointer-events: none;
 
@@ -132,7 +133,7 @@
       color: var(--arvo-lbl-color-disabled, var(--arvo-color-t-disabled));
     }
 
-    // Disabled checked — same track styling, thumb stays right
+    // Disabled checked -- same track styling, thumb stays right
     .arvo-sw__input:checked + .arvo-sw__track {
       background-color: var(--arvo-color-s-disabled);
       border-color: var(--arvo-color-b-disabled);
@@ -143,7 +144,7 @@
     }
   }
 
-  // ── State: readonly ────────────────────────────────────────────────────────
+  // -- State: readonly --------------------------------------------------------
   &.is-readonly {
     .arvo-sw__field {
       cursor: default;
@@ -151,7 +152,7 @@
     }
   }
 
-  // ── Loading (per-element shimmer on __track + __lbl) ──────────────────────
+  // -- Loading (per-element shimmer on __track + __lbl) ----------------------
   &.loading,
   [data-arvo-loading='true'] &:not([data-arvo-loading-ignore='true']) {
     pointer-events: none;
@@ -166,13 +167,15 @@
   }
 }
 
-// ── Hover (no-touch only, not disabled, not readonly) ────────────────────────
-.no-touch .arvo-sw:not(.is-disabled):not(.is-readonly) {
-  &:hover .arvo-sw__input:not(:checked) + .arvo-sw__track {
-    background-color: var(--arvo-color-s-hover);
-  }
+// -- Hover (hover-capable devices only, not disabled, not readonly) ----------
+@include hover {
+  .arvo-sw:not(.is-disabled):not(.is-readonly) {
+    &:hover .arvo-sw__input:not(:checked) + .arvo-sw__track {
+      background-color: var(--arvo-color-s-hover);
+    }
 
-  &:hover .arvo-sw__input:checked + .arvo-sw__track {
-    background-color: var(--arvo-color-s-theme-hover-1);
+    &:hover .arvo-sw__input:checked + .arvo-sw__track {
+      background-color: var(--arvo-color-s-theme-hover-1);
+    }
   }
 }

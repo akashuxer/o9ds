@@ -9,16 +9,31 @@ export interface ArvoIconButtonOptions {
     size?: 'xs' | 'sm' | 'md' | 'lg';
     type?: 'button' | 'submit' | 'reset';
     icon?: string;
+    /**
+     * Optional alternate icon rendered when the button is selected. Use this for
+     * outline/filled toggle pairs (e.g. `icon: 'bookmark-o', selectedIcon: 'bookmark'`).
+     */
+    selectedIcon?: string;
+    /** Tooltip content. Doubles as the button's `aria-label` because it is icon-only. */
     tooltip?: IconButtonTooltipOption;
     isDisabled?: boolean;
     isSelected?: boolean;
+    /**
+     * When true, click toggles the selected state and renders `aria-pressed`.
+     * The button announces itself as a toggle button to assistive tech.
+     */
+    isToggle?: boolean;
     isLoading?: boolean;
     onClick?: (event: Event) => void;
     onKeyDown?: (event: KeyboardEvent) => void;
+    /** Fired when the toggle state flips. Only emitted when `isToggle` is true. */
+    onSelectionChange?: (isSelected: boolean) => void;
 }
-type RequiredIconButtonOptions = Required<Omit<ArvoIconButtonOptions, 'onClick' | 'onKeyDown' | 'isSelected'>> & {
+type RequiredIconButtonOptions = Required<Omit<ArvoIconButtonOptions, 'onClick' | 'onKeyDown' | 'onSelectionChange' | 'isSelected' | 'selectedIcon'>> & {
+    selectedIcon: string | null;
     onClick: ((event: Event) => void) | null;
     onKeyDown: ((event: KeyboardEvent) => void) | null;
+    onSelectionChange: ((isSelected: boolean) => void) | null;
     isSelected: boolean | undefined;
 };
 export declare class ArvoIconButton {
@@ -46,6 +61,12 @@ export declare class ArvoIconButton {
     setSize(size: string): void;
     setLoading(isLoading: boolean): void;
     selected(state?: boolean): boolean | void;
+    /**
+     * Toggle the selected state. Forwards through `selected()` and fires
+     * `onSelectionChange`. Useful when `isToggle` is set so consumers can
+     * programmatically trigger the same flip the user does on click.
+     */
+    toggle(force?: boolean): boolean;
     disabled(state?: boolean): boolean | void;
     focus(): void;
     destroy(): void;

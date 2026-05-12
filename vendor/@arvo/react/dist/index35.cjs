@@ -4,593 +4,704 @@ const jsxRuntime = require("react/jsx-runtime");
 const react = require("react");
 const reactDom = require("react-dom");
 const core = require("@arvo/core");
+const Popover = require("./index23.cjs");
+const IconButton = require("./index14.cjs");
+const Search = require("./index36.cjs");
 const useOverlay = require("./index6.cjs");
-const useTooltip = require("./index10.cjs");
-const FormLabel = require("./index43.cjs");
-const IconButton = require("./index12.cjs");
+const useFocusTrap = require("./index7.cjs");
+const usePositioning = require("./index9.cjs");
+const useListNavigation = require("./index50.cjs");
+const menuSearch = require("./index51.cjs");
 function isGrouped(items) {
   return items.length > 0 && "items" in items[0];
 }
 function flattenItems(items) {
-  if (isGrouped(items)) return items.flatMap((g) => g.items);
+  if (isGrouped(items)) {
+    return items.flatMap((g) => g.items);
+  }
   return items;
 }
-function applyFilter(items, query, filterFn) {
-  if (!query) return items;
-  if (filterFn) {
-    if (isGrouped(items)) {
-      const result = [];
-      for (const group of items) {
-        const filtered = group.items.filter((item) => filterFn(item, query));
-        if (filtered.length > 0) {
-          result.push({ ...group, items: filtered });
+function MenuSkeleton({ count = 5 }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(jsxRuntime.Fragment, { children: Array.from({ length: count }, (_, i) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-action-menu__skeleton", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-action-menu__skeleton-icon" }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-action-menu__skeleton-text" })
+  ] }, i)) });
+}
+function SubmenuPanel({
+  items,
+  closeOnSelect,
+  onClose,
+  onCloseAll,
+  onSelect,
+  anchorRef
+}) {
+  const panelRef = react.useRef(null);
+  const enabledItems = react.useMemo(
+    () => items.map((item, i) => ({ item, index: i })).filter(({ item }) => !item.isDisabled),
+    [items]
+  );
+  const [activeIdx, setActiveIdx] = react.useState(() => {
+    return enabledItems.length > 0 ? enabledItems[0].index : -1;
+  });
+  const { position } = usePositioning.usePositioning({
+    anchorRef,
+    floatRef: panelRef,
+    placement: "right-start",
+    gap: 0,
+    enabled: true
+  });
+  const handleItemClick = react.useCallback(
+    (item, index) => {
+      if (item.isDisabled) return;
+      const result = onSelect(item, index);
+      if (result !== false && closeOnSelect) onCloseAll();
+    },
+    [onSelect, closeOnSelect, onCloseAll]
+  );
+  const focusItem = react.useCallback(
+    (index) => {
+      var _a;
+      setActiveIdx(index);
+      const el = (_a = panelRef.current) == null ? void 0 : _a.querySelector(
+        `[data-submenu-index="${index}"]`
+      );
+      el == null ? void 0 : el.focus({ preventScroll: true });
+    },
+    []
+  );
+  const focusFirstEnabled = react.useCallback(() => {
+    if (enabledItems.length > 0) focusItem(enabledItems[0].index);
+  }, [enabledItems, focusItem]);
+  const focusLastEnabled = react.useCallback(() => {
+    if (enabledItems.length > 0) focusItem(enabledItems[enabledItems.length - 1].index);
+  }, [enabledItems, focusItem]);
+  react.useEffect(() => {
+    if (position) {
+      requestAnimationFrame(() => focusFirstEnabled());
+    }
+  }, [position, focusFirstEnabled]);
+  const handleKeyDown = react.useCallback(
+    (e) => {
+      const currentEnabledIdx = enabledItems.findIndex(({ index }) => index === activeIdx);
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          e.stopPropagation();
+          const next = currentEnabledIdx < enabledItems.length - 1 ? currentEnabledIdx + 1 : 0;
+          focusItem(enabledItems[next].index);
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          e.stopPropagation();
+          const prev = currentEnabledIdx > 0 ? currentEnabledIdx - 1 : enabledItems.length - 1;
+          focusItem(enabledItems[prev].index);
+          break;
+        }
+        case "Home": {
+          e.preventDefault();
+          e.stopPropagation();
+          focusFirstEnabled();
+          break;
+        }
+        case "End": {
+          e.preventDefault();
+          e.stopPropagation();
+          focusLastEnabled();
+          break;
+        }
+        case "ArrowLeft":
+        case "Escape": {
+          e.preventDefault();
+          e.stopPropagation();
+          onClose();
+          break;
+        }
+        case "Tab": {
+          e.preventDefault();
+          e.stopPropagation();
+          onCloseAll();
+          break;
+        }
+        case "Enter":
+        case " ": {
+          e.preventDefault();
+          e.stopPropagation();
+          if (activeIdx >= 0) handleItemClick(items[activeIdx], activeIdx);
+          break;
         }
       }
-      return result;
-    }
-    return items.filter((item) => filterFn(item, query));
-  }
-  if (isGrouped(items)) {
-    return core.filterGroups(items, { query });
-  }
-  return core.filterItems(items, { query });
+    },
+    [activeIdx, enabledItems, items, focusItem, focusFirstEnabled, focusLastEnabled, onClose, onCloseAll, handleItemClick]
+  );
+  const panelClasses = "arvo-action-menu arvo-action-menu--submenu open";
+  const panelStyle = position ? { transform: `translate(${position.x}px, ${position.y}px)` } : { opacity: 0, visibility: "hidden", pointerEvents: "none" };
+  return reactDom.createPortal(
+    /* @__PURE__ */ jsxRuntime.jsx(
+      "div",
+      {
+        ref: panelRef,
+        className: panelClasses,
+        role: "menu",
+        tabIndex: -1,
+        style: panelStyle,
+        onKeyDown: handleKeyDown,
+        children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-action-menu__scroll", children: items.map((item, i) => /* @__PURE__ */ jsxRuntime.jsxs(
+          "div",
+          {
+            className: [
+              "arvo-menu-item",
+              item.isDisabled && "is-disabled",
+              item.destructive && "arvo-menu-item--destructive",
+              i === activeIdx && "focused"
+            ].filter(Boolean).join(" "),
+            role: "menuitem",
+            "aria-disabled": item.isDisabled || void 0,
+            tabIndex: i === activeIdx ? 0 : -1,
+            "data-submenu-index": i,
+            onClick: () => handleItemClick(item, i),
+            children: [
+              item.icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: `arvo-menu-item__ico o9con o9con-${item.icon}`, "aria-hidden": "true" }),
+              /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-menu-item__txt", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-menu-item__lbl", children: item.label }) })
+            ]
+          },
+          item.id
+        )) })
+      }
+    ),
+    document.body
+  );
 }
-const ArvoCombobox = react.forwardRef(
-  function ArvoCombobox2({
+const ArvoActionMenu = react.forwardRef(
+  function ArvoActionMenu2({
     items,
-    value,
-    defaultValue,
-    inputValue: inputValueProp,
-    placeholder,
-    label,
-    isDisabled = false,
-    isRequired = false,
-    isInvalid = false,
-    errorMsg,
-    errorDisplay = "inline",
-    size = "lg",
-    isClearable = true,
     isLoading = false,
-    isReadOnly = false,
-    isFullWidth = false,
-    width,
+    search,
     placement = "bottom-start",
     maxHeight,
     hasGroupDividers = true,
-    filterFn,
+    trailingActionsVisibility = "always",
+    submenuTrigger = "hover",
+    closeOnSelect = true,
     isOpen: openProp,
     defaultOpen = false,
-    onChange,
-    onInputChange,
+    isDisabled = false,
+    trigger,
     onOpen,
     onClose,
-    onClear,
+    onSelect,
     onOpenChange,
     className
   }, ref) {
     const uid = react.useId();
-    const comboId = `arvo-combobox-${uid}`;
-    const panelId = `${comboId}-panel`;
-    const labelId = `${comboId}-lbl`;
-    const inputId = `${comboId}-input`;
-    const errorId = `${comboId}-err`;
-    const rootRef = react.useRef(null);
-    const fieldRef = react.useRef(null);
-    const inputRef = react.useRef(null);
-    const actionsRef = react.useRef(null);
+    const menuId = `arvo-action-menu-${uid}`;
+    const searchCfg = react.useMemo(
+      () => menuSearch.normalizeSearch(search),
+      [search]
+    );
     const panelRef = react.useRef(null);
-    const errIcoRef = react.useRef(null);
-    react.useImperativeHandle(ref, () => rootRef.current, []);
-    const showTooltipIcon = isInvalid && errorDisplay === "tooltip";
-    const showInlineAlert = isInvalid && errorDisplay === "inline";
-    useTooltip.useTooltip({
-      triggerRef: errIcoRef,
-      tooltip: showTooltipIcon && errorMsg ? errorMsg : void 0
-    });
-    const isOpenControlled = openProp !== void 0;
+    const triggerRef = react.useRef(null);
+    const scrollRef = react.useRef(null);
+    const searchWrapperRef = react.useRef(null);
+    const inlinePanelRef = react.useRef(null);
+    react.useImperativeHandle(ref, () => panelRef.current, []);
+    const isControlled = openProp !== void 0;
     const [internalOpen, setInternalOpen] = react.useState(defaultOpen);
-    const isOpen = isOpenControlled ? openProp : internalOpen;
+    const isOpen = isControlled ? openProp : internalOpen;
     const setOpen = react.useCallback(
       (next) => {
-        if (!isOpenControlled) setInternalOpen(next);
+        if (!isControlled) setInternalOpen(next);
         onOpenChange == null ? void 0 : onOpenChange(next);
       },
-      [isOpenControlled, onOpenChange]
+      [isControlled, onOpenChange]
     );
-    const isValueControlled = value !== void 0;
-    const [internalValue, setInternalValue] = react.useState(
-      defaultValue ?? null
-    );
-    const currentValue = isValueControlled ? value : internalValue;
-    const isInputControlled = inputValueProp !== void 0;
-    const [internalInputValue, setInternalInputValue] = react.useState(() => {
-      if (inputValueProp !== void 0) return inputValueProp;
-      const initValue = value ?? defaultValue ?? null;
-      if (initValue != null) {
-        const allFlat = flattenItems(items);
-        const found = allFlat.find((item) => item.value === initValue);
-        return (found == null ? void 0 : found.label) ?? "";
+    const [filterQuery, setFilterQuery] = react.useState("");
+    const filteredItems = react.useMemo(() => {
+      if (!searchCfg || !filterQuery) return items;
+      if (isGrouped(items)) {
+        return core.filterGroups(items, { query: filterQuery });
       }
-      return "";
-    });
-    const currentInputValue = isInputControlled ? inputValueProp : internalInputValue;
+      return core.filterItems(items, { query: filterQuery });
+    }, [items, searchCfg, filterQuery]);
+    const flatItems = react.useMemo(() => flattenItems(filteredItems), [filteredItems]);
+    const totalItemCount = react.useMemo(() => flattenItems(items).length, [items]);
     react.useEffect(() => {
-      if (isInputControlled || !isValueControlled) return;
-      const allFlat = flattenItems(items);
-      const found = allFlat.find((item) => item.value === value);
-      setInternalInputValue((found == null ? void 0 : found.label) ?? "");
-    }, [value, items, isValueControlled, isInputControlled]);
-    const [activeIndex, setActiveIndex] = react.useState(-1);
-    const keyboardActiveRef = react.useRef(false);
-    const overlay = useOverlay.useOverlay();
-    const preventCloseRef = react.useRef(false);
-    const closingRef = react.useRef(false);
-    const isUserTypingRef = react.useRef(false);
-    const filteredItems = react.useMemo(
-      () => isUserTypingRef.current ? applyFilter(items, currentInputValue, filterFn) : items,
-      [items, currentInputValue, filterFn]
-    );
-    const flatItems = react.useMemo(
-      () => flattenItems(filteredItems),
-      [filteredItems]
-    );
-    const selectedItem = react.useMemo(() => {
-      if (currentValue == null) return null;
-      const allFlat = flattenItems(items);
-      return allFlat.find((item) => item.value === currentValue) ?? null;
-    }, [currentValue, items]);
-    const handleClose = react.useCallback(
-      (revertInput = true) => {
+      var _a;
+      if (searchCfg && filterQuery) {
+        (_a = searchCfg.onFilter) == null ? void 0 : _a.call(searchCfg, filterQuery, flatItems.length);
+      }
+    }, [searchCfg, filterQuery, flatItems.length]);
+    const [openSubmenuId, setOpenSubmenuId] = react.useState(null);
+    const submenuTimerRef = react.useRef(null);
+    const itemRefsMap = react.useRef(/* @__PURE__ */ new Map());
+    const [inlinePanel, setInlinePanel] = react.useState(null);
+    const closeInlinePanel = react.useCallback(() => {
+      var _a, _b;
+      if (!inlinePanel) return;
+      if (((_b = (_a = inlinePanel.config).onClose) == null ? void 0 : _b.call(_a)) === false) return;
+      setInlinePanel(null);
+    }, [inlinePanel]);
+    const openInlinePanel = react.useCallback(
+      (config, sourceItem) => {
         var _a;
-        if (!isOpen) return;
-        if (closingRef.current) return;
-        closingRef.current = true;
-        if ((onClose == null ? void 0 : onClose()) === false) {
-          closingRef.current = false;
-          return;
-        }
-        isUserTypingRef.current = false;
-        setOpen(false);
-        overlay.close(comboId);
-        if (revertInput && !isInputControlled) {
-          setInternalInputValue((selectedItem == null ? void 0 : selectedItem.label) ?? "");
-        }
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:close", { bubbles: true, cancelable: true })
-        );
-        closingRef.current = false;
+        if (((_a = config.onOpen) == null ? void 0 : _a.call(config)) === false) return;
+        setInlinePanel({ config, sourceItem });
       },
-      [isOpen, onClose, setOpen, overlay, comboId, isInputControlled, selectedItem]
+      []
     );
+    const overlay = useOverlay.useOverlay();
     const handleOpen = react.useCallback(() => {
       var _a;
-      if (isOpen || isDisabled || isLoading || isReadOnly) return;
+      if (isOpen || isDisabled) return;
       if ((onOpen == null ? void 0 : onOpen()) === false) return;
       setOpen(true);
-      (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-        new CustomEvent("combobox:open", { bubbles: true, cancelable: true })
-      );
-    }, [isOpen, isDisabled, isLoading, isReadOnly, onOpen, setOpen]);
-    const handleSelect = react.useCallback(
-      (item, index) => {
-        var _a;
-        if (item.isDisabled) return;
-        const result = onChange == null ? void 0 : onChange(item, index);
-        isUserTypingRef.current = false;
-        if (!isValueControlled) {
-          setInternalValue(item.value);
-        }
-        if (!isInputControlled) {
-          setInternalInputValue(item.label);
-        }
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:change", {
-            bubbles: true,
-            cancelable: true,
-            detail: { item, index }
-          })
-        );
-        if (result !== false) {
-          handleClose(false);
-        }
-      },
-      [onChange, isValueControlled, isInputControlled, handleClose]
-    );
-    react.useEffect(() => {
-      if (isOpen && flatItems.length > 0) {
-        keyboardActiveRef.current = false;
-        const firstEnabled = flatItems.findIndex((item) => !item.isDisabled);
-        setActiveIndex(firstEnabled >= 0 ? firstEnabled : 0);
-      } else if (isOpen && flatItems.length === 0) {
-        setActiveIndex(-1);
+      if (panelRef.current) {
+        overlay.open({
+          id: menuId,
+          type: "action-menu",
+          element: panelRef.current,
+          triggerElement: triggerRef.current ?? void 0,
+          priority: 20,
+          config: { autoCloseOnOutsideClick: true }
+        });
       }
-    }, [isOpen, flatItems]);
-    const handleItemClick = react.useCallback(
-      (item, flatIndex) => {
-        if (item.isDisabled || isLoading) return;
-        preventCloseRef.current = true;
-        setActiveIndex(flatIndex);
-        handleSelect(item, flatIndex);
-      },
-      [isLoading, handleSelect]
-    );
-    const handleClear = react.useCallback(
-      (e) => {
-        var _a, _b;
-        e.stopPropagation();
-        isUserTypingRef.current = false;
-        const previousValue = currentValue;
-        if (!isValueControlled) {
-          setInternalValue(null);
-        }
-        if (!isInputControlled) {
-          setInternalInputValue("");
-        }
-        onClear == null ? void 0 : onClear({ previousValue });
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:clear", {
-            bubbles: true,
-            detail: { previousValue }
-          })
-        );
-        (_b = inputRef.current) == null ? void 0 : _b.focus({ preventScroll: true });
-      },
-      [currentValue, isValueControlled, isInputControlled, onClear]
-    );
-    const handleChevronClick = react.useCallback(
-      (e) => {
-        e.stopPropagation();
-        if (isDisabled || isLoading || isReadOnly) return;
-        if (isOpen) {
-          handleClose();
-        } else {
-          handleOpen();
-          requestAnimationFrame(() => {
-            var _a;
-            (_a = inputRef.current) == null ? void 0 : _a.focus({ preventScroll: true });
-          });
-        }
-      },
-      [isDisabled, isLoading, isReadOnly, isOpen, handleOpen, handleClose]
-    );
-    const handleInputChange = react.useCallback(
-      (e) => {
-        var _a;
-        const text = e.target.value;
-        isUserTypingRef.current = true;
-        if (!isInputControlled) {
-          setInternalInputValue(text);
-        }
-        onInputChange == null ? void 0 : onInputChange(text);
-        if (currentValue != null) {
-          const matchesSelection = (selectedItem == null ? void 0 : selectedItem.label) === text;
-          if (!matchesSelection && !isValueControlled) {
-            setInternalValue(null);
-          }
-        }
-        (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
-          new CustomEvent("combobox:input", {
-            bubbles: true,
-            detail: { value: text }
-          })
-        );
-        if (!isOpen && text.length > 0) {
-          handleOpen();
-        }
-      },
-      [
-        isInputControlled,
-        onInputChange,
-        currentValue,
-        selectedItem,
-        isValueControlled,
-        isOpen,
-        handleOpen
-      ]
-    );
+      (_a = triggerRef.current) == null ? void 0 : _a.dispatchEvent(
+        new CustomEvent("action-menu:open", { bubbles: true, cancelable: true })
+      );
+    }, [isOpen, isDisabled, onOpen, setOpen, overlay, menuId]);
+    const handleClose = react.useCallback(() => {
+      var _a, _b;
+      if (!isOpen) return;
+      if ((onClose == null ? void 0 : onClose()) === false) return;
+      setOpen(false);
+      setFilterQuery("");
+      setInlinePanel(null);
+      setOpenSubmenuId(null);
+      overlay.close(menuId);
+      (_a = triggerRef.current) == null ? void 0 : _a.focus({ preventScroll: true });
+      (_b = triggerRef.current) == null ? void 0 : _b.dispatchEvent(
+        new CustomEvent("action-menu:close", { bubbles: true, cancelable: true })
+      );
+    }, [isOpen, onClose, setOpen, overlay, menuId]);
+    const toggleOpen = react.useCallback(() => {
+      if (isOpen) handleClose();
+      else handleOpen();
+    }, [isOpen, handleOpen, handleClose]);
     react.useEffect(() => {
       if (!isOpen || !panelRef.current) return;
       overlay.open({
-        id: comboId,
-        type: "dropdown",
+        id: menuId,
+        type: "action-menu",
         element: panelRef.current,
-        triggerElement: inputRef.current ?? void 0,
+        triggerElement: triggerRef.current ?? void 0,
         priority: 20,
         config: { autoCloseOnOutsideClick: true },
         onClose: handleClose
       });
       return () => {
-        overlay.close(comboId);
+        overlay.close(menuId);
       };
     }, [isOpen]);
-    const posRef = react.useRef(null);
-    const posWatcherRef = react.useRef(null);
-    react.useLayoutEffect(() => {
-      var _a;
-      if (!isOpen) {
-        posRef.current = null;
-        (_a = posWatcherRef.current) == null ? void 0 : _a.destroy();
-        posWatcherRef.current = null;
-        return;
+    const { position } = usePositioning.usePositioning({
+      anchorRef: triggerRef,
+      floatRef: panelRef,
+      placement,
+      gap: 2,
+      enabled: isOpen
+    });
+    const positioned = !!position;
+    useFocusTrap.useFocusTrap(inlinePanel ? inlinePanelRef : panelRef, {
+      active: isOpen && positioned && !isLoading,
+      escapeDeactivates: false,
+      returnFocusOnDeactivate: true,
+      allowOutsideClick: true
+    });
+    const searchFocused = react.useRef(false);
+    const keyboardActiveRef = react.useRef(false);
+    const handleItemSelect = react.useCallback(
+      (item, index) => {
+        var _a;
+        const menuItem = item;
+        if (menuItem.isDisabled) return;
+        if (menuItem.submenu) {
+          setOpenSubmenuId(menuItem.id);
+          return;
+        }
+        if (menuItem.inlinePopover) {
+          openInlinePanel(menuItem.inlinePopover, menuItem);
+          return;
+        }
+        const result = onSelect == null ? void 0 : onSelect(menuItem, index);
+        (_a = triggerRef.current) == null ? void 0 : _a.dispatchEvent(
+          new CustomEvent("action-menu:select", {
+            bubbles: true,
+            cancelable: true,
+            detail: { item: menuItem, index }
+          })
+        );
+        if (result !== false && closeOnSelect) {
+          handleClose();
+        }
+      },
+      [onSelect, closeOnSelect, handleClose, openInlinePanel]
+    );
+    const scrollToIndex = react.useCallback(
+      (index) => {
+        var _a;
+        keyboardActiveRef.current = true;
+        const el = (_a = scrollRef.current) == null ? void 0 : _a.querySelector(
+          `[data-index="${index}"]`
+        );
+        if (el) {
+          el.scrollIntoView({ block: "nearest" });
+          el.focus({ preventScroll: true });
+        }
+      },
+      []
+    );
+    const { activeIndex, setActiveIndex, handleKeyDown: navKeyDown } = useListNavigation.useListNavigation({
+      items: flatItems,
+      onSelect: handleItemSelect,
+      onEscape: () => {
+        if (inlinePanel) {
+          closeInlinePanel();
+        } else {
+          handleClose();
+        }
+      },
+      wrap: true,
+      enabled: isOpen && positioned && !isLoading && !searchFocused.current && !inlinePanel,
+      scrollToIndex
+    });
+    react.useEffect(() => {
+      if (isOpen) {
+        keyboardActiveRef.current = false;
+        setActiveIndex(0);
       }
-      const anchor = fieldRef.current;
-      const float = panelRef.current;
-      if (!anchor || !float) return;
-      const opts = { placement, gap: 2, width: "anchor" };
-      const applyPosition = (pos3) => {
-        float.style.transform = `translate(${pos3.x}px, ${pos3.y}px)`;
-        if (pos3.width) {
-          float.style.width = pos3.width;
-          float.style.minWidth = pos3.width;
+    }, [isOpen, flatItems, setActiveIndex]);
+    react.useEffect(() => {
+      if (submenuTrigger === "click" && openSubmenuId) {
+        const activeItem = flatItems[activeIndex];
+        if ((activeItem == null ? void 0 : activeItem.id) !== openSubmenuId) {
+          setOpenSubmenuId(null);
         }
-        if (pos3.maxHeight != null) {
-          float.style.maxHeight = `${pos3.maxHeight}px`;
+      }
+    }, [activeIndex, flatItems, openSubmenuId, submenuTrigger]);
+    react.useEffect(() => {
+      if (!isOpen || !positioned) return;
+      requestAnimationFrame(() => {
+        if (searchCfg && searchWrapperRef.current) {
+          const input = searchWrapperRef.current.querySelector("input");
+          input == null ? void 0 : input.focus();
         }
-      };
-      const anchorWidth = `${anchor.getBoundingClientRect().width}px`;
-      float.style.width = anchorWidth;
-      float.style.minWidth = anchorWidth;
-      const pos2 = core.computePosition(anchor, float, opts);
-      posRef.current = pos2;
-      applyPosition(pos2);
-      float.style.visibility = "";
-      const watcher = core.createPositionWatcher(anchor, float, opts, (result) => {
-        posRef.current = result;
-        applyPosition(result);
       });
-      posWatcherRef.current = watcher;
-      return () => {
-        watcher.destroy();
-        posWatcherRef.current = null;
+    }, [isOpen, positioned, searchCfg]);
+    react.useEffect(() => {
+      if (!isOpen) return;
+      const onKeyDown = (e) => {
+        if (e.key === "Escape") {
+          if (openSubmenuId) return;
+          e.stopPropagation();
+          if (inlinePanel) {
+            closeInlinePanel();
+          } else {
+            handleClose();
+          }
+        }
       };
-    }, [isOpen, placement]);
+      document.addEventListener("keydown", onKeyDown, true);
+      return () => document.removeEventListener("keydown", onKeyDown, true);
+    }, [isOpen, handleClose, inlinePanel, closeInlinePanel, openSubmenuId]);
     react.useEffect(() => {
       if (!isOpen) return;
       const onPointerDown = (e) => {
         var _a, _b;
         const target = e.target;
         if ((_a = panelRef.current) == null ? void 0 : _a.contains(target)) return;
-        if ((_b = rootRef.current) == null ? void 0 : _b.contains(target)) return;
+        if ((_b = triggerRef.current) == null ? void 0 : _b.contains(target)) return;
         handleClose();
       };
       document.addEventListener("pointerdown", onPointerDown, true);
       return () => document.removeEventListener("pointerdown", onPointerDown, true);
     }, [isOpen, handleClose]);
-    react.useEffect(() => {
-      if (!isOpen) return;
-      const onFocusIn = (e) => {
-        var _a, _b;
-        const target = e.target;
-        if ((_a = rootRef.current) == null ? void 0 : _a.contains(target)) return;
-        if ((_b = panelRef.current) == null ? void 0 : _b.contains(target)) return;
-        handleClose();
-      };
-      document.addEventListener("focusin", onFocusIn);
-      return () => document.removeEventListener("focusin", onFocusIn);
-    }, [isOpen, handleClose]);
-    const blurTimeoutRef = react.useRef(null);
-    const handleInputBlur = react.useCallback(() => {
-      if (preventCloseRef.current) {
-        preventCloseRef.current = false;
-        return;
-      }
-      blurTimeoutRef.current = setTimeout(() => {
-        if (isOpen) handleClose();
-      }, 100);
-    }, [isOpen, handleClose]);
-    const handleInputFocus = react.useCallback(() => {
-      if (blurTimeoutRef.current) {
-        clearTimeout(blurTimeoutRef.current);
-        blurTimeoutRef.current = null;
-      }
-    }, []);
-    react.useEffect(() => {
-      return () => {
-        if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current);
-      };
-    }, []);
-    const updatePadding = react.useCallback(() => {
-      if (!actionsRef.current || !fieldRef.current) return;
-      const w = actionsRef.current.offsetWidth;
-      const pad = w > 0 ? w + 4 : 0;
-      fieldRef.current.style.setProperty("--arvo-combobox-pad-r", `${pad}px`);
-    }, []);
-    react.useEffect(() => {
-      updatePadding();
-    });
-    react.useEffect(() => {
-      const el = actionsRef.current;
-      if (!el) return;
-      const obs = new ResizeObserver(updatePadding);
-      obs.observe(el);
-      return () => obs.disconnect();
-    }, [updatePadding]);
-    const findNextEnabled = react.useCallback(
-      (from, direction) => {
-        const len = flatItems.length;
-        if (len === 0) return -1;
-        let idx = from + direction;
-        const isVisited = /* @__PURE__ */ new Set();
-        while (idx >= 0 && idx < len && !isVisited.has(idx)) {
-          isVisited.add(idx);
-          if (!flatItems[idx].isDisabled) return idx;
-          idx += direction;
-        }
-        return -1;
-      },
-      [flatItems]
-    );
-    const handleKeyDown = react.useCallback(
+    const handleTriggerClick = react.useCallback(
       (e) => {
-        if (isDisabled || isLoading) return;
-        switch (e.key) {
-          case "ArrowDown":
-            e.preventDefault();
-            if (!isOpen) {
-              handleOpen();
-            } else {
-              keyboardActiveRef.current = true;
-              const next = findNextEnabled(activeIndex, 1);
-              if (next >= 0) setActiveIndex(next);
-            }
-            break;
-          case "ArrowUp":
-            e.preventDefault();
-            if (!isOpen) {
-              handleOpen();
-            } else {
-              keyboardActiveRef.current = true;
-              const prev = findNextEnabled(activeIndex, -1);
-              if (prev >= 0) setActiveIndex(prev);
-            }
-            break;
-          case "Enter":
-            if (isOpen && activeIndex >= 0 && activeIndex < flatItems.length) {
-              e.preventDefault();
-              const item = flatItems[activeIndex];
-              if (!item.isDisabled) {
-                handleSelect(item, activeIndex);
-              }
-            }
-            break;
-          case "Escape":
-            e.preventDefault();
-            if (isOpen) {
-              handleClose();
-            } else {
-              if (!isInputControlled) {
-                setInternalInputValue("");
-              }
-              if (!isValueControlled) {
-                setInternalValue(null);
-              }
-            }
-            break;
-          case "Tab":
-            if (isOpen) {
-              e.preventDefault();
-              if (activeIndex >= 0 && activeIndex < flatItems.length) {
-                const item = flatItems[activeIndex];
-                if (!item.isDisabled) {
-                  handleSelect(item, activeIndex);
-                  return;
-                }
-              }
-              handleClose();
-            }
-            break;
+        e.preventDefault();
+        toggleOpen();
+      },
+      [toggleOpen]
+    );
+    const handleItemClick = react.useCallback(
+      (item, flatIndex) => {
+        if (item.isDisabled || isLoading) return;
+        setActiveIndex(flatIndex);
+        handleItemSelect(item, flatIndex);
+      },
+      [isLoading, setActiveIndex, handleItemSelect]
+    );
+    const handleTrailingActionClick = react.useCallback(
+      (action, item, e) => {
+        var _a;
+        e.stopPropagation();
+        if (action.inlinePopover) {
+          openInlinePanel(action.inlinePopover, item);
+          return;
+        }
+        const result = (_a = action.onClick) == null ? void 0 : _a.call(action, item, e);
+        if (result !== false && closeOnSelect) {
+          handleClose();
         }
       },
-      [
-        isDisabled,
-        isLoading,
-        isOpen,
-        activeIndex,
-        flatItems,
-        handleOpen,
-        handleClose,
-        handleSelect,
-        findNextEnabled,
-        isInputControlled,
-        isValueControlled
-      ]
+      [closeOnSelect, handleClose, openInlinePanel]
     );
-    react.useEffect(() => {
+    const handlePanelKeyDown = react.useCallback(
+      (e) => {
+        var _a;
+        if (isLoading) return;
+        if (!searchFocused.current && !inlinePanel) {
+          navKeyDown(e);
+        }
+        if (e.key === "ArrowRight" && !inlinePanel) {
+          const activeItem = flatItems[activeIndex];
+          if (activeItem == null ? void 0 : activeItem.submenu) {
+            e.preventDefault();
+            setOpenSubmenuId(activeItem.id);
+            return;
+          }
+          const activeEl = (_a = scrollRef.current) == null ? void 0 : _a.querySelector(
+            `[data-index="${activeIndex}"] .arvo-menu-item__actions button`
+          );
+          if (activeEl) {
+            e.preventDefault();
+            activeEl.focus();
+          }
+        }
+      },
+      [isLoading, navKeyDown, inlinePanel, flatItems, activeIndex]
+    );
+    const handleFilterSearch = react.useCallback(
+      (value) => {
+        setFilterQuery(value);
+        setActiveIndex(0);
+      },
+      [setActiveIndex]
+    );
+    const handleFilterClear = react.useCallback(() => {
       var _a;
-      if (!isOpen || activeIndex < 0) return;
-      const optEl = (_a = panelRef.current) == null ? void 0 : _a.querySelector(
-        `[data-index="${activeIndex}"]`
-      );
-      if (optEl && typeof optEl.scrollIntoView === "function") {
-        optEl.scrollIntoView({ block: "nearest" });
-      }
-    }, [isOpen, activeIndex]);
-    const hasValue = currentValue != null || currentInputValue.length > 0;
-    const classes = [
-      "arvo-combobox",
-      `arvo-combobox--${size}`,
-      isFullWidth && "arvo-combobox--full-width",
-      isClearable && "arvo-combobox--clearable",
-      isLoading && "loading",
-      isDisabled && "is-disabled",
-      isReadOnly && "is-readonly",
-      isInvalid && "has-error",
-      showTooltipIcon && "error-tooltip",
+      setFilterQuery("");
+      setActiveIndex(0);
+      (_a = searchCfg == null ? void 0 : searchCfg.onClear) == null ? void 0 : _a.call(searchCfg);
+    }, [setActiveIndex, searchCfg]);
+    const handleSearchFocus = react.useCallback(() => {
+      searchFocused.current = true;
+    }, []);
+    const handleSearchBlur = react.useCallback(() => {
+      searchFocused.current = false;
+    }, []);
+    const handleSearchWrapperKeyDown = react.useCallback(
+      (e) => {
+        var _a;
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          searchFocused.current = false;
+          const firstItem = (_a = scrollRef.current) == null ? void 0 : _a.querySelector(
+            '[role="menuitem"]'
+          );
+          firstItem == null ? void 0 : firstItem.focus();
+          setActiveIndex(0);
+        } else if (e.key === "Escape" && !filterQuery) {
+          e.stopPropagation();
+          handleClose();
+        }
+      },
+      [setActiveIndex, handleClose, filterQuery]
+    );
+    const panelClasses = [
+      "arvo-action-menu",
       isOpen && "open",
-      hasValue && "has-value",
+      isLoading && "loading",
       className
     ].filter(Boolean).join(" ");
-    const rootStyle = (() => {
-      const effectiveWidth = isFullWidth ? "100%" : width;
-      if (!effectiveWidth) return void 0;
-      return { "--arvo-form-input-width": effectiveWidth };
-    })();
-    const pos = posRef.current;
     const panelStyle = {
-      ...pos ? {
-        transform: `translate(${pos.x}px, ${pos.y}px)`,
-        ...pos.width ? { width: pos.width, minWidth: pos.width } : {},
-        ...pos.maxHeight ? { maxHeight: `${pos.maxHeight}px` } : {}
-      } : { visibility: "hidden" },
-      ...maxHeight ? {
-        "--arvo-combobox-panel-max-height": maxHeight
-      } : {},
-      ...isLoading ? { pointerEvents: "none" } : {}
+      ...position ? { transform: `translate(${position.x}px, ${position.y}px)` } : {},
+      ...maxHeight ? { "--arvo-action-menu-max-height": maxHeight } : {},
+      ...!positioned ? { opacity: 0, pointerEvents: "none" } : {}
     };
-    const renderOption = (item, flatIndex) => {
-      const isSelected = item.value === currentValue;
-      const isHighlighted = flatIndex === activeIndex;
-      const optClasses = [
-        "arvo-combobox__opt",
+    const renderTrailing = (item) => {
+      var _a;
+      const parts = [];
+      if (item.shortcut) {
+        parts.push(
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-menu-item__shortcut", children: item.shortcut }, "shortcut")
+        );
+      }
+      if (item.submenu) {
+        parts.push(
+          /* @__PURE__ */ jsxRuntime.jsx(
+            "span",
+            {
+              className: "arvo-menu-item__submenu o9con o9con-angle-right",
+              "aria-hidden": "true"
+            },
+            "submenu"
+          )
+        );
+      }
+      if ((_a = item.trailingActions) == null ? void 0 : _a.length) {
+        parts.push(
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-menu-item__actions", children: item.trailingActions.map((action) => /* @__PURE__ */ jsxRuntime.jsx(
+            IconButton.ArvoIconButton,
+            {
+              icon: action.icon,
+              variant: "tertiary",
+              size: "sm",
+              tooltip: action.ariaLabel ?? action.id,
+              "aria-label": action.ariaLabel,
+              isDisabled: item.isDisabled || isLoading || action.isDisabled,
+              onClick: (e) => handleTrailingActionClick(action, item, e)
+            },
+            action.id
+          )) }, "actions")
+        );
+      }
+      if (parts.length === 0) return null;
+      return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-menu-item__trailing", children: parts });
+    };
+    const handleItemMouseEnter = react.useCallback(
+      (item, flatIndex) => {
+        keyboardActiveRef.current = false;
+        setActiveIndex(flatIndex);
+        if (submenuTrigger === "hover") {
+          if (submenuTimerRef.current) {
+            clearTimeout(submenuTimerRef.current);
+            submenuTimerRef.current = null;
+          }
+          if (item.submenu && !item.isDisabled) {
+            submenuTimerRef.current = setTimeout(() => {
+              setOpenSubmenuId(item.id);
+            }, 200);
+          } else {
+            setOpenSubmenuId(null);
+          }
+        }
+      },
+      [setActiveIndex, submenuTrigger]
+    );
+    const handleItemMouseLeave = react.useCallback(
+      (item) => {
+        if (submenuTrigger === "hover" && item.submenu) {
+          if (submenuTimerRef.current) {
+            clearTimeout(submenuTimerRef.current);
+            submenuTimerRef.current = null;
+          }
+        }
+      },
+      [submenuTrigger]
+    );
+    react.useEffect(() => {
+      return () => {
+        if (submenuTimerRef.current) {
+          clearTimeout(submenuTimerRef.current);
+        }
+      };
+    }, []);
+    const setItemRef = react.useCallback(
+      (id, node) => {
+        if (node) {
+          itemRefsMap.current.set(id, node);
+        } else {
+          itemRefsMap.current.delete(id);
+        }
+      },
+      []
+    );
+    const renderItem = (item, flatIndex) => {
+      var _a;
+      const itemClasses = [
+        "arvo-menu-item",
+        item.secondaryLabel && "arvo-menu-item--multi-line",
+        item.destructive && "arvo-menu-item--destructive",
+        trailingActionsVisibility === "hover" && ((_a = item.trailingActions) == null ? void 0 : _a.length) && "arvo-menu-item--actions-on-hover",
         item.isDisabled && "is-disabled",
-        isHighlighted && keyboardActiveRef.current && "focused",
-        isSelected && "active"
+        flatIndex === activeIndex && keyboardActiveRef.current && "focused",
+        item.active && "active"
       ].filter(Boolean).join(" ");
-      return /* @__PURE__ */ jsxRuntime.jsxs(
-        "div",
-        {
-          id: `${comboId}-opt-${flatIndex}`,
-          className: optClasses,
-          role: "option",
-          "aria-selected": isSelected,
-          "aria-disabled": item.isDisabled || void 0,
-          "data-index": flatIndex,
-          onClick: () => handleItemClick(item, flatIndex),
-          onMouseEnter: () => {
-            if (!item.isDisabled) {
-              keyboardActiveRef.current = false;
-              setActiveIndex(flatIndex);
-            }
-          },
-          onMouseDown: (e) => {
-            e.preventDefault();
-          },
-          children: [
-            item.icon && /* @__PURE__ */ jsxRuntime.jsx(
-              "span",
-              {
-                className: `arvo-combobox__opt__ico o9con o9con-${item.icon}`,
-                "aria-hidden": "true"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-combobox__opt__txt", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-combobox__opt__lbl", children: item.label }) })
-          ]
-        },
-        item.id
-      );
+      const submenuOpen = item.submenu && openSubmenuId === item.id;
+      return /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { position: "relative" }, children: [
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "div",
+          {
+            ref: (node) => setItemRef(item.id, node),
+            className: itemClasses,
+            role: "menuitem",
+            "aria-disabled": item.isDisabled || void 0,
+            "aria-haspopup": item.submenu ? "menu" : void 0,
+            "aria-expanded": item.submenu ? !!submenuOpen : void 0,
+            tabIndex: flatIndex === activeIndex ? 0 : -1,
+            "data-index": flatIndex,
+            onClick: () => handleItemClick(item, flatIndex),
+            onMouseEnter: () => handleItemMouseEnter(item, flatIndex),
+            onMouseLeave: () => handleItemMouseLeave(item),
+            children: [
+              item.icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: `arvo-menu-item__ico o9con o9con-${item.icon}`, "aria-hidden": "true" }),
+              item.avatar && /* @__PURE__ */ jsxRuntime.jsx(
+                "img",
+                {
+                  className: "arvo-menu-item__avatar",
+                  src: item.avatar,
+                  alt: ""
+                }
+              ),
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-menu-item__txt", children: [
+                /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-menu-item__lbl", children: item.label }),
+                item.secondaryLabel && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-menu-item__secondary", children: item.secondaryLabel })
+              ] }),
+              renderTrailing(item)
+            ]
+          }
+        ),
+        submenuOpen && /* @__PURE__ */ jsxRuntime.jsx(
+          SubmenuPanel,
+          {
+            items: item.submenu,
+            closeOnSelect,
+            onClose: () => {
+              setOpenSubmenuId(null);
+              const parentEl = itemRefsMap.current.get(item.id);
+              parentEl == null ? void 0 : parentEl.focus({ preventScroll: true });
+            },
+            onCloseAll: handleClose,
+            onSelect: (subItem, subIndex) => {
+              const result = onSelect == null ? void 0 : onSelect(subItem, subIndex);
+              if (result !== false && closeOnSelect) handleClose();
+              return false;
+            },
+            anchorRef: { current: itemRefsMap.current.get(item.id) ?? null }
+          }
+        )
+      ] }, item.id);
     };
     const renderContent = () => {
+      if (isLoading) {
+        return /* @__PURE__ */ jsxRuntime.jsx(MenuSkeleton, {});
+      }
       if (flatItems.length === 0) {
-        return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-combobox__empty", role: "status", children: "No results" });
+        return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-action-menu__empty", role: "status", children: "No results" });
       }
       if (isGrouped(filteredItems)) {
         let flatIndex = 0;
         return filteredItems.map(
           (group, groupIdx) => /* @__PURE__ */ jsxRuntime.jsxs("div", { role: "group", "aria-label": group.label, children: [
-            groupIdx > 0 && hasGroupDividers && /* @__PURE__ */ jsxRuntime.jsx("hr", { className: "arvo-combobox__divider", role: "separator" }),
-            group.label && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-combobox__hdr", children: group.label }),
+            groupIdx > 0 && hasGroupDividers && /* @__PURE__ */ jsxRuntime.jsx(
+              "div",
+              {
+                className: "arvo-action-menu__divider",
+                role: "separator"
+              }
+            ),
+            group.label && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-action-menu__hdr", children: group.label }),
             group.items.map((item) => {
-              const node = renderOption(item, flatIndex);
+              const node = renderItem(item, flatIndex);
               flatIndex++;
               return node;
             })
@@ -598,127 +709,127 @@ const ArvoCombobox = react.forwardRef(
         );
       }
       return filteredItems.map(
-        (item, i) => renderOption(item, i)
+        (item, i) => renderItem(item, i)
       );
     };
-    const panelClasses = [
-      "arvo-combobox__panel",
-      isOpen && "open"
-    ].filter(Boolean).join(" ");
-    const panel = isOpen ? reactDom.createPortal(
-      /* @__PURE__ */ jsxRuntime.jsx(
+    const renderInlinePanel = () => {
+      if (!inlinePanel) return null;
+      const { config } = inlinePanel;
+      return /* @__PURE__ */ jsxRuntime.jsx(
         "div",
         {
-          className: `arvo-combobox arvo-combobox--${size}`,
-          style: { display: "contents" },
+          ref: inlinePanelRef,
+          className: "arvo-action-menu__inline-panel open",
           children: /* @__PURE__ */ jsxRuntime.jsx(
-            "div",
+            Popover.ArvoPopover,
             {
-              ref: panelRef,
-              id: panelId,
-              className: panelClasses,
-              role: "listbox",
-              "aria-busy": isLoading || void 0,
-              style: Object.keys(panelStyle).length > 0 ? panelStyle : void 0,
-              children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-combobox__scroll", children: renderContent() })
+              isInline: true,
+              variant: "edge",
+              title: config.title,
+              hasHeader: !!(config.title || config.hasBackButton !== false || config.isClosable !== false),
+              isClosable: config.isClosable !== false,
+              hasBackButton: config.hasBackButton !== false,
+              onBack: () => {
+                var _a;
+                (_a = config.onBack) == null ? void 0 : _a.call(config);
+                closeInlinePanel();
+              },
+              onClose: () => {
+                closeInlinePanel();
+              },
+              actions: config.actions,
+              isOpen: true,
+              isInteractive: true,
+              children: config.content
             }
           )
+        }
+      );
+    };
+    const clonedTrigger = react.isValidElement(trigger) ? (() => {
+      const triggerEl = trigger;
+      const triggerProps = triggerEl.props;
+      const isHostElement = typeof triggerEl.type === "string";
+      const overrides = {
+        ref: (node) => {
+          triggerRef.current = node;
+          const originalRef = triggerEl.ref;
+          if (typeof originalRef === "function") {
+            originalRef(node);
+          } else if (originalRef && typeof originalRef === "object") {
+            originalRef.current = node;
+          }
+        },
+        "aria-expanded": isOpen,
+        "aria-haspopup": "menu",
+        "aria-controls": menuId,
+        onClick: handleTriggerClick
+      };
+      if (isHostElement) {
+        overrides.disabled = isDisabled || triggerProps.disabled || triggerProps.isDisabled;
+      } else {
+        overrides.isDisabled = isDisabled || triggerProps.isDisabled;
+      }
+      return react.cloneElement(triggerEl, overrides);
+    })() : trigger;
+    const panel = isOpen ? reactDom.createPortal(
+      /* @__PURE__ */ jsxRuntime.jsxs(
+        "div",
+        {
+          ref: panelRef,
+          id: menuId,
+          className: panelClasses,
+          role: "menu",
+          "aria-busy": isLoading || void 0,
+          tabIndex: -1,
+          style: Object.keys(panelStyle).length > 0 ? panelStyle : void 0,
+          onKeyDown: handlePanelKeyDown,
+          children: [
+            searchCfg && !isLoading && /* @__PURE__ */ jsxRuntime.jsx(
+              "div",
+              {
+                ref: searchWrapperRef,
+                className: [
+                  "arvo-action-menu__search",
+                  searchCfg.className
+                ].filter(Boolean).join(" "),
+                onKeyDown: handleSearchWrapperKeyDown,
+                children: /* @__PURE__ */ jsxRuntime.jsx(
+                  Search.default,
+                  {
+                    variant: "filter",
+                    value: filterQuery,
+                    placeholder: searchCfg.placeholder,
+                    searchMode: searchCfg.searchMode,
+                    minChars: searchCfg.minChars,
+                    isClearable: searchCfg.isClearable,
+                    shortcut: searchCfg.shortcut,
+                    errorMsg: searchCfg.errorMsg,
+                    errorDisplay: "tooltip",
+                    counter: searchCfg.counter && filterQuery ? { current: flatItems.length, total: totalItemCount } : null,
+                    onSearch: handleFilterSearch,
+                    onClear: handleFilterClear,
+                    onFocus: handleSearchFocus,
+                    onBlur: handleSearchBlur,
+                    isDisabled,
+                    "aria-label": "Filter menu items"
+                  }
+                )
+              }
+            ),
+            /* @__PURE__ */ jsxRuntime.jsx("div", { ref: scrollRef, className: "arvo-action-menu__scroll", children: renderContent() }),
+            renderInlinePanel()
+          ]
         }
       ),
       document.body
     ) : null;
-    return /* @__PURE__ */ jsxRuntime.jsxs("div", { ref: rootRef, className: classes, style: rootStyle, children: [
-      label && /* @__PURE__ */ jsxRuntime.jsx(
-        FormLabel.FormLabel,
-        {
-          htmlFor: inputId,
-          id: labelId,
-          size: size === "sm" ? "sm" : "lg",
-          isRequired,
-          isDisabled,
-          className: "arvo-combobox__lbl",
-          children: label
-        }
-      ),
-      /* @__PURE__ */ jsxRuntime.jsxs("div", { ref: fieldRef, className: "arvo-combobox__field", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "input",
-          {
-            ref: inputRef,
-            id: inputId,
-            type: "text",
-            className: "arvo-combobox__input",
-            role: "combobox",
-            value: currentInputValue,
-            placeholder,
-            disabled: isDisabled,
-            readOnly: isReadOnly,
-            autoComplete: "off",
-            "aria-haspopup": "listbox",
-            "aria-expanded": isOpen,
-            "aria-controls": panelId,
-            "aria-activedescendant": isOpen && activeIndex >= 0 ? `${comboId}-opt-${activeIndex}` : void 0,
-            "aria-autocomplete": "list",
-            "aria-required": isRequired || void 0,
-            "aria-invalid": isInvalid || void 0,
-            "aria-busy": isLoading || void 0,
-            "aria-labelledby": label ? labelId : void 0,
-            "aria-describedby": showInlineAlert && errorMsg ? errorId : void 0,
-            onChange: handleInputChange,
-            onKeyDown: handleKeyDown,
-            onBlur: handleInputBlur,
-            onFocus: handleInputFocus
-          }
-        ),
-        /* @__PURE__ */ jsxRuntime.jsxs("div", { ref: actionsRef, className: "arvo-combobox__actions", children: [
-          isClearable && hasValue && !isDisabled && !isReadOnly && !isLoading && /* @__PURE__ */ jsxRuntime.jsx(
-            IconButton.default,
-            {
-              size: "sm",
-              variant: "tertiary",
-              icon: "close",
-              tooltip: "Clear",
-              "aria-label": "Clear",
-              tabIndex: -1,
-              onClick: handleClear,
-              className: "arvo-combobox__clear"
-            }
-          ),
-          isClearable && hasValue && !isDisabled && !isReadOnly && !isLoading && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-combobox__sep" }),
-          showTooltipIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { ref: errIcoRef, className: "arvo-combobox__err-ico", "aria-hidden": "true" })
-        ] }),
-        /* @__PURE__ */ jsxRuntime.jsx(
-          IconButton.default,
-          {
-            size: "sm",
-            variant: "tertiary",
-            icon: "angle-down",
-            tooltip: "Toggle menu",
-            "aria-label": "Toggle menu",
-            tabIndex: -1,
-            onClick: handleChevronClick,
-            isDisabled,
-            className: "arvo-combobox__ico"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-combobox__border" })
-      ] }),
-      showInlineAlert && errorMsg && /* @__PURE__ */ jsxRuntime.jsxs(
-        "div",
-        {
-          className: "arvo-inline-alert arvo-inline-alert--error",
-          id: errorId,
-          role: "alert",
-          children: [
-            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-inline-alert__ico", "aria-hidden": "true" }),
-            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-inline-alert__msg", children: errorMsg })
-          ]
-        }
-      ),
+    return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+      clonedTrigger,
       panel
     ] });
   }
 );
-exports.ArvoCombobox = ArvoCombobox;
-exports.default = ArvoCombobox;
+exports.ArvoActionMenu = ArvoActionMenu;
+exports.default = ArvoActionMenu;
 //# sourceMappingURL=index35.cjs.map

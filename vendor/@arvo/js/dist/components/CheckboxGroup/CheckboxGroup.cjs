@@ -2,12 +2,14 @@
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const utils = require("@arvo/utils");
 const Checkbox = require("../Checkbox/Checkbox.cjs");
+const MessageAlert = require("../MessageAlert/MessageAlert.cjs");
 let _idCounter = 0;
 const _ArvoCheckboxGroup = class _ArvoCheckboxGroup {
   constructor(element, options) {
     this._labelEl = null;
     this._bdyEl = null;
     this._itemsEl = null;
+    this._inlineAlert = null;
     this._inlineAlertEl = null;
     this._selectAllInstance = null;
     this._selectAllEl = null;
@@ -71,23 +73,16 @@ const _ArvoCheckboxGroup = class _ArvoCheckboxGroup {
     if (isInvalid) el.setAttribute("aria-invalid", "true");
     if (isLoading) el.setAttribute("aria-busy", "true");
     if (label) {
-      this._labelEl = document.createElement("span");
+      this._labelEl = utils.createFormLabel({
+        text: label,
+        as: "span",
+        isRequired,
+        isDisabled,
+        isInvalid
+      });
       this._labelEl.id = this._labelId;
-      this._labelEl.className = [
-        "arvo-form-lbl",
-        "arvo-cb-grp__lbl",
-        size === "sm" ? "arvo-form-lbl--sm" : "",
-        isRequired ? "arvo-form-lbl--required" : "",
-        isDisabled ? "is-disabled" : ""
-      ].filter(Boolean).join(" ");
-      this._labelEl.textContent = label;
-      if (isRequired) {
-        const req = document.createElement("span");
-        req.className = "arvo-form-lbl__req";
-        req.setAttribute("aria-hidden", "true");
-        req.textContent = "*";
-        this._labelEl.appendChild(req);
-      }
+      this._labelEl.classList.add("arvo-cb-grp__lbl");
+      if (size === "sm") this._labelEl.classList.add("arvo-form-lbl--sm");
       el.setAttribute("aria-labelledby", this._labelId);
       el.appendChild(this._labelEl);
     }
@@ -128,14 +123,14 @@ const _ArvoCheckboxGroup = class _ArvoCheckboxGroup {
     }
     this._bdyEl.appendChild(this._itemsEl);
     if (isInvalid && errorMsg) {
-      const alertEl = utils.createInlineAlert({
+      this._inlineAlert = MessageAlert.ArvoMessageAlert.initialize(document.createElement("div"), {
         id: this._errorId,
         message: errorMsg,
         type: "error"
       });
-      this._inlineAlertEl = alertEl;
+      this._inlineAlertEl = this._inlineAlert.el;
       el.setAttribute("aria-describedby", this._errorId);
-      this._bdyEl.appendChild(alertEl);
+      this._bdyEl.appendChild(this._inlineAlertEl);
     }
     el.appendChild(this._bdyEl);
     this._syncSelectAllState();
@@ -284,17 +279,18 @@ const _ArvoCheckboxGroup = class _ArvoCheckboxGroup {
       this._options.errorMsg = msg;
       this._element.classList.add("has-error");
       this._element.setAttribute("aria-invalid", "true");
-      if (this._inlineAlertEl) {
-        utils.updateInlineAlert(this._inlineAlertEl, { message: msg, type: "error" });
+      if (this._inlineAlert) {
+        this._inlineAlert.type("error");
+        this._inlineAlert.message(msg);
       } else if (this._bdyEl) {
-        const alertEl = utils.createInlineAlert({
+        this._inlineAlert = MessageAlert.ArvoMessageAlert.initialize(document.createElement("div"), {
           id: this._errorId,
           message: msg,
           type: "error"
         });
-        this._inlineAlertEl = alertEl;
+        this._inlineAlertEl = this._inlineAlert.el;
         this._element.setAttribute("aria-describedby", this._errorId);
-        this._bdyEl.appendChild(alertEl);
+        this._bdyEl.appendChild(this._inlineAlertEl);
       }
     } else {
       this._options.isInvalid = false;
@@ -302,6 +298,10 @@ const _ArvoCheckboxGroup = class _ArvoCheckboxGroup {
       this._element.classList.remove("has-error");
       this._element.removeAttribute("aria-invalid");
       this._element.removeAttribute("aria-describedby");
+      if (this._inlineAlert) {
+        this._inlineAlert.destroy();
+        this._inlineAlert = null;
+      }
       if (this._inlineAlertEl) {
         this._inlineAlertEl.remove();
         this._inlineAlertEl = null;
@@ -341,24 +341,17 @@ const _ArvoCheckboxGroup = class _ArvoCheckboxGroup {
         }
         this._labelEl.insertAdjacentText("afterbegin", label);
       } else {
-        const { size, isRequired, isDisabled } = this._options;
-        this._labelEl = document.createElement("span");
+        const { size, isRequired, isDisabled, isInvalid } = this._options;
+        this._labelEl = utils.createFormLabel({
+          text: label,
+          as: "span",
+          isRequired,
+          isDisabled,
+          isInvalid
+        });
         this._labelEl.id = this._labelId;
-        this._labelEl.className = [
-          "arvo-form-lbl",
-          "arvo-cb-grp__lbl",
-          size === "sm" ? "arvo-form-lbl--sm" : "",
-          isRequired ? "arvo-form-lbl--required" : "",
-          isDisabled ? "is-disabled" : ""
-        ].filter(Boolean).join(" ");
-        this._labelEl.textContent = label;
-        if (isRequired) {
-          const req = document.createElement("span");
-          req.className = "arvo-form-lbl__req";
-          req.setAttribute("aria-hidden", "true");
-          req.textContent = "*";
-          this._labelEl.appendChild(req);
-        }
+        this._labelEl.classList.add("arvo-cb-grp__lbl");
+        if (size === "sm") this._labelEl.classList.add("arvo-form-lbl--sm");
         this._element.setAttribute("aria-labelledby", this._labelId);
         this._element.insertBefore(this._labelEl, this._element.firstChild);
       }
@@ -369,11 +362,13 @@ const _ArvoCheckboxGroup = class _ArvoCheckboxGroup {
     }
   }
   destroy() {
-    var _a;
+    var _a, _b;
     if (this._itemsEl) {
       this._itemsEl.removeEventListener("checkbox:change", this._boundHandleItemChange);
     }
-    (_a = this._selectAllInstance) == null ? void 0 : _a.destroy();
+    (_a = this._inlineAlert) == null ? void 0 : _a.destroy();
+    this._inlineAlert = null;
+    (_b = this._selectAllInstance) == null ? void 0 : _b.destroy();
     this._selectAllInstance = null;
     this._selectAllEl = null;
     for (const inst of this._childInstances) {

@@ -2,24 +2,24 @@
 // BEM Block: .arvo-textarea
 // Abbreviation: textarea
 // Loading Pattern: A (overlay shimmer)
-// Sizes: sm (default), lg — size controls label only, field is identical
+// Sizes: sm (default), lg -- size controls label only, field is identical
 
 @use '../../../../tokens/src/scss/all' as *;
 @use '../../mixins/form-input' as *;
 @use '../../mixins/form-label' as *;
 @use '../../mixins/form-char-counter' as *;
-@use '../../mixins/inline-alert' as *;
+@use '../../mixins/hover' as *;
 @use '../../mixins/loading' as *;
 
-// ─── .arvo-textarea ──────────────────────────────────────────────────────────
+// --- .arvo-textarea ----------------------------------------------------------
 
 .arvo-textarea {
-  // Field dimensions — constant across both sizes (only the label changes)
+  // Field dimensions -- constant across both sizes (only the label changes)
   --arvo-form-input-font-size: #{$arvo-font-size-14};
   --arvo-form-input-padding-block: #{$arvo-space-6};
   --arvo-form-input-padding-inline: #{$arvo-space-12};
 
-  // ── Root layout ─────────────────────────────────────────────────────────
+  // -- Root layout ---------------------------------------------------------
   display: inline-flex;
   flex-direction: column;
   gap: $arvo-space-8;
@@ -36,7 +36,7 @@
     }
   }
 
-  // ── __lbl (form label) ──────────────────────────────────────────────────
+  // -- __lbl (form label) --------------------------------------------------
   &__lbl {
     @include form-label-base;
     @include form-label-sm;
@@ -46,7 +46,7 @@
     }
   }
 
-  // ── __field (container wrapping the native textarea) ─────────────────────
+  // -- __field (container wrapping the native textarea) ---------------------
   &__field {
     @include form-input-base;
     @include form-input-hover-bg;
@@ -62,7 +62,7 @@
     position: relative;
   }
 
-  // ── __ico (leading icon, aligned to first line of text) ────────────────
+  // -- __ico (leading icon, aligned to first line of text) ----------------
   &__ico {
     flex: 0 0 auto;
     font-size: $arvo-icon-16;
@@ -75,7 +75,7 @@
     }
   }
 
-  // ── __input (native <textarea>) ─────────────────────────────────────────
+  // -- __input (native <textarea>) -----------------------------------------
   &__input {
     @include form-input-text-colors;
 
@@ -106,17 +106,20 @@
     resize: vertical;
   }
 
-  // ── __border (animated bottom border, inside __field) ───────────────────
+  // -- __border (animated bottom border, inside __field) -------------------
   &__border {
     @include form-input-animated-border-base;
   }
 
-  // ── __err-ico (inline error icon inside field) ──────────────────────────
+  // -- __err-ico (slot for in-field <ArvoMessageAlert isInline /> child) ----
+  // Icon glyph + color come from the child .arvo-msg-alert; this slot only
+  // controls visibility based on the parent's .has-error.error-tooltip state.
   &__err-ico {
-    @include error-tooltip-icon;
+    display: none;
+    flex: 0 0 auto;
   }
 
-  // ── __counter (character counter, below field) ──────────────────────────
+  // -- __counter (character counter, below field) --------------------------
   &__counter {
     @include form-char-counter-base;
 
@@ -129,37 +132,23 @@
     }
   }
 
-  // ── Inline alert (below field) ──────────────────────────────────────────
-  .arvo-inline-alert {
-    @include inline-alert-base;
-    display: none;
-
-    &__ico {
-      @include inline-alert-icon;
-    }
-
-    &__msg {
-      @include inline-alert-msg;
-    }
-  }
-
-  // ── Size: sm (default) — label sm is the base ──────────────────────────
+  // -- Size: sm (default) -- label sm is the base --------------------------
   &--sm {}
 
-  // ── Size: lg — only changes label to large ────────────────────────────
+  // -- Size: lg -- only changes label to large ----------------------------
   &--lg {
     .arvo-textarea__lbl {
       @include form-label-lg;
     }
   }
 
-  // ── Auto-resize modifier ───────────────────────────────────────────────
+  // -- Auto-resize modifier -----------------------------------------------
   &--auto-resize &__input {
     overflow: hidden;
     resize: none;
   }
 
-  // ── Border state: focus ─────────────────────────────────────────────────
+  // -- Border state: focus -------------------------------------------------
   &:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) {
     .arvo-textarea__border::after {
       background-color: var(--arvo-color-b-theme-focus);
@@ -168,7 +157,7 @@
     }
   }
 
-  // ── State: disabled ─────────────────────────────────────────────────────
+  // -- State: disabled -----------------------------------------------------
   &.is-disabled {
     cursor: not-allowed;
 
@@ -188,7 +177,7 @@
     }
   }
 
-  // ── State: readonly ─────────────────────────────────────────────────────
+  // -- State: readonly -----------------------------------------------------
   &.is-readonly {
     .arvo-textarea__field {
       cursor: default;
@@ -207,7 +196,7 @@
     }
   }
 
-  // ── State: error ────────────────────────────────────────────────────────
+  // -- State: error --------------------------------------------------------
   &.has-error {
     .arvo-textarea__border {
       background: var(--arvo-color-b-negative);
@@ -223,22 +212,11 @@
 
   &.has-error.error-tooltip {
     .arvo-textarea__err-ico {
-      display: block;
-    }
-
-    .arvo-inline-alert {
-      display: none;
-    }
-  }
-
-  &.has-error:not(.error-tooltip) {
-    .arvo-inline-alert {
       display: inline-flex;
-      @include inline-alert-error;
     }
   }
 
-  // ── Loading state (per-element shimmer on field + label) ────────────────
+  // -- Loading state (per-element shimmer on field + label) ----------------
   &.loading,
   [data-arvo-loading="true"] &:not([data-arvo-loading-ignore="true"]) {
     pointer-events: none;
@@ -253,9 +231,11 @@
   }
 }
 
-// Hover border animation (no-touch only, not disabled/readonly/error)
-.no-touch .arvo-textarea:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
-  .arvo-textarea__border::after {
-    transform: scaleX(1);
+// Hover border animation (hover-capable devices only, not disabled/readonly/error)
+@include hover {
+  .arvo-textarea:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
+    .arvo-textarea__border::after {
+      transform: scaleX(1);
+    }
   }
 }

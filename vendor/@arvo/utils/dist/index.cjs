@@ -2,19 +2,16 @@
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const formLabel = require("./index2.cjs");
 const formCharCounter = require("./index3.cjs");
-const inlineAlert = require("./index4.cjs");
-const indicator = require("./index5.cjs");
+const indicator = require("./index4.cjs");
+const panelShell = require("./index5.cjs");
 exports.createFormLabel = formLabel.createFormLabel;
-exports.updateFormLabel = formLabel.updateFormLabel;
 exports.createCharCounter = formCharCounter.createCharCounter;
 exports.formatCharCount = formCharCounter.formatCharCount;
 exports.updateCharCounter = formCharCounter.updateCharCounter;
-exports.createErrorTooltipIcon = inlineAlert.createErrorTooltipIcon;
-exports.createInlineAlert = inlineAlert.createInlineAlert;
-exports.getDefaultErrorMsg = inlineAlert.getDefaultErrorMsg;
-exports.updateErrorTooltipIcon = inlineAlert.updateErrorTooltipIcon;
-exports.updateInlineAlert = inlineAlert.updateInlineAlert;
 exports.createIndicator = indicator.createIndicator;
 exports.removeIndicator = indicator.removeIndicator;
 exports.updateIndicator = indicator.updateIndicator;
+exports.formatMatchCountMessage = panelShell.formatMatchCountMessage;
+exports.runItemFilter = panelShell.runItemFilter;
+exports.validateHeaderAction = panelShell.validateHeaderAction;
 //# sourceMappingURL=index.cjs.map

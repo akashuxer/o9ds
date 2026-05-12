@@ -1,84 +1,74 @@
 import { jsxs, jsx } from "react/jsx-runtime";
-import { forwardRef, useRef } from "react";
-import { useTooltip } from "./index10.js";
-const ArvoButton = forwardRef(
-  function ArvoButton2({
-    variant = "primary",
-    size = "md",
-    type = "button",
-    label,
-    icon,
+import { forwardRef } from "react";
+function buildLabelClassName(base, size, isRequired, isDisabled, isInvalid) {
+  return [
+    "arvo-form-lbl",
+    size === "sm" && "arvo-form-lbl--sm",
+    isRequired && "arvo-form-lbl--required",
+    isDisabled && "is-disabled",
+    isInvalid && "is-invalid",
+    base
+  ].filter(Boolean).join(" ");
+}
+function renderRequiredIndicator(isRequired, custom) {
+  if (!isRequired) return null;
+  if (custom !== void 0) return custom;
+  return /* @__PURE__ */ jsx("span", { className: "arvo-form-lbl__req", "aria-hidden": "true", children: "*" });
+}
+const ArvoFormLabel = forwardRef(
+  function ArvoFormLabel2({
+    children,
+    size = "lg",
+    isRequired = false,
     isDisabled = false,
-    isSelected,
-    isFullWidth = false,
-    isLoading = false,
-    tooltip,
+    isInvalid = false,
+    requiredIndicator,
     className,
-    onClick,
-    onKeyDown,
     ...rest
   }, ref) {
-    const internalRef = useRef(null);
-    useTooltip({ triggerRef: internalRef, tooltip });
-    const classes = [
-      "arvo-btn",
-      `arvo-btn--${variant}`,
-      `arvo-btn--${size}`,
-      isFullWidth ? "arvo-btn--full-width" : "",
-      isLoading ? "loading" : "",
-      isSelected === true ? "active" : "",
-      className ?? ""
-    ].filter(Boolean).join(" ");
-    const blocked = isDisabled || isLoading;
-    const handleClick = (e) => {
-      if (blocked) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      onClick == null ? void 0 : onClick(e);
-    };
-    const handleKeyDown = (e) => {
-      if (blocked && (e.key === "Enter" || e.key === " ")) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      onKeyDown == null ? void 0 : onKeyDown(e);
-    };
-    const ariaPressedProp = isSelected !== void 0 ? { "aria-pressed": isSelected } : {};
-    const mergeRefs = (node) => {
-      internalRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    };
     return /* @__PURE__ */ jsxs(
-      "button",
+      "label",
       {
-        ref: mergeRefs,
-        type,
-        className: classes,
-        disabled: isDisabled,
-        "aria-busy": isLoading ? true : void 0,
-        onClick: handleClick,
-        onKeyDown: handleKeyDown,
-        ...ariaPressedProp,
+        ref,
+        className: buildLabelClassName(className, size, isRequired, isDisabled, isInvalid),
         ...rest,
         children: [
-          icon && /* @__PURE__ */ jsx(
-            "span",
-            {
-              className: `arvo-btn__ico o9con o9con-${icon}`,
-              "aria-hidden": "true"
-            }
-          ),
-          /* @__PURE__ */ jsx("span", { className: "arvo-btn__lbl", children: label })
+          children,
+          renderRequiredIndicator(isRequired, requiredIndicator)
         ]
       }
     );
   }
 );
+const ArvoFormLabelText = forwardRef(
+  function ArvoFormLabelText2({
+    children,
+    size = "lg",
+    isRequired = false,
+    isDisabled = false,
+    isInvalid = false,
+    requiredIndicator,
+    className,
+    ...rest
+  }, ref) {
+    return /* @__PURE__ */ jsxs(
+      "span",
+      {
+        ref,
+        className: buildLabelClassName(className, size, isRequired, isDisabled, isInvalid),
+        ...rest,
+        children: [
+          children,
+          renderRequiredIndicator(isRequired, requiredIndicator)
+        ]
+      }
+    );
+  }
+);
+const FormLabel = ArvoFormLabel;
 export {
-  ArvoButton as default
+  ArvoFormLabel,
+  ArvoFormLabelText,
+  FormLabel
 };
 //# sourceMappingURL=index11.js.map

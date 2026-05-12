@@ -48,6 +48,8 @@ export declare class ArvoTextbox {
     private _clearBtn;
     private _errIcoEl;
     private _errIcoConnector;
+    private _errMsgAlert;
+    private _inlineAlert;
     private _inlineAlertEl;
     private _leadingIconEl;
     private _resizeObserver;

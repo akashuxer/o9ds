@@ -1,9 +1,3 @@
-import { TooltipPlacement } from '../../../../core/src';
-export type ButtonTooltipOption = string | {
-    content: string;
-    placement?: TooltipPlacement;
-    shortcut?: string;
-};
 export interface ArvoButtonOptions {
     variant?: 'primary' | 'secondary' | 'tertiary' | 'outline' | 'danger';
     size?: 'sm' | 'md' | 'lg';
@@ -11,16 +5,29 @@ export interface ArvoButtonOptions {
     label?: string;
     icon?: string | null;
     isDisabled?: boolean;
+    /**
+     * Selected (active) state.
+     *
+     * - When `isToggle` is `false` (default), this is parent-controlled active
+     *   state for cases like an active menu trigger. Click does NOT toggle.
+     * - When `isToggle` is `true`, the button toggles its own state on click.
+     */
     isSelected?: boolean;
+    /**
+     * When true, click toggles the selected state and renders `aria-pressed`.
+     * The button announces itself as a toggle button to assistive tech.
+     */
+    isToggle?: boolean;
     isFullWidth?: boolean;
     isLoading?: boolean;
-    tooltip?: ButtonTooltipOption;
     onClick?: (event: Event) => void;
+    /** Fired when the toggle state flips. Only emitted when `isToggle` is true. */
+    onSelectionChange?: (isSelected: boolean) => void;
 }
-type RequiredButtonOptions = Required<Omit<ArvoButtonOptions, 'onClick' | 'tooltip' | 'icon' | 'isSelected'>> & {
+type RequiredButtonOptions = Required<Omit<ArvoButtonOptions, 'onClick' | 'onSelectionChange' | 'icon' | 'isSelected'>> & {
     icon: string | null;
-    tooltip: ButtonTooltipOption | null;
     onClick: ((event: Event) => void) | null;
+    onSelectionChange: ((isSelected: boolean) => void) | null;
     isSelected: boolean | undefined;
 };
 export declare class ArvoButton {
@@ -31,13 +38,11 @@ export declare class ArvoButton {
     private _originalContent;
     private _boundHandleClick;
     private _boundHandleKeydown;
-    private _tooltipConnector;
     static readonly VARIANTS: readonly ["primary", "secondary", "tertiary", "outline", "danger"];
     static readonly SIZES: readonly ["sm", "md", "lg"];
     static readonly DEFAULTS: RequiredButtonOptions;
     static initialize(element: HTMLButtonElement, options?: ArvoButtonOptions): ArvoButton;
     constructor(element: HTMLButtonElement, options?: ArvoButtonOptions);
-    private _connectTooltip;
     private _render;
     private _createIconEl;
     private _bindEvents;
@@ -50,6 +55,12 @@ export declare class ArvoButton {
     setSize(size: string): void;
     setLoading(isLoading: boolean): void;
     selected(state?: boolean): boolean | void;
+    /**
+     * Toggle the selected state. Forwards through `selected()` and fires
+     * `onSelectionChange`. Useful when `isToggle` is set so consumers can
+     * programmatically trigger the same flip the user does on click.
+     */
+    toggle(force?: boolean): boolean;
     disabled(state?: boolean): boolean | void;
     focus(): void;
     destroy(): void;

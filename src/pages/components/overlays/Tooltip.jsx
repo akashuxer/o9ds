@@ -4,7 +4,7 @@ import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
-import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
+import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, CssVarsGrid, LiveReference, SimpleTable } from '../../../LayoutComponents/ComponentDocPrimitives'
 import { getDescriptor } from '../../../data/componentDescriptors.generated'
 
@@ -19,8 +19,8 @@ const CSS_VARS = DESCRIPTOR.cssVarGroups
 export default function Tooltip() {
   const [tab, setTab] = useState('Overview')
   const sections = useMemo(() => {
-    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'demo', label: 'Live demo' }, { id: 'behavior', label: 'Behavior' }]
-    if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]
+    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'standard', label: 'Standard usage' }, { id: 'demo', label: 'Live demo' }, { id: 'behavior', label: 'Behavior' }]
+    if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }, { id: 'tooltip-prop', label: 'Built-in tooltip prop' }]
     if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'css-vars', label: 'CSS variables' }, { id: 'config', label: 'Global config' }, { id: 'methods', label: 'Methods (JS)' }]
     if (tab === 'Accessibility') return [{ id: 'keyboard', label: 'Keyboard' }, { id: 'aria', label: 'ARIA' }]
     return []
@@ -40,6 +40,17 @@ export default function Tooltip() {
           <div className="space-y-12">
             <DocSection id="purpose" title="Purpose">
               <DocParagraph>Use Tooltip for short, non-interactive supplementary text — clarifying icon-only buttons, surfacing keyboard shortcuts, or revealing truncated text. Tooltips are transient; for interactive content use <DocStrong>Popover</DocStrong>.</DocParagraph>
+            </DocSection>
+            <DocSection id="standard" title="Standard usage (system-wide rule)">
+              <DocParagraph>
+                <DocCode>{`<ArvoTooltip>`}</DocCode> wrapping the trigger is the default pattern across the design system:
+              </DocParagraph>
+              <CodeBlock language="tsx" code={`<ArvoTooltip content="Save changes">
+  <ArvoButton label="Save" />
+</ArvoTooltip>`} />
+              <DocCallout>
+                Label-bearing components (<DocCode>ArvoButton</DocCode>, <DocCode>ArvoDropdownButton</DocCode>, <DocCode>ArvoSplitButton</DocCode>, <DocCode>ArvoButtonLink</DocCode>) do <DocStrong>not</DocStrong> accept a <DocCode>tooltip</DocCode> prop — wrap them with <DocCode>ArvoTooltip</DocCode> when one is needed. Only icon-only components (<DocCode>ArvoIconButton</DocCode>, <DocCode>ArvoIconButtonLink</DocCode>, <DocCode>ArvoFabButton</DocCode>, <DocCode>ArvoDropdownIconButton</DocCode>, <DocCode>ArvoSplitIconButton</DocCode>) expose a single <DocCode>tooltip</DocCode> / <DocCode>label</DocCode> prop because the value also drives <DocCode>aria-label</DocCode>. For overflow disclosure on truncated content, use a truncation-aware prop (e.g. <DocCode>showTooltipOnOverflow</DocCode>) rather than a generic <DocCode>tooltip</DocCode> prop.
+              </DocCallout>
             </DocSection>
             <DocSection id="demo" title="Live demo">
               <LiveReference>
@@ -85,6 +96,26 @@ export default function Tooltip() {
                 <span key="3">As a replacement for an accessible name on icon-only buttons — set the <DocCode>tooltip</DocCode> / <DocCode>aria-label</DocCode> on the component.</span>,
               ]} />
             </DocSection>
+            <DocSection id="tooltip-prop" title="Built-in tooltip prop (icon-only components)">
+              <DocParagraph>
+                Icon-only components (<DocCode>ArvoIconButton</DocCode>, <DocCode>ArvoIconButtonLink</DocCode>, <DocCode>ArvoFabButton</DocCode>, <DocCode>ArvoDropdownIconButton</DocCode>, <DocCode>ArvoSplitIconButton</DocCode>) expose a <DocCode>tooltip</DocCode> / <DocCode>label</DocCode> prop directly — the same value also drives <DocCode>aria-label</DocCode> for the icon-only control:
+              </DocParagraph>
+              <CodeBlock language="tsx" code={`import { ArvoIconButton } from '@arvo/react';
+
+// String shorthand
+<ArvoIconButton icon="save" tooltip="Save document" />
+
+// Object with shortcut
+<ArvoIconButton icon="save" tooltip={{ content: 'Save document', shortcut: 'Ctrl+S' }} />`} />
+              <DocParagraph>
+                Label-bearing components do <DocStrong>not</DocStrong> accept a <DocCode>tooltip</DocCode> prop — wrap them with <DocCode>ArvoTooltip</DocCode>:
+              </DocParagraph>
+              <CodeBlock language="tsx" code={`import { ArvoButton, ArvoTooltip } from '@arvo/react';
+
+<ArvoTooltip content="Save document">
+  <ArvoButton label="Save" />
+</ArvoTooltip>`} />
+            </DocSection>
           </div>
         )}
 
@@ -111,7 +142,7 @@ export default function Tooltip() {
 <ArvoTooltip content="You do not have permission to delete">
   <button aria-disabled="true" tabIndex={0}>Delete</button>
 </ArvoTooltip>`} />
-              <DocParagraph>Many o9 components also accept a <DocCode>tooltip</DocCode> prop directly (Button, IconButton, FabButton, etc.) — use that built-in option instead of wrapping with <DocCode>ArvoTooltip</DocCode> when possible.</DocParagraph>
+              <DocParagraph>Wrapping with <DocCode>ArvoTooltip</DocCode> is the default pattern for label-bearing components (Button, ButtonLink, DropdownButton, SplitButton). Icon-only components (IconButton, IconButtonLink, FabButton, DropdownIconButton, SplitIconButton) expose a built-in <DocCode>tooltip</DocCode> prop because the value also drives <DocCode>aria-label</DocCode>.</DocParagraph>
             </DocSection>
             <DocSection id="js" title="Vanilla JS">
               <CodeBlock language="js" label="@arvo/js" code={`import { ArvoTooltip, setupTooltips } from '@arvo/js';

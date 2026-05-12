@@ -1,6 +1,6 @@
 {
   "name": "@arvo/styles",
-  "version": "1.0.0-dev.2",
+  "version": "1.1.0",
   "description": "Arvo Design System shared SCSS mixins, component styles, and shared patterns",
   "license": "UNLICENSED",
   "private": false,
@@ -11,7 +11,8 @@
     "./mixins/*": "./src/mixins/*",
     "./base": "./src/base/_global.scss",
     "./css": "./dist/arvo.css",
-    "./css/min": "./dist/arvo.min.css"
+    "./css/min": "./dist/arvo.min.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "src/",

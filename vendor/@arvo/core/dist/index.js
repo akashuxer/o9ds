@@ -11,13 +11,14 @@ import { computePosition } from "./index11.js";
 import { createPositionWatcher } from "./index12.js";
 import { createOverlayHub, overlayHub } from "./index13.js";
 import { createBackdropManager } from "./index14.js";
-import { createMask } from "./index15.js";
-import { filterGroups, filterItems, normalizeQuery } from "./index16.js";
-import { isTruncated } from "./index17.js";
-import { createSortableList } from "./index18.js";
-import { createResizeHandle } from "./index19.js";
-import { createTooltipManager, tooltipManager } from "./index20.js";
-import { connectTooltip } from "./index21.js";
+import { isPageScrollLocked, lockPageScroll } from "./index15.js";
+import { createMask } from "./index16.js";
+import { filterGroups, filterItems, normalizeQuery } from "./index17.js";
+import { isTruncated } from "./index18.js";
+import { createSortableList } from "./index19.js";
+import { createResizeHandle } from "./index20.js";
+import { createTooltipManager, tooltipManager } from "./index21.js";
+import { connectTooltip } from "./index22.js";
 export {
   computePosition,
   connectTooltip,
@@ -41,7 +42,9 @@ export {
   getFocusableElements,
   getLastFocusable,
   isFocusable,
+  isPageScrollLocked,
   isTruncated,
+  lockPageScroll,
   normalizeQuery,
   onReducedMotionChange,
   overlayHub,

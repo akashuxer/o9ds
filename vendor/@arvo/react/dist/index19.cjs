@@ -2,111 +2,130 @@
 Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
 const jsxRuntime = require("react/jsx-runtime");
 const react = require("react");
-const useControllableState = require("./index41.cjs");
-const RadioGroupContext = react.createContext(null);
-const ArvoRadioGroup = react.forwardRef(
-  function ArvoRadioGroup2({
-    name,
+const CheckboxGroup = require("./index20.cjs");
+const useControllableState = require("./index49.cjs");
+const FormLabel = require("./index11.cjs");
+const MessageAlert = require("./index12.cjs");
+const ArvoCheckbox = react.forwardRef(
+  function ArvoCheckbox2({
     label = null,
-    orientation = "vertical",
-    labelPosition = "top",
-    size = "lg",
+    isChecked: checkedProp,
+    defaultChecked = false,
+    isIndeterminate = false,
     isDisabled = false,
-    isReadOnly: isReadonly = false,
+    isReadOnly = false,
     isRequired = false,
     isInvalid = false,
+    isExcluded = false,
+    size = "lg",
+    value = "on",
+    name,
     errorMsg = null,
+    errorDisplay = "inline",
     isLoading = false,
-    value: valueProp,
-    defaultValue = null,
     onChange,
+    onFocus,
+    onBlur,
     className,
-    children,
     ...rest
   }, ref) {
     const uid = react.useId();
-    const labelId = `arvo-rb-grp-lbl-${uid}`;
-    const errorId = `arvo-rb-grp-err-${uid}`;
-    const [selectedValue, setSelectedValue] = useControllableState.useControllableState(
-      valueProp,
-      defaultValue
-    );
-    const onChildChange = react.useCallback(
-      (childValue) => {
-        if (isDisabled || isReadonly || isLoading) return;
-        setSelectedValue(childValue);
-        onChange == null ? void 0 : onChange({ value: childValue, previousValue: selectedValue });
-      },
-      [isDisabled, isReadonly, isLoading, onChange, selectedValue, setSelectedValue]
-    );
-    const contextValue = react.useMemo(
-      () => ({
-        name,
-        size,
-        isDisabled,
-        isReadOnly: isReadonly,
-        isLoading,
-        selectedValue,
-        onChildChange
-      }),
-      [name, size, isDisabled, isReadonly, isLoading, selectedValue, onChildChange]
-    );
-    const showAlert = isInvalid && !!errorMsg;
+    const inputId = `arvo-checkbox-${uid}`;
+    const errorId = `arvo-checkbox-err-${uid}`;
+    const inputRef = react.useRef(null);
+    const [isChecked, setChecked] = useControllableState.useControllableState(checkedProp, defaultChecked);
+    const group = react.useContext(CheckboxGroup.CheckboxGroupContext);
+    const resolvedSize = group ? group.size : size;
+    const resolvedDisabled = isDisabled || (group ? group.isDisabled : false);
+    const resolvedReadonly = isReadOnly || (group ? group.isReadOnly : false);
+    const resolvedLoading = isLoading || (group ? group.isLoading : false);
+    const resolvedName = name ?? (group == null ? void 0 : group.name);
+    react.useEffect(() => {
+      if (!group || value === "on") return;
+      group.registerCheckbox(value, isChecked);
+      return () => {
+        group.unregisterCheckbox(value);
+      };
+    }, [value, group == null ? void 0 : group.registerCheckbox, group == null ? void 0 : group.unregisterCheckbox]);
+    react.useEffect(() => {
+      if (!group || value === "on") return;
+      group.registerCheckbox(value, isChecked);
+    }, [isChecked]);
+    react.useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.indeterminate = isIndeterminate;
+        if (isIndeterminate) {
+          inputRef.current.setAttribute("data-indeterminate", "true");
+        } else {
+          inputRef.current.removeAttribute("data-indeterminate");
+        }
+      }
+    }, [isIndeterminate]);
     const classes = [
-      "arvo-rb-grp",
-      `arvo-rb-grp--${size}`,
-      orientation === "horizontal" && "arvo-rb-grp--horizontal",
-      labelPosition === "start" && "arvo-rb-grp--label-start",
-      isLoading && "loading",
-      isDisabled && "is-disabled",
-      isReadonly && "is-readonly",
+      "arvo-checkbox",
+      `arvo-checkbox--${resolvedSize}`,
+      resolvedLoading && "loading",
+      resolvedDisabled && "is-disabled",
+      resolvedReadonly && "is-readonly",
       isInvalid && "has-error",
       className
     ].filter(Boolean).join(" ");
-    const labelClasses = [
-      "arvo-form-lbl",
-      "arvo-rb-grp__lbl",
-      size === "sm" && "arvo-form-lbl--sm",
-      isRequired && "arvo-form-lbl--required",
-      isDisabled && "is-disabled"
-    ].filter(Boolean).join(" ");
-    return /* @__PURE__ */ jsxRuntime.jsx(RadioGroupContext.Provider, { value: contextValue, children: /* @__PURE__ */ jsxRuntime.jsxs(
+    function handleChange() {
+      if (resolvedDisabled || resolvedLoading || resolvedReadonly) return;
+      const nextChecked = isIndeterminate ? true : !isChecked;
+      setChecked(nextChecked);
+      onChange == null ? void 0 : onChange({ isChecked: nextChecked, value });
+      group == null ? void 0 : group.onChildChange(value, nextChecked);
+    }
+    const showAlert = isInvalid && errorDisplay === "inline";
+    const errorMessage = errorMsg || "Error";
+    return /* @__PURE__ */ jsxRuntime.jsxs(
       "div",
       {
         ref,
         className: classes,
-        role: "radiogroup",
-        "aria-labelledby": label ? labelId : void 0,
-        "aria-required": isRequired || void 0,
-        "aria-invalid": isInvalid || void 0,
-        "aria-describedby": showAlert ? errorId : void 0,
-        "aria-busy": isLoading || void 0,
+        "aria-busy": resolvedLoading || void 0,
+        "data-excluded": isExcluded || void 0,
+        "data-indeterminate": isIndeterminate || void 0,
         ...rest,
         children: [
-          label && /* @__PURE__ */ jsxRuntime.jsxs("span", { id: labelId, className: labelClasses, children: [
-            label,
-            isRequired && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-form-lbl__req", "aria-hidden": "true", children: "*" })
-          ] }),
-          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "arvo-rb-grp__bdy", children: [
-            /* @__PURE__ */ jsxRuntime.jsx("div", { className: "arvo-rb-grp__items", children }),
-            showAlert && /* @__PURE__ */ jsxRuntime.jsxs(
-              "div",
+          /* @__PURE__ */ jsxRuntime.jsxs("label", { className: "arvo-checkbox__field", children: [
+            /* @__PURE__ */ jsxRuntime.jsx(
+              "input",
               {
-                className: "arvo-inline-alert arvo-inline-alert--error",
-                id: errorId,
-                role: "alert",
-                children: [
-                  /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-inline-alert__ico", "aria-hidden": "true" }),
-                  /* @__PURE__ */ jsxRuntime.jsx("span", { className: "arvo-inline-alert__msg", children: errorMsg })
-                ]
+                ref: inputRef,
+                id: inputId,
+                className: "arvo-checkbox__input",
+                type: "checkbox",
+                name: resolvedName,
+                value,
+                checked: isChecked,
+                disabled: resolvedDisabled,
+                required: isRequired,
+                "aria-invalid": isInvalid || void 0,
+                "aria-required": isRequired || void 0,
+                "aria-describedby": showAlert ? errorId : void 0,
+                onChange: handleChange,
+                onFocus,
+                onBlur
+              }
+            ),
+            label && /* @__PURE__ */ jsxRuntime.jsx(
+              FormLabel.ArvoFormLabelText,
+              {
+                className: "arvo-checkbox__lbl",
+                size: resolvedSize,
+                isDisabled: resolvedDisabled,
+                isInvalid,
+                children: label
               }
             )
-          ] })
+          ] }),
+          showAlert && /* @__PURE__ */ jsxRuntime.jsx(MessageAlert.ArvoMessageAlert, { type: "error", id: errorId, message: errorMessage })
         ]
       }
-    ) });
+    );
   }
 );
-exports.RadioGroupContext = RadioGroupContext;
-exports.default = ArvoRadioGroup;
+exports.default = ArvoCheckbox;
 //# sourceMappingURL=index19.cjs.map

@@ -1,21 +1,30 @@
 import { jsxs, jsx } from "react/jsx-runtime";
-import { forwardRef, useId, useContext } from "react";
-import { RadioGroupContext } from "./index19.js";
-import { useControllableState } from "./index41.js";
-const ArvoRadio = forwardRef(
-  function ArvoRadio2({
+import { forwardRef, useId, useRef, useState, useCallback, useEffect } from "react";
+import { formatCharCount } from "@arvo/utils";
+import { useTooltip } from "./index10.js";
+import { FormLabel } from "./index11.js";
+import { ARVO_MSG_ALERT_DEFAULT_ERROR, ArvoMessageAlert } from "./index12.js";
+const ArvoTextarea = forwardRef(
+  function ArvoTextarea2({
     value,
-    name,
-    label = null,
-    isChecked: checkedProp,
-    defaultChecked = false,
+    placeholder,
     isDisabled = false,
-    isRequired = false,
     isReadOnly = false,
+    label,
+    isRequired = false,
     isInvalid = false,
+    size = "sm",
+    icon,
+    rows = 3,
+    maxLength,
+    hasCounter = false,
+    autoResize = false,
+    resizable = "none",
+    errorMsg,
+    errorDisplay = "inline",
     isLoading = false,
-    size = "lg",
-    errorMsg = null,
+    isFullWidth = false,
+    onInput,
     onChange,
     onFocus,
     onBlur,
@@ -23,76 +32,154 @@ const ArvoRadio = forwardRef(
     ...rest
   }, ref) {
     const uid = useId();
-    const inputId = `arvo-radio-${uid}`;
-    const errorId = `arvo-radio-err-${uid}`;
-    const [ownChecked, setOwnChecked] = useControllableState(checkedProp, defaultChecked);
-    const group = useContext(RadioGroupContext);
-    const resolvedName = name ?? (group == null ? void 0 : group.name) ?? "";
-    const resolvedSize = group ? group.size : size;
-    const resolvedDisabled = isDisabled || (group ? group.isDisabled : false);
-    const resolvedReadonly = isReadOnly || (group ? group.isReadOnly : false);
-    const resolvedLoading = isLoading || (group ? group.isLoading : false);
-    const resolvedChecked = group ? group.selectedValue === value : ownChecked;
+    const inputId = `arvo-textarea-${uid}`;
+    const errorId = `arvo-textarea-err-${uid}`;
+    const counterId = `arvo-textarea-counter-${uid}`;
+    const textareaRef = useRef(null);
+    const rootRef = useRef(null);
+    const errIcoRef = useRef(null);
+    const previousValueRef = useRef("");
+    const isControlled = value !== void 0;
+    const [internalValue, setInternalValue] = useState("");
+    const currentValue = isControlled ? value : internalValue;
+    const errorMessage = errorMsg ?? ARVO_MSG_ALERT_DEFAULT_ERROR;
+    const showTooltipIcon = isInvalid && errorDisplay === "tooltip";
+    const showInlineAlert = isInvalid && errorDisplay === "inline";
+    useTooltip({
+      triggerRef: errIcoRef,
+      tooltip: showTooltipIcon ? errorMessage : void 0
+    });
     const classes = [
-      "arvo-radio",
-      `arvo-radio--${resolvedSize}`,
-      resolvedLoading && "loading",
-      resolvedDisabled && "is-disabled",
-      resolvedReadonly && "is-readonly",
+      "arvo-textarea",
+      `arvo-textarea--${size}`,
+      isFullWidth && "arvo-textarea--full-width",
+      autoResize && "arvo-textarea--auto-resize",
+      isLoading && "loading",
+      isDisabled && "is-disabled",
+      isReadOnly && "is-readonly",
       isInvalid && "has-error",
+      showTooltipIcon && "error-tooltip",
       className
     ].filter(Boolean).join(" ");
-    function handleChange() {
-      if (resolvedDisabled || resolvedLoading || resolvedReadonly) return;
-      if (group) {
-        group.onChildChange(value);
-      } else {
-        setOwnChecked(true);
+    const recalcAutoResizeHeight = useCallback(() => {
+      const el = textareaRef.current;
+      if (!el || !autoResize) return;
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+      el.style.overflow = el.scrollHeight > el.clientHeight ? "auto" : "hidden";
+    }, [autoResize]);
+    useEffect(() => {
+      previousValueRef.current = currentValue;
+    }, [currentValue]);
+    useEffect(() => {
+      if (autoResize) {
+        recalcAutoResizeHeight();
       }
-      onChange == null ? void 0 : onChange({ value, name: resolvedName });
+    }, [currentValue, autoResize, recalcAutoResizeHeight]);
+    function handleInput(e) {
+      if (isDisabled || isLoading) {
+        e.preventDefault();
+        return;
+      }
+      if (!isControlled) {
+        setInternalValue(e.currentTarget.value);
+      }
+      onInput == null ? void 0 : onInput(e);
     }
-    return /* @__PURE__ */ jsxs("div", { ref, className: classes, "aria-busy": resolvedLoading || void 0, ...rest, children: [
-      /* @__PURE__ */ jsxs("label", { className: "arvo-radio__field", htmlFor: inputId, children: [
+    function handleChange(e) {
+      var _a;
+      if (isDisabled || isLoading) {
+        e.preventDefault();
+        return;
+      }
+      const newValue = e.target.value;
+      const prev = previousValueRef.current;
+      previousValueRef.current = newValue;
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+      (_a = rootRef.current) == null ? void 0 : _a.dispatchEvent(
+        new CustomEvent("textarea:change", {
+          bubbles: true,
+          cancelable: true,
+          detail: { value: newValue, previousValue: prev }
+        })
+      );
+      onChange == null ? void 0 : onChange(e);
+    }
+    function handleFocus(e) {
+      onFocus == null ? void 0 : onFocus(e);
+    }
+    function handleBlur(e) {
+      onBlur == null ? void 0 : onBlur(e);
+    }
+    const resizeStyle = autoResize ? "none" : resizable;
+    function setRefs(node) {
+      rootRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    }
+    const describedByParts = [];
+    if (showInlineAlert) describedByParts.push(errorId);
+    if (hasCounter && !showInlineAlert) describedByParts.push(counterId);
+    const describedBy = describedByParts.length > 0 ? describedByParts.join(" ") : void 0;
+    return /* @__PURE__ */ jsxs("div", { ref: setRefs, className: classes, role: "group", "aria-busy": isLoading || void 0, children: [
+      label && /* @__PURE__ */ jsx(
+        FormLabel,
+        {
+          htmlFor: inputId,
+          size: "sm",
+          isRequired,
+          isDisabled,
+          isInvalid,
+          className: "arvo-textarea__lbl",
+          children: label
+        }
+      ),
+      /* @__PURE__ */ jsxs("div", { className: "arvo-textarea__field", children: [
+        icon && /* @__PURE__ */ jsx("span", { className: `arvo-textarea__ico o9con o9con-${icon}`, "aria-hidden": "true" }),
         /* @__PURE__ */ jsx(
-          "input",
+          "textarea",
           {
+            ref: textareaRef,
             id: inputId,
-            className: "arvo-radio__input",
-            type: "radio",
-            name: resolvedName,
-            value,
-            checked: resolvedChecked,
-            disabled: resolvedDisabled,
-            readOnly: resolvedReadonly,
+            className: "arvo-textarea__input",
+            value: currentValue,
+            placeholder,
+            disabled: isDisabled,
+            readOnly: isReadOnly,
             required: isRequired,
+            rows,
+            maxLength,
+            style: { resize: resizeStyle },
             "aria-invalid": isInvalid || void 0,
             "aria-required": isRequired || void 0,
-            "aria-describedby": isInvalid && errorMsg ? errorId : void 0,
-            tabIndex: resolvedReadonly ? -1 : 0,
+            "aria-describedby": describedBy,
+            onInput: handleInput,
             onChange: handleChange,
-            onFocus,
-            onBlur
+            onFocus: handleFocus,
+            onBlur: handleBlur,
+            ...rest
           }
         ),
-        /* @__PURE__ */ jsx("span", { className: "arvo-radio__control", "aria-hidden": "true" }),
-        label && /* @__PURE__ */ jsx("span", { className: "arvo-radio__text", children: label })
+        showTooltipIcon && /* @__PURE__ */ jsx(
+          ArvoMessageAlert,
+          {
+            ref: errIcoRef,
+            type: "error",
+            isInline: true,
+            message: errorMessage,
+            className: "arvo-textarea__err-ico"
+          }
+        ),
+        /* @__PURE__ */ jsx("div", { className: "arvo-textarea__border" })
       ] }),
-      isInvalid && errorMsg && /* @__PURE__ */ jsxs(
-        "div",
-        {
-          className: "arvo-inline-alert arvo-inline-alert--error",
-          id: errorId,
-          role: "alert",
-          children: [
-            /* @__PURE__ */ jsx("span", { className: "arvo-inline-alert__ico", "aria-hidden": "true" }),
-            /* @__PURE__ */ jsx("span", { className: "arvo-inline-alert__msg", children: errorMsg })
-          ]
-        }
-      )
+      hasCounter && !showInlineAlert && /* @__PURE__ */ jsx("span", { id: counterId, className: "arvo-textarea__counter", children: formatCharCount(currentValue.length, maxLength ?? null) }),
+      showInlineAlert && /* @__PURE__ */ jsx(ArvoMessageAlert, { type: "error", id: errorId, message: errorMessage })
     ] });
   }
 );
 export {
-  ArvoRadio as default
+  ArvoTextarea as default
 };
 //# sourceMappingURL=index16.js.map

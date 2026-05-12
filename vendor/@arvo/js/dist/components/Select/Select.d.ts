@@ -56,6 +56,8 @@ export declare class ArvoSelect {
     private _hiddenInputEl;
     private _labelEl;
     private _alertEl;
+    private _inlineAlert;
+    private _errMsgAlert;
     private _searchCfg;
     private _isOpen;
     private _isDisabled;

@@ -1,48 +1,32 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const DEFAULT_ERROR_MESSAGE = "Form field value is invalid";
-function createInlineAlert(options = {}) {
-  const { type = "error", message, id } = options;
-  const el = document.createElement("div");
-  el.className = `arvo-inline-alert arvo-inline-alert--${type}`;
-  el.setAttribute("role", "alert");
-  if (id) el.id = id;
-  const ico = document.createElement("span");
-  ico.className = "arvo-inline-alert__ico";
-  ico.setAttribute("aria-hidden", "true");
-  el.appendChild(ico);
-  const msg = document.createElement("span");
-  msg.className = "arvo-inline-alert__msg";
-  msg.textContent = message ?? "";
-  el.appendChild(msg);
+const VALID_VARIANTS = ["unsaved", "new", "unread"];
+const VALID_SIZES = ["sm", "lg"];
+function createIndicator(options) {
+  const variant = VALID_VARIANTS.includes(options.variant) ? options.variant : "unsaved";
+  const size = options.size && VALID_SIZES.includes(options.size) ? options.size : "lg";
+  const el = document.createElement("span");
+  el.className = `arvo-indicator arvo-indicator--${variant} arvo-indicator--${size}`;
+  el.setAttribute("aria-hidden", "true");
   return el;
 }
-function updateInlineAlert(el, options) {
-  if (options.type !== void 0) {
-    el.className = `arvo-inline-alert arvo-inline-alert--${options.type}`;
+function updateIndicator(el, options) {
+  if (options.variant !== void 0) {
+    const variant = VALID_VARIANTS.includes(options.variant) ? options.variant : "unsaved";
+    VALID_VARIANTS.forEach((v) => el.classList.remove(`arvo-indicator--${v}`));
+    el.classList.add(`arvo-indicator--${variant}`);
   }
-  if (options.message !== void 0) {
-    const msg = el.querySelector(".arvo-inline-alert__msg");
-    if (msg) msg.textContent = options.message;
+  if (options.size !== void 0) {
+    const size = VALID_SIZES.includes(options.size) ? options.size : "lg";
+    VALID_SIZES.forEach((s) => el.classList.remove(`arvo-indicator--${s}`));
+    el.classList.add(`arvo-indicator--${size}`);
   }
 }
-function getDefaultErrorMsg() {
-  return DEFAULT_ERROR_MESSAGE;
+function removeIndicator(el) {
+  el == null ? void 0 : el.remove();
+  return null;
 }
-function createErrorTooltipIcon(options = {}) {
-  const ico = document.createElement("span");
-  ico.className = "arvo-err-ico";
-  ico.setAttribute("aria-hidden", "true");
-  const tooltip = options.tooltip ?? DEFAULT_ERROR_MESSAGE;
-  ico.setAttribute("aria-label", tooltip);
-  return ico;
-}
-function updateErrorTooltipIcon(ico, tooltip) {
-  ico.setAttribute("aria-label", tooltip);
-}
-exports.createErrorTooltipIcon = createErrorTooltipIcon;
-exports.createInlineAlert = createInlineAlert;
-exports.getDefaultErrorMsg = getDefaultErrorMsg;
-exports.updateErrorTooltipIcon = updateErrorTooltipIcon;
-exports.updateInlineAlert = updateInlineAlert;
+exports.createIndicator = createIndicator;
+exports.removeIndicator = removeIndicator;
+exports.updateIndicator = updateIndicator;
 //# sourceMappingURL=index4.cjs.map

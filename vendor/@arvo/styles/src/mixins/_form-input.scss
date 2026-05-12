@@ -1,6 +1,7 @@
 @use '../../../tokens/src/scss/all' as *;
+@use 'hover' as *;
 
-// Shared form input mixins — consumed by all form input field elements.
+// Shared form input mixins -- consumed by all form input field elements.
 // Applied to the field/trigger element (e.g. .arvo-txt__field, .arvo-sel__field).
 // Background color belongs on the outer container; the field element stays transparent.
 // Used by: textbox, textarea, number-input, search, select, combobox,
@@ -8,7 +9,7 @@
 //
 // CSS variable strategy: only height, font-size, and padding-inline are exposed
 // as CSS variables because they change per component size modifier. All color
-// tokens are applied statically — they are identical across every consumer and
+// tokens are applied statically -- they are identical across every consumer and
 // never need runtime override.
 
 // form-input-base
@@ -30,20 +31,25 @@
 }
 
 // form-input-hover-bg
-// Applies a subtle background change on hover for non-disabled, non-readonly,
-// non-error inputs. Applied to the __field element (the visible surface).
+// Applies a subtle background change on hover for non-disabled, non-readonly
+// inputs. Applied to the __field element (the visible surface). The hover
+// background is intentionally still applied in error state so the field stays
+// visually interactive; the red `.has-error` border styling continues to come
+// from `form-input-animated-border` and stays visible on top.
 // Used by: textbox, textarea, number-input, search, select, combobox
 @mixin form-input-hover-bg {
   background-color: var(--arvo-form-input-bg-color, var(--arvo-color-s-layer-04));
 
-  .no-touch *:not(.is-disabled):not(.has-error):not(.is-readonly):hover > & {
-    background-color: var(--arvo-color-s-theme-hover-4);
+  @include hover {
+    *:not(.is-disabled):not(.is-readonly):hover > & {
+      background-color: var(--arvo-color-s-theme-hover-4);
+    }
   }
 }
 
 // form-input-text-colors
 // Text, placeholder, and selection colors for the native input/textarea element.
-// All colors are static token references — no CSS variables needed.
+// All colors are static token references -- no CSS variables needed.
 // Used by: textbox, textarea, number-input, search
 @mixin form-input-text-colors {
   color: var(--arvo-color-t-form-value);
@@ -90,7 +96,7 @@
 //          date-picker, time-picker, datetime-picker, daterange-picker
 //
 // All border colors use static token references. No component needs to override
-// these — they are identical across all form inputs.
+// these -- they are identical across all form inputs.
 // ---------------------------------------------------------------------------
 
 // Structural base: absolute 1px border + animated ::after overlay.
@@ -123,14 +129,16 @@
 @mixin form-input-animated-border-complete {
   @include form-input-animated-border-base;
 
-  // Hover — non-touch devices only; parent must not be disabled, error, or readonly
-  .no-touch *:not(.is-disabled):not(.has-error):not(.is-readonly):hover > & {
-    &::after {
-      transform: scaleX(1);
+  // Hover -- hover-capable devices only; parent must not be disabled, error, or readonly
+  @include hover {
+    *:not(.is-disabled):not(.has-error):not(.is-readonly):hover > & {
+      &::after {
+        transform: scaleX(1);
+      }
     }
   }
 
-  // Focus — :focus-within on parent, skip disabled, readonly, and error
+  // Focus -- :focus-within on parent, skip disabled, readonly, and error
   *:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) > & {
     &::after {
       background-color: var(--arvo-color-b-theme-focus);
@@ -139,7 +147,7 @@
     }
   }
 
-  // Error — immediate full-width thick border, no transition
+  // Error -- immediate full-width thick border, no transition
   .has-error > & {
     background: var(--arvo-color-b-negative);
 
@@ -151,7 +159,7 @@
     }
   }
 
-  // Disabled — flat 1px border, no animation
+  // Disabled -- flat 1px border, no animation
   .is-disabled > & {
     background: var(--arvo-color-b-disabled);
 
@@ -163,7 +171,7 @@
     }
   }
 
-  // Readonly — transparent base, dashed border via ::after
+  // Readonly -- transparent base, dashed border via ::after
   .is-readonly > & {
     background: transparent;
 

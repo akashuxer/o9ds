@@ -19,8 +19,6 @@ export interface ArvoDropdownButtonOptions {
     maxHeight?: string;
     hasGroupDividers?: boolean;
     closeOnSelect?: boolean;
-    menuSize?: 'sm' | 'md';
-    tooltip?: string;
     onSelect?: (item: MenuItemData, index: number) => boolean | void;
     onOpen?: () => boolean | void;
     onClose?: () => boolean | void;
@@ -29,10 +27,9 @@ export interface ArvoDropdownButtonOptions {
     onFocus?: (event: FocusEvent) => void;
     onBlur?: (event: FocusEvent) => void;
 }
-type RequiredOptions = Required<Omit<ArvoDropdownButtonOptions, 'onSelect' | 'onOpen' | 'onClose' | 'onOpenChange' | 'onClick' | 'onFocus' | 'onBlur' | 'maxHeight' | 'icon' | 'tooltip' | 'search'>> & {
+type RequiredOptions = Required<Omit<ArvoDropdownButtonOptions, 'onSelect' | 'onOpen' | 'onClose' | 'onOpenChange' | 'onClick' | 'onFocus' | 'onBlur' | 'maxHeight' | 'icon' | 'search'>> & {
     search: MenuSearchProp | undefined;
     icon: string | null;
-    tooltip: string | null;
     maxHeight: string | null;
     onSelect: ((item: MenuItemData, index: number) => boolean | void) | null;
     onOpen: (() => boolean | void) | null;
@@ -50,7 +47,6 @@ export declare class ArvoDropdownButton {
     private _labelEl;
     private _caretEl;
     private _selectedItemId;
-    private _tooltipConnector;
     private _isOpen;
     private _originalLabel;
     private _boundHandleClick;
@@ -62,7 +58,6 @@ export declare class ArvoDropdownButton {
     static readonly DEFAULTS: RequiredOptions;
     static initialize(element: HTMLElement, options?: ArvoDropdownButtonOptions): ArvoDropdownButton;
     constructor(element: HTMLElement, options?: ArvoDropdownButtonOptions);
-    private _connectTooltip;
     private _render;
     private _bindEvents;
     private _handleClick;

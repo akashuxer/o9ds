@@ -5,23 +5,23 @@
 // BEM Block: .arvo-bdg-alert
 // Abbreviation: bdg-alert
 // Category: Feedback
-// Static display-only component — no interactive states, no loading pattern.
+// Static display-only component -- no interactive states, no loading pattern.
 // Three independent modifier axes: variant (primary/outline), type (6 types), size (sm/lg).
 
 .arvo-bdg-alert {
-  // ── Layout / size tokens ────────────────────────────────────────────────
+  // -- Layout / size tokens ------------------------------------------------
   --arvo-bdg-alert-height: $arvo-badge-large;
   --arvo-bdg-alert-font-size: $arvo-font-size-14;
   --arvo-bdg-alert-icon-size: $arvo-icon-16;
 
-  // ── Color tokens (default: primary variant, positive type) ──────────────
+  // -- Color tokens (default: primary variant, positive type) --------------
   --arvo-bdg-alert-text-color: var(--arvo-color-t-positive);
   --arvo-bdg-alert-icon-color: var(--arvo-color-i-positive);
   --arvo-bdg-alert-bg: var(--arvo-color-s-layer-04);
   --arvo-bdg-alert-border-color: transparent;
   --arvo-bdg-alert-border-width: 0px;
 
-  // ── Base layout ─────────────────────────────────────────────────────────
+  // -- Base layout ---------------------------------------------------------
   display: inline-flex;
   align-items: center;
   gap: $arvo-space-4;
@@ -31,16 +31,16 @@
   padding-inline-end: $arvo-space-6;
   box-sizing: border-box;
 
-  // ── Typography ──────────────────────────────────────────────────────────
+  // -- Typography ----------------------------------------------------------
   @include arvo-font-l14-r;
   white-space: nowrap;
   text-align: center;
 
-  // ── Background / border (set by variant modifiers) ──────────────────────
+  // -- Background / border (set by variant modifiers) ----------------------
   background: var(--arvo-bdg-alert-bg);
   border: var(--arvo-bdg-alert-border-width) solid var(--arvo-bdg-alert-border-color);
 
-  // ── Elements ─────────────────────────────────────────────────────────────
+  // -- Elements -------------------------------------------------------------
 
   &__ico {
     flex: 0 0 auto;
@@ -56,7 +56,7 @@
     line-height: normal;
   }
 
-  // ── Variant modifiers ───────────────────────────────────────────────────
+  // -- Variant modifiers ---------------------------------------------------
 
   &--primary {
     --arvo-bdg-alert-bg: var(--arvo-color-s-layer-04);
@@ -70,7 +70,7 @@
     --arvo-bdg-alert-border-color: var(--arvo-color-b-divider);
   }
 
-  // ── Type modifiers ──────────────────────────────────────────────────────
+  // -- Type modifiers ------------------------------------------------------
 
   &--positive {
     --arvo-bdg-alert-text-color: var(--arvo-color-t-positive);
@@ -126,7 +126,7 @@
     }
   }
 
-  // ── Size modifiers ──────────────────────────────────────────────────────
+  // -- Size modifiers ------------------------------------------------------
 
   &--sm {
     --arvo-bdg-alert-height: 20px;

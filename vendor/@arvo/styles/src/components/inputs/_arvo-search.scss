@@ -7,15 +7,15 @@
 
 @use '../../../../tokens/src/scss/all' as *;
 @use '../../mixins/form-input' as *;
-@use '../../mixins/inline-alert' as *;
+@use '../../mixins/hover' as *;
 @use '../../mixins/loading' as *;
 
-// ─── .arvo-search ────────────────────────────────────────────────────────────
+// --- .arvo-search ------------------------------------------------------------
 
 .arvo-search {
   --arvo-form-input-bg-color: var(--arvo-color-s-layer-04);
 
-  // ── Root layout ───────────────────────────────────────────────────────────
+  // -- Root layout -----------------------------------------------------------
   @include form-input-default-width;
   display: inline-flex;
   flex-direction: column;
@@ -26,10 +26,10 @@
     --arvo-form-input-width: 100%;
   }
 
-  // ── __field ───────────────────────────────────────────────────────────────
+  // -- __field ---------------------------------------------------------------
   // Outer container: position: relative for absolutely-positioned children.
   // form-input-base supplies inline-flex, align-items center, height, font.
-  // NOTE A: hover changes bg only — no border appears on hover (unlike textbox).
+  // NOTE A: hover changes bg only -- no border appears on hover (unlike textbox).
   &__field {
     @include form-input-base;
     @include form-input-hover-bg;
@@ -41,7 +41,7 @@
     cursor: text;
   }
 
-  // ── __ico (leading search icon) ───────────────────────────────────────────
+  // -- __ico (leading search icon) -------------------------------------------
   &__ico {
     flex-shrink: 0;
     font-family: $o9con;
@@ -54,7 +54,7 @@
     }
   }
 
-  // ── __input (native <input type="search"> or <textarea>) ─────────────────
+  // -- __input (native <input type="search"> or <textarea>) -----------------
   // NOTE B: padding-right reserves room for the absolutely-positioned __actions.
   // NOTE J: strip webkit search decorations.
   &__input {
@@ -82,7 +82,7 @@
     }
   }
 
-  // ── __actions (right-side absolute container) ─────────────────────────────
+  // -- __actions (right-side absolute container) -----------------------------
   // NOTE B: absolutely positioned so it does not affect flex layout or width.
   &__actions {
     position: absolute;
@@ -96,13 +96,13 @@
     pointer-events: auto;
   }
 
-  // ── __clear (clear icon button, hidden by default) ────────────────────────
+  // -- __clear (clear icon button, hidden by default) ------------------------
   // NOTE C: visibility driven by state selectors below.
   &__clear {
     display: none;
   }
 
-  // ── __sep (vertical separator, 1px × 20px) ────────────────────────────────
+  // -- __sep (vertical separator, 1px x* 20px) --------------------------------
   // NOTE F: JS controls visibility; CSS only provides the base appearance.
   &__sep {
     display: none;
@@ -112,7 +112,7 @@
     flex-shrink: 0;
   }
 
-  // ── __shortcut / __counter (badge elements) ───────────────────────────────
+  // -- __shortcut / __counter (badge elements) -------------------------------
   &__shortcut,
   &__counter {
     display: none;
@@ -129,13 +129,16 @@
     flex-shrink: 0;
   }
 
-  // ── __err-ico (inline error icon inside __actions) ────────────────────────
+  // -- __err-ico (slot for in-field <ArvoMessageAlert isInline /> child) ----
+  // Icon glyph + color come from the child .arvo-msg-alert; this slot only
+  // controls visibility based on the parent's .has-error.error-tooltip state.
   &__err-ico {
-    @include error-tooltip-icon;
+    display: none;
+    flex: 0 0 auto;
   }
 
-  // ── __border (animated bottom border) ────────────────────────────────────
-  // NOTE A: base background is transparent — no border visible by default or on hover.
+  // -- __border (animated bottom border) ------------------------------------
+  // NOTE A: base background is transparent -- no border visible by default or on hover.
   // form-input-animated-border-base is used for structure only.
   &__border {
     @include form-input-animated-border-base;
@@ -149,22 +152,8 @@
     }
   }
 
-  // ── Inline alert (below field) ────────────────────────────────────────────
-  .arvo-inline-alert {
-    @include inline-alert-base;
-    display: none;
-
-    &__ico {
-      @include inline-alert-icon;
-    }
-
-    &__msg {
-      @include inline-alert-msg;
-    }
-  }
-
-  // ── State: focus-within ───────────────────────────────────────────────────
-  // NOTE A: border animates scaleX(0) → scaleX(1) with 3px height on focus.
+  // -- State: focus-within ---------------------------------------------------
+  // NOTE A: border animates scaleX(0) -> scaleX(1) with 3px height on focus.
   &:focus-within:not(.is-disabled):not(.has-error) {
     .arvo-search__border::after {
       background-color: var(--arvo-color-b-theme-focus);
@@ -173,7 +162,7 @@
     }
   }
 
-  // ── State: has-error ──────────────────────────────────────────────────────
+  // -- State: has-error ------------------------------------------------------
   // NOTE A: red border always visible regardless of focus/hover; no transition.
   &.has-error {
     .arvo-search__border {
@@ -188,27 +177,16 @@
     }
   }
 
-  // Standard error variant: inline alert below field
-  &.has-error:not(.error-tooltip) {
-    .arvo-inline-alert {
-      display: inline-flex;
-      @include inline-alert-error;
-    }
-  }
-
-  // ── State: error-tooltip ──────────────────────────────────────────────────
-  // Error icon inside __actions, no inline alert below
+  // -- State: error-tooltip --------------------------------------------------
+  // Inline icon variant: error icon (rendered as <ArvoMessageAlert isInline />)
+  // inside the field, below-field message hidden by consumer.
   &.has-error.error-tooltip {
     .arvo-search__err-ico {
-      display: block;
-    }
-
-    .arvo-inline-alert {
-      display: none;
+      display: inline-flex;
     }
   }
 
-  // ── State: is-disabled ────────────────────────────────────────────────────
+  // -- State: is-disabled ----------------------------------------------------
   // No border line at all when disabled; bg and cursor handled by mixin.
   &.is-disabled {
     cursor: not-allowed;
@@ -234,7 +212,7 @@
     }
   }
 
-  // ── State: has-value ──────────────────────────────────────────────────────
+  // -- State: has-value ------------------------------------------------------
   // NOTE E: counter badge visible when value present (unless disabled)
   &.has-value {
     .arvo-search__counter {
@@ -245,7 +223,7 @@
   // Modifiers --filter and --find require no extra SCSS; base styles apply.
   // Prev/next buttons in --find are always rendered; JS controls disabled state.
 
-  // ── Modifier: --multi-line ────────────────────────────────────────────────
+  // -- Modifier: --multi-line ------------------------------------------------
   // NOTE H: filter variant only. Field becomes auto-height; actions and icon
   // align to the first row via top offset and margin-top respectively.
   &--multi-line {
@@ -278,7 +256,7 @@
     }
   }
 
-  // ── Loading (per-element shimmer on __field) ──────────────────────────────
+  // -- Loading (per-element shimmer on __field) ------------------------------
   &.loading,
   [data-arvo-loading="true"] &:not([data-arvo-loading-ignore="true"]) {
     pointer-events: none;
@@ -296,11 +274,13 @@
   }
 }
 
-// ─── Clear button visibility (NOTE C) ────────────────────────────────────────
-// Show when has-value + hovered (non-touch)
-.no-touch .arvo-search:not(.is-disabled):not(.loading):not(.arvo-search--multi-line):hover.has-value {
-  .arvo-search__clear {
-    display: inline-flex;
+// --- Clear button visibility (NOTE C) ----------------------------------------
+// Show when has-value + hovered (hover-capable devices)
+@include hover {
+  .arvo-search:not(.is-disabled):not(.loading):not(.arvo-search--multi-line):hover.has-value {
+    .arvo-search__clear {
+      display: inline-flex;
+    }
   }
 }
 
@@ -311,14 +291,16 @@
   }
 }
 
-// Always visible on touch devices when has-value (no hover available)
-html:not(.no-touch) .arvo-search:not(.is-disabled):not(.loading):not(.arvo-search--multi-line).has-value {
-  .arvo-search__clear {
-    display: inline-flex;
+// Always visible on touch / non-hover devices when has-value (no hover available)
+@media (hover: none), (pointer: coarse) {
+  .arvo-search:not(.is-disabled):not(.loading):not(.arvo-search--multi-line).has-value {
+    .arvo-search__clear {
+      display: inline-flex;
+    }
   }
 }
 
-// ─── Shortcut badge visibility (NOTE D) ──────────────────────────────────────
+// --- Shortcut badge visibility (NOTE D) --------------------------------------
 // Visible only when empty and not focused
 .arvo-search:not(.has-value):not(:focus-within) {
   .arvo-search__shortcut {

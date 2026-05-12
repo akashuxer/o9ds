@@ -1,44 +1,43 @@
 @use '../../../../tokens/src/scss/all' as *;
 @use '../../mixins/form-label' as *;
-@use '../../mixins/inline-alert' as *;
 
-// ─── .arvo-rb-grp ────────────────────────────────────────────────────────────
+// --- .arvo-rb-grp ------------------------------------------------------------
 
 .arvo-rb-grp {
-  // ── Base layout ──────────────────────────────────────────────────────────
+  // -- Base layout ----------------------------------------------------------
   display: flex;
   flex-direction: column;
   gap: $arvo-space-8;
 
-  // ── __lbl (group label — shared form-label pattern) ──────────────────────
+  // -- __lbl (group label -- shared form-label pattern) ----------------------
   &__lbl {
     @include form-label-base;
     @include form-label-lg;
     color: var(--arvo-lbl-color, var(--arvo-color-t-form-label));
   }
 
-  // ── __bdy (body wrapping __items + inline-alert) ─────────────────────────
+  // -- __bdy (body wrapping __items + below-group error message) -----------
   &__bdy {
     display: flex;
     flex-direction: column;
     gap: $arvo-space-12;
   }
 
-  // ── __items (flex container for ArvoRadio children) ─────────────────────────
+  // -- __items (flex container for ArvoRadio children) -------------------------
   &__items {
     display: flex;
     flex-direction: column;
     gap: $arvo-space-12;
   }
 
-  // ── Size: sm ─────────────────────────────────────────────────────────────
+  // -- Size: sm -------------------------------------------------------------
   &--sm {
     .arvo-rb-grp__lbl {
       @include form-label-sm;
     }
   }
 
-  // ── Layout: horizontal ───────────────────────────────────────────────────
+  // -- Layout: horizontal ---------------------------------------------------
   &--horizontal {
     .arvo-rb-grp__items {
       flex-direction: row;
@@ -46,13 +45,13 @@
     }
   }
 
-  // ── Layout: label-start (only with --horizontal) ─────────────────────────
+  // -- Layout: label-start (only with --horizontal) -------------------------
   &--horizontal#{&}--label-start {
     flex-direction: row;
     gap: $arvo-space-12;
   }
 
-  // ── State: disabled ──────────────────────────────────────────────────────
+  // -- State: disabled ------------------------------------------------------
   &.is-disabled {
     pointer-events: none;
 
@@ -62,31 +61,14 @@
     }
   }
 
-  // ── State: readonly ──────────────────────────────────────────────────────
+  // -- State: readonly ------------------------------------------------------
   &.is-readonly {
     .arvo-rb-grp__items {
       pointer-events: none;
     }
   }
 
-  // ── Inline alert ─────────────────────────────────────────────────────────
-  .arvo-inline-alert {
-    @include inline-alert-base;
-
-    &__ico {
-      @include inline-alert-icon;
-    }
-
-    &__msg {
-      @include inline-alert-msg;
-    }
-
-    &--error {
-      @include inline-alert-error;
-    }
-  }
-
-  // ── Loading state (Pattern C) ────────────────────────────────────────────
+  // -- Loading state (Pattern C) --------------------------------------------
   &.loading,
   &[data-arvo-loading="true"] {
     pointer-events: none;

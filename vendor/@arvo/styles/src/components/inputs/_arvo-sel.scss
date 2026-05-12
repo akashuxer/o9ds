@@ -1,21 +1,21 @@
 @use '../../mixins/form-input' as *;
 @use '../../mixins/form-label' as *;
-@use '../../mixins/inline-alert' as *;
+@use '../../mixins/hover' as *;
 @use '../../mixins/list-item' as *;
 @use '../../mixins/list-group' as *;
 @use '../../mixins/loading' as *;
 @use '../../../../tokens/src/scss/all' as *;
 
-// ─── .arvo-sel ────────────────────────────────────────────────────────────────
+// --- .arvo-sel ----------------------------------------------------------------
 
 .arvo-sel {
-  // ── CSS custom properties (only dynamic values that change per size) ─────
+  // -- CSS custom properties (only dynamic values that change per size) -----
   --arvo-form-input-height: 32px;
   --arvo-form-input-font-size: #{$arvo-font-size-14};
   --arvo-form-input-bg-color: var(--arvo-color-s-layer-04);
   --arvo-form-input-hover-bg-color: var(--arvo-color-s-theme-hover-4);
 
-  // ── Root layout ────────────────────────────────────────────────────────────
+  // -- Root layout ------------------------------------------------------------
   @include form-input-default-width;
   display: inline-flex;
   flex-direction: column;
@@ -24,12 +24,12 @@
   gap: $arvo-space-8;
   font-family: var(--o9-font-family);
 
-  // ── Modifier: --full-width ─────────────────────────────────────────────────
+  // -- Modifier: --full-width -------------------------------------------------
   &--full-width {
     --arvo-form-input-width: 100%;
   }
 
-  // ── Size: --sm ─────────────────────────────────────────────────────────────
+  // -- Size: --sm -------------------------------------------------------------
   &--sm {
     --arvo-form-input-height: 24px;
     --arvo-form-input-font-size: #{$arvo-font-size-12};
@@ -41,7 +41,7 @@
     }
   }
 
-  // ── Size: --lg (default) ───────────────────────────────────────────────────
+  // -- Size: --lg (default) ---------------------------------------------------
   &--lg {
     --arvo-form-input-height: 32px;
     --arvo-form-input-font-size: #{$arvo-font-size-14};
@@ -51,7 +51,7 @@
     }
   }
 
-  // ── __lbl ──────────────────────────────────────────────────────────────────
+  // -- __lbl ------------------------------------------------------------------
   &__lbl {
     @include form-label-base;
     @include form-label-lg;
@@ -65,7 +65,7 @@
     @include form-label-disabled;
   }
 
-  // ── __field ────────────────────────────────────────────────────────────────
+  // -- __field ----------------------------------------------------------------
   &__field {
     @include form-input-base;
     @include form-input-hover-bg;
@@ -104,7 +104,7 @@
     cursor: default;
   }
 
-  // ── __input ────────────────────────────────────────────────────────────────
+  // -- __input ----------------------------------------------------------------
   &__input {
     flex: 1 1 auto;
     min-width: 0;
@@ -124,7 +124,7 @@
     }
   }
 
-  // ── __placeholder ──────────────────────────────────────────────────────────
+  // -- __placeholder ----------------------------------------------------------
   &__placeholder {
     flex: 1 1 auto;
     min-width: 0;
@@ -137,7 +137,7 @@
     user-select: none;
   }
 
-  // ── __ico (chevron) ────────────────────────────────────────────────────────
+  // -- __ico (chevron) --------------------------------------------------------
   &__ico {
     flex: 0 0 auto;
     font-family: $o9con;
@@ -151,12 +151,12 @@
     transform: rotate(180deg);
   }
 
-  // ── __border ───────────────────────────────────────────────────────────────
+  // -- __border ---------------------------------------------------------------
   &__border {
     @include form-input-animated-border-base;
   }
 
-  // ── __panel ────────────────────────────────────────────────────────────────
+  // -- __panel ----------------------------------------------------------------
   &__panel {
     display: none;
     position: absolute;
@@ -197,7 +197,7 @@
       opacity: 0;
     }
 
-    // Panel is open — used by both vanilla JS (parent .open) and React (direct .open on panel)
+    // Panel is open -- used by both vanilla JS (parent .open) and React (direct .open on panel)
     &.open {
       display: flex;
     }
@@ -212,7 +212,7 @@
     pointer-events: none;
   }
 
-  // ── __scroll ───────────────────────────────────────────────────────────────
+  // -- __scroll ---------------------------------------------------------------
   &__scroll {
     flex: 1 1 auto;
     overflow-y: auto;
@@ -223,7 +223,7 @@
     scrollbar-color: var(--arvo-color-s-layer-07) transparent;
   }
 
-  // ── __search ───────────────────────────────────────────────────────────────
+  // -- __search ---------------------------------------------------------------
   &__search {
     padding: $arvo-space-12 $arvo-space-16;
     flex-shrink: 0;
@@ -234,7 +234,7 @@
     flex-grow: 1;
   }
 
-  // ── __opt ──────────────────────────────────────────────────────────────────
+  // -- __opt ------------------------------------------------------------------
   &__opt {
     @include list-item-base;
     @include list-item-single-line;
@@ -248,17 +248,17 @@
     color: var(--arvo-color-t-tertiary);
   }
 
-  // ── __hdr ──────────────────────────────────────────────────────────────────
+  // -- __hdr ------------------------------------------------------------------
   &__hdr {
     @include list-group-header;
   }
 
-  // ── __divider ──────────────────────────────────────────────────────────────
+  // -- __divider --------------------------------------------------------------
   &__divider {
     @include list-group-divider;
   }
 
-  // ── __empty ────────────────────────────────────────────────────────────────
+  // -- __empty ----------------------------------------------------------------
   &__empty {
     display: flex;
     align-items: center;
@@ -269,29 +269,18 @@
     font-family: var(--o9-font-family);
   }
 
-  // ── __err-ico (inline error icon inside field, trailing) ────────────────
+  // -- __err-ico (slot for in-field <ArvoMessageAlert isInline /> child) ----
+  // Icon glyph + color come from the child .arvo-msg-alert; this slot only
+  // controls visibility based on the parent's .has-error.error-tooltip state.
   &__err-ico {
-    @include error-tooltip-icon;
-  }
-
-  // ── Inline alert (below field) ────────────────────────────────────────────
-  .arvo-inline-alert {
-    @include inline-alert-base;
     display: none;
-
-    &__ico {
-      @include inline-alert-icon;
-    }
-
-    &__msg {
-      @include inline-alert-msg;
-    }
+    flex: 0 0 auto;
   }
 
-  // ── Border state: hover ─────────────────────────────────────────────────
+  // -- Border state: hover -------------------------------------------------
   // (handled by outer hover rule below)
 
-  // ── Border state: focus ─────────────────────────────────────────────────
+  // -- Border state: focus -------------------------------------------------
   &:focus-within:not(.is-disabled):not(.is-readonly):not(.has-error) {
     .arvo-sel__border::after {
       background-color: var(--arvo-color-b-theme-focus);
@@ -300,7 +289,7 @@
     }
   }
 
-  // ── State: error ────────────────────────────────────────────────────────
+  // -- State: error --------------------------------------------------------
   &.has-error {
     .arvo-sel__border {
       background: var(--arvo-color-b-negative);
@@ -314,26 +303,15 @@
     }
   }
 
-  // Inline icon variant: error icon inside field, no alert below
+  // Inline icon variant: error icon (rendered as <ArvoMessageAlert isInline />)
+  // inside the field, below-field message hidden by consumer.
   &.has-error.error-tooltip {
     .arvo-sel__err-ico {
-      display: block;
-    }
-
-    .arvo-inline-alert {
-      display: none;
-    }
-  }
-
-  // Standard error variant: inline alert below field
-  &.has-error:not(.error-tooltip) {
-    .arvo-inline-alert {
       display: inline-flex;
-      @include inline-alert-error;
     }
   }
 
-  // ── Loading pattern C: spinner replaces chevron ────────────────────────────
+  // -- Loading pattern C: spinner replaces chevron ----------------------------
   @mixin _sel-loading {
     pointer-events: none;
 
@@ -369,14 +347,16 @@
   }
 }
 
-// ── Hover border animation (no-touch, not disabled/readonly/error) ────────────
-.no-touch .arvo-sel:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
-  .arvo-sel__border::after {
-    transform: scaleX(1);
+// -- Hover border animation (hover-capable devices only, not disabled/readonly/error) --
+@include hover {
+  .arvo-sel:not(.is-disabled):not(.has-error):not(.is-readonly):hover {
+    .arvo-sel__border::after {
+      transform: scaleX(1);
+    }
   }
 }
 
-// ─── Spinner keyframe ─────────────────────────────────────────────────────────
+// --- Spinner keyframe ---------------------------------------------------------
 // Only define once; guard against duplicate if already defined by another component
 @keyframes arvo-spin {
   from { transform: rotate(0deg); }

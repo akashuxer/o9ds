@@ -1,8 +1,8 @@
 /**
- * ArvoAlertDialog — vanilla JS implementation.
+ * ArvoAlertDialog -- vanilla JS implementation.
  *
  * Standalone modal confirmation dialog. Unlike Popover, AlertDialog is NOT
- * anchored to a trigger element — it builds its own DOM, appends to a
+ * anchored to a trigger element -- it builds its own DOM, appends to a
  * container on open(), and removes itself on close(). Composes ArvoButton,
  * ArvoIconButton, ArvoCheckbox, and ArvoTextbox for inner interactive elements.
  *

@@ -5,6 +5,9 @@ import ButtonGroup from './buttons-actions/ButtonGroup'
 import FabButton from './buttons-actions/FabButton'
 import DropdownButton from './buttons-actions/DropdownButton'
 import DropdownIconButton from './buttons-actions/DropdownIconButton'
+import SegmentedControl from './buttons-actions/SegmentedControl'
+import SplitButton from './buttons-actions/SplitButton'
+import SplitIconButton from './buttons-actions/SplitIconButton'
 import Link from './navigation/Link'
 import ButtonLink from './navigation/ButtonLink'
 import IconButtonLink from './navigation/IconButtonLink'
@@ -27,9 +30,14 @@ import HybridPopover from './overlays/HybridPopover'
 import ActionMenu from './overlays/ActionMenu'
 import Tooltip from './overlays/Tooltip'
 import AlertDialog from './overlays/AlertDialog'
+import Drawer from './overlays/Drawer'
+import SidePanel from './overlays/SidePanel'
 import Badge from './feedback/Badge'
+import BannerAlerts from './feedback/BannerAlerts'
+import InlineAlert from './feedback/InlineAlert'
 import Toast from './feedback/Toast'
 import Chip from './inputs/Chip'
+import Label from './utilities/Label'
 import Cards from './data-display/Cards'
 import * as StubPages from './allStubComponents'
 import GenericComponentDoc from './GenericComponentDoc'
@@ -46,6 +54,9 @@ const REAL_PAGES = {
   'fab-button': FabButton,
   'dropdown-button': DropdownButton,
   'dropdown-icon-button': DropdownIconButton,
+  'segmented-control': SegmentedControl,
+  'split-button': SplitButton,
+  'split-icon-button': SplitIconButton,
   link: Link,
   'button-link': ButtonLink,
   'icon-button-link': IconButtonLink,
@@ -68,9 +79,14 @@ const REAL_PAGES = {
   'action-menu': ActionMenu,
   tooltip: Tooltip,
   'alert-dialog': AlertDialog,
+  drawer: Drawer,
+  'side-panel': SidePanel,
   badge: Badge,
+  'banner-alerts': BannerAlerts,
+  'inline-alert': InlineAlert,
   toast: Toast,
   chip: Chip,
+  label: Label,
   cards: Cards,
 }
 

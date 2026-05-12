@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const utils = require("@arvo/utils");
+const MessageAlert = require("../MessageAlert/MessageAlert.cjs");
 let _idCounter = 0;
 const _ArvoRadio = class _ArvoRadio {
   constructor(element, options) {
@@ -7,6 +9,7 @@ const _ArvoRadio = class _ArvoRadio {
     this._fieldEl = null;
     this._controlEl = null;
     this._textEl = null;
+    this._inlineAlert = null;
     this._inlineAlertEl = null;
     this._inputId = "";
     this._errorId = "";
@@ -71,9 +74,13 @@ const _ArvoRadio = class _ArvoRadio {
     this._controlEl.setAttribute("aria-hidden", "true");
     this._fieldEl.appendChild(this._controlEl);
     if (label) {
-      this._textEl = document.createElement("span");
-      this._textEl.className = "arvo-radio__text";
-      this._textEl.textContent = label;
+      this._textEl = utils.createFormLabel({
+        text: label,
+        as: "span",
+        isDisabled,
+        isInvalid
+      });
+      this._textEl.classList.add("arvo-radio__text");
       this._fieldEl.appendChild(this._textEl);
     }
     el.appendChild(this._fieldEl);
@@ -156,29 +163,23 @@ const _ArvoRadio = class _ArvoRadio {
   }
   _renderInlineAlert(errorMsg) {
     if (!this._element) return;
-    if (this._inlineAlertEl) {
-      const msgEl = this._inlineAlertEl.querySelector(".arvo-inline-alert__msg");
-      if (msgEl) msgEl.textContent = errorMsg;
+    if (this._inlineAlert) {
+      this._inlineAlert.message(errorMsg);
       return;
     }
-    const alertEl = document.createElement("div");
-    alertEl.className = "arvo-inline-alert arvo-inline-alert--error";
-    alertEl.id = this._errorId;
-    alertEl.setAttribute("role", "alert");
-    const ico = document.createElement("span");
-    ico.className = "arvo-inline-alert__ico";
-    ico.setAttribute("aria-hidden", "true");
-    alertEl.appendChild(ico);
-    const msg = document.createElement("span");
-    msg.className = "arvo-inline-alert__msg";
-    msg.textContent = errorMsg;
-    alertEl.appendChild(msg);
-    this._inlineAlertEl = alertEl;
-    this._element.appendChild(alertEl);
+    this._inlineAlert = MessageAlert.ArvoMessageAlert.initialize(document.createElement("div"), {
+      type: "error",
+      message: errorMsg,
+      id: this._errorId
+    });
+    this._inlineAlertEl = this._inlineAlert.el;
+    this._element.appendChild(this._inlineAlertEl);
   }
   _removeInlineAlert() {
-    var _a;
-    (_a = this._inlineAlertEl) == null ? void 0 : _a.remove();
+    var _a, _b;
+    (_a = this._inlineAlert) == null ? void 0 : _a.destroy();
+    this._inlineAlert = null;
+    (_b = this._inlineAlertEl) == null ? void 0 : _b.remove();
     this._inlineAlertEl = null;
   }
   value() {
@@ -231,11 +232,15 @@ const _ArvoRadio = class _ArvoRadio {
     this._options.label = label;
     if (label) {
       if (this._textEl) {
-        this._textEl.textContent = label;
+        this._textEl.firstChild.textContent = label;
       } else {
-        this._textEl = document.createElement("span");
-        this._textEl.className = "arvo-radio__text";
-        this._textEl.textContent = label;
+        this._textEl = utils.createFormLabel({
+          text: label,
+          as: "span",
+          isDisabled: this._options.isDisabled,
+          isInvalid: this._options.isInvalid
+        });
+        this._textEl.classList.add("arvo-radio__text");
         (_a = this._fieldEl) == null ? void 0 : _a.appendChild(this._textEl);
       }
     } else {
@@ -280,9 +285,11 @@ const _ArvoRadio = class _ArvoRadio {
     }
   }
   destroy() {
-    var _a, _b;
+    var _a, _b, _c;
     const el = this._element;
     if (!el) return;
+    (_a = this._inlineAlert) == null ? void 0 : _a.destroy();
+    this._inlineAlert = null;
     if (this._inputEl) {
       this._inputEl.removeEventListener("change", this._boundHandleChange);
       this._inputEl.removeEventListener("focus", this._boundHandleFocus);
@@ -299,8 +306,8 @@ const _ArvoRadio = class _ArvoRadio {
       "loading"
     );
     el.removeAttribute("aria-busy");
-    (_a = this._fieldEl) == null ? void 0 : _a.remove();
-    (_b = this._inlineAlertEl) == null ? void 0 : _b.remove();
+    (_b = this._fieldEl) == null ? void 0 : _b.remove();
+    (_c = this._inlineAlertEl) == null ? void 0 : _c.remove();
     this._element = null;
     this._inputEl = null;
     this._fieldEl = null;

@@ -1,7 +1,8 @@
 // Shared form label block
 // BEM Block: .arvo-form-lbl
-// Used by all form controls that render a label via createFormLabel() / <FormLabel>.
-// Component-scoped __lbl classes (e.g. arvo-textbox__lbl) layer on top of this.
+// Public atomic primitive (ArvoFormLabel) and shared internal markup. Renders as
+// either <label> (default) or <span> for inner-caption use inside a wrapping
+// <label> on selection controls (Radio, Switch, Checkbox).
 
 @use '../../mixins/form-label' as *;
 
@@ -19,5 +20,9 @@
 
   &.is-disabled {
     @include form-label-disabled;
+  }
+
+  &.is-invalid {
+    @include form-label-invalid;
   }
 }

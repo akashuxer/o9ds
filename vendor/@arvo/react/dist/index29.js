@@ -1,69 +1,75 @@
-import { jsx, jsxs } from "react/jsx-runtime";
-import { forwardRef } from "react";
-const ArvoBreadcrumb = forwardRef(
-  function ArvoBreadcrumb2({
-    items,
+import { jsxs, jsx } from "react/jsx-runtime";
+import { forwardRef, useRef } from "react";
+const ArvoButtonLink = forwardRef(
+  function ArvoButtonLink2({
+    variant = "primary",
+    size = "md",
+    label,
+    href,
+    icon,
     isDisabled = false,
+    isFullWidth = false,
     isLoading = false,
-    ariaLabel = "Breadcrumb",
-    onNavigate,
-    className
+    target,
+    rel,
+    className,
+    onClick,
+    ...rest
   }, ref) {
+    const internalRef = useRef(null);
+    const needsRel = target === "_blank";
+    const effectiveRel = needsRel ? rel ?? "noopener noreferrer" : rel;
     const classes = [
-      "arvo-bc",
+      "arvo-btn",
+      `arvo-btn--${variant}`,
+      `arvo-btn--${size}`,
+      isFullWidth ? "arvo-btn--full-width" : "",
       isDisabled ? "is-disabled" : "",
       isLoading ? "loading" : "",
       className ?? ""
     ].filter(Boolean).join(" ");
     const blocked = isDisabled || isLoading;
-    const lastIndex = items.length - 1;
-    const handleClick = (e, item, index) => {
+    const handleClick = (e) => {
       if (blocked) {
         e.preventDefault();
         e.stopPropagation();
         return;
       }
-      if (onNavigate && item.href) {
-        onNavigate({ href: item.href, index, label: item.label });
-      }
+      onClick == null ? void 0 : onClick(e);
     };
-    return /* @__PURE__ */ jsx(
-      "nav",
+    const mergeRefs = (node) => {
+      internalRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    };
+    return /* @__PURE__ */ jsxs(
+      "a",
       {
-        ref,
-        "aria-label": ariaLabel,
-        "aria-busy": isLoading ? true : void 0,
+        ref: mergeRefs,
+        href: isDisabled ? void 0 : href,
+        target: isDisabled ? void 0 : target,
+        rel: isDisabled ? void 0 : effectiveRel,
         className: classes,
-        children: /* @__PURE__ */ jsx("ol", { className: "arvo-bc__list", children: items.map((item, index) => {
-          const isLast = index === lastIndex;
-          const isIconOnly = !!item.icon && !item.label;
-          return /* @__PURE__ */ jsx("li", { className: "arvo-bc__item", children: isLast ? /* @__PURE__ */ jsx("span", { className: "arvo-bc__lbl", "aria-current": "page", children: item.label }) : /* @__PURE__ */ jsxs(
-            "a",
+        "aria-disabled": isDisabled ? true : void 0,
+        "aria-busy": isLoading ? true : void 0,
+        tabIndex: isDisabled ? 0 : void 0,
+        onClick: handleClick,
+        ...rest,
+        children: [
+          icon && /* @__PURE__ */ jsx(
+            "span",
             {
-              className: "arvo-bc__lnk",
-              href: isDisabled ? void 0 : item.href,
-              "aria-disabled": isDisabled ? true : void 0,
-              "aria-label": isIconOnly ? item.label || "Home" : void 0,
-              tabIndex: isDisabled ? 0 : void 0,
-              onClick: (e) => handleClick(e, item, index),
-              children: [
-                item.icon && /* @__PURE__ */ jsx(
-                  "span",
-                  {
-                    className: `arvo-bc__ico o9con o9con-${item.icon}`,
-                    "aria-hidden": "true"
-                  }
-                ),
-                item.label && item.label
-              ]
+              className: `arvo-btn__ico o9con o9con-${icon}`,
+              "aria-hidden": "true"
             }
-          ) }, index);
-        }) })
+          ),
+          /* @__PURE__ */ jsx("span", { className: "arvo-btn__lbl", children: label })
+        ]
       }
     );
   }
 );
 export {
-  ArvoBreadcrumb as default
+  ArvoButtonLink as default
 };
 //# sourceMappingURL=index29.js.map

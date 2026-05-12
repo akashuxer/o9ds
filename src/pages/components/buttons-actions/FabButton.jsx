@@ -169,7 +169,7 @@ fab.destroy();`} />
               <DocList items={[
                 'The wrapper <div> is presentational only — no role, not focusable.',
                 'Tab focuses the inner <button>. The focus ring renders on the button, not the wrapper.',
-                'Hover styles inherited from the inner button (.no-touch scope).',
+                'Hover styles inherited from the inner button (gated by @media (hover: hover) and (pointer: fine)).',
               ]} />
             </DocSection>
           </div>

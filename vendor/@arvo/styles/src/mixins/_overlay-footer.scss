@@ -1,0 +1,65 @@
+// Shared overlay-footer mixin -- flex rules for action rows in the footer
+// region of overlay-style components (popover, hybrid popover, side panel,
+// drawer, and future cousins like alert dialog).
+//
+// CONTRACT
+// --------
+// Apply `@include overlay-footer-actions-layout;` inside the selector that
+// directly contains the action buttons. The mixin owns only:
+//
+//   - display + alignment baseline (flex row, center-aligned, end-justified)
+//   - flex sizing rules:
+//       * text/labeled buttons grow to share leftover space (flex: 1 1 0)
+//       * icon-only controls stay at their natural width (flex: 0 0 auto)
+//   - order rule: primary/danger render rightmost regardless of source order
+//
+// Consumers retain ownership of `padding` and `gap` because spacing differs
+// across overlay surfaces (popover vs. panel-shell footer).
+//
+// ICON-ONLY DETECTION
+// -------------------
+// Three signals are honored:
+//   1. Components whose entire purpose is an icon-only control:
+//        .arvo-icon-btn, .arvo-fab-btn, .arvo-dd-icon-btn, .arvo-split-icon-btn
+//   2. ArvoButton rendered in icon-only layout (`.arvo-btn--icon-only`).
+//   3. `[data-icon-only="true"]` attribute, written by PanelShell when an
+//      action declares `isIconOnly: true`.
+//
+// EXAMPLE
+// -------
+//   .arvo-popover__footer {
+//     @include overlay-footer-actions-layout;
+//     padding: $arvo-space-8 $arvo-space-12 $arvo-space-16;
+//     gap: $arvo-space-6;
+//   }
+
+@mixin overlay-footer-actions-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  // All footer children grow to share leftover space.
+  > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  // Icon-only controls keep their natural width and do not grow/shrink.
+  > .arvo-icon-btn,
+  > .arvo-fab-btn,
+  > .arvo-dd-icon-btn,
+  > .arvo-split-icon-btn,
+  > .arvo-btn--icon-only,
+  > [data-icon-only='true'] {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  // Primary and danger render rightmost regardless of source order so the
+  // consumer can author `[Cancel, Apply]` OR `[Apply, Cancel]` and get the
+  // same visual: secondary on the LEFT, primary on the RIGHT.
+  > .arvo-btn { order: 0; }
+  > .arvo-btn--primary,
+  > .arvo-btn--danger { order: 1; }
+}

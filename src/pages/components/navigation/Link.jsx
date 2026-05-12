@@ -152,7 +152,7 @@ lnk.destroy();`} />
               <DocList items={[
                 <span key="1">Focus ring uses <DocCode>outline: 1px solid var(--arvo-color-b-theme-focus)</DocCode> around the full link content area.</span>,
                 <span key="2">Disabled links remain focusable (aria-disabled pattern) so screen reader users can discover them.</span>,
-                <span key="3">Hover styles scoped to <DocCode>.no-touch</DocCode>.</span>,
+                <span key="3">Hover styles wrapped in <DocCode>@media (hover: hover) and (pointer: fine)</DocCode> to prevent sticky hover states on touch devices.</span>,
               ]} />
             </DocSection>
           </div>

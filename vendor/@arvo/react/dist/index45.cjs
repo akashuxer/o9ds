@@ -1,16 +1,33 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const MENU_SEARCH_DEFAULTS = {
-  placeholder: "Search",
-  isClearable: true,
-  searchMode: "input",
-  minChars: 0
-};
-function normalizeSearch(prop, defaults = {}) {
-  if (!prop) return null;
-  const base = { ...MENU_SEARCH_DEFAULTS, ...defaults };
-  if (prop === true) return base;
-  return { ...base, ...prop };
-}
-exports.normalizeSearch = normalizeSearch;
+const react = require("react");
+const useTooltip = require("./index10.cjs");
+const ArvoTooltip = react.forwardRef(
+  function ArvoTooltip2({ content, placement, shortcut, children }, forwardedRef) {
+    const internalRef = react.useRef(null);
+    const config = { content, placement, shortcut };
+    useTooltip.useTooltip({
+      triggerRef: internalRef,
+      tooltip: config
+    });
+    if (!react.isValidElement(children)) return children;
+    return react.cloneElement(children, {
+      ref: (node) => {
+        internalRef.current = node;
+        if (typeof forwardedRef === "function") {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          forwardedRef.current = node;
+        }
+        const originalRef = children.ref;
+        if (typeof originalRef === "function") {
+          originalRef(node);
+        } else if (originalRef && typeof originalRef === "object" && "current" in originalRef) {
+          originalRef.current = node;
+        }
+      }
+    });
+  }
+);
+exports.ArvoTooltip = ArvoTooltip;
 //# sourceMappingURL=index45.cjs.map

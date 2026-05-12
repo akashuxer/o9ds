@@ -2,6 +2,7 @@ import { OverlayHub } from '../overlay';
 import { ResolvedPlacement } from '../position/types';
 export type TooltipPlacement = ResolvedPlacement;
 export interface TooltipManagerConfig {
+    enabled: boolean;
     hoverDelay: number;
     hideDelay: number;
     gap: number;
