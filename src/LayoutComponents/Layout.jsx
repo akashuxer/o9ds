@@ -6,7 +6,7 @@ import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsN
 import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
 
 /** Section hub pages (Foundations / Accessibility / … overview grids) — extra width so 3-column cards match. */
-const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns', '/content', '/usage']
+const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns', '/content']
 
 const PAGE_TITLES = {
   '/': 'Platform UI',
@@ -73,24 +73,6 @@ const PAGE_TITLES = {
   '/contribute': 'How to Contribute',
   '/faqs': 'FAQs',
   '/changelog': 'Changelog',
-  // USAGE section (consumer-facing contract)
-  '/usage': 'Usage Standards',
-  '/usage/public-api': 'Public API',
-  '/usage/components': 'Components Contract',
-  '/usage/styling': 'Styling',
-  '/usage/composition': 'Composition',
-  '/usage/accessibility': 'Accessibility (Consumer)',
-  '/usage/testing': 'Testing',
-  '/usage/versioning': 'Versioning',
-  '/usage/anti-patterns': 'Anti-Patterns',
-  '/usage/checklist': 'PR Checklist',
-  // DEVELOPER REFERENCE section (contributor-facing internals)
-  '/developer-reference/agentic-pipeline': 'Agentic Pipeline',
-  '/developer-reference/component-pipeline': 'Component Pipeline',
-  '/developer-reference/token-pipeline': 'Token Pipeline',
-  '/developer-reference/shared-patterns': 'Shared Patterns',
-  '/developer-reference/testing-and-drift': 'Testing & Drift',
-  '/developer-reference/workflows': 'Contributor Workflows',
 }
 
 const sidebarSections = [
@@ -110,36 +92,6 @@ const sidebarSections = [
       { path: '/figma-make', label: 'For Figma Make Users' },
       { path: '/designers', label: 'For Designers' },
       { path: '/developers', label: 'For Developers' },
-      {
-        path: '_nav-group-usage',
-        label: 'Usage',
-        subsectionGroup: true,
-        children: [
-          { path: '/usage', label: 'Overview' },
-          { path: '/usage/public-api', label: 'Public API' },
-          { path: '/usage/components', label: 'Components Contract' },
-          { path: '/usage/styling', label: 'Styling' },
-          { path: '/usage/composition', label: 'Composition' },
-          { path: '/usage/accessibility', label: 'Accessibility' },
-          { path: '/usage/testing', label: 'Testing' },
-          { path: '/usage/versioning', label: 'Versioning' },
-          { path: '/usage/anti-patterns', label: 'Anti-Patterns' },
-          { path: '/usage/checklist', label: 'PR Checklist' },
-        ],
-      },
-      {
-        path: '_nav-group-developer-reference',
-        label: 'Developer Reference',
-        subsectionGroup: true,
-        children: [
-          { path: '/developer-reference/agentic-pipeline', label: 'Agentic Pipeline' },
-          { path: '/developer-reference/component-pipeline', label: 'Component Pipeline' },
-          { path: '/developer-reference/token-pipeline', label: 'Token Pipeline' },
-          { path: '/developer-reference/shared-patterns', label: 'Shared Patterns' },
-          { path: '/developer-reference/testing-and-drift', label: 'Testing & Drift' },
-          { path: '/developer-reference/workflows', label: 'Contributor Workflows' },
-        ],
-      },
       { path: '/arvo-mcp-other-mcps', label: 'Arvo MCP/Other MCPs' },
       { path: '/contribute', label: 'How to Contribute' },
       { path: '/faqs', label: 'FAQs' },
@@ -254,11 +206,7 @@ export default function Layout({ children }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  /** Accordion: Usage + Developer Reference under GETTING STARTED (default collapsed; expand on toggle or while search has text). */
-  const [subsectionOpen, setSubsectionOpen] = useState({
-    '_nav-group-usage': false,
-    '_nav-group-developer-reference': false,
-  })
+  const [subsectionOpen, setSubsectionOpen] = useState({})
   const searchRef = useRef(null)
   const navRef = useRef(null)
 
@@ -790,8 +738,6 @@ export default function Layout({ children }) {
                       pathname.startsWith('/content') ||
                       pathname.startsWith('/components') ||
                       pathname.startsWith('/developers') ||
-                      pathname.startsWith('/usage') ||
-                      pathname.startsWith('/developer-reference') ||
                       pathname.startsWith('/arvo-mcp') ||
                       pathname.startsWith('/figma-make')
                     ? 'max-w-6xl'

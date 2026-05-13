@@ -29,26 +29,6 @@ export const PATHS_WITH_CONTENT = new Set([
   '/accessibility/testing-and-qa',
   '/content',
 
-  // Usage (consumer contract)
-  '/usage',
-  '/usage/public-api',
-  '/usage/components',
-  '/usage/styling',
-  '/usage/composition',
-  '/usage/accessibility',
-  '/usage/testing',
-  '/usage/versioning',
-  '/usage/anti-patterns',
-  '/usage/checklist',
-
-  // Developer Reference (contributor internals)
-  '/developer-reference/agentic-pipeline',
-  '/developer-reference/component-pipeline',
-  '/developer-reference/token-pipeline',
-  '/developer-reference/shared-patterns',
-  '/developer-reference/testing-and-drift',
-  '/developer-reference/workflows',
-
   // Buttons & Actions
   '/components/button',
   '/components/icon-button',

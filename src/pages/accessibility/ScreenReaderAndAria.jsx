@@ -13,6 +13,7 @@ const tocOverview = [
   { id: 'a11y-aria', label: 'ARIA overview' },
   { id: 'a11y-roles', label: 'Roles, states, properties' },
   { id: 'a11y-sr-modes', label: 'Screen reader modes' },
+  { id: 'a11y-sr-arvo', label: 'Using Arvo components' },
 ]
 
 const rolePurposeColumns = [
@@ -291,6 +292,42 @@ export default function ScreenReaderAndAria() {
                 Use browse mode to read and move through content; use focus mode to type, select options, and activate widgets.
               </figcaption>
             </figure>
+          </section>
+
+          <section id="a11y-sr-arvo" className="space-y-4 scroll-mt-24">
+            <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Using Arvo components</h2>
+            <p className="text-arvo-light-secondary dark:text-neutral-400 leading-relaxed text-sm">
+              Arvo components ship with correct ARIA roles, states, and relationships built in. The following notes describe the ARIA guarantees provided out of the box and what consuming applications must still provide.
+            </p>
+
+            <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">What Arvo components provide</h3>
+            <ul className="list-disc pl-5 space-y-1.5 text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+              <li>Correct semantic role for each widget pattern — <code className="px-1" data-arvo-inline-code>button</code>, <code className="px-1" data-arvo-inline-code>checkbox</code>, <code className="px-1" data-arvo-inline-code>combobox</code>, <code className="px-1" data-arvo-inline-code>dialog</code>, <code className="px-1" data-arvo-inline-code>listbox</code>, <code className="px-1" data-arvo-inline-code>menu</code>, <code className="px-1" data-arvo-inline-code>tab</code>, and others.</li>
+              <li>Required ARIA relationships wired automatically: <code className="px-1" data-arvo-inline-code>aria-haspopup</code>, <code className="px-1" data-arvo-inline-code>aria-expanded</code>, <code className="px-1" data-arvo-inline-code>aria-controls</code>, <code className="px-1" data-arvo-inline-code>aria-activedescendant</code>, <code className="px-1" data-arvo-inline-code>aria-selected</code>, <code className="px-1" data-arvo-inline-code>aria-checked</code>.</li>
+              <li><code className="px-1" data-arvo-inline-code>aria-busy="true"</code> while in a loading state; interaction callbacks are suppressed during load.</li>
+              <li><code className="px-1" data-arvo-inline-code>aria-disabled</code> semantics when the component is disabled.</li>
+              <li>Live region announcements for toasts, inline alerts, and error messages.</li>
+              <li><code className="px-1" data-arvo-inline-code>aria-invalid="true"</code> and <code className="px-1" data-arvo-inline-code>aria-describedby</code> wired to the error message when <code className="px-1" data-arvo-inline-code>hasError</code> / <code className="px-1" data-arvo-inline-code>setError(msg)</code> is used.</li>
+            </ul>
+
+            <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mt-2">What you must provide</h3>
+            <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
+              Components cannot infer an accessible name from their surrounding context. Every form control and icon-only button needs one supplied by the consuming application:
+            </p>
+            <ul className="list-disc pl-5 space-y-1.5 text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+              <li>Form inputs (Textbox, Search, Select, Combobox, etc.) — <code className="px-1" data-arvo-inline-code>label</code> prop, or <code className="px-1" data-arvo-inline-code>aria-label</code> / <code className="px-1" data-arvo-inline-code>aria-labelledby</code>.</li>
+              <li>IconButton, FabButton, IconButtonLink — <code className="px-1" data-arvo-inline-code>label</code> prop is mandatory; it renders as <code className="px-1" data-arvo-inline-code>aria-label</code>.</li>
+              <li>CheckboxGroup, RadioGroup — <code className="px-1" data-arvo-inline-code>label</code> prop for the group legend.</li>
+              <li>Don't use placeholder text as a label substitute — placeholders disappear on input and are not announced as labels.</li>
+              <li>Don't mix multiple labelling sources; pick exactly one of <code className="px-1" data-arvo-inline-code>label</code>, <code className="px-1" data-arvo-inline-code>aria-label</code>, or <code className="px-1" data-arvo-inline-code>aria-labelledby</code>.</li>
+            </ul>
+
+            <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mt-2">What you must not override</h3>
+            <ul className="list-disc pl-5 space-y-1.5 text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+              <li>Never override a component's <code className="px-1" data-arvo-inline-code>role</code> — it is part of the accessibility contract.</li>
+              <li>Never strip or overwrite <code className="px-1" data-arvo-inline-code>aria-*</code> attributes set by the component.</li>
+              <li>Use dedicated composite components (ArvoDropdownButton, ArvoActionMenu, ArvoHybridPopover) rather than wiring a plain button to a popover manually — the dedicated component sets all required ARIA relationships for you.</li>
+            </ul>
           </section>
         </div>
       )}

@@ -24,22 +24,6 @@ const Developers = lazy(() => import('./pages/Developers'))
 const FoundationsOverview = lazy(() => import('./pages/FoundationsOverview'))
 const PatternsOverview = lazy(() => import('./pages/PatternsOverview'))
 const AccessibilityOverview = lazy(() => import('./pages/AccessibilityOverview'))
-const UsageIndex = lazy(() => import('./pages/usage/Index'))
-const UsagePublicApi = lazy(() => import('./pages/usage/PublicApi'))
-const UsageComponents = lazy(() => import('./pages/usage/Components'))
-const UsageStyling = lazy(() => import('./pages/usage/Styling'))
-const UsageComposition = lazy(() => import('./pages/usage/Composition'))
-const UsageAccessibility = lazy(() => import('./pages/usage/Accessibility'))
-const UsageTesting = lazy(() => import('./pages/usage/Testing'))
-const UsageVersioning = lazy(() => import('./pages/usage/Versioning'))
-const UsageAntiPatterns = lazy(() => import('./pages/usage/AntiPatterns'))
-const UsageChecklist = lazy(() => import('./pages/usage/Checklist'))
-const DevRefAgenticPipeline = lazy(() => import('./pages/developer-reference/AgenticPipeline'))
-const DevRefComponentPipeline = lazy(() => import('./pages/developer-reference/ComponentPipeline'))
-const DevRefTokenPipeline = lazy(() => import('./pages/developer-reference/TokenPipeline'))
-const DevRefSharedPatterns = lazy(() => import('./pages/developer-reference/SharedPatterns'))
-const DevRefTestingAndDrift = lazy(() => import('./pages/developer-reference/TestingAndDrift'))
-const DevRefWorkflows = lazy(() => import('./pages/developer-reference/Workflows'))
 const FigmaMake = lazy(() => import('./pages/FigmaMake'))
 const AccessibilityOverviewArticle = lazy(() => import('./pages/accessibility/OverviewArticle'))
 const AccessibilityStandardsAndPrinciples = lazy(() => import('./pages/accessibility/StandardsAndPrinciples'))
@@ -129,25 +113,12 @@ export default function App() {
           <Route path="/contribute" element={<Placeholder title="How to Contribute" />} />
           <Route path="/faqs" element={<Placeholder title="FAQs" />} />
           <Route path="/changelog" element={<Placeholder title="Changelog" />} />
-          {/* Usage — consumer-facing contract */}
-          <Route path="/usage" element={<UsageIndex />} />
-          <Route path="/usage/public-api" element={<UsagePublicApi />} />
-          <Route path="/usage/components" element={<UsageComponents />} />
-          <Route path="/usage/styling" element={<UsageStyling />} />
-          <Route path="/usage/composition" element={<UsageComposition />} />
-          <Route path="/usage/accessibility" element={<UsageAccessibility />} />
-          <Route path="/usage/testing" element={<UsageTesting />} />
-          <Route path="/usage/versioning" element={<UsageVersioning />} />
-          <Route path="/usage/anti-patterns" element={<UsageAntiPatterns />} />
-          <Route path="/usage/checklist" element={<UsageChecklist />} />
-          {/* Developer Reference — contributor internals */}
+          {/* Usage — redirected to consolidated For Developers page */}
+          <Route path="/usage" element={<Navigate to="/developers" replace />} />
+          <Route path="/usage/*" element={<Navigate to="/developers" replace />} />
+          {/* Developer Reference — redirected to consolidated For Developers page */}
           <Route path="/developer-reference" element={<Navigate to="/developers" replace />} />
-          <Route path="/developer-reference/agentic-pipeline" element={<DevRefAgenticPipeline />} />
-          <Route path="/developer-reference/component-pipeline" element={<DevRefComponentPipeline />} />
-          <Route path="/developer-reference/token-pipeline" element={<DevRefTokenPipeline />} />
-          <Route path="/developer-reference/shared-patterns" element={<DevRefSharedPatterns />} />
-          <Route path="/developer-reference/testing-and-drift" element={<DevRefTestingAndDrift />} />
-          <Route path="/developer-reference/workflows" element={<DevRefWorkflows />} />
+          <Route path="/developer-reference/*" element={<Navigate to="/developers" replace />} />
         </Routes>
         </Suspense>
         </Layout>

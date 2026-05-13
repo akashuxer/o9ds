@@ -21,6 +21,7 @@ const toc = [
   { id: 'a11y-kb-roving', label: 'Roving tabindex' },
   { id: 'a11y-kb-active', label: 'aria-activedescendant' },
   { id: 'a11y-kb-delete', label: 'Focus after deletion (lists)' },
+  { id: 'a11y-kb-arvo', label: 'Using Arvo components' },
 ]
 
 const focusCss = `button:focus-visible,
@@ -1613,6 +1614,40 @@ export default function KeyboardAndFocus() {
           </p>
           <FocusAfterDeleteListDemo />
         </div>
+      </section>
+
+      <section id="a11y-kb-arvo" className="space-y-4 scroll-mt-24">
+        <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">Using Arvo components</h2>
+        <p className="text-arvo-light-secondary dark:text-neutral-400 text-sm leading-relaxed">
+          Arvo components implement the keyboard patterns above automatically. The following notes describe what each component guarantees and what consuming applications must preserve.
+        </p>
+
+        <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white">What Arvo components provide</h3>
+        <ul className="list-disc pl-5 space-y-1.5 text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+          <li>Keyboard support per the WAI-ARIA Authoring Practices for each widget pattern (buttons, checkboxes, comboboxes, dialogs, menus, tabs, etc.).</li>
+          <li>Visible focus styles on every interactive element — <code className="px-1" data-arvo-inline-code>:focus-visible</code> ring included.</li>
+          <li>Focus trap inside open modal dialogs, drawers, and side panels; focus returns to the trigger on close.</li>
+          <li>Roving tabindex inside composite widgets (tab strips, toolbars, menus, chip lists).</li>
+          <li>Single Escape closes the topmost overlay; nested overlays close one at a time.</li>
+          <li>Focus moves to the first invalid field after a failed form submission.</li>
+        </ul>
+
+        <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mt-2">What you must not break</h3>
+        <ul className="list-disc pl-5 space-y-1.5 text-sm text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+          <li>Do not remove or suppress focus styles (<code className="px-1" data-arvo-inline-code>outline: none</code> on <code className="px-1" data-arvo-inline-code>.arvo-*</code> is forbidden).</li>
+          <li>Do not add your own <code className="px-1" data-arvo-inline-code>keydown</code> handler on a component that duplicates or conflicts with the built-in pattern. Add custom shortcuts at a higher container scope.</li>
+          <li>Do not close an overlay by removing it from the DOM — always call <code className="px-1" data-arvo-inline-code>close()</code> or <code className="px-1" data-arvo-inline-code>onOpenChange(false)</code> so focus is returned correctly.</li>
+          <li>Do not programmatically <code className="px-1" data-arvo-inline-code>el.focus()</code> something outside a modal overlay while the overlay is open.</li>
+          <li>Do not portal the overlay yourself — use the component so it registers with the overlay hub and inherits correct Escape and focus behavior.</li>
+        </ul>
+
+        <CodeBlock
+          language="scss"
+          label="Forbidden — kills focus ring for keyboard users"
+          code={`/* FORBIDDEN */
+.arvo-btn { outline: none !important; }
+*:focus  { outline: 0; }`}
+        />
       </section>
     </AccessibilityDocPage>
   )
