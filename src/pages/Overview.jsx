@@ -241,6 +241,17 @@ export default function Overview() {
               </span>
               {ARVO_FUN_FACT.closing}
             </p>
+            <p className="mt-6 text-left text-sm leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
+              Dive deeper into the origins, naming rationale, and strategic positioning of the system.{' '}
+              <a
+                href="https://docs.google.com/document/d/10f5ULiuXAm5XneXt3AHSY0ftBGE6F_De/edit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-arvo-light-primary dark:text-white underline decoration-neutral-400 underline-offset-2 transition-colors hover:decoration-arvo-light-primary dark:hover:decoration-white"
+              >
+                Learn more about &ldquo;Arvo — Strategic Analysis &amp; Taxonomic Evaluation&rdquo;
+              </a>
+            </p>
           </div>
         </div>
 

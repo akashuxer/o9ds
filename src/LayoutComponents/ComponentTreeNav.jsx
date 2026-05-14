@@ -128,11 +128,11 @@ export default function ComponentTreeNav({ searchQuery, readyOnly = false, isDar
               type="button"
               onClick={() => toggle(node.id)}
               aria-expanded={open}
-              className="flex w-full items-center gap-1 px-2 py-1.5 text-left text-sm font-medium transition-colors hover:opacity-90"
+              className="flex w-full items-center justify-between gap-1 px-2 py-1.5 text-left text-sm font-medium transition-colors hover:opacity-90"
               style={{ color: isDark ? '#a3a3a3' : '#303030' }}
             >
-              <Chevron open={open} />
               <span className="min-w-0 leading-snug">{node.label}</span>
+              <Chevron open={open} />
             </button>
             {open && node.children && renderNodes(node.children, depth + 1)}
           </li>

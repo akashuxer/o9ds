@@ -5,12 +5,17 @@ import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
 import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
 
+function groupHasContent(item) {
+  if (!item.children) return PATHS_WITH_CONTENT.has(item.path)
+  return item.children.some(groupHasContent)
+}
+
 /** Section hub pages (Foundations / Accessibility / … overview grids) — extra width so 3-column cards match. */
 const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns', '/content']
 
 const PAGE_TITLES = {
   '/': 'Platform UI',
-  '/overview': 'Overview',
+  '/overview': 'About Arvo',
   '/resources': 'Resources / Links',
   '/foundations': 'Foundations',
   '/colors': 'Colors',
@@ -87,11 +92,48 @@ const sidebarSections = [
   {
     title: 'GETTING STARTED',
     items: [
-      { path: '/overview', label: 'Overview' },
+      { path: '/overview', label: 'About Arvo' },
       { path: '/resources', label: 'Resources' },
       { path: '/figma-make', label: 'For Figma Make Users' },
       { path: '/designers', label: 'For Designers' },
-      { path: '/developers', label: 'For Developers' },
+      {
+        path: '_nav-group-for-developers',
+        label: 'For Developers',
+        subsectionGroup: true,
+        children: [
+          { path: '/developers', label: 'Intro Guide' },
+          {
+            path: '_nav-group-usage',
+            label: 'Usage',
+            subsectionGroup: true,
+            children: [
+              { path: '/usage', label: 'Overview' },
+              { path: '/usage/public-api', label: 'Public API' },
+              { path: '/usage/components', label: 'Components Contract' },
+              { path: '/usage/styling', label: 'Styling' },
+              { path: '/usage/composition', label: 'Composition' },
+              { path: '/usage/accessibility', label: 'Accessibility' },
+              { path: '/usage/testing', label: 'Testing' },
+              { path: '/usage/versioning', label: 'Versioning' },
+              { path: '/usage/anti-patterns', label: 'Anti-Patterns' },
+              { path: '/usage/checklist', label: 'PR Checklist' },
+            ],
+          },
+          {
+            path: '_nav-group-developer-reference',
+            label: 'Developer Reference',
+            subsectionGroup: true,
+            children: [
+              { path: '/developer-reference/agentic-pipeline', label: 'Agentic Pipeline' },
+              { path: '/developer-reference/component-pipeline', label: 'Component Pipeline' },
+              { path: '/developer-reference/token-pipeline', label: 'Token Pipeline' },
+              { path: '/developer-reference/shared-patterns', label: 'Shared Patterns' },
+              { path: '/developer-reference/testing-and-drift', label: 'Testing & Drift' },
+              { path: '/developer-reference/workflows', label: 'Contributor Workflows' },
+            ],
+          },
+        ],
+      },
       { path: '/arvo-mcp-other-mcps', label: 'Arvo MCP/Other MCPs' },
       { path: '/contribute', label: 'How to Contribute' },
       { path: '/faqs', label: 'FAQs' },
@@ -107,8 +149,9 @@ const sidebarSections = [
       { path: '/borders', label: 'Borders & Radius' },
       { path: '/effects', label: 'Effects' },
       {
-        path: '/icons',
+        path: '_nav-group-assets',
         label: 'Assets',
+        subsectionGroup: true,
         children: [
           { path: '/icons', label: 'Iconography' },
           { path: '/illustrations', label: 'Illustrations' },
@@ -206,7 +249,13 @@ export default function Layout({ children }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [subsectionOpen, setSubsectionOpen] = useState({})
+  /** Accordion: expandable groups under GETTING STARTED and FOUNDATIONS (default collapsed; expand on toggle or while search has text). */
+  const [subsectionOpen, setSubsectionOpen] = useState({
+    '_nav-group-for-developers': false,
+    '_nav-group-usage': false,
+    '_nav-group-developer-reference': false,
+    '_nav-group-assets': false,
+  })
   const searchRef = useRef(null)
   const navRef = useRef(null)
 
@@ -579,13 +628,19 @@ export default function Layout({ children }) {
                                 })
                               }}
                               aria-expanded={expanded}
-                              className={`mb-1 flex w-full items-center gap-2 py-2 pl-2 pr-2 text-left text-sm font-normal transition-colors hover:bg-black/[0.04] dark:hover:bg-white/[0.06] ${
+                              className={`mb-1 flex w-full items-center justify-between gap-2 py-2 pl-2 pr-2 text-left text-sm font-normal transition-colors hover:bg-black/[0.04] dark:hover:bg-white/[0.06] ${
                                 itemIndex > 0 ? 'mt-2' : 'mt-0.5'
                               }`}
                               style={{
                                 color: isDark ? '#a3a3a3' : '#333333',
                               }}
                             >
+                              <span className="flex items-center gap-2">
+                                {groupHasContent(item) && (
+                                  <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
+                                )}
+                                {item.label}
+                              </span>
                               <svg
                                 className={`h-4 w-4 shrink-0 transition-transform duration-200 ease-out ${
                                   expanded ? 'rotate-90' : ''
@@ -602,33 +657,97 @@ export default function Layout({ children }) {
                                   d="M9 5l7 7-7 7"
                                 />
                               </svg>
-                              <span>{item.label}</span>
                             </button>
                             {expanded && (
                               <ul className="ml-2 space-y-0.5 border-l border-neutral-200 pl-3 dark:border-neutral-700">
-                                {item.children.map((child) => (
-                                  <li key={child.path}>
-                                    <NavLink
-                                      to={child.path}
-                                      end
-                                      onClick={() => setSidebarOpen(false)}
-                                      className={({ isActive }) =>
-                                        `flex items-center justify-between gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
-                                          isActive
-                                            ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
-                                            : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
-                                        }`
-                                      }
-                                    >
-                                      <span className="flex items-center gap-2 min-w-0">
-                                        {PATHS_WITH_CONTENT.has(child.path) && (
-                                          <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
+                                {item.children.map((child) => {
+                                  if (child.subsectionGroup && child.children) {
+                                    const childExpanded =
+                                      Boolean(searchQuery.trim()) || subsectionOpen[child.path] === true
+                                    return (
+                                      <li key={child.path}>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setSubsectionOpen((o) => {
+                                              const isOpen = o[child.path] === true
+                                              return { ...o, [child.path]: !isOpen }
+                                            })
+                                          }}
+                                          aria-expanded={childExpanded}
+                                          className="mt-1 mb-0.5 flex w-full items-center justify-between gap-2 py-1.5 pl-2 pr-2 text-left text-sm font-normal transition-colors hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
+                                          style={{ color: isDark ? '#a3a3a3' : '#333333' }}
+                                        >
+                                          <span className="flex items-center gap-2">
+                                            {groupHasContent(child) && (
+                                              <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
+                                            )}
+                                            {child.label}
+                                          </span>
+                                          <svg
+                                            className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ease-out ${childExpanded ? 'rotate-90' : ''}`}
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            aria-hidden
+                                          >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                          </svg>
+                                        </button>
+                                        {childExpanded && (
+                                          <ul className="ml-2 space-y-0.5 border-l border-neutral-200 pl-3 dark:border-neutral-700">
+                                            {child.children.map((grandchild) => (
+                                              <li key={grandchild.path}>
+                                                <NavLink
+                                                  to={grandchild.path}
+                                                  end
+                                                  onClick={() => setSidebarOpen(false)}
+                                                  className={({ isActive }) =>
+                                                    `flex items-center justify-between gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
+                                                      isActive
+                                                        ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
+                                                        : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
+                                                    }`
+                                                  }
+                                                >
+                                                  <span className="flex items-center gap-2 min-w-0">
+                                                    {PATHS_WITH_CONTENT.has(grandchild.path) && (
+                                                      <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
+                                                    )}
+                                                    {grandchild.label}
+                                                  </span>
+                                                </NavLink>
+                                              </li>
+                                            ))}
+                                          </ul>
                                         )}
-                                        {child.label}
-                                      </span>
-                                    </NavLink>
-                                  </li>
-                                ))}
+                                      </li>
+                                    )
+                                  }
+                                  return (
+                                    <li key={child.path}>
+                                      <NavLink
+                                        to={child.path}
+                                        end
+                                        onClick={() => setSidebarOpen(false)}
+                                        className={({ isActive }) =>
+                                          `flex items-center justify-between gap-2 pl-2 pr-2 py-1.5 text-sm transition-colors border-l-2 ${
+                                            isActive
+                                              ? (isDark ? 'bg-neutral-800 text-white border-white' : 'bg-[#E5E5E5] text-[#010101] border-[#010101]')
+                                              : 'border-transparent hover:opacity-90 ' + (isDark ? 'text-neutral-400 hover:bg-neutral-800/50 hover:text-white' : 'text-[#303030] hover:bg-[#E5E5E5]/80 hover:text-[#010101]')
+                                          }`
+                                        }
+                                      >
+                                        <span className="flex items-center gap-2 min-w-0">
+                                          {PATHS_WITH_CONTENT.has(child.path) && (
+                                            <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
+                                          )}
+                                          {child.label}
+                                        </span>
+                                      </NavLink>
+                                    </li>
+                                  )
+                                })}
                               </ul>
                             )}
                           </li>
