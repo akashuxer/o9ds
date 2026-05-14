@@ -17,6 +17,14 @@ const VARIANTS_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=actions
 const VARIANTS_DARK_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=actions-button-examples--all-variants&viewMode=story&globals=theme%3Ao9dark'
 const SIZES_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=actions-button-examples--all-sizes&viewMode=story&globals=theme%3Ao9theme'
 const SIZES_DARK_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=actions-button-examples--all-sizes&viewMode=story&globals=theme%3Ao9dark'
+const TOAST_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=feedback-toast--default&viewMode=story&globals=theme%3Ao9theme'
+const TOAST_DARK_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=feedback-toast--default&viewMode=story&globals=theme%3Ao9dark'
+const POPOVER_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=overlays-popover--default&viewMode=story&globals=theme%3Ao9theme'
+const POPOVER_DARK_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=overlays-popover--default&viewMode=story&globals=theme%3Ao9dark'
+const DIALOG_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=overlays-alertdialog--default&viewMode=story&globals=theme%3Ao9theme'
+const DIALOG_DARK_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=overlays-alertdialog--default&viewMode=story&globals=theme%3Ao9dark'
+const SIDEPANEL_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=overlays-sidepanel--default&viewMode=story&globals=theme%3Ao9theme'
+const SIDEPANEL_DARK_URL = 'https://o9arvo-storybook.vercel.app/iframe.html?id=overlays-sidepanel--default&viewMode=story&globals=theme%3Ao9dark'
 const COMPONENT_STATUS_DESC = getDocumentationStatusDescription('component')
 
 const docIcon = (
@@ -34,6 +42,10 @@ export default function Toolbar() {
       { id: 'preview', label: 'Preview' },
       { id: 'variants', label: 'Variants' },
       { id: 'sizes', label: 'Sizes' },
+      { id: 'toast', label: 'Toast' },
+      { id: 'popover', label: 'Popover' },
+      { id: 'dialog', label: 'Dialog' },
+      { id: 'sidepanel', label: 'Side Panel' },
       { id: 'status-overview', label: 'Documentation status' },
     ]
     if (tab === 'Usage') return [
@@ -103,6 +115,55 @@ export default function Toolbar() {
                 description="Small, Medium, and Large button sizes."
                 storybookUrl={SIZES_URL}
                 storybookDarkUrl={SIZES_DARK_URL}
+              />
+            </DocSection>
+
+            <DocSection id="toast" title="Toast">
+              <DocParagraph>
+                A brief, non-intrusive notification that appears temporarily to confirm an action or surface a system event.
+              </DocParagraph>
+              <ComponentPreview
+                title="Toast"
+                description="Feedback notification with auto-dismiss."
+                storybookUrl={TOAST_URL}
+                storybookDarkUrl={TOAST_DARK_URL}
+              />
+            </DocSection>
+
+            <DocSection id="popover" title="Popover">
+              <DocParagraph>
+                A floating panel anchored to a trigger element, used for contextual content, menus, or supplementary actions.
+              </DocParagraph>
+              <ComponentPreview
+                title="Popover"
+                description="Contextual floating panel anchored to a trigger."
+                storybookUrl={POPOVER_URL}
+                storybookDarkUrl={POPOVER_DARK_URL}
+              />
+            </DocSection>
+
+            <DocSection id="dialog" title="Dialog">
+              <DocParagraph>
+                A modal overlay that requires user acknowledgment before proceeding. Used for confirmations, warnings, and destructive action gates.
+              </DocParagraph>
+              <ComponentPreview
+                title="Alert Dialog"
+                description="Modal confirmation for critical or destructive actions."
+                storybookUrl={DIALOG_URL}
+                storybookDarkUrl={DIALOG_DARK_URL}
+              />
+            </DocSection>
+
+            <DocSection id="sidepanel" title="Side Panel">
+              <DocParagraph>
+                A sliding panel that opens from the edge of the viewport, used for detail views, forms, and secondary workflows without leaving the current context.
+              </DocParagraph>
+              <ComponentPreview
+                title="Side Panel"
+                description="Sliding panel for detail views and secondary workflows."
+                storybookUrl={SIDEPANEL_URL}
+                storybookDarkUrl={SIDEPANEL_DARK_URL}
+                height={450}
               />
             </DocSection>
 

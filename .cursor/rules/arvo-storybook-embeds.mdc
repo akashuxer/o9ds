@@ -1,0 +1,122 @@
+---
+description: Storybook iframe embedding — performance, security, and architecture
+globs: src/LayoutComponents/ComponentPreview.jsx,src/pages/components/**/*
+alwaysApply: false
+---
+
+# Storybook embeds (iframe architecture)
+
+The site embeds Storybook stories via `ComponentPreview` (`src/LayoutComponents/ComponentPreview.jsx`).
+Current tag: `<object>` — migrating to `<iframe>` in the next update.
+
+## Must follow
+
+### 1. Lazy loading (non-negotiable)
+
+Every embed **must** use `loading="lazy"`:
+
+```html
+<iframe src="..." loading="lazy" />
+```
+
+This is the single biggest performance win — defers network, CPU, and memory until the embed scrolls near the viewport. All modern browsers support it natively.
+
+### 2. Defer rendering — don't mount on page load
+
+Never render an embed eagerly on page load. Mount the `<iframe>` only when the user **needs** it:
+
+- **Tab click** — embed loads when user switches to the tab containing it
+- **Section expand** — embed loads when an accordion/collapsible opens
+- **Scroll into view** — use `IntersectionObserver` as a gate before mounting
+- **Explicit interaction** — "Load preview" button for heavy pages
+
+The `ComponentPreview` should accept a `lazy` prop (default `true`) that wraps the iframe in an `IntersectionObserver` gate. When `lazy` is true, render a lightweight placeholder (title + footer + skeleton) until the card enters the viewport, then mount the iframe.
+
+### 3. Reuse a single iframe when possible (preferred architecture)
+
+On pages with **3+ previews** (e.g. Toolbar with Preview, Variants, Sizes), prefer:
+
+- One visible `<iframe>` that switches `src` based on selection
+- A sidebar list, tab bar, or segmented control to pick the active story
+- Changing `src` on an existing iframe is faster than mounting/unmounting multiple iframes
+
+Use multiple iframes only when previews must be visible simultaneously (e.g. side-by-side comparison). For sequential viewing (tabs, accordions), always reuse one iframe.
+
+### 4. Security — minimal sandbox
+
+Use the **least permissions needed**:
+
+```html
+<iframe
+  src="..."
+  sandbox="allow-scripts"
+  referrerPolicy="strict-origin-when-cross-origin"
+/>
+```
+
+- `allow-scripts` — required for Storybook to render components
+- Do **not** add `allow-same-origin` unless the story specifically needs it (breaks sandbox isolation)
+- Do **not** add `allow-popups`, `allow-forms`, `allow-downloads` unless explicitly required
+- Always set `referrerPolicy="strict-origin-when-cross-origin"`
+
+### 5. Fixed heights — no auto-resize libraries
+
+Do **not** use `iframe-resizer` or similar libraries. They cause layout thrashing and continuous `postMessage` traffic.
+
+Instead:
+- Use a fixed `height` prop (default 300px)
+- Offer a small set of preset heights per story type if needed (compact: 200, default: 300, tall: 450)
+- Resize only on explicit user action (e.g. a drag handle), never automatically
+
+### 6. Virtualize on catalog/list pages
+
+If a page renders **10+ preview cards** (e.g. a components catalog with inline previews):
+- Use `react-window` or TanStack Virtual to only mount visible cards
+- Combine with `loading="lazy"` on each iframe
+- Unmounted cards should not have iframes in the DOM at all
+
+## iframe tag template
+
+When migrating `ComponentPreview` from `<object>` to `<iframe>`:
+
+```jsx
+<iframe
+  src={activeUrl}
+  title={title}
+  width="100%"
+  height={height}
+  loading="lazy"
+  sandbox="allow-scripts"
+  referrerPolicy="strict-origin-when-cross-origin"
+  style={{ display: 'block', border: 'none' }}
+/>
+```
+
+## Storybook URL patterns
+
+| Purpose | URL format |
+|---------|------------|
+| Story canvas only | `https://o9arvo-storybook.vercel.app/iframe.html?id={story-id}&viewMode=story` |
+| Light theme | Append `&globals=theme%3Ao9theme` |
+| Dark theme | Append `&globals=theme%3Ao9dark` |
+| Docs page | Replace `viewMode=story` with `viewMode=docs` and use `--docs` suffix on story id |
+
+The `/iframe.html` path is Storybook's built-in canvas endpoint — it is not an iframe itself; it is a standalone HTML page suitable for embedding.
+
+## ComponentPreview props reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | string | — | Footer title |
+| `description` | string | — | Footer subtitle |
+| `storybookUrl` | string | — | Light-theme story URL |
+| `storybookDarkUrl` | string | — | Dark-theme URL (enables sun/moon toggle) |
+| `height` | number | 300 | Embed height in px |
+| `children` | ReactNode | — | Fallback content when no URL provided |
+
+## When editing ComponentPreview
+
+- Preserve dark-mode styling (uses `useTheme()` like GrayBgCard/WhiteBgCard)
+- Keep the sun/moon theme toggle functional
+- Keep the "Open in new tab" link
+- Update this rule if props or architecture changes
