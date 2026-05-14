@@ -37,10 +37,10 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@arvo/core": "1.0.0-dev.2",
-    "@arvo/tokens": "1.0.0-dev.2",
-    "@arvo/styles": "1.0.0-dev.2",
-    "@arvo/utils": "1.0.0-dev.2"
+    "@arvo/core": "file:../core",
+    "@arvo/tokens": "file:../tokens",
+    "@arvo/styles": "file:../styles",
+    "@arvo/utils": "file:../utils"
   },
   "peerDependencies": {
     "jquery": "^3.7.0"

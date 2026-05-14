@@ -23,6 +23,6 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@arvo/tokens": "1.0.0-dev.2"
+    "@arvo/tokens": "file:../tokens"
   }
 }
