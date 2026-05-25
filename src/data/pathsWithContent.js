@@ -18,6 +18,26 @@ export const PATHS_WITH_CONTENT = new Set([
   '/components',
   '/developers',
   '/figma-make',
+
+  // For Developers → Usage
+  '/usage',
+  '/usage/public-api',
+  '/usage/components',
+  '/usage/styling',
+  '/usage/composition',
+  '/usage/accessibility',
+  '/usage/testing',
+  '/usage/versioning',
+  '/usage/anti-patterns',
+  '/usage/checklist',
+
+  // For Developers → Developer Reference
+  '/developer-reference/agentic-pipeline',
+  '/developer-reference/component-pipeline',
+  '/developer-reference/token-pipeline',
+  '/developer-reference/shared-patterns',
+  '/developer-reference/testing-and-drift',
+  '/developer-reference/workflows',
   '/patterns',
   '/accessibility',
   '/accessibility/overview',
