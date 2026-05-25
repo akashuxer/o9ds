@@ -29,6 +29,7 @@ export default function ActionMenu() {
         <PageHeader
           title="Action Menu"
           description="Overlay menu of actions anchored to a trigger. Drives the menu inside Dropdown Button and Dropdown Icon Button. Supports icons, tone variants, dividers, shortcuts, and inline popover/hybrid-popover sub-flows."
+          componentSlug="action-menu"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

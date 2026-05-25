@@ -84,6 +84,7 @@ export default function BannerAlerts() {
         <PageHeader
           title="Banner Alert"
           description="Full-width banner for persistent contextual feedback. Six semantic types, two layout modes, optional link, and an optional dismiss button."
+          componentSlug="banner-alert"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6h18v4H3V6zm0 8h18v4H3v-4z" /></svg>}
         />
 

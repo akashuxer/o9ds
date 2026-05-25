@@ -23,7 +23,8 @@ Before building a new card, table, or layout element, check and reuse:
 | `OnThisPage` | Right-side section nav |
 | `ColorSwatch` | Color preview tile |
 | `ComponentOverviewCard` | Components catalog — fixed-height white + dot-grid illustration band, theme-aware footer, 2-line description + tooltip when truncated |
-| `ComponentPreview` | Live component preview card with optional Storybook link (no iframe) — renders children natively |
+| `ComponentPreview` | Live component preview card with optional Storybook link (iframe) — renders children natively |
+| `ComponentResourceChips` | Figma / Storybook / Azure Git link chips below component page descriptions — pass `componentSlug` on `PageHeader` |
 | `SectionOverviewPage` | Foundations / Patterns / Accessibility / Content overview grids (search, Ready status, shared cards) |
 
 Import from `../LayoutComponents/ComponentName` (adjust path as needed).

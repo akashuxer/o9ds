@@ -92,6 +92,7 @@ export default function SegmentedControl() {
         <PageHeader
           title="Segmented Control"
           description="Compact single-select control for choosing between peer values that set a setting, view, filter, preference, or boolean / operator. Renders radio-group semantics with arrow-key navigation that moves and selects in one step."
+          componentSlug="segmented-control"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18v6H3V4zm0 10h18v6H3v-6zM9 4v16" /></svg>}
         />
 

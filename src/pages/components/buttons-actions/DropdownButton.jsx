@@ -36,6 +36,7 @@ export default function DropdownButton() {
         <PageHeader
           title="Dropdown Button"
           description="A button that opens an action menu. Composes ArvoButton + ArvoActionMenu — the trigger gets aria-haspopup, aria-expanded, aria-controls, and focus return automatically."
+          componentSlug="dropdown-button"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

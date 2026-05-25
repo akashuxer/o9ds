@@ -30,6 +30,7 @@ export default function Checkbox() {
         <PageHeader
           title="Checkbox"
           description="Single tri-state checkbox (checked, unchecked, indeterminate). For grouped selection, use Checkbox Group."
+          componentSlug="checkbox"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

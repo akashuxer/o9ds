@@ -34,6 +34,7 @@ export default function IconButton() {
         <PageHeader
           title="Icon Button"
           description="Square, icon-only interactive element for compact actions where space is limited or visual simplicity is preferred. Five variants, four sizes (including the IconButton-exclusive xs), toggle/selected state."
+          componentSlug="icon-button"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

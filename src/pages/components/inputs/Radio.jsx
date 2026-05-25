@@ -30,6 +30,7 @@ export default function Radio() {
         <PageHeader
           title="Radio"
           description="A single radio control. Always wrap one or more radios in a RadioGroup so the group provides legend semantics and arrow-key roving focus."
+          componentSlug="radio"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" fill="none" /><circle cx="12" cy="12" r="4" fill="currentColor" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

@@ -528,11 +528,14 @@ export default function Layout({ children }) {
       </header>
       </div>
 
-        {/* Mobile overlay */}
+        {/* Mobile overlay — starts below the sticky header stack so the header stays uncovered */}
         {!isLandingHome && sidebarOpen && (
           <div
-            className="fixed inset-0 z-30 lg:hidden"
-            style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+            className="fixed left-0 right-0 bottom-0 z-30 lg:hidden"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              top: headerStackHeight,
+            }}
             onClick={() => setSidebarOpen(false)}
             aria-hidden
           />

@@ -30,6 +30,7 @@ export default function Switch() {
         <PageHeader
           title="Switch"
           description="On/off toggle for binary settings. Effect should be immediate — switches do not require a separate Save action."
+          componentSlug="switch"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12a7 7 0 0114 0M9 12a3 3 0 116 0 3 3 0 01-6 0z" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

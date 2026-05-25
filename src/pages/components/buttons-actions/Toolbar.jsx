@@ -69,6 +69,7 @@ export default function Toolbar() {
         <PageHeader
           title="Toolbar"
           description="A horizontal container for grouping related actions, filters, and controls. Toolbars provide consistent keyboard navigation across a set of buttons or interactive elements."
+          componentSlug="toolbar"
           icon={docIcon}
         />
 

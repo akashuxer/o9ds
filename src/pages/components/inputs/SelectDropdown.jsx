@@ -36,6 +36,7 @@ export default function SelectDropdown() {
         <PageHeader
           title="Select Dropdown"
           description="Single-select dropdown rendered as a combobox with a listbox popup. Use Combobox when the user should be able to filter the options by typing."
+          componentSlug="select-dropdown"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

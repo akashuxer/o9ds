@@ -37,6 +37,7 @@ export default function Listbox() {
         <PageHeader
           title="Listbox"
           description="Standalone selectable list — single or multi-select. Renders inline (always visible). Use Combobox or Hybrid Popover when the list should appear inside an overlay."
+          componentSlug="listbox"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

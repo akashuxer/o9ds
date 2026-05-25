@@ -1,9 +1,13 @@
+import ComponentResourceChips from './ComponentResourceChips'
+
 /**
  * Consistent page header with avatar icon, title, and optional description.
  * Use across all documentation pages for unified layout.
  * Description uses text-lg (18px); avoid overriding size in descClassName unless intentional.
+ *
+ * @param {string} [componentSlug] — when set, shows Figma / Storybook / Azure Git chips below the description
  */
-export default function PageHeader({ title, description, icon, children, className = '', descClassName = '' }) {
+export default function PageHeader({ title, description, icon, componentSlug, children, className = '', descClassName = '' }) {
   return (
     <section className={className}>
       <h1 className="group flex items-center gap-2 text-[30px] font-bold text-arvo-light-primary dark:text-white mb-4">
@@ -23,6 +27,7 @@ export default function PageHeader({ title, description, icon, children, classNa
           {description}
         </p>
       )}
+      {componentSlug && <ComponentResourceChips slug={componentSlug} />}
       {children}
     </section>
   )

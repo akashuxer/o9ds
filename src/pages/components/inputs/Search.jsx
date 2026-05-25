@@ -30,6 +30,7 @@ export default function Search() {
         <PageHeader
           title="Search"
           description="Single-line search input with a leading magnifier icon, clearable affordance, and optional shortcut hint. Built on the same form-input pattern as Textbox."
+          componentSlug="search"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

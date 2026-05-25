@@ -39,6 +39,7 @@ export default function Breadcrumb() {
         <PageHeader
           title="Breadcrumb"
           description="Horizontal trail of navigational links showing the user's current location within a page hierarchy. The last item is non-navigable, bold text representing the current page."
+          componentSlug="breadcrumb"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

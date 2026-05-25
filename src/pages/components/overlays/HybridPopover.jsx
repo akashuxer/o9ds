@@ -29,6 +29,7 @@ export default function HybridPopover() {
         <PageHeader
           title="Hybrid Popover"
           description="Configurable overlay that composes Popover with structured filter-list content. Multi-select (checkboxes + select-all + indeterminate), single-select (radios), drag-and-drop reordering, grouped items, search, And/Or conditional, corner resize handles, Pattern B loading."
+          componentSlug="hybrid-popover"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 12a1 1 0 011-1h16a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zM3 20a1 1 0 011-1h16a1 1 0 011 1v.01" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

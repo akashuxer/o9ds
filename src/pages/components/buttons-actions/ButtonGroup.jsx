@@ -39,6 +39,7 @@ export default function ButtonGroup() {
         <PageHeader
           title="Button Group"
           description="Horizontal grouping of buttons acting as a unified selection control. Supports single-select (default) and multi-select modes, two visual variants, icon-only display, overflow with action menu, and animated label expansion."
+          componentSlug="button-group"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

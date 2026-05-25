@@ -75,6 +75,7 @@ export default function SidePanel() {
         <PageHeader
           title="Side Panel"
           description="Content-area-scoped pane that docks at the layout level (default) or overlays sibling content. Pin / unpin flips between variants without remounting — preserving state, scroll, and child instances."
+          componentSlug="side-panel"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h12v16H3V4zm14 0h4v16h-4V4z" /></svg>}
         />
 

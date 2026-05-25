@@ -30,6 +30,7 @@ export default function RadioGroup() {
         <PageHeader
           title="Radio Group"
           description="A labeled group of radios that read as a single mutually-exclusive control. Implements arrow-key roving focus per the WAI-ARIA Radio Group pattern."
+          componentSlug="radio-group"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" fill="none" /><circle cx="12" cy="12" r="4" fill="currentColor" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

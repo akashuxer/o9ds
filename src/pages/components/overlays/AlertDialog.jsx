@@ -61,6 +61,7 @@ export default function AlertDialog() {
         <PageHeader
           title="Alert Dialog"
           description="Modal confirmation dialog used to interrupt the flow for a single decision: confirm, cancel, or destructive acknowledge. Built on the overlay hub with a focus trap and a configurable variant set."
+          componentSlug="alert-dialog"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

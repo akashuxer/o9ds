@@ -57,6 +57,7 @@ export default function Chip() {
         <PageHeader
           title="Chip"
           description="Compact interactive label representing an attribute, filter token, or selection. Supports icon, count badge, removability, and selection states. Use ChipList for collections."
+          componentSlug="chip"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h10v10H7z" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

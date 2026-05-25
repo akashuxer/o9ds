@@ -63,6 +63,14 @@ function CheckDoubleIcon({ className }) {
   )
 }
 
+function DownloadIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    </svg>
+  )
+}
+
 function IllustrationCard({ item, size }) {
   const [copied, setCopied] = useState(false)
   const { theme } = useTheme()
@@ -77,6 +85,20 @@ function IllustrationCard({ item, size }) {
       setTimeout(() => setCopied(false), 1500)
     })
   }
+
+  const handleDownload = (e) => {
+    e.stopPropagation()
+    const link = document.createElement('a')
+    link.href = src
+    link.download = src.split('/').pop()
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  const btnStyle = isLight
+    ? { borderColor: '#E5E5E5', color: '#303030' }
+    : { borderColor: '#404040', color: '#a3a3a3' }
 
   return (
     <div
@@ -96,26 +118,37 @@ function IllustrationCard({ item, size }) {
             style={{ width: size, height: size }}
           />
         </div>
-        <div className="mt-4 flex flex-col items-center gap-1 w-full">
+        <div className="mt-4 flex flex-col items-center gap-1.5 w-full">
           <span
             className="text-sm font-medium dark:text-white"
             style={isLight ? { color: '#010101' } : { color: '#fff' }}
           >
             {item.label}
           </span>
-          <button
-            onClick={handleCopy}
-            className="p-1.5 border opacity-0 group-hover:opacity-100 transition-opacity"
-            style={
-              copied
-                ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
-                : isLight ? { borderColor: '#E5E5E5', color: '#303030' } : { borderColor: '#404040', color: '#a3a3a3' }
-            }
-            title="Copy code"
-            aria-label="Copy code"
-          >
-            {copied ? <CheckDoubleIcon className="h-3.5 w-3.5" style={{ color: '#fff' }} /> : <CopyIcon className="h-3.5 w-3.5" />}
-          </button>
+          <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button
+              onClick={handleCopy}
+              className="p-1.5 border transition-colors"
+              style={
+                copied
+                  ? { borderColor: '#00c278', backgroundColor: '#00c278', color: '#fff' }
+                  : btnStyle
+              }
+              title="Copy code"
+              aria-label="Copy code"
+            >
+              {copied ? <CheckDoubleIcon className="h-3.5 w-3.5" style={{ color: '#fff' }} /> : <CopyIcon className="h-3.5 w-3.5" />}
+            </button>
+            <button
+              onClick={handleDownload}
+              className="p-1.5 border transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              style={btnStyle}
+              title="Download SVG"
+              aria-label="Download SVG"
+            >
+              <DownloadIcon className="h-3.5 w-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

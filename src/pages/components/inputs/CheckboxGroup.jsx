@@ -30,6 +30,7 @@ export default function CheckboxGroup() {
         <PageHeader
           title="Checkbox Group"
           description="A labeled group of checkboxes that read as a single multi-select control. Provides the legend-equivalent and ensures the group has a single accessible name."
+          componentSlug="checkbox-group"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M5 13l4 4L19 7" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

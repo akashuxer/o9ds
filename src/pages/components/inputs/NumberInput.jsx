@@ -30,6 +30,7 @@ export default function NumberInput() {
         <PageHeader
           title="Number Input"
           description="Numeric input with optional min/max/step constraints, stepper buttons, and decimal precision. Renders the spinbutton role for assistive tech."
+          componentSlug="number-input"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

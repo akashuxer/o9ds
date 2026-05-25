@@ -30,6 +30,7 @@ export default function ButtonLink() {
         <PageHeader
           title="Button Link"
           description="An anchor element styled identically to Button — visually appears as a button but navigates like a link. Uses the same variants, sizes, and visual states as Button."
+          componentSlug="button-link"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

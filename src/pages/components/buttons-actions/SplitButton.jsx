@@ -83,6 +83,7 @@ export default function SplitButton() {
         <PageHeader
           title="Split Button"
           description="Two-segment action control: an executable action button on the left and a separate dropdown trigger on the right that opens an ActionMenu of alternatives."
+          componentSlug="split-button"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6h12v12H3V6zm15 6l3-3v6l-3-3z" /></svg>}
         />
 

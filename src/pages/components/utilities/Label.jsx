@@ -68,6 +68,7 @@ export default function Label() {
         <PageHeader
           title="Form Label"
           description="Atomic form-label primitive used by every labelled form control. Two variants — ArvoFormLabel (sibling-association) and ArvoFormLabelText (inner caption)."
+          componentSlug="label"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h10M7 12h10M7 17h6" /></svg>}
         />
 

@@ -32,6 +32,7 @@ export default function FabButton() {
         <PageHeader
           title="FAB Button"
           description="Floating Action Button — a persistent, elevated button that floats above page content for a primary or secondary contextual action. Composes ArvoButton (with-label) or ArvoIconButton (icon-only)."
+          componentSlug="fab-button"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

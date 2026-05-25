@@ -85,6 +85,7 @@ export default function Drawer() {
         <PageHeader
           title="Drawer"
           description="Viewport-anchored slide-in overlay panel. Always portaled and always overlay — modal-style temporary surface for forms, filters, settings, and item edits."
+          componentSlug="drawer"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 4h6v16h-6V4zM4 4h6v16H4V4z" /></svg>}
         />
 

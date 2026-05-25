@@ -75,7 +75,7 @@ export default function GenericComponentDoc({ slug, description: descriptionProp
   return (
     <PageWithToc sections={onThisPageSections}>
       <div className="max-w-4xl space-y-8 pb-16">
-        <PageHeader title={title} description={headerDescription} icon={docIcon} />
+        <PageHeader title={title} description={headerDescription} icon={docIcon} componentSlug={slug} />
         <DocTabs tabs={TABS} activeTab={activeTab} onSelect={setActiveTab} />
 
         {activeTab === 'Overview' && (

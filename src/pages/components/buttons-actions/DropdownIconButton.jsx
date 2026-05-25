@@ -36,6 +36,7 @@ export default function DropdownIconButton() {
         <PageHeader
           title="Dropdown Icon Button"
           description="An icon-only trigger that opens an action menu. Composes ArvoIconButton + ArvoActionMenu — ideal for row actions, table cell menus, and dense toolbars."
+          componentSlug="dropdown-icon-button"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

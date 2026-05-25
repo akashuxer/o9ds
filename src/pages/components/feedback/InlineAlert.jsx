@@ -74,6 +74,7 @@ export default function InlineAlert() {
         <PageHeader
           title="Message Alert"
           description="Atomic icon + message status primitive. Renders below form fields, inside panel info slots, and as in-field error icons. Six semantic types and two display modes."
+          componentSlug="inline-alert"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 4h.01M5.07 19h13.86a2 2 0 001.74-3l-6.93-12a2 2 0 00-3.48 0l-6.93 12a2 2 0 001.74 3z" /></svg>}
         />
 

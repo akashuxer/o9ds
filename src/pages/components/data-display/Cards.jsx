@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocTabs from '../../../LayoutComponents/DocTabs'
+import ComponentResourceChips from '../../../LayoutComponents/ComponentResourceChips'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTable from '../../../LayoutComponents/DocTable'
 import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
@@ -218,6 +219,7 @@ export default function Cards() {
           <p className="text-arvo-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed">
             Containers for grouped content and actions. The <strong className="text-arvo-light-primary dark:text-white font-medium">arvo-card</strong> surface is used for tiles, callouts, and structured regions across the platform.
           </p>
+          <ComponentResourceChips slug="cards" />
           <DocTabs tabs={cardTabs} activeTab={activeTab} onSelect={setActiveTab} />
         </section>
 

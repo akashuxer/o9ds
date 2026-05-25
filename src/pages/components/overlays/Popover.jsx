@@ -33,6 +33,7 @@ export default function Popover() {
         <PageHeader
           title="Popover"
           description="Floating panel anchored to a trigger element with structured header, scrollable body, and optional footer. 13 placements, three trigger modes (click/hover/focus), back navigation, controlled/uncontrolled open state."
+          componentSlug="popover"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4v-4H6a2 2 0 01-2-2V6z" /></svg>}
         />
         <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />

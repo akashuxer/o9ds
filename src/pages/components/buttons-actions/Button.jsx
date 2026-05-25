@@ -96,6 +96,7 @@ export default function Button() {
         <PageHeader
           title="Button"
           description="The primary control for triggering actions in the o9 platform. Five variants, three sizes, optional leading icon, and a skeleton shimmer loading state."
+          componentSlug="button"
           icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5" /></svg>}
         />
 
