@@ -207,9 +207,11 @@ export default function Cards() {
               data-arvo-avatar
               data-arvo-avatar-header
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm0 0h16M8 10h8M8 14h4" />
-              </svg>
+              <span
+                className="o9con o9con-cube leading-none text-arvo-light-primary dark:text-white"
+                style={{ fontSize: '18px' }}
+                aria-hidden
+              />
             </span>
             Cards
           </h1>
