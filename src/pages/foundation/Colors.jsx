@@ -865,8 +865,8 @@ export default function Colors() {
           >
             <h2 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">Download for development</h2>
             <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
-              Export all global color tokens as <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>_arvo.colors.scss</code> and replace{' '}
-              <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>tokens/_arvo.colors.scss</code> in the o9 Kibo theme.
+              Export all global color tokens as <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>_colors.scss</code> and replace{' '}
+              <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>packages/tokens/src/scss/_colors.scss</code>.
             </p>
             <GlobalColorsDownloadButton ref={globalDownloadBtnRef} isLight={isLight} />
           </div>

@@ -1,6 +1,6 @@
 import { SHADOW_BOX_TOKEN_ROWS, BLUR_TOKEN_ROWS, OPACITY_TOKEN_ROWS } from '../tokens/effectsTokens'
 
-export const ARVO_EFFECTS_SCSS_FILENAME = '_arvo.effects.scss'
+export const ARVO_EFFECTS_SCSS_FILENAME = '_effects.scss'
 
 function scssLine(name, value) {
   const trimmed = value.trim()
@@ -12,7 +12,7 @@ function linesFromRows(rows) {
   return rows.map((row) => scssLine(row.name, row.value))
 }
 
-/** SCSS source for o9 Kibo `tokens/_arvo.effects.scss` (shadow, blur, opacity). */
+/** SCSS source for `packages/tokens/src/scss/_effects.scss` (shadow, blur, opacity). */
 export function buildArvoEffectsScss() {
   const lines = ['/* All Arvo Effect Tokens */', '']
 

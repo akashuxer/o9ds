@@ -688,21 +688,8 @@ export default function Icons() {
             buttonRef={iconsDownloadBtnRef}
             onDownload={downloadArvoIconsScss}
             buttonLabel="Download Icon Size Tokens"
-            filename="_arvo.icons.scss"
-            replacePath="tokens/_arvo.icons.scss"
-            description={
-              <>
-                Export all icon size tokens as{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  _arvo.icons.scss
-                </code>{' '}
-                and replace{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  tokens/_arvo.icons.scss
-                </code>{' '}
-                in the o9 Kibo theme.
-              </>
-            }
+            filename="_icon-size.scss"
+            replacePath="packages/tokens/src/scss/_icon-size.scss"
           />
         </section>
       )}
@@ -779,21 +766,8 @@ export default function Icons() {
             buttonRef={iconsDownloadBtnRef}
             onDownload={downloadArvoIconsScss}
             buttonLabel="Download Icon Size Tokens"
-            filename="_arvo.icons.scss"
-            replacePath="tokens/_arvo.icons.scss"
-            description={
-              <>
-                Export all icon size tokens as{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  _arvo.icons.scss
-                </code>{' '}
-                and replace{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  tokens/_arvo.icons.scss
-                </code>{' '}
-                in the o9 Kibo theme.
-              </>
-            }
+            filename="_icon-size.scss"
+            replacePath="packages/tokens/src/scss/_icon-size.scss"
           />
         </>
       )}

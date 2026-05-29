@@ -304,13 +304,13 @@ export default function Borders() {
           <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
             Export border radius and width tokens as{' '}
             <code className="font-mono text-xs px-1" style={codeInlineStyle}>
-              _arvo.borders.scss
+              _border.scss
             </code>{' '}
             and replace{' '}
             <code className="font-mono text-xs px-1" style={codeInlineStyle}>
-              tokens/_arvo.borders.scss
-            </code>{' '}
-            in the o9 Kibo theme.
+              packages/tokens/src/scss/_border.scss
+            </code>
+            .
           </p>
           <BordersDownloadButton ref={bordersDownloadBtnRef} isLight={isLight} />
         </section>

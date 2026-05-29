@@ -61,8 +61,6 @@ export default function Spacing() {
     return () => observer.disconnect()
   }, [])
 
-  const codeInlineStyle = isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }
-
   return (
     <PageWithToc sections={SPACING_SECTIONS}>
       <div className="space-y-12">
@@ -133,21 +131,8 @@ export default function Spacing() {
           buttonRef={spacingDownloadBtnRef}
           onDownload={downloadArvoSpacingScss}
           buttonLabel="Download Spacing Tokens"
-          filename="_arvo.spacing.scss"
-          replacePath="tokens/_arvo.spacing.scss"
-          description={
-            <>
-              Export all spacing tokens as{' '}
-              <code className="font-mono text-xs px-1" style={codeInlineStyle}>
-                _arvo.spacing.scss
-              </code>{' '}
-              and replace{' '}
-              <code className="font-mono text-xs px-1" style={codeInlineStyle}>
-                tokens/_arvo.spacing.scss
-              </code>{' '}
-              in the o9 Kibo theme.
-            </>
-          }
+          filename="_spacing.scss"
+          replacePath="packages/tokens/src/scss/_spacing.scss"
         />
       </div>
       <TokenDownloadFab

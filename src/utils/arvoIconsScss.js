@@ -1,7 +1,7 @@
 import { ICON_SIZE_TOKEN_ROWS } from '../tokens/iconTokens'
 import { downloadScssFile } from './downloadScssFile'
 
-export const ARVO_ICONS_SCSS_FILENAME = '_arvo.icons.scss'
+export const ARVO_ICONS_SCSS_FILENAME = '_icon-size.scss'
 
 export function buildArvoIconsScss() {
   const lines = [

@@ -14,7 +14,7 @@ import {
   NOVA_BRAND_TOKENS,
 } from '../tokens/globalColorTokens'
 
-const ARVO_GLOBAL_COLORS_FILENAME = '_arvo.colors.scss'
+const ARVO_GLOBAL_COLORS_FILENAME = '_colors.scss'
 
 /** arvo-global-* → $o9ds-global-* */
 function toScssVariable(token) {
@@ -41,7 +41,7 @@ function appendSubsection(lines, title, tokens) {
   lines.push('')
 }
 
-/** SCSS source for o9 Kibo `tokens/_arvo.colors.scss` (global palette only). */
+/** SCSS source for `packages/tokens/src/scss/_colors.scss` (global palette only). */
 export function buildO9dsGlobalColorsScss() {
   const lines = ['/* All Global Color Tokens */', '']
 

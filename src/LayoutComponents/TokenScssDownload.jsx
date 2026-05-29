@@ -80,8 +80,8 @@ export function TokenDownloadSection({
             and replace{' '}
             <code className="font-mono text-xs px-1" style={codeInlineStyle}>
               {replacePath}
-            </code>{' '}
-            in the o9 Kibo theme.
+            </code>
+            .
           </>
         )}
       </p>

@@ -1,7 +1,7 @@
 import { SPACING_TOKENS } from '../tokens/spacingTokens'
 import { downloadScssFile } from './downloadScssFile'
 
-export const ARVO_SPACING_SCSS_FILENAME = '_arvo.spacing.scss'
+export const ARVO_SPACING_SCSS_FILENAME = '_spacing.scss'
 
 export function buildArvoSpacingScss() {
   const lines = [

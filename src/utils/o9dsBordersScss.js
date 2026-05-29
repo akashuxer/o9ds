@@ -1,11 +1,11 @@
 import { BORDER_RADIUS_TOKEN_ROWS, BORDER_WIDTH_TOKEN_ROWS } from '../tokens/borderTokens'
 
-export const ARVO_BORDERS_SCSS_FILENAME = '_arvo.borders.scss'
+export const ARVO_BORDERS_SCSS_FILENAME = '_border.scss'
 
 const O9DS_IMPORT_COMMENT =
   '// Imported in o9ds.tokens.mapping file due to dependency on token mapping variables'
 
-/** $arvo-* → $o9ds-* for o9 Kibo token files. */
+/** $arvo-* → $o9ds-* for o9 token files. */
 function toO9dsVariable(arvoName) {
   return arvoName.replace(/^\$arvo-/, '$o9ds-')
 }
@@ -20,7 +20,7 @@ function linesFromRows(rows) {
   return rows.map(scssLineWithPxComment)
 }
 
-/** SCSS source for o9 Kibo `tokens/_arvo.borders.scss` (radius + width, o9 comment style). */
+/** SCSS source for `packages/tokens/src/scss/_border.scss` (radius + width). */
 export function buildO9dsBordersScss() {
   const lines = [
     O9DS_IMPORT_COMMENT,

@@ -1,7 +1,7 @@
 import { ILLUSTRATION_SIZE_TOKEN_ROWS } from '../tokens/illustrationTokens'
 import { downloadScssFile } from './downloadScssFile'
 
-export const ARVO_ILLUSTRATIONS_SCSS_FILENAME = '_arvo.illustrations.scss'
+export const ARVO_ILLUSTRATIONS_SCSS_FILENAME = '_illustration-size.scss'
 
 export function buildArvoIllustrationsScss() {
   const lines = [

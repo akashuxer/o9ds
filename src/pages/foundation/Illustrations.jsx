@@ -354,21 +354,8 @@ export default function Illustrations() {
             buttonRef={illusDownloadBtnRef}
             onDownload={downloadArvoIllustrationsScss}
             buttonLabel="Download Illustration Size Tokens"
-            filename="_arvo.illustrations.scss"
-            replacePath="tokens/_arvo.illustrations.scss"
-            description={
-              <>
-                Export all illustration size tokens as{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  _arvo.illustrations.scss
-                </code>{' '}
-                and replace{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  tokens/_arvo.illustrations.scss
-                </code>{' '}
-                in the o9 Kibo theme.
-              </>
-            }
+            filename="_illustration-size.scss"
+            replacePath="packages/tokens/src/scss/_illustration-size.scss"
           />
         </>
       )}
@@ -431,21 +418,8 @@ export default function Illustrations() {
             buttonRef={illusDownloadBtnRef}
             onDownload={downloadArvoIllustrationsScss}
             buttonLabel="Download Illustration Size Tokens"
-            filename="_arvo.illustrations.scss"
-            replacePath="tokens/_arvo.illustrations.scss"
-            description={
-              <>
-                Export all illustration size tokens as{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  _arvo.illustrations.scss
-                </code>{' '}
-                and replace{' '}
-                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
-                  tokens/_arvo.illustrations.scss
-                </code>{' '}
-                in the o9 Kibo theme.
-              </>
-            }
+            filename="_illustration-size.scss"
+            replacePath="packages/tokens/src/scss/_illustration-size.scss"
           />
         </>
       )}
