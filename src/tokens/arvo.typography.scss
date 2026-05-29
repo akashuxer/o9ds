@@ -68,6 +68,11 @@ $o9con-reg-em-1: normal normal normal 1em/1 $o9con;
     font-weight: $arvo-regular;
 }
 
+@mixin arvo-font-h24-m {
+    font-size: $arvo-font-size-24;
+    font-weight: $arvo-medium;
+}
+
 @mixin arvo-font-h20-r {
     font-size: $arvo-font-size-20;
     font-weight: $arvo-regular;
@@ -123,6 +128,16 @@ $o9con-reg-em-1: normal normal normal 1em/1 $o9con;
 
 
 // PARAGRAPH
+
+@mixin arvo-font-p24-r {
+    font-size: $arvo-font-size-24;
+    font-weight: $arvo-regular;
+}
+
+@mixin arvo-font-p20-r {
+    font-size: $arvo-font-size-20;
+    font-weight: $arvo-regular;
+}
 
 @mixin arvo-font-p16-r {
     font-size: $arvo-font-size-16;

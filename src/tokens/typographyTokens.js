@@ -19,6 +19,58 @@ export const FONT_SIZE_TOKENS = [
   { token: '$arvo-font-size-10', value: '0.625rem', px: '10px' },
 ]
 
+/** Overview ✦ Typescale — px parsed from `FONT_SIZE_TOKENS` (largest → smallest). */
+export const TYPSCALE_STEPS = FONT_SIZE_TOKENS.map(({ token, value, px }) => ({
+  token,
+  value,
+  px: Number.parseInt(px, 10),
+}))
+
+export const HEADING_MIXIN_ROWS = [
+  { mixin: '$arvo-font-h64-r', size: '64px (4rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-h40-r', size: '40px (2.5rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-h32-r', size: '32px (2rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-h24-m', size: '24px (1.5rem)', weight: '500', other: '—' },
+  { mixin: '$arvo-font-h20-r', size: '20px (1.25rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-h18-r', size: '18px (1.125rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-h16-m', size: '16px (1rem)', weight: '500', other: '—' },
+  { mixin: '$arvo-font-h14-r', size: '14px (0.875rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-h14-rc', size: '14px', weight: '400', other: 'text-transform: uppercase' },
+  { mixin: '$arvo-font-h14-m', size: '14px', weight: '500', other: '—' },
+  { mixin: '$arvo-font-h12-rc', size: '12px (0.75rem)', weight: '400', other: 'text-transform: uppercase' },
+  { mixin: '$arvo-font-h12-m', size: '12px', weight: '500', other: '—' },
+  { mixin: '$arvo-font-h12-r', size: '12px', weight: '400', other: '—' },
+  { mixin: '$arvo-font-h12-mc', size: '12px', weight: '500', other: 'text-transform: uppercase' },
+]
+
+export const PARAGRAPH_MIXIN_ROWS = [
+  { mixin: '$arvo-font-p24-r', size: '24px (1.5rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-p20-r', size: '20px (1.25rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-p16-r', size: '16px (1rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-p16-m', size: '16px', weight: '500', other: '—' },
+  { mixin: '$arvo-font-p14-r', size: '14px', weight: '400', other: '—' },
+  { mixin: '$arvo-font-p14-m', size: '14px', weight: '500', other: '—' },
+  { mixin: '$arvo-font-p14-b', size: '14px', weight: '700', other: '—' },
+  { mixin: '$arvo-font-p12-r', size: '12px (0.75rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-p12-m', size: '12px', weight: '500', other: '—' },
+  { mixin: '$arvo-font-p12-ru', size: '12px', weight: '500', other: 'text-decoration: underline' },
+  { mixin: '$arvo-font-p10-r', size: '10px (0.625rem)', weight: '400', other: '—' },
+]
+
+export const LABEL_MIXIN_ROWS = [
+  { mixin: '$arvo-font-l40-r', size: '40px (2.5rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-l32-r', size: '32px (2rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-l24-r', size: '24px (1.5rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-l16-r', size: '16px (1rem)', weight: '400', other: '—' },
+  { mixin: '$arvo-font-l14-r', size: '14px', weight: '400', other: '—' },
+  { mixin: '$arvo-font-l14-m', size: '14px', weight: '500', other: '—' },
+  { mixin: '$arvo-font-l14-ru', size: '14px', weight: '400', other: 'text-decoration: underline' },
+  { mixin: '$arvo-font-l12-r', size: '12px', weight: '400', other: '—' },
+  { mixin: '$arvo-font-l12-m', size: '12px', weight: '500', other: '—' },
+  { mixin: '$arvo-font-l12-ru', size: '12px', weight: '400', other: 'text-decoration: underline' },
+  { mixin: '$arvo-font-l10-r', size: '10px (0.625rem)', weight: '400', other: '—' },
+]
+
 export const FONT_WEIGHT_ROWS = [
   { token: '$arvo-regular', value: '400' },
   { token: '$arvo-medium', value: '500' },

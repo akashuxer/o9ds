@@ -1,14 +1,30 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import ComponentOverviewCard from '../../LayoutComponents/ComponentOverviewCard'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
 import DocTabs from '../../LayoutComponents/DocTabs'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
+import { TokenDownloadFab, TokenDownloadSection } from '../../LayoutComponents/TokenScssDownload'
 import { useTheme } from '../../context/ThemeContext'
 import { GLOBAL_TOKEN_HEX } from '../../tokens/globalColorTokens'
 import { resolveSemanticToHex, SEMANTIC_TEXT } from '../../tokens/semanticColorTokens'
-import { FONT_SIZE_TOKENS, FONT_WEIGHT_ROWS, TYPE_STYLE_VARIANT_DOC } from '../../tokens/typographyTokens'
+import {
+  FONT_SIZE_TOKENS,
+  FONT_WEIGHT_ROWS,
+  HEADING_MIXIN_ROWS,
+  LABEL_MIXIN_ROWS,
+  PARAGRAPH_MIXIN_ROWS,
+  TYPE_STYLE_VARIANT_DOC,
+  TYPSCALE_STEPS,
+} from '../../tokens/typographyTokens'
+import {
+  ARVO_SEMANTIC_TYPOGRAPHY_SCSS_FILENAME,
+  ARVO_SEMANTIC_TYPOGRAPHY_SCSS_REPLACE_PATH,
+  ARVO_TYPOGRAPHY_SCSS_FILENAME,
+  ARVO_TYPOGRAPHY_SCSS_REPLACE_PATH,
+  downloadArvoTypographyScss,
+} from '../../utils/arvoTypographyScss'
 
 const TYPEFACE_GRAPHIC_SRC = '/o9DocGraphics/FoundationGraphic/typeface.svg'
 const TYPO1_SRC = '/o9DocGraphics/FoundationGraphic/typo1.svg'
@@ -152,8 +168,6 @@ const VARIANT_CATEGORIZATION_ROWS = [
   },
 ]
 
-const TYPSCALE_SIZES_PX = [64, 40, 32, 24, 20, 18, 16, 14, 12, 10]
-
 const TYPSCALE_SAMPLE = 'Active hierarchy is an ordered collection of levels'
 
 const NAMING_PROPERTY_ROWS = [
@@ -176,49 +190,7 @@ const MIXIN_COLUMNS = [
   { key: 'other', label: 'Other' },
 ]
 
-const MIXIN_ROW_COPY = (row) => `@include ${row.mixin};`
-
-const HEADING_MIXIN_ROWS = [
-  { mixin: 'arvo-font-h64-r', size: '64px (4rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-h40-r', size: '40px (2.5rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-h32-r', size: '32px (2rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-h20-r', size: '20px (1.25rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-h18-r', size: '18px (1.125rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-h16-m', size: '16px (1rem)', weight: '500', other: '—' },
-  { mixin: 'arvo-font-h14-r', size: '14px (0.875rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-h14-rc', size: '14px', weight: '400', other: 'text-transform: uppercase' },
-  { mixin: 'arvo-font-h14-m', size: '14px', weight: '500', other: '—' },
-  { mixin: 'arvo-font-h12-rc', size: '12px (0.75rem)', weight: '400', other: 'text-transform: uppercase' },
-  { mixin: 'arvo-font-h12-m', size: '12px', weight: '500', other: '—' },
-  { mixin: 'arvo-font-h12-r', size: '12px', weight: '400', other: '—' },
-  { mixin: 'arvo-font-h12-mc', size: '12px', weight: '500', other: 'text-transform: uppercase' },
-]
-
-const PARAGRAPH_MIXIN_ROWS = [
-  { mixin: 'arvo-font-p16-r', size: '16px (1rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-p16-m', size: '16px', weight: '500', other: '—' },
-  { mixin: 'arvo-font-p14-r', size: '14px', weight: '400', other: '—' },
-  { mixin: 'arvo-font-p14-m', size: '14px', weight: '500', other: '—' },
-  { mixin: 'arvo-font-p14-b', size: '14px', weight: '700', other: '—' },
-  { mixin: 'arvo-font-p12-r', size: '12px', weight: '400', other: '—' },
-  { mixin: 'arvo-font-p12-m', size: '12px', weight: '500', other: '—' },
-  { mixin: 'arvo-font-p12-ru', size: '12px', weight: '500', other: 'text-decoration: underline' },
-  { mixin: 'arvo-font-p10-r', size: '10px (0.625rem)', weight: '400', other: '—' },
-]
-
-const LABEL_MIXIN_ROWS = [
-  { mixin: 'arvo-font-l40-r', size: '40px (2.5rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-l32-r', size: '32px (2rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-l24-r', size: '24px (1.5rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-l16-r', size: '16px (1rem)', weight: '400', other: '—' },
-  { mixin: 'arvo-font-l14-r', size: '14px', weight: '400', other: '—' },
-  { mixin: 'arvo-font-l14-m', size: '14px', weight: '500', other: '—' },
-  { mixin: 'arvo-font-l14-ru', size: '14px', weight: '400', other: 'text-decoration: underline' },
-  { mixin: 'arvo-font-l12-r', size: '12px', weight: '400', other: '—' },
-  { mixin: 'arvo-font-l12-m', size: '12px', weight: '500', other: '—' },
-  { mixin: 'arvo-font-l12-ru', size: '12px', weight: '400', other: 'text-decoration: underline' },
-  { mixin: 'arvo-font-l10-r', size: '10px (0.625rem)', weight: '400', other: '—' },
-]
+const MIXIN_ROW_COPY = (row) => `@include ${row.mixin.replace(/^\$/, '')};`
 
 const WEIGHT_COLUMNS = [
   { key: 'token', label: 'Variable', mono: true, tone: 'code' },
@@ -254,7 +226,29 @@ const TYPE_STYLE_VARIANT_ROWS = TYPE_STYLE_VARIANT_DOC.map((doc) => ({
 }))
 
 export default function Typography() {
+  const { theme } = useTheme()
+  const isLight = theme === 'light'
   const [activeTab, setActiveTab] = useState('Overview')
+  const typographyDownloadBtnRef = useRef(null)
+  const [showTypographyDownloadFab, setShowTypographyDownloadFab] = useState(true)
+
+  useEffect(() => {
+    if (activeTab !== 'Tokens') {
+      setShowTypographyDownloadFab(false)
+      return undefined
+    }
+
+    const el = typographyDownloadBtnRef.current
+    if (!el) return undefined
+
+    setShowTypographyDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowTypographyDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [activeTab])
 
   const sections = useMemo(() => {
     if (activeTab === 'Overview') {
@@ -277,8 +271,31 @@ export default function Typography() {
       { id: 'heading-mixins', label: 'Heading tokens' },
       { id: 'paragraph-mixins', label: 'Paragraph tokens' },
       { id: 'label-mixins', label: 'Label tokens' },
+      { id: 'typography-download-tokens', label: 'Download tokens' },
     ]
   }, [activeTab])
+
+  const typographyDownloadDescription = (
+    <>
+      Downloads{' '}
+      <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+        {ARVO_TYPOGRAPHY_SCSS_FILENAME}
+      </code>{' '}
+      (font weights, sizes, and family references) and{' '}
+      <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+        {ARVO_SEMANTIC_TYPOGRAPHY_SCSS_FILENAME}
+      </code>{' '}
+      (heading, paragraph, and label mixins). Replace{' '}
+      <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+        {ARVO_TYPOGRAPHY_SCSS_REPLACE_PATH}
+      </code>{' '}
+      and{' '}
+      <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+        {ARVO_SEMANTIC_TYPOGRAPHY_SCSS_REPLACE_PATH}
+      </code>
+      .
+    </>
+  )
 
   return (
     <PageWithToc sections={sections}>
@@ -359,10 +376,13 @@ export default function Typography() {
                 o9Sans sizes in pixels (1rem = 16px). The same sample line appears at each step so you can compare hierarchy at a glance.
               </p>
               <div className="relative max-w-3xl">
-                {TYPSCALE_SIZES_PX.map((px) => (
-                  <div key={px} className="mb-7 last:mb-0">
+                {TYPSCALE_STEPS.map(({ token, value, px }) => (
+                  <div key={token} className="mb-7 last:mb-0">
                     <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-arvo-light-secondary dark:text-neutral-500">
                       Font {px}
+                    </p>
+                    <p className="mb-2 font-mono text-xs text-arvo-light-secondary dark:text-neutral-400">
+                      {token} · {value}
                     </p>
                     <p
                       className="font-sans text-arvo-light-primary dark:text-white leading-[1.15] tracking-[-0.02em]"
@@ -476,29 +496,63 @@ export default function Typography() {
             <section id="tokens-naming" className="space-y-4">
               <h2 className="text-2xl font-bold text-arvo-light-primary dark:text-white">Token naming</h2>
               <p className="text-lg text-arvo-light-secondary dark:text-neutral-400 max-w-3xl">
-                Mixins follow <code className="font-mono text-sm" data-arvo-inline-code>arvo-font-{'{variant}{size}-{property}'}</code>: variant
+                Mixins follow <code className="font-mono text-sm" data-arvo-inline-code>$arvo-font-{'{variant}{size}-{property}'}</code>: variant
                 (h / p / l), optical size in the name (10, 12, 14, …), then the style suffix. See the{' '}
                 <strong className="text-arvo-light-primary dark:text-white font-medium">Overview</strong> tab for variant categorization and property suffixes.
               </p>
             </section>
 
             <section id="heading-mixins" className="space-y-4">
-              <h2 className="text-2xl font-bold text-arvo-light-primary dark:text-white">Heading tokens</h2>
+              <h2 className="text-2xl font-bold text-arvo-light-primary dark:text-white">
+                <span className="text-arvo-light-secondary dark:text-neutral-500 mr-1.5" aria-hidden>
+                  ✦
+                </span>
+                Heading mixins
+              </h2>
               <DocTable columns={MIXIN_COLUMNS} rows={HEADING_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} rowCopyAlwaysVisible />
             </section>
 
             <section id="paragraph-mixins" className="space-y-4">
-              <h2 className="text-2xl font-bold text-arvo-light-primary dark:text-white">Paragraph tokens</h2>
+              <h2 className="text-2xl font-bold text-arvo-light-primary dark:text-white">
+                <span className="text-arvo-light-secondary dark:text-neutral-500 mr-1.5" aria-hidden>
+                  ✦
+                </span>
+                Paragraph mixins
+              </h2>
               <DocTable columns={MIXIN_COLUMNS} rows={PARAGRAPH_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} rowCopyAlwaysVisible />
             </section>
 
             <section id="label-mixins" className="space-y-4">
-              <h2 className="text-2xl font-bold text-arvo-light-primary dark:text-white">Label tokens</h2>
+              <h2 className="text-2xl font-bold text-arvo-light-primary dark:text-white">
+                <span className="text-arvo-light-secondary dark:text-neutral-500 mr-1.5" aria-hidden>
+                  ✦
+                </span>
+                Label mixins
+              </h2>
               <DocTable columns={MIXIN_COLUMNS} rows={LABEL_MIXIN_ROWS} rowCopy={MIXIN_ROW_COPY} rowCopyAlwaysVisible />
             </section>
+
+            <TokenDownloadSection
+              id="typography-download-tokens"
+              isLight={isLight}
+              buttonRef={typographyDownloadBtnRef}
+              onDownload={downloadArvoTypographyScss}
+              buttonLabel="Download Font Variables"
+              filename={ARVO_TYPOGRAPHY_SCSS_FILENAME}
+              replacePath={ARVO_TYPOGRAPHY_SCSS_REPLACE_PATH}
+              description={typographyDownloadDescription}
+            />
           </div>
         )}
       </div>
+      {activeTab === 'Tokens' && (
+        <TokenDownloadFab
+          isLight={isLight}
+          visible={showTypographyDownloadFab}
+          onClick={downloadArvoTypographyScss}
+          ariaLabel="Download Font Variables"
+        />
+      )}
     </PageWithToc>
   )
 }
