@@ -6,6 +6,7 @@ const SLUG_TO_DESCRIPTOR = {
   'select-dropdown': 'select',
   'inline-alert': 'message-alert',
   label: 'form-label',
+  toolbar: 'button-group',
 }
 
 const STORYBOOK_BASE = 'https://o9arvo-storybook.vercel.app'

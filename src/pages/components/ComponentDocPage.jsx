@@ -10,6 +10,7 @@ import DropdownIconButton from './buttons-actions/DropdownIconButton'
 import SegmentedControl from './buttons-actions/SegmentedControl'
 import SplitButton from './buttons-actions/SplitButton'
 import SplitIconButton from './buttons-actions/SplitIconButton'
+import Toolbar from './buttons-actions/Toolbar'
 import Link from './navigation/Link'
 import ButtonLink from './navigation/ButtonLink'
 import IconButtonLink from './navigation/IconButtonLink'
@@ -59,6 +60,7 @@ const REAL_PAGES = {
   'segmented-control': SegmentedControl,
   'split-button': SplitButton,
   'split-icon-button': SplitIconButton,
+  toolbar: Toolbar,
   link: Link,
   'button-link': ButtonLink,
   'icon-button-link': IconButtonLink,
