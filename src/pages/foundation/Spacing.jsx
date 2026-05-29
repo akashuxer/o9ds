@@ -1,14 +1,19 @@
+import { useRef, useEffect, useState } from 'react'
+import { useTheme } from '../../context/ThemeContext'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
+import { TokenDownloadFab, TokenDownloadSection } from '../../LayoutComponents/TokenScssDownload'
 import { SPACING_TOKENS } from '../../tokens/spacingTokens'
+import { downloadArvoSpacingScss } from '../../utils/arvoSpacingScss'
 
 const SPACING_SECTIONS = [
   { id: 'spacing-scale-tokens', label: 'Spacing Scale / Tokens' },
   { id: 'applying-padding', label: 'Applying padding' },
   { id: 'applying-margin', label: 'Applying margin' },
   { id: 'applying-gap', label: 'Applying gap' },
+  { id: 'spacing-download-tokens', label: 'Download tokens' },
 ]
 
 const spacingIcon = (
@@ -38,6 +43,26 @@ const SPACING_TABLE_ROWS = SPACING_TOKENS.map((t) => ({
 const copySpacingRowName = (row) => row.name
 
 export default function Spacing() {
+  const { theme } = useTheme()
+  const isLight = theme === 'light'
+  const spacingDownloadBtnRef = useRef(null)
+  const [showSpacingDownloadFab, setShowSpacingDownloadFab] = useState(true)
+
+  useEffect(() => {
+    const el = spacingDownloadBtnRef.current
+    if (!el) return
+
+    setShowSpacingDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowSpacingDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const codeInlineStyle = isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }
+
   return (
     <PageWithToc sections={SPACING_SECTIONS}>
       <div className="space-y-12">
@@ -101,7 +126,36 @@ export default function Spacing() {
 }`}
           />
         </section>
+
+        <TokenDownloadSection
+          id="spacing-download-tokens"
+          isLight={isLight}
+          buttonRef={spacingDownloadBtnRef}
+          onDownload={downloadArvoSpacingScss}
+          buttonLabel="Download Spacing Tokens"
+          filename="_arvo.spacing.scss"
+          replacePath="tokens/_arvo.spacing.scss"
+          description={
+            <>
+              Export all spacing tokens as{' '}
+              <code className="font-mono text-xs px-1" style={codeInlineStyle}>
+                _arvo.spacing.scss
+              </code>{' '}
+              and replace{' '}
+              <code className="font-mono text-xs px-1" style={codeInlineStyle}>
+                tokens/_arvo.spacing.scss
+              </code>{' '}
+              in the o9 Kibo theme.
+            </>
+          }
+        />
       </div>
+      <TokenDownloadFab
+        isLight={isLight}
+        visible={showSpacingDownloadFab}
+        onClick={downloadArvoSpacingScss}
+        ariaLabel="Download Spacing Tokens"
+      />
     </PageWithToc>
   )
 }

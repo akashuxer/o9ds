@@ -129,7 +129,7 @@ export const SEMANTIC_BORDER = [
   { token: 'arvo-color-b-form', lightGlobal: 'arvo-global-gray-11', darkGlobal: 'arvo-global-gray-05', useCase: 'Form field border.' },
   { token: 'arvo-color-b-disabled', lightGlobal: 'arvo-global-gray-03', darkGlobal: 'arvo-global-gray-05', useCase: 'Disabled border. Use with surface-theme background (sits on top of that).' },
   { token: 'arvo-color-b-readonly', lightGlobal: 'arvo-global-gray-05', darkGlobal: 'arvo-global-gray-05', useCase: 'Read-only field border (dashed).', borderStyle: 'dashed' },
-  { token: 'arvo-color-b-utility-purple', lightGlobal: 'arvo-global-purple-dark', darkGlobal: 'arvo-global-purple-light', useCase: 'Utility purple border.' },
+  { token: 'arvo-color-b-utility-purple', lightGlobal: 'arvo-global-purple-10', darkGlobal: 'arvo-global-purple-09', useCase: 'Utility purple border.' },
   { token: 'arvo-color-b-focus-inverse', lightGlobal: 'arvo-global-white', darkGlobal: 'arvo-global-black', useCase: 'Focus inverse border. Use with surface-theme background (sits on top of that).' },
 ]
 
@@ -158,7 +158,7 @@ export const SEMANTIC_TEXT = [
   { token: 'arvo-color-t-neutral', lightGlobal: 'arvo-global-black', darkGlobal: 'arvo-global-white', useCase: 'Neutral text.' },
   { token: 'arvo-color-t-form-label', lightGlobal: 'arvo-global-gray-08', darkGlobal: 'arvo-global-gray-02', useCase: 'Form label text.' },
   { token: 'arvo-color-t-form-value', lightGlobal: 'arvo-global-gray-09', darkGlobal: 'arvo-global-gray-01', useCase: 'Form value text.' },
-  { token: 'arvo-color-t-utility-purple', lightGlobal: 'arvo-global-purple-dark', darkGlobal: 'arvo-global-purple-light', useCase: 'Utility purple text.' },
+  { token: 'arvo-color-t-utility-purple', lightGlobal: 'arvo-global-purple-10', darkGlobal: 'arvo-global-purple-09', useCase: 'Utility purple text.' },
 ]
 
 // Icon tokens — use o9con icon for color swatch. Same mapping logic as text.
@@ -186,5 +186,5 @@ export const SEMANTIC_ICON = [
   { token: 'arvo-color-i-info-light', lightGlobal: 'arvo-global-bluish-09', darkGlobal: 'arvo-global-bluish-07', useCase: 'Info icon (light).' },
   { token: 'arvo-color-i-info-dark', lightGlobal: 'arvo-global-bluish-10', darkGlobal: 'arvo-global-bluish-08', useCase: 'Info icon (dark).' },
   { token: 'arvo-color-i-neutral', lightGlobal: 'arvo-global-black', darkGlobal: 'arvo-global-white', useCase: 'Neutral icon.' },
-  { token: 'arvo-color-i-utility-purple', lightGlobal: 'arvo-global-purple-dark', darkGlobal: 'arvo-global-purple-light', useCase: 'Utility purple icon.' },
+  { token: 'arvo-color-i-utility-purple', lightGlobal: 'arvo-global-purple-10', darkGlobal: 'arvo-global-purple-09', useCase: 'Utility purple icon.' },
 ]

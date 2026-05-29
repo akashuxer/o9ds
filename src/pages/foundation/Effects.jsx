@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect, forwardRef } from 'react'
+import { useTheme } from '../../context/ThemeContext'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import DocTable from '../../LayoutComponents/DocTable'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import WhiteBgCard from '../../LayoutComponents/WhiteBgCard'
 import { BLUR_TOKEN_ROWS, OPACITY_TOKEN_ROWS, SHADOW_BOX_TOKEN_ROWS } from '../../tokens/effectsTokens'
+import { downloadArvoEffectsScss } from '../../utils/arvoEffectsScss'
 
 /** Sample image for opacity previews (shared base; opacity applied per card). */
 const OPACITY_SAMPLE_IMG = '/hero-1.svg'
@@ -16,7 +18,56 @@ const EFFECTS_SECTIONS = [
   { id: 'shadow-tokens', label: 'Shadow tokens' },
   { id: 'blur', label: 'Blur Tokens' },
   { id: 'opacity-tokens', label: 'Opacity tokens' },
+  { id: 'effects-download-tokens', label: 'Download tokens' },
 ]
+
+function DownloadIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+    </svg>
+  )
+}
+
+const EffectsDownloadButton = forwardRef(function EffectsDownloadButton({ isLight, className = '' }, ref) {
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={downloadArvoEffectsScss}
+      className={`inline-flex items-center gap-2 border px-4 py-2 text-sm font-medium transition-colors hover:opacity-90 dark:border-neutral-600 dark:text-white ${className}`}
+      style={
+        isLight
+          ? { borderColor: '#010101', backgroundColor: '#010101', color: '#FFFFFF' }
+          : { borderColor: '#FFFFFF', backgroundColor: '#FFFFFF', color: '#010101' }
+      }
+    >
+      <DownloadIcon className="h-4 w-4" />
+      Download Effects Tokens
+    </button>
+  )
+})
+
+function EffectsDownloadFab({ isLight, visible }) {
+  if (!visible) return null
+
+  return (
+    <button
+      type="button"
+      onClick={downloadArvoEffectsScss}
+      aria-label="Download Effects Tokens"
+      title="Download Effects Tokens"
+      className="fixed z-40 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-[transform,opacity] hover:scale-105 active:scale-95 bottom-20 right-5 sm:bottom-8 sm:right-8"
+      style={
+        isLight
+          ? { backgroundColor: '#010101', color: '#FFFFFF', boxShadow: '0 4px 14px rgba(1, 1, 1, 0.25)' }
+          : { backgroundColor: '#FFFFFF', color: '#010101', boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)' }
+      }
+    >
+      <DownloadIcon className="h-6 w-6" />
+    </button>
+  )
+}
 
 const effectsIcon = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -283,6 +334,26 @@ const OPACITY_ROWS_FOR_TABLE = OPACITY_TOKEN_ROWS.map((row) => ({
 const copyRowTokenName = (row) => row.clipboard ?? row.name
 
 export default function Effects() {
+  const { theme } = useTheme()
+  const isLight = theme === 'light'
+  const effectsDownloadBtnRef = useRef(null)
+  const [showEffectsDownloadFab, setShowEffectsDownloadFab] = useState(true)
+
+  useEffect(() => {
+    const el = effectsDownloadBtnRef.current
+    if (!el) return
+
+    setShowEffectsDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowEffectsDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const codeInlineStyle = isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }
+
   return (
     <PageWithToc sections={EFFECTS_SECTIONS}>
       <div className="space-y-12">
@@ -403,7 +474,28 @@ export default function Effects() {
 
           <DocTable columns={OPACITY_COLUMNS} rows={OPACITY_ROWS_FOR_TABLE} rowCopy={copyRowTokenName} rowCopyAlwaysVisible />
         </section>
+
+        <section
+          id="effects-download-tokens"
+          className="scroll-mt-24 border p-6 shadow-sm dark:border-neutral-700"
+          style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : { backgroundColor: 'transparent' }}
+        >
+          <h2 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">Download for development</h2>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+            Export all global effects tokens as{' '}
+            <code className="font-mono text-xs px-1" style={codeInlineStyle}>
+              _arvo.effects.scss
+            </code>{' '}
+            and replace{' '}
+            <code className="font-mono text-xs px-1" style={codeInlineStyle}>
+              tokens/_arvo.effects.scss
+            </code>{' '}
+            in the o9 Kibo theme.
+          </p>
+          <EffectsDownloadButton ref={effectsDownloadBtnRef} isLight={isLight} />
+        </section>
       </div>
+      <EffectsDownloadFab isLight={isLight} visible={showEffectsDownloadFab} />
     </PageWithToc>
   )
 }

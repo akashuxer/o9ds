@@ -1,10 +1,12 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { useTheme } from '../../context/ThemeContext'
 import { o9conIcons } from '../../tokens/o9conIcons'
-import { ICON_SIZE_TOKENS_SCSS } from '../../tokens/iconTokens'
+import { ICON_SIZE_PX, ICON_SIZE_TOKENS_SCSS } from '../../tokens/iconTokens'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import ExpandableDocImage from '../../LayoutComponents/ExpandableDocImage'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
+import { TokenDownloadFab, TokenDownloadSection } from '../../LayoutComponents/TokenScssDownload'
+import { downloadArvoIconsScss } from '../../utils/arvoIconsScss'
 
 /** Icon spec SVGs live in `public/IconGraphic/` (dot-grid surface matches ComponentOverviewCard). */
 function iconGraphicSrc(filename) {
@@ -117,7 +119,7 @@ const ICON_TYPE_CATEGORIES = [
 ]
 
 const tabs = ['Overview', 'o9con Gallery', 'Accessibility', 'Code']
-const SIZES = [14, 16, 20, 24, 32]
+const SIZES = ICON_SIZE_PX
 
 function CopyIcon({ className }) {
   return (
@@ -193,8 +195,28 @@ export default function Icons() {
   const [selectedSize, setSelectedSize] = useState(24)
   const [o9conSearch, setO9conSearch] = useState('')
   const tabListRef = useRef(null)
+  const iconsDownloadBtnRef = useRef(null)
+  const [showIconsDownloadFab, setShowIconsDownloadFab] = useState(false)
   const { theme } = useTheme()
   const isLight = theme === 'light'
+
+  useEffect(() => {
+    if (activeTab !== 'Overview' && activeTab !== 'o9con Gallery') {
+      setShowIconsDownloadFab(false)
+      return
+    }
+
+    const el = iconsDownloadBtnRef.current
+    if (!el) return
+
+    setShowIconsDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowIconsDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [activeTab])
 
   const handleTabKeyDown = (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
@@ -232,12 +254,14 @@ export default function Icons() {
         { id: 'icons-in-figma', label: 'Icons in Figma' },
         { id: 'illustrator-tips', label: 'Illustrator tips' },
         { id: 'available-sizes', label: 'Available Sizes' },
+        { id: 'icons-download-tokens', label: 'Download tokens' },
       ]
     }
     if (activeTab === 'o9con Gallery') {
       return [
         { id: 'display-options', label: 'Display Options' },
         { id: 'o9con-library', label: 'o9con Library' },
+        { id: 'icons-download-tokens', label: 'Download tokens' },
       ]
     }
     if (activeTab === 'Accessibility') {
@@ -657,6 +681,29 @@ export default function Icons() {
               ))}
             </div>
           </div>
+
+          <TokenDownloadSection
+            id="icons-download-tokens"
+            isLight={isLight}
+            buttonRef={iconsDownloadBtnRef}
+            onDownload={downloadArvoIconsScss}
+            buttonLabel="Download Icon Size Tokens"
+            filename="_arvo.icons.scss"
+            replacePath="tokens/_arvo.icons.scss"
+            description={
+              <>
+                Export all icon size tokens as{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  _arvo.icons.scss
+                </code>{' '}
+                and replace{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  tokens/_arvo.icons.scss
+                </code>{' '}
+                in the o9 Kibo theme.
+              </>
+            }
+          />
         </section>
       )}
 
@@ -725,6 +772,29 @@ export default function Icons() {
               <p className="text-arvo-light-secondary dark:text-neutral-400 py-8 text-center">No icons match your search.</p>
             )}
           </section>
+
+          <TokenDownloadSection
+            id="icons-download-tokens"
+            isLight={isLight}
+            buttonRef={iconsDownloadBtnRef}
+            onDownload={downloadArvoIconsScss}
+            buttonLabel="Download Icon Size Tokens"
+            filename="_arvo.icons.scss"
+            replacePath="tokens/_arvo.icons.scss"
+            description={
+              <>
+                Export all icon size tokens as{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  _arvo.icons.scss
+                </code>{' '}
+                and replace{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  tokens/_arvo.icons.scss
+                </code>{' '}
+                in the o9 Kibo theme.
+              </>
+            }
+          />
         </>
       )}
 
@@ -780,11 +850,13 @@ export default function Icons() {
 </button>
 
 <!-- Icon sizes available -->
+<span class="o9con o9con-arrow-left arvo-icon-12"></span> <!-- 12px -->
 <span class="o9con o9con-arrow-left arvo-icon-14"></span> <!-- 14px -->
 <span class="o9con o9con-arrow-left arvo-icon-16"></span> <!-- 16px -->
 <span class="o9con o9con-arrow-left arvo-icon-20"></span> <!-- 20px -->
 <span class="o9con o9con-arrow-left arvo-icon-24"></span> <!-- 24px -->
-<span class="o9con o9con-arrow-left arvo-icon-32"></span> <!-- 32px -->`}
+<span class="o9con o9con-arrow-left arvo-icon-32"></span> <!-- 32px -->
+<span class="o9con o9con-arrow-left arvo-icon-40"></span> <!-- 40px -->`}
             label="o9con usage examples"
           />
 
@@ -796,6 +868,14 @@ export default function Icons() {
         </section>
       )}
     </div>
+    {(activeTab === 'Overview' || activeTab === 'o9con Gallery') && (
+      <TokenDownloadFab
+        isLight={isLight}
+        visible={showIconsDownloadFab}
+        onClick={downloadArvoIconsScss}
+        ariaLabel="Download Icon Size Tokens"
+      />
+    )}
     </PageWithToc>
   )
 }

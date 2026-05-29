@@ -1,3 +1,5 @@
+import { useState, useRef, useEffect, forwardRef } from 'react'
+import { useTheme } from '../../context/ThemeContext'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
 import PageHeader from '../../LayoutComponents/PageHeader'
@@ -7,6 +9,7 @@ import {
   BORDER_RADIUS_TOKEN_ROWS,
   BORDER_WIDTH_TOKEN_ROWS,
 } from '../../tokens/borderTokens'
+import { downloadO9dsBordersScss } from '../../utils/o9dsBordersScss'
 
 const OLD_BORDER_IMG = '/o9DocGraphics/FoundationGraphic/old-border.svg'
 const NEW_BORDER_IMG = '/o9DocGraphics/FoundationGraphic/new-border.svg'
@@ -18,7 +21,56 @@ const BORDERS_SECTIONS = [
   { id: 'applying-border-radius', label: 'Applying border-radius' },
   { id: 'border-width-tokens', label: 'Border width tokens' },
   { id: 'applying-border-width', label: 'Applying border-width' },
+  { id: 'borders-download-tokens', label: 'Download tokens' },
 ]
+
+function DownloadIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+    </svg>
+  )
+}
+
+const BordersDownloadButton = forwardRef(function BordersDownloadButton({ isLight, className = '' }, ref) {
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={downloadO9dsBordersScss}
+      className={`inline-flex items-center gap-2 border px-4 py-2 text-sm font-medium transition-colors hover:opacity-90 dark:border-neutral-600 dark:text-white ${className}`}
+      style={
+        isLight
+          ? { borderColor: '#010101', backgroundColor: '#010101', color: '#FFFFFF' }
+          : { borderColor: '#FFFFFF', backgroundColor: '#FFFFFF', color: '#010101' }
+      }
+    >
+      <DownloadIcon className="h-4 w-4" />
+      Download Border Tokens
+    </button>
+  )
+})
+
+function BordersDownloadFab({ isLight, visible }) {
+  if (!visible) return null
+
+  return (
+    <button
+      type="button"
+      onClick={downloadO9dsBordersScss}
+      aria-label="Download Border Tokens"
+      title="Download Border Tokens"
+      className="fixed z-40 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-[transform,opacity] hover:scale-105 active:scale-95 bottom-20 right-5 sm:bottom-8 sm:right-8"
+      style={
+        isLight
+          ? { backgroundColor: '#010101', color: '#FFFFFF', boxShadow: '0 4px 14px rgba(1, 1, 1, 0.25)' }
+          : { backgroundColor: '#FFFFFF', color: '#010101', boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)' }
+      }
+    >
+      <DownloadIcon className="h-6 w-6" />
+    </button>
+  )
+}
 
 const bordersIcon = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -42,12 +94,18 @@ const WIDTH_COLUMNS = [
   { key: 'usage', label: 'Usage' },
 ]
 
-function BorderRadiusPreview({ circle }) {
+function BorderRadiusPreview({ name }) {
+  const style =
+    name === '$arvo-radius-circle'
+      ? { borderRadius: '999px' }
+      : name === '$arvo-radius-16'
+        ? { borderRadius: '1rem' }
+        : { borderRadius: 0 }
+
   return (
     <div
-      className={`h-12 w-12 border-2 border-neutral-400 bg-neutral-100 dark:border-neutral-500 dark:bg-neutral-800 ${
-        circle ? 'rounded-full' : 'rounded-2xl'
-      }`}
+      className="h-12 w-12 border-2 border-neutral-400 bg-neutral-100 dark:border-neutral-500 dark:bg-neutral-800"
+      style={style}
       aria-hidden
     />
   )
@@ -65,7 +123,7 @@ function BorderWidthPreview({ px }) {
 
 const BORDER_RADIUS_TABLE_ROWS = BORDER_RADIUS_TOKEN_ROWS.map((row) => ({
   ...row,
-  preview: <BorderRadiusPreview circle={row.name.includes('circle')} />,
+  preview: <BorderRadiusPreview name={row.name} />,
 }))
 
 const BORDER_WIDTH_TABLE_ROWS = BORDER_WIDTH_TOKEN_ROWS.map((row) => ({
@@ -76,6 +134,26 @@ const BORDER_WIDTH_TABLE_ROWS = BORDER_WIDTH_TOKEN_ROWS.map((row) => ({
 const copyBorderRow = (row) => row.clipboard
 
 export default function Borders() {
+  const { theme } = useTheme()
+  const isLight = theme === 'light'
+  const bordersDownloadBtnRef = useRef(null)
+  const [showBordersDownloadFab, setShowBordersDownloadFab] = useState(true)
+
+  useEffect(() => {
+    const el = bordersDownloadBtnRef.current
+    if (!el) return
+
+    setShowBordersDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowBordersDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const codeInlineStyle = isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }
+
   return (
     <PageWithToc sections={BORDERS_SECTIONS}>
       <div className="space-y-12">
@@ -164,7 +242,9 @@ export default function Borders() {
             Border radius tokens
           </h2>
           <p className="m-0 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400">
-            Prefer <code className="font-mono text-sm px-1" data-arvo-inline-code>0</code> for new UI. The token below makes a full circle—use it for small indicators (for example an unsaved orange dot), not for large rounded cards.
+            Prefer <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-radius-none</code> (0) for new UI. Use{' '}
+            <code className="font-mono text-sm px-1" data-arvo-inline-code>$arvo-radius-circle</code> for small circular indicators (for example an
+            unsaved orange dot), not for large rounded cards.
           </p>
           <DocTable
             columns={RADIUS_COLUMNS}
@@ -214,7 +294,28 @@ export default function Borders() {
 }`}
           />
         </section>
+
+        <section
+          id="borders-download-tokens"
+          className="scroll-mt-24 border p-6 shadow-sm dark:border-neutral-700"
+          style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : { backgroundColor: 'transparent' }}
+        >
+          <h2 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">Download for development</h2>
+          <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+            Export border radius and width tokens as{' '}
+            <code className="font-mono text-xs px-1" style={codeInlineStyle}>
+              _arvo.borders.scss
+            </code>{' '}
+            and replace{' '}
+            <code className="font-mono text-xs px-1" style={codeInlineStyle}>
+              tokens/_arvo.borders.scss
+            </code>{' '}
+            in the o9 Kibo theme.
+          </p>
+          <BordersDownloadButton ref={bordersDownloadBtnRef} isLight={isLight} />
+        </section>
       </div>
+      <BordersDownloadFab isLight={isLight} visible={showBordersDownloadFab} />
     </PageWithToc>
   )
 }

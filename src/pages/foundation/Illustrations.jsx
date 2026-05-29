@@ -1,8 +1,10 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { useTheme } from '../../context/ThemeContext'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
-import { ILLUSTRATION_SIZE_TOKENS_SCSS } from '../../tokens/illustrationTokens'
+import { TokenDownloadFab, TokenDownloadSection } from '../../LayoutComponents/TokenScssDownload'
+import { ILLUSTRATION_SIZE_PX, ILLUSTRATION_SIZE_TOKENS_SCSS } from '../../tokens/illustrationTokens'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
+import { downloadArvoIllustrationsScss } from '../../utils/arvoIllustrationsScss'
 
 const tabs = ['Overview', 'o9Illus Gallery', 'Accessibility', 'Code']
 
@@ -25,7 +27,7 @@ const ILLUSTRATIONS = [
   { name: 'settings', label: 'Settings', srcDark: '/o9illus/dark/o9illus-dark-settings.svg', srcLight: '/o9illus/light/o9illus-light-settings.svg' },
 ]
 
-const SIZES = [80, 120, 200, 280]
+const SIZES = ILLUSTRATION_SIZE_PX
 
 const DESIGN_PRINCIPLES = [
   {
@@ -157,10 +159,30 @@ function IllustrationCard({ item, size }) {
 
 export default function Illustrations() {
   const [activeTab, setActiveTab] = useState('Overview')
-  const [selectedSize, setSelectedSize] = useState(120)
+  const [selectedSize, setSelectedSize] = useState(124)
   const tabListRef = useRef(null)
+  const illusDownloadBtnRef = useRef(null)
+  const [showIllusDownloadFab, setShowIllusDownloadFab] = useState(false)
   const { theme } = useTheme()
   const isLight = theme === 'light'
+
+  useEffect(() => {
+    if (activeTab !== 'Overview' && activeTab !== 'o9Illus Gallery') {
+      setShowIllusDownloadFab(false)
+      return
+    }
+
+    const el = illusDownloadBtnRef.current
+    if (!el) return
+
+    setShowIllusDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowIllusDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [activeTab])
 
   const onThisPageSections = useMemo(() => {
     if (activeTab === 'Overview') {
@@ -168,12 +190,14 @@ export default function Illustrations() {
         { id: 'o9illus-philosophy', label: 'o9Illus Design Philosophy' },
         { id: 'usage-guidelines', label: 'Usage Guidelines' },
         { id: 'sizes', label: 'Sizes' },
+        { id: 'illus-download-tokens', label: 'Download tokens' },
       ]
     }
     if (activeTab === 'o9Illus Gallery') {
       return [
         { id: 'illus-display-options', label: 'Display Options' },
         { id: 'o9illus-library', label: 'o9Illus Library' },
+        { id: 'illus-download-tokens', label: 'Download tokens' },
       ]
     }
     if (activeTab === 'Accessibility') return [{ id: 'illus-accessibility', label: 'Illustration Accessibility' }]
@@ -285,10 +309,10 @@ export default function Illustrations() {
               <div>
                 <h3 className="font-semibold text-arvo-light-primary dark:text-white mb-3">Size Selection</h3>
                 <ul className="space-y-2 text-sm text-arvo-light-secondary dark:text-neutral-400">
-                  <li><strong className="text-arvo-light-primary dark:text-white">80px</strong> — Compact illustrations for tight layouts and inline states</li>
-                  <li><strong className="text-arvo-light-primary dark:text-white">120px</strong> — Default size for most empty states and modal dialogs</li>
-                  <li><strong className="text-arvo-light-primary dark:text-white">200px</strong> — Medium-large illustrations for section empty states</li>
-                  <li><strong className="text-arvo-light-primary dark:text-white">280px</strong> — Largest size for prominent empty states and landing pages</li>
+                  <li><strong className="text-arvo-light-primary dark:text-white">96px</strong> — Compact illustrations for tight layouts and inline states</li>
+                  <li><strong className="text-arvo-light-primary dark:text-white">124px</strong> — Default size for most empty states and modal dialogs</li>
+                  <li><strong className="text-arvo-light-primary dark:text-white">224px</strong> — Medium-large illustrations for section empty states</li>
+                  <li><strong className="text-arvo-light-primary dark:text-white">300px</strong> — Largest size for prominent empty states and landing pages</li>
                 </ul>
               </div>
             </div>
@@ -323,6 +347,29 @@ export default function Illustrations() {
               </div>
             </div>
           </section>
+
+          <TokenDownloadSection
+            id="illus-download-tokens"
+            isLight={isLight}
+            buttonRef={illusDownloadBtnRef}
+            onDownload={downloadArvoIllustrationsScss}
+            buttonLabel="Download Illustration Size Tokens"
+            filename="_arvo.illustrations.scss"
+            replacePath="tokens/_arvo.illustrations.scss"
+            description={
+              <>
+                Export all illustration size tokens as{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  _arvo.illustrations.scss
+                </code>{' '}
+                and replace{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  tokens/_arvo.illustrations.scss
+                </code>{' '}
+                in the o9 Kibo theme.
+              </>
+            }
+          />
         </>
       )}
 
@@ -377,6 +424,29 @@ export default function Illustrations() {
               ))}
             </div>
           </section>
+
+          <TokenDownloadSection
+            id="illus-download-tokens"
+            isLight={isLight}
+            buttonRef={illusDownloadBtnRef}
+            onDownload={downloadArvoIllustrationsScss}
+            buttonLabel="Download Illustration Size Tokens"
+            filename="_arvo.illustrations.scss"
+            replacePath="tokens/_arvo.illustrations.scss"
+            description={
+              <>
+                Export all illustration size tokens as{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  _arvo.illustrations.scss
+                </code>{' '}
+                and replace{' '}
+                <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>
+                  tokens/_arvo.illustrations.scss
+                </code>{' '}
+                in the o9 Kibo theme.
+              </>
+            }
+          />
         </>
       )}
 
@@ -400,12 +470,12 @@ export default function Illustrations() {
           <p className="text-arvo-light-secondary dark:text-neutral-400">Use the following HTML structure to render an illustration:</p>
           <div className="relative">
             <CodeBlock
-              code={`<div class="arvo-illus arvo-illus--dashboard arvo-illus-120"></div>`}
-              label="Example: Dashboard at 120px"
+              code={`<div class="arvo-illus arvo-illus--dashboard arvo-illus-124"></div>`}
+              label="Example: Dashboard at 124px"
             />
           </div>
           <p className="text-sm text-arvo-light-secondary dark:text-neutral-400">
-            Replace <code className="px-1 py-0.5" data-arvo-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, no-filters-found, no-form-configured, no-notifications, no-post, no-report, no-results-found, no-slides, no-tasks, restricted-access, server-error, settings) and <code className="px-1 py-0.5" data-arvo-inline-code>120</code> with the desired size (80, 120, 200, 280).
+            Replace <code className="px-1 py-0.5" data-arvo-inline-code>dashboard</code> with the illustration name (e.g. dashboard, document, favorites, help, no-filter-results, no-filters-found, no-form-configured, no-notifications, no-post, no-report, no-results-found, no-slides, no-tasks, restricted-access, server-error, settings) and <code className="px-1 py-0.5" data-arvo-inline-code>124</code> with the desired size (96, 124, 224, 300).
           </p>
 
           <div id="illus-size-tokens">
@@ -416,6 +486,14 @@ export default function Illustrations() {
         </section>
       )}
     </div>
+    {(activeTab === 'Overview' || activeTab === 'o9Illus Gallery') && (
+      <TokenDownloadFab
+        isLight={isLight}
+        visible={showIllusDownloadFab}
+        onClick={downloadArvoIllustrationsScss}
+        ariaLabel="Download Illustration Size Tokens"
+      />
+    )}
     </PageWithToc>
   )
 }

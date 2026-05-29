@@ -88,11 +88,13 @@ export const FEEDBACK_BLUISH = [
   { token: 'arvo-global-bluish-09', hex: '#0037FF', branding: 'Shock Accent' },
   { token: 'arvo-global-bluish-08', hex: '#8AA3FF', branding: 'Shock L3' },
   { token: 'arvo-global-bluish-07', hex: '#B8C7FF', branding: 'Shock L4' },
+  { token: 'arvo-global-bluish-06', hex: '#E1E8FF' },
 ]
 
 export const FEEDBACK_GREENISH = [
-  { token: 'arvo-global-greenish-10', hex: '#0C7951', branding: 'Grass D2' },
-  { token: 'arvo-global-greenish-09', hex: '#2FE09D', branding: 'Grass L1' },
+  { token: 'arvo-global-greenish-10', hex: '#00804F', branding: 'Grass D2' },
+  { token: 'arvo-global-greenish-09', hex: '#92E6A7', branding: 'Grass L1' },
+  { token: 'arvo-global-greenish-08', hex: '#C0F0CA' },
 ]
 
 export const FEEDBACK_REDISH = [
@@ -102,29 +104,44 @@ export const FEEDBACK_REDISH = [
   { token: 'arvo-global-redish-08', hex: '#D9311B', branding: 'Sienna Accent' },
   { token: 'arvo-global-redish-07', hex: '#EB5436', branding: 'Sienna L1' },
   { token: 'arvo-global-redish-06', hex: '#F07A62', branding: 'Sienna L2' },
+  { token: 'arvo-global-redish-05', hex: '#FFE4E0' },
 ]
 
 export const FEEDBACK_ORANGISH = [
+  { token: 'arvo-global-orangish-11', hex: '#1A1700' },
   { token: 'arvo-global-orangish-10', hex: '#926200' },
-  { token: 'arvo-global-orangish-09', hex: '#FFEF5C', branding: 'Sun L2' },
-  { token: 'arvo-global-orangish-08', hex: '#D25F0C', branding: 'Ocra D1' },
-  { token: 'arvo-global-orangish-07', hex: '#E39600' },
+  { token: 'arvo-global-orangish-09', hex: '#EFBC5C', branding: 'Sun L2' },
+  { token: 'arvo-global-orangish-08', hex: '#C7880D', branding: 'Ocra D1' },
+  { token: 'arvo-global-orangish-07', hex: '#FFF2D6' },
 ]
 
 // Utility Colors — used less frequently
 export const UTILITY_TOKENS = [
-  { token: 'arvo-global-purple-dark', hex: '#7433CC', branding: 'Indigo Accent' },
-  { token: 'arvo-global-purple-light', hex: '#A67DDE', branding: 'Indigo L2' },
+  { token: 'arvo-global-purple-10', hex: '#7433CC', branding: 'Indigo Accent' },
+  { token: 'arvo-global-purple-09', hex: '#BFA2E7', branding: 'Indigo L2' },
+  { token: 'arvo-global-purple-08', hex: '#D8C7F0' },
+  { token: 'arvo-global-pink-10', hex: '#B60071' },
+  { token: 'arvo-global-pink-09', hex: '#E38ABF' },
+  { token: 'arvo-global-pink-08', hex: '#F2B8D9' },
+  { token: 'arvo-global-glacier-10', hex: '#0172AA' },
+  { token: 'arvo-global-glacier-09', hex: '#8BC0DD' },
+  { token: 'arvo-global-glacier-08', hex: '#BAD8EB' },
+  { token: 'arvo-global-amber-10', hex: '#A44A09' },
+  { token: 'arvo-global-amber-09', hex: '#FFA565' },
+  { token: 'arvo-global-amber-08', hex: '#FFBE8F' },
+  { token: 'arvo-global-green-10', hex: '#073725' },
+  { token: 'arvo-global-green-09', hex: '#015132' },
+  { token: 'arvo-global-green-08', hex: '#26A644' },
+  { token: 'arvo-global-green-07', hex: '#6EDE8A' },
   { token: 'arvo-global-opacity-1', hex: '#01010199' },
   { token: 'arvo-global-opacity-2', hex: '#4C4C4C33' },
   { token: 'arvo-global-opacity-3', hex: '#4C4C4C0F' },
-  { token: 'arvo-global-green-10', hex: '#073725' },
-  { token: 'arvo-global-green-09', hex: '#015132' },
-  { token: 'arvo-global-green-08', hex: '#00804F' },
-  { token: 'arvo-global-green-07', hex: '#26A644' },
-  { token: 'arvo-global-green-06', hex: '#6EDE8A' },
-  { token: 'arvo-global-green-05', hex: '#E1F3E4' },
-  { token: 'arvo-global-dark-gray-10', hex: '#1A1A1A' },
+]
+
+// Nova AI Brand Colors
+export const NOVA_BRAND_TOKENS = [
+  { token: 'arvo-global-nova-start', hex: '#FFE9C9' },
+  { token: 'arvo-global-nova-end', hex: '#FF3D00' },
 ]
 
 /** Build a flat lookup map: global token name -> hex */
@@ -141,6 +158,7 @@ const ALL_GLOBAL = [
   ...FEEDBACK_REDISH,
   ...FEEDBACK_ORANGISH,
   ...UTILITY_TOKENS,
+  ...NOVA_BRAND_TOKENS,
 ]
 
 export const GLOBAL_TOKEN_HEX = Object.fromEntries(ALL_GLOBAL.map((t) => [t.token, t.hex]))

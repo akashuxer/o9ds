@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect, forwardRef } from 'react'
 import { useTheme } from '../../context/ThemeContext'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import ColorSwatch from '../../LayoutComponents/ColorSwatch'
@@ -18,6 +18,7 @@ import {
   FEEDBACK_REDISH,
   FEEDBACK_ORANGISH,
   UTILITY_TOKENS,
+  NOVA_BRAND_TOKENS,
 } from '../../tokens/globalColorTokens'
 import {
   SEMANTIC_SURFACE,
@@ -32,8 +33,57 @@ import {
   resolveSurfaceNegativeActiveHex,
   resolveSurfaceWhiteStaticHex,
 } from '../../tokens/semanticColorTokens'
+import { downloadO9dsGlobalColorsScss } from '../../utils/o9dsGlobalColorsScss'
 
 const tabs = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Tokens']
+
+function DownloadIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+    </svg>
+  )
+}
+
+const GlobalColorsDownloadButton = forwardRef(function GlobalColorsDownloadButton({ isLight, className = '' }, ref) {
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={downloadO9dsGlobalColorsScss}
+      className={`inline-flex items-center gap-2 border px-4 py-2 text-sm font-medium transition-colors hover:opacity-90 dark:border-neutral-600 dark:text-white ${className}`}
+      style={
+        isLight
+          ? { borderColor: '#010101', backgroundColor: '#010101', color: '#FFFFFF' }
+          : { borderColor: '#FFFFFF', backgroundColor: '#FFFFFF', color: '#010101' }
+      }
+    >
+      <DownloadIcon className="h-4 w-4" />
+      Download Global Color Tokens
+    </button>
+  )
+})
+
+function GlobalColorsDownloadFab({ isLight, visible }) {
+  if (!visible) return null
+
+  return (
+    <button
+      type="button"
+      onClick={downloadO9dsGlobalColorsScss}
+      aria-label="Download Global Color Tokens"
+      title="Download Global Color Tokens"
+      className="fixed z-40 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-[transform,opacity] hover:scale-105 active:scale-95 bottom-20 right-5 sm:bottom-8 sm:right-8"
+      style={
+        isLight
+          ? { backgroundColor: '#010101', color: '#FFFFFF', boxShadow: '0 4px 14px rgba(1, 1, 1, 0.25)' }
+          : { backgroundColor: '#FFFFFF', color: '#010101', boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)' }
+      }
+    >
+      <DownloadIcon className="h-6 w-6" />
+    </button>
+  )
+}
 
 function CopyIcon({ className }) {
   return (
@@ -342,6 +392,26 @@ export default function Colors() {
   const [lightTheme, setLightTheme] = useState('o9theme')
   const { theme } = useTheme()
   const isLight = theme === 'light'
+  const globalDownloadBtnRef = useRef(null)
+  const [showGlobalDownloadFab, setShowGlobalDownloadFab] = useState(true)
+
+  useEffect(() => {
+    if (activeTab !== 'Global Tokens') {
+      setShowGlobalDownloadFab(false)
+      return
+    }
+
+    const el = globalDownloadBtnRef.current
+    if (!el) return
+
+    setShowGlobalDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowGlobalDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [activeTab])
 
   const onThisPageSections = useMemo(() => {
     if (activeTab === 'Overview') {
@@ -365,6 +435,8 @@ export default function Colors() {
         { id: 'global-secondary-themes', label: 'Secondary Themes' },
         { id: 'global-feedback-colors', label: 'Feedback Colors' },
         { id: 'global-utility-colors', label: 'Utility Colors' },
+        { id: 'global-nova-brand-colors', label: 'Nova AI Brand Colors' },
+        { id: 'global-download-tokens', label: 'Download tokens' },
       ]
     }
     if (activeTab === 'Semantic Tokens') return [{ id: 'semantic-tokens', label: 'Semantic Tokens' }]
@@ -687,6 +759,7 @@ export default function Colors() {
       )}
 
       {activeTab === 'Global Tokens' && (
+        <>
         <section className="space-y-10">
           {/* Neutral Colors */}
           <div id="global-neutral-colors">
@@ -775,7 +848,31 @@ export default function Colors() {
             </p>
             <TokenTable tokens={UTILITY_TOKENS} isLight={isLight} />
           </div>
+
+          {/* Nova AI Brand Colors */}
+          <div id="global-nova-brand-colors">
+            <h2 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">Nova AI Brand Colors</h2>
+            <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4" style={isLight ? { color: '#303030' } : undefined}>
+              Gradient endpoints for Nova AI brand surfaces and accents.
+            </p>
+            <TokenTable tokens={NOVA_BRAND_TOKENS} isLight={isLight} />
+          </div>
+
+          <div
+            id="global-download-tokens"
+            className="scroll-mt-24 border p-6 shadow-sm dark:border-neutral-700"
+            style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : { backgroundColor: 'transparent' }}
+          >
+            <h2 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">Download for development</h2>
+            <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+              Export all global color tokens as <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>_arvo.colors.scss</code> and replace{' '}
+              <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>tokens/_arvo.colors.scss</code> in the o9 Kibo theme.
+            </p>
+            <GlobalColorsDownloadButton ref={globalDownloadBtnRef} isLight={isLight} />
+          </div>
         </section>
+        <GlobalColorsDownloadFab isLight={isLight} visible={showGlobalDownloadFab} />
+        </>
       )}
 
       {activeTab === 'Semantic Tokens' && (

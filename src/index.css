@@ -731,11 +731,13 @@ html.dark main td [data-arvo-type-variant-preview] {
 }
 
 /* o9con icon sizes - use with .o9con base */
+.arvo-icon-12 { font-size: 12px; }
 .arvo-icon-14 { font-size: 14px; }
 .arvo-icon-16 { font-size: 16px; }
 .arvo-icon-20 { font-size: 20px; }
 .arvo-icon-24 { font-size: 24px; }
 .arvo-icon-32 { font-size: 32px; }
+.arvo-icon-40 { font-size: 40px; }
 
 /* Visually hidden but available to assistive tech (do not use display:none / visibility:hidden). */
 .o9-msg-sr-only {
