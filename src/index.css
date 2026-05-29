@@ -200,6 +200,11 @@ html.dark {
   --arvo-color-s-overlay-static: rgba(1, 1, 1, 0.6);
   --arvo-color-s-shadow-static-1: rgba(76, 76, 76, 0.2);
   --arvo-color-s-shadow-static-2: rgba(76, 76, 76, 0.0588235294);
+  --arvo-global-nova-start: #FFE9C9;
+  --arvo-global-nova-end: #FF3D00;
+  --arvo-color-s-nova-static: linear-gradient(61deg, var(--arvo-global-nova-start) 0.88%, var(--arvo-global-nova-end) 60.13%);
+  --arvo-color-b-nova-static: linear-gradient(61deg, var(--arvo-global-nova-start) 0.88%, var(--arvo-global-nova-end) 60.13%);
+  --arvo-color-i-nova-static: linear-gradient(61deg, var(--arvo-global-nova-start) 0.88%, var(--arvo-global-nova-end) 60.13%);
   --arvo-color-s-warning-static: #E39600;
   --arvo-color-s-currenttime: #926200;
   --arvo-color-s-ancestorfrozen: #073725;
@@ -376,6 +381,11 @@ html:not(.dark) {
   --arvo-color-s-overlay-static: rgba(1, 1, 1, 0.6);
   --arvo-color-s-shadow-static-1: rgba(76, 76, 76, 0.2);
   --arvo-color-s-shadow-static-2: rgba(76, 76, 76, 0.0588235294);
+  --arvo-global-nova-start: #FFE9C9;
+  --arvo-global-nova-end: #FF3D00;
+  --arvo-color-s-nova-static: linear-gradient(61deg, var(--arvo-global-nova-start) 0.88%, var(--arvo-global-nova-end) 60.13%);
+  --arvo-color-b-nova-static: linear-gradient(61deg, var(--arvo-global-nova-start) 0.88%, var(--arvo-global-nova-end) 60.13%);
+  --arvo-color-i-nova-static: linear-gradient(61deg, var(--arvo-global-nova-start) 0.88%, var(--arvo-global-nova-end) 60.13%);
   --arvo-color-s-warning-static: #E39600;
   --arvo-color-s-currenttime: #E39600;
   --arvo-color-s-ancestorfrozen: #26A644;
@@ -720,6 +730,16 @@ body {
 main .arvo-swatch,
 main [data-arvo-swatch] {
   color: var(--arvo-swatch-color) !important;
+}
+
+/* Nova icon gradient — same token as surface nova-static; clip gradient to o9con ::before glyph */
+main .arvo-icon-nova-static.o9con::before {
+  display: inline-block;
+  background: var(--arvo-color-i-nova-static, var(--arvo-icon-nova-preview));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 /* Typography type-style variant previews: --arvo-type-variant-color references --arvo-color-t-* on html */

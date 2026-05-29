@@ -19,6 +19,8 @@ import {
   FEEDBACK_GREENISH,
   FEEDBACK_REDISH,
   FEEDBACK_ORANGISH,
+  FEEDBACK_POSITIVE,
+  FEEDBACK_WARNING,
   UTILITY_TOKENS,
   NOVA_BRAND_TOKENS,
 } from '../../tokens/globalColorTokens'
@@ -34,8 +36,24 @@ import {
   resolveSurfaceThemeHex,
   resolveSurfaceNegativeActiveHex,
   resolveSurfaceWhiteStaticHex,
+  NOVA_SURFACE_BACKGROUND_CSS,
+  NOVA_BORDER_BACKGROUND_CSS,
+  NOVA_ICON_COLOR_CSS,
+  SURFACE_QUICK_FILTERS,
+  BORDER_QUICK_FILTERS,
+  TEXT_QUICK_FILTERS,
+  ICON_QUICK_FILTERS,
+  getSurfaceTokenFilterCategory,
+  getBorderTokenFilterCategory,
+  getTextTokenFilterCategory,
+  getIconTokenFilterCategory,
+  countSurfaceTokensByQuickFilter,
+  countBorderTokensByQuickFilter,
+  countTextTokensByQuickFilter,
+  countIconTokensByQuickFilter,
 } from '../../tokens/semanticColorTokens'
 import { downloadO9dsGlobalColorsScss } from '../../utils/o9dsGlobalColorsScss'
+import { downloadO9dsSemanticColorsScss } from '../../utils/o9dsSemanticColorsScss'
 
 const tabs = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Tokens']
 
@@ -75,6 +93,46 @@ function GlobalColorsDownloadFab({ isLight, visible }) {
       onClick={downloadO9dsGlobalColorsScss}
       aria-label="Download Global Color Tokens"
       title="Download Global Color Tokens"
+      className="fixed z-40 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-[transform,opacity] hover:scale-105 active:scale-95 bottom-20 right-5 sm:bottom-8 sm:right-8"
+      style={
+        isLight
+          ? { backgroundColor: '#010101', color: '#FFFFFF', boxShadow: '0 4px 14px rgba(1, 1, 1, 0.25)' }
+          : { backgroundColor: '#FFFFFF', color: '#010101', boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)' }
+      }
+    >
+      <DownloadIcon className="h-6 w-6" />
+    </button>
+  )
+}
+
+const SemanticColorsDownloadButton = forwardRef(function SemanticColorsDownloadButton({ isLight, className = '' }, ref) {
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={downloadO9dsSemanticColorsScss}
+      className={`inline-flex items-center gap-2 border px-4 py-2 text-sm font-medium transition-colors hover:opacity-90 dark:border-neutral-600 dark:text-white ${className}`}
+      style={
+        isLight
+          ? { borderColor: '#010101', backgroundColor: '#010101', color: '#FFFFFF' }
+          : { borderColor: '#FFFFFF', backgroundColor: '#FFFFFF', color: '#010101' }
+      }
+    >
+      <DownloadIcon className="h-4 w-4" />
+      Download Semantic Color Tokens
+    </button>
+  )
+})
+
+function SemanticColorsDownloadFab({ isLight, visible }) {
+  if (!visible) return null
+
+  return (
+    <button
+      type="button"
+      onClick={downloadO9dsSemanticColorsScss}
+      aria-label="Download Semantic Color Tokens"
+      title="Download Semantic Color Tokens"
       className="fixed z-40 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-[transform,opacity] hover:scale-105 active:scale-95 bottom-20 right-5 sm:bottom-8 sm:right-8"
       style={
         isLight
@@ -188,6 +246,7 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
   const lightHex = resolveHex(row, lightTheme, false)
   const darkHex = resolveHex(row, lightTheme, true)
   const lightModeGlobalName = resolveName(row, lightTheme, false)
+  const darkModeGlobalName = resolveName(row, lightTheme, true)
   const useSurfaceThemeBg =
     row.token === 'arvo-color-b-focus-inverse' ||
     row.token === 'arvo-color-t-inverse' ||
@@ -200,12 +259,21 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
     row.token === 'arvo-color-t-black-static' || row.token === 'arvo-color-i-black-static'
 
   const getCopyText = () => {
+    if (semanticSubTab === 'Surface' && row.lightGradient) {
+      return NOVA_SURFACE_BACKGROUND_CSS
+    }
     if (semanticSubTab === 'Surface') return `background: var(--${row.token});`
+    if (semanticSubTab === 'Border' && row.lightGradient) {
+      return NOVA_BORDER_BACKGROUND_CSS
+    }
     if (semanticSubTab === 'Border') {
       const style = row.borderStyle === 'dashed' ? 'dashed' : 'solid'
       return `border: 2px ${style} var(--${row.token});`
     }
     if (semanticSubTab === 'Text') return `color: var(--${row.token});`
+    if (semanticSubTab === 'Icon' && row.lightGradient) {
+      return NOVA_ICON_COLOR_CSS
+    }
     if (semanticSubTab === 'Icon') return `color: var(--${row.token});`
     return row.token
   }
@@ -224,15 +292,35 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
   const isIconTab = semanticSubTab === 'Icon'
 
   const lightTileStyle = isBorderTab
-    ? { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${lightHex}` }
+    ? row.lightGradient
+      ? {
+          background: row.token === 'arvo-color-b-nova-static' ? 'var(--arvo-color-b-nova-static)' : row.lightGradient,
+          border: `1px solid ${rowBorderColor}`,
+        }
+      : { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${lightHex}` }
     : isTextTab || isIconTab
       ? null
-      : { backgroundColor: lightHex, border: `1px solid ${rowBorderColor}` }
+      : row.lightGradient
+        ? {
+            background: row.token === 'arvo-color-s-nova-static' ? 'var(--arvo-color-s-nova-static)' : row.lightGradient,
+            border: `1px solid ${rowBorderColor}`,
+          }
+        : { backgroundColor: lightHex, border: `1px solid ${rowBorderColor}` }
   const darkTileStyle = isBorderTab
-    ? { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${darkHex}` }
+    ? row.darkGradient
+      ? {
+          background: row.token === 'arvo-color-b-nova-static' ? 'var(--arvo-color-b-nova-static)' : row.darkGradient,
+          border: `1px solid ${rowBorderColor}`,
+        }
+      : { backgroundColor: 'transparent', border: `2px ${row.borderStyle || 'solid'} ${darkHex}` }
     : isTextTab || isIconTab
       ? null
-      : { backgroundColor: darkHex, border: `1px solid ${rowBorderColor}` }
+      : row.darkGradient
+        ? {
+            background: row.token === 'arvo-color-s-nova-static' ? 'var(--arvo-color-s-nova-static)' : row.darkGradient,
+            border: `1px solid ${rowBorderColor}`,
+          }
+        : { backgroundColor: darkHex, border: `1px solid ${rowBorderColor}` }
 
   const lightModeCellBg = useSurfaceNegativeActiveBg
     ? resolveSurfaceNegativeActiveHex(lightTheme, false)
@@ -276,9 +364,21 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
     const lum = 0.299 * r + 0.587 * g + 0.114 * b
     return lum < 0.08
   }
+  const isNovaIconToken = row.token === 'arvo-color-i-nova-static'
   const needsContrastBackdrop = !useSurfaceThemeBg && !useSurfaceNegativeActiveBg && !useSurfaceWhiteStaticBg
-  const lightSwatchBg = (isTextTab || isIconTab) && needsContrastBackdrop && isWhiteOrVeryLight(lightHex) ? '#404040' : 'transparent'
-  const darkSwatchBg = (isTextTab || isIconTab) && needsContrastBackdrop && isBlackOrVeryDark(darkHex) ? '#525252' : 'transparent'
+  const lightSwatchBg =
+    (isTextTab || isIconTab) && !isNovaIconToken && needsContrastBackdrop && isWhiteOrVeryLight(lightHex) ? '#404040' : 'transparent'
+  const darkSwatchBg =
+    (isTextTab || isIconTab) && !isNovaIconToken && needsContrastBackdrop && isBlackOrVeryDark(darkHex) ? '#525252' : 'transparent'
+  const iconPreviewClass = isNovaIconToken
+    ? 'o9con o9con-genai-filled arvo-icon-20 arvo-icon-nova-static'
+    : 'o9con o9con-thumbs-up-filled arvo-icon-20 arvo-swatch'
+  const iconPreviewStyle = isNovaIconToken
+    ? { ['--arvo-icon-nova-preview']: row.lightGradient, fontSize: '20px' }
+    : { ['--arvo-swatch-color']: lightHex, color: 'var(--arvo-swatch-color)', fontSize: '20px' }
+  const iconPreviewStyleDark = isNovaIconToken
+    ? { ['--arvo-icon-nova-preview']: row.darkGradient, fontSize: '20px' }
+    : { ['--arvo-swatch-color']: darkHex, color: 'var(--arvo-swatch-color)', fontSize: '20px' }
 
   return (
     <tr style={{ borderBottom: `1px solid ${rowBorderColor}` }} className="last:border-b-0 group">
@@ -291,7 +391,12 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
             </div>
           ) : isIconTab ? (
             <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: lightSwatchBg }}>
-              <span className="o9con o9con-info-circle arvo-icon-20 arvo-swatch" style={{ ['--arvo-swatch-color']: lightHex, color: 'var(--arvo-swatch-color)', fontSize: '20px' }} title={lightHex} aria-hidden />
+              <span
+                className={iconPreviewClass}
+                style={iconPreviewStyle}
+                title={isNovaIconToken ? lightModeGlobalName : lightHex}
+                aria-hidden
+              />
             </div>
           ) : (
             <div className="h-6 w-6 shrink-0" style={lightTileStyle} title={lightHex} />
@@ -307,12 +412,17 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
             </div>
           ) : isIconTab ? (
             <div className="shrink-0 w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: darkSwatchBg }}>
-              <span className="o9con o9con-info-circle arvo-icon-20 arvo-swatch" style={{ ['--arvo-swatch-color']: darkHex, color: 'var(--arvo-swatch-color)', fontSize: '20px' }} title={darkHex} aria-hidden />
+              <span
+                className={iconPreviewClass}
+                style={iconPreviewStyleDark}
+                title={isNovaIconToken ? darkModeGlobalName : darkHex}
+                aria-hidden
+              />
             </div>
           ) : (
             <div className="h-6 w-6 shrink-0" style={darkTileStyle} title={darkHex} />
           )}
-          <span className="font-mono" style={{ color: darkModeCellFg }}>{row.darkGlobal}</span>
+          <span className="font-mono text-xs" style={{ color: darkModeCellFg }}>{darkModeGlobalName}</span>
         </div>
       </td>
       <td className="py-2 px-3 text-arvo-light-secondary dark:text-neutral-400 text-sm" style={isLight ? { color: '#303030' } : undefined}>
@@ -337,7 +447,66 @@ function SemanticTokenRow({ row, lightTheme, isLight, semanticSubTab, resolveHex
   )
 }
 
-function SemanticTokenTable({ tokens, lightTheme, isLight, semanticSubTab }) {
+function SemanticTokenFilterBar({ label, filters, value, onChange, counts, isLight, ariaLabel }) {
+  const rowBorderColor = isLight ? '#E5E5E5' : '#404040'
+
+  return (
+    <div
+      className="flex flex-col gap-2 border-b px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+      style={{
+        borderColor: rowBorderColor,
+        backgroundColor: isLight ? '#FAFAFA' : '#141414',
+      }}
+    >
+      <p className="text-xs text-arvo-light-secondary dark:text-neutral-500 shrink-0">{label}</p>
+      <div
+        role="tablist"
+        aria-label={ariaLabel}
+        className="inline-flex flex-wrap gap-0.5 p-0.5"
+        style={{
+          backgroundColor: isLight ? '#F2F2F2' : '#262626',
+          boxShadow: isLight ? 'inset 0 0 0 1px #E5E5E5' : 'inset 0 0 0 1px #404040',
+        }}
+      >
+        {filters.map(({ id, label: filterLabel }) => {
+          const selected = value === id
+          return (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={selected}
+              onClick={() => onChange(id)}
+              className={`px-2.5 py-1 text-xs font-medium transition-colors sm:px-3 sm:text-sm ${
+                selected
+                  ? 'text-arvo-light-primary dark:text-white'
+                  : 'text-arvo-light-secondary hover:text-arvo-light-primary dark:text-neutral-400 dark:hover:text-neutral-200'
+              }`}
+              style={
+                selected
+                  ? {
+                      backgroundColor: isLight ? '#FFFFFF' : '#404040',
+                      boxShadow: isLight ? '0 1px 2px rgba(1, 1, 1, 0.06)' : 'none',
+                    }
+                  : undefined
+              }
+            >
+              {filterLabel}
+              <span
+                className="ml-1.5 tabular-nums font-normal"
+                style={{ opacity: selected ? 0.65 : 0.45 }}
+              >
+                {counts[id]}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function SemanticTokenTable({ tokens, lightTheme, isLight, semanticSubTab, toolbarFilter }) {
   const rowBorderColor = isLight ? '#E5E5E5' : '#404040'
   const tableBg = isLight ? '#FFFFFF' : '#0a0a0a'
 
@@ -349,6 +518,7 @@ function SemanticTokenTable({ tokens, lightTheme, isLight, semanticSubTab }) {
         backgroundColor: tableBg,
       }}
     >
+      {toolbarFilter}
       <table className="w-full text-sm">
         <thead>
           <tr
@@ -363,17 +533,29 @@ function SemanticTokenTable({ tokens, lightTheme, isLight, semanticSubTab }) {
           </tr>
         </thead>
         <tbody>
-          {tokens.map((row) => (
-            <SemanticTokenRow
-              key={row.token}
-              row={row}
-              lightTheme={lightTheme}
-              isLight={isLight}
-              semanticSubTab={semanticSubTab}
-              resolveHex={resolveSemanticToHex}
-              resolveName={resolveSemanticToGlobalName}
-            />
-          ))}
+          {tokens.length === 0 ? (
+            <tr>
+              <td
+                colSpan={5}
+                className="py-10 px-3 text-center text-sm text-arvo-light-secondary dark:text-neutral-400"
+                style={isLight ? { color: '#303030' } : undefined}
+              >
+                No tokens in this group.
+              </td>
+            </tr>
+          ) : (
+            tokens.map((row) => (
+              <SemanticTokenRow
+                key={row.token}
+                row={row}
+                lightTheme={lightTheme}
+                isLight={isLight}
+                semanticSubTab={semanticSubTab}
+                resolveHex={resolveSemanticToHex}
+                resolveName={resolveSemanticToGlobalName}
+              />
+            ))
+          )}
         </tbody>
       </table>
     </div>
@@ -391,11 +573,17 @@ const SEMANTIC_COUNTS = {
 export default function Colors() {
   const [activeTab, setActiveTab] = useDocTabUrl(tabs, { basePath: PATH_COLOR_BASE })
   const [semanticSubTab, setSemanticSubTab] = useState('Surface')
+  const [surfaceQuickFilter, setSurfaceQuickFilter] = useState('all')
+  const [borderQuickFilter, setBorderQuickFilter] = useState('all')
+  const [textQuickFilter, setTextQuickFilter] = useState('all')
+  const [iconQuickFilter, setIconQuickFilter] = useState('all')
   const [lightTheme, setLightTheme] = useState('o9theme')
   const { theme } = useTheme()
   const isLight = theme === 'light'
   const globalDownloadBtnRef = useRef(null)
+  const semanticDownloadBtnRef = useRef(null)
   const [showGlobalDownloadFab, setShowGlobalDownloadFab] = useState(true)
+  const [showSemanticDownloadFab, setShowSemanticDownloadFab] = useState(true)
 
   useEffect(() => {
     if (activeTab !== 'Global Tokens') {
@@ -414,6 +602,46 @@ export default function Colors() {
     observer.observe(el)
     return () => observer.disconnect()
   }, [activeTab])
+
+  useEffect(() => {
+    if (activeTab !== 'Semantic Tokens') {
+      setShowSemanticDownloadFab(false)
+      return
+    }
+
+    const el = semanticDownloadBtnRef.current
+    if (!el) return
+
+    setShowSemanticDownloadFab(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowSemanticDownloadFab(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -16px 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [activeTab])
+
+  const surfaceFilterCounts = useMemo(() => countSurfaceTokensByQuickFilter(), [])
+  const borderFilterCounts = useMemo(() => countBorderTokensByQuickFilter(), [])
+  const textFilterCounts = useMemo(() => countTextTokensByQuickFilter(), [])
+  const iconFilterCounts = useMemo(() => countIconTokensByQuickFilter(), [])
+
+  const semanticTableTokens = useMemo(() => {
+    const tokens = SEMANTIC_DATA[semanticSubTab]
+    if (semanticSubTab === 'Surface' && surfaceQuickFilter !== 'all') {
+      return tokens.filter((row) => getSurfaceTokenFilterCategory(row.token) === surfaceQuickFilter)
+    }
+    if (semanticSubTab === 'Border' && borderQuickFilter !== 'all') {
+      return tokens.filter((row) => getBorderTokenFilterCategory(row.token) === borderQuickFilter)
+    }
+    if (semanticSubTab === 'Text' && textQuickFilter !== 'all') {
+      return tokens.filter((row) => getTextTokenFilterCategory(row.token) === textQuickFilter)
+    }
+    if (semanticSubTab === 'Icon' && iconQuickFilter !== 'all') {
+      return tokens.filter((row) => getIconTokenFilterCategory(row.token) === iconQuickFilter)
+    }
+    return tokens
+  }, [semanticSubTab, surfaceQuickFilter, borderQuickFilter, textQuickFilter, iconQuickFilter])
 
   const onThisPageSections = useMemo(() => {
     if (activeTab === 'Overview') {
@@ -441,7 +669,12 @@ export default function Colors() {
         { id: 'global-download-tokens', label: 'Download tokens' },
       ]
     }
-    if (activeTab === 'Semantic Tokens') return [{ id: 'semantic-tokens', label: 'Semantic Tokens' }]
+    if (activeTab === 'Semantic Tokens') {
+      return [
+        { id: 'semantic-tokens', label: 'Semantic Tokens' },
+        { id: 'semantic-download-tokens', label: 'Download tokens' },
+      ]
+    }
     return []
   }, [activeTab])
 
@@ -840,6 +1073,14 @@ export default function Colors() {
                 <h3 className="text-sm font-medium text-arvo-light-primary dark:text-white mb-3">Orangish</h3>
                 <TokenTable tokens={FEEDBACK_ORANGISH} isLight={isLight} />
               </div>
+              <div>
+                <h3 className="text-sm font-medium text-arvo-light-primary dark:text-white mb-3">Positive</h3>
+                <TokenTable tokens={FEEDBACK_POSITIVE} isLight={isLight} />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-arvo-light-primary dark:text-white mb-3">Warning</h3>
+                <TokenTable tokens={FEEDBACK_WARNING} isLight={isLight} />
+              </div>
             </div>
           </div>
 
@@ -879,6 +1120,7 @@ export default function Colors() {
       )}
 
       {activeTab === 'Semantic Tokens' && (
+        <>
         <section id="semantic-tokens" className="space-y-6">
           <p className="text-arvo-light-secondary dark:text-neutral-400">Purpose-driven mappings for surfaces, borders, text, and icons. All semantic tokens map to global tokens—no hardcoded values.</p>
 
@@ -918,7 +1160,13 @@ export default function Colors() {
                 key={tab}
                 role="tab"
                 aria-selected={semanticSubTab === tab}
-                onClick={() => setSemanticSubTab(tab)}
+                onClick={() => {
+                  setSemanticSubTab(tab)
+                  if (tab !== 'Surface') setSurfaceQuickFilter('all')
+                  if (tab !== 'Border') setBorderQuickFilter('all')
+                  if (tab !== 'Text') setTextQuickFilter('all')
+                  if (tab !== 'Icon') setIconQuickFilter('all')
+                }}
                 data-arvo-tab-active={semanticSubTab === tab ? '' : undefined}
                 className={`pb-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
                   semanticSubTab === tab
@@ -942,14 +1190,72 @@ export default function Colors() {
             ))}
           </div>
 
-          {/* Token table */}
           <SemanticTokenTable
-            tokens={SEMANTIC_DATA[semanticSubTab]}
+            tokens={semanticTableTokens}
             lightTheme={lightTheme}
             isLight={isLight}
             semanticSubTab={semanticSubTab}
+            toolbarFilter={
+              semanticSubTab === 'Surface' ? (
+                <SemanticTokenFilterBar
+                  label="Filter surface tokens"
+                  ariaLabel="Surface token groups"
+                  filters={SURFACE_QUICK_FILTERS}
+                  value={surfaceQuickFilter}
+                  onChange={setSurfaceQuickFilter}
+                  counts={surfaceFilterCounts}
+                  isLight={isLight}
+                />
+              ) : semanticSubTab === 'Border' ? (
+                <SemanticTokenFilterBar
+                  label="Filter border tokens"
+                  ariaLabel="Border token groups"
+                  filters={BORDER_QUICK_FILTERS}
+                  value={borderQuickFilter}
+                  onChange={setBorderQuickFilter}
+                  counts={borderFilterCounts}
+                  isLight={isLight}
+                />
+              ) : semanticSubTab === 'Text' ? (
+                <SemanticTokenFilterBar
+                  label="Filter text tokens"
+                  ariaLabel="Text token groups"
+                  filters={TEXT_QUICK_FILTERS}
+                  value={textQuickFilter}
+                  onChange={setTextQuickFilter}
+                  counts={textFilterCounts}
+                  isLight={isLight}
+                />
+              ) : semanticSubTab === 'Icon' ? (
+                <SemanticTokenFilterBar
+                  label="Filter icon tokens"
+                  ariaLabel="Icon token groups"
+                  filters={ICON_QUICK_FILTERS}
+                  value={iconQuickFilter}
+                  onChange={setIconQuickFilter}
+                  counts={iconFilterCounts}
+                  isLight={isLight}
+                />
+              ) : null
+            }
           />
+
+          <div
+            id="semantic-download-tokens"
+            className="scroll-mt-24 border p-6 shadow-sm dark:border-neutral-700"
+            style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#FFFFFF' } : { backgroundColor: 'transparent' }}
+          >
+            <h2 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-2">Download for development</h2>
+            <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+              Export all semantic color token mappings as{' '}
+              <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>_semantic-colors.scss</code> and replace{' '}
+              <code className="font-mono text-xs px-1" style={isLight ? { backgroundColor: '#F2F2F2' } : { backgroundColor: '#262626' }}>packages/tokens/src/scss/_semantic-colors.scss</code>.
+            </p>
+            <SemanticColorsDownloadButton ref={semanticDownloadBtnRef} isLight={isLight} />
+          </div>
         </section>
+        <SemanticColorsDownloadFab isLight={isLight} visible={showSemanticDownloadFab} />
+        </>
       )}
     </div>
     </PageWithToc>

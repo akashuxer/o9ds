@@ -10,6 +10,8 @@ import {
   FEEDBACK_GREENISH,
   FEEDBACK_REDISH,
   FEEDBACK_ORANGISH,
+  FEEDBACK_POSITIVE,
+  FEEDBACK_WARNING,
   UTILITY_TOKENS,
   NOVA_BRAND_TOKENS,
 } from '../tokens/globalColorTokens'
@@ -60,6 +62,8 @@ export function buildO9dsGlobalColorsScss() {
   appendSubsection(lines, 'Greenish', FEEDBACK_GREENISH)
   appendSubsection(lines, 'Redish', FEEDBACK_REDISH)
   appendSubsection(lines, 'Orangish', FEEDBACK_ORANGISH)
+  appendSubsection(lines, 'Positive', FEEDBACK_POSITIVE)
+  appendSubsection(lines, 'Warning', FEEDBACK_WARNING)
 
   appendSection(lines, 'Utility Colors', UTILITY_TOKENS)
   appendSection(lines, 'Nova AI Brand Colors', NOVA_BRAND_TOKENS)

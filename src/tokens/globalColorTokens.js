@@ -115,6 +115,18 @@ export const FEEDBACK_ORANGISH = [
   { token: 'arvo-global-orangish-07', hex: '#FFF2D6' },
 ]
 
+/** Positive feedback scale (semantic surface strong/subtle). */
+export const FEEDBACK_POSITIVE = [
+  { token: 'arvo-global-positive-10', hex: '#00804F', branding: 'Grass D2' },
+  { token: 'arvo-global-positive-08', hex: '#C0F0CA' },
+]
+
+/** Warning feedback scale (semantic surface strong/subtle). */
+export const FEEDBACK_WARNING = [
+  { token: 'arvo-global-warning-10', hex: '#926200' },
+  { token: 'arvo-global-warning-06', hex: '#FFF2D6' },
+]
+
 // Utility Colors — used less frequently
 export const UTILITY_TOKENS = [
   { token: 'arvo-global-purple-10', hex: '#7433CC', branding: 'Indigo Accent' },
@@ -133,6 +145,7 @@ export const UTILITY_TOKENS = [
   { token: 'arvo-global-green-09', hex: '#015132' },
   { token: 'arvo-global-green-08', hex: '#26A644' },
   { token: 'arvo-global-green-07', hex: '#6EDE8A' },
+  { token: 'arvo-global-green-05', hex: '#E1F3E4' },
   { token: 'arvo-global-opacity-1', hex: '#01010199' },
   { token: 'arvo-global-opacity-2', hex: '#4C4C4C33' },
   { token: 'arvo-global-opacity-3', hex: '#4C4C4C0F' },
@@ -157,6 +170,8 @@ const ALL_GLOBAL = [
   ...FEEDBACK_GREENISH,
   ...FEEDBACK_REDISH,
   ...FEEDBACK_ORANGISH,
+  ...FEEDBACK_POSITIVE,
+  ...FEEDBACK_WARNING,
   ...UTILITY_TOKENS,
   ...NOVA_BRAND_TOKENS,
 ]
