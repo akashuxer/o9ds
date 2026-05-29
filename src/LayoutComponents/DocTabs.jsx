@@ -1,5 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 
+export { useDocTabUrl } from '../hooks/useDocTabUrl'
+
 /**
  * Reusable tab bar for documentation pages (Overview, Usage, API, Accessibility, etc.).
  * Parent controls activeTab and passes onSelect. Handles arrow-key navigation.

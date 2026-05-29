@@ -2,7 +2,7 @@ import { useState, useMemo, useRef } from 'react'
 import { ArvoPopover, ArvoButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
@@ -15,7 +15,7 @@ const PROPS = DESCRIPTOR.props
 
 
 export default function Popover() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
   const triggerRef = useRef(null)
   const [open, setOpen] = useState(false)
 

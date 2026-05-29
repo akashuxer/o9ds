@@ -2,108 +2,155 @@
  * Sidebar green dot + section overview "ready" state: routes with real documentation
  * (not placeholder). Import this single source from Layout and overview pages.
  */
+import {
+  PATH_ABOUT_ARVO,
+  PATH_A11Y_ASSISTIVE,
+  PATH_A11Y_INTRODUCTION,
+  PATH_A11Y_KEYBOARD,
+  PATH_A11Y_OVERVIEW,
+  PATH_A11Y_SCREEN_READER_BASE,
+  PATH_A11Y_STANDARDS,
+  PATH_A11Y_TESTING,
+  PATH_A11Y_VISUAL,
+  PATH_BORDERS,
+  PATH_COLOR_BASE,
+  PATH_COMPONENTS_OVERVIEW,
+  PATH_CONTENT_OVERVIEW,
+  PATH_DEV_INTRO_BASE,
+  PATH_EFFECTS,
+  PATH_FIGMA_MAKE_BASE,
+  PATH_FOUNDATIONS_OVERVIEW,
+  PATH_HOME,
+  PATH_ICONS_BASE,
+  PATH_ILLUSTRATIONS_BASE,
+  PATH_PATTERNS_OVERVIEW,
+  PATH_RESOURCES,
+  PATH_SPACING,
+  PATH_SYMBOL,
+  PATH_TYPOGRAPHY_BASE,
+  componentDocBase,
+  docPagePath,
+} from './docPaths'
+
 export const PATHS_WITH_CONTENT = new Set([
-  '/',
-  '/overview',
-  '/resources',
-  '/foundations',
-  '/colors',
-  '/typography',
-  '/spacing',
-  '/borders',
-  '/effects',
-  '/icons',
-  '/illustrations',
-  '/symbol',
-  '/components',
-  '/developers',
-  '/figma-make',
-
-  // For Developers → Usage
-  '/usage',
-  '/usage/public-api',
-  '/usage/components',
-  '/usage/styling',
-  '/usage/composition',
-  '/usage/accessibility',
-  '/usage/testing',
-  '/usage/versioning',
-  '/usage/anti-patterns',
-  '/usage/checklist',
-
-  // For Developers → Developer Reference
-  '/developer-reference/agentic-pipeline',
-  '/developer-reference/component-pipeline',
-  '/developer-reference/token-pipeline',
-  '/developer-reference/shared-patterns',
-  '/developer-reference/testing-and-drift',
-  '/developer-reference/workflows',
-  '/patterns',
-  '/accessibility',
-  '/accessibility/overview',
-  '/accessibility/standards-and-principles',
-  '/accessibility/assistive-technology',
-  '/accessibility/screen-reader-and-aria',
-  '/accessibility/keyboard-and-focus',
-  '/accessibility/visual-accessibility',
-  '/accessibility/testing-and-qa',
-  '/content',
+  PATH_HOME,
+  PATH_ABOUT_ARVO,
+  PATH_RESOURCES,
+  PATH_FOUNDATIONS_OVERVIEW,
+  docPagePath(PATH_COLOR_BASE, 'Overview'),
+  docPagePath(PATH_TYPOGRAPHY_BASE, 'Overview'),
+  PATH_SPACING,
+  PATH_BORDERS,
+  PATH_EFFECTS,
+  docPagePath(PATH_ICONS_BASE, 'Overview'),
+  docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview'),
+  PATH_SYMBOL,
+  PATH_COMPONENTS_OVERVIEW,
+  docPagePath(PATH_DEV_INTRO_BASE, 'Overview'),
+  docPagePath(PATH_FIGMA_MAKE_BASE, 'Overview'),
+  PATH_PATTERNS_OVERVIEW,
+  PATH_A11Y_OVERVIEW,
+  PATH_A11Y_INTRODUCTION,
+  PATH_A11Y_STANDARDS,
+  PATH_A11Y_ASSISTIVE,
+  docPagePath(PATH_A11Y_SCREEN_READER_BASE, 'Overview'),
+  PATH_A11Y_KEYBOARD,
+  PATH_A11Y_VISUAL,
+  PATH_A11Y_TESTING,
+  PATH_CONTENT_OVERVIEW,
 
   // Buttons & Actions
-  '/components/button',
-  '/components/icon-button',
-  '/components/button-group',
-  '/components/dropdown-button',
-  '/components/dropdown-icon-button',
-  '/components/fab-button',
+  componentDocBase('button') + '/overview',
+  componentDocBase('icon-button') + '/overview',
+  componentDocBase('button-group') + '/overview',
+  componentDocBase('dropdown-button') + '/overview',
+  componentDocBase('dropdown-icon-button') + '/overview',
+  componentDocBase('fab-button') + '/overview',
 
   // Navigation
-  '/components/link',
-  '/components/button-link',
-  '/components/icon-button-link',
-  '/components/tabstrip',
-  '/components/breadcrumb',
+  componentDocBase('link') + '/overview',
+  componentDocBase('button-link') + '/overview',
+  componentDocBase('icon-button-link') + '/overview',
+  componentDocBase('tabstrip') + '/overview',
+  componentDocBase('breadcrumb') + '/overview',
 
   // Inputs — Text
-  '/components/textbox',
-  '/components/textarea',
-  '/components/number-input',
+  componentDocBase('textbox') + '/overview',
+  componentDocBase('textarea') + '/overview',
+  componentDocBase('number-input') + '/overview',
 
   // Inputs — Selection Controls
-  '/components/checkbox',
-  '/components/checkbox-group',
-  '/components/radio',
-  '/components/radio-group',
-  '/components/switch',
+  componentDocBase('checkbox') + '/overview',
+  componentDocBase('checkbox-group') + '/overview',
+  componentDocBase('radio') + '/overview',
+  componentDocBase('radio-group') + '/overview',
+  componentDocBase('switch') + '/overview',
 
   // Inputs — Selection Inputs
-  '/components/select-dropdown',
-  '/components/combobox',
-  '/components/listbox',
-  '/components/search',
+  componentDocBase('select-dropdown') + '/overview',
+  componentDocBase('combobox') + '/overview',
+  componentDocBase('listbox') + '/overview',
+  componentDocBase('search') + '/overview',
 
-  // Feedback
-  '/components/toast',
-  '/components/badge',
+  // Inputs — Other
+  componentDocBase('chip') + '/overview',
 
   // Overlays
-  '/components/action-menu',
-  '/components/popover',
-  '/components/hybrid-popover',
-  '/components/tooltip',
-  '/components/alert-dialog',
+  componentDocBase('popover') + '/overview',
+  componentDocBase('hybrid-popover') + '/overview',
+  componentDocBase('action-menu') + '/overview',
+  componentDocBase('tooltip') + '/overview',
+  componentDocBase('alert-dialog') + '/overview',
+  componentDocBase('drawer') + '/overview',
+  componentDocBase('side-panel') + '/overview',
 
-  // Inputs (additional)
-  '/components/chip',
+  // Feedback
+  componentDocBase('badge') + '/overview',
+  componentDocBase('banner-alerts') + '/overview',
+  componentDocBase('inline-alert') + '/overview',
+  componentDocBase('toast') + '/overview',
 
-  // Data Display
-  '/components/cards',
+  // Utilities
+  componentDocBase('label') + '/overview',
+
+  // Data display
+  componentDocBase('cards') + '/overview',
+
+  // Buttons — more
+  componentDocBase('segmented-control') + '/overview',
+  componentDocBase('split-button') + '/overview',
+  componentDocBase('split-icon-button') + '/overview',
+  componentDocBase('toolbar') + '/overview',
 ])
 
-/**
- * @param {string} path
- * @returns {boolean}
- */
-export function hasReadyDocumentation(path) {
-  return PATHS_WITH_CONTENT.has(path)
+/** Match pathname to a ready route (supports tab suffixes under known bases). */
+export function hasReadyDocumentation(pathname) {
+  const normalized = pathname.replace(/\/$/, '') || '/'
+  if (PATHS_WITH_CONTENT.has(normalized)) return true
+
+  for (const ready of PATHS_WITH_CONTENT) {
+    if (normalized.startsWith(`${ready.replace(/\/overview$/, '')}/`)) return true
+  }
+
+  const componentMatch = normalized.match(/^\/components\/[^/]+\//)
+  if (componentMatch && PATHS_WITH_CONTENT.has(`${componentMatch[0].slice(0, -1)}/overview`)) {
+    return true
+  }
+
+  const tabbedBases = [
+    PATH_COLOR_BASE,
+    PATH_TYPOGRAPHY_BASE,
+    PATH_ICONS_BASE,
+    PATH_ILLUSTRATIONS_BASE,
+    PATH_FIGMA_MAKE_BASE,
+    PATH_DEV_INTRO_BASE,
+    PATH_A11Y_SCREEN_READER_BASE,
+  ]
+  for (const base of tabbedBases) {
+    if (normalized.startsWith(`${base}/`) && PATHS_WITH_CONTENT.has(docPagePath(base, 'Overview'))) {
+      return true
+    }
+  }
+
+  return false
 }

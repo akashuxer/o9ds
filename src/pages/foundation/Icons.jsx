@@ -1,4 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react'
+import { useDocTabUrl } from '../../hooks/useDocTabUrl'
+import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
+import { PATH_ICONS_BASE } from '../../data/docPaths'
 import { useTheme } from '../../context/ThemeContext'
 import { o9conIcons } from '../../tokens/o9conIcons'
 import { ICON_SIZE_PX, ICON_SIZE_TOKENS_SCSS } from '../../tokens/iconTokens'
@@ -191,7 +194,7 @@ function O9conIconCard({ icon, size, isLight }) {
 }
 
 export default function Icons() {
-  const [activeTab, setActiveTab] = useState('Overview')
+  const [activeTab, setActiveTab] = useDocTabUrl(tabs, { basePath: PATH_ICONS_BASE })
   const [selectedSize, setSelectedSize] = useState(24)
   const [o9conSearch, setO9conSearch] = useState('')
   const tabListRef = useRef(null)
@@ -281,6 +284,7 @@ export default function Icons() {
   }, [activeTab])
 
   return (
+    <DocTabRouteProvider basePath={PATH_ICONS_BASE}>
     <PageWithToc sections={onThisPageSections}>
     <div className="space-y-8">
       <section>
@@ -851,5 +855,6 @@ export default function Icons() {
       />
     )}
     </PageWithToc>
+    </DocTabRouteProvider>
   )
 }

@@ -4,6 +4,17 @@ import { BackgroundRippleEffect } from '@/components/ui/BackgroundRippleEffect'
 import PublicRasterPicture from '@/components/media/PublicRasterPicture'
 import { useTheme } from '../context/ThemeContext'
 import { useDocsShell } from '../context/DocsShellContext'
+import {
+  PATH_A11Y_OVERVIEW,
+  PATH_ABOUT_ARVO,
+  PATH_COMPONENTS_OVERVIEW,
+  PATH_CONTENT_OVERVIEW,
+  PATH_FOUNDATIONS_OVERVIEW,
+  PATH_ICONS_BASE,
+  PATH_PATTERNS_OVERVIEW,
+  PATH_FIGMA_MAKE_BASE,
+  docPagePath,
+} from '../data/docPaths'
 
 /** Flip order: Consistent → Flexible → Accessible → Effortless → Delightful */
 const FLIP_WORDS = ['Consistent', 'Flexible', 'Accessible', 'Effortless', 'Delightful']
@@ -28,13 +39,13 @@ const cards = [
   {
     title: 'Get Started',
     desc: 'Orientation, principles, and how teams adopt Arvo.',
-    path: '/overview',
+    path: PATH_ABOUT_ARVO,
     icon: 'getStarted',
   },
   {
     title: 'Foundations',
     desc: 'Tokens, color, type, spacing, and motion baselines.',
-    path: '/foundations',
+    path: PATH_FOUNDATIONS_OVERVIEW,
     icon: 'foundations',
   },
   {
@@ -46,37 +57,37 @@ const cards = [
   {
     title: 'Figma Make',
     desc: 'Rapid prototyping tool using the Arvo design language.',
-    path: '/figma-make',
+    path: docPagePath(PATH_FIGMA_MAKE_BASE, 'Overview'),
     icon: 'figmaMake',
   },
   {
     title: 'Components',
     desc: 'Inputs, actions, navigation, and data display.',
-    path: '/components',
+    path: PATH_COMPONENTS_OVERVIEW,
     icon: 'components',
   },
   {
     title: 'Assets',
     desc: 'Iconography and illustration language.',
-    path: '/icons',
+    path: docPagePath(PATH_ICONS_BASE, 'Overview'),
     icon: 'assets',
   },
   {
     title: 'Accessibility',
     desc: 'Inclusive patterns and WCAG-aligned guidance.',
-    path: '/accessibility',
+    path: PATH_A11Y_OVERVIEW,
     icon: 'accessibility',
   },
   {
     title: 'Content Guidelines',
     desc: 'Voice, tone, and product copy conventions.',
-    path: '/content',
+    path: PATH_CONTENT_OVERVIEW,
     icon: 'content',
   },
   {
     title: 'Patterns',
     desc: 'Common workflows: forms, tables, modals, and more.',
-    path: '/patterns',
+    path: PATH_PATTERNS_OVERVIEW,
     icon: 'patterns',
   },
 ]
@@ -418,7 +429,7 @@ export default function Home() {
 
   const onGetStarted = () => {
     enterDocs()
-    navigate('/overview')
+    navigate(PATH_ABOUT_ARVO)
   }
 
   return (

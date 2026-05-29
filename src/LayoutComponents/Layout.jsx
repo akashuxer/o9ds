@@ -3,15 +3,68 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
-import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
+import { PATHS_WITH_CONTENT, hasReadyDocumentation } from '../data/pathsWithContent'
+import {
+  ACCESSIBILITY,
+  COMPONENTS,
+  CONTENT,
+  FOUNDATIONS,
+  GETTING_STARTED,
+  PATTERNS,
+  PATH_A11Y_ASSISTIVE,
+  PATH_A11Y_INTRODUCTION,
+  PATH_A11Y_KEYBOARD,
+  PATH_A11Y_OVERVIEW,
+  PATH_A11Y_SCREEN_READER_BASE,
+  PATH_A11Y_SHORTCUTS,
+  PATH_A11Y_STANDARDS,
+  PATH_A11Y_TESTING,
+  PATH_A11Y_VISUAL,
+  PATH_ABOUT_ARVO,
+  PATH_ARVO_MCP,
+  PATH_BORDERS,
+  PATH_CHANGELOG,
+  PATH_COLOR_BASE,
+  PATH_COLOR_DATA_VIZ,
+  PATH_COMPONENTS_OVERVIEW,
+  PATH_CONTENT_OVERVIEW,
+  PATH_CONTRIBUTE,
+  PATH_DESIGNERS,
+  PATH_DEV_INTRO_BASE,
+  PATH_DEV_REF_BASE,
+  PATH_DEV_USAGE_BASE,
+  PATH_EFFECTS,
+  PATH_FAQS,
+  PATH_FIGMA_MAKE_BASE,
+  PATH_FOUNDATIONS_OVERVIEW,
+  PATH_HOME,
+  PATH_ICONS_BASE,
+  PATH_ILLUSTRATIONS_BASE,
+  PATH_MOTION,
+  PATH_PATTERNS_OVERVIEW,
+  PATH_RESOURCES,
+  PATH_SPACING,
+  PATH_SYMBOL,
+  PATH_TYPOGRAPHY_BASE,
+  contentTopicPath,
+  devRefTopicPath,
+  devUsageTopicPath,
+  docPagePath,
+  patternTopicPath,
+} from '../data/docPaths'
 
 function groupHasContent(item) {
-  if (!item.children) return PATHS_WITH_CONTENT.has(item.path)
+  if (!item.children) return hasReadyDocumentation(item.path)
   return item.children.some(groupHasContent)
 }
 
 /** Section hub pages (Foundations / Accessibility / … overview grids) — extra width so 3-column cards match. */
-const SECTION_OVERVIEW_HUB_PATHS = ['/foundations', '/accessibility', '/patterns', '/content']
+const SECTION_OVERVIEW_HUB_PATHS = [
+  PATH_FOUNDATIONS_OVERVIEW,
+  PATH_A11Y_OVERVIEW,
+  PATH_PATTERNS_OVERVIEW,
+  PATH_CONTENT_OVERVIEW,
+]
 
 const PAGE_TITLES = {
   '/': 'Platform UI',
@@ -85,38 +138,38 @@ const sidebarSections = [
     title: '',
     hideTitle: true,
     items: [
-      { path: '/', label: 'Home' },
-      { path: '/changelog', label: 'Changelog' },
+      { path: PATH_HOME, label: 'Home' },
+      { path: PATH_CHANGELOG, label: 'Changelog' },
     ],
   },
   {
     title: 'GETTING STARTED',
     items: [
-      { path: '/overview', label: 'About Arvo' },
-      { path: '/resources', label: 'Resources' },
-      { path: '/figma-make', label: 'For Figma Make Users' },
-      { path: '/designers', label: 'For Designers' },
+      { path: PATH_ABOUT_ARVO, label: 'About Arvo' },
+      { path: PATH_RESOURCES, label: 'Resources' },
+      { path: docPagePath(PATH_FIGMA_MAKE_BASE, 'Overview'), label: 'For Figma Make Users' },
+      { path: PATH_DESIGNERS, label: 'For Designers' },
       {
         path: '_nav-group-for-developers',
         label: 'For Developers',
         subsectionGroup: true,
         children: [
-          { path: '/developers', label: 'Intro Guide' },
+          { path: docPagePath(PATH_DEV_INTRO_BASE, 'Overview'), label: 'Intro Guide' },
           {
             path: '_nav-group-usage',
             label: 'Usage',
             subsectionGroup: true,
             children: [
-              { path: '/usage', label: 'Overview' },
-              { path: '/usage/public-api', label: 'Public API' },
-              { path: '/usage/components', label: 'Components Contract' },
-              { path: '/usage/styling', label: 'Styling' },
-              { path: '/usage/composition', label: 'Composition' },
-              { path: '/usage/accessibility', label: 'Accessibility' },
-              { path: '/usage/testing', label: 'Testing' },
-              { path: '/usage/versioning', label: 'Versioning' },
-              { path: '/usage/anti-patterns', label: 'Anti-Patterns' },
-              { path: '/usage/checklist', label: 'PR Checklist' },
+              { path: devUsageTopicPath('overview'), label: 'Overview' },
+              { path: devUsageTopicPath('public-api'), label: 'Public API' },
+              { path: devUsageTopicPath('components'), label: 'Components Contract' },
+              { path: devUsageTopicPath('styling'), label: 'Styling' },
+              { path: devUsageTopicPath('composition'), label: 'Composition' },
+              { path: devUsageTopicPath('accessibility'), label: 'Accessibility' },
+              { path: devUsageTopicPath('testing'), label: 'Testing' },
+              { path: devUsageTopicPath('versioning'), label: 'Versioning' },
+              { path: devUsageTopicPath('anti-patterns'), label: 'Anti-Patterns' },
+              { path: devUsageTopicPath('checklist'), label: 'PR Checklist' },
             ],
           },
           {
@@ -124,42 +177,42 @@ const sidebarSections = [
             label: 'Developer Reference',
             subsectionGroup: true,
             children: [
-              { path: '/developer-reference/agentic-pipeline', label: 'Agentic Pipeline' },
-              { path: '/developer-reference/component-pipeline', label: 'Component Pipeline' },
-              { path: '/developer-reference/token-pipeline', label: 'Token Pipeline' },
-              { path: '/developer-reference/shared-patterns', label: 'Shared Patterns' },
-              { path: '/developer-reference/testing-and-drift', label: 'Testing & Drift' },
-              { path: '/developer-reference/workflows', label: 'Contributor Workflows' },
+              { path: devRefTopicPath('agentic-pipeline'), label: 'Agentic Pipeline' },
+              { path: devRefTopicPath('component-pipeline'), label: 'Component Pipeline' },
+              { path: devRefTopicPath('token-pipeline'), label: 'Token Pipeline' },
+              { path: devRefTopicPath('shared-patterns'), label: 'Shared Patterns' },
+              { path: devRefTopicPath('testing-and-drift'), label: 'Testing & Drift' },
+              { path: devRefTopicPath('workflows'), label: 'Contributor Workflows' },
             ],
           },
         ],
       },
-      { path: '/arvo-mcp-other-mcps', label: 'Arvo MCP/Other MCPs' },
-      { path: '/contribute', label: 'How to Contribute' },
-      { path: '/faqs', label: 'FAQs' },
+      { path: PATH_ARVO_MCP, label: 'Arvo MCP/Other MCPs' },
+      { path: PATH_CONTRIBUTE, label: 'How to Contribute' },
+      { path: PATH_FAQS, label: 'FAQs' },
     ],
   },
   {
     title: 'FOUNDATIONS',
     items: [
-      { path: '/foundations', label: 'Overview' },
-      { path: '/colors', label: 'Colors' },
-      { path: '/typography', label: 'Typography' },
-      { path: '/spacing', label: 'Spacing' },
-      { path: '/borders', label: 'Borders & Radius' },
-      { path: '/effects', label: 'Effects' },
+      { path: PATH_FOUNDATIONS_OVERVIEW, label: 'Overview' },
+      { path: docPagePath(PATH_COLOR_BASE, 'Overview'), label: 'Colors' },
+      { path: docPagePath(PATH_TYPOGRAPHY_BASE, 'Overview'), label: 'Typography' },
+      { path: PATH_SPACING, label: 'Spacing' },
+      { path: PATH_BORDERS, label: 'Borders & Radius' },
+      { path: PATH_EFFECTS, label: 'Effects' },
       {
         path: '_nav-group-assets',
         label: 'Assets',
         subsectionGroup: true,
         children: [
-          { path: '/icons', label: 'Iconography' },
-          { path: '/illustrations', label: 'Illustrations' },
-          { path: '/symbol', label: 'Symbol' },
+          { path: docPagePath(PATH_ICONS_BASE, 'Overview'), label: 'Iconography' },
+          { path: docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview'), label: 'Illustrations' },
+          { path: PATH_SYMBOL, label: 'Symbol' },
         ],
       },
-      { path: '/motion', label: 'Motion & Animation' },
-      { path: '/colors/data-viz', label: 'Data Visualization Colors' },
+      { path: PATH_MOTION, label: 'Motion & Animation' },
+      { path: PATH_COLOR_DATA_VIZ, label: 'Data Visualization Colors' },
     ],
   },
   {
@@ -170,42 +223,42 @@ const sidebarSections = [
   {
     title: 'ACCESSIBILITY',
     items: [
-      { path: '/accessibility', label: 'Overview' },
-      { path: '/accessibility/overview', label: 'Introduction' },
-      { path: '/accessibility/standards-and-principles', label: 'Standards and principles' },
-      { path: '/accessibility/assistive-technology', label: 'Assistive technology' },
-      { path: '/accessibility/screen-reader-and-aria', label: 'Screen reader and ARIA' },
-          { path: '/accessibility/keyboard-and-focus', label: 'Keyboard and focus' },
-          { path: '/accessibility/shortcuts', label: 'Shortcuts' },
-          { path: '/accessibility/visual-accessibility', label: 'Visual accessibility' },
-          { path: '/accessibility/testing-and-qa', label: 'Testing and QA' },
+      { path: PATH_A11Y_OVERVIEW, label: 'Overview' },
+      { path: PATH_A11Y_INTRODUCTION, label: 'Introduction' },
+      { path: PATH_A11Y_STANDARDS, label: 'Standards and principles' },
+      { path: PATH_A11Y_ASSISTIVE, label: 'Assistive technology' },
+      { path: docPagePath(PATH_A11Y_SCREEN_READER_BASE, 'Overview'), label: 'Screen reader and ARIA' },
+      { path: PATH_A11Y_KEYBOARD, label: 'Keyboard and focus' },
+      { path: PATH_A11Y_SHORTCUTS, label: 'Shortcuts' },
+      { path: PATH_A11Y_VISUAL, label: 'Visual accessibility' },
+      { path: PATH_A11Y_TESTING, label: 'Testing and QA' },
     ],
   },
   {
     title: 'CONTENT GUIDELINES',
     items: [
-      { path: '/content', label: 'Overview' },
-      { path: '/content/writing-principles', label: 'Writing Principles' },
-      { path: '/content/grammar', label: 'Grammar' },
-      { path: '/content/voice-and-tone', label: 'Voice and Tone' },
+      { path: PATH_CONTENT_OVERVIEW, label: 'Overview' },
+      { path: contentTopicPath('writing-principles'), label: 'Writing Principles' },
+      { path: contentTopicPath('grammar'), label: 'Grammar' },
+      { path: contentTopicPath('voice-and-tone'), label: 'Voice and Tone' },
     ],
   },
   {
     title: 'PATTERNS',
     items: [
-      { path: '/patterns', label: 'Overview' },
-      { path: '/patterns/forms', label: 'Forms' },
-      { path: '/patterns/search', label: 'Search' },
-      { path: '/patterns/application-layouts', label: 'Application Layouts' },
-      { path: '/patterns/notifications-alerts', label: 'Notifications / Alerts' },
-      { path: '/patterns/truncation', label: 'Truncation' },
-      { path: '/patterns/loading', label: 'Loading' },
-      { path: '/patterns/export', label: 'Export' },
-      { path: '/patterns/destructive-action', label: 'Destructive Action' },
-      { path: '/patterns/navigation', label: 'Navigation' },
-      { path: '/patterns/on-hover-always-visible', label: 'On Hover / Always Visible' },
-      { path: '/patterns/filters', label: 'Filters' },
-      { path: '/patterns/bulk-actions', label: 'Bulk Actions' },
+      { path: PATH_PATTERNS_OVERVIEW, label: 'Overview' },
+      { path: patternTopicPath('forms'), label: 'Forms' },
+      { path: patternTopicPath('search'), label: 'Search' },
+      { path: patternTopicPath('application-layouts'), label: 'Application Layouts' },
+      { path: patternTopicPath('notifications-alerts'), label: 'Notifications / Alerts' },
+      { path: patternTopicPath('truncation'), label: 'Truncation' },
+      { path: patternTopicPath('loading'), label: 'Loading' },
+      { path: patternTopicPath('export'), label: 'Export' },
+      { path: patternTopicPath('destructive-action'), label: 'Destructive Action' },
+      { path: patternTopicPath('navigation'), label: 'Navigation' },
+      { path: patternTopicPath('on-hover-always-visible'), label: 'On Hover / Always Visible' },
+      { path: patternTopicPath('filters'), label: 'Filters' },
+      { path: patternTopicPath('bulk-actions'), label: 'Bulk Actions' },
     ],
   },
 ]
@@ -220,11 +273,11 @@ function filterNavItemsByReady(items) {
   return items
     .map((item) => {
       if (item.children) {
-        const children = item.children.filter((c) => PATHS_WITH_CONTENT.has(c.path))
+        const children = item.children.filter((c) => hasReadyDocumentation(c.path))
         if (children.length === 0) return null
         return { ...item, children }
       }
-      return PATHS_WITH_CONTENT.has(item.path) ? item : null
+      return hasReadyDocumentation(item.path) ? item : null
     })
     .filter(Boolean)
 }
@@ -233,7 +286,7 @@ function getPageTitle(pathname) {
   const exact = PAGE_TITLES[pathname]
   if (exact) return exact
   // Fallback for /components/:slug – titleize slug
-  const componentsMatch = pathname.match(/^\/components\/(.+)$/)
+  const componentsMatch = pathname.match(/^\/components\/([^/]+)/)
   if (componentsMatch) {
     return componentsMatch[1].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
   }
@@ -245,7 +298,7 @@ export default function Layout({ children }) {
   const { pathname } = useLocation()
   const isSectionOverviewHub = SECTION_OVERVIEW_HUB_PATHS.includes(pathname)
   /** Full-width landing: sidebar only appears on routes other than `/`. */
-  const isLandingHome = pathname === '/'
+  const isLandingHome = pathname === PATH_HOME
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -714,7 +767,7 @@ export default function Layout({ children }) {
                                                   }
                                                 >
                                                   <span className="flex items-center gap-2 min-w-0">
-                                                    {PATHS_WITH_CONTENT.has(grandchild.path) && (
+                                                    {hasReadyDocumentation(grandchild.path) && (
                                                       <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
                                                     )}
                                                     {grandchild.label}
@@ -742,7 +795,7 @@ export default function Layout({ children }) {
                                         }
                                       >
                                         <span className="flex items-center gap-2 min-w-0">
-                                          {PATHS_WITH_CONTENT.has(child.path) && (
+                                          {hasReadyDocumentation(child.path) && (
                                             <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
                                           )}
                                           {child.label}
@@ -782,7 +835,7 @@ export default function Layout({ children }) {
                                   }
                                 >
                                   <span className="flex items-center gap-2 min-w-0">
-                                    {PATHS_WITH_CONTENT.has(child.path) && (
+                                    {hasReadyDocumentation(child.path) && (
                                       <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
                                     )}
                                     {child.label}
@@ -809,7 +862,7 @@ export default function Layout({ children }) {
                           }
                         >
                           <span className="flex items-center gap-2 min-w-0">
-                            {PATHS_WITH_CONTENT.has(item.path) && (
+                            {hasReadyDocumentation(item.path) && (
                               <span className="h-2 w-2 shrink-0 rounded-none bg-[#00c278]" aria-hidden title="Content available" />
                             )}
                             {item.label}
@@ -841,11 +894,17 @@ export default function Layout({ children }) {
         >
           <div
             className={`mx-auto relative z-10 ${
-              pathname === '/'
+              pathname === PATH_HOME
                 ? 'w-full max-w-none'
                 : isSectionOverviewHub
                   ? 'max-w-7xl'
-                  : pathname.startsWith('/overview') ||
+                  : pathname.startsWith(GETTING_STARTED) ||
+                      pathname.startsWith(FOUNDATIONS) ||
+                      pathname.startsWith(PATTERNS) ||
+                      pathname.startsWith(ACCESSIBILITY) ||
+                      pathname.startsWith(CONTENT) ||
+                      pathname.startsWith(COMPONENTS) ||
+                      pathname.startsWith('/overview') ||
                       pathname.startsWith('/resources') ||
                       pathname.startsWith('/colors') ||
                       pathname.startsWith('/typography') ||

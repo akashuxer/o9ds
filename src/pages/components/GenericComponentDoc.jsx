@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import DocTabs from '../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../LayoutComponents/DocTabs'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import GrayBgCard from '../../LayoutComponents/GrayBgCard'
@@ -42,7 +42,7 @@ function DocumentationStatusCard({ id }) {
 export default function GenericComponentDoc({ slug, description: descriptionProp }) {
   const title = slugToComponentTitle(slug)
   const headerDescription = descriptionProp ?? getComponentPageDescription(slug)
-  const [activeTab, setActiveTab] = useState('Overview')
+  const [activeTab, setActiveTab] = useDocTabUrl(TABS)
 
   const onThisPageSections = useMemo(() => {
     if (activeTab === 'Overview') {

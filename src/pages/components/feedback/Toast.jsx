@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useToast, ArvoButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
@@ -21,7 +21,7 @@ const PROVIDER_PROPS = [
 ]
 
 export default function Toast() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
   const toast = useToast?.() ?? null
   const sections = useMemo(() => {
     if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'demo', label: 'Live demo' }]

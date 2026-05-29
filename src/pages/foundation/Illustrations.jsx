@@ -1,4 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react'
+import { useDocTabUrl } from '../../hooks/useDocTabUrl'
+import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
+import { PATH_ILLUSTRATIONS_BASE } from '../../data/docPaths'
 import { useTheme } from '../../context/ThemeContext'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import { TokenDownloadFab, TokenDownloadSection } from '../../LayoutComponents/TokenScssDownload'
@@ -158,7 +161,7 @@ function IllustrationCard({ item, size }) {
 }
 
 export default function Illustrations() {
-  const [activeTab, setActiveTab] = useState('Overview')
+  const [activeTab, setActiveTab] = useDocTabUrl(tabs, { basePath: PATH_ILLUSTRATIONS_BASE })
   const [selectedSize, setSelectedSize] = useState(124)
   const tabListRef = useRef(null)
   const illusDownloadBtnRef = useRef(null)
@@ -218,6 +221,7 @@ export default function Illustrations() {
   }
 
   return (
+    <DocTabRouteProvider basePath={PATH_ILLUSTRATIONS_BASE}>
     <PageWithToc sections={onThisPageSections}>
     <div className="max-w-4xl space-y-8">
       <section>
@@ -469,5 +473,6 @@ export default function Illustrations() {
       />
     )}
     </PageWithToc>
+    </DocTabRouteProvider>
   )
 }

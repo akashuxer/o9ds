@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { ArvoLink } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, CssVarsGrid, KeyboardTable, AriaTable, MethodsTable, EventsTable, SimpleTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
@@ -17,7 +17,7 @@ const CSS_VARS = DESCRIPTOR.cssVarGroups
 
 
 export default function Link() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
   const sections = useMemo(() => {
     if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'variants', label: 'Variants' }, { id: 'sizes', label: 'Sizes' }]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]

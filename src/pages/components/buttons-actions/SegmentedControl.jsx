@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { ArvoSegmentedControl } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
 import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
@@ -52,7 +52,7 @@ const COMPARE_ROWS = [
 ]
 
 export default function SegmentedControl() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
   const [view, setView] = useState('list')
 
   const sections = useMemo(() => {

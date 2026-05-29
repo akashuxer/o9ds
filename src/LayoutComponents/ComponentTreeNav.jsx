@@ -6,7 +6,8 @@ import {
   findOpenGroupIds,
   filterComponentNavTree,
 } from '../data/componentsNav'
-import { PATHS_WITH_CONTENT } from '../data/pathsWithContent'
+import { hasReadyDocumentation } from '../data/pathsWithContent'
+import { PATH_COMPONENTS_OVERVIEW } from '../data/docPaths'
 
 /** Keep only component leaves that have full docs (green dot in nav). */
 function filterNavTreeByReady(nodes) {
@@ -141,14 +142,14 @@ export default function ComponentTreeNav({ searchQuery, readyOnly = false, isDar
     </ul>
   )
 
-  const showOverviewLink = !readyOnly || PATHS_WITH_CONTENT.has('/components')
+  const showOverviewLink = !readyOnly || hasReadyDocumentation(PATH_COMPONENTS_OVERVIEW)
 
   if (tree.length === 0) {
     return (
       <ul className="space-y-0.5">
         {showOverviewLink && (
           <li>
-            <NavLink to="/components" end className={linkClass} onClick={onNavigate}>
+            <NavLink to={PATH_COMPONENTS_OVERVIEW} end className={linkClass} onClick={onNavigate}>
               <span className="flex items-center gap-2 min-w-0">Overview</span>
             </NavLink>
           </li>
@@ -161,7 +162,7 @@ export default function ComponentTreeNav({ searchQuery, readyOnly = false, isDar
     <ul className="space-y-0.5">
       {showOverviewLink && (
         <li>
-          <NavLink to="/components" end className={linkClass} onClick={onNavigate}>
+          <NavLink to={PATH_COMPONENTS_OVERVIEW} end className={linkClass} onClick={onNavigate}>
             <span className="flex items-center gap-2 min-w-0">Overview</span>
           </NavLink>
         </li>

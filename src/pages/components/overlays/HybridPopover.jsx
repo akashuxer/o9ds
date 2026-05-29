@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable } from '../../../LayoutComponents/ComponentDocPrimitives'
@@ -14,7 +14,7 @@ const PROPS = DESCRIPTOR.props
 
 
 export default function HybridPopover() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
   const sections = useMemo(() => {
     if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'modes', label: 'Modes' }]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]

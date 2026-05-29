@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { ArvoIconButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
 import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
@@ -19,7 +19,7 @@ const CSS_VARS = DESCRIPTOR.cssVarGroups
 
 
 export default function IconButton() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
   const sections = useMemo(() => {
     if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'variants', label: 'Variants' }, { id: 'sizes', label: 'Sizes' }, { id: 'states', label: 'States' }, { id: 'dos-donts', label: "Dos & Don'ts" }]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]

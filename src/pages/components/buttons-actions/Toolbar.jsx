@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import ComponentPreview from '../../../LayoutComponents/ComponentPreview'
 import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
 import DocSection, { DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
@@ -34,7 +34,7 @@ const docIcon = (
 )
 
 export default function Toolbar() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
 
   const sections = useMemo(() => {
     if (tab === 'Overview') return [

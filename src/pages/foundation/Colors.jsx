@@ -2,7 +2,9 @@ import { useState, useMemo, useRef, useEffect, forwardRef } from 'react'
 import { useTheme } from '../../context/ThemeContext'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import ColorSwatch from '../../LayoutComponents/ColorSwatch'
-import DocTabs from '../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../LayoutComponents/DocTabs'
+import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
+import { PATH_COLOR_BASE } from '../../data/docPaths'
 import WhiteBgCard from '../../LayoutComponents/WhiteBgCard'
 import { PALETTE_ORDER, BRAND_PALETTES, NEUTRALS_PALETTE } from '../../tokens/brandColors'
 import {
@@ -387,7 +389,7 @@ const SEMANTIC_COUNTS = {
 }
 
 export default function Colors() {
-  const [activeTab, setActiveTab] = useState('Overview')
+  const [activeTab, setActiveTab] = useDocTabUrl(tabs, { basePath: PATH_COLOR_BASE })
   const [semanticSubTab, setSemanticSubTab] = useState('Surface')
   const [lightTheme, setLightTheme] = useState('o9theme')
   const { theme } = useTheme()
@@ -444,6 +446,7 @@ export default function Colors() {
   }, [activeTab])
 
   return (
+    <DocTabRouteProvider basePath={PATH_COLOR_BASE}>
     <PageWithToc sections={onThisPageSections}>
     <div className="max-w-4xl space-y-8">
       <section>
@@ -950,5 +953,6 @@ export default function Colors() {
       )}
     </div>
     </PageWithToc>
+    </DocTabRouteProvider>
   )
 }

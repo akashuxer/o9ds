@@ -1,4 +1,6 @@
 import { useParams } from 'react-router-dom'
+import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
+import { componentDocBase } from '../../data/docPaths'
 import Button from './buttons-actions/Button'
 import IconButton from './buttons-actions/IconButton'
 import ButtonGroup from './buttons-actions/ButtonGroup'
@@ -104,6 +106,15 @@ const FULL_DOC_BY_SLUG = (() => {
 export default function ComponentDocPage() {
   const { slug } = useParams()
   const Cmp = slug ? FULL_DOC_BY_SLUG[slug] : null
-  if (Cmp) return <Cmp />
-  return <GenericComponentDoc slug={slug} />
+  const basePath = slug ? componentDocBase(slug) : null
+
+  if (!basePath) {
+    return Cmp ? <Cmp /> : <GenericComponentDoc slug={slug} />
+  }
+
+  return (
+    <DocTabRouteProvider basePath={basePath}>
+      {Cmp ? <Cmp /> : <GenericComponentDoc slug={slug} />}
+    </DocTabRouteProvider>
+  )
 }

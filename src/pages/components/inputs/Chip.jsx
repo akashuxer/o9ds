@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import {
@@ -25,7 +25,7 @@ const KEYBOARD = DESCRIPTOR.keyboard
 const ARIA = DESCRIPTOR.aria
 
 export default function Chip() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
 
   const sections = useMemo(() => {
     if (tab === 'Overview') return [

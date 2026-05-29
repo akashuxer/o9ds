@@ -105,7 +105,7 @@ export default function ReferenceLibraryTab() {
           <DocCallout tone="note" title="Prompts Library">
             Ready-made prompts for common workflows live on the{' '}
             <Link
-              to="/figma-make#prompts-library"
+              to="/gettingstarted/figma-make/prompts-library"
               className="font-semibold text-arvo-light-primary underline underline-offset-2 dark:text-white"
             >
               Prompts Library

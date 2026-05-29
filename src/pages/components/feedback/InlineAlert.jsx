@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { ArvoMessageAlert } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
 import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
@@ -35,7 +35,7 @@ const SIZE_ROWS = [
 ]
 
 export default function InlineAlert() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
 
   const sections = useMemo(() => {
     if (tab === 'Overview') return [

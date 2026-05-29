@@ -1,8 +1,10 @@
-import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo, useCallback } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import PageHeader from '../LayoutComponents/PageHeader'
 import PageWithToc from '../LayoutComponents/PageWithToc'
 import DocTabs from '../LayoutComponents/DocTabs'
+import { PATH_DEV_INTRO_BASE, PATH_DEV_USAGE_BASE, docPagePath } from '../data/docPaths'
+import { useDevelopersIntroTabUrl, useDevelopersUsageSection } from '../hooks/useDevelopersTabUrl'
 import CodeBlock from '../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../LayoutComponents/DocSection'
 import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../LayoutComponents/codeHighlight'
@@ -129,8 +131,24 @@ const DIST_MATRIX = [
   ['@arvo/js', 'dist/', 'ESM, CJS, .d.ts', '., ./plugin, ./auto'],
 ]
 
-export default function Developers() {
-  const [activeTab, setActiveTab] = useState('Overview')
+export default function Developers({ section = 'intro' }) {
+  useDevelopersUsageSection()
+  const [introTab, setIntroTab] = useDevelopersIntroTabUrl()
+  const navigate = useNavigate()
+
+  const activeTab = section === 'usage' ? 'Usage' : introTab
+
+  const setActiveTab = useCallback(
+    (tab) => {
+      if (!TABS.includes(tab)) return
+      if (section === 'usage' && tab === 'Usage') {
+        navigate(docPagePath(PATH_DEV_USAGE_BASE, 'Overview'))
+        return
+      }
+      setIntroTab(tab)
+    },
+    [section, navigate, setIntroTab],
+  )
 
   const sections = useMemo(() => {
     if (activeTab === 'Overview') return [

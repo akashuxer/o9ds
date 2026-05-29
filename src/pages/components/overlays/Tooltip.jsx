@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { ArvoTooltip, ArvoButton } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, CssVarsGrid, LiveReference, SimpleTable } from '../../../LayoutComponents/ComponentDocPrimitives'
@@ -17,7 +17,7 @@ const CSS_VARS = DESCRIPTOR.cssVarGroups
 
 
 export default function Tooltip() {
-  const [tab, setTab] = useState('Overview')
+  const [tab, setTab] = useDocTabUrl(TABS)
   const sections = useMemo(() => {
     if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'standard', label: 'Standard usage' }, { id: 'demo', label: 'Live demo' }, { id: 'behavior', label: 'Behavior' }]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }, { id: 'tooltip-prop', label: 'Built-in tooltip prop' }]

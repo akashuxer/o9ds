@@ -1,4 +1,14 @@
 import { Link } from 'react-router-dom'
+import {
+  PATH_A11Y_ASSISTIVE,
+  PATH_A11Y_KEYBOARD,
+  PATH_A11Y_SCREEN_READER_BASE,
+  PATH_A11Y_SHORTCUTS,
+  PATH_A11Y_STANDARDS,
+  PATH_A11Y_TESTING,
+  PATH_A11Y_VISUAL,
+  docPagePath,
+} from '../../data/docPaths'
 import ExpandableDocImage from '../../LayoutComponents/ExpandableDocImage'
 import AccessibilityDocPage from './AccessibilityDocPage'
 
@@ -156,37 +166,37 @@ export default function OverviewArticle() {
         <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white">What to read next</h2>
         <ul className="space-y-2 text-arvo-light-secondary dark:text-neutral-400">
           <li>
-            <Link to="/accessibility/standards-and-principles" className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
+            <Link to={PATH_A11Y_STANDARDS} className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
               Standards and principles
             </Link>
           </li>
           <li>
-            <Link to="/accessibility/assistive-technology" className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
+            <Link to={PATH_A11Y_ASSISTIVE} className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
               Assistive technology
             </Link>
           </li>
           <li>
-            <Link to="/accessibility/screen-reader-and-aria" className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
+            <Link to={docPagePath(PATH_A11Y_SCREEN_READER_BASE, 'Overview')} className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
               Screen reader and ARIA
             </Link>
           </li>
           <li>
-            <Link to="/accessibility/keyboard-and-focus" className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
+            <Link to={PATH_A11Y_KEYBOARD} className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
               Keyboard and focus
             </Link>
           </li>
           <li>
-            <Link to="/accessibility/shortcuts" className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
+            <Link to={PATH_A11Y_SHORTCUTS} className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
               Shortcuts
             </Link>
           </li>
           <li>
-            <Link to="/accessibility/visual-accessibility" className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
+            <Link to={PATH_A11Y_VISUAL} className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
               Visual accessibility
             </Link>
           </li>
           <li>
-            <Link to="/accessibility/testing-and-qa" className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
+            <Link to={PATH_A11Y_TESTING} className="underline font-medium text-arvo-light-primary dark:text-white hover:opacity-90">
               Testing and QA
             </Link>
           </li>

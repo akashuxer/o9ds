@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
-import DocTabs from '../../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import ComponentResourceChips from '../../../LayoutComponents/ComponentResourceChips'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTable from '../../../LayoutComponents/DocTable'
@@ -153,7 +153,7 @@ function StorybookEmbedsSection() {
 }
 
 export default function Cards() {
-  const [activeTab, setActiveTab] = useState('Overview')
+  const [activeTab, setActiveTab] = useDocTabUrl(cardTabs)
 
   const onThisPageSections = useMemo(() => {
     if (activeTab === 'Overview') {

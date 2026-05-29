@@ -1,8 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import AccessibilityDocPage from './AccessibilityDocPage'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
-import DocTabs from '../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../LayoutComponents/DocTabs'
+import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
+import { PATH_A11Y_SCREEN_READER_BASE } from '../../data/docPaths'
 import ExpandableDocImage from '../../LayoutComponents/ExpandableDocImage'
 
 const TABS = ['Overview', 'Labels', 'Live regions', 'Heading & page title']
@@ -114,7 +116,7 @@ const tocHeading = [
 ]
 
 export default function ScreenReaderAndAria() {
-  const [activeTab, setActiveTab] = useState('Overview')
+  const [activeTab, setActiveTab] = useDocTabUrl(TABS, { basePath: PATH_A11Y_SCREEN_READER_BASE })
 
   const tocSections = useMemo(() => {
     if (activeTab === 'Labels') return tocLabels
@@ -124,6 +126,7 @@ export default function ScreenReaderAndAria() {
   }, [activeTab])
 
   return (
+    <DocTabRouteProvider basePath={PATH_A11Y_SCREEN_READER_BASE}>
     <AccessibilityDocPage
       title="Screen reader and ARIA"
       description="How the accessibility tree and ARIA expose meaning to assistive technologies. Use the tabs to move between foundations, labels and forms, live regions, and document headings."
@@ -783,5 +786,6 @@ export default function ScreenReaderAndAria() {
         </div>
       )}
     </AccessibilityDocPage>
+    </DocTabRouteProvider>
   )
 }

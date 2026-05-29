@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import ComponentOverviewCard from '../../LayoutComponents/ComponentOverviewCard'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import DocTable from '../../LayoutComponents/DocTable'
-import DocTabs from '../../LayoutComponents/DocTabs'
+import DocTabs, { useDocTabUrl } from '../../LayoutComponents/DocTabs'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import { TokenDownloadFab, TokenDownloadSection } from '../../LayoutComponents/TokenScssDownload'
@@ -18,6 +18,8 @@ import {
   TYPE_STYLE_VARIANT_DOC,
   TYPSCALE_STEPS,
 } from '../../tokens/typographyTokens'
+import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
+import { PATH_TYPOGRAPHY_BASE } from '../../data/docPaths'
 import {
   ARVO_SEMANTIC_TYPOGRAPHY_SCSS_FILENAME,
   ARVO_SEMANTIC_TYPOGRAPHY_SCSS_REPLACE_PATH,
@@ -228,7 +230,7 @@ const TYPE_STYLE_VARIANT_ROWS = TYPE_STYLE_VARIANT_DOC.map((doc) => ({
 export default function Typography() {
   const { theme } = useTheme()
   const isLight = theme === 'light'
-  const [activeTab, setActiveTab] = useState('Overview')
+  const [activeTab, setActiveTab] = useDocTabUrl(typographyTabs, { basePath: PATH_TYPOGRAPHY_BASE })
   const typographyDownloadBtnRef = useRef(null)
   const [showTypographyDownloadFab, setShowTypographyDownloadFab] = useState(true)
 
@@ -298,6 +300,7 @@ export default function Typography() {
   )
 
   return (
+    <DocTabRouteProvider basePath={PATH_TYPOGRAPHY_BASE}>
     <PageWithToc sections={sections}>
       <div className="space-y-12">
         <PageHeader
@@ -554,5 +557,6 @@ export default function Typography() {
         />
       )}
     </PageWithToc>
+    </DocTabRouteProvider>
   )
 }
