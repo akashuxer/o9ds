@@ -13,7 +13,6 @@ import {
   PATH_A11Y_VISUAL,
   PATH_BORDERS,
   PATH_COLOR_BASE,
-  PATH_EFFECTS,
   PATH_ICONS_BASE,
   PATH_ILLUSTRATIONS_BASE,
   PATH_MOTION,
@@ -32,7 +31,8 @@ const SECTION_OVERVIEW_BY_PATH = {
   [docPagePath(PATH_TYPOGRAPHY_BASE, 'Overview')]: `${FOUNDATION_GRAPHIC}/typography.png`,
   [PATH_SPACING]: `${FOUNDATION_GRAPHIC}/space.png`,
   [PATH_BORDERS]: `${FOUNDATION_GRAPHIC}/border.png`,
-  [PATH_EFFECTS]: `${FOUNDATION_GRAPHIC}/effects.png`,
+  /** Keep in sync with PATH_EFFECTS in docPaths.js */
+  '/foundations/effects': `${FOUNDATION_GRAPHIC}/effects.png`,
   [docPagePath(PATH_ICONS_BASE, 'Overview')]: `${FOUNDATION_GRAPHIC}/icon.png`,
   [docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview')]: `${FOUNDATION_GRAPHIC}/illustration.png`,
   [PATH_SYMBOL]: `${FOUNDATION_GRAPHIC}/icon.png`,
