@@ -26,9 +26,21 @@ import {
   PATH_SPACING,
   PATH_SYMBOL,
   PATH_TYPOGRAPHY_BASE,
+  PATH_CONTENT_OVERVIEW,
   componentDocBase,
+  contentTopicPath,
   docPagePath,
+  grammarStyleTopicPath,
 } from './docPaths'
+import { GRAMMAR_STYLE_TOPICS } from './contentGrammarNav'
+
+/** Content Guidelines routes with published documentation (sidebar green dot + ready filter). */
+const CONTENT_GUIDELINES_READY_PATHS = new Set([
+  PATH_CONTENT_OVERVIEW,
+  contentTopicPath('voice-and-tone'),
+  contentTopicPath('writing-principles'),
+  ...GRAMMAR_STYLE_TOPICS.map((topic) => grammarStyleTopicPath(topic.slug)),
+])
 
 export const PATHS_WITH_CONTENT = new Set([
   PATH_HOME,
@@ -146,9 +158,11 @@ export const PATHS_WITH_CONTENT = new Set([
 export function hasReadyDocumentation(pathname) {
   const normalized = pathname.replace(/\/$/, '') || '/'
 
-  // Patterns and Content Guidelines are published but not marked "ready" in nav.
   if (normalized === '/patterns' || normalized.startsWith('/patterns/')) return false
-  if (normalized === '/content' || normalized.startsWith('/content/')) return false
+
+  if (normalized === '/content' || normalized.startsWith('/content/')) {
+    return CONTENT_GUIDELINES_READY_PATHS.has(normalized)
+  }
 
   if (PATHS_WITH_CONTENT.has(normalized)) return true
 

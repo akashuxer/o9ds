@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react'
+import { useSidebarActiveLinkScroll } from '../hooks/useSidebarActiveLinkScroll'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import ComponentTreeNav from './ComponentTreeNav'
@@ -310,6 +311,16 @@ function getPageTitle(pathname) {
   return 'Arvo Design System'
 }
 
+function initialSubsectionOpen(pathname) {
+  return {
+    '_nav-group-for-developers': false,
+    '_nav-group-usage': false,
+    '_nav-group-developer-reference': false,
+    '_nav-group-assets': false,
+    '_nav-group-grammar-style': pathname.startsWith('/content/grammar-style'),
+  }
+}
+
 export default function Layout({ children }) {
   const { theme, toggleTheme } = useTheme()
   const { pathname } = useLocation()
@@ -320,15 +331,10 @@ export default function Layout({ children }) {
   const [sidebarReadyOnly, setSidebarReadyOnly] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   /** Accordion: expandable groups under GETTING STARTED and FOUNDATIONS (default collapsed; expand on toggle or while search has text). */
-  const [subsectionOpen, setSubsectionOpen] = useState({
-    '_nav-group-for-developers': false,
-    '_nav-group-usage': false,
-    '_nav-group-developer-reference': false,
-    '_nav-group-assets': false,
-    '_nav-group-grammar-style': false,
-  })
+  const [subsectionOpen, setSubsectionOpen] = useState(() => initialSubsectionOpen(pathname))
   const searchRef = useRef(null)
   const navRef = useRef(null)
+  const sidebarRef = useRef(null)
 
   useEffect(() => {
     const pageName = getPageTitle(pathname)
@@ -382,6 +388,8 @@ export default function Layout({ children }) {
       })
       .filter(Boolean)
   }, [searchQuery, sidebarReadyOnly])
+
+  useSidebarActiveLinkScroll(sidebarRef, navRef, [subsectionOpen, filteredSections, searchQuery])
 
   // / shortcut to focus search
   useEffect(() => {
@@ -621,6 +629,7 @@ export default function Layout({ children }) {
         <div className="flex min-[2560px]:max-w-[1800px] min-[2560px]:mx-auto min-[2560px]:w-full">
         {/* Sidebar - drawer on mobile, fixed on lg, sticky in-flow on 2560px+ — hidden until Get Started on home */}
         <aside
+          ref={sidebarRef}
           className={`
             ${isLandingHome ? 'hidden' : ''}
             fixed left-0 z-40 w-64 shrink-0 overflow-y-auto border-r
@@ -637,6 +646,7 @@ export default function Layout({ children }) {
           }}
         >
           <div
+            data-arvo-sidebar-sticky
             className="sticky top-0 z-10 p-4 border-b"
             style={{ backgroundColor: isDark ? '#0a0a0a' : '#F2F2F2', borderColor: isDark ? '#262626' : '#E5E5E5' }}
           >
