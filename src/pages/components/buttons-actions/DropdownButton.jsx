@@ -4,6 +4,7 @@ import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
+import DosDontCards from '../../../LayoutComponents/DosDontCards'
 import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
 import { getDescriptor } from '../../../data/componentDescriptors.generated'
@@ -13,11 +14,33 @@ const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
 const DESCRIPTOR = getDescriptor('dropdown-button')
 const PROPS = DESCRIPTOR.props
 
+const VARIANTS = [
+  { name: 'Primary', desc: 'Default for the main labeled action that opens the menu — filled theme background.' },
+  { name: 'Secondary', desc: 'Supporting actions where the trigger should be visible but not dominant.' },
+  { name: 'Tertiary', desc: 'Low-emphasis triggers in dense toolbars or inline row actions.' },
+  { name: 'Outline', desc: 'Brand-colored border without fill — use when the trigger must stand out on varied backgrounds.' },
+]
+
+const STATES = [
+  { name: 'Closed', desc: 'Default resting state; caret points down.' },
+  { name: 'Open', desc: 'Menu visible; caret rotates up; trigger receives aria-expanded="true".' },
+  { name: 'Disabled', desc: 'Trigger and menu blocked; explain why in surrounding context if possible.' },
+  { name: 'Loading', desc: 'Shimmer on trigger; menu cannot open until loading completes.' },
+]
 
 export default function DropdownButton() {
   const [tab, setTab] = useDocTabUrl(TABS)
   const sections = useMemo(() => {
-    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'demo', label: 'Live demo' }]
+    if (tab === 'Overview') return [
+      { id: 'purpose', label: 'Purpose' },
+      { id: 'anatomy', label: 'Anatomy' },
+      { id: 'modes', label: 'Modes' },
+      { id: 'variants', label: 'Variants' },
+      { id: 'sizes', label: 'Sizes' },
+      { id: 'states', label: 'States' },
+      { id: 'demo', label: 'Live reference' },
+      { id: 'dos-donts', label: 'Dos & Don\'ts' },
+    ]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]
     if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'methods', label: 'Methods (JS)' }, { id: 'events', label: 'Events (JS)' }]
     if (tab === 'Accessibility') return [{ id: 'keyboard', label: 'Keyboard' }, { id: 'aria', label: 'ARIA' }]
@@ -28,6 +51,12 @@ export default function DropdownButton() {
     { id: 'edit', label: 'Edit', icon: 'edit' },
     { id: 'duplicate', label: 'Duplicate', icon: 'copy' },
     { id: 'delete', label: 'Delete', icon: 'bin', tone: 'danger' },
+  ]
+
+  const sortItems = [
+    { id: 'name', label: 'Sort by name' },
+    { id: 'date', label: 'Sort by date' },
+    { id: 'status', label: 'Sort by status' },
   ]
 
   return (
@@ -45,14 +74,60 @@ export default function DropdownButton() {
           <div className="space-y-12">
             <DocSection id="purpose" title="Purpose">
               <DocParagraph>
-                Use Dropdown Button when a single button needs to expose a small, related set of actions. The component handles overlay orchestration, focus management, and ARIA wiring. For icon-only triggers, use <DocStrong>Dropdown Icon Button</DocStrong>.
+                Dropdown Button combines a labeled trigger with an action menu — one visible control that reveals a short list of related choices on demand. It reduces visual clutter compared to showing every action inline, while keeping the trigger discoverable through its label and caret affordance.
+              </DocParagraph>
+              <DocParagraph>
+                The component handles overlay positioning, focus return, and ARIA wiring between trigger and menu. For icon-only triggers in tables or dense layouts, use <DocStrong>Dropdown Icon Button</DocStrong> instead.
               </DocParagraph>
             </DocSection>
-            <DocSection id="demo" title="Live demo">
+
+            <DocSection id="anatomy" title="Anatomy">
+              <DocParagraph>
+                A dropdown button comprises a <DocStrong>trigger</DocStrong> (button surface with optional leading icon, label, and trailing caret), and a connected <DocStrong>action menu</DocStrong> (list of items rendered on open). The caret always signals expandability and rotates when open.
+              </DocParagraph>
+            </DocSection>
+
+            <DocSection id="modes" title="Modes">
+              <DocList items={[
+                <span key="1"><DocStrong>Action mode</DocStrong> (default) — menu items fire actions; the trigger label stays fixed. Use for &ldquo;Actions&rdquo;, &ldquo;More&rdquo;, or overflow menus where selecting an item performs work rather than changing the trigger text.</span>,
+                <span key="2"><DocStrong>Selection mode</DocStrong> — choosing an item updates the trigger label and marks the active item in the menu. Use when the button represents the current value (sort order, export format, view density) and the menu is the picker.</span>,
+              ]} />
+            </DocSection>
+
+            <DocSection id="variants" title="Variants">
+              <DocParagraph>Four trigger variants inherit Button styling. Match variant to the importance of opening the menu, not to individual menu item severity — reserve danger tone for destructive items inside the menu.</DocParagraph>
+              <ul className="space-y-2 text-arvo-light-secondary dark:text-neutral-400">
+                {VARIANTS.map(({ name, desc }) => (
+                  <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
+                ))}
+              </ul>
+            </DocSection>
+
+            <DocSection id="sizes" title="Sizes">
+              <DocParagraph>Three sizes — sm, md (default), lg — scale trigger height, padding, font, icon, and caret together. Match surrounding buttons in the same toolbar or footer.</DocParagraph>
+            </DocSection>
+
+            <DocSection id="states" title="States">
+              <ul className="list-disc pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+                {STATES.map(({ name, desc }) => (
+                  <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
+                ))}
+              </ul>
+            </DocSection>
+
+            <DocSection id="demo" title="Live reference">
               <LiveReference>
                 <ArvoDropdownButton label="Actions" items={items} onSelect={(item) => console.log(item)} />
                 <ArvoDropdownButton label="More" items={items} variant="secondary" />
+                <ArvoDropdownButton label="Sort by name" items={sortItems} mode="selection" variant="tertiary" />
               </LiveReference>
+            </DocSection>
+
+            <DocSection id="dos-donts" title="Dos & Don'ts">
+              <DosDontCards
+                doItems={['Keep menus short (3–7 items); group or search for longer lists', 'Use action mode for task menus; selection mode when the trigger shows current value', 'Place destructive items last and mark with danger tone', 'Ensure the trigger label describes what opens — not just "Menu"']}
+                dontItems={['Use for primary navigation — use Link or Breadcrumb', 'Duplicate every toolbar action as both inline button and menu item', 'Hide the only path to a critical action behind a vague "More" label', 'Use for long scrollable lists — use Combobox or Listbox instead']}
+              />
             </DocSection>
           </div>
         )}

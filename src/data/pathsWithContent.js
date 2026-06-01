@@ -15,7 +15,6 @@ import {
   PATH_BORDERS,
   PATH_COLOR_BASE,
   PATH_COMPONENTS_OVERVIEW,
-  PATH_CONTENT_OVERVIEW,
   PATH_DEV_INTRO_BASE,
   PATH_EFFECTS,
   PATH_FIGMA_MAKE_BASE,
@@ -23,7 +22,6 @@ import {
   PATH_HOME,
   PATH_ICONS_BASE,
   PATH_ILLUSTRATIONS_BASE,
-  PATH_PATTERNS_OVERVIEW,
   PATH_RESOURCES,
   PATH_SPACING,
   PATH_SYMBOL,
@@ -48,7 +46,6 @@ export const PATHS_WITH_CONTENT = new Set([
   PATH_COMPONENTS_OVERVIEW,
   docPagePath(PATH_DEV_INTRO_BASE, 'Overview'),
   docPagePath(PATH_FIGMA_MAKE_BASE, 'Overview'),
-  PATH_PATTERNS_OVERVIEW,
   PATH_A11Y_OVERVIEW,
   PATH_A11Y_INTRODUCTION,
   PATH_A11Y_STANDARDS,
@@ -57,7 +54,6 @@ export const PATHS_WITH_CONTENT = new Set([
   PATH_A11Y_KEYBOARD,
   PATH_A11Y_VISUAL,
   PATH_A11Y_TESTING,
-  PATH_CONTENT_OVERVIEW,
 
   // Buttons & Actions
   componentDocBase('button') + '/overview',
@@ -115,17 +111,45 @@ export const PATHS_WITH_CONTENT = new Set([
 
   // Data display
   componentDocBase('cards') + '/overview',
+  componentDocBase('accordion') + '/overview',
 
   // Buttons — more
   componentDocBase('segmented-control') + '/overview',
   componentDocBase('split-button') + '/overview',
   componentDocBase('split-icon-button') + '/overview',
-  componentDocBase('toolbar') + '/overview',
+  // Feedback — extended
+  componentDocBase('empty-state') + '/overview',
+  componentDocBase('skeleton-loader') + '/overview',
+  componentDocBase('spinner') + '/overview',
+
+  // Inputs — date & time
+  componentDocBase('date-picker') + '/overview',
+  componentDocBase('date-range-picker') + '/overview',
+  componentDocBase('date-time-picker') + '/overview',
+  componentDocBase('time-picker') + '/overview',
+  componentDocBase('multi-select') + '/overview',
+  componentDocBase('otp-input') + '/overview',
+  componentDocBase('slider') + '/overview',
+  componentDocBase('text-editor') + '/overview',
+
+  // Navigation — extended
+  componentDocBase('tree') + '/overview',
+
+  // Utilities
+  componentDocBase('avatar') + '/overview',
+  componentDocBase('avatar-group') + '/overview',
+  componentDocBase('scroll-bar') + '/overview',
+  componentDocBase('splitter') + '/overview',
 ])
 
 /** Match pathname to a ready route (supports tab suffixes under known bases). */
 export function hasReadyDocumentation(pathname) {
   const normalized = pathname.replace(/\/$/, '') || '/'
+
+  // Patterns and Content Guidelines are published but not marked "ready" in nav.
+  if (normalized === '/patterns' || normalized.startsWith('/patterns/')) return false
+  if (normalized === '/content' || normalized.startsWith('/content/')) return false
+
   if (PATHS_WITH_CONTENT.has(normalized)) return true
 
   for (const ready of PATHS_WITH_CONTENT) {

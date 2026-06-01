@@ -4,6 +4,7 @@ import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
+import DosDontCards from '../../../LayoutComponents/DosDontCards'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import { PropsTable, CssVarsGrid, KeyboardTable, AriaTable, MethodsTable, SimpleTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
 import { getDescriptor } from '../../../data/componentDescriptors.generated'
@@ -14,12 +15,30 @@ const DESCRIPTOR = getDescriptor('fab-button')
 const PROPS = DESCRIPTOR.props
 const CSS_VARS = DESCRIPTOR.cssVarGroups
 
+const VARIANTS = [
+  { name: 'Primary', desc: 'The dominant floating action — one per view for the single most important create/add workflow.' },
+  { name: 'Secondary', desc: 'A supporting floating action when two persistent actions are justified (e.g. Add + Filter).' },
+]
 
-
+const STATES = [
+  { name: 'Default', desc: 'Ready to activate; elevated shadow separates FAB from page content.' },
+  { name: 'Hover / focus', desc: 'Inherited from inner button; focus ring renders on the button, not the wrapper.' },
+  { name: 'Disabled', desc: 'Non-interactive; shadow remains at reduced opacity — explain why if the action is temporarily unavailable.' },
+  { name: 'Loading', desc: 'Shimmer on inner button; blocks repeat activation during async work.' },
+]
 export default function FabButton() {
   const [tab, setTab] = useDocTabUrl(TABS)
   const sections = useMemo(() => {
-    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'modes', label: 'Modes' }, { id: 'indicator', label: 'Indicator badge' }]
+    if (tab === 'Overview') return [
+      { id: 'purpose', label: 'Purpose' },
+      { id: 'anatomy', label: 'Anatomy' },
+      { id: 'layouts', label: 'Layouts' },
+      { id: 'variants', label: 'Variants' },
+      { id: 'indicator', label: 'Indicator badge' },
+      { id: 'placement', label: 'Placement' },
+      { id: 'states', label: 'States' },
+      { id: 'dos-donts', label: 'Dos & Don\'ts' },
+    ]
     if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]
     if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'css-vars', label: 'CSS variables' }, { id: 'arch', label: 'Architecture' }, { id: 'zindex', label: 'Z-index cascade' }, { id: 'methods', label: 'Methods (JS)' }]
     if (tab === 'Accessibility') return [{ id: 'keyboard', label: 'Keyboard' }, { id: 'aria', label: 'ARIA' }, { id: 'focus', label: 'Focus' }]
@@ -41,25 +60,75 @@ export default function FabButton() {
           <div className="space-y-12">
             <DocSection id="purpose" title="Purpose">
               <DocParagraph>
-                Use FAB for the most important action on a page or view, where the action should remain visible regardless of scroll position. The FAB wrapper provides elevation, z-index control, and an optional indicator badge — the inner button handles all interaction.
+                A Floating Action Button (FAB) keeps one high-priority action visible above scrolling content — typically create, compose, or add. Its elevation and fixed position signal &ldquo;this action follows you&rdquo; without occupying permanent layout space in the page chrome.
+              </DocParagraph>
+              <DocParagraph>
+                FAB is a composition wrapper: it adds shadow, z-index layering, and an optional indicator badge around an inner Button or Icon Button. Interaction, variants, loading, and focus behavior all delegate to the inner control.
               </DocParagraph>
             </DocSection>
-            <DocSection id="modes" title="Modes">
+
+            <DocSection id="anatomy" title="Anatomy">
+              <DocParagraph>
+                A FAB comprises a presentational <DocStrong>wrapper</DocStrong> (elevation shadow, positioning context), an inner <DocStrong>button</DocStrong> (icon-only or icon + label), and an optional <DocStrong>indicator badge</DocStrong> (top-right corner, decorative unless paired with other status communication).
+              </DocParagraph>
+            </DocSection>
+
+            <DocSection id="layouts" title="Layouts">
+              <DocParagraph>Two layouts trade label clarity for compactness. Icon-only is the default; extended FAB adds a visible label when the action needs explicit naming.</DocParagraph>
               <LiveReference>
                 <ArvoFabButton icon="plus" tooltip="Add" />
                 <ArvoFabButton icon="plus" label="Create" />
                 <ArvoFabButton icon="edit" tooltip="Edit" variant="secondary" />
                 <ArvoFabButton icon="bell-o" tooltip="Notifications" indicator="new" />
               </LiveReference>
+              <ul className="list-disc pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed mt-4">
+                <li><DocStrong>Icon-only</DocStrong> — 40 × 40px square (ArvoIconButton lg). Tooltip provides the accessible name.</li>
+                <li><DocStrong>Extended (with label)</DocStrong> — 32px height pill (ArvoButton md). Label is visible; tooltip optional.</li>
+              </ul>
             </DocSection>
+
+            <DocSection id="variants" title="Variants">
+              <DocParagraph>FAB supports only primary and secondary — not tertiary, outline, or danger. Destructive floating actions are rare; if needed, use confirmation and consider an inline Button instead.</DocParagraph>
+              <ul className="space-y-2 text-arvo-light-secondary dark:text-neutral-400">
+                {VARIANTS.map(({ name, desc }) => (
+                  <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
+                ))}
+              </ul>
+            </DocSection>
+
             <DocSection id="indicator" title="Indicator badge">
-              <DocParagraph>The indicator uses the shared <DocCode>arvo-indicator</DocCode> pattern.</DocParagraph>
+              <DocParagraph>The indicator uses the shared <DocCode>arvo-indicator</DocCode> pattern to surface lightweight status at a glance.</DocParagraph>
               <SimpleTable columns={['Variant', 'Color', 'Shape', 'Semantic']} rows={[
                 ['unsaved', 'warning', 'Circle', 'Unsaved changes'],
                 ['new', 'negative', 'Square', 'New notification'],
                 ['unread', 'theme', 'Square', 'Unread items'],
               ]} />
-              <DocCallout>The indicator is purely decorative (<DocCode>aria-hidden="true"</DocCode>). If the status is critical, communicate it through other means (e.g., live region, tooltip).</DocCallout>
+              <DocCallout>The indicator is purely decorative (<DocCode>aria-hidden="true"</DocCode>). If the status is critical, communicate it through other means (e.g., live region, tooltip, or page-level alert).</DocCallout>
+            </DocSection>
+
+            <DocSection id="placement" title="Placement">
+              <DocParagraph>
+                Anchor FAB to the bottom-end corner in LTR layouts (bottom-right), with consistent inset from viewport edges (typically 16–24px). Avoid overlapping primary navigation, toasts, or modal footers. Use <DocCode>zIndex</DocCode> only when stacking above local overlays — default 1050 sits above page content but below modals (1300).
+              </DocParagraph>
+            </DocSection>
+
+            <DocSection id="states" title="States">
+              <ul className="list-disc pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+                {STATES.map(({ name, desc }) => (
+                  <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
+                ))}
+              </ul>
+              <LiveReference>
+                <ArvoFabButton icon="plus" tooltip="Add" isLoading />
+                <ArvoFabButton icon="plus" tooltip="Add" isDisabled />
+              </LiveReference>
+            </DocSection>
+
+            <DocSection id="dos-donts" title="Dos & Don'ts">
+              <DosDontCards
+                doItems={['Reserve for the single most important persistent action on a view', 'Use extended FAB when icon alone is ambiguous ("Create scenario")', 'Keep one primary FAB; a secondary FAB is the maximum for one region', 'Ensure FAB does not cover critical content or primary navigation']}
+                dontItems={['Place multiple competing primary FABs in one viewport', 'Use for actions available elsewhere in persistent header chrome', 'Rely on indicator badge alone for time-sensitive alerts', 'Use danger/destructive actions without a confirmation step']}
+              />
             </DocSection>
           </div>
         )}

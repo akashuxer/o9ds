@@ -200,6 +200,7 @@ export const COMPONENT_DOC_ROUTES = new Set([
   '/components/label/overview',
   // Data display
   '/components/cards/overview',
+  '/components/accordion/overview',
 ])
 
 /**

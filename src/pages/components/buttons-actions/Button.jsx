@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react'
-import { ArvoButton } from '@arvo/react'
+import { ArvoButton, ArvoTextbox } from '@arvo/react'
 import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
 import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
-import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
-import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
+import DosDontCards from '../../../LayoutComponents/DosDontCards'
+import ExpandableDocImage from '../../../LayoutComponents/ExpandableDocImage'
+import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong, DocSubsection } from '../../../LayoutComponents/DocSection'
 import {
   PropsTable,
   CssVarsGrid,
@@ -29,24 +30,50 @@ const EVENTS = DESCRIPTOR.events
 const KEYBOARD = DESCRIPTOR.keyboard
 const ARIA = DESCRIPTOR.aria
 
-// UX-level summaries for the Overview tab — kept hand-curated because they
-// describe how designers should think about each variant / state, not the
-// raw CSS class produced by the BEM modifier.
-const VARIANTS = [
-  { name: 'Primary', desc: 'Main call-to-action; use sparingly (one per viewport region).' },
-  { name: 'Secondary', desc: 'Supporting actions that are important but not primary.' },
-  { name: 'Tertiary', desc: 'Low-emphasis actions, dense toolbars, or inline contexts.' },
-  { name: 'Outline', desc: 'Actions needing brand-color emphasis without filled background.' },
-  { name: 'Danger', desc: 'Destructive actions (delete, remove); always pair with confirmation.' },
+// UX-level summaries for the Overview tab — aligned with o9UI design spec.
+const VARIANT_ROWS = [
+  ['Primary', 'The most important action on a page, form, or container. Designed to grab attention — use sparingly to avoid confusion.'],
+  ['Secondary', 'Supporting or less critical actions that complement the primary button. Typically neutral; used for navigation, cancellation, or dismissing dialogs.'],
+  ['Tertiary', 'Utility or least significant actions to keep the UI clean. Often used above widgets or for low-priority interactions.'],
+  ['Outline', 'Important actions that are not primary but still need visibility. Common inside cards or for secondary tasks on a page.'],
+  ['Danger (primary)', 'Destructive or irreversible outcomes (delete, remove, restore). Visually stands out to warn users before they act.'],
+  ['Danger (outline)', 'When multiple destructive and neutral actions appear in one view — destructive with border emphasis, not filled.'],
+  ['Danger (tertiary)', 'Subtle destructive actions in dense layouts where a filled or outlined danger button would compete visually.'],
 ]
 
-const STATES = [
-  { name: 'Default', desc: 'Ready to activate.' },
-  { name: 'Hover', desc: 'Confirms interactivity (desktop). Touch uses separate affordance.' },
-  { name: 'Focus', desc: 'Visible focus ring for keyboard users.' },
-  { name: 'Active / pressed', desc: 'Optional for toggle-style actions.' },
-  { name: 'Disabled', desc: 'Not actionable; must be explainable in context.' },
-  { name: 'Loading', desc: 'Action in progress; blocks repeat activation.' },
+const STATE_ROWS = [
+  ['Enabled', 'The button is available and ready for interaction.'],
+  ['Hover', 'Visual response to pointer interaction, confirming the control is interactive.'],
+  ['Focus', 'Highlighted during keyboard navigation (not on mouse click) to show which control has focus.'],
+  ['Active', 'Pressed state while the user is activating the control.'],
+  ['Disabled', 'Non-interactive; cannot be triggered. Explain why nearby when possible.'],
+]
+
+const SIZE_DETAIL_ROWS = [
+  [
+    'Small',
+    '24px',
+    'Space-constrained and high-density layouts where compact actions are required without disrupting layout structure.',
+    'Table row actions (Edit, Delete, View); grid and pivot cell actions; dense toolbars and inline controls; secondary actions inside compact components.',
+  ],
+  [
+    'Medium (default)',
+    '32px',
+    'Standard size across the platform — balanced usability, readability, and layout consistency.',
+    'Form actions (Save, Cancel, Apply); overlay footers (windows, dialogs, side panes); widget-level primary actions; filter panels and workflow controls.',
+  ],
+  [
+    'Large',
+    '40px',
+    'High-emphasis spacious layouts where visibility and prominence are required.',
+    'Empty states with illustrations; landing or onboarding sections; large modals or full-screen dialogs; primary actions in low-density layouts.',
+  ],
+]
+
+const ALIGNMENT_RULES = [
+  'Medium button height (32px) aligns with medium input fields for consistent form layouts.',
+  'Small button height (24px) aligns with small input fields for compact sections.',
+  'Maintain consistent vertical rhythm when mixing buttons and inputs in the same row or footer.',
 ]
 
 const SIZE_TABLE_ROWS = [
@@ -63,8 +90,10 @@ export default function Button() {
       { id: 'purpose', label: 'Purpose' },
       { id: 'anatomy', label: 'Anatomy' },
       { id: 'variants', label: 'Variants' },
-      { id: 'sizes', label: 'Sizes' },
       { id: 'states', label: 'States' },
+      { id: 'sizes', label: 'Sizes' },
+      { id: 'alignment-rules', label: 'Alignment rules' },
+      { id: 'content-guidelines', label: 'Content guidelines' },
       { id: 'dos-donts', label: 'Dos & Don\'ts' },
     ]
     if (tab === 'Usage') return [
@@ -106,64 +135,160 @@ export default function Button() {
           <div className="space-y-12">
             <DocSection id="purpose" title="Purpose">
               <DocParagraph>
-                A text button is a labeled control that performs an action on a single activation. It is not for navigation to another page (use a <DocStrong>link</DocStrong> in that case); it is for doing something in context — save, apply, cancel, delete, or open a related UI.
+                Buttons allow users to trigger actions such as submitting data, applying changes, progressing workflows, or executing system operations. They are the most critical interactive component in the system and define action hierarchy, intent clarity, and workflow progression — especially in data-heavy B2B environments.
+              </DocParagraph>
+              <DocParagraph>
+                A button performs work in context; it does not navigate to another destination. Use a <DocStrong>link</DocStrong> when the user should get a URL, bookmark, or open-in-new-tab behavior.
               </DocParagraph>
             </DocSection>
 
             <DocSection id="anatomy" title="Anatomy">
-              <DocParagraph>
-                A text button combines a <DocStrong>surface</DocStrong> (the clickable container), an optional <DocStrong>leading icon</DocStrong>, and a <DocStrong>label</DocStrong>.
-              </DocParagraph>
-              <LiveReference>
-                <ArvoButton label="Save Changes" variant="primary" />
-                <ArvoButton label="Add Item" variant="primary" icon="plus" />
-              </LiveReference>
+              <DocParagraph>A button consists of:</DocParagraph>
+              <ExpandableDocImage
+                src="/o9DocGraphics/button-anatomy.svg"
+                alt="Button anatomy diagram showing container, label, and optional leading icon"
+                className="w-full max-w-2xl border border-arvo-light-border dark:border-neutral-700"
+              />
+              <ol className="list-decimal pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+                <li><DocStrong>Container</DocStrong> — the clickable surface of the button.</li>
+                <li><DocStrong>Label (required)</DocStrong> — descriptive text that indicates the action.</li>
+                <li><DocStrong>Icon (optional)</DocStrong> — leading o9con icon to visually support the label.</li>
+              </ol>
             </DocSection>
 
             <DocSection id="variants" title="Variants">
-              <DocParagraph>Five variants communicate importance and risk. Use one primary action per region; secondary and tertiary support the task without competing.</DocParagraph>
-              <ul className="space-y-2 text-arvo-light-secondary dark:text-neutral-400">
-                {VARIANTS.map(({ name, desc }) => (
-                  <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
-                ))}
-              </ul>
+              <DocParagraph>
+                Buttons are categorized into seven core variants based on visual priority, user intent, and action impact. The component API exposes five variants (<DocCode>primary</DocCode>, <DocCode>secondary</DocCode>, <DocCode>tertiary</DocCode>, <DocCode>outline</DocCode>, <DocCode>danger</DocCode>); danger outline and danger tertiary describe destructive emphasis levels used in product layouts when multiple negative actions share a view.
+              </DocParagraph>
+              <SimpleTable columns={['Variant', 'Purpose']} rows={VARIANT_ROWS} />
               <LiveReference>
-                <ArvoButton label="Primary" variant="primary" />
-                <ArvoButton label="Secondary" variant="secondary" />
-                <ArvoButton label="Tertiary" variant="tertiary" />
-                <ArvoButton label="Outline" variant="outline" />
-                <ArvoButton label="Danger" variant="danger" />
-              </LiveReference>
-            </DocSection>
-
-            <DocSection id="sizes" title="Sizes">
-              <DocParagraph>Three sizes scale height, padding, font, and icon together.</DocParagraph>
-              <LiveReference>
-                <ArvoButton label="Small" variant="primary" size="sm" />
-                <ArvoButton label="Medium" variant="primary" size="md" />
-                <ArvoButton label="Large" variant="primary" size="lg" />
+                <ArvoButton label="Primary" variant="primary" icon="plus" />
+                <ArvoButton label="Secondary" variant="secondary" icon="plus" />
+                <ArvoButton label="Tertiary" variant="tertiary" icon="plus" />
+                <ArvoButton label="Outline" variant="outline" icon="plus" />
+                <ArvoButton label="Delete" variant="danger" icon="bin" />
               </LiveReference>
             </DocSection>
 
             <DocSection id="states" title="States">
-              <ul className="list-disc pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
-                {STATES.map(({ name, desc }) => (
-                  <li key={name}><DocStrong>{name}</DocStrong> — {desc}</li>
-                ))}
-              </ul>
+              <DocParagraph>Interaction states communicate availability, feedback, and keyboard focus across all variants.</DocParagraph>
+              <SimpleTable columns={['State', 'Purpose']} rows={STATE_ROWS} />
               <LiveReference>
-                <ArvoButton label="Default" variant="primary" />
+                <ArvoButton label="Enabled" variant="primary" />
                 <ArvoButton label="Disabled" variant="primary" isDisabled />
                 <ArvoButton label="Loading" variant="primary" isLoading />
-                <ArvoButton label="Toggle" variant="secondary" isToggle defaultSelected />
+              </LiveReference>
+              <DocCallout>
+                Hover applies only on fine-pointer devices (<DocCode>@media (hover: hover)</DocCode>). Focus-visible shows a distinct ring for keyboard users — not on mouse click. Active reflects the pressed state during click. <DocStrong>Loading</DocStrong> and <DocStrong>toggle / selected</DocStrong> are additional Arvo states for async work and persistent on/off actions.
+              </DocCallout>
+            </DocSection>
+
+            <DocSection id="sizes" title="Sizes">
+              <DocParagraph>
+                Buttons are available in three sizes, designed to support different density levels, interaction contexts, and touch-target requirements across the platform. Height, padding, font, and icon scale together.
+              </DocParagraph>
+              <SimpleTable columns={['Size', 'Height', 'Purpose', 'Typical use cases']} rows={SIZE_DETAIL_ROWS} />
+              <LiveReference>
+                <div className="flex flex-col items-center gap-1">
+                  <ArvoButton label="Button" variant="primary" size="sm" icon="plus" />
+                  <span className="text-xs text-arvo-light-secondary dark:text-neutral-500">24px</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <ArvoButton label="Button" variant="primary" size="md" icon="plus" />
+                  <span className="text-xs text-arvo-light-secondary dark:text-neutral-500">32px</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <ArvoButton label="Button" variant="primary" size="lg" icon="plus" />
+                  <span className="text-xs text-arvo-light-secondary dark:text-neutral-500">40px</span>
+                </div>
               </LiveReference>
             </DocSection>
 
-            <DocSection id="dos-donts" title="Dos & Don'ts">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <GrayBgCard title="Do" bullets={['Use one primary action per viewport or modal', 'Pair destructive actions with confirmation', 'Match label to the outcome users expect', 'Reserve loading for real async work']} />
-                <WhiteBgCard title="Don't" bullets={['Style plain text as a link if the control performs an action', 'Stack multiple primary buttons in one row', "Use vague labels ('OK', 'Submit') without context", 'Enable loading without blocking duplicate submits']} />
+            <DocSection id="alignment-rules" title="Alignment rules">
+              <DocParagraph>When buttons sit beside inputs or in form footers, match size to field density so baselines and touch targets stay consistent.</DocParagraph>
+              <div className="grid gap-3">
+                {ALIGNMENT_RULES.map((rule) => (
+                  <GrayBgCard key={rule} desc={rule} />
+                ))}
               </div>
+              <DocSubsection title="Medium pairing (32px)">
+                <LiveReference>
+                  <div className="flex flex-wrap items-end gap-6">
+                    <div className="min-w-[220px]">
+                      <ArvoTextbox label="Medium (Default) Input Field" placeholder="Placeholder" />
+                    </div>
+                    <div className="flex flex-col items-start gap-1 pb-1">
+                      <ArvoButton label="Medium (Default) Button" variant="primary" size="md" />
+                      <span className="text-xs text-arvo-light-secondary dark:text-neutral-500">32px height</span>
+                    </div>
+                  </div>
+                </LiveReference>
+              </DocSubsection>
+              <DocSubsection title="Small pairing (24px)">
+                <LiveReference>
+                  <div className="flex flex-wrap items-end gap-6">
+                    <div className="min-w-[200px]">
+                      <ArvoTextbox label="Small Input Field" placeholder="Placeholder" size="sm" />
+                    </div>
+                    <div className="flex flex-col items-start gap-1 pb-1">
+                      <ArvoButton label="Small Button" variant="secondary" size="sm" />
+                      <span className="text-xs text-arvo-light-secondary dark:text-neutral-500">24px height</span>
+                    </div>
+                  </div>
+                </LiveReference>
+              </DocSubsection>
+              <DocSubsection title="Token reference">
+                <SimpleTable columns={['Size', 'Height', 'Font', 'Icon', 'Padding']} rows={SIZE_TABLE_ROWS} />
+              </DocSubsection>
+            </DocSection>
+
+            <DocSection id="content-guidelines" title="Content guidelines / UX copy">
+              <DocParagraph>
+                Button labels (calls to action) should be clear, concise, and action-oriented so users immediately understand what will happen on activation.
+              </DocParagraph>
+              <DocList items={[
+                'Keep labels short — maximum 3 words, ideally 1–2.',
+                'Use Title Case (capitalize key words; avoid capitalizing articles and prepositions unless necessary).',
+                'Start with a strong verb (Save, Apply, Create, Delete).',
+                'Remove unnecessary words like "a", "an", "the".',
+                'Avoid "Click" or "Press" in labels.',
+                'Add a noun after the verb when it improves clarity — e.g. "Submit Expenses" vs "Submit".',
+                'Ensure labels are specific to the action and context — avoid generic "Proceed" or "Continue" unless meaning is obvious.',
+                'Maintain consistency across similar actions — always use "Save", not "Save Changes" in one place and "Update" in another for the same action.',
+              ]} />
+              <DocSubsection title="Examples">
+                <DosDontCards
+                  stacked
+                  doTitle="Good"
+                  dontTitle="Avoid"
+                  doItems={['Save', 'Apply Filters', 'Create Plan', 'Delete Item']}
+                  dontItems={['Click Here', 'Submit Now', 'Proceed Further', 'OK']}
+                />
+              </DocSubsection>
+              <DocParagraph>
+                For language and tone standards, refer to the Buttons and Calls to Action guidance in the Content writing section.
+              </DocParagraph>
+            </DocSection>
+
+            <DocSection id="dos-donts" title="Dos & Don'ts">
+              <DosDontCards
+                doItems={[
+                  'Use one primary action per viewport, form, or modal footer.',
+                  'Pair destructive actions with confirmation — never rely on color alone.',
+                  'Match button size to surrounding input density in forms.',
+                  'Write verb-first labels that describe the outcome (Save, Apply Filters).',
+                  'Use loading state for real async work that blocks repeat submits.',
+                  'Place secondary (Cancel) before primary (Save) in LTR footers.',
+                ]}
+                dontItems={[
+                  'Stack multiple primary buttons in one row or footer.',
+                  'Use vague labels ("OK", "Submit") without contextual meaning.',
+                  'Style navigation as a button when a link is semantically correct.',
+                  'Disable a button without explaining why nearby or in helper text.',
+                  'Use danger variant for non-destructive actions to "make it stand out".',
+                  'Trigger actions on focus alone or require hover to discover affordance.',
+                ]}
+              />
             </DocSection>
           </div>
         )}

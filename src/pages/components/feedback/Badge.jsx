@@ -1,152 +1,43 @@
-import { useState, useMemo } from 'react'
 import { ArvoBadgeAlert } from '@arvo/react'
-import PageHeader from '../../../LayoutComponents/PageHeader'
-import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
-import CodeBlock from '../../../LayoutComponents/CodeBlock'
-import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
-import { PropsTable, KeyboardTable, AriaTable, MethodsTable, EventsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
-import { getDescriptor } from '../../../data/componentDescriptors.generated'
+import { createExpertComponentPage } from '../shared/createExpertComponentPage'
 
-const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
+export default createExpertComponentPage({
+  slug: 'badge',
+  title: 'Badge Alert',
+  description:
+    'Compact badge-style status indicator with four tones (info, success, warning, danger), two visual weights, optional title, actions, and dismissal. Live-region wired so screen readers hear changes.',
+  componentSlug: 'badge',
+  icon: (
+    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
+  liveDemo: (
+    <>
+      <ArvoBadgeAlert type="info" message="Heads up — the system will be down on Sunday." />
+      <ArvoBadgeAlert type="positive" message="Changes saved successfully." />
+      <ArvoBadgeAlert type="warning" message="Your session expires in 5 minutes." />
+      <ArvoBadgeAlert type="negative" message="Failed to save changes." />
+    </>
+  ),
+  reactCode: `import { ArvoBadgeAlert } from '@arvo/react';
 
-const DESCRIPTOR = getDescriptor('badge')
-const PROPS = DESCRIPTOR.props
+<ArvoBadgeAlert type="info" message="The system will be down on Sunday." />
 
-
-export default function Badge() {
-  const [tab, setTab] = useDocTabUrl(TABS)
-  const sections = useMemo(() => {
-    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'demo', label: 'Live demo' }]
-    if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]
-    if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'methods', label: 'Methods (JS)' }, { id: 'events', label: 'Events (JS)' }]
-    if (tab === 'Accessibility') return [{ id: 'roles', label: 'Roles & live regions' }, { id: 'keyboard', label: 'Keyboard' }, { id: 'aria', label: 'ARIA' }]
-    return []
-  }, [tab])
-
-  return (
-    <PageWithToc sections={sections}>
-      <div className="space-y-8">
-        <PageHeader
-          title="Badge Alert"
-          description="Compact badge-style status indicator with four tones (info, success, warning, danger), two visual weights, optional title, actions, and dismissal. Live-region wired so screen readers hear changes."
-          componentSlug="badge"
-          icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-        />
-        <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />
-
-        {tab === 'Overview' && (
-          <div className="space-y-12">
-            <DocSection id="purpose" title="Purpose">
-              <DocParagraph>Use Badge Alert for inline messages adjacent to or above the content they describe — form validation summaries, contextual notes, system status banners. For ephemeral confirmations use <DocStrong>Toast</DocStrong>.</DocParagraph>
-            </DocSection>
-            <DocSection id="demo" title="Live demo">
-              <LiveReference>
-                <ArvoBadgeAlert type="info" message="Heads up — the system will be down on Sunday." />
-                <ArvoBadgeAlert type="positive" message="Changes saved successfully." />
-                <ArvoBadgeAlert type="warning" message="Your session expires in 5 minutes." />
-                <ArvoBadgeAlert type="negative" message="Failed to save changes." />
-              </LiveReference>
-            </DocSection>
-          </div>
-        )}
-
-        {tab === 'Usage' && (
-          <div className="space-y-12">
-            <DocSection id="when" title="When to use">
-              <DocList items={[
-                'Inline status messages adjacent to or above the related content.',
-                'Form validation summaries (multiple errors collapsed into one alert).',
-                'System banners (maintenance windows, plan limits).',
-              ]} />
-            </DocSection>
-            <DocSection id="when-not" title="When not to use">
-              <DocList items={[
-                <span key="1">Per-field validation errors — use the <DocCode>error</DocCode> prop on the field component.</span>,
-                <span key="2">Ephemeral confirmations — use <DocStrong>Toast</DocStrong>.</span>,
-                <span key="3">Modal confirmations — use a Popover with footer actions.</span>,
-              ]} />
-            </DocSection>
-          </div>
-        )}
-
-        {tab === 'Code/APIs' && (
-          <div className="space-y-12">
-            <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoBadgeAlert } from '@arvo/react';
-
-<ArvoBadgeAlert type="info" description="The system will be down on Sunday." />
+<ArvoBadgeAlert type="positive" message="Changes saved successfully." />
 
 <ArvoBadgeAlert
-  type="success"
-  title="Saved"
-  description="Your changes have been published."
-/>
-
-<ArvoBadgeAlert
-  type="danger"
-  title="Failed to save"
-  description="Try again or contact support."
-  actions={[{ id: 'retry', label: 'Retry', onClick: () => retry() }]}
-  dismissible
-  onDismiss={() => hide()}
-/>`} />
-            </DocSection>
-            <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoBadgeAlert } from '@arvo/js';
+  type="negative"
+  message="Failed to save changes."
+  maxWidth={320}
+/>`,
+  jsCode: `import { ArvoBadgeAlert } from '@arvo/js';
 
 const alert = ArvoBadgeAlert.initialize(el, {
-  type: 'success',
-  title: 'Saved',
-  description: 'Your changes have been published.',
-  dismissible: true,
-  onDismiss: () => hide(),
+  type: 'positive',
+  message: 'Changes saved successfully.',
 });
 
-alert.update({ type: 'danger', title: 'Failed' });
-alert.dismiss();
-alert.destroy();`} />
-            </DocSection>
-            <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
-            <DocSection id="methods" title="Methods (JS)">
-              <MethodsTable rows={[
-                { method: 'ArvoBadgeAlert.initialize(el, options)', returns: 'ArvoBadgeAlert', desc: 'Factory.' },
-                { method: 'update(partial)', desc: 'Update type, title, description, actions, etc.' },
-                { method: 'dismiss()', desc: 'Programmatically dismiss the alert.' },
-                { method: 'destroy()', desc: 'Tear down.' },
-              ]} />
-            </DocSection>
-            <DocSection id="events" title="Custom events (JS)">
-              <EventsTable rows={[{ event: 'bdg-alert:dismiss', payload: '—', desc: 'Fires when the user dismisses the alert.' }]} />
-            </DocSection>
-          </div>
-        )}
-
-        {tab === 'Accessibility' && (
-          <div className="space-y-12">
-            <DocSection id="roles" title="Roles & live regions">
-              <DocList items={[
-                <span key="1"><DocStrong>danger</DocStrong> tone uses <DocCode>role="alert"</DocCode> (assertive live region) — interrupts current speech.</span>,
-                <span key="2"><DocStrong>info / success / warning</DocStrong> use <DocCode>role="status"</DocCode> (polite live region) — announced when the screen reader pauses.</span>,
-                <span key="3">Use the matching tone semantically — don't escalate info to alert just for visual emphasis.</span>,
-              ]} />
-            </DocSection>
-            <DocSection id="keyboard" title="Keyboard">
-              <KeyboardTable rows={[
-                { key: 'Tab / Shift+Tab', action: 'Move focus to inline actions and the dismiss button.' },
-                { key: 'Enter / Space', action: 'Activate the focused action or dismiss button.' },
-              ]} />
-            </DocSection>
-            <DocSection id="aria" title="ARIA">
-              <AriaTable rows={[
-                { attr: 'role="alert" / role="status"', when: 'Driven by tone; do not override.' },
-                { attr: 'aria-labelledby', when: 'Points at the title element when title is set.' },
-                { attr: 'aria-describedby', when: 'Points at the description.' },
-              ]} />
-            </DocSection>
-          </div>
-        )}
-      </div>
-    </PageWithToc>
-  )
-}
+alert.update({ type: 'negative', message: 'Failed to save changes.' });
+alert.destroy();`,
+})

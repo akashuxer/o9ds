@@ -1,85 +1,33 @@
-import { useState, useMemo } from 'react'
 import { ArvoSwitch } from '@arvo/react'
-import PageHeader from '../../../LayoutComponents/PageHeader'
-import PageWithToc from '../../../LayoutComponents/PageWithToc'
-import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
-import CodeBlock from '../../../LayoutComponents/CodeBlock'
-import DocSection, { DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
-import { PropsTable, KeyboardTable, AriaTable, MethodsTable, LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
-import { getDescriptor } from '../../../data/componentDescriptors.generated'
+import { LiveReference } from '../../../LayoutComponents/ComponentDocPrimitives'
+import { createExpertComponentPage } from '../shared/createExpertComponentPage'
 
-const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
-
-const DESCRIPTOR = getDescriptor('switch')
-const PROPS = DESCRIPTOR.props
-
-
-export default function Switch() {
-  const [tab, setTab] = useDocTabUrl(TABS)
-  const sections = useMemo(() => {
-    if (tab === 'Overview') return [{ id: 'purpose', label: 'Purpose' }, { id: 'demo', label: 'Live demo' }]
-    if (tab === 'Usage') return [{ id: 'when', label: 'When to use' }, { id: 'when-not', label: 'When not to use' }]
-    if (tab === 'Code/APIs') return [{ id: 'react', label: 'React' }, { id: 'js', label: 'Vanilla JS' }, { id: 'props', label: 'Props' }, { id: 'methods', label: 'Methods (JS)' }]
-    if (tab === 'Accessibility') return [{ id: 'keyboard', label: 'Keyboard' }, { id: 'aria', label: 'ARIA' }]
-    return []
-  }, [tab])
-
-  return (
-    <PageWithToc sections={sections}>
-      <div className="space-y-8">
-        <PageHeader
-          title="Switch"
-          description="On/off toggle for binary settings. Effect should be immediate — switches do not require a separate Save action."
-          componentSlug="switch"
-          icon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12a7 7 0 0114 0M9 12a3 3 0 116 0 3 3 0 01-6 0z" /></svg>}
-        />
-        <DocTabs tabs={TABS} activeTab={tab} onSelect={setTab} />
-
-        {tab === 'Overview' && (
-          <div className="space-y-12">
-            <DocSection id="purpose" title="Purpose">
-              <DocParagraph>Use Switch for settings that read as on/off and take effect immediately. The control role is <DocCode>switch</DocCode>, distinct from a checkbox.</DocParagraph>
-            </DocSection>
-            <DocSection id="demo" title="Live demo">
-              <LiveReference>
-                <ArvoSwitch label="Wi-Fi" defaultChecked />
-                <ArvoSwitch label="Notifications" />
-                <ArvoSwitch label="Disabled" isDisabled />
-              </LiveReference>
-            </DocSection>
-          </div>
-        )}
-
-        {tab === 'Usage' && (
-          <div className="space-y-12">
-            <DocSection id="when" title="When to use">
-              <DocList items={[
-                'Settings that toggle a system state immediately (Wi-Fi, dark mode, notifications).',
-                'When the on/off semantic is clearer than checked/unchecked.',
-              ]} />
-            </DocSection>
-            <DocSection id="when-not" title="When not to use">
-              <DocList items={[
-                <span key="1">For form fields that need to be saved with a submit — use <DocStrong>Checkbox</DocStrong>.</span>,
-                <span key="2">For mutually exclusive options — use <DocStrong>Radio Group</DocStrong> or <DocStrong>Button Group</DocStrong>.</span>,
-              ]} />
-            </DocSection>
-          </div>
-        )}
-
-        {tab === 'Code/APIs' && (
-          <div className="space-y-12">
-            <DocSection id="react" title="React">
-              <CodeBlock language="tsx" label="@arvo/react" code={`import { ArvoSwitch } from '@arvo/react';
+export default createExpertComponentPage({
+  slug: 'switch',
+  title: 'Switch',
+  description:
+    'On/off toggle for binary settings. Effect should be immediate — switches do not require a separate Save action.',
+  componentSlug: 'switch',
+  icon: (
+    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12a7 7 0 0114 0M9 12a3 3 0 116 0 3 3 0 01-6 0z" />
+    </svg>
+  ),
+  liveDemo: (
+    <LiveReference>
+      <ArvoSwitch label="Wi-Fi" defaultChecked />
+      <ArvoSwitch label="Notifications" />
+      <ArvoSwitch label="Disabled" isDisabled />
+    </LiveReference>
+  ),
+  reactCode: `import { ArvoSwitch } from '@arvo/react';
 
 <ArvoSwitch label="Wi-Fi" defaultChecked />
 
 // Controlled
 const [on, setOn] = useState(true);
-<ArvoSwitch label="Dark mode" isChecked={on} onChange={setOn} />`} />
-            </DocSection>
-            <DocSection id="js" title="Vanilla JS">
-              <CodeBlock language="js" label="@arvo/js" code={`import { ArvoSwitch } from '@arvo/js';
+<ArvoSwitch label="Dark mode" isChecked={on} onChange={setOn} />`,
+  jsCode: `import { ArvoSwitch } from '@arvo/js';
 
 const sw = ArvoSwitch.initialize(el, {
   label: 'Wi-Fi',
@@ -91,40 +39,5 @@ sw.toggle();           // flip
 sw.toggle(false);      // force off
 sw.checked();          // => boolean
 sw.disabled(true);
-sw.destroy();`} />
-            </DocSection>
-            <DocSection id="props" title="Props"><PropsTable rows={PROPS} /></DocSection>
-            <DocSection id="methods" title="Methods (JS)">
-              <MethodsTable rows={[
-                { method: 'ArvoSwitch.initialize(el, options)', returns: 'ArvoSwitch', desc: 'Factory.' },
-                { method: 'toggle(state?)', desc: 'Flip or set on/off state.' },
-                { method: 'checked(state?)', returns: 'boolean | void', desc: 'Get/set checked state.' },
-                { method: 'disabled(state?)', returns: 'boolean | void', desc: 'Get/set disabled state.' },
-                { method: 'destroy()', desc: 'Tear down.' },
-              ]} />
-            </DocSection>
-          </div>
-        )}
-
-        {tab === 'Accessibility' && (
-          <div className="space-y-12">
-            <DocSection id="keyboard" title="Keyboard">
-              <KeyboardTable rows={[
-                { key: 'Space', action: 'Toggle the switch.' },
-                { key: 'Tab / Shift+Tab', action: 'Move focus.' },
-              ]} />
-            </DocSection>
-            <DocSection id="aria" title="ARIA">
-              <AriaTable rows={[
-                { attr: 'role="switch"', when: 'Set automatically on the control.' },
-                { attr: 'aria-checked', when: 'Reflects the current on/off state — "true" or "false".' },
-                { attr: 'aria-disabled', when: 'Set when isDisabled.' },
-                { attr: 'aria-readonly', when: 'Set when isReadonly.' },
-              ]} />
-            </DocSection>
-          </div>
-        )}
-      </div>
-    </PageWithToc>
-  )
-}
+sw.destroy();`,
+})

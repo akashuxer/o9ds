@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BackgroundRippleEffect } from '@/components/ui/BackgroundRippleEffect'
 import PublicRasterPicture from '@/components/media/PublicRasterPicture'
@@ -92,7 +92,7 @@ const cards = [
   },
 ]
 
-function HomeBlockCardIllustration({ illustrationSrc, isLight, loading = 'lazy', fetchPriority = 'auto' }) {
+function HomeBlockCardIllustration({ illustrationSrc, isLight, loading = 'lazy', fetchpriority = 'auto' }) {
   return (
     <div
       className="relative h-[clamp(200px,42vw,300px)] min-h-[200px] w-full shrink-0 overflow-hidden border-b sm:h-[clamp(220px,26vw,300px)] sm:min-h-[220px] lg:h-[clamp(240px,22vw,300px)]"
@@ -118,7 +118,7 @@ function HomeBlockCardIllustration({ illustrationSrc, isLight, loading = 'lazy',
             className="absolute inset-3 z-[1] h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] max-h-none object-contain object-center sm:inset-4 sm:h-[calc(100%-2rem)] sm:w-[calc(100%-2rem)] motion-safe:transition-[transform,filter] motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:scale-[1.04] motion-safe:group-hover:brightness-[1.02] dark:brightness-[0.98] dark:group-hover:brightness-100"
             loading={loading}
             decoding="async"
-            fetchPriority={fetchPriority}
+            fetchpriority={fetchpriority}
           />
         ) : null}
       </div>
@@ -344,7 +344,7 @@ function TabletHeroFrame({ slides, className = '' }) {
                     height={1080}
                     loading="eager"
                     decoding="async"
-                    fetchPriority="high"
+                    fetchpriority="high"
                   />
                 </div>
               </div>
@@ -394,7 +394,7 @@ function TabletHeroFrame({ slides, className = '' }) {
                         height={1080}
                         loading="eager"
                         decoding="async"
-                        fetchPriority={i === 0 ? 'high' : 'low'}
+                        fetchpriority={i === 0 ? 'high' : 'low'}
                       />
                     </div>
                   ))}
@@ -413,19 +413,6 @@ export default function Home() {
   const { enterDocs } = useDocsShell()
   const navigate = useNavigate()
   const isLight = theme === 'light'
-
-  /** Card PNGs: inject preloads as soon as Home mounts (no cost on other routes). */
-  useLayoutEffect(() => {
-    if (document.querySelector('link[data-arvo-preload="home-cards"]')) return
-    Object.values(HOME_CARD_ILLUSTRATIONS).forEach((href) => {
-      const l = document.createElement('link')
-      l.rel = 'preload'
-      l.as = 'image'
-      l.href = href
-      l.setAttribute('data-arvo-preload', 'home-cards')
-      document.head.appendChild(l)
-    })
-  }, [])
 
   const onGetStarted = () => {
     enterDocs()
@@ -512,7 +499,7 @@ export default function Home() {
                     illustrationSrc={illustrationSrc}
                     isLight={isLight}
                     loading={isAboveFoldCard ? 'eager' : 'lazy'}
-                    fetchPriority={isAboveFoldCard ? 'low' : 'auto'}
+                    fetchpriority={isAboveFoldCard ? 'low' : 'auto'}
                   />
                   <div className="bg-[#FAFAFA] px-5 pb-6 pt-5 dark:bg-neutral-900/80 sm:px-6">
                     <h3 className="mb-2 text-lg font-semibold tracking-tight text-arvo-light-primary dark:text-white sm:text-xl">

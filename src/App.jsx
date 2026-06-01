@@ -56,7 +56,9 @@ import {
   PATH_SPACING,
   PATH_SYMBOL,
   PATH_TYPOGRAPHY_BASE,
+  PATH_GRAMMAR_STYLE_BASE,
   docPagePath,
+  grammarStyleTopicPath,
 } from './data/docPaths'
 
 const Home = lazy(() => import('./pages/Home'))
@@ -87,6 +89,9 @@ const AccessibilityVisualAccessibility = lazy(() => import('./pages/accessibilit
 const AccessibilityTestingAndQA = lazy(() => import('./pages/accessibility/TestingAndQA'))
 const AccessibilityShortcuts = lazy(() => import('./pages/accessibility/Shortcuts'))
 const ContentOverview = lazy(() => import('./pages/ContentOverview'))
+const ContentVoiceAndTone = lazy(() => import('./pages/content/VoiceAndTone'))
+const ContentWritingPrinciples = lazy(() => import('./pages/content/WritingPrinciples'))
+const ContentGrammarStyle = lazy(() => import('./pages/content/GrammarStylePage'))
 
 function DevelopersUsageGate() {
   return <Developers section="usage" />
@@ -99,7 +104,12 @@ export default function App() {
       <OverlayProvider>
       <TooltipProvider>
       <ArvoToastProvider>
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <ScrollToTop />
         <Layout>
         <Suspense fallback={null}>
@@ -161,9 +171,11 @@ export default function App() {
 
           {/* Content & Patterns */}
           <Route path={PATH_CONTENT_OVERVIEW} element={<ContentOverview />} />
-          <Route path={`${CONTENT}/writing-principles`} element={<Placeholder title="Writing Principles" documentationCatalog="contentWriting" />} />
-          <Route path={`${CONTENT}/grammar`} element={<Placeholder title="Grammar" documentationCatalog="contentWriting" />} />
-          <Route path={`${CONTENT}/voice-and-tone`} element={<Placeholder title="Voice and Tone" documentationCatalog="contentWriting" />} />
+          <Route path={`${CONTENT}/writing-principles`} element={<ContentWritingPrinciples />} />
+          <Route path={`${CONTENT}/voice-and-tone`} element={<ContentVoiceAndTone />} />
+          <Route path={`${PATH_GRAMMAR_STYLE_BASE}/:topic`} element={<ContentGrammarStyle />} />
+          <Route path={PATH_GRAMMAR_STYLE_BASE} element={<Navigate to={grammarStyleTopicPath('intro')} replace />} />
+          <Route path={`${CONTENT}/grammar`} element={<LegacyRedirect to={grammarStyleTopicPath('intro')} />} />
           <Route path={PATH_PATTERNS_OVERVIEW} element={<PatternsOverview />} />
           <Route path={`${PATTERNS}/forms`} element={<Placeholder title="Forms" documentationCatalog="patterns" />} />
           <Route path={`${PATTERNS}/search`} element={<Placeholder title="Search" documentationCatalog="patterns" />} />

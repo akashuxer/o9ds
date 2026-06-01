@@ -168,6 +168,7 @@ Values below are from **Vite build output** and **local Lighthouse 11** against 
 | 2026-05-12 | **Figma Make:** `MakeDemosTab` (`#make-demos`) tab order before Prompts Library. Demos: Demo 1–5 GIFs under `public/figmamakeGraphic/` (`Demo 05 example.gif` → lyric-amount workflows site) + figma.site links. `PromptsLibraryTab`: User Management + Enterprise + supply-chain prompts with `View` links; legacy strings may remain under `figma-make/data/`. |
 | 2026-05-12 | **Figma Make Overview:** embedded intro video (`youtube-nocookie.com/embed`, lazy iframe, `aspect-video`) — loads third-party player after request. |
 | 2026-05-12 | **Home:** Storybook card → `https://o9arvo-storybook.vercel.app/` + `public/home/storybook.png`; Figma Make card → `public/home/make.png` (both + WebP via build pipeline). |
+| 2026-06-01 | **Home hero preloads:** removed global `/hero-*.svg` from `index.html` (no route-scoped preload — hero uses `fetchpriority` + `loading="eager"`). **Router:** v7 future flags on `BrowserRouter`. **Console:** `encodePublicMediaUrl` for spaced public paths in `PublicRasterPicture` (`srcset`); lowercase `fetchpriority` on hero/card images; dropped Home card PNG `link` preloads (lazy below-fold art). |
 | _YYYY-MM-DD_ | _e.g. Added lazy routes, WebP pipeline, vercel header order fix_ |
 
 _Add a row whenever you merge performance-related PRs._
@@ -181,6 +182,6 @@ _Add a row whenever you merge performance-related PRs._
 - `src/components/media/PublicRasterPicture.jsx`  
 - `scripts/optimize-public-png-to-webp.mjs`, `scripts/audit-public-images.mjs`  
 - `vercel.json`, `netlify.toml`  
-- `index.html` — head resources (no duplicate o9Sans/o9con links)
+- `index.html` — head resources (no duplicate o9Sans/o9con links; no global hero/card preloads)
 - `scripts/vendor-arvo.mjs` — refresh `vendor/@arvo/*` from `../o9-design-system/packages`
 - `scripts/sync-from-descriptors.mjs` — regenerate `src/data/componentDescriptors.generated.js`

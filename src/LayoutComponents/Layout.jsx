@@ -3,6 +3,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
+import { GRAMMAR_STYLE_NAV_ITEMS, GRAMMAR_STYLE_TOPICS } from '../data/contentGrammarNav'
 import { PATHS_WITH_CONTENT, hasReadyDocumentation } from '../data/pathsWithContent'
 import {
   ACCESSIBILITY,
@@ -50,6 +51,7 @@ import {
   devRefTopicPath,
   devUsageTopicPath,
   docPagePath,
+  grammarStyleTopicPath,
   patternTopicPath,
 } from '../data/docPaths'
 
@@ -113,8 +115,13 @@ const PAGE_TITLES = {
   '/accessibility/testing-and-qa': 'Testing and QA',
   '/content': 'Content Guidelines',
   '/content/writing-principles': 'Writing Principles',
-  '/content/grammar': 'Grammar',
   '/content/voice-and-tone': 'Voice and Tone',
+  ...Object.fromEntries(
+    GRAMMAR_STYLE_TOPICS.map((topic) => [
+      grammarStyleTopicPath(topic.slug),
+      topic.slug === 'intro' ? 'Grammar & Style' : topic.label,
+    ]),
+  ),
   '/patterns': 'Patterns',
   '/patterns/forms': 'Forms',
   '/patterns/search': 'Search',
@@ -238,9 +245,14 @@ const sidebarSections = [
     title: 'CONTENT GUIDELINES',
     items: [
       { path: PATH_CONTENT_OVERVIEW, label: 'Overview' },
-      { path: contentTopicPath('writing-principles'), label: 'Writing Principles' },
-      { path: contentTopicPath('grammar'), label: 'Grammar' },
       { path: contentTopicPath('voice-and-tone'), label: 'Voice and Tone' },
+      { path: contentTopicPath('writing-principles'), label: 'Writing Principles' },
+      {
+        path: '_nav-group-grammar-style',
+        label: 'Grammar & Style',
+        subsectionGroup: true,
+        children: GRAMMAR_STYLE_NAV_ITEMS,
+      },
     ],
   },
   {
@@ -290,6 +302,11 @@ function getPageTitle(pathname) {
   if (componentsMatch) {
     return componentsMatch[1].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
   }
+  const grammarMatch = pathname.match(/^\/content\/grammar-style\/([^/]+)/)
+  if (grammarMatch) {
+    const topic = GRAMMAR_STYLE_TOPICS.find((t) => t.slug === grammarMatch[1])
+    if (topic) return topic.slug === 'intro' ? 'Grammar & Style' : topic.label
+  }
   return 'Arvo Design System'
 }
 
@@ -308,6 +325,7 @@ export default function Layout({ children }) {
     '_nav-group-usage': false,
     '_nav-group-developer-reference': false,
     '_nav-group-assets': false,
+    '_nav-group-grammar-style': false,
   })
   const searchRef = useRef(null)
   const navRef = useRef(null)
@@ -315,6 +333,12 @@ export default function Layout({ children }) {
   useEffect(() => {
     const pageName = getPageTitle(pathname)
     document.title = `Arvo Design System - ${pageName}`
+  }, [pathname])
+
+  useEffect(() => {
+    if (pathname.startsWith('/content/grammar-style')) {
+      setSubsectionOpen((o) => ({ ...o, '_nav-group-grammar-style': true }))
+    }
   }, [pathname])
 
   const filteredSections = useMemo(() => {

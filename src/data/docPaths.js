@@ -72,6 +72,12 @@ export function contentTopicPath(slug) {
   return `${CONTENT}/${slug}`
 }
 
+export const PATH_GRAMMAR_STYLE_BASE = `${CONTENT}/grammar-style`
+
+export function grammarStyleTopicPath(slug) {
+  return `${PATH_GRAMMAR_STYLE_BASE}/${slug}`
+}
+
 export function devRefTopicPath(slug) {
   return `${PATH_DEV_REF_BASE}/${slug}`
 }

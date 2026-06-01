@@ -914,3 +914,55 @@ html.dark main [data-arvo-kb-form-demo] input:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* Semantic text/border utilities — token-backed (t = text, b = border) */
+.t-positive {
+  color: var(--arvo-color-t-positive);
+}
+.t-negative {
+  color: var(--arvo-color-t-negative);
+}
+.b-positive {
+  border-color: var(--arvo-color-b-positive);
+}
+.b-negative {
+  border-color: var(--arvo-color-b-negative);
+}
+
+/* Do/Don't cards — semantic green/red text + left border (both themes) */
+html[data-theme="light"] main [data-arvo-dos-dont-card] .t-positive,
+html:not(.dark) main [data-arvo-dos-dont-card] .t-positive,
+html[data-theme="dark"] main [data-arvo-dos-dont-card] .t-positive,
+html.dark main [data-arvo-dos-dont-card] .t-positive {
+  color: var(--arvo-color-t-positive) !important;
+}
+html[data-theme="light"] main [data-arvo-dos-dont-card] .t-negative,
+html:not(.dark) main [data-arvo-dos-dont-card] .t-negative,
+html[data-theme="dark"] main [data-arvo-dos-dont-card] .t-negative,
+html.dark main [data-arvo-dos-dont-card] .t-negative {
+  color: var(--arvo-color-t-negative) !important;
+}
+html[data-theme="light"] main [data-arvo-dos-dont-card],
+html:not(.dark) main [data-arvo-dos-dont-card] {
+  border-top-color: #e5e5e5 !important;
+  border-right-color: #e5e5e5 !important;
+  border-bottom-color: #e5e5e5 !important;
+}
+html[data-theme="dark"] main [data-arvo-dos-dont-card],
+html.dark main [data-arvo-dos-dont-card] {
+  border-top-color: #404040 !important;
+  border-right-color: #404040 !important;
+  border-bottom-color: #404040 !important;
+}
+html[data-theme="light"] main [data-arvo-dos-dont-card][data-arvo-tone="positive"],
+html:not(.dark) main [data-arvo-dos-dont-card][data-arvo-tone="positive"],
+html[data-theme="dark"] main [data-arvo-dos-dont-card][data-arvo-tone="positive"],
+html.dark main [data-arvo-dos-dont-card][data-arvo-tone="positive"] {
+  border-left-color: var(--arvo-color-b-positive) !important;
+}
+html[data-theme="light"] main [data-arvo-dos-dont-card][data-arvo-tone="negative"],
+html:not(.dark) main [data-arvo-dos-dont-card][data-arvo-tone="negative"],
+html[data-theme="dark"] main [data-arvo-dos-dont-card][data-arvo-tone="negative"],
+html.dark main [data-arvo-dos-dont-card][data-arvo-tone="negative"] {
+  border-left-color: var(--arvo-color-b-negative) !important;
+}

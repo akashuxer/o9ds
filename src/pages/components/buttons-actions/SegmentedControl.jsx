@@ -4,8 +4,7 @@ import PageHeader from '../../../LayoutComponents/PageHeader'
 import PageWithToc from '../../../LayoutComponents/PageWithToc'
 import DocTabs, { useDocTabUrl } from '../../../LayoutComponents/DocTabs'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
-import GrayBgCard from '../../../LayoutComponents/GrayBgCard'
-import WhiteBgCard from '../../../LayoutComponents/WhiteBgCard'
+import DosDontCards from '../../../LayoutComponents/DosDontCards'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../../../LayoutComponents/DocSection'
 import {
   PropsTable,
@@ -67,6 +66,8 @@ export default function SegmentedControl() {
     if (tab === 'Usage') return [
       { id: 'when', label: 'When to use' },
       { id: 'when-not', label: 'When not to use' },
+      { id: 'scenarios', label: 'Scenarios' },
+      { id: 'best-practices', label: 'Best practices' },
       { id: 'vs-btn-grp', label: 'vs Button Group' },
       { id: 'examples', label: 'Examples' },
     ]
@@ -139,18 +140,18 @@ export default function SegmentedControl() {
             </DocSection>
 
             <DocSection id="dos-donts" title="Dos & Don'ts">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <GrayBgCard title="Do" bullets={[
+              <DosDontCards
+                doItems={[
                   'Use for 2–4 peer values (settings, views, filters, operators).',
                   'Always set ariaLabel — it labels the radiogroup for assistive tech.',
                   'Pair the icon-only layout with a clear surrounding label or context.',
-                ]} />
-                <WhiteBgCard title="Don't" bullets={[
+                ]}
+                dontItems={[
                   'Use for command actions (Save / Export / Share) — that is a Button Group.',
                   'Use when one option is more prominent than the others — use Buttons with primary / secondary variants.',
                   'Stack 5+ options — switch to Select or Radio Group.',
-                ]} />
-              </div>
+                ]}
+              />
             </DocSection>
           </div>
         )}
@@ -171,6 +172,23 @@ export default function SegmentedControl() {
                 <span key="1">For command-style actions — use <DocStrong>Button Group</DocStrong>.</span>,
                 <span key="2">For independent toggles where multiple values can be selected — use <DocStrong>Button Group</DocStrong> in multi-select mode or <DocStrong>Checkbox Group</DocStrong>.</span>,
                 <span key="3">For long lists of values (5+) — use <DocStrong>Select</DocStrong> or <DocStrong>Radio Group</DocStrong>.</span>,
+              ]} />
+            </DocSection>
+
+            <DocSection id="scenarios" title="Scenarios">
+              <ul className="space-y-3 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
+                <li><DocStrong>List / Grid / Kanban view switcher</DocStrong> — switching how a collection is rendered. Always pair with a stable ariaLabel such as &ldquo;View type&rdquo;.</li>
+                <li><DocStrong>Day / Week / Month scope</DocStrong> — controls the period a calendar or report covers; pair with the chart or table heading so context is clear.</li>
+                <li><DocStrong>AND / OR operator</DocStrong> — toggling a query-builder operator inside a filter row. Use the secondary variant so the control reads as part of the inline filter.</li>
+              </ul>
+            </DocSection>
+
+            <DocSection id="best-practices" title="Best practices">
+              <DocList items={[
+                'Place the control directly above or beside the content it filters — not in a distant toolbar unless the relationship is obvious.',
+                'Keep option labels short (1–2 words). Use icon-only mode only when icons are universally understood in your product.',
+                'Reflect the selected value in the page heading or table title when the control changes scope (e.g. "Orders — Week view").',
+                'Disable the control while async data loads rather than showing a stale selection that no longer applies.',
               ]} />
             </DocSection>
 

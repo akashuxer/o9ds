@@ -9,16 +9,33 @@ const contentIcon = (
   </svg>
 )
 
+const contentOverviewDescription = (
+  <>
+    <p className="m-0">
+      Arvo establishes a shared writing system across products, workflows, and components to ensure communication feels clear, consistent, and trustworthy.
+    </p>
+    <p className="m-0">
+      This guidance applies to all user-facing content including buttons, forms, dialogs, tables, notifications, onboarding, AI experiences, and enterprise workflows.
+    </p>
+    <p className="m-0">
+      <strong className="font-semibold text-arvo-light-primary dark:text-white">The goal is simple:</strong>
+      <br />
+      Help users complete work with less effort.
+    </p>
+  </>
+)
+
 export default function ContentOverview() {
   return (
     <SectionOverviewPage
       title="Content Guidelines"
-      description="UX writing, voice, tone, and grammar for product copy. Search, filter by ready status, and open a guideline page."
+      description={contentOverviewDescription}
       icon={contentIcon}
       items={CONTENT_CATALOG}
       getIllustrationSrc={getSectionOverviewIllustrationSrc}
       isReady={hasReadyDocumentation}
       documentationCatalogId="contentWriting"
+      preserveCatalogOrder
     />
   )
 }

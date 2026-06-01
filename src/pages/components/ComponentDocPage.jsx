@@ -42,6 +42,23 @@ import Toast from './feedback/Toast'
 import Chip from './inputs/Chip'
 import Label from './utilities/Label'
 import Cards from './data-display/Cards'
+import Accordion from './data-display/Accordion'
+import EmptyState from './feedback/EmptyState'
+import SkeletonLoader from './feedback/SkeletonLoader'
+import Spinner from './feedback/Spinner'
+import DatePicker from './inputs/DatePicker'
+import DateRangePicker from './inputs/DateRangePicker'
+import DateTimePicker from './inputs/DateTimePicker'
+import TextEditor from './inputs/TextEditor'
+import MultiSelect from './inputs/MultiSelect'
+import OtpInput from './inputs/OtpInput'
+import Slider from './inputs/Slider'
+import TimePicker from './inputs/TimePicker'
+import Tree from './navigation/Tree'
+import Avatar from './utilities/Avatar'
+import AvatarGroup from './utilities/AvatarGroup'
+import ScrollBar from './utilities/ScrollBar'
+import Splitter from './utilities/Splitter'
 import * as StubPages from './allStubComponents'
 import GenericComponentDoc from './GenericComponentDoc'
 import { getAllComponentPageMeta, slugToComponentModuleName } from '../../data/componentPageMeta'
@@ -92,6 +109,23 @@ const REAL_PAGES = {
   chip: Chip,
   label: Label,
   cards: Cards,
+  accordion: Accordion,
+  'empty-state': EmptyState,
+  'skeleton-loader': SkeletonLoader,
+  spinner: Spinner,
+  'date-picker': DatePicker,
+  'date-range-picker': DateRangePicker,
+  'date-time-picker': DateTimePicker,
+  'text-editor': TextEditor,
+  'multi-select': MultiSelect,
+  'otp-input': OtpInput,
+  slider: Slider,
+  'time-picker': TimePicker,
+  tree: Tree,
+  avatar: Avatar,
+  'avatar-group': AvatarGroup,
+  'scroll-bar': ScrollBar,
+  splitter: Splitter,
 }
 
 const FULL_DOC_BY_SLUG = (() => {

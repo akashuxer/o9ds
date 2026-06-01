@@ -32,11 +32,11 @@ export default function PageHeader({ title, description, icon, componentSlug, ch
         {title}
       </h1>
       {description && (
-        <p
-          className={`text-lg text-arvo-light-secondary dark:text-neutral-400 max-w-2xl leading-relaxed ${descClassName}`}
+        <div
+          className={`text-lg text-arvo-light-secondary dark:text-neutral-400 max-w-3xl space-y-4 leading-relaxed ${descClassName}`}
         >
-          {description}
-        </p>
+          {typeof description === 'string' ? <p className="m-0">{description}</p> : description}
+        </div>
       )}
       {componentSlug && <ComponentResourceChips slug={componentSlug} />}
       {children}

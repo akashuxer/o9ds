@@ -25,6 +25,7 @@ import {
   PATH_TYPOGRAPHY_BASE,
   contentTopicPath,
   docPagePath,
+  grammarStyleTopicPath,
   patternTopicPath,
 } from './docPaths'
 
@@ -165,7 +166,7 @@ export const ACCESSIBILITY_CATALOG = [
 
 /** @type {OverviewCatalogItem[]} */
 export const CONTENT_CATALOG = [
-  { path: contentTopicPath('writing-principles'), label: 'Writing Principles', section: 'Content Guidelines' },
-  { path: contentTopicPath('grammar'), label: 'Grammar', section: 'Content Guidelines' },
   { path: contentTopicPath('voice-and-tone'), label: 'Voice and Tone', section: 'Content Guidelines' },
+  { path: contentTopicPath('writing-principles'), label: 'Writing Principles', section: 'Content Guidelines' },
+  { path: grammarStyleTopicPath('intro'), label: 'Grammar & Style', section: 'Content Guidelines' },
 ]
