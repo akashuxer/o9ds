@@ -4,7 +4,12 @@ import { grammarStyleTopicPath } from './docPaths'
 
 /** @type {GrammarStyleTopic[]} */
 export const GRAMMAR_STYLE_TOPICS = [
-  { slug: 'intro', label: 'Intro', description: 'How grammar and style rules fit with voice, tone, and writing principles.' },
+  {
+    slug: 'intro',
+    label: 'Intro',
+    description:
+      'Platform-wide grammar, formatting, and style standards for clear, consistent product copy across o9 experiences.',
+  },
   { slug: 'acronyms', label: 'Acronyms' },
   { slug: 'ages', label: 'Ages' },
   { slug: 'american-english', label: 'American English' },
