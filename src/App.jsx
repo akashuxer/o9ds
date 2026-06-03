@@ -73,6 +73,7 @@ const ComponentDocPage = lazy(() => import('./pages/components/ComponentDocPage'
 const Placeholder = lazy(() => import('./pages/Placeholder'))
 const Borders = lazy(() => import('./pages/foundation/Borders'))
 const Effects = lazy(() => import('./pages/foundation/Effects'))
+const Motion = lazy(() => import('./pages/foundation/Motion'))
 const Illustrations = lazy(() => import('./pages/foundation/Illustrations'))
 const Symbol = lazy(() => import('./pages/foundation/Symbol'))
 const Developers = lazy(() => import('./pages/Developers'))
@@ -149,7 +150,7 @@ export default function App() {
           <Route path={`${PATH_ILLUSTRATIONS_BASE}/:tab`} element={<Illustrations />} />
           <Route path={PATH_ILLUSTRATIONS_BASE} element={<Navigate to={docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview')} replace />} />
           <Route path={PATH_SYMBOL} element={<Symbol />} />
-          <Route path={PATH_MOTION} element={<Placeholder title="Motion & Animation" documentationCatalog="foundations" />} />
+          <Route path={PATH_MOTION} element={<Motion />} />
           <Route path={PATH_EFFECTS} element={<Effects />} />
 
           {/* Components */}

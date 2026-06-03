@@ -14,10 +14,19 @@ const COMPONENT_PAGE_ICON = (
  * Use across all documentation pages for unified layout.
  * Description uses text-lg (18px); avoid overriding size in descClassName unless intentional.
  *
- * @param {string} [componentSlug] — when set, shows Figma / Storybook / Azure Git chips below the description
- *                                   and forces the shared o9con-cube avatar icon for consistency.
+ * @param {string} [componentSlug] — when set, shows resource chips below the description and forces the shared o9con-cube avatar icon.
+ * @param {import('../data/componentResourceStatus').ComponentResourceStatusMap} [resourceStatus] — color-coded ready / not started / in progress on Figma, Storybook, Azure Git, and Documentation chips.
  */
-export default function PageHeader({ title, description, icon, componentSlug, children, className = '', descClassName = '' }) {
+export default function PageHeader({
+  title,
+  description,
+  icon,
+  componentSlug,
+  resourceStatus,
+  children,
+  className = '',
+  descClassName = '',
+}) {
   const resolvedIcon = componentSlug ? COMPONENT_PAGE_ICON : icon
   return (
     <section className={className}>
@@ -38,8 +47,8 @@ export default function PageHeader({ title, description, icon, componentSlug, ch
           {typeof description === 'string' ? <p className="m-0">{description}</p> : description}
         </div>
       )}
-      {componentSlug && <ComponentResourceChips slug={componentSlug} />}
       {children}
+      {componentSlug && <ComponentResourceChips slug={componentSlug} resourceStatus={resourceStatus} />}
     </section>
   )
 }

@@ -4,7 +4,7 @@ import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
 import { PATH_ICONS_BASE } from '../../data/docPaths'
 import { useTheme } from '../../context/ThemeContext'
 import { o9conIcons } from '../../tokens/o9conIcons'
-import { ICON_SIZE_PX, ICON_SIZE_TOKENS_SCSS } from '../../tokens/iconTokens'
+import { ICON_SIZE_PX, ICON_SIZE_PX_GALLERY, ICON_SIZE_TOKENS_SCSS } from '../../tokens/iconTokens'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
 import ExpandableDocImage from '../../LayoutComponents/ExpandableDocImage'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
@@ -123,6 +123,7 @@ const ICON_TYPE_CATEGORIES = [
 
 const tabs = ['Overview', 'o9con Gallery', 'Accessibility', 'Code']
 const SIZES = ICON_SIZE_PX
+const GALLERY_SIZES = ICON_SIZE_PX_GALLERY
 
 function CopyIcon({ className }) {
   return (
@@ -674,7 +675,10 @@ export default function Icons() {
           {/* Available Sizes */}
           <div id="available-sizes">
             <h2 className="text-xl font-bold text-arvo-light-primary dark:text-white mb-2">Available Sizes</h2>
-            <p className="text-arvo-light-secondary dark:text-neutral-400 mb-4">Icons are available in multiple predefined sizes for consistency</p>
+            <p className="text-arvo-light-secondary dark:text-neutral-400 mb-4">Icons are available in multiple predefined sizes for consistency.</p>
+            <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl" style={isLight ? { color: '#303030' } : undefined}>
+              <strong className="text-arvo-light-primary dark:text-white">Note:</strong> 8px and 12px are only for special-case indicator scenarios. Do not use them in general layout except where Arvo already does.
+            </p>
             <div className="border p-4 flex flex-wrap items-center gap-6 dark:border-neutral-700 dark:bg-neutral-800/50" style={isLight ? { borderColor: '#E5E5E5', backgroundColor: '#F2F2F2' } : undefined}>
               {SIZES.map((s) => (
                 <div key={s} className="flex flex-col items-center gap-2">
@@ -706,7 +710,7 @@ export default function Icons() {
             <div className="flex flex-wrap items-center gap-4 mb-2">
               <span className="text-sm dark:text-neutral-400" style={isLight ? { color: '#303030' } : undefined}>Icon Size:</span>
               <div className="flex gap-2">
-                {SIZES.map((s) => (
+                {GALLERY_SIZES.map((s) => (
                   <button
                     key={s}
                     onClick={() => setSelectedSize(s)}
@@ -828,7 +832,8 @@ export default function Icons() {
 </button>
 
 <!-- Icon sizes available -->
-<span class="o9con o9con-arrow-left arvo-icon-12"></span> <!-- 12px -->
+<span class="o9con o9con-arrow-left arvo-icon-8"></span> <!-- 8px — indicators only -->
+<span class="o9con o9con-arrow-left arvo-icon-12"></span> <!-- 12px — indicators only -->
 <span class="o9con o9con-arrow-left arvo-icon-14"></span> <!-- 14px -->
 <span class="o9con o9con-arrow-left arvo-icon-16"></span> <!-- 16px -->
 <span class="o9con o9con-arrow-left arvo-icon-20"></span> <!-- 20px -->
@@ -840,7 +845,10 @@ export default function Icons() {
 
           <div id="icon-size-tokens">
             <h3 className="text-lg font-semibold text-arvo-light-primary dark:text-white mb-3">Icon Size Tokens</h3>
-            <p className="text-arvo-light-secondary dark:text-neutral-400 mb-4">Copy the SCSS variables for icon sizes:</p>
+            <p className="text-arvo-light-secondary dark:text-neutral-400 mb-2">Copy the SCSS variables for icon sizes:</p>
+            <p className="text-sm text-arvo-light-secondary dark:text-neutral-400 mb-4 max-w-2xl">
+              8px and 12px are reserved for indicator-style UI only—not for general layout unless a component spec calls for them.
+            </p>
             <CodeBlock code={ICON_SIZE_TOKENS_SCSS} label="o9con icon size tokens" />
           </div>
         </section>

@@ -751,6 +751,7 @@ html.dark main td [data-arvo-type-variant-preview] {
 }
 
 /* o9con icon sizes - use with .o9con base */
+.arvo-icon-8 { font-size: 8px; }
 .arvo-icon-12 { font-size: 12px; }
 .arvo-icon-14 { font-size: 14px; }
 .arvo-icon-16 { font-size: 16px; }

@@ -94,6 +94,7 @@ Use only these steps for padding, margin, and gap.
 
 | Token | Value (rem) | Reference (px) |
 |-------|-------------|----------------|
+| `$arvo-icon-8` | 0.5rem | 8px |
 | `$arvo-icon-12` | 0.75rem | 12px |
 | `$arvo-icon-14` | 0.875rem | 14px |
 | `$arvo-icon-16` | 1rem | 16px |
@@ -101,7 +102,7 @@ Use only these steps for padding, margin, and gap.
 | `$arvo-icon-24` | 1.5rem | 24px |
 | `$arvo-icon-32` | 2rem | 32px |
 
-**Figma Make default set:** **`12`, `16`, `20`, `24`** — use **`14`** / **`32`** only when a component spec requires them.
+**Figma Make default set:** **`12`, `16`, `20`, `24`** — use **`14`** / **`32`** only when a component spec requires them. **`8`** and **`12`** are for indicator-style scenarios only; avoid them in layout except where Arvo already uses them.
 
 ---
 

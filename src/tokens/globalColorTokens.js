@@ -95,6 +95,7 @@ export const FEEDBACK_GREENISH = [
   { token: 'arvo-global-greenish-10', hex: '#00804F', branding: 'Grass D2' },
   { token: 'arvo-global-greenish-09', hex: '#92E6A7', branding: 'Grass L1' },
   { token: 'arvo-global-greenish-08', hex: '#C0F0CA' },
+  { token: 'arvo-global-greenish-07', hex: '#E1F3E4' },
 ]
 
 export const FEEDBACK_REDISH = [

@@ -51,7 +51,7 @@ export const COMPONENTS_NAV_TREE = [
     id: 'feedback',
     label: 'Feedback',
     children: sortLeaves([
-      { path: '/components/badge/overview', label: 'Badge Alert' },
+      { path: '/components/badge/overview', label: 'Badge' },
       { path: '/components/banner-alerts/overview', label: 'Banner Alert' },
       { path: '/components/counter/overview', label: 'Counter' },
       { path: '/components/email-notification/overview', label: 'Email Notification' },

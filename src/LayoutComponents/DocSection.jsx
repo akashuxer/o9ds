@@ -16,9 +16,9 @@ export default function DocSection({ id, title, children, className = '' }) {
 }
 
 /** Subsection wrapper (h3) for nested headings inside a DocSection. */
-export function DocSubsection({ title, children, className = '' }) {
+export function DocSubsection({ id, title, children, className = '' }) {
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div id={id} className={`space-y-2 ${id ? 'scroll-mt-24' : ''} ${className}`}>
       {title && (
         <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">
           {title}

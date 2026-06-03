@@ -24,7 +24,7 @@ Before building a new card, table, or layout element, check and reuse:
 | `ColorSwatch` | Color preview tile |
 | `ComponentOverviewCard` | Components catalog — fixed-height white + dot-grid illustration band, theme-aware footer, 2-line description + tooltip when truncated |
 | `ComponentPreview` | Live component preview card with optional Storybook link (iframe) — renders children natively |
-| `ComponentResourceChips` | Figma / Storybook / Azure Git link chips below component page descriptions — pass `componentSlug` on `PageHeader` |
+| `ComponentResourceChips` | Azure Git / Storybook / Figma / Documentation chips on `PageHeader` (`componentSlug`). Pass `resourceStatus` on `PageHeader` for ready / not started / in progress color coding (no separate status pills). |
 | `SectionOverviewPage` | Foundations / Patterns / Accessibility / Content overview grids (search, Ready status, shared cards) |
 
 Import from `../LayoutComponents/ComponentName` (adjust path as needed).
