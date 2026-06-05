@@ -53,7 +53,7 @@ export const COMPONENTS_NAV_TREE = [
     children: sortLeaves([
       { path: '/components/badge/overview', label: 'Badge' },
       { path: '/components/banner-alerts/overview', label: 'Banner Alert' },
-      { path: '/components/counter/overview', label: 'Counter' },
+      { path: '/components/status/overview', label: 'Status' },
       { path: '/components/email-notification/overview', label: 'Email Notification' },
       { path: '/components/empty-state/overview', label: 'Empty State' },
       { path: '/components/inline-alert/overview', label: 'Message Alert' },

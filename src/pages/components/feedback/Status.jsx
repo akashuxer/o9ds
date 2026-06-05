@@ -1,3 +1,3 @@
 import { stubComponentPage } from '../stubComponentPage'
 
-export default stubComponentPage('counter')
+export default stubComponentPage('status')

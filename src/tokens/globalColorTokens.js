@@ -109,7 +109,7 @@ export const FEEDBACK_REDISH = [
 ]
 
 export const FEEDBACK_ORANGISH = [
-  { token: 'arvo-global-orangish-11', hex: '#1A1700' },
+  { token: 'arvo-global-orangish-11', hex: '#242000' },
   { token: 'arvo-global-orangish-10', hex: '#926200' },
   { token: 'arvo-global-orangish-09', hex: '#EFBC5C', branding: 'Sun L2' },
   { token: 'arvo-global-orangish-08', hex: '#C7880D', branding: 'Ocra D1' },
