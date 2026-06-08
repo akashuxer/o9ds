@@ -219,7 +219,7 @@ const sidebarSections = [
           { path: PATH_SYMBOL, label: 'Symbol' },
         ],
       },
-      { path: PATH_MOTION, label: 'Motion & Animation' },
+      { path: docPagePath(PATH_MOTION, 'Overview'), label: 'Motion & Animation' },
       { path: PATH_COLOR_DATA_VIZ, label: 'Data Visualization Colors' },
     ],
   },
@@ -296,28 +296,68 @@ function filterNavItemsByReady(items) {
 }
 
 function getPageTitle(pathname) {
-  const exact = PAGE_TITLES[pathname]
+  const normalized = pathname.replace(/\/$/, '')
+  const exact = PAGE_TITLES[normalized] ?? PAGE_TITLES[pathname]
   if (exact) return exact
   // Fallback for /components/:slug – titleize slug
-  const componentsMatch = pathname.match(/^\/components\/([^/]+)/)
+  const componentsMatch = normalized.match(/^\/components\/([^/]+)/)
   if (componentsMatch) {
     return componentsMatch[1].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
   }
-  const grammarMatch = pathname.match(/^\/content\/grammar-style\/([^/]+)/)
+  const grammarMatch = normalized.match(/^\/content\/grammar-style\/([^/]+)/)
   if (grammarMatch) {
     const topic = GRAMMAR_STYLE_TOPICS.find((t) => t.slug === grammarMatch[1])
     if (topic) return topic.slug === 'intro' ? 'Grammar & Style' : topic.label
+  }
+  const usageMatch = normalized.match(new RegExp(`^${PATH_DEV_USAGE_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^/]+)`))
+  if (usageMatch) {
+    const slug = usageMatch[1]
+    const labels = {
+      overview: 'Usage Standards',
+      'public-api': 'Public API',
+      components: 'Components Contract',
+      styling: 'Styling',
+      composition: 'Composition',
+      accessibility: 'Accessibility',
+      testing: 'Testing',
+      versioning: 'Versioning',
+      'anti-patterns': 'Anti-Patterns',
+      checklist: 'PR Checklist',
+    }
+    if (labels[slug]) return labels[slug]
+  }
+  const devRefMatch = normalized.match(new RegExp(`^${PATH_DEV_REF_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^/]+)`))
+  if (devRefMatch) {
+    const slug = devRefMatch[1]
+    const labels = {
+      'agentic-pipeline': 'Agentic Pipeline',
+      'component-pipeline': 'Component Pipeline',
+      'token-pipeline': 'Token Pipeline',
+      'shared-patterns': 'Shared Patterns',
+      'testing-and-drift': 'Testing & Drift',
+      workflows: 'Contributor Workflows',
+    }
+    if (labels[slug]) return labels[slug]
+  }
+  const introMatch = normalized.match(new RegExp(`^${PATH_DEV_INTRO_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^/]+)`))
+  if (introMatch) {
+    const tabLabels = { overview: 'For Developers', usage: 'For Developers — Usage', architecture: 'For Developers — Architecture' }
+    if (tabLabels[introMatch[1]]) return tabLabels[introMatch[1]]
   }
   return 'Arvo Design System'
 }
 
 function initialSubsectionOpen(pathname) {
+  const normalized = pathname.replace(/\/$/, '')
+  const onDevUsage = normalized.startsWith(PATH_DEV_USAGE_BASE)
+  const onDevRef = normalized.startsWith(PATH_DEV_REF_BASE)
+  const onDevIntro = normalized.startsWith(PATH_DEV_INTRO_BASE)
   return {
-    '_nav-group-for-developers': false,
-    '_nav-group-usage': false,
-    '_nav-group-developer-reference': false,
+    '_nav-group-for-developers': onDevUsage || onDevRef || onDevIntro,
+    '_nav-group-usage': onDevUsage,
+    '_nav-group-developer-reference': onDevRef,
     '_nav-group-assets': false,
-    '_nav-group-grammar-style': pathname.startsWith('/content/grammar-style'),
+    '_nav-group-grammar-style': normalized.startsWith('/content/grammar-style'),
   }
 }
 
@@ -342,8 +382,21 @@ export default function Layout({ children }) {
   }, [pathname])
 
   useEffect(() => {
-    if (pathname.startsWith('/content/grammar-style')) {
+    const normalized = pathname.replace(/\/$/, '')
+    if (normalized.startsWith('/content/grammar-style')) {
       setSubsectionOpen((o) => ({ ...o, '_nav-group-grammar-style': true }))
+    }
+    if (
+      normalized.startsWith(PATH_DEV_USAGE_BASE) ||
+      normalized.startsWith(PATH_DEV_REF_BASE) ||
+      normalized.startsWith(PATH_DEV_INTRO_BASE)
+    ) {
+      setSubsectionOpen((o) => ({
+        ...o,
+        '_nav-group-for-developers': true,
+        '_nav-group-usage': normalized.startsWith(PATH_DEV_USAGE_BASE),
+        '_nav-group-developer-reference': normalized.startsWith(PATH_DEV_REF_BASE),
+      }))
     }
   }, [pathname])
 

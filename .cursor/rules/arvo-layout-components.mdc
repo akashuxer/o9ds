@@ -29,4 +29,17 @@ Before building a new card, table, or layout element, check and reuse:
 
 Import from `../LayoutComponents/ComponentName` (adjust path as needed).
 
+## Doc tab URLs (`useDocTabUrl`)
+
+When a page owns its own `DocTabRouteProvider` (foundations like Typography, Motion, Icons):
+
+1. **Always pass `basePath` in the hook** — the provider wraps JSX *below* the hook call, so context is not available yet:
+   ```js
+   const [activeTab, setActiveTab] = useDocTabUrl(TABS, { basePath: PATH_MY_PAGE })
+   ```
+2. **Register routes in `App.jsx`**: `path={\`${PATH}/:tab\`}` plus redirect `PATH` → `docPagePath(PATH, 'Overview')`.
+3. **Nav links** use `docPagePath(PATH, 'Overview')`, not the bare base path.
+
+Component doc pages use `ComponentDocPage`, which wraps children in `DocTabRouteProvider` first — those child pages may call `useDocTabUrl(TABS)` without `basePath`.
+
 **When adding new layout components:** Add them here and to README.md LayoutComponents list.

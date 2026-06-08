@@ -58,6 +58,8 @@ import {
   PATH_TYPOGRAPHY_BASE,
   PATH_GRAMMAR_STYLE_BASE,
   docPagePath,
+  devRefTopicPath,
+  devUsageTopicPath,
   grammarStyleTopicPath,
 } from './data/docPaths'
 
@@ -93,10 +95,8 @@ const ContentOverview = lazy(() => import('./pages/ContentOverview'))
 const ContentVoiceAndTone = lazy(() => import('./pages/content/VoiceAndTone'))
 const ContentWritingPrinciples = lazy(() => import('./pages/content/WritingPrinciples'))
 const ContentGrammarStyle = lazy(() => import('./pages/content/GrammarStylePage'))
-
-function DevelopersUsageGate() {
-  return <Developers section="usage" />
-}
+const UsageTopicPage = lazy(() => import('./pages/usage/UsageTopicPage'))
+const DevRefTopicPage = lazy(() => import('./pages/developer-reference/DevRefTopicPage'))
 
 export default function App() {
   return (
@@ -125,13 +125,12 @@ export default function App() {
           <Route path={`${PATH_FIGMA_MAKE_BASE}/:tab`} element={<FigmaMake />} />
           <Route path={PATH_FIGMA_MAKE_BASE} element={<Navigate to={docPagePath(PATH_FIGMA_MAKE_BASE, 'Overview')} replace />} />
           <Route path={PATH_DESIGNERS} element={<Placeholder title="For Designers" />} />
-          <Route path={`${PATH_DEV_INTRO_BASE}/:tab`} element={<Developers section="intro" />} />
+          <Route path={`${PATH_DEV_INTRO_BASE}/:tab`} element={<Developers />} />
           <Route path={PATH_DEV_INTRO_BASE} element={<Navigate to={docPagePath(PATH_DEV_INTRO_BASE, 'Overview')} replace />} />
-          <Route path={`${PATH_DEV_USAGE_BASE}/:topic?`} element={<DevelopersUsageGate />} />
-          <Route
-            path={`${PATH_DEV_REF_BASE}/:topic`}
-            element={<LegacyRedirect to={docPagePath(PATH_DEV_INTRO_BASE, 'Architecture')} />}
-          />
+          <Route path={`${PATH_DEV_USAGE_BASE}/:topic`} element={<UsageTopicPage />} />
+          <Route path={PATH_DEV_USAGE_BASE} element={<Navigate to={devUsageTopicPath('overview')} replace />} />
+          <Route path={`${PATH_DEV_REF_BASE}/:topic`} element={<DevRefTopicPage />} />
+          <Route path={PATH_DEV_REF_BASE} element={<Navigate to={devRefTopicPath('agentic-pipeline')} replace />} />
           <Route path={PATH_ARVO_MCP} element={<Placeholder title="Arvo MCP/Other MCPs" />} />
           <Route path={PATH_CONTRIBUTE} element={<Placeholder title="How to Contribute" />} />
           <Route path={PATH_FAQS} element={<Placeholder title="FAQs" />} />
@@ -150,7 +149,8 @@ export default function App() {
           <Route path={`${PATH_ILLUSTRATIONS_BASE}/:tab`} element={<Illustrations />} />
           <Route path={PATH_ILLUSTRATIONS_BASE} element={<Navigate to={docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview')} replace />} />
           <Route path={PATH_SYMBOL} element={<Symbol />} />
-          <Route path={PATH_MOTION} element={<Motion />} />
+          <Route path={`${PATH_MOTION}/:tab`} element={<Motion />} />
+          <Route path={PATH_MOTION} element={<Navigate to={docPagePath(PATH_MOTION, 'Overview')} replace />} />
           <Route path={PATH_EFFECTS} element={<Effects />} />
 
           {/* Components */}

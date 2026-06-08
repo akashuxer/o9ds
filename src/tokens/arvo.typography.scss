@@ -208,6 +208,12 @@ $o9con-reg-em-1: normal normal normal 1em/1 $o9con;
     font-weight: $arvo-regular;
 }
 
+@mixin arvo-font-l16-m {
+    font-size: $arvo-font-size-16;
+    font-weight: $arvo-regular;
+    text-decoration: underline;
+}
+
 @mixin arvo-font-l14-r {
     font-size: $arvo-font-size-14;
     font-weight: $arvo-regular;

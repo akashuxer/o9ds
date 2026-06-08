@@ -1,7 +1,6 @@
 import { Navigate, useParams } from 'react-router-dom'
 import {
   COMPONENTS,
-  PATH_DEV_INTRO_BASE,
   contentTopicPath,
   devRefTopicPath,
   devUsageTopicPath,
@@ -36,7 +35,7 @@ export function LegacyUsageRedirect() {
 
 export function LegacyDevRefRedirect() {
   const { topic } = useParams()
-  const to = topic ? devRefTopicPath(topic) : docPagePath(PATH_DEV_INTRO_BASE, 'Architecture')
+  const to = topic ? devRefTopicPath(topic) : devRefTopicPath('agentic-pipeline')
   return <Navigate to={to} replace />
 }
 

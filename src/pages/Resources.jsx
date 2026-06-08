@@ -4,6 +4,7 @@ import DocTable from '../LayoutComponents/DocTable'
 import PageHeader from '../LayoutComponents/PageHeader'
 import PageWithToc from '../LayoutComponents/PageWithToc'
 import { TABLE_IDENTIFIER_TONE_CLASS } from '../LayoutComponents/codeHighlight'
+import { devUsageTopicPath } from '../data/docPaths'
 import { RESOURCES_DEVELOPMENT, RESOURCES_DOCS, RESOURCES_FIGMA } from '../data/resourcesLinks'
 import { RESOURCES_TEAM_GROUPS } from '../data/resourcesTeam'
 
@@ -155,7 +156,7 @@ export default function Resources() {
               { to: '/components', label: 'Components' },
               { to: '/usage', label: 'Usage standards' },
               { to: '/developers', label: 'For developers' },
-              { to: '/usage/checklist', label: 'PR checklist' },
+              { to: devUsageTopicPath('checklist'), label: 'PR checklist' },
             ].map(({ to, label }) => (
               <li key={to} className="m-0">
                 <Link

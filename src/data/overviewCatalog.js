@@ -80,7 +80,7 @@ export const FOUNDATIONS_CATALOG = [
     description: 'Product symbol usage: clear space, sizing, and co-branding so the mark stays recognizable.',
   },
   {
-    path: PATH_MOTION,
+    path: docPagePath(PATH_MOTION, 'Overview'),
     label: 'Motion & Animation',
     section: 'Foundations',
     description: 'Duration, easing, and motion patterns for feedback, transitions, and reduced-motion respect.',

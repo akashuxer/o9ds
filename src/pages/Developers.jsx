@@ -4,7 +4,7 @@ import PageHeader from '../LayoutComponents/PageHeader'
 import PageWithToc from '../LayoutComponents/PageWithToc'
 import DocTabs from '../LayoutComponents/DocTabs'
 import { PATH_DEV_INTRO_BASE, PATH_DEV_USAGE_BASE, docPagePath } from '../data/docPaths'
-import { useDevelopersIntroTabUrl, useDevelopersUsageSection } from '../hooks/useDevelopersTabUrl'
+import { useDevelopersIntroTabUrl } from '../hooks/useDevelopersTabUrl'
 import CodeBlock from '../LayoutComponents/CodeBlock'
 import DocSection, { DocCallout, DocCode, DocList, DocParagraph, DocStrong } from '../LayoutComponents/DocSection'
 import { DOC_TABLE_FIRST_COLUMN_CLASS } from '../LayoutComponents/codeHighlight'
@@ -131,24 +131,23 @@ const DIST_MATRIX = [
   ['@arvo/js', 'dist/', 'ESM, CJS, .d.ts', '., ./plugin, ./auto'],
 ]
 
-export default function Developers({ section = 'intro' }) {
-  useDevelopersUsageSection()
+export default function Developers() {
   const [introTab, setIntroTab] = useDevelopersIntroTabUrl()
   const navigate = useNavigate()
-
-  const activeTab = section === 'usage' ? 'Usage' : introTab
 
   const setActiveTab = useCallback(
     (tab) => {
       if (!TABS.includes(tab)) return
-      if (section === 'usage' && tab === 'Usage') {
+      if (tab === 'Usage') {
         navigate(docPagePath(PATH_DEV_USAGE_BASE, 'Overview'))
         return
       }
       setIntroTab(tab)
     },
-    [section, navigate, setIntroTab],
+    [navigate, setIntroTab],
   )
+
+  const activeTab = introTab
 
   const sections = useMemo(() => {
     if (activeTab === 'Overview') return [

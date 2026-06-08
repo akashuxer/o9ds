@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { devRefTopicPath } from '../../data/docPaths'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
@@ -144,7 +146,7 @@ pnpm pipeline bug-fix --component Button --description "hover state missing in d
 pnpm pipeline new-component --descriptor descriptors/tooltip.json --dry-run`}
           />
           <DocParagraph>
-            Outside Cursor, <DocStrong>you are the orchestrator</DocStrong> — run each step as a separate conversation, passing the agent role, project conventions, and prior outputs as context. See the <a className="underline" href="/developer-reference/workflows">Contributor Workflows</a> page for the per-step recipes.
+            Outside Cursor, <DocStrong>you are the orchestrator</DocStrong> — run each step as a separate conversation, passing the agent role, project conventions, and prior outputs as context. See the <Link className="underline" to={devRefTopicPath('workflows')}>Contributor Workflows</Link> page for the per-step recipes.
           </DocParagraph>
         </DocSection>
 

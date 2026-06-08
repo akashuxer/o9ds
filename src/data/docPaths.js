@@ -123,5 +123,5 @@ export const LEGACY_PATH_REDIRECTS = {
   '/content': PATH_CONTENT_OVERVIEW,
   '/patterns': PATH_PATTERNS_OVERVIEW,
   '/usage': devUsageTopicPath('overview'),
-  '/developer-reference': docPagePath(PATH_DEV_INTRO_BASE, 'Architecture'),
+  '/developer-reference': devRefTopicPath('agentic-pipeline'),
 }

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { devRefTopicPath } from '../../data/docPaths'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import CodeBlock from '../../LayoutComponents/CodeBlock'
@@ -199,7 +201,7 @@ export default function Workflows() {
                   <span key="1"><DocStrong>Full generation</DocStrong> for new components — Test Generator with descriptor + React + JS + reference test file.</span>,
                   <span key="2"><DocStrong>Regression test</DocStrong> for bug fixes — same agent, given the source with the fix and the existing test file. Add a single test that would have caught the bug.</span>,
                 ]} />
-                <p className="m-0 mt-2">See <a className="underline" href="/developer-reference/testing-and-drift">Testing & Drift</a> for the test categories the agent always covers (props, states, events, a11y, keyboard, loading, parity, lifecycle).</p>
+                <p className="m-0 mt-2">See <Link className="underline" to={devRefTopicPath('testing-and-drift')}>Testing & Drift</Link> for the test categories the agent always covers (props, states, events, a11y, keyboard, loading, parity, lifecycle).</p>
               </>
             }
           />

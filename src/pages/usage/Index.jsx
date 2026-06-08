@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom'
 import PageHeader from '../../LayoutComponents/PageHeader'
+import { devUsageTopicPath } from '../../data/docPaths'
 
 const TILES = [
-  { path: '/usage/public-api', title: 'Public API & imports', desc: 'Allowed entry points per @arvo/* package; banned deep imports.' },
-  { path: '/usage/components', title: 'Component contract', desc: 'Props, options, methods, events, controlled vs uncontrolled state.' },
-  { path: '/usage/styling', title: 'Styling & theming', desc: 'Tokens, CSS variables, BEM rules, override safety.' },
-  { path: '/usage/composition', title: 'Composition & extension', desc: 'Wrappers, providers, parent loading, anti-fork rules.' },
-  { path: '/usage/accessibility', title: 'Accessibility contract', desc: 'Required ARIA, focus, labels, keyboard expectations.' },
-  { path: '/usage/testing', title: 'Testing discipline', desc: 'Public-behavior testing patterns and selector rules.' },
-  { path: '/usage/versioning', title: 'Versioning & upgrades', desc: 'Lockstep semver and the upgrade checklist.' },
-  { path: '/usage/anti-patterns', title: 'Anti-patterns', desc: 'The 12 patterns that break upgrades.' },
-  { path: '/usage/checklist', title: 'PR checklist', desc: 'Reviewer checklist plus per-component customization matrix.' },
+  { path: devUsageTopicPath('public-api'), title: 'Public API & imports', desc: 'Allowed entry points per @arvo/* package; banned deep imports.' },
+  { path: devUsageTopicPath('components'), title: 'Component contract', desc: 'Props, options, methods, events, controlled vs uncontrolled state.' },
+  { path: devUsageTopicPath('styling'), title: 'Styling & theming', desc: 'Tokens, CSS variables, BEM rules, override safety.' },
+  { path: devUsageTopicPath('composition'), title: 'Composition & extension', desc: 'Wrappers, providers, parent loading, anti-fork rules.' },
+  { path: devUsageTopicPath('accessibility'), title: 'Accessibility contract', desc: 'Required ARIA, focus, labels, keyboard expectations.' },
+  { path: devUsageTopicPath('testing'), title: 'Testing discipline', desc: 'Public-behavior testing patterns and selector rules.' },
+  { path: devUsageTopicPath('versioning'), title: 'Versioning & upgrades', desc: 'Lockstep semver and the upgrade checklist.' },
+  { path: devUsageTopicPath('anti-patterns'), title: 'Anti-patterns', desc: 'The 12 patterns that break upgrades.' },
+  { path: devUsageTopicPath('checklist'), title: 'PR checklist', desc: 'Reviewer checklist plus per-component customization matrix.' },
 ]
 
 const PRINCIPLES = [
