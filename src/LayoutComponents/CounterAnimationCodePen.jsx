@@ -1,7 +1,8 @@
+import { ARVO_MOTION_COUNTER_TOKEN } from '../data/motionTokens'
 import CodeBlock from './CodeBlock'
 import { DocParagraph } from './DocSection'
 
-export const ARVO_MOTION_COUNTER_TOKEN = '$arvo-motion-counter: 180ms cubic-bezier(0.4, 0, 0.2, 1);'
+export { ARVO_MOTION_COUNTER_TOKEN }
 
 export const BADGE_COUNTER_CODEPEN_FULL_URL = 'https://codepen.io/Akash-Upadhyay-the-selector/full/dPOmgNP'
 

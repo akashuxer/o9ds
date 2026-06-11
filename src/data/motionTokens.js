@@ -15,6 +15,19 @@ export const MOTION_EASING_ROWS = [
   { token: '$arvo-ease-in-out', value: 'ease-in-out' },
 ]
 
+export const MOTION_COUNTER_ROW = {
+  token: '$arvo-motion-counter',
+  value: '$arvo-duration-base $arvo-ease-standard',
+}
+
+/** Full SCSS declaration for counter badge motion — shared by docs and `_animation.scss` export. */
+export const ARVO_MOTION_COUNTER_TOKEN = `${MOTION_COUNTER_ROW.token}: ${MOTION_COUNTER_ROW.value};`
+
+/** Clipboard text for motion token table rows (full `$token: value;` line). */
+export function motionTokenClipboard(row) {
+  return row.clipboard ?? `${row.token}: ${row.value};`
+}
+
 /** @typedef {{ id: string, title: string, description?: string, rows: Array<{ token: string, value: string }> }} MotionTokenSection */
 
 /** @type {MotionTokenSection[]} */
@@ -152,6 +165,13 @@ export const MOTION_SEMANTIC_SECTIONS = [
       { token: '$arvo-transform-status-hidden', value: 'scale(0.6)' },
       { token: '$arvo-transform-status-visible', value: 'scale(1)' },
     ],
+  },
+  {
+    id: 'motion-counter',
+    title: 'Counter',
+    description:
+      'Interactive Counter is a dynamic counter badge that updates based on user actions. Add, Remove, Plus (+), Minus (–), Delete, Clear all, Select, Deselect. Used for lightweight numeric feedback when a count value changes.',
+    rows: [MOTION_COUNTER_ROW],
   },
   {
     id: 'motion-chip-remove',

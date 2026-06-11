@@ -4,6 +4,7 @@ import {
   MOTION_DURATION_ROWS,
   MOTION_EASING_ROWS,
   MOTION_SEMANTIC_SECTIONS,
+  motionTokenClipboard,
 } from '../../data/motionTokens'
 
 const TOKEN_COLUMNS = [
@@ -17,18 +18,36 @@ export default function MotionTokensTab() {
     <div className="space-y-12">
       <DocSection id="motion-core-durations" title="Core durations">
         <DocParagraph>Base duration scale for transitions and animations across Arvo components.</DocParagraph>
-        <DocTable columns={TOKEN_COLUMNS} rows={MOTION_DURATION_ROWS} highlightFirstColumnIdentifier />
+        <DocTable
+          columns={TOKEN_COLUMNS}
+          rows={MOTION_DURATION_ROWS}
+          highlightFirstColumnIdentifier
+          rowCopy={motionTokenClipboard}
+          rowCopyAlwaysVisible
+        />
       </DocSection>
 
       <DocSection id="motion-core-easing" title="Core easing">
         <DocParagraph>Standard easing curves referenced by semantic motion tokens.</DocParagraph>
-        <DocTable columns={TOKEN_COLUMNS} rows={MOTION_EASING_ROWS} highlightFirstColumnIdentifier />
+        <DocTable
+          columns={TOKEN_COLUMNS}
+          rows={MOTION_EASING_ROWS}
+          highlightFirstColumnIdentifier
+          rowCopy={motionTokenClipboard}
+          rowCopyAlwaysVisible
+        />
       </DocSection>
 
       {MOTION_SEMANTIC_SECTIONS.map(({ id, title, description, rows }) => (
         <DocSection key={id} id={id} title={title}>
           {description && <DocParagraph>{description}</DocParagraph>}
-          <DocTable columns={TOKEN_COLUMNS} rows={rows} highlightFirstColumnIdentifier />
+          <DocTable
+            columns={TOKEN_COLUMNS}
+            rows={rows}
+            highlightFirstColumnIdentifier
+            rowCopy={motionTokenClipboard}
+            rowCopyAlwaysVisible
+          />
         </DocSection>
       ))}
     </div>

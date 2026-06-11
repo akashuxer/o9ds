@@ -1,4 +1,3 @@
-import { ARVO_MOTION_COUNTER_TOKEN } from '../LayoutComponents/CounterAnimationCodePen'
 import {
   MOTION_DURATION_ROWS,
   MOTION_EASING_ROWS,
@@ -37,10 +36,6 @@ export function buildArvoAnimationScss() {
     lines.push(...rows.map(tokenLine))
     lines.push('')
   }
-
-  lines.push(...sectionBanner('Badge counter'))
-  lines.push(ARVO_MOTION_COUNTER_TOKEN)
-  lines.push('')
 
   return `${lines.join('\n').trimEnd()}\n`
 }
