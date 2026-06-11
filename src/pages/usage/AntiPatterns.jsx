@@ -257,7 +257,7 @@ import { setupOverlayPlugin } from '@arvo/js';`}
 
         <DocSection id="ap-12" title="12. Using experimental / undocumented props in production">
           <DocParagraph>
-            If a prop appears in TypeScript autocomplete but is <em>not</em> on the component's docs page (or its Storybook example list), it is not part of the contract — regardless of whether it works today. The same goes for:
+            If a prop appears in TypeScript autocomplete but is <em>not</em> on the component's docs page (or its Storybook page), it is not part of the contract — regardless of whether it works today. The same goes for:
           </DocParagraph>
           <DocList items={[
             'Undocumented combinations of documented props.',

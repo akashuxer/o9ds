@@ -20,7 +20,7 @@ export default createExpertComponentPage({
   slug: 'tabstrip',
   title: 'Tabstrip',
   description:
-    'Horizontal strip of selectable tabs for switching between views or panels. Three variants, two sizes, optional tab icons, closable and pinnable tabs, full WAI-ARIA Tabs Pattern keyboard navigation.',
+    'Horizontal strip of selectable tabs for switching between views or panels. Two variants, two sizes, optional tab icons, closable and pinnable tabs, full WAI-ARIA Tabs Pattern keyboard navigation.',
   componentSlug: 'tabstrip',
   icon: (
     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -54,8 +54,8 @@ const tabs = [
   onPin={({ id, pinned }) => togglePin(id, pinned)}
 />
 
-<ArvoTabstrip tabs={tabs} variant="secondary" size="sm" />
-<ArvoTabstrip tabs={tabs} variant="tertiary" />`,
+<ArvoTabstrip tabs={tabs} variant="primary" />
+<ArvoTabstrip tabs={tabs} variant="secondary" size="sm" />`,
   jsCode: `import { ArvoTabstrip } from '@arvo/js';
 
 const strip = ArvoTabstrip.initialize(el, {

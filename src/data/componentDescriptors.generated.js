@@ -15,7 +15,7 @@ export const COMPONENT_DESCRIPTORS = {
     "abbreviation": "action-menu",
     "category": "Overlays",
     "status": "stable",
-    "description": "Overlay menu of actionable items triggered from a button or icon button. Supports flat and grouped items with optional headers and dividers, trailing actions, keyboard shortcuts, checkable items, submenus, inline popovers, inline hybrid popovers, type-ahead search, and an optional filter input. Items extend ListItemBase from @arvo/core/list with menu-specific fields.",
+    "description": "Overlay menu of actionable items triggered from a button or icon button. Supports flat and grouped items with optional headers and dividers, trailing actions, keyboard shortcuts, in-item switches, multi-line right links, submenus, inline popovers, inline hybrid popovers (with full HybridPopover item wiring), inline panel stacking, hover-to-open inline panels, type-ahead search, filter empty states, and an optional filter input. Items extend ListItemBase from @arvo/core/list with menu-specific fields.",
     "bem": {
       "block": "arvo-action-menu",
       "elements": [
@@ -113,7 +113,7 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "When true and items are grouped, renders a visual divider (__divider) between consecutive groups. No divider above the first group or below the last group."
       },
       {
-        "prop": "trailingActionsVisibility",
+        "prop": "actionsVisibility",
         "type": "'always' | 'hover'",
         "default": "always",
         "required": "No",
@@ -132,6 +132,13 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "true",
         "required": "No",
         "desc": "When true, the menu closes after an item is selected (via Enter, Space, or click). When false, the menu stays open. Can be overridden per-selection by returning false from onSelect."
+      },
+      {
+        "prop": "emptyConfig",
+        "type": "Partial<ActionMenuEmptyConfig>",
+        "default": "—",
+        "required": "No",
+        "desc": "Customization for the ArvoEmptyState rendered when filtering yields zero results or when the item list is empty. Merged over built-in no-results / no-data defaults."
       },
       {
         "prop": "isOpen",
@@ -287,10 +294,6 @@ export const COMPONENT_DESCRIPTORS = {
         "when": "Set to 'true' on the menu panel during loading state"
       },
       {
-        "attr": "aria-checked",
-        "when": "Set on menuitemcheckbox items. 'true' when checked, 'false' when unchecked. Only present on items where checked is defined."
-      },
-      {
         "attr": "aria-disabled",
         "when": "Set on disabled menu items and on the trigger when menu is disabled"
       }
@@ -314,7 +317,7 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "key": "Enter",
-        "action": "Activate the focused item: fire onSelect (for normal items), open submenu (for submenu items), open inline popover (for items with inlinePopover), toggle checked state (for menuitemcheckbox items)."
+        "action": "Activate the focused item: fire onSelect (for normal items), open submenu (for submenu items), open inline popover or inline hybrid popover (for items with inline panels), toggle switch (for items with switch)."
       },
       {
         "key": "Space",
@@ -322,7 +325,7 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "key": "Escape",
-        "action": "If an inline popover is open, close the inline panel and return to the menu. If a submenu is open, close the submenu and return to the parent item. Otherwise, close the menu and return focus to the trigger."
+        "action": "If an inline panel stack has depth > 0, pop the top inline panel and return focus to its opener. If a submenu is open, close the submenu and return to the parent item. Otherwise, close the menu and return focus to the trigger."
       },
       {
         "key": "ArrowRight",
@@ -349,7 +352,6 @@ export const COMPONENT_DESCRIPTORS = {
           "--arvo-menu-item-shortcut-font-size",
           "--arvo-menu-item-destructive-color",
           "--arvo-menu-item-destructive-icon-color",
-          "--arvo-menu-item-check-color",
           "--arvo-menu-item-submenu-color"
         ]
       }
@@ -362,7 +364,7 @@ export const COMPONENT_DESCRIPTORS = {
     "abbreviation": "alert-dlg",
     "category": "Overlays",
     "status": "beta",
-    "description": "Modal confirmation dialog used for status feedback and destructive-action confirmation. Renders a centered fixed-width panel above a blurred backdrop with semantic icon, title, body message, optional confirmation textbox, optional 'don't show again' checkbox, and an action button row. Differs from Popover in three ways: (1) centered/modal positioning (not anchored to a trigger), (2) requires backdrop with backdrop-blur, and (3) demands explicit user action — never auto-dismisses on outside click by default. Five semantic variants (warning, info, success, error, block) drive the header icon glyph; the title color stays t-primary on all variants. Supports a hasDangerAction modifier that swaps the primary button for a red danger button (e.g., 'Delete'). Built on the overlay hub at the modal z-index band (1200–1299) with focus trap and Escape-to-cancel.",
+    "description": "Modal confirmation dialog used for status feedback and destructive-action confirmation. Renders a centered fixed-width panel above a blurred backdrop (provided by the shared `@arvo/core/mask` overlay primitive) with semantic icon, title, optional banner-alert slot, rich-text body message, optional confirmation input (textbox/textarea/combobox/select; multi-select pending), optional 'don't show again' checkbox, and an action button row. Differs from Popover in three ways: (1) centered/modal positioning (not anchored to a trigger), (2) always paints a scrim through the shared mask, and (3) demands explicit user action -- never auto-dismisses on outside click by default. Five semantic variants (warning, info, positive, negative, block) drive the header icon glyph; the title color stays t-primary on all variants. Supports a hasDangerAction modifier that swaps the primary button for a red danger button (e.g., 'Delete'). Built on the overlay hub at the modal z-index band (1200-1299) with focus trap and Escape-to-cancel.",
     "bem": {
       "block": "arvo-alert-dlg",
       "elements": [
@@ -374,12 +376,12 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "panel",
           "optional": "No",
-          "desc": "The dialog box itself. Fixed width 500px (--arvo-alert-dlg-width), min-height 144px, max-height 500px. White background (--arvo-color-s-layer-03), o9-shadow-lg-64 drop shadow. Flex column. Centered via position: fixed; top:50%; left:50%; transform: translate(-50%, -50%). role='alertdialog'."
+          "desc": "The dialog box itself. Fixed 500px wide ($arvo-alertdialog-wmax; capped by viewport via max-width: calc(100% - 32px)). Height is content-driven within $arvo-alertdialog-hmin (164px) to $arvo-alertdialog-hmax (320px) -- the __body scrolls vertically when content overflows. White background (--arvo-color-s-layer-03), o9-shadow-lg-64 drop shadow. Flex column. Centered via position: fixed; top:50%; left:50%; transform: translate(-50%, -50%). role='alertdialog'. No sm/md/lg size variants -- dimensions are token-driven."
         },
         {
           "name": "header",
           "optional": "No",
-          "desc": "40px-tall row containing the status icon and title. padding: 10px 12px 10px 16px (block: --arvo-space-10, inline: 16px start / 12px end). gap: 2px. overflow: hidden so the title can ellipsize."
+          "desc": "40px-tall row containing the status icon and title. padding: 10px 12px 10px 16px (block: $arvo-space-10, inline: 16px start / 12px end). gap: 2px. overflow: hidden so the title can ellipsize."
         },
         {
           "name": "ico",
@@ -399,7 +401,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "body",
           "optional": "No",
-          "desc": "Scrollable content region between header and footer. padding: 16px. gap: 16px. flex column. Holds the message paragraph and (optionally) the confirmation textbox. Referenced by the panel's aria-describedby."
+          "desc": "Scrollable content region between header and footer. padding: 16px. gap: 16px. flex column. overflow-y: auto so a vertical scrollbar appears when the body content would push the panel past $arvo-alertdialog-hmax (320px). Holds the message paragraph and (optionally) the confirmation textbox. Referenced by the panel's aria-describedby."
         },
         {
           "name": "msg",
@@ -424,7 +426,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "actions",
           "optional": "No",
-          "desc": "Right-aligned button group inside the footer. flex 1, justify-content end, gap 6px (--arvo-space-6). Holds secondary, primary, and/or danger buttons. Each button has min-width 112px (--arvo-container-btn-min)."
+          "desc": "Right-aligned button group inside the footer. flex 1, justify-content end, gap 6px ($arvo-space-6). Holds secondary, primary, and/or danger buttons. Each button has min-width 112px (--arvo-container-btn-min)."
         }
       ],
       "variants": [
@@ -437,12 +439,12 @@ export const COMPONENT_DESCRIPTORS = {
           "desc": "Informational variant — uses o9con-info-circle-filled icon in i-info-dark color."
         },
         {
-          "name": "success",
-          "desc": "Success/positive variant — uses o9con-check-circle icon in i-positive color."
+          "name": "positive",
+          "desc": "Positive variant (renamed from `success` in Run 4 to align with Toast/Banner Alert/Message Alert) -- uses o9con-check-circle icon in i-positive color."
         },
         {
-          "name": "error",
-          "desc": "Error variant — uses o9con-blocker-action-filled-alt icon in i-negative color."
+          "name": "negative",
+          "desc": "Negative variant (renamed from `error` in Run 4) -- uses o9con-blocker-action-filled-alt icon in i-negative color."
         },
         {
           "name": "block",
@@ -465,7 +467,7 @@ export const COMPONENT_DESCRIPTORS = {
     "props": [
       {
         "prop": "variant",
-        "type": "'warning' | 'info' | 'success' | 'error' | 'block'",
+        "type": "'warning' | 'info' | 'positive' | 'negative' | 'block'",
         "default": "warning",
         "required": "No",
         "desc": "Semantic variant controlling the header icon glyph and icon color. Title color stays t-primary on all variants."
@@ -479,10 +481,17 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "prop": "message",
-        "type": "string",
+        "type": "BasicInlineContent",
         "default": "—",
         "required": "No",
-        "desc": "Body message text. Rendered inside the __msg paragraph. For richer body content (with embedded emphasis or multiple paragraphs), use the content prop instead."
+        "desc": "Body message. Plain string OR a `BasicInlineContent` array (`InlineNode[]`) from `@arvo/core/inline-content`. The shared adapter renders inline runs (text, em, strong, link, code, kbd) -- raw HTML strings, event handlers, and arbitrary attributes are not representable. Rendered inside the __msg paragraph. For richer body content (multiple paragraphs, custom layout) use the `content` prop."
+      },
+      {
+        "prop": "bannerAlert",
+        "type": "ArvoBannerAlertProps",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional `ArvoBannerAlert` rendered between the header and body. The dialog instantiates the banner internally; pass an `ArvoBannerAlertProps` config (React) or `ArvoBannerAlertOptions` (JS). Use this for contextual feedback that should appear inside the dialog without competing with the body message."
       },
       {
         "prop": "content",
@@ -566,7 +575,14 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "ArvoAlertDialogConfirmInput | null",
         "default": "—",
         "required": "No",
-        "desc": "Renders a confirmation textbox inside the body when set. Shape: { label?: string; placeholder?: string; maxLength?: number; expectedValue?: string; onChange?: (value: string) => void }. When expectedValue is set, primaryAction.isDisabled is auto-true until the input value equals expectedValue (the canonical 'type DELETE to confirm' pattern)."
+        "desc": "Confirmation input rendered inside the body. Discriminated union over `type`: `'textbox'` (default), `'textarea'`, `'combobox'`, `'select'`, `'multi-select'` (pending; falls back to combobox single-select with a one-shot dev warning until ArvoMultiSelect ships). Common shape: `{ type?, label?, placeholder?, expectedValue?, validate?, onChange? }`. Type-specific extensions: textbox/textarea add `maxLength`; textarea adds `rows`; combobox/select/multi-select add `options: ArvoAlertDialogConfirmInputOptionItem[]`; multi-select uses `expectedValues: string[]` and a `string[]` validate signature. When `expectedValue`/`expectedValues` is set, the primary button stays disabled until the input matches (canonical 'type DELETE to confirm' pattern). The optional `validate` callback runs alongside; return `true` to allow, `false` to block silently, or a `string` to surface an inline error in `__confirm-error` and block."
+      },
+      {
+        "prop": "hasPrimaryBtn",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Whether the primary (right-most) action button is rendered. Defaults to `true`. Only honored when `variant: 'warning'` -- on other variants `false` is ignored with a one-shot dev warning. Use this to render a warning dialog with only a Cancel button."
       },
       {
         "prop": "dontShowAgain",
@@ -581,13 +597,6 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "false",
         "required": "No",
         "desc": "Pattern B structured skeleton loading state. Disables action buttons, hides the dont-show checkbox, shows shimmer in title and body. Sets aria-busy='true' on the panel."
-      },
-      {
-        "prop": "size",
-        "type": "'sm' | 'md' | 'lg'",
-        "default": "md",
-        "required": "No",
-        "desc": "Panel width preset. sm=400px, md=500px (default — matches Figma), lg=640px. Sets --arvo-alert-dlg-width."
       },
       {
         "prop": "isDisabled",
@@ -695,9 +704,9 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Get or set the title text."
       },
       {
-        "method": "message(value: string)",
-        "returns": "string | void",
-        "desc": "Get or set the body message text."
+        "method": "message(value: BasicInlineContent)",
+        "returns": "BasicInlineContent | void",
+        "desc": "Get or set the body message. Accepts plain strings or BasicInlineContent arrays."
       },
       {
         "method": "renderContent(content: string | HTMLElement | function)",
@@ -783,53 +792,13 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "category": "Layout",
         "vars": [
-          "--arvo-alert-dlg-width",
-          "--arvo-alert-dlg-min-height",
-          "--arvo-alert-dlg-max-height",
-          "--arvo-alert-dlg-header-height",
-          "--arvo-alert-dlg-z-index",
-          "--arvo-alert-dlg-btn-min-width"
-        ]
-      },
-      {
-        "category": "Spacing",
-        "vars": [
-          "--arvo-alert-dlg-header-padding-block",
-          "--arvo-alert-dlg-header-padding-inline-start",
-          "--arvo-alert-dlg-header-padding-inline-end",
-          "--arvo-alert-dlg-header-gap",
-          "--arvo-alert-dlg-body-padding",
-          "--arvo-alert-dlg-body-gap",
-          "--arvo-alert-dlg-footer-padding-top",
-          "--arvo-alert-dlg-footer-padding-bottom",
-          "--arvo-alert-dlg-footer-padding-inline",
-          "--arvo-alert-dlg-footer-gap",
-          "--arvo-alert-dlg-actions-gap"
+          "(none)"
         ]
       },
       {
         "category": "Icon",
         "vars": [
-          "--arvo-alert-dlg-icon-size",
           "--arvo-alert-dlg-icon-color"
-        ]
-      },
-      {
-        "category": "Colors",
-        "vars": [
-          "--arvo-alert-dlg-bg",
-          "--arvo-alert-dlg-title-color",
-          "--arvo-alert-dlg-msg-color",
-          "--arvo-alert-dlg-shadow",
-          "--arvo-alert-dlg-backdrop-bg",
-          "--arvo-alert-dlg-backdrop-blur"
-        ]
-      },
-      {
-        "category": "Transition",
-        "vars": [
-          "--arvo-alert-dlg-transition-duration",
-          "--arvo-alert-dlg-transition-easing"
         ]
       }
     ],
@@ -930,13 +899,6 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "ARIA role applied to the root element. 'status' (default) uses implicit aria-live='polite' for non-urgent feedback. 'alert' uses implicit aria-live='assertive' for critical errors that require immediate attention."
       },
       {
-        "prop": "maxWidth",
-        "type": "string",
-        "default": "—",
-        "required": "No",
-        "desc": "Optional maximum width as a CSS value string (e.g. '200px', '50%'). When set, constrains the badge width and truncates the message text with an ellipsis on overflow. Sets --arvo-bdg-alert-max-width on the root element."
-      },
-      {
         "prop": "className",
         "type": "string",
         "default": "—",
@@ -977,11 +939,6 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Show or hide the status icon element"
       },
       {
-        "method": "setMaxWidth(value: string | null)",
-        "returns": "void",
-        "desc": "Set or remove the maximum width constraint. When set, the message truncates with an ellipsis on overflow."
-      },
-      {
         "method": "destroy()",
         "returns": "void",
         "desc": "Clean up DOM references and restore original element state"
@@ -1008,12 +965,6 @@ export const COMPONENT_DESCRIPTORS = {
         ]
       },
       {
-        "category": "Truncation",
-        "vars": [
-          "--arvo-bdg-alert-max-width"
-        ]
-      },
-      {
         "category": "Colors",
         "vars": [
           "--arvo-bdg-alert-text-color",
@@ -1021,6 +972,12 @@ export const COMPONENT_DESCRIPTORS = {
           "--arvo-bdg-alert-bg",
           "--arvo-bdg-alert-border-color",
           "--arvo-bdg-alert-border-width"
+        ]
+      },
+      {
+        "category": "Typography",
+        "vars": [
+          "--arvo-bdg-alert-font-size"
         ]
       }
     ],
@@ -1032,7 +989,7 @@ export const COMPONENT_DESCRIPTORS = {
     "abbreviation": "bnr-alert",
     "category": "Feedback",
     "status": "new",
-    "description": "Full-width inline alert banner for persistent contextual feedback. Renders as a horizontal bar with a 2px left border colored by semantic type, a type-specific subtle background, a leading status icon, and a content area containing an optional title, a required message, and an optional link. Two layout modes: default (title + multi-line message + optional link, 16px vertical padding) and compact (message only, tighter 8-10px padding). Optionally dismissible via a 16px close button on the right side. Six semantic types (positive, info, neutral, warning, negative, block) controlling border color, background tint, title/icon color, and icon glyph — using the same type vocabulary and icon set as BadgeAlert and Toast. Unlike Toast (ephemeral overlay notification with auto-dismiss) and BadgeAlert (compact inline status badge), BannerAlert is a persistent page-level notification that occupies the full width of its container and remains visible until explicitly dismissed or programmatically removed. Also used inside the panel-shell __banner slot (SidePanel, Drawer) as a contextual status strip.",
+    "description": "Full-width inline alert banner for persistent contextual feedback. Renders as a horizontal bar with a 2px left border colored by semantic type, a type-specific subtle background, a leading status icon, and a content area containing an optional title, a required message, and an optional action row (outline button + inline link). Two layout modes: default (title + multi-line message + optional action row, 16px vertical padding) and compact (message only, tighter 8-10px padding). Optionally dismissible via a 16px close button on the right side. Six semantic types (positive, info, neutral, warning, negative, block) controlling border color, background tint, title/icon color, and icon glyph -- using the same type vocabulary and icon set as BadgeAlert and Toast. Title is 2-line clamped with a tooltip on truncation via the shared `attachTitleTruncationTooltip` util. Message accepts the shared `BasicInlineContent` rich-text contract from `@arvo/core/inline-content` (string OR `InlineNode[]`) so callers can embed inline links, strong, code, and kbd runs. Action props are structured: `button?: ArvoBannerAlertButton` renders an outline `ArvoButton` and `link?: ArvoBannerAlertLink` renders an `ArvoLink` -- consumers never construct DOM or JSX. Unlike Toast (ephemeral overlay notification with auto-dismiss) and BadgeAlert (compact inline status badge), BannerAlert is a persistent page-level notification that occupies the full width of its container and remains visible until explicitly dismissed or programmatically removed. Also used inside the panel-shell __banner slot (SidePanel, Drawer) as a contextual status strip.",
     "bem": {
       "block": "arvo-bnr-alert",
       "elements": [
@@ -1054,22 +1011,32 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "title",
           "optional": "Yes",
-          "desc": "Optional title text. Medium weight (arvo-font-h14-m), type-colored. Single-line truncated with ellipsis (16px fixed height, overflow hidden, white-space nowrap). Only rendered in default (non-compact) mode."
+          "desc": "Optional title text. Medium weight (arvo-font-h14-m), type-colored. Clamped to 2 lines with ellipsis; the shared `attachTitleTruncationTooltip` util shows a tooltip with the full title on hover/focus only when the layout has clipped it. Only rendered in default (non-compact) mode."
         },
         {
           "name": "msg",
           "optional": "No",
-          "desc": "Message body text. Regular weight (arvo-font-p12-r), secondary text color (--arvo-color-t-secondary). Multi-line in default mode, single-line in compact mode (truncates with ellipsis in compact when constrained)."
+          "desc": "Message body. Regular weight (arvo-font-p12-r), secondary text color (--arvo-color-t-secondary). Plain string OR a `BasicInlineContent` array from `@arvo/core/inline-content`. The shared adapter renders inline runs (text, em, strong, link, code, kbd) via the `inline-content` SCSS mixin. Multi-line in default mode, single-line in compact mode (truncates when constrained)."
+        },
+        {
+          "name": "actions",
+          "optional": "Yes",
+          "desc": "Action row beneath the message in default mode. Holds the optional outline `__btn` and inline `__link` slots. Not rendered when neither is configured."
+        },
+        {
+          "name": "btn",
+          "optional": "Yes",
+          "desc": "Optional outline action button. Internal ArvoButton (variant=outline, size=sm) composed by React and JS from the structured `button` prop (`{ label, icon?, isDisabled?, isLoading?, ariaLabel?, onClick? }`). Only rendered in default (non-compact) mode."
         },
         {
           "name": "link",
           "optional": "Yes",
-          "desc": "Optional link area below the copy block in default mode. Accepts a configured ArvoLink instance (React: ReactNode, JS: HTMLElement). Uses arvo-font-l12-ru styling. Only rendered in default (non-compact) mode."
+          "desc": "Optional inline action link. Internal ArvoLink (variant=primary, size=sm) composed by React and JS from the structured `link` prop (`{ label, href, target?, rel?, icon?, isExternal?, ariaLabel?, onClick? }`). `target='_blank'` automatically receives `rel='noopener noreferrer'`. Only rendered in default (non-compact) mode."
         },
         {
           "name": "close",
           "optional": "Yes",
-          "desc": "Dismiss button. Bespoke internal <button type='button'> element (NOT an ArvoIconButton instance to avoid size-system coupling). 16x16 with o9con-close icon. Always visible when isDismissible is true. Clicking fires bnr-alert:dismiss event and calls onDismiss callback. Styled to match the visual appearance of a tertiary icon button."
+          "desc": "Dismiss button. Internal ArvoIconButton (variant=tertiary, size=sm, icon=close) composed by React + JS. 16x16 with o9con-close glyph. Always visible when isDismissible is true. Clicking fires bnr-alert:dismiss event and calls onDismiss callback."
         }
       ],
       "variants": [],
@@ -1104,10 +1071,10 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "prop": "message",
-        "type": "string",
+        "type": "BasicInlineContent",
         "default": "—",
         "required": "Yes",
-        "desc": "Body message text. Uses regular font weight (arvo-font-p12-r) and secondary text color. Multi-line wrapping in default mode. In compact mode, this is the only content displayed."
+        "desc": "Body message. Accepts either a plain string or a `BasicInlineContent` array (`InlineNode[]`) from `@arvo/core/inline-content`. The shared adapter renders inline runs (text, em, strong, link, code, kbd) -- raw HTML strings, event handlers, and arbitrary attributes are not representable. Uses regular font weight (arvo-font-p12-r) and secondary text color. Multi-line wrapping in default mode. In compact mode this is the only content displayed."
       },
       {
         "prop": "isCompact",
@@ -1124,11 +1091,18 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Whether to render the close button on the right side. When true, clicking the close button fires the bnr-alert:dismiss event and calls onDismiss. The component does NOT auto-remove itself — the consumer controls removal via state (React) or destroy() (JS). React: changing the prop across re-renders works as expected. JS: read-once at construction; rebuild the instance via destroy() + initialize() to change."
       },
       {
-        "prop": "link",
-        "type": "ReactNode (React) | HTMLElement (JS)",
+        "prop": "button",
+        "type": "ArvoBannerAlertButton",
         "default": "—",
         "required": "No",
-        "desc": "Optional link element rendered below the message in default mode. In React, pass a configured <ArvoLink> component. In JS, pass a DOM element (e.g., a configured ArvoLink instance). Ignored in compact mode."
+        "desc": "Optional outline action button rendered in the action row below the message. Shape: `{ label, icon?, isDisabled?, isLoading?, ariaLabel?, onClick? }`. The component renders an internal ArvoButton with `variant: 'outline'` and `size: 'sm'` baked in -- consumers never construct the button DOM or JSX. Ignored in compact mode."
+      },
+      {
+        "prop": "link",
+        "type": "ArvoBannerAlertLink",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional inline link rendered in the action row below the message. Shape: `{ label, href, target?, rel?, icon?, isExternal?, ariaLabel?, onClick? }`. The component renders an internal ArvoLink with `variant: 'primary'` and `size: 'sm'` baked in. `target='_blank'` automatically receives `rel='noopener noreferrer'`. Ignored in compact mode."
       },
       {
         "prop": "isLoading",
@@ -1186,11 +1160,6 @@ export const COMPONENT_DESCRIPTORS = {
         "method": "title(text: string | null | undefined)",
         "returns": "string | null | void",
         "desc": "Dual-purpose getter/setter for the title text. Pass null to hide the title. No-op in compact mode."
-      },
-      {
-        "method": "setLink(element: HTMLElement | null)",
-        "returns": "void",
-        "desc": "Set or remove the link element. No-op in compact mode."
       },
       {
         "method": "loading(state: boolean | undefined)",
@@ -1409,20 +1378,7 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Activate the focused breadcrumb link (navigate to href)."
       }
     ],
-    "cssVarGroups": [
-      {
-        "category": "Colors",
-        "vars": [
-          "--arvo-bc-link-color",
-          "--arvo-bc-link-color-hover",
-          "--arvo-bc-current-color",
-          "--arvo-bc-separator-color",
-          "--arvo-bc-icon-color",
-          "--arvo-bc-icon-color-hover",
-          "--arvo-bc-disabled-color"
-        ]
-      }
-    ],
+    "cssVarGroups": [],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=29114-7633&m=dev"
   },
   "button-group": {
@@ -1685,28 +1641,9 @@ export const COMPONENT_DESCRIPTORS = {
         ]
       },
       {
-        "category": "Item-hover",
+        "category": "Colors",
         "vars": [
-          "--arvo-btn-grp-active-bg-hover-primary",
-          "--arvo-btn-grp-active-bg-hover-secondary"
-        ]
-      },
-      {
-        "category": "Sizing-lg",
-        "vars": [
-          "--arvo-btn-grp-item-padding-inline",
-          "--arvo-btn-grp-item-padding-block",
-          "--arvo-btn-grp-item-font-size",
-          "--arvo-btn-grp-item-icon-size"
-        ]
-      },
-      {
-        "category": "Sizing-sm",
-        "vars": [
-          "--arvo-btn-grp-item-padding-inline",
-          "--arvo-btn-grp-item-padding-block",
-          "--arvo-btn-grp-item-font-size",
-          "--arvo-btn-grp-item-icon-size"
+          "--arvo-btn-grp-active-bg-hover"
         ]
       }
     ],
@@ -1778,7 +1715,7 @@ export const COMPONENT_DESCRIPTORS = {
       "states": [
         {
           "name": "is-disabled",
-          "desc": "Disabled state. Removes href, adds aria-isDisabled='true', uses disabled colors. Applied via class since <a> has no native :disabled."
+          "desc": "Disabled state. Removes href, adds aria-disabled='true', uses disabled colors. Applied via class since <a> has no native :disabled."
         },
         {
           "name": "loading",
@@ -1834,7 +1771,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Prevents navigation and interaction. Removes href, adds aria-isDisabled='true'. Uses disabled colors from arvo-btn:disabled."
+        "desc": "Prevents navigation and interaction. Removes href, adds aria-disabled='true'. Uses disabled colors from arvo-btn:disabled."
       },
       {
         "prop": "isFullWidth",
@@ -2027,10 +1964,6 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "full-width",
           "desc": "Button expands to fill container width"
-        },
-        {
-          "name": "icon-only",
-          "desc": "Internal modifier when rendering as icon-only button (arvo-icon-btn)"
         }
       ],
       "states": [
@@ -2094,9 +2027,30 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "prop": "isSelected",
         "type": "boolean",
+        "default": "—",
+        "required": "No",
+        "desc": "Controlled selected/pressed state. When passed, the consumer owns the state and must pair with onSelectionChange. Renders aria-pressed and the .active class. Combine with isToggle to make the button manage its own state (uncontrolled)."
+      },
+      {
+        "prop": "defaultSelected",
+        "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Persistent active/selected state for toggle buttons"
+        "desc": "Uncontrolled initial selected state for toggle buttons. Only consulted when isSelected is omitted. Has no effect unless isToggle is true. Mirrors React's useControllableState defaultValue pattern."
+      },
+      {
+        "prop": "isToggle",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "When true, click toggles the selected state and renders aria-pressed. Assistive tech announces the button as a toggle button."
+      },
+      {
+        "prop": "onSelectionChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Callback fired when the toggle state flips. Receives the new isSelected boolean. Only emitted when isToggle is true."
       },
       {
         "prop": "isFullWidth",
@@ -2111,13 +2065,6 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "false",
         "required": "No",
         "desc": "Shows Pattern A skeleton loading overlay. Prevents interaction and hides content."
-      },
-      {
-        "prop": "tooltip",
-        "type": "string | TooltipConfig",
-        "default": "—",
-        "required": "No",
-        "desc": "Supplementary information shown via the arvo tooltip system on hover/focus. Accepts a string or a config object with content, placement, and shortcut. Auto-displays label text if button text is truncated."
       },
       {
         "prop": "onClick",
@@ -2197,6 +2144,11 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Get or set selected/active state. Adds/removes .active class and aria-pressed attribute."
       },
       {
+        "method": "toggle(force: boolean | undefined)",
+        "returns": "boolean",
+        "desc": "Flip (or set) the toggle state, fire onSelectionChange, and return the new isSelected value. Useful for programmatic toggling on isToggle buttons."
+      },
+      {
         "method": "disabled(state: boolean | undefined)",
         "returns": "boolean | void",
         "desc": "Get or set disabled state."
@@ -2219,7 +2171,7 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "attr": "aria-disabled",
-        "when": "Set via native disabled attribute on <button>; use aria-isDisabled=\"true\" only when button must remain focusable"
+        "when": "Set via native disabled attribute on <button>; use aria-disabled=\"true\" only when button must remain focusable"
       },
       {
         "attr": "aria-pressed",
@@ -2273,7 +2225,8 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "category": "Typography",
         "vars": [
-          "--arvo-btn-font-size"
+          "--arvo-btn-font-size",
+          "--arvo-btn-font-weight"
         ]
       },
       {
@@ -2293,6 +2246,478 @@ export const COMPONENT_DESCRIPTORS = {
       }
     ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=9058-398&m=dev"
+  },
+  "calendar": {
+    "slug": "calendar",
+    "name": "Calendar",
+    "abbreviation": "cal",
+    "category": "DateTime",
+    "status": "stable",
+    "description": "Internal calendar grid that renders one view at a time (days / months / quarters / years / member tiles). Standalone -- DOES NOT own the header chrome. Consumed by ArvoDatePicker, ArvoDateTimePicker, and ArvoDateRangePicker. Reusable from @arvo/react and @arvo/js for advanced composition. Fixed-dimension cells (40x40 day, 80x80 non-day with weeks column, 70x70 non-day without weeks column, 83.5x80 member tile) to keep popover width constant across view modes (ADR-8).",
+    "bem": {
+      "block": "arvo-cal",
+      "elements": [
+        {
+          "name": "grid",
+          "optional": "No",
+          "desc": "Outer grid container holding the active view (days/months/quarters/years/members)."
+        },
+        {
+          "name": "row",
+          "optional": "No",
+          "desc": "One row of the grid (week row in days view, period row in non-day views, tile row in members view)."
+        },
+        {
+          "name": "weekday-hdr",
+          "optional": "Yes",
+          "desc": "Weekday header row (Su/Mo/Tu/We/Th/Fr/Sa). Days view only."
+        },
+        {
+          "name": "week",
+          "optional": "Yes",
+          "desc": "Weeks column cell (e.g. 'W21') in days view when hasWeeks=true. Frequency-aware label in member-week mode."
+        },
+        {
+          "name": "cell",
+          "optional": "No",
+          "desc": "Individual selectable cell (day / month / quarter / year / member)."
+        },
+        {
+          "name": "cell-label",
+          "optional": "No",
+          "desc": "Primary text inside a cell (date number or period label or member displayName)."
+        },
+        {
+          "name": "cell-sublabel",
+          "optional": "Yes",
+          "desc": "Secondary text inside a cell (range, e.g. week date range in member-week tile)."
+        }
+      ],
+      "variants": [],
+      "sizes": [],
+      "layouts": [
+        {
+          "name": "show-weeks",
+          "desc": "Weeks column visible (days view) and non-day cells widen to 80x80"
+        }
+      ],
+      "states": [
+        {
+          "name": "is-disabled",
+          "desc": "Whole calendar disabled"
+        },
+        {
+          "name": "is-readonly",
+          "desc": "Whole calendar read-only"
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "locale",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "BCP-47 locale (e.g. 'en-US'). Resolves from configureDateTime / navigator if omitted."
+      },
+      {
+        "prop": "visibleYear",
+        "type": "number",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Currently displayed year."
+      },
+      {
+        "prop": "visibleMonth",
+        "type": "number",
+        "default": "—",
+        "required": "Yes",
+        "desc": "Currently displayed month (0..11)."
+      },
+      {
+        "prop": "viewMode",
+        "type": "'days' | 'months' | 'quarters' | 'years' | 'members'",
+        "default": "days",
+        "required": "No",
+        "desc": "Active grid view mode."
+      },
+      {
+        "prop": "weekStart",
+        "type": "'0' | '1' | '2' | '3' | '4' | '5' | '6'",
+        "default": "0",
+        "required": "No",
+        "desc": "0=Sun..6=Sat. Drives column rotation in days view."
+      },
+      {
+        "prop": "hasWeeks",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Show weeks column (days view) and widen non-day cells to 80x80 (vs 70x70)."
+      },
+      {
+        "prop": "hasOutsideDays",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Render adjacent-month days in the day grid and the leading / trailing year in the years grid. Defaults to false so cells outside the active period stay empty."
+      },
+      {
+        "prop": "frequency",
+        "type": "'day' | 'week' | 'month' | 'quarter' | 'year'",
+        "default": "—",
+        "required": "No",
+        "desc": "Drives the member-mode tile grid and locks the navigation unit."
+      },
+      {
+        "prop": "memberIndex",
+        "type": "MemberIndex|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Member index from @arvo/core/datetime. Required when viewMode='members'."
+      },
+      {
+        "prop": "currentMemberIndex",
+        "type": "number|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Index of the current member (drives the current-member key-highlight). NEVER read IsCurrentBucketIndex; consumer maps."
+      },
+      {
+        "prop": "selectedDate",
+        "type": "Date|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Single-select date."
+      },
+      {
+        "prop": "selectedMember",
+        "type": "NormalizedMember|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Single-select member (member view)."
+      },
+      {
+        "prop": "rangeStart",
+        "type": "Date|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Range start endpoint."
+      },
+      {
+        "prop": "rangeEnd",
+        "type": "Date|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Range end endpoint."
+      },
+      {
+        "prop": "hoverDate",
+        "type": "Date|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Hover-preview endpoint (range mode)."
+      },
+      {
+        "prop": "isRangeComplete",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Whether the range is complete; clears hover preview when true."
+      },
+      {
+        "prop": "minDate",
+        "type": "Date|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Inclusive min selectable date."
+      },
+      {
+        "prop": "maxDate",
+        "type": "Date|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Inclusive max selectable date."
+      },
+      {
+        "prop": "isKeyboardEnabled",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Enable keyboard navigation."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'md' | 'lg'",
+        "default": "md",
+        "required": "No",
+        "desc": "Reserved for future scale support."
+      },
+      {
+        "prop": "onCellSelect",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { date?: Date; member?: NormalizedMember; mode: string }) => void"
+      },
+      {
+        "prop": "onCellHover",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { date?: Date; member?: NormalizedMember }) => void"
+      },
+      {
+        "prop": "onViewModeChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { mode: string }) => void -- emitted on Alt+Down/Up requesting a zoom"
+      },
+      {
+        "prop": "onMonthChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { year: number; month: number }) => void"
+      },
+      {
+        "prop": "onDismiss",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Fired on Escape."
+      }
+    ],
+    "events": [
+      {
+        "event": "cal:select",
+        "payload": "{ date: Date | undefined, member: NormalizedMember | undefined, mode: string }",
+        "desc": "Cell selected (click or Enter/Space)."
+      },
+      {
+        "event": "cal:hover",
+        "payload": "{ date: Date | undefined, member: NormalizedMember | undefined }",
+        "desc": "Cell hover (range mode preview)."
+      },
+      {
+        "event": "cal:viewmode-change",
+        "payload": "{ mode: string }",
+        "desc": "Requested view-mode change (Alt+Down/Up). Cancellable."
+      },
+      {
+        "event": "cal:month-change",
+        "payload": "{ year: number, month: number }",
+        "desc": "Visible month/year changed (Page Up/Down nav)."
+      },
+      {
+        "event": "cal:dismiss",
+        "payload": "{  }",
+        "desc": "Escape pressed."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoCalendarOptions)",
+        "returns": "instance",
+        "desc": "Initialize calendar on a DOM element."
+      },
+      {
+        "method": "focusCell(target: Date | NormalizedMember)",
+        "returns": "void",
+        "desc": "Move roving focus to the matching cell."
+      },
+      {
+        "method": "restoreFocus()",
+        "returns": "void",
+        "desc": "Restore focus to the last focused cell."
+      },
+      {
+        "method": "setViewMode(mode: ViewMode)",
+        "returns": "void",
+        "desc": "Switch grid view (days/months/quarters/years/members)."
+      },
+      {
+        "method": "next()",
+        "returns": "void",
+        "desc": "Advance one period in the current view."
+      },
+      {
+        "method": "prev()",
+        "returns": "void",
+        "desc": "Back one period in the current view."
+      },
+      {
+        "method": "today()",
+        "returns": "void",
+        "desc": "Snap visible period to today's date."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Remove listeners and clean up."
+      },
+      {
+        "method": "update(partial: Partial<ArvoCalendarOptions>)",
+        "returns": "void",
+        "desc": "Apply a partial options update and re-render the calendar grid. JS-layer convenience for batched prop changes (frequency, value, range bounds, locale, etc.) without re-initializing."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-label",
+        "when": "Localized 'X calendar showing {month} {year}'"
+      },
+      {
+        "attr": "aria-current",
+        "when": "Set to 'date' on today's cell"
+      },
+      {
+        "attr": "aria-selected",
+        "when": "Set on the focused selection or range endpoints"
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "Set on out-of-range cells"
+      },
+      {
+        "attr": "aria-readonly",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-rowcount",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-colcount",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "ArrowLeft",
+        "action": "Move 1 cell left (RTL: right)"
+      },
+      {
+        "key": "ArrowRight",
+        "action": "Move 1 cell right (RTL: left)"
+      },
+      {
+        "key": "ArrowUp",
+        "action": "Move 1 row up"
+      },
+      {
+        "key": "ArrowDown",
+        "action": "Move 1 row down"
+      },
+      {
+        "key": "Home",
+        "action": "Move to first cell of current row"
+      },
+      {
+        "key": "End",
+        "action": "Move to last cell of current row"
+      },
+      {
+        "key": "PageUp",
+        "action": "Previous view (month/year/decade depending on mode)"
+      },
+      {
+        "key": "PageDown",
+        "action": "Next view (month/year/decade)"
+      },
+      {
+        "key": "Shift+PageUp",
+        "action": "In days view: previous year"
+      },
+      {
+        "key": "Shift+PageDown",
+        "action": "In days view: next year"
+      },
+      {
+        "key": "Enter",
+        "action": "Select focused cell"
+      },
+      {
+        "key": "Space",
+        "action": "Select focused cell"
+      },
+      {
+        "key": "Shift+Arrow",
+        "action": "Extend range (when range mode active)"
+      },
+      {
+        "key": "Alt+Down",
+        "action": "Request view-mode zoom in (days -> months -> years)"
+      },
+      {
+        "key": "Alt+Up",
+        "action": "Request view-mode zoom out (years -> months -> days)"
+      },
+      {
+        "key": "Letter",
+        "action": "In months view: type-ahead to month starting with letter (locale-aware)"
+      },
+      {
+        "key": "Escape",
+        "action": "Emit cal:dismiss (parent may close popover)"
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Cells",
+        "vars": [
+          "--arvo-cal-day-cell-w",
+          "--arvo-cal-day-cell-h",
+          "--arvo-cal-period-cell-w",
+          "--arvo-cal-period-cell-h",
+          "--arvo-cal-member-tile-w",
+          "--arvo-cal-member-tile-h"
+        ]
+      },
+      {
+        "category": "Grid",
+        "vars": [
+          "--arvo-cal-body-h",
+          "--arvo-cal-body-w"
+        ]
+      },
+      {
+        "category": "Color",
+        "vars": [
+          "--arvo-cal-cell-text-color",
+          "--arvo-cal-cell-bg",
+          "--arvo-cal-cell-bg-hover",
+          "--arvo-cal-cell-bg-selected",
+          "--arvo-cal-cell-bg-range",
+          "--arvo-cal-cell-text-selected",
+          "--arvo-cal-cell-today-color",
+          "--arvo-cal-cell-today-color-selected"
+        ]
+      },
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-cal-cell-size",
+          "--arvo-cal-cell-today-size",
+          "--arvo-cal-cell-today-offset",
+          "--arvo-cal-grid-cols",
+          "--arvo-cal-grid-gap",
+          "--arvo-cal-nav-height",
+          "--arvo-cal-nav-gap",
+          "--arvo-cal-week-col-size",
+          "--arvo-cal-outside-opacity"
+        ]
+      },
+      {
+        "category": "Colors",
+        "vars": [
+          "--arvo-cal-nav-label-color",
+          "--arvo-cal-nav-button-color"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/AnCpSepdO3JORVLOnYxVv8/?node-id=30438-60003"
   },
   "checkbox-group": {
     "slug": "checkbox-group",
@@ -2528,12 +2953,12 @@ export const COMPONENT_DESCRIPTORS = {
   "checkbox": {
     "slug": "checkbox",
     "name": "Checkbox",
-    "abbreviation": "checkbox",
+    "abbreviation": "cb",
     "category": "Inputs",
     "status": "stable",
     "description": "Boolean selection control supporting checked, unchecked, indeterminate, and excluded states with visible inline label and optional size variants.",
     "bem": {
-      "block": "arvo-checkbox",
+      "block": "arvo-cb",
       "elements": [
         {
           "name": "field",
@@ -2801,7 +3226,15 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Move focus to/from the checkbox (native behavior). Disabled checkbox is removed from tab order."
       }
     ],
-    "cssVarGroups": [],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-cb-box-size",
+          "--arvo-cb-icon-size"
+        ]
+      }
+    ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=25784-507&m=dev"
   },
   "chip": {
@@ -3004,13 +3437,6 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "—",
         "required": "No",
         "desc": "Optional CSS max-width (e.g. \"160px\", \"50%\"). Sets --arvo-chip-max-width on the root and truncates the label with ellipsis on overflow. Must remain wide enough to expose the avatar and (when present) the trailing exclude/error/clear elements."
-      },
-      {
-        "prop": "tooltip",
-        "type": "string | TooltipConfig",
-        "default": "—",
-        "required": "No",
-        "desc": "Supplementary information displayed via the arvo tooltip system on hover/focus. Auto-displays the full label when truncation is detected."
       },
       {
         "prop": "onClick",
@@ -3556,6 +3982,13 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Read-only state: value is visible but cannot be changed."
       },
       {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width value applied to the root element (e.g. '200px', '50%'). Sets `--arvo-form-input-width`. Overridden by `isFullWidth`. Defaults to `300px` via the shared `form-input-default-width` mixin."
+      },
+      {
         "prop": "isFullWidth",
         "type": "boolean",
         "default": "false",
@@ -3739,6 +4172,11 @@ export const COMPONENT_DESCRIPTORS = {
         "method": "destroy()",
         "returns": "void",
         "desc": "Remove listeners, close panel, clean up overlay-hub, restore element."
+      },
+      {
+        "method": "width()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the field width. Sets `--arvo-form-input-width` on the root element."
       }
     ],
     "aria": [
@@ -3836,9 +4274,1807 @@ export const COMPONENT_DESCRIPTORS = {
           "--arvo-form-input-border-disabled-color",
           "--arvo-form-input-border-readonly-color"
         ]
+      },
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-combobox-pad-r",
+          "--arvo-combobox-ico-width"
+        ]
       }
     ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=26482-62668&m=dev"
+  },
+  "date-picker": {
+    "slug": "date-picker",
+    "name": "DatePicker",
+    "abbreviation": "dp",
+    "category": "DateTime",
+    "status": "stable",
+    "description": "Single-date picker. Form-input-styled trigger plus Calendar popover. Standardized .NET/Kendo format tokens, locale-aware month/day names, ISO-8601 week numbering by default. Supports anchor mode (overlay-only) and isSegmented input editing. Always uses ArvoFormLabel + ArvoMessageAlert + ArvoIconButton internally; never rolls custom DOM for shared atoms.",
+    "bem": {
+      "block": "arvo-dp",
+      "elements": [
+        {
+          "name": "lbl",
+          "optional": "Yes",
+          "desc": "Form label rendered above the trigger. Optional."
+        },
+        {
+          "name": "field",
+          "optional": "No",
+          "desc": "Form-input field wrapper around input and actions."
+        },
+        {
+          "name": "input",
+          "optional": "No",
+          "desc": "Native <input> element (isSegmented input renders here)."
+        },
+        {
+          "name": "actions",
+          "optional": "No",
+          "desc": "Right-side actions overlay (form-input-actions-overlay pattern)."
+        },
+        {
+          "name": "clear-btn",
+          "optional": "Yes",
+          "desc": "ArvoIconButton 'x' to clear the value."
+        },
+        {
+          "name": "trigger-btn",
+          "optional": "No",
+          "desc": "ArvoIconButton calendar icon to toggle the popover."
+        },
+        {
+          "name": "err-ico",
+          "optional": "Yes",
+          "desc": "Inline error icon (msg-alert inline mode)."
+        },
+        {
+          "name": "err-msg",
+          "optional": "Yes",
+          "desc": "Inline error message (ArvoMessageAlert inline)."
+        },
+        {
+          "name": "border",
+          "optional": "No",
+          "desc": "form-input-animated-border element."
+        },
+        {
+          "name": "popover",
+          "optional": "No",
+          "desc": "Overlay container rendered via overlay-hub."
+        },
+        {
+          "name": "header",
+          "optional": "No",
+          "desc": "CalendarNav single variant (month/year buttons + prev/next/today IconButtons)."
+        },
+        {
+          "name": "body",
+          "optional": "No",
+          "desc": "Calendar grid host."
+        }
+      ],
+      "variants": [],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small trigger (24px input field; 46px label+field total)"
+        },
+        {
+          "name": "lg",
+          "desc": "Large trigger (32px input field; 54px label+field total, default)"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "full-width",
+          "desc": "Trigger fills container width (--arvo-form-input-width: 100%)"
+        },
+        {
+          "name": "show-weeks",
+          "desc": "Calendar shows weeks column and uses 80x80 non-day cells"
+        },
+        {
+          "name": "anchor-mode",
+          "desc": "No input rendered; host element is the trigger"
+        }
+      ],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Popover currently visible"
+        },
+        {
+          "name": "has-value",
+          "desc": "A date value is set"
+        },
+        {
+          "name": "has-text-selected",
+          "desc": "Segmented input has a focused segment"
+        },
+        {
+          "name": "has-error",
+          "desc": "Validation error"
+        },
+        {
+          "name": "error-tooltip",
+          "desc": "Error shown as icon + tooltip (vs inline alert)"
+        },
+        {
+          "name": "is-disabled",
+          "desc": "Disabled"
+        },
+        {
+          "name": "is-readonly",
+          "desc": "Read-only"
+        },
+        {
+          "name": "loading",
+          "desc": "Loading (Pattern C)"
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "value",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Current date value. String values are parsed via parseDate(value, format, locale)."
+      },
+      {
+        "prop": "defaultValue",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Initial value for uncontrolled mode."
+      },
+      {
+        "prop": "format",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": ".NET / Kendo date format. Empty resolves to locale default."
+      },
+      {
+        "prop": "locale",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "BCP-47 locale."
+      },
+      {
+        "prop": "weekStart",
+        "type": "'0' | '1' | '2' | '3' | '4' | '5' | '6'",
+        "default": "0",
+        "required": "No",
+        "desc": "First day of week. 0=Sunday."
+      },
+      {
+        "prop": "hasWeeks",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Show weeks column in calendar."
+      },
+      {
+        "prop": "minDate",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Min selectable date (inclusive)."
+      },
+      {
+        "prop": "maxDate",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Max selectable date (inclusive)."
+      },
+      {
+        "prop": "placeholder",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Placeholder text shown in trigger when value is null."
+      },
+      {
+        "prop": "label",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Form label text."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'lg'",
+        "default": "lg",
+        "required": "No",
+        "desc": "Trigger size."
+      },
+      {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width on the trigger. Defaults to 300px via form-input-default-width."
+      },
+      {
+        "prop": "isFullWidth",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Shorthand for width=100%."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disabled state."
+      },
+      {
+        "prop": "isReadOnly",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Read-only."
+      },
+      {
+        "prop": "isRequired",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Required for forms."
+      },
+      {
+        "prop": "isInvalid",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Validation invalid."
+      },
+      {
+        "prop": "errorMsg",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Error message text."
+      },
+      {
+        "prop": "errorDisplay",
+        "type": "'inline' | 'tooltip' | 'none'",
+        "default": "inline",
+        "required": "No",
+        "desc": "How to render error feedback."
+      },
+      {
+        "prop": "isClearable",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "When true and a value is set, renders a clear icon button in the action overlay. Defaults to false."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Loading state (Pattern C)."
+      },
+      {
+        "prop": "isAutoClose",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Close popover on day select."
+      },
+      {
+        "prop": "isStrictParsing",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Reject partial format parses."
+      },
+      {
+        "prop": "isSegmented",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Use isSegmented input editing in the trigger."
+      },
+      {
+        "prop": "anchor",
+        "type": "boolean | HTMLElement | RefObject",
+        "default": "false",
+        "required": "No",
+        "desc": "Overlay-only mode. Pass a host element/ref to bind without rendering an input."
+      },
+      {
+        "prop": "placement",
+        "type": "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'auto'",
+        "default": "bottom-start",
+        "required": "No",
+        "desc": "Popover placement."
+      },
+      {
+        "prop": "zIndex",
+        "type": "number",
+        "default": "—",
+        "required": "No",
+        "desc": "Popover z-index override."
+      },
+      {
+        "prop": "calendarProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for inner ArvoCalendar config the parent does not curate as a flat prop. Typed as Pick<ArvoCalendarProps, 'hasOutsideDays' | 'isKeyboardEnabled' | 'size'>. Bag-only keys flow through; flat props always win on overlap. See apps/docs/docs/usage/composition.mdx 'Scoped configuration props'."
+      },
+      {
+        "prop": "popoverProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for popover surface options (DatePicker portals a custom overlay, not ArvoPopover). Shape: { width?: string; offset?: number }. Bag-only keys flow through; flat options (placement, zIndex) always win on overlap."
+      },
+      {
+        "prop": "onChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { value: Date|null; formattedValue: string }) => void"
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "() => boolean|void. Return false to cancel."
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "() => boolean|void. Return false to cancel."
+      },
+      {
+        "prop": "onBlur",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "() => void"
+      }
+    ],
+    "events": [
+      {
+        "event": "dp:change",
+        "payload": "{ value: Date | null, formattedValue: string }",
+        "desc": "Value changed (committed)."
+      },
+      {
+        "event": "dp:open",
+        "payload": "{  }",
+        "desc": "Popover opening."
+      },
+      {
+        "event": "dp:close",
+        "payload": "{  }",
+        "desc": "Popover closing."
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoDatePickerOptions)",
+        "returns": "instance",
+        "desc": "Initialize date picker."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": "Open the popover."
+      },
+      {
+        "method": "close()",
+        "returns": "void",
+        "desc": "Close the popover."
+      },
+      {
+        "method": "toggle(force: boolean | undefined)",
+        "returns": "void",
+        "desc": "Toggle popover (force overrides)."
+      },
+      {
+        "method": "value(v: Date | string | null | undefined)",
+        "returns": "Date | null | void",
+        "desc": "Get or set the value (dual-purpose)."
+      },
+      {
+        "method": "formattedValue()",
+        "returns": "string",
+        "desc": "Get formatted display value."
+      },
+      {
+        "method": "clear()",
+        "returns": "void",
+        "desc": "Clear value to null."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set disabled."
+      },
+      {
+        "method": "setError(message: string | false)",
+        "returns": "void",
+        "desc": "Set or clear error."
+      },
+      {
+        "method": "setLoading(loading: boolean)",
+        "returns": "void",
+        "desc": "Toggle loading."
+      },
+      {
+        "method": "focus()",
+        "returns": "void",
+        "desc": "Focus the trigger."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Clean up."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-haspopup",
+        "when": "Set to 'dialog' on the input"
+      },
+      {
+        "attr": "aria-expanded",
+        "when": "Toggled when popover opens/closes"
+      },
+      {
+        "attr": "aria-controls",
+        "when": "Points to the popover element id"
+      },
+      {
+        "attr": "aria-required",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-invalid",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-label",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-labelledby",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-describedby",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Alt+Down",
+        "action": "Open popover and focus selected/today cell"
+      },
+      {
+        "key": "Alt+Up",
+        "action": "Close popover"
+      },
+      {
+        "key": "Enter",
+        "action": "Commit isSegmented input and close (if valid)"
+      },
+      {
+        "key": "Escape",
+        "action": "Close popover; preserve last applied value"
+      },
+      {
+        "key": "Tab",
+        "action": "Move between trigger, header, calendar (focus trap inside popover)"
+      },
+      {
+        "key": "ArrowLeft/ArrowRight (segment)",
+        "action": "Move between segments in isSegmented input"
+      },
+      {
+        "key": "ArrowUp/ArrowDown (segment)",
+        "action": "Increment/decrement segment value (month-aware day bounds)"
+      },
+      {
+        "key": "0-9",
+        "action": "Digit input with auto-advance"
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Trigger",
+        "vars": [
+          "--arvo-form-input-width",
+          "--arvo-form-input-height",
+          "--arvo-form-input-pad-r"
+        ]
+      },
+      {
+        "category": "Popover",
+        "vars": [
+          "--arvo-dp-popover-w",
+          "--arvo-dp-popover-padding"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/AnCpSepdO3JORVLOnYxVv8/?node-id=30438-60997"
+  },
+  "date-range-picker": {
+    "slug": "date-range-picker",
+    "name": "DateRangePicker",
+    "abbreviation": "drp",
+    "category": "DateTime",
+    "status": "stable",
+    "description": "Date range picker with three config-gated capability layers (ADR-1): (a) absolute dual-calendar range, (b) member/timeframe range with scrollable member-tile panel, (c) rolling time with Start/End steppers + sticky Save/Cancel footer. Capability gating is config-driven: 'frequency' + 'memberData' enables member capability; 'rolling: true' enables the rolling tab. Single public component, single API surface. Generic over the platform's member data via currentMemberIndex and rollingPrefix props (ADR-5).",
+    "bem": {
+      "block": "arvo-drp",
+      "elements": [
+        {
+          "name": "lbl",
+          "optional": "Yes",
+          "desc": "Form label."
+        },
+        {
+          "name": "field",
+          "optional": "No",
+          "desc": "Form-input field wrapper."
+        },
+        {
+          "name": "input",
+          "optional": "No",
+          "desc": "Native <input> (dual-range isSegmented input)."
+        },
+        {
+          "name": "actions",
+          "optional": "No",
+          "desc": "Right-side actions overlay."
+        },
+        {
+          "name": "clear-btn",
+          "optional": "Yes",
+          "desc": "ArvoIconButton clear."
+        },
+        {
+          "name": "trigger-btn",
+          "optional": "No",
+          "desc": "ArvoIconButton calendar icon."
+        },
+        {
+          "name": "err-ico",
+          "optional": "Yes",
+          "desc": "Inline error icon."
+        },
+        {
+          "name": "err-msg",
+          "optional": "Yes",
+          "desc": "Inline error message."
+        },
+        {
+          "name": "indicator",
+          "optional": "Yes",
+          "desc": "Consumer-controlled indicator pinned to the field's top-right corner. Rendered when the `indicator` prop / `indicator()` ref returns a descriptor."
+        },
+        {
+          "name": "border",
+          "optional": "No",
+          "desc": "Animated bottom border."
+        },
+        {
+          "name": "popover",
+          "optional": "No",
+          "desc": "Overlay container."
+        },
+        {
+          "name": "header",
+          "optional": "No",
+          "desc": "CalendarNav range / range-month / member / rolling variant."
+        },
+        {
+          "name": "body",
+          "optional": "No",
+          "desc": "Body host (dual calendar OR member-tile panel OR rolling-setting + member-tile panel)."
+        },
+        {
+          "name": "rolling-setting",
+          "optional": "Yes",
+          "desc": "Rolling Start/End steppers row (rolling mode only)."
+        },
+        {
+          "name": "info-alert",
+          "optional": "Yes",
+          "desc": "Inline info alert with rolling members-included message (rolling mode only)."
+        },
+        {
+          "name": "tile-panel",
+          "optional": "Yes",
+          "desc": "Scrollable member-tile panel (member or rolling modes)."
+        },
+        {
+          "name": "footer",
+          "optional": "Yes",
+          "desc": "Sticky footer with current-indicator and Cancel/Save (rolling mode only)."
+        },
+        {
+          "name": "current-ind",
+          "optional": "Yes",
+          "desc": "Footer current-period indicator dot + text."
+        }
+      ],
+      "variants": [],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small trigger (24px input field; 46px label+field total)"
+        },
+        {
+          "name": "lg",
+          "desc": "Large trigger (32px input field; 54px label+field total, default)"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "full-width",
+          "desc": "Trigger fills container width"
+        },
+        {
+          "name": "show-weeks",
+          "desc": "Calendar shows weeks column (default true for range)"
+        },
+        {
+          "name": "anchor-mode",
+          "desc": "Overlay-only mode"
+        }
+      ],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Popover open"
+        },
+        {
+          "name": "has-value",
+          "desc": "Range value set"
+        },
+        {
+          "name": "has-text-selected",
+          "desc": "Segment focused"
+        },
+        {
+          "name": "has-indicator",
+          "desc": "Consumer has set an indicator descriptor; the __indicator slot is rendered"
+        },
+        {
+          "name": "has-error",
+          "desc": "Error"
+        },
+        {
+          "name": "error-tooltip",
+          "desc": "Error icon + tooltip"
+        },
+        {
+          "name": "is-disabled",
+          "desc": "Disabled"
+        },
+        {
+          "name": "is-readonly",
+          "desc": "Read-only"
+        },
+        {
+          "name": "loading",
+          "desc": "Loading (Pattern C)"
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "startValue",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Range start date."
+      },
+      {
+        "prop": "endValue",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Range end date."
+      },
+      {
+        "prop": "format",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": ".NET / Kendo date format."
+      },
+      {
+        "prop": "locale",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "BCP-47 locale."
+      },
+      {
+        "prop": "weekStart",
+        "type": "'0' | '1' | '2' | '3' | '4' | '5' | '6'",
+        "default": "0",
+        "required": "No",
+        "desc": "First day of week."
+      },
+      {
+        "prop": "hasWeeks",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Show weeks column (default true for range)."
+      },
+      {
+        "prop": "minDate",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Min selectable date."
+      },
+      {
+        "prop": "maxDate",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Max selectable date."
+      },
+      {
+        "prop": "placeholder",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Placeholder text."
+      },
+      {
+        "prop": "label",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Form label."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'lg'",
+        "default": "lg",
+        "required": "No",
+        "desc": "Trigger size."
+      },
+      {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width."
+      },
+      {
+        "prop": "isFullWidth",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Shorthand for width=100%."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disabled."
+      },
+      {
+        "prop": "isReadOnly",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Read-only."
+      },
+      {
+        "prop": "isRequired",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Required."
+      },
+      {
+        "prop": "isInvalid",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Invalid."
+      },
+      {
+        "prop": "errorMsg",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Error message."
+      },
+      {
+        "prop": "errorDisplay",
+        "type": "'inline' | 'tooltip' | 'none'",
+        "default": "inline",
+        "required": "No",
+        "desc": "Error feedback presentation."
+      },
+      {
+        "prop": "isClearable",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "When true and a value is set, renders a clear icon button in the action overlay. Defaults to false."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Loading."
+      },
+      {
+        "prop": "isAutoClose",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Auto-close on commit. Applies to absolute / member modes; rolling is footer-controlled."
+      },
+      {
+        "prop": "isStrictParsing",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Reject partial parses."
+      },
+      {
+        "prop": "isSegmented",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Segmented input editing."
+      },
+      {
+        "prop": "frequency",
+        "type": "'day' | 'week' | 'month' | 'quarter' | 'year'",
+        "default": "—",
+        "required": "No",
+        "desc": "Frequency for member data. With memberData, enables member capability."
+      },
+      {
+        "prop": "memberData",
+        "type": "MemberItem[]",
+        "default": "—",
+        "required": "No",
+        "desc": "Generic member data (key/name/displayName)."
+      },
+      {
+        "prop": "currentMemberIndex",
+        "type": "number | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Index of current member. Consumer maps platform-specific IsCurrentBucketIndex (ADR-5)."
+      },
+      {
+        "prop": "hasRolling",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Enable the Rolling tab and rolling popover."
+      },
+      {
+        "prop": "rollingPrefix",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Prefix label shown on rolling stepper (e.g. 'CW', 'CY', 'FY', 'CM')."
+      },
+      {
+        "prop": "rollingValue",
+        "type": "RollingValue | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Current rolling offsets."
+      },
+      {
+        "prop": "hasModeToggle",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Show the member-mode switch in the header when member capability is active."
+      },
+      {
+        "prop": "indicator",
+        "type": "ArvoIndicatorDescriptor | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional indicator pinned to the top-right of the trigger field. Fully consumer-controlled -- the picker never sets or clears it on its own. Pass null (or omit) to hide."
+      },
+      {
+        "prop": "anchor",
+        "type": "boolean | HTMLElement | RefObject",
+        "default": "false",
+        "required": "No",
+        "desc": "Overlay-only mode."
+      },
+      {
+        "prop": "placement",
+        "type": "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'auto'",
+        "default": "bottom-start",
+        "required": "No",
+        "desc": "Popover placement."
+      },
+      {
+        "prop": "zIndex",
+        "type": "number",
+        "default": "—",
+        "required": "No",
+        "desc": "Popover z-index override."
+      },
+      {
+        "prop": "calendarProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for inner ArvoCalendar config the parent does not curate as a flat prop. Typed as Pick<ArvoCalendarProps, 'hasOutsideDays' | 'isKeyboardEnabled' | 'size'>. Applies to BOTH absolute-mode calendars (member-mode tile panel is parent-owned and unaffected). Bag-only keys flow through; flat props always win on overlap. See apps/docs/docs/usage/composition.mdx 'Scoped configuration props'."
+      },
+      {
+        "prop": "popoverProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for popover surface options (DateRangePicker portals a custom overlay, not ArvoPopover). Shape: { width?: string; offset?: number }. Bag-only keys flow through; flat options (placement, zIndex) always win on overlap."
+      },
+      {
+        "prop": "onChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { start: Date|null; end: Date|null; formatted: { start: string; end: string }; mode: 'absolute'|'member'|'rolling'; memberRange?: { start: NormalizedMember|null; end: NormalizedMember|null }; rollingValue?: RollingValue }) => void"
+      },
+      {
+        "prop": "onModeChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { mode: 'absolute'|'member'|'rolling' }) => void"
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Cancellable"
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Cancellable"
+      },
+      {
+        "prop": "onCancel",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Rolling Cancel"
+      },
+      {
+        "prop": "onSave",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Rolling Save"
+      }
+    ],
+    "events": [
+      {
+        "event": "drp:change",
+        "payload": "{ start: Date | null, end: Date | null, formatted: { start: string; end: string }, mode: 'absolute'|'member'|'rolling', memberRange: { start: NormalizedMember | null; end: NormalizedMember | null } | undefined, rollingValue: RollingValue | undefined }",
+        "desc": "Committed range or rolling value"
+      },
+      {
+        "event": "drp:mode-change",
+        "payload": "{ mode: 'absolute'|'member'|'rolling' }",
+        "desc": "User toggled mode (switch or tab)"
+      },
+      {
+        "event": "drp:open",
+        "payload": "{  }",
+        "desc": "Popover opening"
+      },
+      {
+        "event": "drp:close",
+        "payload": "{  }",
+        "desc": "Popover closing"
+      },
+      {
+        "event": "drp:cancel",
+        "payload": "{  }",
+        "desc": "Rolling Cancel"
+      },
+      {
+        "event": "drp:save",
+        "payload": "{  }",
+        "desc": "Rolling Save"
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoDateRangePickerOptions)",
+        "returns": "instance",
+        "desc": "Initialize."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "close()",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "toggle(force: boolean | undefined)",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "range(v: DateRange | undefined)",
+        "returns": "DateRange | void",
+        "desc": "Get or set the absolute date range (dual-purpose)."
+      },
+      {
+        "method": "memberRange(v: { start: NormalizedMember|null; end: NormalizedMember|null } | undefined)",
+        "returns": "{ start: NormalizedMember | null; end: NormalizedMember | null } | void",
+        "desc": "Get or set member range."
+      },
+      {
+        "method": "rolling(v: RollingValue | undefined)",
+        "returns": "RollingValue | null | void",
+        "desc": "Get or set rolling value."
+      },
+      {
+        "method": "mode(m: 'absolute'|'member'|'rolling' | undefined)",
+        "returns": "'absolute'|'member'|'rolling' | void",
+        "desc": "Get or set active mode."
+      },
+      {
+        "method": "memberToggle(v: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set member-mode switch state."
+      },
+      {
+        "method": "clear()",
+        "returns": "void",
+        "desc": "Clear all range values."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": ""
+      },
+      {
+        "method": "setError(message: string | false)",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "setLoading(loading: boolean)",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "indicator(v: ArvoIndicatorDescriptor | null | undefined)",
+        "returns": "ArvoIndicatorDescriptor | null | void",
+        "desc": "Get / set the trigger indicator. Pass an indicator descriptor to show, or null to hide. Mirrors the `indicator` prop."
+      },
+      {
+        "method": "focus()",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": ""
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-haspopup",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-expanded",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-controls",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-required",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-invalid",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-label",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-labelledby",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-describedby",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Alt+Down",
+        "action": "Open popover"
+      },
+      {
+        "key": "Alt+Up",
+        "action": "Close popover"
+      },
+      {
+        "key": "Enter",
+        "action": "Commit isSegmented input and close (if valid)"
+      },
+      {
+        "key": "Escape",
+        "action": "Close popover; discard draft; restore last applied (rolling = Cancel semantics)"
+      },
+      {
+        "key": "Tab",
+        "action": "Trigger -> header -> body -> footer (when present)"
+      },
+      {
+        "key": "ArrowKeys (cell)",
+        "action": "Move within calendar/tile grid; Shift+Arrow extends range"
+      },
+      {
+        "key": "ArrowUp/ArrowDown (stepper)",
+        "action": "Increment/decrement rolling offset"
+      },
+      {
+        "key": "Letter (months view)",
+        "action": "Type-ahead month select"
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Trigger",
+        "vars": [
+          "--arvo-form-input-width",
+          "--arvo-form-input-height",
+          "--arvo-form-input-pad-r"
+        ]
+      },
+      {
+        "category": "Popover",
+        "vars": [
+          "--arvo-drp-popover-absolute-w",
+          "--arvo-drp-popover-member-w",
+          "--arvo-drp-popover-rolling-w",
+          "--arvo-drp-popover-absolute-h",
+          "--arvo-drp-popover-member-h",
+          "--arvo-drp-popover-rolling-h"
+        ]
+      },
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-drp-popover-w",
+          "--arvo-drp-popover-h"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/AnCpSepdO3JORVLOnYxVv8/?node-id=30457-66759"
+  },
+  "datetime-picker": {
+    "slug": "datetime-picker",
+    "name": "DateTimePicker",
+    "abbreviation": "dtp",
+    "category": "DateTime",
+    "status": "stable",
+    "description": "Combined date+time picker. Form-input-styled trigger plus composed Calendar + TimeDropdown overlay. Single <input> trigger (resolves legacy ambiguity). Constraint props: min/max are full datetime; startTime/endTime are time-only across all dates.",
+    "bem": {
+      "block": "arvo-dtp",
+      "elements": [
+        {
+          "name": "lbl",
+          "optional": "Yes",
+          "desc": "Form label."
+        },
+        {
+          "name": "field",
+          "optional": "No",
+          "desc": "Form-input field wrapper."
+        },
+        {
+          "name": "input",
+          "optional": "No",
+          "desc": "Native <input> (combined isSegmented input for date+time)."
+        },
+        {
+          "name": "actions",
+          "optional": "No",
+          "desc": "Right-side actions overlay."
+        },
+        {
+          "name": "clear-btn",
+          "optional": "Yes",
+          "desc": "ArvoIconButton clear."
+        },
+        {
+          "name": "trigger-btn",
+          "optional": "No",
+          "desc": "ArvoIconButton calendar icon."
+        },
+        {
+          "name": "err-ico",
+          "optional": "Yes",
+          "desc": "Inline error icon."
+        },
+        {
+          "name": "err-msg",
+          "optional": "Yes",
+          "desc": "Inline error message."
+        },
+        {
+          "name": "border",
+          "optional": "No",
+          "desc": "Animated bottom border."
+        },
+        {
+          "name": "popover",
+          "optional": "No",
+          "desc": "Overlay container."
+        },
+        {
+          "name": "header",
+          "optional": "No",
+          "desc": "CalendarNav single variant on the calendar side."
+        },
+        {
+          "name": "body",
+          "optional": "No",
+          "desc": "Calendar + TimeDropdown composition row."
+        },
+        {
+          "name": "cal",
+          "optional": "No",
+          "desc": "Calendar host (344w)."
+        },
+        {
+          "name": "time",
+          "optional": "No",
+          "desc": "TimeDropdown host (144w)."
+        }
+      ],
+      "variants": [],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small trigger (24px input field; 46px label+field total)"
+        },
+        {
+          "name": "lg",
+          "desc": "Large trigger (32px input field; 54px label+field total, default)"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "full-width",
+          "desc": "Trigger fills container width"
+        },
+        {
+          "name": "show-weeks",
+          "desc": "Calendar shows weeks column"
+        },
+        {
+          "name": "anchor-mode",
+          "desc": "Overlay-only mode"
+        }
+      ],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Popover open"
+        },
+        {
+          "name": "has-value",
+          "desc": "Value set"
+        },
+        {
+          "name": "has-text-selected",
+          "desc": "Segment focused"
+        },
+        {
+          "name": "has-error",
+          "desc": "Error"
+        },
+        {
+          "name": "error-tooltip",
+          "desc": "Error icon + tooltip"
+        },
+        {
+          "name": "is-disabled",
+          "desc": "Disabled"
+        },
+        {
+          "name": "is-readonly",
+          "desc": "Read-only"
+        },
+        {
+          "name": "loading",
+          "desc": "Loading (Pattern C)"
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "value",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Current datetime value."
+      },
+      {
+        "prop": "defaultValue",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Initial value for uncontrolled mode."
+      },
+      {
+        "prop": "format",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": ".NET / Kendo combined date+time format."
+      },
+      {
+        "prop": "locale",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "BCP-47 locale."
+      },
+      {
+        "prop": "weekStart",
+        "type": "'0' | '1' | '2' | '3' | '4' | '5' | '6'",
+        "default": "0",
+        "required": "No",
+        "desc": "First day of week."
+      },
+      {
+        "prop": "hasWeeks",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Calendar shows weeks column."
+      },
+      {
+        "prop": "interval",
+        "type": "number",
+        "default": "15",
+        "required": "No",
+        "desc": "TimeDropdown interval (minutes)."
+      },
+      {
+        "prop": "min",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Full datetime min (time constraint applies only on boundary date)."
+      },
+      {
+        "prop": "max",
+        "type": "Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Full datetime max."
+      },
+      {
+        "prop": "startTime",
+        "type": "TimeObject | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Time-only floor applied across ALL dates."
+      },
+      {
+        "prop": "endTime",
+        "type": "TimeObject | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Time-only ceiling applied across ALL dates."
+      },
+      {
+        "prop": "placeholder",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Placeholder text."
+      },
+      {
+        "prop": "label",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Form label text."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'lg'",
+        "default": "lg",
+        "required": "No",
+        "desc": "Trigger size."
+      },
+      {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width."
+      },
+      {
+        "prop": "isFullWidth",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Shorthand for width=100%."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disabled."
+      },
+      {
+        "prop": "isReadOnly",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Read-only."
+      },
+      {
+        "prop": "isRequired",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Required."
+      },
+      {
+        "prop": "isInvalid",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Invalid."
+      },
+      {
+        "prop": "errorMsg",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Error message."
+      },
+      {
+        "prop": "errorDisplay",
+        "type": "'inline' | 'tooltip' | 'none'",
+        "default": "inline",
+        "required": "No",
+        "desc": "Error feedback presentation."
+      },
+      {
+        "prop": "isClearable",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "When true and a value is set, renders a clear icon button in the action overlay. Defaults to false."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Loading."
+      },
+      {
+        "prop": "isAutoClose",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "DateTime defaults FALSE (users typically need both date and time)."
+      },
+      {
+        "prop": "isStrictParsing",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Reject partial parses."
+      },
+      {
+        "prop": "isSegmented",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Segmented input editing."
+      },
+      {
+        "prop": "anchor",
+        "type": "boolean | HTMLElement | RefObject",
+        "default": "false",
+        "required": "No",
+        "desc": "Overlay-only mode."
+      },
+      {
+        "prop": "placement",
+        "type": "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'auto'",
+        "default": "bottom-start",
+        "required": "No",
+        "desc": "Popover placement."
+      },
+      {
+        "prop": "zIndex",
+        "type": "number",
+        "default": "—",
+        "required": "No",
+        "desc": "Popover z-index override."
+      },
+      {
+        "prop": "calendarProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for inner ArvoCalendar config. Pick<ArvoCalendarProps, 'hasOutsideDays' | 'isKeyboardEnabled' | 'size'>. Bag-only keys flow through; flat props always win on overlap."
+      },
+      {
+        "prop": "popoverProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for popover surface options (custom portal, not ArvoPopover). Shape: { width?: string; offset?: number }. Flat options (placement, zIndex) always win on overlap. A timeProps bag is intentionally omitted in this pass -- ArvoTimeDropdown has no parity-safe long-tail option today."
+      },
+      {
+        "prop": "onChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { value: Date|null; formattedValue: string }) => void"
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Cancellable"
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Cancellable"
+      },
+      {
+        "prop": "onBlur",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "() => void"
+      }
+    ],
+    "events": [
+      {
+        "event": "dtp:change",
+        "payload": "{ value: Date | null, formattedValue: string }",
+        "desc": "Value changed"
+      },
+      {
+        "event": "dtp:open",
+        "payload": "{  }",
+        "desc": "Popover opening"
+      },
+      {
+        "event": "dtp:close",
+        "payload": "{  }",
+        "desc": "Popover closing"
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoDateTimePickerOptions)",
+        "returns": "instance",
+        "desc": "Initialize."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "close()",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "toggle(force: boolean | undefined)",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "value(v: Date | string | null | undefined)",
+        "returns": "Date | null | void",
+        "desc": "Get or set (dual-purpose)."
+      },
+      {
+        "method": "formattedValue()",
+        "returns": "string",
+        "desc": ""
+      },
+      {
+        "method": "clear()",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": ""
+      },
+      {
+        "method": "setError(message: string | false)",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "setLoading(loading: boolean)",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "focus()",
+        "returns": "void",
+        "desc": ""
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": ""
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-haspopup",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-expanded",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-controls",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-required",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-invalid",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-label",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-labelledby",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-describedby",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Alt+Down",
+        "action": "Open popover"
+      },
+      {
+        "key": "Alt+Up",
+        "action": "Close popover"
+      },
+      {
+        "key": "Enter",
+        "action": "Commit isSegmented value and close (if valid)"
+      },
+      {
+        "key": "Escape",
+        "action": "Close popover"
+      },
+      {
+        "key": "Tab",
+        "action": "Calendar header -> Calendar grid -> Time tabs (if any) -> Time list"
+      },
+      {
+        "key": "ArrowLeft/ArrowRight (segment)",
+        "action": "Move segments across date and time portions"
+      },
+      {
+        "key": "ArrowUp/ArrowDown (segment)",
+        "action": "Increment/decrement segment value"
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Trigger",
+        "vars": [
+          "--arvo-form-input-width",
+          "--arvo-form-input-height",
+          "--arvo-form-input-pad-r"
+        ]
+      },
+      {
+        "category": "Popover",
+        "vars": [
+          "--arvo-dtp-popover-w",
+          "--arvo-dtp-cal-padding"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/AnCpSepdO3JORVLOnYxVv8/?node-id=30457-3443"
   },
   "drawer": {
     "slug": "drawer",
@@ -3858,7 +6094,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "pane",
           "optional": "No",
-          "desc": "The drawer pane wrapper. Fixed-position, anchored to one edge of the viewport (or the configured container), flex column. Sets pane width via --arvo-drw-width and applies a side-aware drop shadow (--arvo-shadow-left for side='right', --arvo-shadow-right for side='left'). Hosts the panel-shell rendered tree (header, sticky, body, footer) as children -- the shell's BEM elements use parentBlock='arvo-drw'."
+          "desc": "The drawer pane wrapper. Fixed-position, anchored to one edge of the viewport (or the configured container), flex column. Sets pane width via --arvo-drw-width and applies a side-aware drop shadow ($arvo-shadow-left SCSS token for side='right', $arvo-shadow-right for side='left'; shadow color portion resolves through the mode-aware --arvo-color-s-shadow-static-2 CSS variable). Hosts the panel-shell rendered tree (header, sticky, body, footer) as children -- the shell's BEM elements use parentBlock='arvo-drw'."
         }
       ],
       "variants": [],
@@ -3866,11 +6102,11 @@ export const COMPONENT_DESCRIPTORS = {
       "layouts": [
         {
           "name": "side-left",
-          "desc": "Side='left' -- pane anchors to the left edge of the container. Slides in from the left (translateX(-100%) -> 0). Drop shadow points right (--arvo-shadow-right)."
+          "desc": "Side='left' -- pane anchors to the left edge of the container. Slides in from the left (translateX(-100%) -> 0). Drop shadow points right ($arvo-shadow-right SCSS token)."
         },
         {
           "name": "side-right",
-          "desc": "Side='right' (default) -- pane anchors to the right edge. Slides in from the right (translateX(100%) -> 0). Drop shadow points left (--arvo-shadow-left)."
+          "desc": "Side='right' (default) -- pane anchors to the right edge. Slides in from the right (translateX(100%) -> 0). Drop shadow points left ($arvo-shadow-left SCSS token)."
         },
         {
           "name": "side-top",
@@ -3899,10 +6135,10 @@ export const COMPONENT_DESCRIPTORS = {
     "props": [
       {
         "prop": "side",
-        "type": "'left' | 'right' | 'top' | 'bottom'",
+        "type": "'left' | 'right'",
         "default": "right",
         "required": "No",
-        "desc": "Edge the pane anchors to. v1 implements 'left' and 'right' fully. 'top' and 'bottom' are reserved values that fall back to 'right' with a dev console.warn until the top/bottom-sheet layout ships."
+        "desc": "Edge the pane anchors to. Run 5 dropped `top` and `bottom`; the design system only supports left/right anchored drawers. Passing `top` or `bottom` falls back to `right` with a one-shot dev console.warn."
       },
       {
         "prop": "isOpen",
@@ -4056,7 +6292,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "_documentation",
         "default": "—",
         "required": "No",
-        "desc": "The following props are forwarded verbatim to the embedded panel-shell. Their semantics, defaults, and validation are defined by the panel-shell shared pattern (see packages/utils/src/panel-shell.ts and the panel-shell entry in SHARED-PATTERNS-REGISTRY.json). Listed here so consumers reading the descriptor see the full Drawer surface area: title, hasHeader, hasBackButton, onBack, headerActions, stickyHeader, items, getItemId, filterKeys, getItemSearchText, renderItem, itemsRole, actions, hasFooter."
+        "desc": "The following props are forwarded verbatim to the embedded panel-shell. Their semantics, defaults, and validation are defined by the panel-shell shared pattern (see packages/utils/src/panel-shell.ts and the panel-shell entry in SHARED-PATTERNS-REGISTRY.json). Listed here so consumers reading the descriptor see the full Drawer surface area: title, hasHeader, hasBackButton, onBack, headerActions, stickyHeader, items, getItemId, filterKeys, getItemSearchText, renderItem, itemsRole, onSearchChange, onItemActivate, onTabSelect, actions, hasFooter. The onSearchChange / onItemActivate / onTabSelect callbacks mirror the drw:search / drw:item-activate / drw:tab-select events (React consumers use the callbacks; vanilla JS consumers may use either the callback options or the bubbled events). React additionally exposes searchQuery / defaultSearchQuery for controlled/uncontrolled search; the vanilla JS equivalent is the imperative search() method."
       }
     ],
     "events": [
@@ -4270,9 +6506,7 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "category": "Animation",
         "vars": [
-          "--arvo-drw-slide-duration",
-          "--arvo-drw-backdrop-opacity-light",
-          "--arvo-drw-backdrop-opacity-dark"
+          "--arvo-drw-slide-duration"
         ]
       }
     ],
@@ -4460,6 +6694,13 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "true",
         "required": "No",
         "desc": "Whether the menu closes after an item is selected. Passed through to ArvoActionMenu."
+      },
+      {
+        "prop": "menuProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for inner ArvoActionMenu config the parent does not curate as a flat prop. Typed as Pick<ArvoActionMenuProps, 'actionsVisibility' | 'submenuTrigger'>. Bag-only keys flow through. On any conflict with a flat prop, the flat prop wins. See apps/docs/docs/usage/composition.mdx 'Scoped configuration props' for the rule."
       },
       {
         "prop": "onSelect",
@@ -4834,6 +7075,13 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "true",
         "required": "No",
         "desc": "Whether the menu closes after an item is selected."
+      },
+      {
+        "prop": "menuProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for inner ArvoActionMenu config the parent does not curate as a flat prop. Typed as Pick<ArvoActionMenuProps, 'actionsVisibility' | 'submenuTrigger'>. Bag-only keys flow through. On any conflict with a flat prop, the flat prop wins. See apps/docs/docs/usage/composition.mdx 'Scoped configuration props' for the rule."
       },
       {
         "prop": "onSelect",
@@ -5278,23 +7526,6 @@ export const COMPONENT_DESCRIPTORS = {
           "--arvo-fab-btn-indicator-top",
           "--arvo-fab-btn-indicator-right"
         ]
-      },
-      {
-        "category": "Layout-icon-only",
-        "vars": [
-          "--arvo-fab-btn-size"
-        ]
-      },
-      {
-        "category": "Layout-with-label",
-        "vars": [
-          "--arvo-fab-btn-height",
-          "--arvo-fab-btn-padding-inline",
-          "--arvo-fab-btn-padding-block",
-          "--arvo-fab-btn-gap",
-          "--arvo-fab-btn-font-size",
-          "--arvo-fab-btn-icon-size"
-        ]
       }
     ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=33642-51830&m=dev"
@@ -5305,7 +7536,7 @@ export const COMPONENT_DESCRIPTORS = {
     "abbreviation": "form-lbl",
     "category": "Inputs",
     "status": "stable",
-    "description": "Public atomic form label primitive shared by every labelled form control in the design system. Exposes two variants -- ArvoFormLabel renders a `<label htmlFor>` for sibling-association fields (text inputs, select, combobox, listbox), and ArvoFormLabelText renders a `<span>` for the inner caption used by selection controls (radio, switch, checkbox) where the visible caption is nested inside an outer wrapping `<label>`. Both variants share the same typography, required indicator, disabled, and invalid styling.",
+    "description": "Public atomic form label primitive shared by every labelled form control in the design system. Exposes two render targets -- ArvoFormLabel renders a `<label htmlFor>` for sibling-association fields (text inputs, select, combobox, listbox, the four pickers), and the same primitive renders as a `<span>` (React: ArvoFormLabelText; JS: pass `as: 'span'`) for the inner caption used by selection controls (radio, switch, checkbox) where the visible caption is nested inside an outer wrapping `<label>`. Default size is sm (12px); the lg (14px) variant is reserved for selection controls (Checkbox / Radio / their groups) where the caption scales with the control size.",
     "bem": {
       "block": "arvo-form-lbl",
       "elements": [
@@ -5318,8 +7549,8 @@ export const COMPONENT_DESCRIPTORS = {
       "variants": [],
       "sizes": [
         {
-          "name": "sm",
-          "desc": "Small size, 12px font"
+          "name": "lg",
+          "desc": "Large size, 14px font. Used by selection controls in their lg variant. The default (no modifier) is 12px."
         }
       ],
       "layouts": [],
@@ -5352,9 +7583,9 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "prop": "size",
         "type": "'sm' | 'lg'",
-        "default": "lg",
+        "default": "sm",
         "required": "No",
-        "desc": "Typography size. `lg` is 14px (default). `sm` is 12px and is the size used by form-input components above their fields."
+        "desc": "Typography size. Default `sm` is 12px (all input-style controls and the pickers). `lg` is 14px and is reserved for selection controls (Checkbox / Radio / their groups) where the caption scales with the control size."
       },
       {
         "prop": "isRequired",
@@ -5382,11 +7613,52 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "ReactNode",
         "default": "—",
         "required": "No",
-        "desc": "Custom node rendered in place of the default `*`. Only rendered when isRequired is true."
+        "desc": "Custom node rendered in place of the default `*`. Only rendered when isRequired is true. The vanilla JS option accepts string | HTMLElement."
       }
     ],
     "events": [],
-    "methods": [],
+    "methods": [
+      {
+        "method": "text()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the caption text."
+      },
+      {
+        "method": "size()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for size."
+      },
+      {
+        "method": "required()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the required state."
+      },
+      {
+        "method": "disabled()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the disabled state."
+      },
+      {
+        "method": "invalid()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the invalid state."
+      },
+      {
+        "method": "for()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the `for` attribute. No-op on `<span>`."
+      },
+      {
+        "method": "as()",
+        "returns": "void",
+        "desc": "Returns the rendered tag. Read-only after construction."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Removes all child nodes and detaches internal references."
+      }
+    ],
     "aria": [
       {
         "attr": "aria-hidden",
@@ -5420,12 +7692,12 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "cond",
           "optional": "Yes",
-          "desc": "And/Or ArvoButtonGroup toggle inside __sticky, rendered only for multi variant when conditional config is provided."
+          "desc": "And/Or ArvoButtonGroup toggle inside __sticky when conditional config is provided (multi or single)."
         },
         {
           "name": "banner",
           "optional": "Yes",
-          "desc": "Optional info/warning banner between sticky header and body. Wraps ArvoInlineAlert."
+          "desc": "Optional info/warning banner above search in __sticky. Wraps ArvoBannerAlert."
         },
         {
           "name": "list",
@@ -5647,11 +7919,18 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Search configuration. False disables search entirely."
       },
       {
+        "prop": "bannerAlert",
+        "type": "ArvoBannerAlertProps | false",
+        "default": "false",
+        "required": "No",
+        "desc": "Optional banner in __banner slot above search. False hides the banner."
+      },
+      {
         "prop": "conditional",
         "type": "false | HybridPopoverConditionalConfig",
         "default": "false",
         "required": "No",
-        "desc": "And/Or toggle config. Only rendered for multi variant."
+        "desc": "And/Or toggle config. Rendered for multi and single variants when provided."
       },
       {
         "prop": "hasGlobalSelectAll",
@@ -5861,7 +8140,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "string | null",
         "default": "—",
         "required": "No",
-        "desc": "Parent overlay entry id for inline nesting seam. When set, back button defaults to closing self. Future: recursive nesting resolver."
+        "desc": "Parent overlay entry id for inline nesting chain coordination. Nested inline instances use this to coordinate popAll on root close."
       },
       {
         "prop": "onApply",
@@ -6127,7 +8406,7 @@ export const COMPONENT_DESCRIPTORS = {
       "states": [
         {
           "name": "is-disabled",
-          "desc": "Disabled state. Removes href, adds aria-isDisabled='true', uses disabled colors. Applied via class since <a> has no native :disabled."
+          "desc": "Disabled state. Removes href, adds aria-disabled='true', uses disabled colors. Applied via class since <a> has no native :disabled."
         },
         {
           "name": "loading",
@@ -6183,7 +8462,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Prevents navigation and interaction. Removes href, adds aria-isDisabled='true'."
+        "desc": "Prevents navigation and interaction. Removes href, adds aria-disabled='true'."
       },
       {
         "prop": "isLoading",
@@ -6518,7 +8797,7 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "attr": "aria-disabled",
-        "when": "Set via native disabled attribute on <button>; use aria-isDisabled=\"true\" only when button must remain focusable."
+        "when": "Set via native disabled attribute on <button>; use aria-disabled=\"true\" only when button must remain focusable."
       },
       {
         "attr": "aria-pressed",
@@ -6641,7 +8920,7 @@ export const COMPONENT_DESCRIPTORS = {
         },
         {
           "name": "is-disabled",
-          "desc": "Disabled state. Removes href, adds aria-isDisabled='true', uses disabled text/icon colors, cursor not-allowed."
+          "desc": "Disabled state. Removes href, adds aria-disabled='true', uses disabled text/icon colors, cursor not-allowed."
         },
         {
           "name": "loading",
@@ -6704,7 +8983,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Prevents navigation and interaction. Adds aria-isDisabled='true' and removes href. Uses disabled text/icon colors."
+        "desc": "Prevents navigation and interaction. Adds aria-disabled='true' and removes href. Uses disabled text/icon colors."
       },
       {
         "prop": "isVisited",
@@ -6867,9 +9146,9 @@ export const COMPONENT_DESCRIPTORS = {
           "desc": "Search/filter input container above the list. Only present when searchable is true."
         },
         {
-          "name": "search-input",
+          "name": "search",
           "optional": "Yes",
-          "desc": "Native text input inside __search for filtering options."
+          "desc": "Filter search wrapper. Contains a nested ArvoSearch component when the `search` prop is enabled. The actual input element lives inside the ArvoSearch subtree as `arvo-search__input`; this listbox does not render its own search-input element."
         },
         {
           "name": "list",
@@ -7269,10 +9548,10 @@ export const COMPONENT_DESCRIPTORS = {
     "props": [
       {
         "prop": "type",
-        "type": "'error' | 'success' | 'warning' | 'info' | 'neutral' | 'block'",
-        "default": "error",
+        "type": "'negative' | 'positive' | 'warning' | 'info' | 'neutral' | 'block'",
+        "default": "negative",
         "required": "No",
-        "desc": "Semantic type. Drives icon glyph, icon color, and text color via the SCSS pattern. Default `error` preserves the behavior of the previous `inline-alert` util that all form-input consumers rely on (validation failure is the most common in-place use case). Note: the alert-family components `ArvoBannerAlert` / `ArvoBadgeAlert` / `ArvoToast` use `negative` instead of `error`; MessageAlert deliberately uses `error` to match the form-validation vocabulary and the existing consumer call sites. The new `block` type is NEW in this rework and was not part of the previous `inline-alert` API."
+        "desc": "Semantic type. Drives icon glyph, icon color, and text color via the SCSS pattern. Default `negative` preserves the behavior of the previous `inline-alert` util that all form-input consumers rely on (validation failure is the most common in-place use case). Run 4b renamed `error` -> `negative` and `success` -> `positive` to align MessageAlert with the rest of the alert family (Toast, Banner Alert, Alert Dialog)."
       },
       {
         "prop": "isInline",
@@ -7283,10 +9562,10 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "prop": "message",
-        "type": "ReactNode",
+        "type": "ReactNode (React) | BasicInlineContent (JS)",
         "default": "—",
         "required": "No",
-        "desc": "Alert text. Required for non-inline rendering of useful content. When `isInline=true` this prop is ignored at render time, BUT it is still mirrored into `aria-label` on the root element so screen readers retain semantic context for the standalone icon. Accepts string or composed nodes (e.g. `<strong>` titles, line breaks, embedded `<ArvoLink>`)."
+        "desc": "Alert text. The JS layer accepts a plain string OR a `BasicInlineContent` array (text, em, strong, link, code, kbd) from the shared `@arvo/core/inline-content` contract (basic-inline profile) and renders it via `renderInlineContentToDOM` -- identical to Toast, Banner Alert, and Alert Dialog. The React layer accepts any `ReactNode`: a string, the shared inline forms via `renderInlineContentReact(content)` for `.arvo-inline__*` styling parity, or richer JSX (e.g. the SidePanel notification layout). Both honor the same `.arvo-inline__*` SCSS contract; the AST form is the security guarantee for the data-driven (JS) path. When `isInline=true` the message is not rendered visually, but a string value is mirrored into `aria-label` on the root (non-string content falls back to the type-default label) so screen readers retain semantic context for the standalone icon."
       },
       {
         "prop": "icon",
@@ -7347,12 +9626,17 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "method": "message()",
         "returns": "void",
-        "desc": "Dual-purpose getter/setter for the alert's message text. Pass `null` to clear. Updates the rendered text in full mode and the `aria-label` mirror in inline mode. JS layer only."
+        "desc": "Dual-purpose getter/setter for the alert's message. Accepts a string or a `BasicInlineContent` array (basic-inline profile). Pass `null` to clear. Re-renders the inline content in full mode and updates the `aria-label` mirror in inline mode. JS layer only."
       },
       {
         "method": "inline()",
         "returns": "void",
         "desc": "Dual-purpose getter/setter for the `isInline` layout toggle. Adds/removes the `--inline` modifier class and shows/hides the `__msg` / `__close` slots. JS layer only."
+      },
+      {
+        "method": "icon()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the optional custom icon override. Pass an o9con name (without the `o9con-` prefix) to show a custom glyph; pass `null` to fall back to the type-default icon. JS layer only."
       },
       {
         "method": "dismissable()",
@@ -7393,7 +9677,21 @@ export const COMPONENT_DESCRIPTORS = {
         "key": "Enter / Space"
       }
     ],
-    "cssVarGroups": [],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-msg-alert-body-gap",
+          "--arvo-msg-alert-icon-size"
+        ]
+      },
+      {
+        "category": "Typography",
+        "vars": [
+          "--arvo-msg-alert-font-size"
+        ]
+      }
+    ],
     "figma": null
   },
   "number-input": {
@@ -7415,6 +9713,11 @@ export const COMPONENT_DESCRIPTORS = {
           "name": "field",
           "optional": "No",
           "desc": "Flex container for input and stepper buttons, provides hover/focus area"
+        },
+        {
+          "name": "prefix",
+          "optional": "Yes",
+          "desc": "Optional static non-editable label rendered inside __field at the leading edge (e.g. 'Wk', 'Mo', 'px'). Cosmetic only - not part of the input value. Present only when the prefix prop is set. aria-hidden=\"true\". Pointer events forward to the inner input."
         },
         {
           "name": "input",
@@ -7571,6 +9874,13 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Shows skeleton loading overlay (Pattern A)"
       },
       {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width value applied to the root element (e.g. '200px', '50%'). Sets `--arvo-form-input-width`. Overridden by `isFullWidth`. Defaults to `300px` via the shared `form-input-default-width` mixin."
+      },
+      {
         "prop": "isFullWidth",
         "type": "boolean",
         "default": "false",
@@ -7604,6 +9914,20 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "—",
         "required": "No",
         "desc": "Blur handler callback. Called when the input loses focus."
+      },
+      {
+        "prop": "prefix",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional static text rendered inside the field at the leading edge (e.g. 'Wk', 'Mo', 'px', '$'). Purely cosmetic - never part of the numeric value, never parsed, never emitted in events. When set, the block gains the --has-prefix modifier and the inner input's leading padding is sized to the prefix's measured width so the numeric value never overlaps the prefix. Set to null to remove. aria-hidden on the prefix element; pointer clicks on the prefix focus the inner input. Added for the Date Range Picker rolling stepper per ADR-6 but broadly reusable for any unit-bearing input."
+      },
+      {
+        "prop": "prefixTooltip",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Optional tooltip text shown when hovering the prefix element (e.g. show 'Weeks' when prefix is 'Wk'). No tooltip when null. Only effective when the prefix prop is also set. Routed through the shared Arvo tooltip pipeline."
       }
     ],
     "events": [
@@ -7658,6 +9982,11 @@ export const COMPONENT_DESCRIPTORS = {
         "method": "destroy()",
         "returns": "void",
         "desc": "Remove all event listeners, clean up references"
+      },
+      {
+        "method": "width()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the field width. Sets `--arvo-form-input-width` on the root element."
       }
     ],
     "aria": [
@@ -7728,13 +10057,26 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Move focus into / out of the input"
       }
     ],
-    "cssVarGroups": [],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-number-input-pad-r"
+        ]
+      },
+      {
+        "category": "Colors",
+        "vars": [
+          "--arvo-number-input-prefix-color"
+        ]
+      }
+    ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=26482-63638&m=dev"
   },
   "popover": {
     "slug": "popover",
     "name": "Popover",
-    "abbreviation": "pop",
+    "abbreviation": "popover",
     "category": "Overlays",
     "status": "stable",
     "description": "Floating overlay panel anchored to a trigger element for displaying contextual content, forms, or actions. Supports click, hover, and focus trigger modes, optional header with title and back button, sticky header slot, scrollable body, and an action footer. Rendered via portal to document.body with dynamic positioning.",
@@ -7802,7 +10144,7 @@ export const COMPONENT_DESCRIPTORS = {
       "layouts": [
         {
           "name": "inline",
-          "desc": "Inline positioning mode — no absolute positioning or portal"
+          "desc": "Inline layout mode -- applies compact CSS (--inline). Panel still portals to document.body; floating positioning is skipped when isInline is true."
         }
       ],
       "states": [
@@ -7864,7 +10206,21 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "ArvoPopoverHeaderAction[]",
         "default": "[]",
         "required": "No",
-        "desc": "Array of header action configs. Each has: id (string), type ('btn' | 'dropdown' | 'switch'), icon (string), label (string), onClick, checked, onChange, disabled."
+        "desc": "Array of header action configs. Supports type 'btn' (icon button), 'dropdown' (ArvoDropdownIconButton with optional status indicator), and 'switch' (inline ArvoSwitch)."
+      },
+      {
+        "prop": "stickyBody",
+        "type": "ReactNode | HTMLElement | string | function",
+        "default": "—",
+        "required": "No",
+        "desc": "Alias for stickyHeader. Content rendered in a sticky slot between header and body."
+      },
+      {
+        "prop": "emptyContent",
+        "type": "ArvoPopoverEmptyContent",
+        "default": "—",
+        "required": "No",
+        "desc": "When provided, renders ArvoEmptyState in the body instead of children/content. Footer is auto-hidden."
       },
       {
         "prop": "stickyHeader",
@@ -7885,7 +10241,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "ArvoPopoverAction[]",
         "default": "[]",
         "required": "No",
-        "desc": "Footer action buttons. Each has: id (string), label (string), icon (string), variant ('primary' | 'secondary' | 'tertiary'), action (callback — return false to prevent auto-close), disabled (boolean)."
+        "desc": "Footer action buttons. Each has: id (string), label (string), icon (string), variant ('primary' | 'secondary' | 'tertiary' | 'danger'), action (callback -- return false to prevent auto-close), isDisabled (boolean)."
       },
       {
         "prop": "hasFooter",
@@ -8004,7 +10360,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Inline mode — skips absolute positioning and portal. Panel renders in document flow."
+        "desc": "Inline mode -- applies compact layout CSS and skips floating positioning. The panel still renders via portal to document.body."
       }
     ],
     "events": [
@@ -8126,6 +10482,12 @@ export const COMPONENT_DESCRIPTORS = {
         "vars": [
           "--arvo-popover-arrow-x",
           "--arvo-popover-arrow-y"
+        ]
+      },
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-popover-width"
         ]
       }
     ],
@@ -8623,7 +10985,15 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Move focus into/out of the radio group. Only one radio in the group is in tab order (the selected one, or the first non-disabled if none selected)."
       }
     ],
-    "cssVarGroups": [],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-radio-circle-size",
+          "--arvo-radio-dot-size"
+        ]
+      }
+    ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=25784-857&m=dev"
   },
   "search": {
@@ -8712,6 +11082,10 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "multi-line",
           "desc": "Textarea mode for filter variant. __field gets height: auto, min-height: 32px."
+        },
+        {
+          "name": "full-width",
+          "desc": "Stretches the root to fill its container. Applied when `isFullWidth` is true (shorthand for `width: '100%'`)."
         }
       ],
       "states": [
@@ -8905,6 +11279,13 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "—",
         "required": "No",
         "desc": "Additional CSS classes (React only)."
+      },
+      {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width value applied to the root element (e.g. '200px', '50%'). Sets `--arvo-form-input-width`. Overridden by `isFullWidth`. Defaults to `300px` via the shared `form-input-default-width` mixin."
       }
     ],
     "events": [
@@ -8999,6 +11380,11 @@ export const COMPONENT_DESCRIPTORS = {
         "method": "destroy()",
         "returns": "void",
         "desc": "Remove all listeners, clean up DOM, release references."
+      },
+      {
+        "method": "width()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the field width. Sets `--arvo-form-input-width` on the root element."
       }
     ],
     "aria": [
@@ -9045,7 +11431,14 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Moves focus out of the input. Clear button has tabIndex -1 so it does not receive Tab focus. Find variant prev/next buttons receive Tab focus after the input."
       }
     ],
-    "cssVarGroups": [],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-search-pad-r"
+        ]
+      }
+    ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=13979-597&m=dev"
   },
   "segmented-control": {
@@ -9251,7 +11644,23 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Activate the focused option (no-op if already selected)."
       }
     ],
-    "cssVarGroups": [],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-seg-ctrl-height"
+        ]
+      },
+      {
+        "category": "Colors",
+        "vars": [
+          "--arvo-seg-ctrl-active-bg",
+          "--arvo-seg-ctrl-active-bg-hover",
+          "--arvo-seg-ctrl-active-text",
+          "--arvo-seg-ctrl-active-icon"
+        ]
+      }
+    ],
     "figma": null
   },
   "select": {
@@ -9993,7 +12402,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "_documentation",
         "default": "—",
         "required": "No",
-        "desc": "The following props are forwarded verbatim to the embedded panel-shell. Their semantics, defaults, and validation are defined by the panel-shell shared pattern (see packages/utils/src/panel-shell.ts and the panel-shell entry in SHARED-PATTERNS-REGISTRY.json). Listed here so consumers reading the descriptor see the full SidePanel surface area: title, hasHeader, hasBackButton, onBack, headerActions, stickyHeader, items, getItemId, filterKeys, getItemSearchText, renderItem, itemsRole, actions, hasFooter, isClosable."
+        "desc": "The following props are forwarded verbatim to the embedded panel-shell. Their semantics, defaults, and validation are defined by the panel-shell shared pattern (see packages/utils/src/panel-shell.ts and the panel-shell entry in SHARED-PATTERNS-REGISTRY.json). Listed here so consumers reading the descriptor see the full SidePanel surface area: title, hasHeader, hasBackButton, onBack, headerActions, stickyHeader, items, getItemId, filterKeys, getItemSearchText, renderItem, itemsRole, onSearchChange, onItemActivate, onTabSelect, actions, hasFooter, isClosable. The onSearchChange / onItemActivate / onTabSelect callbacks mirror the sp:search / sp:item-activate / sp:tab-select events (React consumers use the callbacks; vanilla JS consumers may use either the callback options or the bubbled events). React additionally exposes searchQuery / defaultSearchQuery for controlled/uncontrolled search; the vanilla JS equivalent is the imperative search() method."
       }
     ],
     "events": [
@@ -10439,6 +12848,13 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Whether the menu closes after an item is selected. Pass through."
       },
       {
+        "prop": "menuProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for inner ArvoActionMenu config the parent does not curate as a flat prop. Typed as Pick<ArvoActionMenuProps, 'actionsVisibility' | 'submenuTrigger'>. Bag-only keys flow through. On any conflict with a flat prop, the flat prop wins. See apps/docs/docs/usage/composition.mdx 'Scoped configuration props' for the rule."
+      },
+      {
         "prop": "triggerLabel",
         "type": "string",
         "default": "Show options",
@@ -10868,6 +13284,13 @@ export const COMPONENT_DESCRIPTORS = {
         "default": "true",
         "required": "No",
         "desc": "Whether the menu closes after an item is selected."
+      },
+      {
+        "prop": "menuProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for inner ArvoActionMenu config the parent does not curate as a flat prop. Typed as Pick<ArvoActionMenuProps, 'actionsVisibility' | 'submenuTrigger'>. Bag-only keys flow through. On any conflict with a flat prop, the flat prop wins. See apps/docs/docs/usage/composition.mdx 'Scoped configuration props' for the rule."
       },
       {
         "prop": "triggerLabel",
@@ -11352,37 +13775,10 @@ export const COMPONENT_DESCRIPTORS = {
     ],
     "cssVarGroups": [
       {
-        "category": "Track",
+        "category": "Layout",
         "vars": [
-          "--arvo-sw-track-bg",
-          "--arvo-sw-track-bg-checked",
-          "--arvo-sw-track-bg-hover",
-          "--arvo-sw-track-bg-checked-hover",
-          "--arvo-sw-track-bg-disabled",
-          "--arvo-sw-track-border-disabled"
-        ]
-      },
-      {
-        "category": "Thumb",
-        "vars": [
-          "--arvo-sw-thumb-bg",
-          "--arvo-sw-thumb-bg-checked",
-          "--arvo-sw-thumb-bg-disabled",
-          "--arvo-sw-thumb-icon-color",
-          "--arvo-sw-thumb-icon-color-disabled"
-        ]
-      },
-      {
-        "category": "Label",
-        "vars": [
-          "--arvo-sw-lbl-color",
-          "--arvo-sw-lbl-color-disabled"
-        ]
-      },
-      {
-        "category": "Focus",
-        "vars": [
-          "--arvo-sw-focus-border"
+          "--arvo-sw-track-width",
+          "--arvo-sw-track-height"
         ]
       }
     ],
@@ -11442,10 +13838,6 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "secondary",
           "desc": "Secondary variant — active tab gets theme-active background fill"
-        },
-        {
-          "name": "tertiary",
-          "desc": "Tertiary/compact variant — only active tab shows label, no actions or bottom border"
         }
       ],
       "sizes": [
@@ -11486,18 +13878,18 @@ export const COMPONENT_DESCRIPTORS = {
           "desc": "Skeleton shimmer loading overlay on all tabs (Pattern C)"
         },
         {
-          "name": "show-actions",
-          "desc": "Forces tab actions to be visible regardless of hover state"
+          "name": "has-overflow",
+          "desc": "Set automatically on the root when tab content overflows horizontally and the overflow ActionMenu is rendered."
         }
       ]
     },
     "props": [
       {
         "prop": "variant",
-        "type": "'primary' | 'secondary' | 'tertiary'",
+        "type": "'primary' | 'secondary'",
         "default": "primary",
         "required": "No",
-        "desc": "Visual style variant. Tertiary hides labels on inactive tabs and removes actions."
+        "desc": "Visual style variant. Run 7 dropped `tertiary`; the design system supports `primary` and `secondary` only. Overflow is provided by `ArvoDropdownIconButton` regardless of variant."
       },
       {
         "prop": "size",
@@ -11518,7 +13910,14 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "string | null",
         "default": "—",
         "required": "No",
-        "desc": "ID of the currently selected tab. When null, the first non-disabled tab is auto-selected."
+        "desc": "Controlled selected tab id. When passed, the consumer owns the selection state and must pair with onSelect."
+      },
+      {
+        "prop": "defaultSelectedId",
+        "type": "string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Uncontrolled initial selected tab id. Only consulted when selectedId is omitted. When both are omitted (or both are null), the first non-disabled tab is auto-selected. Mirrors React's useControllableState defaultValue pattern."
       },
       {
         "prop": "isClosable",
@@ -11710,7 +14109,8 @@ export const COMPONENT_DESCRIPTORS = {
         "vars": [
           "--arvo-tabs-height",
           "--arvo-tab-padding-inline",
-          "--arvo-tab-gap"
+          "--arvo-tab-gap",
+          "--arvo-tabs-actions-w"
         ]
       },
       {
@@ -11925,7 +14325,14 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "boolean",
         "default": "false",
         "required": "No",
-        "desc": "Expands to fill parent container width"
+        "desc": "Expands to fill parent container width. Shorthand for `width: '100%'`."
+      },
+      {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width value applied to the root element (e.g. '200px', '50%'). Sets `--arvo-form-input-width`. Overridden by `isFullWidth`. Defaults to `300px` via the shared `form-input-default-width` mixin."
       },
       {
         "prop": "onInput",
@@ -12008,6 +14415,11 @@ export const COMPONENT_DESCRIPTORS = {
         "method": "setLoading(loading: boolean)",
         "returns": "void",
         "desc": "Toggle loading skeleton overlay"
+      },
+      {
+        "method": "width()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the textarea width. Sets `--arvo-form-input-width` on the root element."
       },
       {
         "method": "destroy()",
@@ -12236,6 +14648,13 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Shows skeleton loading overlay (Pattern A)"
       },
       {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width value applied to the root element (e.g. '200px', '50%'). Sets `--arvo-form-input-width`. Overridden by `isFullWidth`. Defaults to `300px` via the shared `form-input-default-width` mixin."
+      },
+      {
         "prop": "isFullWidth",
         "type": "boolean",
         "default": "false",
@@ -12342,6 +14761,11 @@ export const COMPONENT_DESCRIPTORS = {
         "method": "destroy()",
         "returns": "void",
         "desc": "Remove all event listeners, clean up references"
+      },
+      {
+        "method": "width()",
+        "returns": "void",
+        "desc": "Dual-purpose getter/setter for the field width. Sets `--arvo-form-input-width` on the root element."
       }
     ],
     "aria": [
@@ -12380,8 +14804,753 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Clear input if clearable and has value; otherwise no-op"
       }
     ],
-    "cssVarGroups": [],
+    "cssVarGroups": [
+      {
+        "category": "Layout",
+        "vars": [
+          "--arvo-textbox-pad-r"
+        ]
+      }
+    ],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=13751-2570&m=dev"
+  },
+  "time-dropdown": {
+    "slug": "time-dropdown",
+    "name": "TimeDropdown",
+    "abbreviation": "tdrop",
+    "category": "DateTime",
+    "status": "stable",
+    "description": "Internal scrollable time list with optional AM/PM tabs in 12-hour mode. Standalone -- consumed by ArvoTimePicker and ArvoDateTimePicker. Reusable from @arvo/react and @arvo/js. 12 vs 24 hour mode is DERIVED from format and locale (no use12Hour runtime prop).",
+    "bem": {
+      "block": "arvo-tdrop",
+      "elements": [
+        {
+          "name": "tabs",
+          "optional": "Yes",
+          "desc": "AM/PM tab row (12-hour mode only)."
+        },
+        {
+          "name": "tab",
+          "optional": "Yes",
+          "desc": "Single AM or PM tab."
+        },
+        {
+          "name": "list",
+          "optional": "No",
+          "desc": "Scrollable list of time options."
+        },
+        {
+          "name": "item",
+          "optional": "No",
+          "desc": "Individual time option row (136x32)."
+        },
+        {
+          "name": "label",
+          "optional": "No",
+          "desc": "Item text content."
+        }
+      ],
+      "variants": [],
+      "sizes": [],
+      "layouts": [],
+      "states": [
+        {
+          "name": "is-disabled",
+          "desc": "Whole component disabled"
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "value",
+        "type": "TimeObject|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Selected time. TimeObject = { hours, minutes, seconds?, milliseconds?, timezone? }."
+      },
+      {
+        "prop": "format",
+        "type": "string",
+        "default": "—",
+        "required": "Yes",
+        "desc": ".NET / Kendo time format. Determines 12 vs 24 hour mode."
+      },
+      {
+        "prop": "locale",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "BCP-47 locale. Fallback 12/24-hour determination when format is empty."
+      },
+      {
+        "prop": "interval",
+        "type": "number",
+        "default": "15",
+        "required": "No",
+        "desc": "Minutes between options."
+      },
+      {
+        "prop": "minTime",
+        "type": "TimeObject|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Inclusive min. Options outside are HIDDEN."
+      },
+      {
+        "prop": "maxTime",
+        "type": "TimeObject|null",
+        "default": "—",
+        "required": "No",
+        "desc": "Inclusive max. Options outside are HIDDEN."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disables the whole component (root .is-disabled, aria-disabled, suppressed handlers, disabled tabs)."
+      },
+      {
+        "prop": "onChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(time: TimeObject) => void"
+      },
+      {
+        "prop": "onDismiss",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Fired on Escape"
+      }
+    ],
+    "events": [
+      {
+        "event": "tdrop:change",
+        "payload": "{ value: TimeObject }",
+        "desc": "Time option selected"
+      },
+      {
+        "event": "tdrop:dismiss",
+        "payload": "{  }",
+        "desc": "Escape pressed"
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoTimeDropdownOptions)",
+        "returns": "instance",
+        "desc": "Initialize on a DOM element."
+      },
+      {
+        "method": "value(v: TimeObject | undefined)",
+        "returns": "TimeObject | null | void",
+        "desc": "Get or set the selected time (dual-purpose). Setter does not emit tdrop:change."
+      },
+      {
+        "method": "formattedValue()",
+        "returns": "string",
+        "desc": "Get formatted display value via formatTime(value, format)."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set the whole-component disabled flag (dual-purpose). Setter toggles is-disabled class and aria-disabled on root and listbox."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Remove listeners and clean up. Idempotent."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-label",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-selected",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "ArrowUp",
+        "action": "Previous option in current tab"
+      },
+      {
+        "key": "ArrowDown",
+        "action": "Next option in current tab"
+      },
+      {
+        "key": "Home",
+        "action": "First option"
+      },
+      {
+        "key": "End",
+        "action": "Last option"
+      },
+      {
+        "key": "Enter",
+        "action": "Select focused option"
+      },
+      {
+        "key": "Space",
+        "action": "Select focused option"
+      },
+      {
+        "key": "ArrowLeft",
+        "action": "(12-hour mode, focus on tabs) switch to AM"
+      },
+      {
+        "key": "ArrowRight",
+        "action": "(12-hour mode, focus on tabs) switch to PM"
+      },
+      {
+        "key": "Escape",
+        "action": "Emit tdrop:dismiss"
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Panel",
+        "vars": [
+          "--arvo-tdrop-w",
+          "--arvo-tdrop-max-h"
+        ]
+      },
+      {
+        "category": "Item",
+        "vars": [
+          "--arvo-tdrop-item-h",
+          "--arvo-tdrop-item-px"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/AnCpSepdO3JORVLOnYxVv8/?node-id=30438-60231"
+  },
+  "time-picker": {
+    "slug": "time-picker",
+    "name": "TimePicker",
+    "abbreviation": "tp",
+    "category": "DateTime",
+    "status": "stable",
+    "description": "Time-only picker. Form-input-styled trigger plus TimeDropdown popover. 12 vs 24 hour mode derived from format and locale (no use12Hour runtime prop). Supports anchor mode and isSegmented input editing.",
+    "bem": {
+      "block": "arvo-tp",
+      "elements": [
+        {
+          "name": "lbl",
+          "optional": "Yes",
+          "desc": "Form label."
+        },
+        {
+          "name": "field",
+          "optional": "No",
+          "desc": "Form-input field wrapper."
+        },
+        {
+          "name": "input",
+          "optional": "No",
+          "desc": "Native <input> (isSegmented input)."
+        },
+        {
+          "name": "actions",
+          "optional": "No",
+          "desc": "Right-side actions overlay."
+        },
+        {
+          "name": "clear-btn",
+          "optional": "Yes",
+          "desc": "ArvoIconButton clear."
+        },
+        {
+          "name": "trigger-btn",
+          "optional": "No",
+          "desc": "ArvoIconButton clock icon."
+        },
+        {
+          "name": "err-ico",
+          "optional": "Yes",
+          "desc": "Inline error icon."
+        },
+        {
+          "name": "err-msg",
+          "optional": "Yes",
+          "desc": "Inline error message."
+        },
+        {
+          "name": "border",
+          "optional": "No",
+          "desc": "Animated bottom border."
+        },
+        {
+          "name": "popover",
+          "optional": "No",
+          "desc": "Overlay container."
+        },
+        {
+          "name": "body",
+          "optional": "No",
+          "desc": "TimeDropdown host."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "desc": "Default form-input visual treatment"
+        }
+      ],
+      "sizes": [
+        {
+          "name": "sm",
+          "desc": "Small trigger (24px input field; 46px label+field total)"
+        },
+        {
+          "name": "lg",
+          "desc": "Large trigger (32px input field; 54px label+field total, default)"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "full-width",
+          "desc": "Trigger fills container width"
+        },
+        {
+          "name": "anchor-mode",
+          "desc": "Overlay-only mode"
+        }
+      ],
+      "states": [
+        {
+          "name": "open",
+          "desc": "Popover open"
+        },
+        {
+          "name": "has-value",
+          "desc": "Value set"
+        },
+        {
+          "name": "has-text-selected",
+          "desc": "Segment focused"
+        },
+        {
+          "name": "has-error",
+          "desc": "Error"
+        },
+        {
+          "name": "error-tooltip",
+          "desc": "Error icon + tooltip"
+        },
+        {
+          "name": "is-disabled",
+          "desc": "Disabled"
+        },
+        {
+          "name": "is-readonly",
+          "desc": "Read-only"
+        },
+        {
+          "name": "loading",
+          "desc": "Loading (Pattern C)"
+        }
+      ]
+    },
+    "props": [
+      {
+        "prop": "value",
+        "type": "TimeObject | Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Current time. TimeObject = { hours, minutes, seconds?, milliseconds?, timezone? }. Dates convert by extracting time fields."
+      },
+      {
+        "prop": "defaultValue",
+        "type": "TimeObject | Date | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Initial value for uncontrolled mode."
+      },
+      {
+        "prop": "format",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": ".NET / Kendo time format."
+      },
+      {
+        "prop": "locale",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "BCP-47 locale."
+      },
+      {
+        "prop": "interval",
+        "type": "number",
+        "default": "15",
+        "required": "No",
+        "desc": "Minutes between options in the dropdown."
+      },
+      {
+        "prop": "minTime",
+        "type": "TimeObject | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Min selectable (options outside hidden in dropdown)."
+      },
+      {
+        "prop": "maxTime",
+        "type": "TimeObject | string | null",
+        "default": "—",
+        "required": "No",
+        "desc": "Max selectable."
+      },
+      {
+        "prop": "placeholder",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Placeholder text."
+      },
+      {
+        "prop": "label",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Form label text."
+      },
+      {
+        "prop": "variant",
+        "type": "'default'",
+        "default": "default",
+        "required": "No",
+        "desc": "Visual variant."
+      },
+      {
+        "prop": "size",
+        "type": "'sm' | 'lg'",
+        "default": "lg",
+        "required": "No",
+        "desc": "Trigger size."
+      },
+      {
+        "prop": "width",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "CSS width."
+      },
+      {
+        "prop": "isFullWidth",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Shorthand for width=100%."
+      },
+      {
+        "prop": "isDisabled",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Disabled."
+      },
+      {
+        "prop": "isReadOnly",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Read-only."
+      },
+      {
+        "prop": "isRequired",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Required."
+      },
+      {
+        "prop": "isInvalid",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Invalid."
+      },
+      {
+        "prop": "errorMsg",
+        "type": "string",
+        "default": "—",
+        "required": "No",
+        "desc": "Error message."
+      },
+      {
+        "prop": "errorDisplay",
+        "type": "'inline' | 'tooltip' | 'none'",
+        "default": "inline",
+        "required": "No",
+        "desc": "Error feedback presentation."
+      },
+      {
+        "prop": "isClearable",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "When true and a value is set, renders a clear icon button in the action overlay. Defaults to false."
+      },
+      {
+        "prop": "isLoading",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Loading."
+      },
+      {
+        "prop": "isAutoClose",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Close popover on select."
+      },
+      {
+        "prop": "isStrictParsing",
+        "type": "boolean",
+        "default": "false",
+        "required": "No",
+        "desc": "Reject partial parses."
+      },
+      {
+        "prop": "isSegmented",
+        "type": "boolean",
+        "default": "true",
+        "required": "No",
+        "desc": "Use isSegmented input editing."
+      },
+      {
+        "prop": "anchor",
+        "type": "boolean | HTMLElement | RefObject",
+        "default": "false",
+        "required": "No",
+        "desc": "Overlay-only mode."
+      },
+      {
+        "prop": "placement",
+        "type": "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'auto'",
+        "default": "bottom-start",
+        "required": "No",
+        "desc": "Popover placement."
+      },
+      {
+        "prop": "zIndex",
+        "type": "number",
+        "default": "—",
+        "required": "No",
+        "desc": "Popover z-index override."
+      },
+      {
+        "prop": "popoverProps",
+        "type": "object",
+        "default": "—",
+        "required": "No",
+        "desc": "Scoped escape-hatch bag for popover surface options (custom portal, not ArvoPopover). Shape: { width?: string; offset?: number }. Flat options (placement, zIndex) always win on overlap. A timeProps bag is intentionally omitted in this pass -- ArvoTimeDropdown has no parity-safe long-tail option today."
+      },
+      {
+        "prop": "onChange",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "(payload: { value: TimeObject|null; formattedValue: string }) => void"
+      },
+      {
+        "prop": "onOpen",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Cancellable"
+      },
+      {
+        "prop": "onClose",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "Cancellable"
+      },
+      {
+        "prop": "onBlur",
+        "type": "function",
+        "default": "—",
+        "required": "No",
+        "desc": "() => void"
+      }
+    ],
+    "events": [
+      {
+        "event": "tp:change",
+        "payload": "{ value: TimeObject | null, formattedValue: string }",
+        "desc": "Value changed"
+      },
+      {
+        "event": "tp:open",
+        "payload": "{  }",
+        "desc": "Popover opening"
+      },
+      {
+        "event": "tp:close",
+        "payload": "{  }",
+        "desc": "Popover closing"
+      }
+    ],
+    "methods": [
+      {
+        "method": "initialize(element: HTMLElement, options: ArvoTimePickerOptions)",
+        "returns": "instance",
+        "desc": "Initialize."
+      },
+      {
+        "method": "open()",
+        "returns": "void",
+        "desc": "Open popover."
+      },
+      {
+        "method": "close()",
+        "returns": "void",
+        "desc": "Close popover."
+      },
+      {
+        "method": "toggle(force: boolean | undefined)",
+        "returns": "void",
+        "desc": "Toggle."
+      },
+      {
+        "method": "value(v: TimeObject | Date | string | null | undefined)",
+        "returns": "TimeObject | null | void",
+        "desc": "Get or set (dual-purpose)."
+      },
+      {
+        "method": "formattedValue()",
+        "returns": "string",
+        "desc": "Formatted value."
+      },
+      {
+        "method": "clear()",
+        "returns": "void",
+        "desc": "Clear."
+      },
+      {
+        "method": "disabled(state: boolean | undefined)",
+        "returns": "boolean | void",
+        "desc": "Get or set disabled."
+      },
+      {
+        "method": "setError(message: string | false)",
+        "returns": "void",
+        "desc": "Set or clear error."
+      },
+      {
+        "method": "setLoading(loading: boolean)",
+        "returns": "void",
+        "desc": "Toggle loading."
+      },
+      {
+        "method": "focus()",
+        "returns": "void",
+        "desc": "Focus the trigger."
+      },
+      {
+        "method": "destroy()",
+        "returns": "void",
+        "desc": "Clean up."
+      }
+    ],
+    "aria": [
+      {
+        "attr": "aria-haspopup",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-expanded",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-controls",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-required",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-invalid",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-disabled",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-busy",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-label",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-labelledby",
+        "when": "See component spec."
+      },
+      {
+        "attr": "aria-describedby",
+        "when": "See component spec."
+      }
+    ],
+    "keyboard": [
+      {
+        "key": "Alt+Down",
+        "action": "Open popover"
+      },
+      {
+        "key": "Alt+Up",
+        "action": "Close popover"
+      },
+      {
+        "key": "Enter",
+        "action": "Commit and close (if valid)"
+      },
+      {
+        "key": "Escape",
+        "action": "Close popover"
+      },
+      {
+        "key": "ArrowLeft/ArrowRight (segment)",
+        "action": "Move segments"
+      },
+      {
+        "key": "ArrowUp/ArrowDown (segment)",
+        "action": "Increment/decrement segment value"
+      }
+    ],
+    "cssVarGroups": [
+      {
+        "category": "Trigger",
+        "vars": [
+          "--arvo-form-input-width",
+          "--arvo-form-input-height",
+          "--arvo-form-input-pad-r"
+        ]
+      },
+      {
+        "category": "Popover",
+        "vars": [
+          "--arvo-tp-popover-w"
+        ]
+      }
+    ],
+    "figma": "https://www.figma.com/design/AnCpSepdO3JORVLOnYxVv8/?node-id=30443-1255"
   },
   "toast": {
     "slug": "toast",
@@ -12389,7 +15558,7 @@ export const COMPONENT_DESCRIPTORS = {
     "abbreviation": "toast",
     "category": "Feedback",
     "status": "stable",
-    "description": "Lightweight, non-blocking overlay alert for contextual feedback. Toasts auto-stack vertically (newest on top), support fade-away auto-dismissal, and use semantic types for visual styling. Error and block types require explicit user dismissal and never auto-dismiss. All other types fade out after a configurable timeout. Hover pauses the fade timer. Toasts render inside the overlay hub container at z-index band 1300-1399, above all other overlays. Each toast is a self-contained notification with an icon, optional title, message, optional link, and a close button.",
+    "description": "Lightweight, non-blocking overlay alert for contextual feedback. Toasts auto-stack vertically (newest on top), support fade-away auto-dismissal, and use semantic types for visual styling. Negative and block types require explicit user dismissal and never auto-dismiss. All other types fade out after a configurable timeout. Hover pauses the fade timer. Toasts render inside the overlay hub container at z-index band 1300-1399, above all other overlays. Each toast is a self-contained notification with an icon, optional title, rich-text message, optional link, and a close button. Title is clamped to 2 lines with a tooltip when truncated. Message accepts the shared `BasicInlineContent` rich-text contract from `@arvo/core/inline-content` (string OR `InlineNode[]`) so callers can embed inline links, strong, code, and kbd runs.",
     "bem": {
       "block": "arvo-toast",
       "elements": [
@@ -12416,7 +15585,7 @@ export const COMPONENT_DESCRIPTORS = {
         {
           "name": "link",
           "optional": "Yes",
-          "desc": "Link area at the bottom of the content section. Accepts a configured ArvoLink component instance."
+          "desc": "Link area at the bottom of the content section. Wraps an internal ArvoLink (size='sm', variant='primary') that the toast renders from the structured `link` action. Consumers never put their own DOM or JSX here."
         },
         {
           "name": "close",
@@ -12455,10 +15624,10 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "prop": "message",
-        "type": "string",
+        "type": "BasicInlineContent",
         "default": "—",
         "required": "Yes",
-        "desc": "Body message text. Uses regular font weight and secondary text color."
+        "desc": "Body message. Accepts either a plain string or a `BasicInlineContent` array (`InlineNode[]`) from `@arvo/core/inline-content`. The shared adapter renders it through React or DOM depending on the consumer; raw HTML strings, event handlers, and arbitrary attributes are not representable. Allowed inline runs: text, em, strong, link, code, kbd. Uses regular font weight and secondary text color. The shared `inline-content` SCSS mixin styles the published `.arvo-inline__*` classes."
       },
       {
         "prop": "fadeAway",
@@ -12490,17 +15659,17 @@ export const COMPONENT_DESCRIPTORS = {
       },
       {
         "prop": "link",
-        "type": "ReactNode (React) | HTMLElement (JS)",
+        "type": "ArvoToastLinkAction",
         "default": "—",
         "required": "No",
-        "desc": "Optional link element rendered below the message. In React, pass a configured <ArvoLink> component. In JS, pass a DOM element (e.g., a configured link). Positioned at the bottom of the content area."
+        "desc": "Optional structured link action rendered below the message. Shape: { label, href, icon?, isExternal?, onClick? }. The toast renders an internal ArvoLink from this data with size='sm' and variant='primary' baked in -- consumers never construct the link DOM or JSX. React and JS share the exact same option shape (the onClick event type is React.MouseEvent<HTMLAnchorElement> in React vs Event in JS)."
       },
       {
         "prop": "position",
-        "type": "'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'",
+        "type": "'top-right' | 'bottom-right'",
         "default": "top-right",
         "required": "No",
-        "desc": "Screen position where toasts stack. All toasts from the same toast manager share the same position. This is set on the toast container, not individual toasts."
+        "desc": "Screen position where toasts stack. All toasts from the same toast manager share the same position. This is set on the toast container, not individual toasts. Toasts are right-anchored only; the legacy `top-left` and `bottom-left` placements were removed in the Run 2 refactor (the design only supports right-side stacking)."
       },
       {
         "prop": "className",
@@ -12514,7 +15683,7 @@ export const COMPONENT_DESCRIPTORS = {
         "type": "function",
         "default": "—",
         "required": "No",
-        "desc": "Callback fired when the toast is dismissed (via close button click, Escape key, or fade-out completion). Receives no arguments. Not cancellable — toast always closes."
+        "desc": "Callback fired when the toast is dismissed, regardless of cause: close button click, Escape key, fade-out completion, or a programmatic close(id)/closeAll() call. Receives no arguments. Not cancelable -- the toast always closes."
       },
       {
         "prop": "onMouseEnter",
@@ -12541,28 +15710,28 @@ export const COMPONENT_DESCRIPTORS = {
     "methods": [
       {
         "method": "initialize(container: HTMLElement | string | null, options: ArvoToastManagerOptions)",
-        "returns": "instance",
-        "desc": "Create a toast manager instance. The manager owns the toast container element and handles stacking, z-index, and position."
+        "returns": "ArvoToast",
+        "desc": "Static factory that creates a toast manager instance. The manager owns the toast container element and handles stacking, z-index, and position. JS only -- React mounts an equivalent <ArvoToastProvider>."
       },
       {
         "method": "show(options: ArvoToastOptions)",
         "returns": "string",
-        "desc": "Create and display a new toast. Returns the toast's unique ID. The toast is inserted at the top of the stack, pushing existing toasts down."
+        "desc": "Create and display a new toast. Returns the toast's unique id. The toast is inserted at the top of the stack, pushing existing toasts down."
       },
       {
         "method": "close(id: string)",
         "returns": "void",
-        "desc": "Programmatically close and remove a specific toast by ID."
+        "desc": "Programmatically close a toast by id. Fires the toast's onClose callback and dispatches toast:close on the container with reason: 'programmatic'. No-op if the id is unknown."
       },
       {
         "method": "closeAll()",
         "returns": "void",
-        "desc": "Close and remove all active toasts."
+        "desc": "Close every active toast. Fires each toast's onClose and dispatches one toast:close per toast (reason: 'programmatic')."
       },
       {
         "method": "destroy()",
         "returns": "void",
-        "desc": "Close all toasts, remove the container element, and clean up all event listeners and timers."
+        "desc": "Close all toasts, unregister from the overlay hub, remove the container element, and clean up all event listeners and timers. The manager cannot be reused after destroy()."
       }
     ],
     "aria": [
@@ -12597,13 +15766,9 @@ export const COMPONENT_DESCRIPTORS = {
       {
         "category": "Colors",
         "vars": [
-          "--arvo-toast-bg",
-          "--arvo-toast-shadow",
-          "--arvo-toast-msg-color",
           "--arvo-toast-border-color",
           "--arvo-toast-title-color",
-          "--arvo-toast-icon-color",
-          "--arvo-toast-close-color"
+          "--arvo-toast-icon-color"
         ]
       }
     ],
@@ -12719,22 +15884,7 @@ export const COMPONENT_DESCRIPTORS = {
         "action": "Focus on trigger shows tooltip; focus away hides it"
       }
     ],
-    "cssVarGroups": [
-      {
-        "category": "Colors",
-        "vars": [
-          "--arvo-tip-bg",
-          "--arvo-tip-text-color",
-          "--arvo-tip-shortcut-bg"
-        ]
-      },
-      {
-        "category": "Effects",
-        "vars": [
-          "--arvo-tip-shadow"
-        ]
-      }
-    ],
+    "cssVarGroups": [],
     "figma": "https://www.figma.com/design/g8S6ueJqluUt9kN8uZLprN/-NEW--arvo-Component-Library--in-progress-?node-id=17613-1878&m=dev"
   },
   "badge": {
@@ -12832,13 +15982,6 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "ARIA role applied to the root element. 'status' (default) uses implicit aria-live='polite' for non-urgent feedback. 'alert' uses implicit aria-live='assertive' for critical errors that require immediate attention."
       },
       {
-        "prop": "maxWidth",
-        "type": "string",
-        "default": "—",
-        "required": "No",
-        "desc": "Optional maximum width as a CSS value string (e.g. '200px', '50%'). When set, constrains the badge width and truncates the message text with an ellipsis on overflow. Sets --arvo-bdg-alert-max-width on the root element."
-      },
-      {
         "prop": "className",
         "type": "string",
         "default": "—",
@@ -12879,11 +16022,6 @@ export const COMPONENT_DESCRIPTORS = {
         "desc": "Show or hide the status icon element"
       },
       {
-        "method": "setMaxWidth(value: string | null)",
-        "returns": "void",
-        "desc": "Set or remove the maximum width constraint. When set, the message truncates with an ellipsis on overflow."
-      },
-      {
         "method": "destroy()",
         "returns": "void",
         "desc": "Clean up DOM references and restore original element state"
@@ -12910,12 +16048,6 @@ export const COMPONENT_DESCRIPTORS = {
         ]
       },
       {
-        "category": "Truncation",
-        "vars": [
-          "--arvo-bdg-alert-max-width"
-        ]
-      },
-      {
         "category": "Colors",
         "vars": [
           "--arvo-bdg-alert-text-color",
@@ -12923,6 +16055,12 @@ export const COMPONENT_DESCRIPTORS = {
           "--arvo-bdg-alert-bg",
           "--arvo-bdg-alert-border-color",
           "--arvo-bdg-alert-border-width"
+        ]
+      },
+      {
+        "category": "Typography",
+        "vars": [
+          "--arvo-bdg-alert-font-size"
         ]
       }
     ],

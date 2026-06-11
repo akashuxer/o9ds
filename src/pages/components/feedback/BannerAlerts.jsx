@@ -30,26 +30,42 @@ export default createExpertComponentPage({
       <ArvoBannerAlert type="warning" message="Compact: message only, tighter padding." isCompact />
     </>
   ),
-  reactCode: `import { ArvoBannerAlert, ArvoLink } from '@arvo/react';
+  reactCode: `import { ArvoBannerAlert } from '@arvo/react';
 
+// Basic info banner
 <ArvoBannerAlert
   type="info"
   title="System update"
   message="A new version is available."
 />
 
+// Negative with a structured action button + link (object form)
 <ArvoBannerAlert
   type="negative"
   title="Connection lost"
   message="We can't reach the server."
-  link={<ArvoLink label="View status" href="/status" size="sm" />}
+  button={{ label: 'Retry', onClick: retry }}
+  link={{ label: 'View status', href: '/status' }}
   onDismiss={() => setVisible(false)}
 />
 
+// Rich-text message with an inline link (BasicInlineContent)
+<ArvoBannerAlert
+  type="info"
+  title="Update available"
+  message={[
+    { type: 'strong', children: 'Version 2.5' },
+    { type: 'text', value: ' is now available. Read the ' },
+    { type: 'link', label: 'release notes', href: '/release', target: '_blank' },
+    { type: 'text', value: ' for details.' },
+  ]}
+/>
+
+// Compact mode (message only, tighter padding)
 <ArvoBannerAlert type="warning" message="Approaching storage quota." isCompact />
 
+// Non-dismissible + loading (Pattern A shimmer)
 <ArvoBannerAlert type="positive" title="Saved" message="Your changes have been saved." isDismissible={false} />
-
 <ArvoBannerAlert type="info" title="Checking status" message="Verifying connectivity..." isLoading />`,
   jsCode: `import { ArvoBannerAlert } from '@arvo/js';
 

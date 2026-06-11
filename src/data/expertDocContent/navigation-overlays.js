@@ -441,11 +441,10 @@ export const NAV_OVERLAY_EXPERT_DOC = {
       ],
     },
     variants: {
-      intro: 'Three visual variants support different chrome densities from module headers to compact inspector panels.',
+      intro: 'Two visual variants support different chrome densities from module headers to compact inspector panels.',
       rows: [
         ['Primary', 'Flat tabs with bottom-border indicator on the selected tab — default module header.'],
         ['Secondary', 'Filled background on selected tab — higher contrast on gray surfaces.'],
-        ['Tertiary', 'Icon-only unselected tabs expanding to icon + label on selection — ultra-compact toolbars.'],
       ],
     },
     states: {

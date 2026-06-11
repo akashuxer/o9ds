@@ -221,7 +221,7 @@ hasMask: { variant: 'dark', opacity: 0.5, blur: 8, closeOnClick: false }`} />
   title="Settings"
   hasMask={{ variant: 'dark', opacity: 0.6, blur: 4 }}
   closeOnEscape
-  closeOnMaskClick={false}
+  closeOnOutsideClick={false}
 />
 
 // Filter drawer with items and footer actions
@@ -250,7 +250,7 @@ const drawer = ArvoDrawer.initialize(marker, {
   title: 'Filters',
   hasMask: { variant: 'light' },
   closeOnEscape: true,
-  closeOnMaskClick: true,
+  closeOnOutsideClick: true,
   lockScroll: 'auto',
   width: 360,
   stickyHeader: { search: true },

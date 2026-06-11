@@ -62,11 +62,45 @@ setupTooltips({ delay: 400 });`}
           <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Slot / config props</h3>
           <DocList items={[
             <span key="1"><DocCode>ArvoHybridPopover</DocCode>'s <DocCode>groups</DocCode>, <DocCode>items</DocCode>, <DocCode>inline</DocCode>, <DocCode>search</DocCode>, <DocCode>empty</DocCode>, <DocCode>conditional</DocCode> props.</span>,
-            <span key="2"><DocCode>ArvoActionMenu</DocCode>'s <DocCode>items</DocCode>, <DocCode>trailingActions</DocCode>, <DocCode>inlinePopover</DocCode>, <DocCode>inlineHybridPopover</DocCode>.</span>,
+            <span key="2"><DocCode>ArvoActionMenu</DocCode>'s <DocCode>items</DocCode>, <DocCode>actions</DocCode>, <DocCode>inlinePopover</DocCode>, <DocCode>inlineHybridPopover</DocCode>.</span>,
             <span key="3"><DocCode>ArvoCombobox</DocCode> / <DocCode>ArvoSelect</DocCode> / <DocCode>ArvoListbox</DocCode>'s <DocCode>options</DocCode> plus optional <DocCode>renderOption</DocCode>.</span>,
             <span key="4"><DocCode>ArvoButtonGroup</DocCode>'s <DocCode>items</DocCode> plus per-item <DocCode>data</DocCode> for custom click payloads.</span>,
-            <span key="5"><DocCode>ArvoToast</DocCode> actions: pass <DocCode>actions: [{`{ label, onClick }`}]</DocCode>, don't append buttons to the toast DOM.</span>,
+            <span key="5"><DocCode>ArvoToast</DocCode>'s <DocCode>link</DocCode> action: pass <DocCode>link: {`{ label, href, icon?, isExternal?, onClick? }`}</DocCode>, don't append an anchor or <DocCode>ArvoLink</DocCode> to the toast DOM. The toast renders the internal <DocCode>ArvoLink</DocCode> itself.</span>,
           ]} />
+
+          <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Inline rich-text content (InlineContent)</h3>
+          <DocParagraph>
+            Feedback components that surface a <DocCode>message</DocCode> prop (<DocCode>ArvoToast</DocCode>, <DocCode>ArvoBannerAlert</DocCode>, <DocCode>ArvoAlertDialog</DocCode>, <DocCode>ArvoMessageAlert</DocCode>) accept either a plain string or a small structured AST exported from <DocCode>@arvo/core</DocCode> as <DocCode>BasicInlineContent</DocCode>. The basic profile allows <DocCode>text</DocCode>, <DocCode>em</DocCode>, <DocCode>strong</DocCode>, <DocCode>link</DocCode>, <DocCode>code</DocCode>, and <DocCode>kbd</DocCode>.
+          </DocParagraph>
+          <CodeBlock
+            language="tsx"
+            label="Structured inline message"
+            code={`import type { BasicInlineContent } from '@arvo/react';
+
+const message: BasicInlineContent = [
+  { type: 'text', value: 'Press ' },
+  { type: 'kbd', value: 'Esc' },
+  { type: 'text', value: ' or read the ' },
+  {
+    type: 'link',
+    label: 'release notes',
+    href: 'https://example.com/release',
+    target: '_blank',
+  },
+  { type: 'text', value: '.' },
+];
+
+<ArvoToast message={message} />`}
+          />
+          <DocParagraph>The contract is the security guarantee:</DocParagraph>
+          <DocList items={[
+            'Raw HTML strings, event handlers, arbitrary attributes, and block-level markup are not representable. Strings always render as text.',
+            <span key="2">Links are sanitized through <DocCode>sanitizeLink</DocCode> — allowed protocols are <DocCode>http:</DocCode>, <DocCode>https:</DocCode>, <DocCode>mailto:</DocCode>, <DocCode>tel:</DocCode>, plus relative paths.</span>,
+            <span key="3"><DocCode>target="_blank"</DocCode> always sets <DocCode>rel="noopener noreferrer"</DocCode>.</span>,
+          ]} />
+          <DocParagraph>
+            For React custom composition (e.g. <DocCode>{`<ArvoMessageAlert message={<>...</>} />`}</DocCode>) keep using <DocCode>ReactNode</DocCode> — only <DocCode>message</DocCode>-shaped feedback props use the portable <DocCode>InlineContent</DocCode> AST.
+          </DocParagraph>
 
           <h3 className="text-base font-semibold text-arvo-light-primary dark:text-white">Parent loading attribute</h3>
           <CodeBlock
@@ -162,7 +196,7 @@ root.querySelectorAll('.arvo-cb__input').forEach(addAnalytics);
         <DocSection id="when-public-not-enough" title="When the public API isn't enough">
           <DocParagraph>The healthy escalation path is:</DocParagraph>
           <ol className="list-decimal pl-5 space-y-2 text-arvo-light-secondary dark:text-neutral-400 leading-relaxed">
-            <li><DocStrong>Search the docs and Storybook examples</DocStrong> — many advanced patterns already exist (search-in-popover, conditional bodies, inline confirmation, bulk actions, …).</li>
+            <li><DocStrong>Search the docs and Storybook pages</DocStrong> — many advanced patterns already exist (search-in-popover, conditional bodies, inline confirmation, bulk actions, …).</li>
             <li><DocStrong>Compose</DocStrong> existing components in app code.</li>
             <li><DocStrong>Open a design system extension request</DocStrong> with the use case and expected API.</li>
             <li><DocStrong>Mark the area as technical debt</DocStrong> in your repo until the supported extension is shipped.</li>

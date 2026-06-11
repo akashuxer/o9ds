@@ -32,43 +32,61 @@ export default createExpertComponentPage({
   liveDemo: <ToastLiveDemo />,
   reactCode: `import { ArvoToastProvider, useToast } from '@arvo/react';
 
-// Once at app root
-<ArvoToastProvider position="top-right" max={5}>
+// Once at app root (toasts are right-anchored: top-right or bottom-right)
+<ArvoToastProvider position="top-right">
   <App />
 </ArvoToastProvider>
 
 // Anywhere in the tree
 function SaveButton() {
-  const toast = useToast();
+  const { show } = useToast();
   return (
     <button onClick={async () => {
       try {
         await save();
-        toast.success({ title: 'Saved' });
+        show({ type: 'positive', message: 'Changes saved.' });
       } catch {
-        toast.danger({ title: 'Failed', description: 'Try again.' });
+        // negative/block never auto-dismiss
+        show({ type: 'negative', title: 'Save failed', message: 'Try again.' });
       }
     }}>Save</button>
   );
 }
 
-// Sticky toast with action
-toast.info({
-  title: 'New version available',
-  description: 'Refresh to update.',
-  duration: 0,
-  actions: [{ label: 'Refresh', onClick: () => location.reload() }],
-});`,
+// With a structured link action -- the toast renders the internal ArvoLink
+show({
+  type: 'info',
+  title: 'Report ready',
+  message: 'Your export is available for download.',
+  link: { label: 'Download report', href: '/reports/latest' },
+});
+
+// Programmatic close
+const { show, close, closeAll } = useToast();
+const id = show({ type: 'info', title: 'Working…', fadeAway: false });
+close(id);
+closeAll();`,
   jsCode: `import { ArvoToast } from '@arvo/js';
 
-// Once at app boot
-ArvoToast.setup({ position: 'top-right', max: 5 });
+// Create a toast manager once at app boot
+const toasts = ArvoToast.initialize(document.body, {
+  position: 'top-right',
+  timeout: 5000,
+});
 
-// Push a toast
-ArvoToast.success({ title: 'Saved', description: 'Your changes were published.' });
-ArvoToast.danger({ title: 'Failed', actions: [{ label: 'Retry', onClick: retry }] });
+// Push a toast -- returns an id
+const id = toasts.show({ type: 'positive', message: 'Saved successfully!' });
 
-// Programmatic dismissal
-const id = ArvoToast.info({ title: 'Loading…', duration: 0 });
-ArvoToast.dismiss(id);`,
+// With title + structured link
+toasts.show({
+  type: 'info',
+  title: 'Report ready',
+  message: 'Your export is available for download.',
+  link: { label: 'Download report', href: '/reports/latest' },
+});
+
+// Close one / all, then tear down
+toasts.close(id);
+toasts.closeAll();
+toasts.destroy();`,
 })

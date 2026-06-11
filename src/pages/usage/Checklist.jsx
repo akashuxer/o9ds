@@ -104,7 +104,7 @@ const MATRICES = [
     title: 'Listbox / menus (ArvoListbox, ArvoActionMenu)',
     rows: [
       ['Pass options / items data; selectionMode, multiple, disabled per item', 'Safe'],
-      ['ArvoActionMenu trailingActions, inlinePopover, inlineHybridPopover', 'Safe'],
+      ['ArvoActionMenu actions, inlinePopover, inlineHybridPopover', 'Safe'],
       ['Set per-component CSS variables', 'Safe'],
       ['Render arbitrary children inside an item', 'Safe with restrictions: must remain a single accessible item'],
       ['Reorder items at runtime through public APIs', 'Safe'],
