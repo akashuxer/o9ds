@@ -20,6 +20,27 @@ if (!hasVendoredArvoReact) {
   console.warn('[vite] vendor/@arvo/react/dist missing — using stub shim. Run `npm run vendor:arvo`.')
 }
 
+/**
+ * Mirror vercel.json `/storybook` → `/storybook/index.html` in dev.
+ * Without this, Vite's SPA fallback serves the docs app for `/storybook/`.
+ */
+function storybookStaticDevPlugin() {
+  return {
+    name: 'arvo-storybook-static-dev',
+    enforce: 'pre',
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        const pathOnly = (req.url ?? '').split('?')[0]
+        if (pathOnly === '/storybook' || pathOnly === '/storybook/') {
+          const query = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''
+          req.url = `/storybook/index.html${query}`
+        }
+        next()
+      })
+    },
+  }
+}
+
 /** Regenerate WebP siblings for public PNGs once per production build (also covers `vite build` without npm hooks). */
 function publicPngToWebpPlugin() {
   return {
@@ -34,7 +55,7 @@ function publicPngToWebpPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), publicPngToWebpPlugin()],
+  plugins: [storybookStaticDevPlugin(), react(), publicPngToWebpPlugin()],
   resolve: { alias },
   build: {
     rollupOptions: {
