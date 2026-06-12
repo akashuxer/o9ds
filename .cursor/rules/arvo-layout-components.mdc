@@ -14,6 +14,7 @@ Before building a new card, table, or layout element, check and reuse:
 |-----------|---------|
 | `PageHeader` | Page title + avatar icon + optional description (use on all doc pages) |
 | `DocTable` | Any structured table (props, tokens, keyboard, ARIA, etc.) |
+| `DocChecklist` | Interactive checkbox checklist for contribution gates, pre-ship checks, etc. |
 | `WhiteBgCard` | Principle cards, callouts — white bg, light border |
 | `GrayBgCard` | Principle cards, callouts — gray bg, dark border |
 | `DocTabs` | Overview / Usage / API / Accessibility tabs (with slide animation) |
