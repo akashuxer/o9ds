@@ -5,7 +5,11 @@
       "destination": "/storybook/index.html"
     },
     {
-      "source": "/((?!storybook(/|$)).*)",
+      "source": "/storybook/",
+      "destination": "/storybook/index.html"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
