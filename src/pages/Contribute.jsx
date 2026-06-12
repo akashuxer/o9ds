@@ -27,7 +27,7 @@ export default function Contribute() {
         <div className="space-y-8">
           <PageHeader
             title="How to Contribute"
-            description="Arvo grows through implementation and shared product thinking. Run the descriptor-driven pipeline as a developer, or share UX feedback and proposals as a designer — no code required."
+            description="Arvo grows through implementation and shared product thinking. Run the descriptor-driven pipeline as a developer, or share UX feedback and proposals as a designer."
             icon={headerIcon}
           />
 
