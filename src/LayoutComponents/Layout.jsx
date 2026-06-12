@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react'
 import { useSidebarActiveLinkScroll } from '../hooks/useSidebarActiveLinkScroll'
 import { NavLink, Link, useLocation } from 'react-router-dom'
+import { ArvoTooltip } from '@arvo/react'
 import { useTheme } from '../context/ThemeContext'
+import PublicRasterPicture from '@/components/media/PublicRasterPicture'
 import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
 import { GRAMMAR_STYLE_NAV_ITEMS, GRAMMAR_STYLE_TOPICS } from '../data/contentGrammarNav'
@@ -24,6 +26,7 @@ import {
   PATH_A11Y_VISUAL,
   PATH_ABOUT_ARVO,
   PATH_ARVO_MCP,
+  PATH_ARVO_NOVA_AI_AGENT,
   PATH_BORDERS,
   PATH_CHANGELOG,
   PATH_COLOR_BASE,
@@ -36,7 +39,6 @@ import {
   PATH_DEV_REF_BASE,
   PATH_DEV_USAGE_BASE,
   PATH_EFFECTS,
-  PATH_FAQS,
   PATH_FIGMA_MAKE_BASE,
   PATH_FOUNDATIONS_OVERVIEW,
   PATH_HOME,
@@ -46,6 +48,7 @@ import {
   PATH_PATTERNS_OVERVIEW,
   PATH_RESOURCES,
   PATH_SPACING,
+  PATH_STORYBOOK_SANDBOX,
   PATH_SYMBOL,
   PATH_TYPOGRAPHY_BASE,
   contentTopicPath,
@@ -105,6 +108,7 @@ const PAGE_TITLES = {
   '/developers': 'For Developers',
   '/arvo-mcp-other-mcps': 'Arvo MCP/Other MCPs',
   '/figma-make': 'For Figma Make Users',
+  [PATH_ARVO_NOVA_AI_AGENT]: 'Arvo — Nova AI Agent',
   '/accessibility': 'Accessibility',
   '/accessibility/overview': 'Accessibility — Introduction',
   '/accessibility/standards-and-principles': 'Standards and principles',
@@ -156,6 +160,8 @@ const sidebarSections = [
       { path: PATH_ABOUT_ARVO, label: 'About Arvo' },
       { path: PATH_RESOURCES, label: 'Resources' },
       { path: docPagePath(PATH_FIGMA_MAKE_BASE, 'Overview'), label: 'For Figma Make Users' },
+      { path: PATH_ARVO_NOVA_AI_AGENT, label: 'Arvo — Nova AI Agent' },
+      { path: PATH_ARVO_MCP, label: 'Arvo MCP/Other MCPs' },
       { path: PATH_DESIGNERS, label: 'For Designers' },
       {
         path: '_nav-group-for-developers',
@@ -195,9 +201,7 @@ const sidebarSections = [
           },
         ],
       },
-      { path: PATH_ARVO_MCP, label: 'Arvo MCP/Other MCPs' },
       { path: PATH_CONTRIBUTE, label: 'How to Contribute' },
-      { path: PATH_FAQS, label: 'FAQs' },
     ],
   },
   {
@@ -359,6 +363,45 @@ function initialSubsectionOpen(pathname) {
     '_nav-group-assets': false,
     '_nav-group-grammar-style': normalized.startsWith('/content/grammar-style'),
   }
+}
+
+const STORYBOOK_ICON_SRC = '/componentOverview/storybook.png'
+
+const HEADER_ACTION_BTN_CLASS =
+  'flex items-center justify-center gap-0 border p-2 text-sm font-medium transition-colors shrink-0 hover:opacity-90 whitespace-nowrap lg:gap-2 lg:px-3 lg:py-2'
+
+function HeaderNavButton({ to, href, children, isDark, ariaLabel }) {
+  const style = {
+    borderColor: isDark ? '#525252' : '#E5E5E5',
+    color: isDark ? '#e5e5e5' : '#010101',
+  }
+
+  const trigger = href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={HEADER_ACTION_BTN_CLASS}
+      style={style}
+      aria-label={ariaLabel}
+    >
+      {children}
+    </a>
+  ) : (
+    <Link to={to} className={HEADER_ACTION_BTN_CLASS} style={style} aria-label={ariaLabel}>
+      {children}
+    </Link>
+  )
+
+  return (
+    <ArvoTooltip content={ariaLabel} placement="bottom-center">
+      {trigger}
+    </ArvoTooltip>
+  )
+}
+
+function HeaderActionLabel({ children }) {
+  return <span className="hidden lg:inline">{children}</span>
 }
 
 export default function Layout({ children }) {
@@ -640,27 +683,58 @@ export default function Layout({ children }) {
               </div>
             </Link>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="flex items-center gap-2 border p-2 sm:px-3 sm:py-2 text-sm transition-colors shrink-0"
-              style={{
-                borderColor: isDark ? '#525252' : '#E5E5E5',
-                color: isDark ? '#a3a3a3' : '#303030',
-              }}
-              title={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <HeaderNavButton
+              href={PATH_STORYBOOK_SANDBOX}
+              isDark={isDark}
+              ariaLabel="Storybook Sandbox"
             >
-              {theme === 'dark' ? (
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              )}
-              <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
-            </button>
+              <PublicRasterPicture
+                src={STORYBOOK_ICON_SRC}
+                alt=""
+                className="h-4 w-4 shrink-0 rounded-[3px]"
+                aria-hidden
+              />
+              <HeaderActionLabel>Storybook Sandbox</HeaderActionLabel>
+            </HeaderNavButton>
+            <HeaderNavButton
+              to={docPagePath(PATH_CONTRIBUTE, 'For Developers')}
+              isDark={isDark}
+              ariaLabel="Contribute to Arvo"
+            >
+              <span className="o9con o9con-comment-empty shrink-0 text-base leading-none" aria-hidden />
+              <HeaderActionLabel>Contribute to Arvo</HeaderActionLabel>
+            </HeaderNavButton>
+            <HeaderNavButton to={PATH_ARVO_NOVA_AI_AGENT} isDark={isDark} ariaLabel="Arvo Agent">
+              <span className="o9con o9con-flash shrink-0 text-base leading-none" aria-hidden />
+              <HeaderActionLabel>Arvo Agent</HeaderActionLabel>
+            </HeaderNavButton>
+            <ArvoTooltip
+              content={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              placement="bottom-center"
+            >
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className={HEADER_ACTION_BTN_CLASS}
+                style={{
+                  borderColor: isDark ? '#525252' : '#E5E5E5',
+                  color: isDark ? '#a3a3a3' : '#303030',
+                }}
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {theme === 'dark' ? (
+                  <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+                <HeaderActionLabel>{theme === 'dark' ? 'Light' : 'Dark'}</HeaderActionLabel>
+              </button>
+            </ArvoTooltip>
           </div>
         </div>
       </header>

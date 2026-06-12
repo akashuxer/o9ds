@@ -13,6 +13,7 @@ import {
   PATH_ICONS_BASE,
   PATH_PATTERNS_OVERVIEW,
   PATH_FIGMA_MAKE_BASE,
+  PATH_STORYBOOK_SANDBOX,
   docPagePath,
 } from '../data/docPaths'
 
@@ -32,9 +33,6 @@ const HOME_CARD_ILLUSTRATIONS = {
   patterns: '/home/patterns.png',
 }
 
-/** Arvo Storybook, served same-origin from /storybook (see public/storybook/README.md). */
-const STORYBOOK_PLAYGROUND_URL = '/storybook/'
-
 const cards = [
   {
     title: 'Get Started',
@@ -51,7 +49,7 @@ const cards = [
   {
     title: 'Storybook',
     desc: 'Interactive sandbox playground for Arvo components.',
-    externalHref: STORYBOOK_PLAYGROUND_URL,
+    externalHref: PATH_STORYBOOK_SANDBOX,
     icon: 'storybook',
   },
   {

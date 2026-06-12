@@ -647,6 +647,21 @@ html[data-theme="light"] main a[data-arvo-principles-btn],
 html:not(.dark) main a[data-arvo-principles-btn] {
   color: #F2F2F2 !important;
 }
+/* Theme CTA links — inverse text/icons on s-theme surface (beats main font-semibold !important) */
+html[data-theme="light"] main a[data-arvo-theme-cta],
+html:not(.dark) main a[data-arvo-theme-cta],
+html[data-theme="dark"] main a[data-arvo-theme-cta],
+html.dark main a[data-arvo-theme-cta] {
+  color: var(--arvo-color-t-inverse) !important;
+  background-color: var(--arvo-color-s-theme) !important;
+  border-color: var(--arvo-color-s-theme) !important;
+}
+html[data-theme="light"] main a[data-arvo-theme-cta] svg,
+html:not(.dark) main a[data-arvo-theme-cta] svg,
+html[data-theme="dark"] main a[data-arvo-theme-cta] svg,
+html.dark main a[data-arvo-theme-cta] svg {
+  color: var(--arvo-color-i-inverse) !important;
+}
 /* Force light mode text visibility - overrides conflicting Tailwind utilities */
 html[data-theme="light"] main,
 html:not(.dark) main {

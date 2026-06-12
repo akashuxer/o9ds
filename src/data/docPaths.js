@@ -17,9 +17,12 @@ export function docPagePath(basePath, tabLabel) {
 // ——— Getting Started ———
 export const PATH_HOME = '/'
 export const PATH_CHANGELOG = '/changelog'
+/** Arvo Storybook sandbox — same-origin static export under `public/storybook/`. */
+export const PATH_STORYBOOK_SANDBOX = '/storybook/'
 export const PATH_ABOUT_ARVO = `${GETTING_STARTED}/aboutarvo`
 export const PATH_RESOURCES = `${GETTING_STARTED}/resources`
 export const PATH_FIGMA_MAKE_BASE = `${GETTING_STARTED}/figma-make`
+export const PATH_ARVO_NOVA_AI_AGENT = `${GETTING_STARTED}/arvo-nova-ai-agent`
 export const PATH_DESIGNERS = `${GETTING_STARTED}/designers`
 export const PATH_CONTRIBUTE = `${GETTING_STARTED}/contribute`
 export const PATH_FAQS = `${GETTING_STARTED}/faqs`

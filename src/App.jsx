@@ -32,6 +32,7 @@ import {
   PATH_A11Y_VISUAL,
   PATH_ABOUT_ARVO,
   PATH_ARVO_MCP,
+  PATH_ARVO_NOVA_AI_AGENT,
   PATH_BORDERS,
   PATH_CHANGELOG,
   PATH_COLOR_BASE,
@@ -84,6 +85,7 @@ const FoundationsOverview = lazy(() => import('./pages/FoundationsOverview'))
 const PatternsOverview = lazy(() => import('./pages/PatternsOverview'))
 const AccessibilityOverview = lazy(() => import('./pages/AccessibilityOverview'))
 const FigmaMake = lazy(() => import('./pages/FigmaMake'))
+const ArvoNovaAiAgent = lazy(() => import('./pages/ArvoNovaAiAgent'))
 const AccessibilityOverviewArticle = lazy(() => import('./pages/accessibility/OverviewArticle'))
 const AccessibilityStandardsAndPrinciples = lazy(() => import('./pages/accessibility/StandardsAndPrinciples'))
 const AccessibilityAssistiveTechnology = lazy(() => import('./pages/accessibility/AssistiveTechnology'))
@@ -104,7 +106,7 @@ export default function App() {
     <ThemeProvider>
       <DocsShellProvider>
       <OverlayProvider>
-      <TooltipProvider>
+      <TooltipProvider config={{ enabled: true, hoverDelay: 400 }}>
       <ArvoToastProvider>
       <BrowserRouter
         future={{
@@ -125,6 +127,7 @@ export default function App() {
           <Route path={PATH_RESOURCES} element={<Resources />} />
           <Route path={`${PATH_FIGMA_MAKE_BASE}/:tab`} element={<FigmaMake />} />
           <Route path={PATH_FIGMA_MAKE_BASE} element={<Navigate to={docPagePath(PATH_FIGMA_MAKE_BASE, 'Overview')} replace />} />
+          <Route path={PATH_ARVO_NOVA_AI_AGENT} element={<ArvoNovaAiAgent />} />
           <Route path={PATH_DESIGNERS} element={<Placeholder title="For Designers" />} />
           <Route path={`${PATH_DEV_INTRO_BASE}/:tab`} element={<Developers />} />
           <Route path={PATH_DEV_INTRO_BASE} element={<Navigate to={docPagePath(PATH_DEV_INTRO_BASE, 'Overview')} replace />} />
