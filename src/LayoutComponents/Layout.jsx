@@ -6,7 +6,8 @@ import { useTheme } from '../context/ThemeContext'
 import PublicRasterPicture from '@/components/media/PublicRasterPicture'
 import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
-import { GRAMMAR_STYLE_NAV_ITEMS, GRAMMAR_STYLE_TOPICS } from '../data/contentGrammarNav'
+import { GRAMMAR_STYLE_NAV_ITEMS } from '../data/contentGrammarNav'
+import { applyDocumentTitle } from '../utils/documentTitle'
 import { PATHS_WITH_CONTENT, hasReadyDocumentation } from '../data/pathsWithContent'
 import {
   ACCESSIBILITY,
@@ -55,7 +56,6 @@ import {
   devRefTopicPath,
   devUsageTopicPath,
   docPagePath,
-  grammarStyleTopicPath,
   patternTopicPath,
 } from '../data/docPaths'
 
@@ -71,79 +71,6 @@ const SECTION_OVERVIEW_HUB_PATHS = [
   PATH_PATTERNS_OVERVIEW,
   PATH_CONTENT_OVERVIEW,
 ]
-
-const PAGE_TITLES = {
-  '/': 'Platform UI',
-  '/overview': 'About Arvo',
-  '/resources': 'Resources / Links',
-  '/foundations': 'Foundations',
-  '/colors': 'Colors',
-  '/colors/data-viz': 'Data Visualization Colors',
-  '/typography': 'Typography',
-  '/spacing': 'Spacing',
-  '/borders': 'Borders & Radius',
-  '/icons': 'Iconography',
-  '/illustrations': 'Illustrations',
-  '/symbol': 'Symbol',
-  '/motion': 'Motion & Animation',
-  '/effects': 'Effects',
-  '/elevation': 'Effects',
-  '/components': 'Components',
-  '/components/button': 'Button',
-  '/components/cards': 'Cards',
-  '/components/icon-button': 'Icon Button',
-  '/components/split-button': 'Split Button',
-  '/components/button-group': 'Button Group',
-  '/components/link': 'Link',
-  '/components/breadcrumb': 'Breadcrumb',
-  '/components/tabstrip': 'Tabstrip',
-  '/components/pagination': 'Pagination',
-  '/components/workspace-sidebar': 'Workspace Sidebar',
-  '/components/label': 'Label',
-  '/components/textbox': 'Textbox',
-  '/components/textarea': 'Textarea',
-  '/components/search': 'Search',
-  '/components/select': 'Select',
-  '/designers': 'For Designers',
-  '/developers': 'For Developers',
-  '/arvo-mcp-other-mcps': 'Arvo MCP/Other MCPs',
-  '/figma-make': 'For Figma Make Users',
-  [PATH_ARVO_NOVA_AI_AGENT]: 'Arvo — Nova AI Agent',
-  '/accessibility': 'Accessibility',
-  '/accessibility/overview': 'Accessibility — Introduction',
-  '/accessibility/standards-and-principles': 'Standards and principles',
-  '/accessibility/assistive-technology': 'Assistive technology',
-  '/accessibility/screen-reader-and-aria': 'Screen reader and ARIA',
-  '/accessibility/keyboard-and-focus': 'Keyboard and focus',
-  '/accessibility/shortcuts': 'Shortcuts',
-  '/accessibility/visual-accessibility': 'Visual accessibility',
-  '/accessibility/testing-and-qa': 'Testing and QA',
-  '/content': 'Content Guidelines',
-  '/content/writing-principles': 'Writing Principles',
-  '/content/voice-and-tone': 'Voice and Tone',
-  ...Object.fromEntries(
-    GRAMMAR_STYLE_TOPICS.map((topic) => [
-      grammarStyleTopicPath(topic.slug),
-      topic.slug === 'intro' ? 'Grammar & Style' : topic.label,
-    ]),
-  ),
-  '/patterns': 'Patterns',
-  '/patterns/forms': 'Forms',
-  '/patterns/search': 'Search',
-  '/patterns/application-layouts': 'Application Layouts',
-  '/patterns/notifications-alerts': 'Notifications / Alerts',
-  '/patterns/truncation': 'Truncation',
-  '/patterns/loading': 'Loading',
-  '/patterns/export': 'Export',
-  '/patterns/destructive-action': 'Destructive Action',
-  '/patterns/navigation': 'Navigation',
-  '/patterns/on-hover-always-visible': 'On Hover / Always Visible',
-  '/patterns/filters': 'Filters',
-  '/patterns/bulk-actions': 'Bulk Actions',
-  '/contribute': 'How to Contribute',
-  '/faqs': 'FAQs',
-  '/changelog': 'Changelog',
-}
 
 const sidebarSections = [
   {
@@ -299,58 +226,6 @@ function filterNavItemsByReady(items) {
     .filter(Boolean)
 }
 
-function getPageTitle(pathname) {
-  const normalized = pathname.replace(/\/$/, '')
-  const exact = PAGE_TITLES[normalized] ?? PAGE_TITLES[pathname]
-  if (exact) return exact
-  // Fallback for /components/:slug – titleize slug
-  const componentsMatch = normalized.match(/^\/components\/([^/]+)/)
-  if (componentsMatch) {
-    return componentsMatch[1].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
-  }
-  const grammarMatch = normalized.match(/^\/content\/grammar-style\/([^/]+)/)
-  if (grammarMatch) {
-    const topic = GRAMMAR_STYLE_TOPICS.find((t) => t.slug === grammarMatch[1])
-    if (topic) return topic.slug === 'intro' ? 'Grammar & Style' : topic.label
-  }
-  const usageMatch = normalized.match(new RegExp(`^${PATH_DEV_USAGE_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^/]+)`))
-  if (usageMatch) {
-    const slug = usageMatch[1]
-    const labels = {
-      overview: 'Usage Standards',
-      'public-api': 'Public API',
-      components: 'Components Contract',
-      styling: 'Styling',
-      composition: 'Composition',
-      accessibility: 'Accessibility',
-      testing: 'Testing',
-      versioning: 'Versioning',
-      'anti-patterns': 'Anti-Patterns',
-      checklist: 'PR Checklist',
-    }
-    if (labels[slug]) return labels[slug]
-  }
-  const devRefMatch = normalized.match(new RegExp(`^${PATH_DEV_REF_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^/]+)`))
-  if (devRefMatch) {
-    const slug = devRefMatch[1]
-    const labels = {
-      'agentic-pipeline': 'Agentic Pipeline',
-      'component-pipeline': 'Component Pipeline',
-      'token-pipeline': 'Token Pipeline',
-      'shared-patterns': 'Shared Patterns',
-      'testing-and-drift': 'Testing & Drift',
-      workflows: 'Contributor Workflows',
-    }
-    if (labels[slug]) return labels[slug]
-  }
-  const introMatch = normalized.match(new RegExp(`^${PATH_DEV_INTRO_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^/]+)`))
-  if (introMatch) {
-    const tabLabels = { overview: 'For Developers', usage: 'For Developers — Usage', architecture: 'For Developers — Architecture' }
-    if (tabLabels[introMatch[1]]) return tabLabels[introMatch[1]]
-  }
-  return 'Arvo Design System'
-}
-
 function initialSubsectionOpen(pathname) {
   const normalized = pathname.replace(/\/$/, '')
   const onDevUsage = normalized.startsWith(PATH_DEV_USAGE_BASE)
@@ -420,8 +295,7 @@ export default function Layout({ children }) {
   const sidebarRef = useRef(null)
 
   useEffect(() => {
-    const pageName = getPageTitle(pathname)
-    document.title = `Arvo Design System - ${pageName}`
+    applyDocumentTitle(pathname)
   }, [pathname])
 
   useEffect(() => {
