@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BackgroundRippleEffect } from '@/components/ui/BackgroundRippleEffect'
 import PublicRasterPicture from '@/components/media/PublicRasterPicture'
@@ -235,177 +235,6 @@ function RotatingFlipWord() {
   )
 }
 
-/** Hero illustration paths — auto-advancing carousel (see TabletHeroFrame). */
-const HERO_SLIDES = [
-  { src: '/hero-1.svg', alt: 'Arvo Design System — hero illustration 1 of 3' },
-  { src: '/hero-2.svg', alt: 'Arvo Design System — hero illustration 2 of 3' },
-  { src: '/hero-3.svg', alt: 'Arvo Design System — hero illustration 3 of 3' },
-]
-
-const HERO_CAROUSEL_INTERVAL_MS = 5200
-
-function TabletHeroFrame({ slides, className = '' }) {
-  const frameRef = useRef(null)
-  const indexRef = useRef(0)
-  const [ty, setTy] = useState(0)
-  const [index, setIndex] = useState(0)
-  const [reduceMotion, setReduceMotion] = useState(false)
-  /** When false, X position jumps without CSS transition (used after clone slide to snap back to real slide 1). */
-  const [slideTransitionOn, setSlideTransitionOn] = useState(true)
-
-  const loopSlides = useMemo(() => {
-    if (slides.length < 2) return slides
-    return [...slides, slides[0]]
-  }, [slides])
-
-  const slideCount = loopSlides.length
-  const lastIndex = slideCount - 1
-
-  useEffect(() => {
-    indexRef.current = index
-  }, [index])
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReduceMotion(mq.matches)
-    const fn = () => setReduceMotion(mq.matches)
-    mq.addEventListener('change', fn)
-    return () => mq.removeEventListener('change', fn)
-  }, [])
-
-  useEffect(() => {
-    if (reduceMotion || slides.length < 2) return
-    const id = window.setInterval(() => {
-      setIndex((i) => {
-        if (i === slides.length - 1) return lastIndex
-        return i + 1
-      })
-    }, HERO_CAROUSEL_INTERVAL_MS)
-    return () => window.clearInterval(id)
-  }, [reduceMotion, slides.length, lastIndex])
-
-  const handleSlideTransitionEnd = (e) => {
-    if (e.propertyName !== 'transform') return
-    if (indexRef.current !== lastIndex) return
-    setSlideTransitionOn(false)
-    setIndex(0)
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setSlideTransitionOn(true)
-      })
-    })
-  }
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = frameRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const vh = window.innerHeight || 1
-      const mid = (rect.top + rect.bottom) / 2
-      const n = (mid - vh / 2) / (vh * 0.9)
-      setTy(Math.max(-28, Math.min(28, n * -36)))
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  const pct = slideCount ? (100 / slideCount) * index : 0
-
-  const transitionClass =
-    reduceMotion || !slideTransitionOn
-      ? ''
-      : 'motion-safe:transition-transform motion-safe:duration-[680ms] motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'
-
-  if (reduceMotion || slides.length < 2) {
-    return (
-      <div className={`relative z-[5] w-full overflow-visible ${className}`}>
-        <div ref={frameRef} className="relative mx-auto w-full max-w-none overflow-visible">
-          <div className="relative block w-full max-w-full">
-            <div className="relative w-full overflow-visible bg-transparent p-1 leading-[0] sm:p-1.5">
-              <div
-                className="relative motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-reduce:transform-none"
-                style={{ transform: `translate3d(0, ${ty}px, 0)` }}
-              >
-                <div
-                  role="region"
-                  aria-roledescription="carousel"
-                  aria-label="Hero illustrations"
-                  className="relative w-full overflow-hidden"
-                >
-                  <img
-                    src={slides[0].src}
-                    alt={slides[0].alt}
-                    className="block h-auto max-h-[min(85vh,880px)] w-full max-w-full align-top"
-                    width={1920}
-                    height={1080}
-                    loading="eager"
-                    decoding="async"
-                    fetchpriority="high"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className={`relative z-[5] w-full overflow-visible ${className}`}>
-      <div ref={frameRef} className="relative mx-auto w-full max-w-none overflow-visible">
-        <div className="relative block w-full max-w-full">
-          <div className="relative w-full overflow-visible bg-transparent p-1 leading-[0] sm:p-1.5">
-            <div
-              className="relative motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-reduce:transform-none"
-              style={{ transform: `translate3d(0, ${ty}px, 0)` }}
-            >
-              <div
-                role="region"
-                aria-roledescription="carousel"
-                aria-label="Hero illustrations"
-                aria-live="polite"
-                className="relative w-full overflow-hidden"
-              >
-                <div
-                  className={`flex ${transitionClass}`}
-                  style={{
-                    width: `${slideCount * 100}%`,
-                    transform: `translateX(-${pct}%)`,
-                  }}
-                  onTransitionEnd={handleSlideTransitionEnd}
-                >
-                  {loopSlides.map((slide, i) => (
-                    <div
-                      key={i === lastIndex ? `${slide.src}-loop-clone` : slide.src}
-                      className="box-border shrink-0"
-                      style={{ width: `${100 / slideCount}%` }}
-                      aria-hidden={i !== index}
-                    >
-                      <img
-                        src={slide.src}
-                        alt={slide.alt}
-                        className="block h-auto max-h-[min(85vh,880px)] w-full max-w-full align-top"
-                        width={1920}
-                        height={1080}
-                        loading="eager"
-                        decoding="async"
-                        fetchpriority={i === 0 ? 'high' : 'low'}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function Home() {
   const { theme } = useTheme()
   const { enterDocs } = useDocsShell()
@@ -427,63 +256,63 @@ export default function Home() {
 
       <div className="relative z-10 space-y-20 md:space-y-28">
         <section className="relative w-full">
-          {/* Tight column gap + ~50/50 split so H1 has width for fewer lines; image sits in the other half */}
-          <div className="grid w-full grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.18fr)] lg:items-center lg:gap-4 xl:gap-5 2xl:gap-6">
-            <div className="min-w-0 overflow-visible text-left lg:pr-1 xl:pr-2">
-              <p
-                className="mb-6 text-xs font-medium uppercase tracking-[0.08em] text-neutral-500 motion-safe:animate-fade-in-up motion-reduce:animate-none dark:text-neutral-400 sm:text-sm md:mb-8"
-                style={{ animationDelay: '0ms' }}
-              >
-                ONE COMPANY — MULTIPLE PRODUCTS — ONE DESIGN SYSTEM
-              </p>
+          <div className="min-w-0 max-w-3xl overflow-visible text-left">
+            <p
+              className="mb-6 text-xs font-medium uppercase tracking-[0.08em] text-neutral-500 motion-safe:animate-fade-in-up motion-reduce:animate-none dark:text-neutral-400 sm:text-sm md:mb-8"
+              style={{ animationDelay: '0ms' }}
+            >
+              DESIGNED FOR SCALE • BUILT FOR EVERY O9 PRODUCT
+            </p>
 
-              <h1
-                className="text-balance text-left text-[clamp(2rem,4.5vw+1rem,3.75rem)] font-semibold leading-[1.04] tracking-[-0.038em] text-arvo-light-primary motion-safe:animate-fade-in-up motion-reduce:animate-none dark:text-white md:text-[clamp(2.15rem,4.8vw+1rem,4.1rem)] lg:text-[clamp(2.25rem,3.8vw+1.35rem,4.35rem)] xl:text-[clamp(2.4rem,4.2vw+1.25rem,4.85rem)]"
-                style={{ animationDelay: '40ms' }}
+            <h1
+              className="text-balance text-left text-[clamp(2rem,4.5vw+1rem,3.75rem)] font-semibold leading-[1.04] tracking-[-0.038em] text-arvo-light-primary motion-safe:animate-fade-in-up motion-reduce:animate-none dark:text-white md:text-[clamp(2.15rem,4.8vw+1rem,4.1rem)] lg:text-[clamp(2.25rem,3.8vw+1.35rem,4.35rem)] xl:text-[clamp(2.4rem,4.2vw+1.25rem,4.85rem)]"
+              style={{ animationDelay: '40ms' }}
+            >
+              <span className="text-arvo-light-primary dark:text-white">Build experiences that feel </span>
+              <span className="inline-block overflow-visible align-baseline">
+                <RotatingFlipWord />
+              </span>
+            </h1>
+
+            <p
+              className="mt-6 max-w-2xl text-xl font-medium leading-snug text-arvo-light-primary motion-safe:animate-fade-in-up dark:text-neutral-200 md:text-2xl md:leading-relaxed"
+              style={{ animationDelay: '90ms' }}
+            >
+              Arvo helps teams design and build faster with reusable foundations, shared standards, and
+              enterprise-ready components, creating seamless experiences across o9UI.
+            </p>
+
+            <div className="mt-10 flex justify-start motion-safe:animate-fade-in-up motion-reduce:animate-none" style={{ animationDelay: '160ms' }}>
+              <button
+                type="button"
+                onClick={onGetStarted}
+                className="group relative inline-flex min-h-[48px] min-w-[200px] items-center justify-center overflow-hidden border-2 border-[#010101] bg-[#010101] px-8 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-o9-shock focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-white dark:bg-white dark:text-[#010101] dark:focus-visible:ring-offset-black"
               >
-                <span className="text-arvo-light-primary dark:text-white">Build experiences that feel </span>
-                <span className="inline-block overflow-visible align-baseline">
-                  <RotatingFlipWord />
+                <span
+                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full"
+                  aria-hidden
+                />
+                <span className="relative flex items-center gap-2 text-white dark:text-[#010101]">
+                  Get Started
+                  <svg className="h-4 w-4 motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
                 </span>
-              </h1>
-
-              <p
-                className="mt-6 max-w-xl text-xl font-medium leading-snug text-arvo-light-primary motion-safe:animate-fade-in-up dark:text-neutral-200 md:text-2xl md:leading-relaxed"
-                style={{ animationDelay: '90ms' }}
-              >
-                Design with Arvo. Ship faster with confidence. Scale seamlessly across o9UI.
-              </p>
-
-              <div className="mt-10 flex justify-start motion-safe:animate-fade-in-up motion-reduce:animate-none" style={{ animationDelay: '160ms' }}>
-                <button
-                  type="button"
-                  onClick={onGetStarted}
-                  className="group relative inline-flex min-h-[48px] min-w-[200px] items-center justify-center overflow-hidden border-2 border-[#010101] bg-[#010101] px-8 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-o9-shock focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-white dark:bg-white dark:text-[#010101] dark:focus-visible:ring-offset-black"
-                >
-                  <span
-                    className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full"
-                    aria-hidden
-                  />
-                  <span className="relative flex items-center gap-2 text-white dark:text-[#010101]">
-                    Get Started
-                    <svg className="h-4 w-4 motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <div className="relative flex min-h-0 min-w-0 justify-end lg:justify-end lg:pl-0">
-              <TabletHeroFrame className="mt-2 w-full max-w-full lg:mt-0" slides={HERO_SLIDES} />
+              </button>
             </div>
           </div>
         </section>
 
         <section id="home-cards" className="scroll-mt-24 w-full">
-          <h2 className="mb-10 max-w-4xl text-left text-[clamp(1.65rem,5.5vw,2.85rem)] font-medium leading-[1.12] tracking-[-0.03em] text-arvo-light-primary motion-safe:animate-fade-in-up dark:text-white md:mb-14">
-            Building Blocks of Arvo
-          </h2>
+          <div className="mb-10 max-w-4xl md:mb-14">
+            <h2 className="text-left text-[clamp(1.65rem,5.5vw,2.85rem)] font-medium leading-[1.12] tracking-[-0.03em] text-arvo-light-primary motion-safe:animate-fade-in-up dark:text-white">
+              Everything you need to build with Arvo
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-arvo-light-secondary dark:text-neutral-400 sm:text-lg sm:leading-relaxed">
+              Explore the foundations, components, tools, and guidance that help teams design, develop, and scale
+              consistent experiences across o9UI.
+            </p>
+          </div>
           <div className="grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-9">
             {cards.map(({ title, desc, path, externalHref, icon }, i) => {
               const illustrationSrc = icon ? (HOME_CARD_ILLUSTRATIONS[icon] ?? null) : null

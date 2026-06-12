@@ -9,7 +9,7 @@ import { BLUR_TOKEN_ROWS, OPACITY_TOKEN_ROWS, SHADOW_BOX_TOKEN_ROWS } from '../.
 import { downloadArvoEffectsScss } from '../../utils/arvoEffectsScss'
 
 /** Sample image for opacity previews (shared base; opacity applied per card). */
-const OPACITY_SAMPLE_IMG = '/hero-1.svg'
+const OPACITY_SAMPLE_IMG = '/home/components.png'
 
 /** Placeholder asset for blur preview (mask overlay over image). */
 const BLUR_PREVIEW_PLACEHOLDER_IMG = '/placeholder.svg'

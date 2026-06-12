@@ -42,33 +42,6 @@
       ]
     },
     {
-      "source": "/hero-1.svg",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, stale-while-revalidate=86400"
-        }
-      ]
-    },
-    {
-      "source": "/hero-2.svg",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, stale-while-revalidate=86400"
-        }
-      ]
-    },
-    {
-      "source": "/hero-3.svg",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, stale-while-revalidate=86400"
-        }
-      ]
-    },
-    {
       "source": "/home/(.*)",
       "headers": [
         {
