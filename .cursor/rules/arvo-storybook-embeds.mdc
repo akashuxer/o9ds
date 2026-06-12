@@ -94,14 +94,16 @@ When migrating `ComponentPreview` from `<object>` to `<iframe>`:
 
 ## Storybook URL patterns
 
+Storybook is served **same-origin** from `/storybook/` (Vite copies `public/storybook/` to `dist/`; Vercel rewrites are configured to bypass the SPA catch-all for that path). See `public/storybook/README.md` for the manual drop-in workflow. Always use root-relative URLs so dev, preview, and production behave identically.
+
 | Purpose | URL format |
 |---------|------------|
-| Story canvas only | `https://o9arvo-storybook.vercel.app/iframe.html?id={story-id}&viewMode=story` |
+| Story canvas only | `/storybook/iframe.html?id={story-id}&viewMode=story` |
 | Light theme | Append `&globals=theme%3Ao9theme` |
 | Dark theme | Append `&globals=theme%3Ao9dark` |
 | Docs page | Replace `viewMode=story` with `viewMode=docs` and use `--docs` suffix on story id |
 
-The `/iframe.html` path is Storybook's built-in canvas endpoint — it is not an iframe itself; it is a standalone HTML page suitable for embedding.
+The `/iframe.html` path is Storybook's built-in canvas endpoint — it is not an iframe itself; it is a standalone HTML page suitable for embedding. Because the embed is now same-origin, the `<iframe>` sandbox does **not** need `allow-same-origin` to function.
 
 ## ComponentPreview props reference
 

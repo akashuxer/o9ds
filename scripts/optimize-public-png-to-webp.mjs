@@ -16,6 +16,10 @@ import sharp from 'sharp'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const publicDir = path.resolve(__dirname, '..', 'public')
 
+// `public/storybook/` is a hand-dropped static export from o9-design-system
+// (see public/storybook/README.md). Treat it as opaque vendored output.
+const SKIP_DIRS = new Set(['storybook'])
+
 async function collectPngFiles(dir, acc = []) {
   let entries
   try {
@@ -24,6 +28,7 @@ async function collectPngFiles(dir, acc = []) {
     return acc
   }
   for (const e of entries) {
+    if (e.isDirectory() && dir === publicDir && SKIP_DIRS.has(e.name)) continue
     const full = path.join(dir, e.name)
     if (e.isDirectory()) await collectPngFiles(full, acc)
     else if (e.isFile() && e.name.toLowerCase().endsWith('.png')) acc.push(full)

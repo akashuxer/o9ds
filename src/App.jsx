@@ -79,6 +79,7 @@ const Motion = lazy(() => import('./pages/foundation/Motion'))
 const Illustrations = lazy(() => import('./pages/foundation/Illustrations'))
 const Symbol = lazy(() => import('./pages/foundation/Symbol'))
 const Developers = lazy(() => import('./pages/Developers'))
+const Contribute = lazy(() => import('./pages/Contribute'))
 const FoundationsOverview = lazy(() => import('./pages/FoundationsOverview'))
 const PatternsOverview = lazy(() => import('./pages/PatternsOverview'))
 const AccessibilityOverview = lazy(() => import('./pages/AccessibilityOverview'))
@@ -132,7 +133,7 @@ export default function App() {
           <Route path={`${PATH_DEV_REF_BASE}/:topic`} element={<DevRefTopicPage />} />
           <Route path={PATH_DEV_REF_BASE} element={<Navigate to={devRefTopicPath('agentic-pipeline')} replace />} />
           <Route path={PATH_ARVO_MCP} element={<Placeholder title="Arvo MCP/Other MCPs" />} />
-          <Route path={PATH_CONTRIBUTE} element={<Placeholder title="How to Contribute" />} />
+          <Route path={PATH_CONTRIBUTE} element={<Contribute />} />
           <Route path={PATH_FAQS} element={<Placeholder title="FAQs" />} />
 
           {/* Foundations */}

@@ -11,7 +11,7 @@ import {
 } from '../../../data/documentationStatus'
 
 const TABS = ['Overview', 'Usage', 'Code/APIs', 'Accessibility']
-const SB = 'https://o9arvo-storybook.vercel.app/iframe.html'
+const SB = '/storybook/iframe.html'
 
 const story = (id, theme = 'o9theme') =>
   `${SB}?id=${id}&viewMode=story&globals=theme%3A${theme}`

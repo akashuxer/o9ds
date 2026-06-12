@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/storybook",
+      "destination": "/storybook/index.html"
+    },
+    {
+      "source": "/((?!storybook(/|$)).*)",
       "destination": "/index.html"
     }
   ],
@@ -125,6 +129,24 @@
     },
     {
       "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/storybook/(assets|sb-addons|sb-manager|sb-common-assets|fonts|o9con|o9illus)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/storybook/(.*)\\.(woff2?|ttf|otf|eot)",
       "headers": [
         {
           "key": "Cache-Control",

@@ -32,8 +32,8 @@ const HOME_CARD_ILLUSTRATIONS = {
   patterns: '/home/patterns.png',
 }
 
-/** Hosted Arvo Storybook (Vercel). */
-const STORYBOOK_PLAYGROUND_URL = 'https://o9arvo-storybook.vercel.app/'
+/** Arvo Storybook, served same-origin from /storybook (see public/storybook/README.md). */
+const STORYBOOK_PLAYGROUND_URL = '/storybook/'
 
 const cards = [
   {

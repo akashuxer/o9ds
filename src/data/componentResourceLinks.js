@@ -9,7 +9,7 @@ const SLUG_TO_DESCRIPTOR = {
   toolbar: 'button-group',
 }
 
-const STORYBOOK_BASE = 'https://o9arvo-storybook.vercel.app'
+const STORYBOOK_BASE = '/storybook'
 const AZURE_GIT_REPO = 'https://o9git.visualstudio.com/CoreDev/_git/o9.DesignSystem'
 
 /** Map descriptor category labels to Storybook story id prefix. */
