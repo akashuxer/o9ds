@@ -1,0 +1,83 @@
+# Re-author commits from teammates and sync main + development so Vercel Hobby
+# deploys succeed (Hobby blocks Git deploys when the commit author is not on the
+# Vercel team). Optional deploy hook triggers production even faster.
+#
+# Setup (GitHub → Settings → Secrets and variables → Actions):
+#   DEPLOY_SYNC_TOKEN — recommended: fine-grained PAT with Contents read/write on
+#     this repo (Akash's account). Falls back to GITHUB_TOKEN if unset.
+#   VERCEL_DEPLOY_HOOK_URL — optional: Vercel project → Settings → Git → Deploy Hooks
+#     (production / main). POST on every push for an immediate deploy.
+#   ALLOWED_COMMIT_AUTHOR_EMAIL — optional override (default: akash.upadhyay@o9solutions.com)
+
+name: Vercel deploy sync
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+concurrency:
+  group: vercel-deploy-sync-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync-for-vercel:
+    if: >-
+      !contains(github.event.head_commit.message, '[vercel-sync]')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.DEPLOY_SYNC_TOKEN || github.token }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "Akash Upadhyay"
+          git config user.email "${ALLOWED_COMMIT_AUTHOR_EMAIL}"
+        env:
+          ALLOWED_COMMIT_AUTHOR_EMAIL: ${{ vars.ALLOWED_COMMIT_AUTHOR_EMAIL || 'akash.upadhyay@o9solutions.com' }}
+
+      - name: Re-author and sync branches
+        env:
+          ALLOWED_COMMIT_AUTHOR_EMAIL: ${{ vars.ALLOWED_COMMIT_AUTHOR_EMAIL || 'akash.upadhyay@o9solutions.com' }}
+          ALLOWED_COMMIT_AUTHOR_NAME: Akash Upadhyay
+        run: |
+          set -euo pipefail
+
+          AUTHOR_EMAIL="${{ github.event.head_commit.author.email }}"
+          CURRENT_SHA="$(git rev-parse HEAD)"
+
+          if [ "$AUTHOR_EMAIL" != "$ALLOWED_COMMIT_AUTHOR_EMAIL" ]; then
+            echo "Re-authoring commit from ${AUTHOR_EMAIL} → ${ALLOWED_COMMIT_AUTHOR_EMAIL}"
+            ORIGINAL_MESSAGE="$(git log -1 --format=%B)"
+            git commit \
+              --amend \
+              --author="${ALLOWED_COMMIT_AUTHOR_NAME} <${ALLOWED_COMMIT_AUTHOR_EMAIL}>" \
+              --no-edit \
+              -m "${ORIGINAL_MESSAGE}"$'\n\n'"[vercel-sync] Re-authored for Vercel Hobby deploy."
+            CURRENT_SHA="$(git rev-parse HEAD)"
+          else
+            echo "Commit author already allowed (${AUTHOR_EMAIL}). Syncing branches only."
+          fi
+
+          git push origin "${CURRENT_SHA}:refs/heads/main" --force-with-lease
+          git push origin "${CURRENT_SHA}:refs/heads/development" --force-with-lease
+
+      - name: Trigger Vercel deploy hook
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${VERCEL_DEPLOY_HOOK_URL:-}" ]; then
+            echo "VERCEL_DEPLOY_HOOK_URL not set; skipping deploy hook."
+            exit 0
+          fi
+          echo "POST deploy hook…"
+          curl --fail --silent --show-error --request POST "$VERCEL_DEPLOY_HOOK_URL"
+          echo ""
+          echo "Deploy hook accepted."
