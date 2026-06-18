@@ -39,6 +39,7 @@ import {
   PATH_RESOURCES,
   PATH_SPACING,
   PATH_SYMBOL,
+  PATH_LOGOS_BASE,
   PATH_TYPOGRAPHY_BASE,
   contentTopicPath,
 } from '../data/docPaths'
@@ -53,6 +54,7 @@ const COLOR_TABS = ['Overview', 'Brand Colors', 'Global Tokens', 'Semantic Token
 const TYPOGRAPHY_TABS = ['Overview', 'Tokens']
 const ICONS_TABS = ['Overview', 'o9con Gallery', 'Accessibility', 'Code']
 const ILLUSTRATIONS_TABS = ['Overview', 'o9Illus Gallery', 'Accessibility', 'Code']
+const LOGOS_TABS = ['Overview', 'Logo Gallery']
 const MOTION_TABS = ['Overview', 'Tokens']
 const SCREEN_READER_TABS = ['Overview', 'Labels', 'Live regions', 'Heading & page title']
 
@@ -184,6 +186,7 @@ export function getPageTitleFromPathname(pathname) {
     matchTabbedBase(path, PATH_TYPOGRAPHY_BASE, 'Typography', TYPOGRAPHY_TABS) ??
     matchTabbedBase(path, PATH_ICONS_BASE, 'Iconography', ICONS_TABS) ??
     matchTabbedBase(path, PATH_ILLUSTRATIONS_BASE, 'Illustrations', ILLUSTRATIONS_TABS) ??
+    matchTabbedBase(path, PATH_LOGOS_BASE, 'Logos', LOGOS_TABS) ??
     matchTabbedBase(path, PATH_MOTION, 'Motion & Animation', MOTION_TABS) ??
     matchTabbedBase(path, PATH_A11Y_SCREEN_READER_BASE, 'Screen reader and ARIA', SCREEN_READER_TABS)
   if (title) return title

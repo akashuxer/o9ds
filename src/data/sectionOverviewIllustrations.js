@@ -18,6 +18,7 @@ import {
   PATH_MOTION,
   PATH_SPACING,
   PATH_SYMBOL,
+  PATH_LOGOS_BASE,
   PATH_TYPOGRAPHY_BASE,
   docPagePath,
 } from './docPaths'
@@ -36,6 +37,7 @@ const SECTION_OVERVIEW_BY_PATH = {
   [docPagePath(PATH_ICONS_BASE, 'Overview')]: `${FOUNDATION_GRAPHIC}/icon.png`,
   [docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview')]: `${FOUNDATION_GRAPHIC}/illustration.png`,
   [PATH_SYMBOL]: `${FOUNDATION_GRAPHIC}/icon.png`,
+  [docPagePath(PATH_LOGOS_BASE, 'Overview')]: `${FOUNDATION_GRAPHIC}/icon.png`,
   [PATH_MOTION]: `${FOUNDATION_GRAPHIC}/motion.png`,
 }
 

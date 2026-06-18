@@ -22,6 +22,7 @@ import {
   PATH_MOTION,
   PATH_SPACING,
   PATH_SYMBOL,
+  PATH_LOGOS_BASE,
   PATH_TYPOGRAPHY_BASE,
   contentTopicPath,
   docPagePath,
@@ -78,6 +79,12 @@ export const FOUNDATIONS_CATALOG = [
     label: 'Symbol',
     section: 'Assets',
     description: 'Product symbol usage: clear space, sizing, and co-branding so the mark stays recognizable.',
+  },
+  {
+    path: docPagePath(PATH_LOGOS_BASE, 'Overview'),
+    label: 'Logos',
+    section: 'Assets',
+    description: 'Integration logos for AI, data platforms, connectors, and tools — sized with image-* tokens for product UI.',
   },
   {
     path: docPagePath(PATH_MOTION, 'Overview'),

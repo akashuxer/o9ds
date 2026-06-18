@@ -7,6 +7,7 @@ import PublicRasterPicture from '@/components/media/PublicRasterPicture'
 import ComponentTreeNav from './ComponentTreeNav'
 import { COMPONENTS_NAV_TREE, filterComponentNavTree } from '../data/componentsNav'
 import { GRAMMAR_STYLE_NAV_ITEMS } from '../data/contentGrammarNav'
+import { FIGMA_HEADER_LIBRARIES } from '../data/figmaLibraryLinks'
 import { applyDocumentTitle } from '../utils/documentTitle'
 import { PATHS_WITH_CONTENT, hasReadyDocumentation } from '../data/pathsWithContent'
 import {
@@ -51,6 +52,7 @@ import {
   PATH_SPACING,
   PATH_STORYBOOK_SANDBOX,
   PATH_SYMBOL,
+  PATH_LOGOS_BASE,
   PATH_TYPOGRAPHY_BASE,
   contentTopicPath,
   devRefTopicPath,
@@ -148,6 +150,7 @@ const sidebarSections = [
           { path: docPagePath(PATH_ICONS_BASE, 'Overview'), label: 'Iconography' },
           { path: docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview'), label: 'Illustrations' },
           { path: PATH_SYMBOL, label: 'Symbol' },
+          { path: docPagePath(PATH_LOGOS_BASE, 'Overview'), label: 'Logos' },
         ],
       },
       { path: docPagePath(PATH_MOTION, 'Overview'), label: 'Motion & Animation' },
@@ -241,29 +244,36 @@ function initialSubsectionOpen(pathname) {
 }
 
 const STORYBOOK_ICON_SRC = '/componentOverview/storybook.png'
+const FIGMA_LOGO_SRC = '/componentOverview/figma-logo.png'
 
-const HEADER_ACTION_BTN_CLASS =
-  'flex items-center justify-center gap-0 border p-2 text-sm font-medium transition-colors shrink-0 hover:opacity-90 whitespace-nowrap lg:gap-2 lg:px-3 lg:py-2'
+const HEADER_ACTION_BTN_BASE =
+  'flex items-center justify-center gap-0 border p-2 text-sm font-medium transition-colors shrink-0 whitespace-nowrap lg:gap-2 lg:px-3 lg:py-2'
+
+function headerActionBtnClass(isDark) {
+  return isDark
+    ? `${HEADER_ACTION_BTN_BASE} border-neutral-600 text-neutral-200 hover:bg-neutral-800 hover:border-neutral-500 active:bg-neutral-700`
+    : `${HEADER_ACTION_BTN_BASE} border-neutral-200 text-neutral-900 hover:bg-neutral-50 hover:border-neutral-300 active:bg-neutral-100`
+}
+
+function headerMenuItemClass(isDark) {
+  return isDark
+    ? 'text-neutral-200 hover:bg-neutral-800 active:bg-neutral-700'
+    : 'text-neutral-900 hover:bg-neutral-50 active:bg-neutral-100'
+}
 
 function HeaderNavButton({ to, href, children, isDark, ariaLabel }) {
-  const style = {
-    borderColor: isDark ? '#525252' : '#E5E5E5',
-    color: isDark ? '#e5e5e5' : '#010101',
-  }
-
   const trigger = href ? (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={HEADER_ACTION_BTN_CLASS}
-      style={style}
+      className={headerActionBtnClass(isDark)}
       aria-label={ariaLabel}
     >
       {children}
     </a>
   ) : (
-    <Link to={to} className={HEADER_ACTION_BTN_CLASS} style={style} aria-label={ariaLabel}>
+    <Link to={to} className={headerActionBtnClass(isDark)} aria-label={ariaLabel}>
       {children}
     </Link>
   )
@@ -277,6 +287,82 @@ function HeaderNavButton({ to, href, children, isDark, ariaLabel }) {
 
 function HeaderActionLabel({ children }) {
   return <span className="hidden lg:inline">{children}</span>
+}
+
+function HeaderFigmaDropdown({ isDark }) {
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef(null)
+  const tooltipLabel = 'Design Library (Figma)'
+
+  useEffect(() => {
+    if (!open) return undefined
+
+    const onPointerDown = (event) => {
+      if (rootRef.current && !rootRef.current.contains(event.target)) {
+        setOpen(false)
+      }
+    }
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+
+    document.addEventListener('mousedown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  const menuSurfaceClass = isDark ? 'border-neutral-600 bg-neutral-900' : 'border-neutral-200 bg-white'
+
+  const trigger = (
+    <button
+      type="button"
+      className={headerActionBtnClass(isDark)}
+      aria-expanded={open}
+      aria-haspopup="menu"
+      aria-label={tooltipLabel}
+      onClick={() => setOpen((value) => !value)}
+    >
+      <PublicRasterPicture
+        src={FIGMA_LOGO_SRC}
+        alt=""
+        width={12}
+        height={18}
+        className="h-[18px] w-auto shrink-0 object-contain object-center"
+        aria-hidden
+      />
+      <HeaderActionLabel>Design Library (Figma)</HeaderActionLabel>
+      <span className="o9con o9con-angle-down hidden text-xs leading-none lg:inline" aria-hidden />
+    </button>
+  )
+
+  return (
+    <div ref={rootRef} className="relative shrink-0">
+      {open ? trigger : <ArvoTooltip content={tooltipLabel} placement="bottom-center">{trigger}</ArvoTooltip>}
+      {open && (
+        <div
+          role="menu"
+          className={`absolute right-0 top-[calc(100%+4px)] z-50 min-w-[15.5rem] border py-1 shadow-lg ${menuSurfaceClass}`}
+        >
+          {FIGMA_HEADER_LIBRARIES.map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              role="menuitem"
+              className={`block px-3 py-2 text-sm font-medium transition-colors ${headerMenuItemClass(isDark)}`}
+              onClick={() => setOpen(false)}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function Layout({ children }) {
@@ -571,6 +657,7 @@ export default function Layout({ children }) {
               />
               <HeaderActionLabel>Storybook Sandbox</HeaderActionLabel>
             </HeaderNavButton>
+            <HeaderFigmaDropdown isDark={isDark} />
             <HeaderNavButton
               to={docPagePath(PATH_CONTRIBUTE, 'For Developers')}
               isDark={isDark}
@@ -590,11 +677,7 @@ export default function Layout({ children }) {
               <button
                 type="button"
                 onClick={toggleTheme}
-                className={HEADER_ACTION_BTN_CLASS}
-                style={{
-                  borderColor: isDark ? '#525252' : '#E5E5E5',
-                  color: isDark ? '#a3a3a3' : '#303030',
-                }}
+                className={headerActionBtnClass(isDark)}
                 aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               >
                 {theme === 'dark' ? (
@@ -948,6 +1031,7 @@ export default function Layout({ children }) {
                       pathname.startsWith('/icons') ||
                       pathname.startsWith('/illustrations') ||
                       pathname.startsWith('/symbol') ||
+                      pathname.startsWith('/logos') ||
                       pathname.startsWith('/foundations') ||
                       pathname.startsWith('/patterns') ||
                       pathname.startsWith('/accessibility') ||

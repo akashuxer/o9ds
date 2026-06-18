@@ -42,6 +42,9 @@ export const PATH_EFFECTS = `${FOUNDATIONS}/effects`
 export const PATH_ICONS_BASE = `${FOUNDATIONS}/icons`
 export const PATH_ILLUSTRATIONS_BASE = `${FOUNDATIONS}/illustrations`
 export const PATH_SYMBOL = `${FOUNDATIONS}/symbol`
+export const PATH_LOGOS_BASE = `${FOUNDATIONS}/logos`
+/** Same route as {@link PATH_LOGOS_BASE}. */
+export const PATH_LOGOS = PATH_LOGOS_BASE
 export const PATH_MOTION = `${FOUNDATIONS}/motion`
 export const PATH_COLOR_DATA_VIZ = `${FOUNDATIONS}/color/data-viz`
 
@@ -114,6 +117,7 @@ export const LEGACY_PATH_REDIRECTS = {
   '/icons': docPagePath(PATH_ICONS_BASE, 'Overview'),
   '/illustrations': docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview'),
   '/symbol': PATH_SYMBOL,
+  '/logos': docPagePath(PATH_LOGOS_BASE, 'Overview'),
   '/motion': PATH_MOTION,
   '/colors/data-viz': PATH_COLOR_DATA_VIZ,
   '/components': PATH_COMPONENTS_OVERVIEW,

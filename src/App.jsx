@@ -56,6 +56,7 @@ import {
   PATH_RESOURCES,
   PATH_SPACING,
   PATH_SYMBOL,
+  PATH_LOGOS_BASE,
   PATH_TYPOGRAPHY_BASE,
   PATH_GRAMMAR_STYLE_BASE,
   docPagePath,
@@ -79,6 +80,7 @@ const Effects = lazy(() => import('./pages/foundation/Effects'))
 const Motion = lazy(() => import('./pages/foundation/Motion'))
 const Illustrations = lazy(() => import('./pages/foundation/Illustrations'))
 const Symbol = lazy(() => import('./pages/foundation/Symbol'))
+const Logos = lazy(() => import('./pages/foundation/Logos'))
 const Developers = lazy(() => import('./pages/Developers'))
 const Contribute = lazy(() => import('./pages/Contribute'))
 const FoundationsOverview = lazy(() => import('./pages/FoundationsOverview'))
@@ -154,6 +156,8 @@ export default function App() {
           <Route path={`${PATH_ILLUSTRATIONS_BASE}/:tab`} element={<Illustrations />} />
           <Route path={PATH_ILLUSTRATIONS_BASE} element={<Navigate to={docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview')} replace />} />
           <Route path={PATH_SYMBOL} element={<Symbol />} />
+          <Route path={`${PATH_LOGOS_BASE}/:tab`} element={<Logos />} />
+          <Route path={PATH_LOGOS_BASE} element={<Navigate to={docPagePath(PATH_LOGOS_BASE, 'Overview')} replace />} />
           <Route path={`${PATH_MOTION}/:tab`} element={<Motion />} />
           <Route path={PATH_MOTION} element={<Navigate to={docPagePath(PATH_MOTION, 'Overview')} replace />} />
           <Route path={PATH_EFFECTS} element={<Effects />} />
@@ -214,6 +218,7 @@ export default function App() {
           <Route path="/icons/:tab?" element={<LegacyDocTabRedirect newBase={PATH_ICONS_BASE} />} />
           <Route path="/illustrations/:tab?" element={<LegacyDocTabRedirect newBase={PATH_ILLUSTRATIONS_BASE} />} />
           <Route path="/symbol" element={<LegacyRedirect to={PATH_SYMBOL} />} />
+          <Route path="/logos/:tab?" element={<LegacyDocTabRedirect newBase={PATH_LOGOS_BASE} />} />
           <Route path="/motion" element={<LegacyRedirect to={PATH_MOTION} />} />
           <Route path="/components" element={<LegacyRedirect to={PATH_COMPONENTS_OVERVIEW} />} />
 
