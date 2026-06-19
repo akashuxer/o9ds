@@ -1,3 +1,144 @@
+@charset "UTF-8";
+/* Arvo motion & animation tokens */
+/* -------------------------------- */
+/* Core Durations */
+/* -------------------------------- */
+/* -------------------------------- */
+/* Core Easing */
+/* -------------------------------- */
+/* -------------------------------- */
+/* Layout expand / collapse */
+/* -------------------------------- */
+/* Accordion, Tree, Show More/Less, Disclosure */
+/* -------------------------------- */
+/* Popup / floating surface */
+/* -------------------------------- */
+/* Menu, Popover, Tooltip, Context Menu, Select Menu */
+/* -------------------------------- */
+/* Dialog / overlay surface */
+/* -------------------------------- */
+/* Window, Dialog, Modal, Alert Dialog, Confirm Dialog */
+/* -------------------------------- */
+/* Feedback */
+/* -------------------------------- */
+/* Toast, Banner Alert, Inline Message */
+/* -------------------------------- */
+/* Layout shift (FLIP) */
+/* -------------------------------- */
+/* Toast stack reflow, chip list reflow — WAAPI compensation after DOM change */
+/* -------------------------------- */
+/* Toast visibility duration */
+/* -------------------------------- */
+/* Controls how long toast remains visible before auto-dismiss. */
+/* -------------------------------- */
+/* Link */
+/* -------------------------------- */
+/* Link underline enter / exit motion */
+/* -------------------------------- */
+/* Nested content transition */
+/* -------------------------------- */
+/* Popover, Window, Drawer, Settings, Nested View */
+/* -------------------------------- */
+/* Nested footer transition */
+/* -------------------------------- */
+/* Footer action changes inside nested views */
+/* -------------------------------- */
+/* Invalid drop / constraint feedback */
+/* -------------------------------- */
+/* Duplicate block, invalid drop, rejected placement */
+/* -------------------------------- */
+/* Form input */
+/* -------------------------------- */
+/* Textbox, Textarea, Select, Combobox — animated bottom border width */
+/* -------------------------------- */
+/* Focus ring */
+/* -------------------------------- */
+/* Inset focus frame on button group segments and theme-filled controls */
+/* -------------------------------- */
+/* Checkmark draw */
+/* -------------------------------- */
+/* Checkbox, confirmation stroke reveal */
+/* -------------------------------- */
+/* Tabs / segmented control */
+/* -------------------------------- */
+/* Tabs, Scrollspy, Segmented Control, Button Group */
+/* -------------------------------- */
+/* Search expand */
+/* -------------------------------- */
+/* Compact search icon → search input */
+/* -------------------------------- */
+/* Toggle / icon state change */
+/* -------------------------------- */
+/* Pin, Star, Favorite, Bookmark */
+/* -------------------------------- */
+/* Status indicator */
+/* -------------------------------- */
+/* Unsaved dot, dirty state, pending marker, and pulsating active status. */
+/* -------------------------------- */
+/* Counter */
+/* -------------------------------- */
+/* Interactive Counter is a dynamic counter badge that updates based on user actions. Add, Remove, Plus (+), Minus (–), Delete, Clear all, Select, Deselect. Used for lightweight numeric feedback when a count value changes. */
+/* -------------------------------- */
+/* Chip remove */
+/* -------------------------------- */
+/* Filter chip clear, tag remove */
+/* -------------------------------- */
+/* Chip toggle / filter select */
+/* -------------------------------- */
+/* Selectable filter chips — selected state and filtered content below. */
+/* -------------------------------- */
+/* Search result highlight */
+/* -------------------------------- */
+/* -------------------------------- */
+/* Scrollspy */
+/* -------------------------------- */
+/* Scroll-linked section indicator */
+/* -------------------------------- */
+/* Navigation active indicator */
+/* -------------------------------- */
+/* Vertical nav — shared left border and highlight slide between items. */
+/* -------------------------------- */
+/* Empty state illustration */
+/* -------------------------------- */
+/* -------------------------------- */
+/* Avatar group uplift */
+/* -------------------------------- */
+/* Hover/focus elevation on stacked Avatar Group items — scale + shadow, no positional shift. */
+/* -------------------------------- */
+/* Slider */
+/* -------------------------------- */
+/* Slider thumb travel, filled track width, and thumb scale on hover/focus. */
+/* -------------------------------- */
+/* Progress indicator */
+/* -------------------------------- */
+/* Linear fill width and circular arc stroke — determinate value changes and indeterminate loops. */
+/* -------------------------------- */
+/* Carousel pagination */
+/* -------------------------------- */
+/* Slide track translation and square dot width for carousel view pagination. */
+/* -------------------------------- */
+/* Stepper */
+/* -------------------------------- */
+/* Horizontal stepper connector fill and step marker / label state transitions. */
+/* -------------------------------- */
+/* Loader */
+/* -------------------------------- */
+/* Dot, circular, and square loading indicators. */
+/* -------------------------------- */
+/* Pane / drawer */
+/* -------------------------------- */
+/* Side Panel, Drawer, Member Info Panel */
+/* -------------------------------- */
+/* Launchbar drawer */
+/* -------------------------------- */
+/* Hover-triggered launchbar secondary panel — open, close, and content switch timing. */
+/* -------------------------------- */
+/* List split view */
+/* -------------------------------- */
+/* List container resizing into an inline split-view — list shifts left, detail panel slides in, content crossfades on item switch. */
+/* -------------------------------- */
+/* Toggle switch */
+/* -------------------------------- */
 :root {
   --o9-font-family: o9Sans, NotoSans, Arial, sans-serif;
   --arvo-space-1: 0.0625rem;
@@ -41,13 +182,13 @@
   --arvo-opacity-high: 0.8;
   --arvo-opacity-medium: 0.6;
   --arvo-opacity-low: 0.4;
-  --arvo-motion-form-input: 0.15s ease;
-  --arvo-motion-tab: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --arvo-motion-pane: transform 0.3s ease;
-  --arvo-motion-expand: 300ms ease-in-out;
-  --arvo-motion-scrollspy: 300ms ease;
-  --arvo-motion-toggle: 0.3s ease;
-  --arvo-motion-popup: opacity 0.3s ease, transform 0.3s ease;
+  --arvo-motion-form-input: width 150ms ease;
+  --arvo-motion-tab: transform 220ms cubic-bezier(0.4, 0, 0.2, 1), width 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --arvo-motion-pane: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --arvo-motion-expand: height 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --arvo-motion-scrollspy: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --arvo-motion-toggle: transform 220ms cubic-bezier(0.2, 0, 0, 1), background-color 180ms ease, opacity 180ms ease;
+  --arvo-motion-popup: opacity 300ms ease, transform 300ms ease;
   --arvo-icon-12: 0.75rem;
   --arvo-icon-14: 0.875rem;
   --arvo-icon-16: 1rem;
@@ -1374,7 +1515,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   flex-shrink: 0;
   line-height: normal;
   pointer-events: none;
-  transition: transform 0.15s ease;
+  transition: transform width 150ms ease;
 }
 .arvo-dd-btn.open .arvo-dd-btn__caret {
   transform: rotate(180deg);
@@ -1408,7 +1549,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   flex-shrink: 0;
   line-height: normal;
   pointer-events: none;
-  transition: transform 0.15s ease;
+  transition: transform width 150ms ease;
 }
 .arvo-dd-icon-btn.open .arvo-dd-icon-btn__caret {
   transform: rotate(180deg);
@@ -1479,7 +1620,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   flex-shrink: 0;
   line-height: normal;
   pointer-events: none;
-  transition: transform 0.15s ease;
+  transition: transform width 150ms ease;
 }
 .arvo-split-btn.open .arvo-split-btn__caret {
   transform: rotate(180deg);
@@ -1596,7 +1737,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   flex-shrink: 0;
   line-height: normal;
   pointer-events: none;
-  transition: transform 0.15s ease;
+  transition: transform width 150ms ease;
 }
 .arvo-split-icon-btn.open .arvo-split-icon-btn__caret {
   transform: rotate(180deg);
@@ -1989,7 +2130,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   box-shadow: -10px 0px 10px 0px var(--arvo-color-s-shadow-static-2);
   pointer-events: auto;
   opacity: 1;
-  animation: arvo-toast-enter 300ms ease-in-out;
+  animation: arvo-toast-enter height 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .arvo-toast.is-fading {
   opacity: 0;
@@ -2429,7 +2570,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   background-color: var(--arvo-color-b-theme);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.15s ease, height 0.15s ease;
+  transition: transform width 150ms ease, height width 150ms ease;
   will-change: transform, height;
 }
 .arvo-search__border {
@@ -2679,7 +2820,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   background-color: var(--arvo-color-b-theme);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.15s ease, height 0.15s ease;
+  transition: transform width 150ms ease, height width 150ms ease;
   will-change: transform, height;
 }
 .arvo-textbox__err-ico {
@@ -2948,7 +3089,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   background-color: var(--arvo-color-b-theme);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.15s ease, height 0.15s ease;
+  transition: transform width 150ms ease, height width 150ms ease;
   will-change: transform, height;
 }
 .arvo-textarea__err-ico {
@@ -3213,7 +3354,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   background-color: var(--arvo-color-b-theme);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.15s ease, height 0.15s ease;
+  transition: transform width 150ms ease, height width 150ms ease;
   will-change: transform, height;
 }
 @media (hover: hover) and (pointer: fine) {
@@ -3917,7 +4058,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   background-color: var(--arvo-color-s-layer-07);
   position: relative;
   flex-shrink: 0;
-  transition: background-color 0.3s ease;
+  transition: background-color transform 220ms cubic-bezier(0.2, 0, 0, 1), background-color 180ms ease, opacity 180ms ease;
   box-sizing: border-box;
 }
 .arvo-sw__thumb {
@@ -3930,7 +4071,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: left 0.3s ease;
+  transition: left transform 220ms cubic-bezier(0.2, 0, 0, 1), background-color 180ms ease, opacity 180ms ease;
 }
 .arvo-sw__thumb::before {
   content: "\ea82";
@@ -3938,7 +4079,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   font-size: 12px;
   color: var(--arvo-color-i-primary);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity transform 220ms cubic-bezier(0.2, 0, 0, 1), background-color 180ms ease, opacity 180ms ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -4196,7 +4337,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   font-family: "o9con";
   font-size: 16px;
   color: var(--arvo-color-i-secondary);
-  transition: transform 0.15s ease;
+  transition: transform width 150ms ease;
   user-select: none;
 }
 .arvo-sel.open .arvo-sel__ico {
@@ -4218,7 +4359,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   background-color: var(--arvo-color-b-theme);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.15s ease, height 0.15s ease;
+  transition: transform width 150ms ease, height width 150ms ease;
   will-change: transform, height;
 }
 .arvo-sel__panel {
@@ -4291,7 +4432,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -4631,7 +4772,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   flex: 0 0 auto;
 }
 .arvo-combobox__ico .arvo-btn__ico {
-  transition: transform 0.15s ease;
+  transition: transform width 150ms ease;
 }
 .arvo-combobox.open .arvo-combobox__ico .arvo-btn__ico {
   transform: rotate(180deg);
@@ -4652,7 +4793,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   background-color: var(--arvo-color-b-theme);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.15s ease, height 0.15s ease;
+  transition: transform width 150ms ease, height width 150ms ease;
   will-change: transform, height;
 }
 .arvo-combobox__panel {
@@ -4727,7 +4868,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -4973,7 +5114,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -6091,7 +6232,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -6173,7 +6314,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
 .arvo-menu-item--actions-on-hover .arvo-menu-item__actions {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 300ms ease-in-out, visibility 300ms ease-in-out;
+  transition: opacity height 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1), visibility height 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .arvo-menu-item--actions-on-hover:focus-visible .arvo-menu-item__actions, .arvo-menu-item--actions-on-hover.focused .arvo-menu-item__actions, .arvo-menu-item--actions-on-hover.active .arvo-menu-item__actions, .arvo-menu-item--actions-on-hover .arvo-menu-item__actions:focus-within {
   opacity: 1;
@@ -6263,7 +6404,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -6348,7 +6489,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -6538,7 +6679,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   pointer-events: auto;
   z-index: 2;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity width 150ms ease;
 }
 .arvo-hpop__handle::after {
   content: "";
@@ -6770,7 +6911,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -7171,7 +7312,7 @@ body[data-scroll-pref=always] ::-webkit-scrollbar-track:hover {
   cursor: pointer;
   user-select: none;
   font-family: var(--o9-font-family);
-  transition: background-color 0.15s ease;
+  transition: background-color width 150ms ease;
   height: var(--arvo-list-item-height-single, 32px);
   white-space: nowrap;
   overflow: hidden;

@@ -59,7 +59,8 @@ export default function OnThisPage({ sections = [], className = '' }) {
 
   return (
     <nav
-      className={`sticky top-24 self-start hidden xl:block w-52 shrink-0 ${className}`}
+      className={`sticky self-start hidden xl:block w-52 shrink-0 md:-mr-2 ${className}`}
+      style={{ top: 'calc(var(--arvo-header-stack-height, 56px) + 1.5rem)' }}
       aria-label="On this page"
     >
       <div

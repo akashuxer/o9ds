@@ -1,22 +1,25 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
 import PageHeader from '../../LayoutComponents/PageHeader'
 import PageWithToc from '../../LayoutComponents/PageWithToc'
 import DocTabs, { useDocTabUrl } from '../../LayoutComponents/DocTabs'
-import DocSection from '../../LayoutComponents/DocSection'
-import CounterAnimationCodePen from '../../LayoutComponents/CounterAnimationCodePen'
 import { TokenDownloadFab, TokenDownloadSection } from '../../LayoutComponents/TokenScssDownload'
 import { DocTabRouteProvider } from '../../context/DocTabRouteContext'
 import { useTheme } from '../../context/ThemeContext'
 import { PATH_MOTION } from '../../data/docPaths'
-import { MOTION_OVERVIEW_TOC, MOTION_TOKENS_TOC } from '../../data/motionTokens'
+import { MOTION_OVERVIEW_TOC } from '../../data/motionOverview'
+import { MOTION_PLAYGROUND_TOC } from '../../data/motionPlayground'
+import { MOTION_TOKENS_TOC } from '../../data/motionTokens'
 import {
   ARVO_ANIMATION_SCSS_FILENAME,
   ARVO_ANIMATION_SCSS_REPLACE_PATH,
   downloadArvoAnimationScss,
 } from '../../utils/arvoAnimationScss'
+import MotionOverviewTab from './MotionOverviewTab'
 import MotionTokensTab from './MotionTokensTab'
 
-const MOTION_TABS = ['Overview', 'Tokens']
+const MotionPlaygroundTab = lazy(() => import('./MotionPlaygroundTab'))
+
+const MOTION_TABS = ['Overview', 'Tokens', 'Playground']
 
 const motionIcon = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -58,6 +61,9 @@ export default function Motion() {
     if (activeTab === 'Tokens') {
       return [...MOTION_TOKENS_TOC, { id: 'motion-download-tokens', label: 'Download tokens' }]
     }
+    if (activeTab === 'Playground') {
+      return MOTION_PLAYGROUND_TOC
+    }
     return MOTION_OVERVIEW_TOC
   }, [activeTab])
 
@@ -68,18 +74,12 @@ export default function Motion() {
           <PageHeader
             title="Motion & Animation"
             icon={motionIcon}
-            description="Duration, easing, and motion patterns for feedback, transitions, and reduced-motion respect across Arvo components."
+            description="Functional motion for the o9 Platform UI — principles, patterns, and when to animate. Token values live on the Tokens tab."
           />
 
           <DocTabs tabs={MOTION_TABS} activeTab={activeTab} onSelect={setActiveTab} />
 
-          {activeTab === 'Overview' && (
-            <div className="space-y-12">
-              <DocSection id="motion-counter-animation" title="Direction-based counter animation">
-                <CounterAnimationCodePen />
-              </DocSection>
-            </div>
-          )}
+          {activeTab === 'Overview' && <MotionOverviewTab />}
 
           {activeTab === 'Tokens' && (
             <div className="space-y-12">
@@ -94,6 +94,12 @@ export default function Motion() {
                 replacePath={ARVO_ANIMATION_SCSS_REPLACE_PATH}
               />
             </div>
+          )}
+
+          {activeTab === 'Playground' && (
+            <Suspense fallback={null}>
+              <MotionPlaygroundTab />
+            </Suspense>
           )}
         </div>
         {activeTab === 'Tokens' && (

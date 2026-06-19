@@ -13,7 +13,8 @@
     "vendor:arvo": "node scripts/vendor-arvo.mjs",
     "generate:component-stubs": "node scripts/generate-component-stubs.mjs",
     "generate:o9con-icons": "node scripts/generate-o9con-icons.mjs",
-    "sync:descriptors": "node scripts/sync-from-descriptors.mjs"
+    "sync:descriptors": "node scripts/sync-from-descriptors.mjs",
+    "sync:animation": "node scripts/sync-animation-scss.mjs"
   },
   "dependencies": {
     "@arvo/assets": "file:./vendor/@arvo/assets",

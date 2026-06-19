@@ -62,7 +62,7 @@ export const LABEL_MIXIN_ROWS = [
   { mixin: '$arvo-font-l32-r', size: '32px (2rem)', weight: '400', other: '—' },
   { mixin: '$arvo-font-l24-r', size: '24px (1.5rem)', weight: '400', other: '—' },
   { mixin: '$arvo-font-l16-r', size: '16px (1rem)', weight: '400', other: '—' },
-  { mixin: '$arvo-font-l16-m', size: '16px (1rem)', weight: '400', other: 'text-decoration: underline' },
+  { mixin: '$arvo-font-l16-m', size: '16px (1rem)', weight: '500', other: '—' },
   { mixin: '$arvo-font-l14-r', size: '14px', weight: '400', other: '—' },
   { mixin: '$arvo-font-l14-m', size: '14px', weight: '500', other: '—' },
   { mixin: '$arvo-font-l14-ru', size: '14px', weight: '400', other: 'text-decoration: underline' },

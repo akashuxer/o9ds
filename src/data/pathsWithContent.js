@@ -60,6 +60,7 @@ export const PATHS_WITH_CONTENT = new Set([
   PATH_EFFECTS,
   docPagePath(PATH_MOTION, 'Overview'),
   docPagePath(PATH_MOTION, 'Tokens'),
+  docPagePath(PATH_MOTION, 'Playground'),
   docPagePath(PATH_ICONS_BASE, 'Overview'),
   docPagePath(PATH_ILLUSTRATIONS_BASE, 'Overview'),
   PATH_SYMBOL,

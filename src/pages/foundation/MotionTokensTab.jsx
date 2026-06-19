@@ -1,5 +1,7 @@
 import DocSection, { DocParagraph } from '../../LayoutComponents/DocSection'
 import DocTable from '../../LayoutComponents/DocTable'
+import MotionDurationStrip from '../../LayoutComponents/MotionDurationStrip'
+import MotionEasingStrip from '../../LayoutComponents/MotionEasingStrip'
 import {
   MOTION_DURATION_ROWS,
   MOTION_EASING_ROWS,
@@ -12,14 +14,24 @@ const TOKEN_COLUMNS = [
   { key: 'value', label: 'Value', mono: true },
 ]
 
+const CORE_TOKEN_COLUMNS = [
+  { key: 'token', label: 'Token', mono: true },
+  { key: 'value', label: 'Value', mono: true },
+  { key: 'meaning', label: 'Use when' },
+]
+
 /** Motion & Animation — Tokens tab. */
 export default function MotionTokensTab() {
   return (
     <div className="space-y-12">
       <DocSection id="motion-core-durations" title="Core durations">
-        <DocParagraph>Base duration scale for transitions and animations across Arvo components.</DocParagraph>
+        <DocParagraph>
+          Base duration scale for transitions and animations across Arvo components. Most interaction motion finishes
+          between 120ms and 300ms.
+        </DocParagraph>
+        <MotionDurationStrip />
         <DocTable
-          columns={TOKEN_COLUMNS}
+          columns={CORE_TOKEN_COLUMNS}
           rows={MOTION_DURATION_ROWS}
           highlightFirstColumnIdentifier
           rowCopy={motionTokenClipboard}
@@ -28,9 +40,13 @@ export default function MotionTokensTab() {
       </DocSection>
 
       <DocSection id="motion-core-easing" title="Core easing">
-        <DocParagraph>Standard easing curves referenced by semantic motion tokens.</DocParagraph>
+        <DocParagraph>
+          Easing curves control acceleration — whether motion eases in, eases out, or both. Semantic motion tokens
+          reference one of these curves; pick based on how decisive or gentle the interaction should feel.
+        </DocParagraph>
+        <MotionEasingStrip />
         <DocTable
-          columns={TOKEN_COLUMNS}
+          columns={CORE_TOKEN_COLUMNS}
           rows={MOTION_EASING_ROWS}
           highlightFirstColumnIdentifier
           rowCopy={motionTokenClipboard}

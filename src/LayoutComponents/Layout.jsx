@@ -529,6 +529,7 @@ export default function Layout({ children }) {
       style={{
         backgroundColor: isDark ? '#000' : '#FFFFFF',
         color: isDark ? '#fff' : '#010101',
+        '--arvo-header-stack-height': `${headerStackHeight}px`,
       }}
     >
       {/* Sticky stack: optional evolution banner + main header row */}
@@ -1040,7 +1041,7 @@ export default function Layout({ children }) {
                       pathname.startsWith('/developers') ||
                       pathname.startsWith('/arvo-mcp') ||
                       pathname.startsWith('/figma-make')
-                    ? 'max-w-6xl'
+                    ? 'w-full'
                     : 'max-w-4xl'
             }`}
           >

@@ -264,7 +264,7 @@ html.dark {
   --arvo-color-i-negative: #F07A62;
   --arvo-color-i-negative-static: #D9311B;
   --arvo-color-i-warning: #FFEF5C;
-  --arvo-color-i-warning-static: #D9311B;
+  --arvo-color-i-warning-static: #C7880D;
   --arvo-color-i-info-light: #B8C7FF;
   --arvo-color-i-info-dark: #8AA3FF;
   --arvo-color-i-neutral: #FFFFFF;
@@ -445,7 +445,7 @@ html:not(.dark) {
   --arvo-color-i-negative: #BC1227;
   --arvo-color-i-negative-static: #D9311B;
   --arvo-color-i-warning: #926200;
-  --arvo-color-i-warning-static: #D9311B;
+  --arvo-color-i-warning-static: #C7880D;
   --arvo-color-i-info-light: #0037FF;
   --arvo-color-i-info-dark: #002ED2;
   --arvo-color-i-neutral: #010101;
