@@ -575,17 +575,17 @@ export function FocusRingDemo() {
   return (
     <div className="mp-button-group-demos mp-focus-ring-demo">
       <div className="mp-button-group-demo">
-        <p className="mp-button-group-demo-label">4 selected</p>
+        <p className="mp-button-group-demo-label">With labels</p>
         <MotionButtonGroupMulti
-          options={BUTTON_GROUP_LABELS}
-          defaultSelected={['Data', 'Display', 'Layout', 'Options']}
-          ariaLabel="Button group — four selected"
+          options={FOCUS_RING_LABELS}
+          defaultSelected={['Data', 'Display', 'Layout']}
+          ariaLabel="Button group — three selected"
         />
       </div>
       <div className="mp-button-group-demo">
         <p className="mp-button-group-demo-label">1 selected</p>
         <MotionButtonGroupMulti
-          options={BUTTON_GROUP_LABELS}
+          options={FOCUS_RING_LABELS}
           defaultSelected={['Display']}
           ariaLabel="Button group — one selected"
         />
@@ -958,6 +958,8 @@ export function NavActiveIndicatorDemo() {
 }
 
 const BUTTON_GROUP_LABELS = ['Data', 'Display', 'Layout', 'Options', 'Controls']
+const BUTTON_GROUP_COMPACT_LABELS = ['Data', 'Display', 'Layout']
+const FOCUS_RING_LABELS = ['Data', 'Display', 'Layout']
 
 const BUTTON_GROUP_ICONS = [
   { id: 'bold', label: 'Bold', icon: 'bold' },
@@ -1162,7 +1164,7 @@ export function ButtonGroupDemo() {
     <div className="mp-button-group-demos">
       <div className="mp-button-group-demo">
         <p className="mp-button-group-demo-label">With labels</p>
-        <MotionButtonGroup options={BUTTON_GROUP_LABELS} defaultActive={1} ariaLabel="Button group" />
+        <MotionButtonGroup options={BUTTON_GROUP_COMPACT_LABELS} defaultActive={1} ariaLabel="Button group" />
       </div>
       <div className="mp-button-group-demo">
         <p className="mp-button-group-demo-label">Icon only</p>
@@ -2553,7 +2555,7 @@ export function NestedContentDemo() {
         <p className="mp-button-group-demo-label">In popover</p>
         <NestedContentPanel />
       </div>
-      <div className="mp-nested-content-demo">
+      <div className="mp-nested-content-demo" data-mp-autoplay-skip>
         <p className="mp-button-group-demo-label">In dialog</p>
         <DemoBtn onClick={openDialog}>Open dialog</DemoBtn>
         <dialog ref={dialogRef} className="mp-arvo-dialog mp-nested-dialog">
@@ -4483,6 +4485,143 @@ export function LoaderDemo() {
   )
 }
 
+const SCROLLSPY_SECTIONS = [
+  { id: 'overview', label: 'Overview', body: 'Scrollspy links a vertical nav to in-page sections. The active marker slides as you scroll or click.' },
+  { id: 'usage', label: 'Usage', body: 'Use on long doc pages, settings panels, and wizards where users need section context without losing their place.' },
+  { id: 'tokens', label: 'Tokens', body: 'Indicator motion uses $arvo-motion-scrollspy — transform over 300ms with standard easing.' },
+  { id: 'accessibility', label: 'Accessibility', body: 'Mark the current section with aria-current="location". Ensure keyboard users can move focus between nav links.' },
+]
+
+/** Scroll a target into view inside a scroll container — never the document. */
+function scrollWithinContainer(container, target, { behavior = 'smooth', offset = 0 } = {}) {
+  if (!(container instanceof HTMLElement) || !(target instanceof HTMLElement)) return
+
+  const top =
+    container.scrollTop +
+    target.getBoundingClientRect().top -
+    container.getBoundingClientRect().top -
+    offset
+
+  container.scrollTo({ top: Math.max(0, top), behavior })
+}
+
+function VerticalScrollspyDemo() {
+  const uid = useId().replace(/:/g, '')
+  const navRef = useRef(null)
+  const contentRef = useRef(null)
+  const [activeId, setActiveId] = useState(SCROLLSPY_SECTIONS[0].id)
+  const [indicator, setIndicator] = useState({ top: 0, height: 0 })
+
+  const moveIndicator = useCallback(() => {
+    const nav = navRef.current
+    const activeButton = nav?.querySelector(`[data-scrollspy-section="${activeId}"]`)
+    if (!nav || !(activeButton instanceof HTMLElement)) return
+
+    const navRect = nav.getBoundingClientRect()
+    const buttonRect = activeButton.getBoundingClientRect()
+    setIndicator({
+      top: buttonRect.top - navRect.top + nav.scrollTop,
+      height: buttonRect.height,
+    })
+  }, [activeId])
+
+  useLayoutEffect(() => {
+    moveIndicator()
+  }, [moveIndicator])
+
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) return undefined
+    const observer = new ResizeObserver(moveIndicator)
+    observer.observe(nav)
+    nav.querySelectorAll('.mp-scrollspy-nav-item').forEach((item) => observer.observe(item))
+    return () => observer.disconnect()
+  }, [moveIndicator])
+
+  const updateActiveFromScroll = useCallback(() => {
+    const panel = contentRef.current
+    if (!panel) return
+
+    const panelTop = panel.getBoundingClientRect().top
+    let nextActive = SCROLLSPY_SECTIONS[0].id
+
+    for (const section of SCROLLSPY_SECTIONS) {
+      const el = panel.querySelector(`#${uid}-${section.id}`)
+      if (!(el instanceof HTMLElement)) continue
+      const offset = el.getBoundingClientRect().top - panelTop
+      if (offset <= 20) nextActive = section.id
+    }
+
+    setActiveId(nextActive)
+  }, [uid])
+
+  useEffect(() => {
+    const panel = contentRef.current
+    if (!panel) return undefined
+
+    const onScroll = () => {
+      window.requestAnimationFrame(updateActiveFromScroll)
+    }
+
+    panel.addEventListener('scroll', onScroll, { passive: true })
+    updateActiveFromScroll()
+    return () => panel.removeEventListener('scroll', onScroll)
+  }, [updateActiveFromScroll])
+
+  const scrollToSection = (sectionId, event) => {
+    event?.preventDefault?.()
+    event?.stopPropagation?.()
+
+    const panel = contentRef.current
+    const target = panel?.querySelector(`#${uid}-${sectionId}`)
+    if (!panel || !(target instanceof HTMLElement)) return
+
+    scrollWithinContainer(panel, target)
+    setActiveId(sectionId)
+  }
+
+  return (
+    <div className="mp-scrollspy-layout">
+      <nav ref={navRef} className="mp-scrollspy-nav" aria-label="Section navigation">
+        <span
+          className="mp-scrollspy-indicator"
+          data-mp-motion
+          style={{ transform: `translateY(${indicator.top}px)`, height: indicator.height }}
+          aria-hidden="true"
+        />
+        <ul className="mp-scrollspy-nav-list">
+          {SCROLLSPY_SECTIONS.map((section) => (
+            <li key={section.id}>
+              <button
+                type="button"
+                className={`mp-scrollspy-nav-item${activeId === section.id ? ' is-active' : ''}`}
+                data-scrollspy-section={section.id}
+                aria-current={activeId === section.id ? 'location' : undefined}
+                onClick={(event) => scrollToSection(section.id, event)}
+              >
+                {section.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div ref={contentRef} className="mp-scrollspy-content" tabIndex={0} aria-label="Section content">
+        {SCROLLSPY_SECTIONS.map((section) => (
+          <section key={section.id} id={`${uid}-${section.id}`} className="mp-scrollspy-section">
+            <h4 className="mp-scrollspy-section-title">{section.label}</h4>
+            <p className="mp-scrollspy-section-body">{section.body}</p>
+          </section>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* 26. Scrollspy */
+export function ScrollspyDemo() {
+  return <VerticalScrollspyDemo />
+}
+
 /** Map playground section id → demo component. */
 export const MOTION_PLAYGROUND_DEMOS = {
   'motion-pg-expand': ExpandCollapseDemo,
@@ -4501,6 +4640,7 @@ export const MOTION_PLAYGROUND_DEMOS = {
   'motion-pg-stepper': StepperDemo,
   'motion-pg-tabs': TabsDemo,
   'motion-pg-nav-indicator': NavActiveIndicatorDemo,
+  'motion-pg-scrollspy': ScrollspyDemo,
   'motion-pg-button-group': ButtonGroupDemo,
   'motion-pg-button-group-multi': ButtonGroupMultiSelectDemo,
   'motion-pg-search-expand': SearchExpandDemo,

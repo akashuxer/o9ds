@@ -1,43 +1,83 @@
-import { useState } from 'react'
-import DocSection, { DocParagraph } from '../../../LayoutComponents/DocSection'
+import { useCallback, useRef, useState } from 'react'
 import CodeBlock from '../../../LayoutComponents/CodeBlock'
+import { isAutoplayExcluded, isAutoplayStatic } from './motionDemoAutoplay'
+import { useMotionPlaygroundPlayback } from './MotionPlaygroundPlaybackContext'
+import useMotionDemoAutoplay from './useMotionDemoAutoplay'
 
-/** Single playground example — preview, tokens, expandable code. */
-export default function MotionPlaygroundExample({ id, title, purpose, behavior, tokens, code, children }) {
+/**
+ * Rich motion example card — preview, trigger hint, expandable code.
+ */
+export default function MotionPlaygroundExample({
+  id,
+  title,
+  purpose,
+  code,
+  trigger,
+  featured = false,
+  fullWidth = true,
+  children,
+}) {
+  const { continuousPreview, autoplayScopeEnabled } = useMotionPlaygroundPlayback()
+  const previewRef = useRef(null)
   const [showCode, setShowCode] = useState(false)
+  const [demoGeneration, setDemoGeneration] = useState(0)
+
+  const autoplayEnabled =
+    continuousPreview && autoplayScopeEnabled && !isAutoplayExcluded(id) && !isAutoplayStatic(id)
+
+  const handleCycleReset = useCallback(() => {
+    setDemoGeneration((generation) => generation + 1)
+  }, [])
+
+  useMotionDemoAutoplay({
+    containerRef: previewRef,
+    exampleId: id,
+    enabled: autoplayEnabled,
+    onCycleReset: handleCycleReset,
+  })
+
+  const cardClass = [
+    'mg-example-card',
+    featured ? 'mg-example-card--featured' : '',
+    fullWidth ? 'mg-example-card--full' : '',
+    autoplayEnabled ? 'mg-example-card--autoplay' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
-    <DocSection id={id} title={title}>
-      <DocParagraph>{purpose}</DocParagraph>
-      {behavior ? (
-        <p className="text-sm text-arvo-light-secondary dark:text-neutral-500 m-0 leading-relaxed">{behavior}</p>
-      ) : null}
+    <article className={cardClass} id={id}>
+      <header>
+        <h3 className="mg-example-card__title">{title}</h3>
+        <p className="mg-example-card__desc">{purpose}</p>
+        {trigger ? (
+          <p className="mg-example-card__trigger">
+            <strong className="mg-example-card__trigger-label">Trigger</strong> {trigger}
+          </p>
+        ) : null}
+      </header>
 
-      <div className="motion-playground mp-preview-frame" data-mp-example>
-        {children}
-      </div>
-
-      <div className="flex flex-wrap gap-2 pt-1">
-        {tokens.map((token) => (
-          <code
-            key={token}
-            className="text-xs font-mono px-2 py-1 border border-arvo-light-border dark:border-neutral-700 text-arvo-light-primary dark:text-neutral-200"
-          >
-            {token}
-          </code>
-        ))}
+      <div className="mg-preview-shell">
+        <div
+          ref={previewRef}
+          className="motion-playground mp-preview-frame"
+          data-mp-example
+          data-mp-autoplay-skip={isAutoplayExcluded(id) ? 'true' : undefined}
+        >
+          <div key={demoGeneration}>{children}</div>
+        </div>
       </div>
 
       <button
         type="button"
+        className="mg-code-toggle"
         onClick={() => setShowCode((open) => !open)}
-        className="text-sm font-medium text-arvo-light-primary dark:text-white hover:underline"
         aria-expanded={showCode}
       >
-        {showCode ? 'Hide code' : 'Show code'}
+        {showCode ? 'Hide implementation' : 'Show implementation'}
       </button>
 
       {showCode ? <CodeBlock code={code} language="scss" label="SCSS" /> : null}
-    </DocSection>
+    </article>
   )
 }

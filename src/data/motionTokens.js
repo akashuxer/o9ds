@@ -663,6 +663,7 @@ export const MOTION_LAYOUT_SHIFT = {
 
 /** On-this-page sections — Motion Tokens tab. */
 export const MOTION_TOKENS_TOC = [
+  { id: 'motion-token-catalog', label: 'Find tokens' },
   { id: 'motion-core-durations', label: 'Core durations' },
   { id: 'motion-core-easing', label: 'Core easing' },
   ...MOTION_SEMANTIC_SECTIONS.map(({ id, title }) => ({ id, label: title })),

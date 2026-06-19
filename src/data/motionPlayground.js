@@ -1,57 +1,28 @@
-/** Motion Playground — example metadata & TOC (live demos on Playground tab). */
+/** Motion Playground — example metadata (live demos on Playground tab). */
 
-export const MOTION_PLAYGROUND_TOC = [
-  { id: 'motion-playground-intro', label: 'Introduction' },
-  { id: 'motion-pg-expand', label: 'Tree view expand' },
-  { id: 'motion-pg-accordion', label: 'Accordion' },
-  { id: 'motion-pg-popup', label: 'Popup / floating surface' },
-  { id: 'motion-pg-dialog', label: 'Dialog / overlay' },
-  { id: 'motion-pg-feedback', label: 'Toast feedback' },
-  { id: 'motion-pg-banner-dismiss', label: 'Banner alert dismiss' },
-  { id: 'motion-pg-focus-ring', label: 'Focus ring' },
-  { id: 'motion-pg-form-input', label: 'Form input' },
-  { id: 'motion-pg-checkbox', label: 'Checkbox' },
-  { id: 'motion-pg-radio', label: 'Radio' },
-  { id: 'motion-pg-slider', label: 'Slider' },
-  { id: 'motion-pg-progress', label: 'Progress indicator' },
-  { id: 'motion-pg-carousel', label: 'Carousel pagination' },
-  { id: 'motion-pg-stepper', label: 'Stepper' },
-  { id: 'motion-pg-tabs', label: 'Tabs' },
-  { id: 'motion-pg-nav-indicator', label: 'Navigation active indicator' },
-  { id: 'motion-pg-button-group', label: 'Button group (single select)' },
-  { id: 'motion-pg-button-group-multi', label: 'Button group (multi select)' },
-  { id: 'motion-pg-search-expand', label: 'Search expand' },
-  { id: 'motion-pg-toggle', label: 'Toggle / icon state' },
-  { id: 'motion-pg-show-more', label: 'Show more / show less' },
-  { id: 'motion-pg-status', label: 'Status indicator' },
-  { id: 'motion-pg-counter', label: 'Counter' },
-  { id: 'motion-pg-chip-remove', label: 'Chip remove' },
-  { id: 'motion-pg-chip-toggle', label: 'Chip toggle / filter' },
-  { id: 'motion-pg-search-highlight', label: 'Search highlight' },
-  { id: 'motion-pg-empty-state', label: 'Empty state' },
-  { id: 'motion-pg-avatar-uplift', label: 'Avatar group uplift' },
-  { id: 'motion-pg-pane', label: 'Pane / drawer' },
-  { id: 'motion-pg-launchbar-drawer', label: 'Launchbar drawer' },
-  { id: 'motion-pg-switch', label: 'Switch' },
-  { id: 'motion-pg-link', label: 'Link' },
-  { id: 'motion-pg-nested-content', label: 'Nested content' },
-  { id: 'motion-pg-nested-footer', label: 'Nested footer' },
-  { id: 'motion-pg-loader', label: 'Loader' },
-  { id: 'motion-pg-list-reorder', label: 'List reorder' },
-  { id: 'motion-pg-list-split', label: 'List split view' },
-  { id: 'motion-pg-transfer', label: 'Transfer between containers' },
-  { id: 'motion-pg-invalid-drop', label: 'Invalid drop' },
-]
+import {
+  MOTION_EXAMPLE_META,
+  MOTION_FEATURED_EXAMPLE_IDS,
+  MOTION_PLAYGROUND_CATEGORIES,
+  MOTION_COMPACT_EXAMPLE_IDS,
+} from './motionPlaygroundCategories.js'
 
-/** @typedef {{ id: string, title: string, purpose: string, behavior?: string, tokens: string[], code: string }} MotionPlaygroundExample */
+export { MOTION_PLAYGROUND_TOC } from './motionPlaygroundCategories.js'
+export {
+  MOTION_PLAYGROUND_CATEGORIES,
+  MOTION_FEATURED_EXAMPLE_IDS,
+  MOTION_EXAMPLE_META,
+  MOTION_COMPACT_EXAMPLE_IDS,
+} from './motionPlaygroundCategories.js'
+
+/** @typedef {{ id: string, title: string, purpose: string, tokens: string[], code: string }} MotionPlaygroundExample */
 
 /** @type {MotionPlaygroundExample[]} */
 export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-expand',
     title: 'Tree view expand / collapse',
-    purpose: 'Reveals nested tree branches — TreeView, accordion, show more, disclosure.',
-    behavior: 'Children height animates open; caret switches from angle-right to angle-down. Collapse reverses both.',
+    purpose: 'Branches unfold as you drill deeper, with the caret turning to mark what is open.',
     tokens: ['$arvo-motion-transition-expand'],
     code: `.tree-children {
   height: 0;
@@ -67,8 +38,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-accordion',
     title: 'Accordion expand / collapse',
-    purpose: 'Expandable sections with height animation and caret rotation.',
-    behavior: 'Body height animates open; caret-right rotates 90° when expanded.',
+    purpose: 'Sections open with a gentle height change and a caret that rotates to show expanded state.',
     tokens: ['$arvo-motion-transition-expand'],
     code: `.accordion-body-wrapper {
   height: 0;
@@ -83,8 +53,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-popup',
     title: 'Popup / floating surface',
-    purpose: 'Lightweight surfaces — menu, popover, tooltip.',
-    behavior: 'Menu and popover fade in with slight upward movement; tooltip appears on hover/focus.',
+    purpose: 'Menus and popovers lift lightly into view — anchored enough to notice, calm enough to ignore.',
     tokens: ['$arvo-transition-popup', '$arvo-transform-popup-enter', '$arvo-transform-popup-exit'],
     code: `.popup-surface {
   opacity: 0;
@@ -106,8 +75,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-dialog',
     title: 'Dialog / overlay surface',
-    purpose: 'Blocking surfaces — dialog, modal, confirmation.',
-    behavior: 'Dialog fades in with slight upward movement. Backdrop fades in parallel.',
+    purpose: 'Dialogs ease in with a soft rise while the backdrop fades, drawing focus without jarring the page.',
     tokens: [
       '$arvo-transition-dialog',
       '$arvo-transition-dialog-backdrop',
@@ -132,9 +100,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-feedback',
     title: 'Toast feedback',
-    purpose: 'Toast confirms a system message appeared or was dismissed.',
-    behavior:
-      'Toast enters from top-right; dismiss exits toward top-right. Stack reflow uses $arvo-motion-layout-shift (FLIP) on add/remove.',
+    purpose: 'New toasts arrive from the corner; dismissed ones slip away and the stack settles naturally.',
     tokens: [
       '$arvo-motion-feedback',
       '$arvo-motion-layout-shift',
@@ -161,9 +127,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-banner-dismiss',
     title: 'Banner alert dismiss',
-    purpose: 'Banner stack dismiss — remaining alerts reflow smoothly after close.',
-    behavior:
-      'Dismiss fades out, moves up slightly, and collapses height so banners below move up naturally.',
+    purpose: 'Closing a banner lifts it away and the remaining alerts slide up to fill the space.',
     tokens: ['$arvo-motion-feedback', '$arvo-transform-banner-dismiss-exit', '$arvo-duration-medium', '$arvo-ease-simple'],
     code: `.banner-alert {
   overflow: hidden;
@@ -189,9 +153,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-focus-ring',
     title: 'Focus ring motion',
-    purpose: 'Keyboard focus visibility on multi-select button group segments.',
-    behavior:
-      'Tab through segments to see the inset focus frame fade in and out ($arvo-motion-focus-ring). Unselected segments use var(--arvo-color-b-theme-focus); selected (theme-filled) segments use var(--arvo-color-b-focus-inverse).',
+    purpose: 'Tab through options and a crisp focus ring appears — a clear keyboard path with no guesswork.',
     tokens: ['$arvo-motion-focus-ring', '--arvo-color-b-theme-focus', '--arvo-color-b-focus-inverse'],
     code: `.button-group-segment:focus-visible:not(.is-active)::after {
   border-color: var(--arvo-color-b-theme-focus);
@@ -206,9 +168,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-form-input',
     title: 'Form input motion',
-    purpose: 'Animated bottom border on text fields using the form-input motion token.',
-    behavior:
-      'Resting state shows a static gray bottom border. On focus, a theme line grows left to right (width 0 → 100%). On blur, it retracts right to left. Transition uses $arvo-motion-form-input (150ms ease). Field padding-inline is 8px.',
+    purpose: 'Focus draws a line that grows beneath the field; blur pulls it back to mark where attention lives.',
     tokens: ['$arvo-motion-form-input'],
     code: `.border-animation {
   position: absolute;
@@ -226,8 +186,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-checkbox',
     title: 'Checkbox motion',
-    purpose: 'Checkbox box fill and checkmark draw on select.',
-    behavior: 'Box uses $arvo-motion-form-input-field; checkmark stroke uses $arvo-motion-checkmark-draw.',
+    purpose: 'Selection fills the box and draws the check — a small, satisfying confirmation.',
     tokens: ['$arvo-motion-form-input-field', '$arvo-motion-checkmark-draw'],
     code: `.checkbox-box {
   transition: $arvo-motion-form-input-field;
@@ -246,9 +205,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-radio',
     title: 'Radio motion',
-    purpose: 'Circular radio control fill on select.',
-    behavior:
-      'Outer ring uses $arvo-motion-form-input-field; inner dot fades and scales in on selection. Hover darkens the ring border.',
+    purpose: 'The chosen option blooms with a dot that scales in, making the single selection unmistakable.',
     tokens: ['$arvo-motion-form-input-field'],
     code: `.radio-box {
   width: 18px;
@@ -276,9 +233,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-slider',
     title: 'Slider',
-    purpose: 'Bounded numeric range — thumb travel and filled track follow value changes.',
-    behavior:
-      'Filled track is 4px; thumb is 8px at rest and scales to 10px on hover, focus, or drag. Fill width and thumb position animate on stepper/keyboard changes; dragging follows the pointer. Stepper buttons align to the track row.',
+    purpose: 'Thumb and fill travel together as the value changes — continuous, tactile feedback on every step.',
     tokens: ['$arvo-motion-slider', '$arvo-motion-slider-thumb'],
     code: `.slider-fill,
 .slider-thumb {
@@ -306,9 +261,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-progress',
     title: 'Progress indicator',
-    purpose: 'Linear, circular, and half-gauge progress — determinate value updates and indeterminate loading.',
-    behavior:
-      'Linear fill grows left-to-right with $arvo-motion-progress-linear; percentage label updates in sync. Circular arc advances clockwise from 12 o’clock with $arvo-motion-progress-circular; value sits centered inside. Half gauge uses a semi-circular arc with butt caps (sharp ends) and $arvo-motion-progress-gauge; value sits inside the opening. Decreasing values animate backward on all variants. Indeterminate modes loop until a value is available. Track uses slider rail gray; fill uses b-theme.',
+    purpose: 'Bars and rings fill at a steady pace; when the wait continues, motion loops calmly until ready.',
     tokens: [
       '$arvo-motion-progress-linear',
       '$arvo-motion-progress-circular',
@@ -339,9 +292,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-carousel',
     title: 'Carousel pagination',
-    purpose: 'Carousel view with square dot navigation — slide transitions and swipe.',
-    behavior:
-      'Next: current slide exits left while incoming enters from right; previous reverses direction. Outgoing and incoming move together inside an overflow-hidden viewport. Square dots expand into a pill when active; inactive dots return to default in sync. Non-adjacent dot selection jumps directly to the target slide. Navigation is disabled during transitions. Swipe follows the pointer and snaps to the nearest slide on release; below threshold, the view returns smoothly. Reduced motion uses an immediate update.',
+    purpose: 'Slides glide in either direction while the active dot stretches to mark where you are.',
     tokens: ['$arvo-motion-carousel-slide', '$arvo-motion-carousel-dot'],
     code: `.carousel-track {
   transition: $arvo-motion-carousel-slide;
@@ -362,9 +313,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-stepper',
     title: 'Stepper status transition',
-    purpose: 'Horizontal stepper — connector line and step indicator state changes.',
-    behavior:
-      'Next: connector animates toward the next step, then the next step becomes current and the previous step completes with a check-circle icon. Previous reverses the connector and restores the prior step as current. Warning and error states update marker and label together without shake or flash. Only the affected connector segment and step indicators animate. Reduced motion applies final states immediately.',
+    purpose: 'Connectors fill and step markers advance — progress feels sequential, not sudden.',
     tokens: [
       '$arvo-motion-stepper-connector',
       '$arvo-motion-stepper-marker',
@@ -386,9 +335,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-tabs',
     title: 'Tabs motion',
-    purpose: 'Active tab indicator movement across horizontal or vertical tab strips.',
-    behavior:
-      'Horizontal: underline slides and resizes along the bottom edge. Vertical: left-edge indicator slides and resizes to match the selected tab. Strip separators and inactive hover use $arvo-border-3 with $arvo-color-b-hover.',
+    purpose: 'The active underline glides to the selected tab, with a quiet hover hint on the rest.',
     tokens: ['$arvo-motion-tab', '$arvo-border-3', '$arvo-color-b-hover', '$arvo-color-b-theme-active'],
     code: `.tabstrip {
   border-bottom: $arvo-border-3 solid $arvo-color-b-hover;
@@ -415,9 +362,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-nav-indicator',
     title: 'Navigation active indicator',
-    purpose: 'Vertical navigation — shared left border slides between active rows.',
-    behavior:
-      'One shared left border and background highlight move directly to the selected row — position and height animate together in 180ms with standard easing. Active label and icon update in sync; inactive rows return to default. Hover uses s-theme-hover-4 on non-active items only. Initial load places the indicator without animation. Reduced motion snaps or uses a minimal fade.',
+    purpose: 'One accent bar travels down the rail as you switch items, keeping your place visible at a glance.',
     tokens: [
       '$arvo-motion-nav-indicator',
       '$arvo-motion-nav-item',
@@ -455,11 +400,25 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
 }`,
   },
   {
+    id: 'motion-pg-scrollspy',
+    title: 'Scrollspy',
+    purpose: 'Side links and content stay in sync — scroll or click, and the marker follows the section you are on.',
+    tokens: ['$arvo-motion-scrollspy'],
+    code: `.scrollspy-indicator {
+  position: absolute;
+  left: 0;
+  width: 2px;
+  transition: var(--arvo-motion-scrollspy);
+}
+
+.scrollspy-nav-item {
+  transition: color $arvo-duration-base $arvo-ease-standard;
+}`,
+  },
+  {
     id: 'motion-pg-button-group',
     title: 'Button group (single select) motion',
-    purpose: 'Active background slides between grouped options — with text labels, icon-only, or expand-on-select.',
-    behavior:
-      'With labels and icon-only use a sliding indicator ($arvo-motion-segmented-control). Expand-on-select adds label width/opacity and segment width transitions ($arvo-duration-medium with standard easing). Selected labels use $arvo-font-l16-m.',
+    purpose: 'The selected fill slides between options, or the segment widens to reveal a label when chosen.',
     tokens: ['$arvo-motion-segmented-control', '$arvo-duration-medium'],
     code: `/* With labels & icon only — sliding indicator */
 .active-indicator {
@@ -494,10 +453,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-button-group-multi',
     title: 'Button group (multi select) motion',
-    purpose:
-      'Independent toggles for cumulative states (e.g. Bold + Italic). Nothing selected by default — each item animates its own pressed surface.',
-    behavior:
-      'With labels and icon-only use per-item press motion ($arvo-motion-toggle). Expand-on-select adds the same label width/opacity and segment width pattern as single-select ($arvo-duration-medium). Selected labels use $arvo-font-l16-m.',
+    purpose: 'Each option presses in on its own — combine states like Bold and Italic without one stealing the spotlight.',
     tokens: ['$arvo-motion-toggle', '$arvo-duration-medium'],
     code: `/* With labels & icon only — per-item press */
 .button-group--multi .segment {
@@ -534,9 +490,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-search-expand',
     title: 'Search expand motion',
-    purpose: 'Compact search icon expands into a full input field beside a heading.',
-    behavior:
-      'Two layouts: expands right (compact header) or expands left (search aligned to the trailing edge). Width grows 36px → 240px; input and close icon fade in. Bottom focus line grows left to right on focus (same as form input) and retracts on blur or collapse.',
+    purpose: 'Search grows from a compact icon into a full field, with focus signaled underneath.',
     tokens: ['$arvo-motion-search-expand', '$arvo-motion-form-input'],
     code: `.search-box {
   width: 36px;
@@ -564,9 +518,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-toggle',
     title: 'Toggle / icon state',
-    purpose: 'Confirms bookmark, favorite, star, or pin state change — icon or text button.',
-    behavior:
-      'Icon toggle: outline cross-fades to filled using --arvo-color-i-theme-active. Button toggle: same icon + label cross-fade — inactive uses secondary tokens, active uses theme-active. Brief scale pulse on activate.',
+    purpose: 'Icons shift from outline to filled with a brief pulse — state change you can feel.',
     tokens: [
       '$arvo-motion-toggle',
       '$arvo-transform-toggle-active',
@@ -589,9 +541,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-show-more',
     title: 'Show more / show less',
-    purpose: 'Inline expand for truncated text — show more, show less, or +N more patterns.',
-    behavior:
-      'Three patterns: inline show more beside truncated text, show more below a clamped paragraph with animated height, and chip lists that reveal hidden items via +N more / show less. Chevron rotates 180° when expanded.',
+    purpose: 'Truncated content unfolds in place and the chevron turns to invite going back.',
     tokens: ['$arvo-motion-transition-expand'],
     code: `.text-wrapper {
   overflow: hidden;
@@ -609,9 +559,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-status',
     title: 'Status indicator',
-    purpose: 'Unsaved dot, dirty state, or pending marker without interrupting workflow.',
-    behavior:
-      'Dirty state: dot scales up and fades in when active. Pulsating status: solid warning core with a ring that expands and fades on loop — uses --arvo-color-i-warning-static and --arvo-color-s-warning-static.',
+    purpose: 'An unsaved dot appears quietly; warning states breathe with a gentle expanding ring.',
     tokens: [
       '$arvo-motion-status-indicator',
       '$arvo-motion-status-pulse',
@@ -647,8 +595,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-counter',
     title: 'Counter motion',
-    purpose: 'Notification badge or selection count — notice count changes without noise.',
-    behavior: 'Increase slides upward; decrease slides downward. Uses animation retrigger via class reset.',
+    purpose: 'Numbers rise when counts go up and fall when they drop — change is noticed, not shouted.',
     tokens: ['$arvo-motion-counter'],
     code: `.counter-number.is-increasing {
   animation: counter-slide-up $arvo-motion-counter;
@@ -666,9 +613,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-chip-remove',
     title: 'Chip remove',
-    purpose: 'Filter chip or tag removal feels intentional, not abrupt.',
-    behavior:
-      'Dismissed chip fades and collapses width (max-width → 0) so siblings glide into place. FLIP reflow uses $arvo-motion-layout-shift after DOM removal.',
+    purpose: 'Removed chips shrink away and neighbors ease into place without a jolt.',
     tokens: ['$arvo-motion-chip-remove', '$arvo-transform-chip-remove', '$arvo-motion-layout-shift'],
     code: `.chip {
   max-width: 18rem;
@@ -687,9 +632,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-chip-toggle',
     title: 'Chip toggle / filter',
-    purpose: 'Filter chips that toggle on/off and filter a list or grid below.',
-    behavior:
-      'Chip fill and label crossfade on toggle (180ms). List/grid rows below slide/fade and height-collapse (220ms) as filters change.',
+    purpose: 'Selecting a filter crossfades the chip while matching rows below appear or fade out.',
     tokens: ['$arvo-motion-chip-toggle', '$arvo-motion-chip-filter-content'],
     code: `.filter-chip {
   gap: $arvo-space-4;
@@ -718,8 +661,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-search-highlight',
     title: 'Search result highlight',
-    purpose: 'Matching text highlights while typing without layout shift.',
-    behavior: 'Highlight background fades in on match.',
+    purpose: 'Matched text warms with a highlight that fades in as you type — no layout jump.',
     tokens: ['$arvo-motion-search-highlight'],
     code: `mark {
   transition: $arvo-motion-search-highlight;
@@ -729,8 +671,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-empty-state',
     title: 'Empty state illustration',
-    purpose: 'Optional ambient motion for empty states — low priority.',
-    behavior: 'Illustration floats slowly on a 2.8s loop with subtle opacity pulse.',
+    purpose: 'Empty views get a slow, ambient float — quiet motion that says the space is ready.',
     tokens: ['$arvo-motion-empty-state', '$arvo-transform-empty-state-float', '$o9illus-124'],
     code: `.empty-illustration {
   margin-bottom: 24px;
@@ -763,9 +704,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-avatar-uplift',
     title: 'Avatar group uplift',
-    purpose: 'Individual avatar lift in a stacked group — Avatar Group hover feedback.',
-    behavior:
-      'Hovering or focusing one avatar scales it to 110% in place (image, border, and +N tile together) with a symmetric shadow — no translate. Stacked avatars overlap by 4px; z-index brings the active avatar forward.',
+    purpose: 'Hover lifts one face from the stack with a soft shadow — individual focus in a crowd.',
     tokens: [
       '$arvo-motion-avatar-uplift',
       '$arvo-transform-avatar-uplift-hover',
@@ -798,8 +737,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-pane',
     title: 'Pane / drawer',
-    purpose: 'Large side surfaces — drawer, inspector, member info panel.',
-    behavior: 'Panel slides in from the screen edge.',
+    purpose: 'Side panels slide in from the edge, bringing inspectors and drawers without reloading the shell.',
     tokens: ['$arvo-motion-pane', '$arvo-transform-pane-open', '$arvo-transform-pane-closed-right'],
     code: `.drawer {
   transform: $arvo-transform-pane-closed-right;
@@ -812,9 +750,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-launchbar-drawer',
     title: 'Launchbar drawer',
-    purpose: 'Hover-triggered secondary navigation — launchbar icon opens an adjacent drawer panel.',
-    behavior:
-      'Opens after 300ms hover (150ms when switching items with drawer already open). Closes 250ms after pointer leaves both launchbar item and drawer. Slides in from a small negative offset with subtle fade (220ms emphasized); closes with 180ms standard easing. Keyboard focus and click open immediately; touch uses tap. Esc dismisses. Launchbar stays fixed; main content is not pushed.',
+    purpose: 'Hover or focus opens a secondary panel beside the launchbar; leave, and it glides away.',
     tokens: [
       '$arvo-motion-launchbar-drawer-open',
       '$arvo-motion-launchbar-drawer-close',
@@ -840,8 +776,7 @@ export const MOTION_PLAYGROUND_EXAMPLES = [
   {
     id: 'motion-pg-switch',
     title: 'Switch / toggle slide',
-    purpose: 'Binary ON/OFF control with clear thumb movement.',
-    behavior: 'Thumb slides with emphasized easing; track color transitions.',
+    purpose: 'The thumb glides across the track as color shifts — on or off, instantly readable.',
     tokens: ['$arvo-transition-switch-slide'],
     code: `.switch-thumb {
   transition: $arvo-transition-switch-slide;
@@ -853,9 +788,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-link',
     title: 'Link motion',
-    purpose: 'Underline enter/exit for primary, secondary, and tertiary links.',
-    behavior:
-      'Primary and secondary: --arvo-color-t-info-dark / --arvo-color-t-secondary with underline that exits on hover. Tertiary: --arvo-color-t-info-dark, no underline until hover. All variants use --arvo-color-t-info-light on hover.',
+    purpose: 'Underlines sweep in on hover while color shifts — links feel responsive, not static.',
     tokens: ['$arvo-motion-link', '--arvo-color-t-info-dark', '--arvo-color-t-info-light', '--arvo-color-t-secondary'],
     code: `.arvo-link--primary {
   color: var(--arvo-color-t-info-dark);
@@ -894,9 +827,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-nested-content',
     title: 'Nested content transition',
-    purpose: 'Forward/back navigation inside popover, dialog, drawer, or settings flow.',
-    behavior:
-      'Forward: old content exits left, new enters from right. Back reverses. Header back button and footer crossfade. List rows with nested navigation show an inline chevron that shifts slightly right on hover and returns on leave. Same panel shown inline and inside a dialog.',
+    purpose: 'Drill forward and content slides ahead; step back and it returns — like pages in a single panel.',
     tokens: [
       '$arvo-motion-nested-content',
       '$arvo-motion-nested-footer',
@@ -932,9 +863,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-nested-footer',
     title: 'Nested surface transition',
-    purpose: 'Action menu opens a nested popover surface with forward/back motion.',
-    behavior:
-      'Menu surface slides to nested popover; back returns to menu. Content and footer crossfade on view change. Menu rows with inline chevrons shift the arrow slightly right on hover.',
+    purpose: 'Menus hand off to nested surfaces with a smooth slide and crossfade between views.',
     tokens: ['$arvo-transition-popup', '$arvo-motion-nested-content', '$arvo-motion-nested-footer'],
     code: `.surface {
   opacity: 0;
@@ -955,9 +884,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-loader',
     title: 'Loader',
-    purpose: 'Loading indicators — dot pulse, circular spin, square trail, and skeleton shimmer.',
-    behavior:
-      'Dot loader pulses three circles in sequence. Circular loader spins a partial ring. Square loader animates a block through a box-shadow trail. Skeleton loader uses s-pulse-dark as the base with a blurred s-pulse-light diagonal shimmer band. All loop until content resolves.',
+    purpose: 'Dots pulse, rings spin, skeletons shimmer — motion that says loading without demanding attention.',
     tokens: [
       '$arvo-motion-loader-dot',
       '$arvo-motion-loader-circle',
@@ -991,9 +918,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-list-reorder',
     title: 'Reordering within same list',
-    purpose: 'Drag-handle reorder in filter lists, column pickers, and hybrid popover rows.',
-    behavior:
-      'Drag via o9con-drag-handle or use angle-up / angle-down to move a row. Picked row uses s-layer-05 surface, arvo-shadow-down, and a top border in b-theme. Siblings slide smoothly with $arvo-motion-layout-shift timing while dragging; button moves use FLIP.',
+    purpose: 'Drag a row and it lifts; siblings part smoothly to show exactly where it will land.',
     tokens: [
       '$arvo-motion-layout-shift',
       '$arvo-shadow-down',
@@ -1018,9 +943,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-list-split',
     title: 'List split view',
-    purpose: 'Inline list-to-detail layout — edit opens a split view inside the same container.',
-    behavior:
-      'Edit on a list row resizes the list to the left and slides the detail panel in from the right within the same container — no modal or overlay. Edit on another row keeps split-view open and crossfades detail content only. Close collapses the detail panel and expands the list back to full width. Layout uses $arvo-motion-split-layout and $arvo-motion-split-detail-panel; content switches use $arvo-motion-split-content.',
+    purpose: 'Choosing edit shrinks the list and a detail panel slides in — two views, one calm transition.',
     tokens: [
       '$arvo-motion-split-layout',
       '$arvo-motion-split-detail-panel',
@@ -1054,9 +977,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-transfer',
     title: 'Transfer items between two containers',
-    purpose: 'Dual-list pickers — move selected or all items between source and destination panels.',
-    behavior:
-      'Drag via o9con-drag-handle or use transfer buttons. Dragging moves selected rows as a group to the opposite container only — drops on the source list are rejected. Selected rows fade, fly horizontally, and land with fade-in; source gaps close with $arvo-motion-layout-shift. Selection clears when complete.',
+    purpose: 'Selected items fly across to the other list while gaps close behind them.',
     tokens: [
       '$arvo-motion-layout-shift',
       '$arvo-duration-fast',
@@ -1088,8 +1009,7 @@ input:checked + .switch-track .switch-thumb {
   {
     id: 'motion-pg-invalid-drop',
     title: 'Invalid drop / constraint feedback',
-    purpose: 'Rejected placement — duplicate block, invalid target, max limit.',
-    behavior: 'Block tilts, shows X, shakes once, stays invalid until fixed.',
+    purpose: 'A rejected drop tilts, marks the error, and shakes once — clear feedback until the issue is fixed.',
     tokens: ['$arvo-motion-invalid-drop'],
     code: `.block.is-dropped-invalid {
   border-color: #d92d20;
@@ -1100,3 +1020,78 @@ input:checked + .switch-track .switch-thumb {
 }`,
   },
 ]
+
+/** Motion/transform/duration chips only — exclude color (and border) foundation tokens from card chips. */
+export function filterMotionPlaygroundTokenChips(tokens) {
+  return (tokens ?? []).filter((token) => {
+    if (token.startsWith('--arvo-color-')) return false
+    if (token.startsWith('$arvo-color-')) return false
+    if (token.startsWith('$arvo-border-')) return false
+    return true
+  })
+}
+
+/** Merge base example with gallery metadata (category, timing, guidance). */
+export function enrichMotionExample(example) {
+  const merged = {
+    ...example,
+    ...MOTION_EXAMPLE_META[example.id],
+    fullWidth: !MOTION_COMPACT_EXAMPLE_IDS.has(example.id),
+  }
+  return {
+    ...merged,
+    tokens: filterMotionPlaygroundTokenChips(merged.tokens),
+  }
+}
+
+export function getFeaturedMotionExamples() {
+  return MOTION_FEATURED_EXAMPLE_IDS.map((id) =>
+    enrichMotionExample(MOTION_PLAYGROUND_EXAMPLES.find((e) => e.id === id)),
+  ).filter(Boolean)
+}
+
+export function getMotionExamplesByCategory(categoryId, { excludeFeatured = false } = {}) {
+  const category = MOTION_PLAYGROUND_CATEGORIES.find((c) => c.categoryId === categoryId)
+  if (!category) return []
+  return category.exampleIds
+    .filter((id) => !excludeFeatured || !MOTION_FEATURED_EXAMPLE_IDS.includes(id))
+    .map((id) => MOTION_PLAYGROUND_EXAMPLES.find((e) => e.id === id))
+    .filter(Boolean)
+    .map(enrichMotionExample)
+}
+
+export function getAllMotionExamples() {
+  const seen = new Set()
+  /** @type {ReturnType<typeof enrichMotionExample>[]} */
+  const result = []
+  for (const category of MOTION_PLAYGROUND_CATEGORIES) {
+    for (const id of category.exampleIds) {
+      if (seen.has(id)) continue
+      seen.add(id)
+      const example = MOTION_PLAYGROUND_EXAMPLES.find((e) => e.id === id)
+      if (example) result.push(enrichMotionExample(example))
+    }
+  }
+  return result
+}
+
+/** Resolve Playground category filter from URL hash (category id, featured, or example id). */
+export function resolvePlaygroundFilterFromHash(hash) {
+  const id = (hash || '').replace(/^#/, '')
+  if (
+    !id ||
+    id === 'motion-playground-patterns' ||
+    id === 'motion-playground-all' ||
+    id === 'motion-cat-all'
+  ) {
+    return 'all'
+  }
+  if (id === 'motion-playground-featured') {
+    return 'featured'
+  }
+  const category = MOTION_PLAYGROUND_CATEGORIES.find((c) => c.id === id || c.categoryId === id)
+  if (category) return category.categoryId
+  if (MOTION_EXAMPLE_META[id]?.categoryId) return MOTION_EXAMPLE_META[id].categoryId
+  const byExample = MOTION_PLAYGROUND_CATEGORIES.find((c) => c.exampleIds.includes(id))
+  return byExample?.categoryId ?? 'all'
+}
